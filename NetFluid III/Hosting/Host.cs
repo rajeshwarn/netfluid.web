@@ -1,0 +1,817 @@
+﻿// ********************************************************************************************************
+// <copyright company="NetFluid">
+//     Copyright (c) 2013 Matteo Fabbri. All rights reserved.
+// </copyright>
+// ********************************************************************************************************
+// The contents of this file are subject to the GNU AGPL v3.0 (the "License"); 
+// you may not use this file except in compliance with the License. You may obtain a copy of the License at 
+// http://www.fsf.org/licensing/licenses/agpl-3.0.html 
+// 
+// Commercial licenses are also available from http://netfluid.org/, including free evaluation licenses.
+//
+// Software distributed under the License is distributed on an "AS IS" basis, WITHOUT WARRANTY OF 
+// ANY KIND, either express or implied. See the License for the specific language governing rights and 
+// limitations under the License. 
+// 
+// The Initial Developer of this file is Matteo Fabbri.
+// 
+// Contributor(s): (Open source contributors should list themselves and their modifications here). 
+// Change Log: 
+// Date           Changed By      Notes
+// 23/10/2013    Matteo Fabbri      Inital coding
+// ********************************************************************************************************
+
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Reflection;
+using System.Text;
+using System.Text.RegularExpressions;
+
+namespace NetFluid
+{
+    internal class Host
+    {
+        private static readonly char[] urlSeparator;
+        private static readonly Dictionary<string, Type> Types;
+        private readonly Dictionary<StatusCode, RouteTarget> callOn;
+        private readonly List<FluidPage> instances;
+        private readonly Dictionary<string, RouteTarget> routes;
+        private RouteTarget callOnAnyCode;
+        private Type[] controllers;
+        private ParamRouteTarget[] parametrized;
+        private RegexRouteTarget[] regex;
+        private SmallControllerChecked[] smallControllers;
+
+        private struct PublicFolder
+        {
+            public string Path;
+            public string Uri;
+        }
+        
+        PublicFolder[] folders;
+        Dictionary<string,byte[]> immutableData;
+        	
+        static Host()
+        {
+            urlSeparator = new[] {'/'};
+            Types = new Dictionary<string, Type>();
+        }
+
+        internal Host()
+        {
+            routes = new Dictionary<string, RouteTarget>();
+            parametrized = new ParamRouteTarget[0];
+            regex = new RegexRouteTarget[0];
+            smallControllers = new SmallControllerChecked[0];
+            callOn = new Dictionary<StatusCode, RouteTarget>();
+            controllers = new Type[0];
+            instances = new List<FluidPage>();
+            
+            folders = new Host.PublicFolder[0];
+            immutableData = new Dictionary<string, byte[]>();
+        }
+
+        public string RoutesMap
+        {
+            get
+            {
+                var sb = new StringBuilder();
+
+                foreach (RegexRouteTarget item in regex)
+                {
+                    sb.AppendLine("\t\tRegex:" + item.Regex + " pointing to " + item.Type.FullName + "." +
+                                  item.Method.Name);
+                }
+                foreach (ParamRouteTarget item in parametrized)
+                {
+                    sb.AppendLine("\t\tParametrized:" + item.Url + " pointing to " + item.Type.FullName + "." +
+                                  item.Method.Name);
+                }
+                foreach (var item in routes)
+                {
+                    sb.AppendLine("\t\tParametrized:" + item.Key + " pointing to " + item.Value.Type.FullName + "." +
+                                  item.Value.Method.Name);
+                }
+                return sb.ToString();
+            }
+        }
+
+        private static void Finalize(Context c, MethodInfo method, object target, params object[] args)
+        {
+            object res = method.Invoke(target, args);
+            if (res != null && res is IResponse)
+            {
+                var resp = res as IResponse;
+                resp.SendResponse(c);
+            }
+            c.Close();
+        }
+
+        public void Serve(Context cnt)
+        {
+            try
+            {
+                if (Engine.DevMode)
+                    Console.WriteLine(cnt.Request.Host + ":" + cnt.Request.Url + " - " + "Checking small controllers");
+
+                #region SMALL CONTROLLERS
+
+                foreach (var item in smallControllers)
+                {
+                    if (item.Condition(cnt))
+                    {
+                        if (Engine.DevMode)
+                            Console.WriteLine(cnt.Request.Host + ":" + cnt.Request.Url + " - " +
+                                              "Calling small controller");
+
+                        item.Action(cnt);
+                    }
+                    if (!cnt.IsOpen)
+                        return;
+                }
+
+                #endregion
+
+                #region CONTROLLERS
+
+                if (Engine.DevMode)
+                    Console.WriteLine(cnt.Request.Host + ":" + cnt.Request.Url + " - " + "Checking controllers");
+
+                foreach (Type t in controllers)
+                {
+                    var item = t.CreateIstance() as FluidController;
+
+                    if (Engine.DevMode)
+                        Console.WriteLine(cnt.Request.Host + ":" + cnt.Request.Url + " - " + "Checking " + t.FullName);
+
+                    item.Context = cnt;
+                    if (item.Condition())
+                    {
+                        if (Engine.DevMode)
+                            Console.WriteLine(cnt.Request.Host + ":" + cnt.Request.Url + " - " + "Calling " + t.FullName);
+                        item.Run();
+                    }
+                    if (!cnt.IsOpen)
+                        return;
+                }
+
+                #endregion
+
+                if (Engine.DevMode)
+                    Console.WriteLine(cnt.Request.Host + ":" + cnt.Request.Url + " - " + "Checking regex routes");
+
+                #region REGEX
+
+                foreach (var rr in regex)
+                {
+                    var m = rr.Regex.Match(cnt.Request.Url);
+
+                    if (!m.Success)
+                        continue;
+
+                    if (Engine.DevMode)
+                    {
+                        Console.WriteLine(cnt.Request.Host + ":" + cnt.Request.Url + " - " + "Matched " + rr.Regex);
+                        Console.WriteLine(cnt.Request.Host + ":" + cnt.Request.Url + " - " + "Calling " +
+                                          rr.Type.FullName + "." + rr.Method.Name);
+                    }
+
+                    var page = rr.Type.CreateIstance() as FluidPage;
+                    page.Context = cnt;
+
+                    var parameters = rr.Method.GetParameters();
+
+                    if (parameters.Length == 0)
+                    {
+                        Finalize(cnt, rr.Method, page, null);
+                        return;
+                    }
+
+                    if (Engine.DevMode)
+                        Console.WriteLine(cnt.Request.Host + ":" + cnt.Request.Url + " - " + "Parsing arguments");
+
+                    var groups = rr.Regex.GetGroupNames();
+                    var args = new object[parameters.Length];
+                    for (int i = 0; i < parameters.Length; i++)
+                    {
+                        if (groups.Contains(parameters[i].Name))
+                        {
+                            var q = new QueryValue(m.Groups[parameters[i].Name].Value);
+                            args[i] = q.Parse(parameters[i]);
+                        }
+                        else
+                        {
+                            args[i] = parameters[i].ParameterType.IsValueType
+                                          ? Activator.CreateInstance(parameters[i].ParameterType)
+                                          : null;
+                        }
+                    }
+                    Finalize(cnt, rr.Method, page, args);
+                    return;
+                }
+
+                #endregion
+
+                #region PARAMETRIZED
+
+                if (Engine.DevMode)
+                    Console.WriteLine(cnt.Request.Host + ":" + cnt.Request.Url + " - " + "Checking parametrized routes");
+
+                for (int i = 0; i < parametrized.Length; i++)
+                {
+                    if (!cnt.Request.Url.StartsWith(parametrized[i].Url))
+                        continue;
+
+                    if (Engine.DevMode)
+                    {
+                        Console.WriteLine(cnt.Request.Host + ":" + cnt.Request.Url + " - " + "Matched " +
+                                          parametrized[i].Url);
+                        Console.WriteLine(cnt.Request.Host + ":" + cnt.Request.Url + " - " + "Calling " +
+                                          parametrized[i].Type.FullName + "." + parametrized[i].Method.Name);
+                    }
+
+                    var page = parametrized[i].Type.CreateIstance() as FluidPage;
+                    page.Context = cnt;
+
+                    ParameterInfo[] parameters = parametrized[i].Method.GetParameters();
+
+                    if (parameters.Length == 0)
+                    {
+                        Finalize(cnt, parametrized[i].Method, page, null);
+                        return;
+                    }
+
+                    string[] argUri = cnt.Request.Url.Substring(parametrized[i].Url.Length).Split(urlSeparator,
+                                                                                                  StringSplitOptions.
+                                                                                                      RemoveEmptyEntries);
+                    var args = new object[parameters.Length];
+                    for (int j = 0; j < parameters.Length; j++)
+                    {
+                        if (j < argUri.Length)
+                        {
+                            var qv = new QueryValue(argUri[j]);
+                            args[j] = qv.Parse(parameters[j]);
+                        }
+                        else
+                        {
+                            args[j] = parameters[j].ParameterType.IsValueType
+                                          ? Activator.CreateInstance(parameters[j].ParameterType)
+                                          : null;
+                        }
+                    }
+
+                    Finalize(cnt, parametrized[i].Method, page, args);
+                    return;
+                }
+
+                #endregion
+
+                #region FIXED ROUTES
+
+                if (Engine.DevMode)
+                    Console.WriteLine(cnt.Request.Host + ":" + cnt.Request.Url + " - " + "Checking routes ");
+
+                RouteTarget route;
+                if (routes.TryGetValue(cnt.Request.Url, out route))
+                {
+                    if (Engine.DevMode)
+                    {
+                        Console.WriteLine(cnt.Request.Host + ":" + cnt.Request.Url + " - " + "Matched " +
+                                          cnt.Request.Url);
+                        Console.WriteLine(cnt.Request.Host + ":" + cnt.Request.Url + " - " + "Calling " +
+                                          route.Type.FullName + "." + route.Method.Name);
+                    }
+
+                    var page = route.Type.CreateIstance() as FluidPage;
+                    page.Context = cnt;
+
+                    var parameters = route.Method.GetParameters();
+
+                    if (parameters.Length == 0)
+                    {
+                        Finalize(cnt, route.Method, page, null);
+                        return;
+                    }
+
+                    var args = new object[parameters.Length];
+                    for (int i = 0; i < parameters.Length; i++)
+                    {
+                        QueryValue q;
+                        if (cnt.Request.Values.TryGetValue(parameters[i].Name, out q))
+                            args[i] = q.Parse(parameters[i]);
+                        else
+                            args[i] = parameters[i].ParameterType.IsValueType
+                                          ? Activator.CreateInstance(parameters[i].ParameterType)
+                                          : null;
+                    }
+
+                    Finalize(cnt, route.Method, page, args);
+                    return;
+                }
+
+                #endregion
+
+                if (Engine.DevMode)
+                    Console.WriteLine(cnt.Request.Host + ":" + cnt.Request.Url + " - " + "Looking for a public folder");
+
+                #region PUBLIC FILES
+                #region IMMUTABLE
+	            byte[] content;
+	            if (immutableData.TryGetValue(cnt.Request.Url, out content))
+	            {
+	                if (!string.IsNullOrEmpty(cnt.Request.Headers["If-Modified-Since"]))
+	                {
+	                    cnt.Response.StatusCode = StatusCode.NotModified;
+	                    cnt.Close();
+	                }
+	                else
+	                {
+	                    cnt.Response.ContentType = MimeTypes.GetType(cnt.Request.Url);
+	                    cnt.Response.Headers["Cache-Control"] = "max-age=29030400";
+	                    cnt.Response.Headers["Last-Modified"] = DateTime.MinValue.ToString("r");
+	                    cnt.Response.Headers["Vary"] = "Accept-Encoding";
+	                    cnt.SendHeaders();
+	                    cnt.OutputStream.BeginWrite(content, 0, content.Length, x =>
+		                {
+		                      try
+		                      {
+		                          cnt.OutputStream.EndWrite(x);
+		                          cnt.Close();
+		                      }
+		                      catch (Exception)
+		                      {
+		                      }
+		                 }, null);
+	                }
+	                return;
+	            }
+	            #endregion
+	            
+	            foreach (PublicFolder item in folders)
+	            {
+	                if (cnt.Request.Url.StartsWith(item.Uri))
+	                {
+	                    string path = System.IO.Path.GetFullPath(item.Path + cnt.Request.Url.Replace('/', System.IO.Path.DirectorySeparatorChar));
+	
+	                    if (!path.StartsWith(item.Path))
+	                        return;
+	
+	                    if (System.IO.File.Exists(path))
+	                    {
+	                        cnt.Response.ContentType = MimeTypes.GetType(cnt.Request.Url);
+	                        cnt.SendHeaders();
+	                        var fs = new System.IO.FileStream(path, System.IO.FileMode.OpenOrCreate, System.IO.FileAccess.ReadWrite, System.IO.FileShare.ReadWrite);
+	                        fs.CopyTo(cnt.OutputStream);
+	                        cnt.Close();
+	                        return;
+	                    }
+	                }
+	            }
+	            
+	            #endregion
+
+                if (Engine.DevMode)
+                    Console.WriteLine(cnt.Request.Host + ":" + cnt.Request.Url + " - " + "Checking status code handlers");
+
+                cnt.Response.StatusCode = StatusCode.NotFound;
+
+                RouteTarget rt;
+                if (callOn.TryGetValue(cnt.Response.StatusCode, out rt))
+                {
+                    if (Engine.DevMode)
+                        Console.WriteLine(cnt.Request.Host + ":" + cnt.Request.Url + " - " + "Calling " +
+                                          rt.Type.FullName + "." + rt.Method.Name);
+
+                    var p = rt.Type.CreateIstance() as FluidPage;
+                    p.Context = cnt;
+
+                    Finalize(cnt, rt.Method, p, null);
+                    return;
+                }
+                if (callOnAnyCode != null)
+                {
+                    if (Engine.DevMode)
+                        Console.WriteLine(cnt.Request.Host + ":" + cnt.Request.Url + " - " + "Calling " +
+                                          callOnAnyCode.Type.FullName + "." + callOnAnyCode.Method.Name);
+
+                    var p = callOnAnyCode.Type.CreateIstance() as FluidPage;
+                    p.Context = cnt;
+
+                    Finalize(cnt, callOnAnyCode.Method, p, null);
+                    return;
+                }
+            }
+            catch (Exception ex)
+            {
+                if (Engine.DevMode)
+                    Console.WriteLine(cnt.Request.Host + ":" + cnt.Request.Url + " - " + "Exception occurred");
+
+                if (ex is TargetInvocationException)
+                    ex = ex.InnerException;
+
+                Engine.Logger.Log(LogLevel.Exception, "Exception during page execution", ex);
+
+                if (Engine.DevMode)
+                    while (ex != null)
+                    {
+                        cnt.Response.StatusCode = StatusCode.InternalServerError;
+                        cnt.SendHeaders();
+                        cnt.Writer.WriteLine("<h1>" + ex.GetType().FullName + "</h1>");
+                        if (ex.Data.Count > 0)
+                        {
+                            cnt.Writer.WriteLine("<h2>Data</h2>");
+                            cnt.Writer.WriteLine("<table>");
+                            foreach (object data in ex.Data.Keys)
+                            {
+                                cnt.Writer.WriteLine("<tr><td>" + data + "</td><td>" + ex.Data[data] + "</td></tr>");
+                            }
+                            cnt.Writer.WriteLine("</table>");
+                        }
+                        cnt.Writer.WriteLine("<h2>HelpLink</h2>");
+                        cnt.Writer.WriteLine(ex.HelpLink);
+
+                        cnt.Writer.WriteLine("<h2>Message</h2>");
+                        cnt.Writer.WriteLine(ex.Message);
+
+                        cnt.Writer.WriteLine("<h2>Source</h2>");
+                        cnt.Writer.WriteLine(ex.Source);
+
+                        cnt.Writer.WriteLine("<h2>StackTrace</h2>");
+                        cnt.Writer.WriteLine(ex.StackTrace);
+
+                        cnt.Writer.WriteLine("<h2>TargetSite</h2>");
+                        cnt.Writer.WriteLine(ex.TargetSite);
+
+                        if (ex.InnerException != null)
+                        {
+                            cnt.Writer.WriteLine("<h2>Inner Exception</h2>");
+                            ex = ex.InnerException;
+                        }
+                        else
+                        {
+                            break;
+                        }
+                    }
+            }
+            cnt.Close();
+        }
+
+        private static Type GetType(string type)
+        {
+            Type t = null;
+            Types.TryGetValue(type, out t);
+            return t;
+        }
+
+        public void Load(Type page)
+        {
+            if (!Types.ContainsKey(page.Name))
+                Types.Add(page.Name, page);
+
+            if (page.FullName != null && !Types.ContainsKey(page.FullName))
+                Types.Add(page.FullName, page);
+
+            if (!page.Inherit(typeof (FluidPage)))
+                throw new TypeLoadException("page must inherit NetFluid.FluidPage");
+
+            if (page.Inherit(typeof (FluidController)))
+                controllers = controllers.Concat(new[] {page}).ToArray();
+
+            try
+            {
+                instances.Add(page.CreateIstance() as FluidPage);
+            }
+            catch (Exception ex)
+            {
+                Engine.Logger.Log(LogLevel.Error, "Failed to create instance of " + page.FullName, ex);
+            }
+
+            foreach (MethodInfo m in page.GetMethods())
+            {
+                foreach (Route ma in m.CustomAttribute<Route>())
+                    SetRoute(ma.Uri, page, m);
+
+                foreach (ParametrizedRoute ma in m.CustomAttribute<ParametrizedRoute>())
+                    SetParameterizedRoute(ma.Uri, page, m);
+
+                foreach (RegexRoute ma in m.CustomAttribute<RegexRoute>())
+                    SetRegexRoute(ma.Uri, page, m);
+
+                foreach (CallOn ma in m.CustomAttribute<CallOn>())
+                {
+                    if (!callOn.ContainsKey(ma.StatusCode))
+                        callOn.Add(ma.StatusCode, new RouteTarget {Type = page, Method = m});
+
+                    if (ma.StatusCode == StatusCode.Any)
+                        callOnAnyCode = new RouteTarget {Type = page, Method = m};
+                }
+            }
+
+            foreach (Route r in page.CustomAttribute<Route>(true))
+            {
+                SetRoute(r.Uri, page, "Run");
+
+                foreach (MethodInfo m in page.GetMethods())
+                {
+                    foreach (Route ma in m.CustomAttribute<Route>())
+                        SetRoute(r.Uri + ma.Uri, page, m);
+
+                    foreach (ParametrizedRoute ma in m.CustomAttribute<ParametrizedRoute>())
+                        SetParameterizedRoute(r.Uri + ma.Uri, page, m);
+
+                    foreach (RegexRoute ma in m.CustomAttribute<RegexRoute>())
+                        SetRegexRoute(Regex.Escape(r.Uri) + ma.Uri, page, m);
+                }
+            }
+
+            foreach (CallOn r in page.CustomAttribute<CallOn>(true))
+            {
+                if (!callOn.ContainsKey(r.StatusCode))
+                {
+                    callOn.Add(r.StatusCode, new RouteTarget {Type = page, Method = page.GetMethod("Run")});
+                }
+                if (r.StatusCode == StatusCode.Any)
+                    callOnAnyCode = new RouteTarget {Type = page, Method = page.GetMethod("Run")};
+            }
+        }
+
+        public void AddPublicFolder(string uriPath, string realPath)
+        {
+        	folders = (folders.Concat(new PublicFolder{Path=realPath, Uri=uriPath })).ToArray();
+        }
+        
+        public void AddImmutablePublicFolder(string uriPath, string realPath)
+        {
+        	string m = System.IO.Path.GetFullPath(realPath);
+            string start = uriPath.EndsWith('/') ? uriPath : uriPath + "/";
+
+            foreach (string x in System.IO.Directory.GetFiles(m, "*.*", System.IO.SearchOption.AllDirectories))
+            {
+                string s = x.Substring(m.Length).Replace(System.IO.Path.DirectorySeparatorChar, '/');
+
+                if (s[0] == '/')
+                    s = s.Substring(1);
+
+                string fileUri = start + s;
+                if (!immutableData.ContainsKey(fileUri))
+                {
+                    immutableData.Add(fileUri, System.IO.File.ReadAllBytes(x));
+                }
+            }
+        }
+   
+        public void SetSmallController(Action<Context> act)
+        {
+            smallControllers =
+                smallControllers.Concat(new[] {new SmallControllerChecked {Action = act, Condition = (x) => true}}).
+                    ToArray();
+        }
+
+        public void SetSmallController(Func<Context, bool> condition, Action<Context> act)
+        {
+            smallControllers =
+                smallControllers.Concat(new[] {new SmallControllerChecked {Action = act, Condition = condition}}).
+                    ToArray();
+        }
+
+        public void SetRoute(string url, string methodFullname)
+        {
+            if (url == null)
+                throw new NullReferenceException("Null url");
+
+            if (methodFullname == null)
+                throw new NullReferenceException("Null method");
+
+            Type t = GetType(methodFullname.Substring(0, methodFullname.LastIndexOf('.')));
+            if (t == null)
+                throw new TypeLoadException(methodFullname.Substring(0, methodFullname.LastIndexOf('.')) + " not found");
+
+            if (!t.Inherit(typeof (FluidPage)))
+                throw new TypeLoadException("Routed types must inherit NetFluid.FluidPage");
+
+            instances.Add(t.CreateIstance() as FluidPage);
+
+            SetRoute(url, t, methodFullname.Substring(methodFullname.LastIndexOf('.') + 1));
+        }
+
+        public void SetRoute(string url, Type type, string method)
+        {
+            if (url == null)
+                throw new NullReferenceException("Null url");
+
+            if (method == null)
+                throw new NullReferenceException("Null method");
+
+            if (type == null)
+                throw new NullReferenceException("Null type");
+
+            if (!type.Inherit(typeof (FluidPage)))
+                throw new TypeLoadException("Routed types must inherit NetFluid.FluidPage");
+
+            var rt = new RouteTarget {Type = type, Method = type.GetMethod(method)};
+
+            instances.Add(type.CreateIstance() as FluidPage);
+
+            if (routes.ContainsKey(url))
+                routes[url] = rt;
+            else
+                routes.Add(url, rt);
+        }
+
+        public void SetRoute(string url, Type type, MethodInfo method)
+        {
+            if (url == null)
+                throw new NullReferenceException("Null url");
+
+            if (method == null)
+                throw new NullReferenceException("Null method");
+
+            if (type == null)
+                throw new NullReferenceException("Null type");
+
+            if (!type.Inherit(typeof (FluidPage)))
+                throw new TypeLoadException("Routed types must inherit NetFluid.FluidPage");
+
+
+            var rt = new RouteTarget {Type = type, Method = method};
+
+            instances.Add(type.CreateIstance() as FluidPage);
+
+            if (routes.ContainsKey(url))
+                routes[url] = rt;
+            else
+                routes.Add(url, rt);
+        }
+
+        public void SetParameterizedRoute(string url, string methodFullname)
+        {
+            if (url == null)
+                throw new NullReferenceException("Null url");
+
+            if (methodFullname == null)
+                throw new NullReferenceException("Null method");
+
+            Type t = GetType(methodFullname.Substring(0, methodFullname.LastIndexOf('.')));
+            if (t == null)
+                throw new TypeLoadException(methodFullname.Substring(0, methodFullname.LastIndexOf('.')) + " not found");
+
+            if (!t.Inherit(typeof (FluidPage)))
+                throw new TypeLoadException("Routed types must inherit NetFluid.FluidPage");
+
+            instances.Add(t.CreateIstance() as FluidPage);
+
+            SetParameterizedRoute(url, t, methodFullname.Substring(methodFullname.LastIndexOf('.') + 1));
+        }
+
+        public void SetParameterizedRoute(string url, Type type, string method)
+        {
+            if (url == null)
+                throw new NullReferenceException("Null url");
+
+            if (method == null)
+                throw new NullReferenceException("Null method");
+
+            if (type == null)
+                throw new NullReferenceException("Null type");
+
+            if (!type.Inherit(typeof (FluidPage)))
+                throw new TypeLoadException("Routed types must inherit NetFluid.FluidPage");
+
+            var rt = new ParamRouteTarget {Type = type, Method = type.GetMethod(method), Url = url};
+
+            instances.Add(type.CreateIstance() as FluidPage);
+
+            parametrized = parametrized.Concat(new[] {rt}).OrderByDescending(x => x.Url.Length).ToArray();
+        }
+
+        public void SetParameterizedRoute(string url, Type type, MethodInfo method)
+        {
+            if (url == null)
+                throw new NullReferenceException("Null url");
+
+            if (method == null)
+                throw new NullReferenceException("Null method");
+
+            if (type == null)
+                throw new NullReferenceException("Null type");
+
+            if (!type.Inherit(typeof (FluidPage)))
+                throw new TypeLoadException("Routed types must inherit NetFluid.FluidPage");
+
+            var rt = new ParamRouteTarget {Type = type, Method = method, Url = url};
+
+            instances.Add(type.CreateIstance() as FluidPage);
+
+            parametrized = parametrized.Concat(new[] {rt}).OrderByDescending(x => x.Url.Length).ToArray();
+        }
+
+        public void SetRegexRoute(string rgx, string methodFullname)
+        {
+            if (rgx == null)
+                throw new NullReferenceException("Null regex");
+
+            if (methodFullname == null)
+                throw new NullReferenceException("Null method");
+
+            Type t = GetType(methodFullname.Substring(0, methodFullname.LastIndexOf('.')));
+            if (t == null)
+                throw new TypeLoadException(methodFullname.Substring(0, methodFullname.LastIndexOf('.')) + " not found");
+
+            if (!t.Inherit(typeof (FluidPage)))
+                throw new TypeLoadException("Routed types must inherit NetFluid.FluidPage");
+
+            instances.Add(t.CreateIstance() as FluidPage);
+
+            SetRegexRoute(rgx, t, methodFullname.Substring(methodFullname.LastIndexOf('.') + 1));
+        }
+
+        public void SetRegexRoute(string rgx, Type type, string method)
+        {
+            if (rgx == null)
+                throw new NullReferenceException("Null regex");
+
+            if (method == null)
+                throw new NullReferenceException("Null method");
+
+            if (type == null)
+                throw new NullReferenceException("Null type");
+
+            if (!type.Inherit(typeof (FluidPage)))
+                throw new TypeLoadException("Routed types must inherit NetFluid.FluidPage");
+
+            MethodInfo m = type.GetMethod(method);
+            if (m == null)
+                throw new TypeLoadException(type.FullName + "." + method + " not found");
+
+            var rt = new RegexRouteTarget {Type = type, Method = m, Regex = new Regex(rgx, RegexOptions.Compiled)};
+
+            instances.Add(type.CreateIstance() as FluidPage);
+
+            regex = regex.Concat(new[] {rt}).ToArray();
+        }
+
+        public void SetRegexRoute(string rgx, Type type, MethodInfo method)
+        {
+            if (rgx == null)
+                throw new NullReferenceException("Null regex");
+
+            if (method == null)
+                throw new NullReferenceException("Null method");
+
+            if (type == null)
+                throw new NullReferenceException("Null type");
+
+            if (!type.Inherit(typeof (FluidPage)))
+                throw new TypeLoadException("Routed types must inherit NetFluid.FluidPage");
+
+            var rt = new RegexRouteTarget {Type = type, Method = method, Regex = new Regex(rgx, RegexOptions.Compiled)};
+
+            instances.Add(type.CreateIstance() as FluidPage);
+
+            regex = regex.Concat(new[] {rt}).ToArray();
+        }
+
+        #region Nested type: ParamRouteTarget
+
+        private class ParamRouteTarget
+        {
+            public MethodInfo Method;
+            public Type Type;
+            public string Url;
+        }
+
+        #endregion
+
+        #region Nested type: RegexRouteTarget
+
+        private class RegexRouteTarget
+        {
+            public MethodInfo Method;
+            public Regex Regex;
+            public Type Type;
+        }
+
+        #endregion
+
+        #region Nested type: RouteTarget
+
+        private class RouteTarget
+        {
+            public MethodInfo Method;
+            public Type Type;
+        }
+
+        #endregion
+
+        #region Nested type: SmallControllerChecked
+
+        private class SmallControllerChecked
+        {
+            public Action<Context> Action;
+            public Func<Context, bool> Condition;
+        }
+
+        #endregion
+    }
+}
