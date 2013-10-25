@@ -2,3 +2,8 @@ C:\Users\Matte\Desktop\NF\Repository\NetFluid III\bin\net_4_0_Release\NetFluid.d
 C:\Users\Matte\Desktop\NF\Repository\NetFluid III\bin\net_4_0_Release\NetFluid.pdb
 C:\Users\Matte\Desktop\NF\Repository\NetFluid III\obj\net_4_0_Release\NetFluid.dll
 C:\Users\Matte\Desktop\NF\Repository\NetFluid III\obj\net_4_0_Release\NetFluid.pdb
+C:\Users\Matte\Desktop\NF\GitHub\NetFluid III\bin\net_4_0_Release\NetFluid.dll
+C:\Users\Matte\Desktop\NF\GitHub\NetFluid III\bin\net_4_0_Release\NetFluid.pdb
+C:\Users\Matte\Desktop\NF\GitHub\NetFluid III\obj\net_4_0_Release\NetFluid.dll
+C:\Users\Matte\Desktop\NF\GitHub\NetFluid III\obj\net_4_0_Release\NetFluid.pdb
+C:\Users\Matte\Desktop\NF\GitHub\NetFluid III\obj\net_4_0_Release\NetFluid3.csprojResolveAssemblyReference.cache

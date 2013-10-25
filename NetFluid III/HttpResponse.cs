@@ -25,6 +25,7 @@ using System;
 using System.Net;
 using System.Text;
 using NetFluid.HTTP;
+using System.Globalization;
 
 namespace NetFluid
 {
@@ -44,7 +45,11 @@ namespace NetFluid
         public HttpResponse()
         {
             StatusDescription = "OK";
+            
             Headers = new WebHeaderCollection();
+            Headers.Append("Server","NetFluid III");
+            Headers.Append("Date",DateTime.UtcNow.ToString("r", CultureInfo.InvariantCulture));
+
             ContentType = "text/html; charset=utf-8";
             ProtocolVersion = HttpVersion.Version11;
             ContentEncoding = Encoding.UTF8;

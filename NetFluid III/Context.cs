@@ -61,8 +61,8 @@ namespace NetFluid
 
         public Context(Socket sock)
         {
-        	sock.SendTimeout = 10000;
-            sock.ReceiveTimeout = 10000;
+        	sock.SendTimeout = 5000;
+            sock.ReceiveTimeout = 5000;
 
             IsOpen = true;
             Secure = false;
@@ -483,84 +483,90 @@ namespace NetFluid
 
         public void SendHeaders()
         {
-            if (HeadersSent)
-                return;
+            try
+            {
+                if (HeadersSent)
+                    return;
 
-            if (Response.ContentEncoding == null)
-                Response.ContentEncoding = Encoding.UTF8;
+                if (Response.ContentEncoding == null)
+                    Response.ContentEncoding = Encoding.UTF8;
 
-            if (Response.ContentType != null)
-                if (Response.ContentType.IndexOf("charset=", StringComparison.Ordinal) == -1)
-                    Response.Headers.Set("Content-Type",
-                                         Response.ContentType + "; charset=" + Response.ContentEncoding.WebName);
+                if (Response.ContentType != null)
+                    if (Response.ContentType.IndexOf("charset=", StringComparison.Ordinal) == -1)
+                        Response.Headers.Set("Content-Type",
+                                             Response.ContentType + "; charset=" + Response.ContentEncoding.WebName);
+                    else
+                        Response.Headers.Set("Content-Type", Response.ContentType);
+
+
+                // They sent both KeepAlive: true and Connection: close!?
+                if (!Response.KeepAlive || Response.StatusCode >= (StatusCode)400)
+                {
+                    Response.Headers.Set("Connection", "close");
+                }
                 else
-                    Response.Headers.Set("Content-Type", Response.ContentType);
+                {
+                    Response.Headers.Set("Keep-Alive", "timeout=15,max=100");
+                    if (Request.ProtocolVersion <= HttpVersion.Version10)
+                        Response.Headers.Set("Connection", "keep-alive");
+                }
 
+                if (SessionId != null)
+                {
+                    if (Response.Cookies == null)
+                        Response.Cookies = new CookieCollection();
+                    Response.Cookies.Add(new Cookie("SESSION-ID", SessionId));
+                }
 
-            // They sent both KeepAlive: true and Connection: close!?
-            if (!Response.KeepAlive || Response.StatusCode >= (StatusCode) 400)
-            {
-                Response.Headers.Set("Connection", "close");
+                if (Response.Cookies != null)
+                    foreach (Cookie cookie in Response.Cookies)
+                        Response.Headers.Append("Set-Cookie", cookie.ToClientString());
+
+                if (Request.ProtocolVersion >= HttpVersion.Version11)
+                    Response.Headers.Set("Transfer-Encoding", "chunked");
+
+                #region COMPRESSION HEADERS
+
+                if (Request.Headers["Accept-Encoding"].Contains("gzip"))
+                    Response.Headers["Content-Encoding"] = "gzip";
+
+                else if (Request.Headers["Accept-Encoding"].Contains("deflate"))
+                    Response.Headers["Content-Encoding"] = "deflate";
+
+                #endregion
+
+                string h = string.Format("HTTP/{0} {1} {2}\r\n{3}\r\n", Response.ProtocolVersion, (int)Response.StatusCode,
+                                         Response.StatusDescription, Response.Headers);
+                byte[] b = Response.ContentEncoding.GetBytes(h);
+                OutputStream.Write(b, 0, b.Length);
+                OutputStream.Flush();
+
+                if (Request.ProtocolVersion >= HttpVersion.Version11)
+                {
+                    OutputStream = new ChunkedStream(OutputStream);
+                    writer = new StreamWriter(OutputStream, Response.ContentEncoding, 1024);
+                }
+
+                #region COMPRESSION STREAM
+
+                if (Request.Headers["Accept-Encoding"].Contains("gzip"))
+                {
+                    OutputStream = new GZipStream(OutputStream, CompressionMode.Compress);
+                    writer = new StreamWriter(OutputStream, Response.ContentEncoding, 1024);
+                }
+                else if (Request.Headers["Accept-Encoding"].Contains("deflate"))
+                {
+                    OutputStream = new DeflateStream(OutputStream, CompressionMode.Compress);
+                    writer = new StreamWriter(OutputStream, Response.ContentEncoding, 1024);
+                }
+
+                #endregion
+
+                HeadersSent = true;
             }
-            else
+            catch (Exception)
             {
-                Response.Headers.Set("Keep-Alive", "timeout=15,max=100");
-                if (Request.ProtocolVersion <= HttpVersion.Version10)
-                    Response.Headers.Set("Connection", "keep-alive");
             }
-
-            if (SessionId != null)
-            {
-                if (Response.Cookies == null)
-                    Response.Cookies = new CookieCollection();
-                Response.Cookies.Add(new Cookie("SESSION-ID", SessionId));
-            }
-
-            if (Response.Cookies != null)
-                foreach (Cookie cookie in Response.Cookies)
-                    Response.Headers.Append("Set-Cookie", cookie.ToClientString());
-
-            if (Request.ProtocolVersion >= HttpVersion.Version11)
-                Response.Headers.Set("Transfer-Encoding", "chunked");
-
-            #region COMPRESSION HEADERS
-
-            if (Request.Headers["Accept-Encoding"].Contains("gzip"))
-                Response.Headers["Content-Encoding"] = "gzip";
-
-            else if (Request.Headers["Accept-Encoding"].Contains("deflate"))
-                Response.Headers["Content-Encoding"] = "deflate";
-
-            #endregion
-
-            string h = string.Format("HTTP/{0} {1} {2}\r\n{3}\r\n", Response.ProtocolVersion, (int) Response.StatusCode,
-                                     Response.StatusDescription, Response.Headers);
-            byte[] b = Response.ContentEncoding.GetBytes(h);
-            OutputStream.Write(b, 0, b.Length);
-            OutputStream.Flush();
-
-            if (Request.ProtocolVersion >= HttpVersion.Version11)
-            {
-                OutputStream = new ChunkedStream(OutputStream);
-                writer = new StreamWriter(OutputStream, Response.ContentEncoding, 1024);
-            }
-
-            #region COMPRESSION STREAM
-
-            if (Request.Headers["Accept-Encoding"].Contains("gzip"))
-            {
-                OutputStream = new GZipStream(OutputStream, CompressionMode.Compress);
-                writer = new StreamWriter(OutputStream, Response.ContentEncoding, 1024);
-            }
-            else if (Request.Headers["Accept-Encoding"].Contains("deflate"))
-            {
-                OutputStream = new DeflateStream(OutputStream, CompressionMode.Compress);
-                writer = new StreamWriter(OutputStream, Response.ContentEncoding, 1024);
-            }
-
-            #endregion
-
-            HeadersSent = true;
         }
 
         public void Close()

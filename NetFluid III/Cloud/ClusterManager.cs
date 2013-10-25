@@ -30,6 +30,7 @@ using System.Linq;
 using System.Net;
 using System.Net.Sockets;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace NetFluid.Cloud
 {
@@ -143,11 +144,15 @@ namespace NetFluid.Cloud
 
             if (fow != null)
             {
-                var sock = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
-                sock.ReceiveTimeout = 10000;
-                sock.ReceiveTimeout = 10000;
-                sock.Connect(fow);
-                Add(new State(context.InputStream,new NetworkStream(sock),context.Buffer,context.Buffer.Length));
+                Task.Factory.StartNew(()=>
+                {
+                    var sock = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+                    sock.ReceiveTimeout = 5000;
+                    sock.SendTimeout = 5000;
+                    sock.Connect(fow);
+                    Add(new State(context.InputStream, new NetworkStream(sock), context.Buffer, context.Buffer.Length));
+                });
+
                 return true;
             }
             return false;

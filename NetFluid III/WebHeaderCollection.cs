@@ -35,14 +35,7 @@ namespace NetFluid
 
         public WebHeaderCollection()
         {
-            values = new Dictionary<string, List<string>>
-                         {
-                             {"Server", new List<string>(new[] {"NetFluid III"})},
-                             {
-                                 "Date",
-                                 new List<string>(new[] {DateTime.UtcNow.ToString("r", CultureInfo.InvariantCulture)})
-                             },
-                         };
+            values = new Dictionary<string, List<string>>();
         }
 
         public string this[string index]

@@ -25,6 +25,7 @@ using System;
 using System.Net;
 using System.Net.Sockets;
 using System.Security.Cryptography.X509Certificates;
+using System.Threading.Tasks;
 
 namespace NetFluid.HTTP
 {
@@ -74,7 +75,14 @@ namespace NetFluid.HTTP
             var listenSocket = sender as Socket;
             do
             {
-                new Context(e.AcceptSocket);
+                try
+                {
+                    new Context(e.AcceptSocket);
+                }
+                catch (Exception)
+                {
+                    Engine.Logger.Log(LogLevel.Exception, "Error on context");
+                }
                 e.AcceptSocket = null;
             } while (!listenSocket.AcceptAsync(e));
         }
@@ -84,15 +92,22 @@ namespace NetFluid.HTTP
             var listenSocket = sender as Socket;
             do
             {
-                new Context(e.AcceptSocket, certificate);
+                try
+                {
+                    new Context(e.AcceptSocket, certificate);
+                }
+                catch (Exception)
+                {
+                    Engine.Logger.Log(LogLevel.Exception, "Error on context");
+                }
                 e.AcceptSocket = null; // to enable reuse
             } while (!listenSocket.AcceptAsync(e));
         }
 
         public void Start()
         {
-            Engine.Logger.Log(LogLevel.Debug,
-                              "Starting " + (certificate != null ? "secure " : " ") + "web interface on " + endpoint);
+            Engine.Logger.Log(LogLevel.Debug,"Starting " + (certificate != null ? "secure " : " ") + "web interface on " + endpoint);
+
             var e = new SocketAsyncEventArgs();
             if (certificate == null)
             {
