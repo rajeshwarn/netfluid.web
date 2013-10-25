@@ -130,7 +130,21 @@ namespace NetFluid
             }, null);
         }
 
-        public string SessionId { get; private set; }
+        string sessionId;
+        public string SessionId
+        {
+            get
+            {
+                if (sessionId == null)
+                    sessionId = Security.UID();
+
+                return sessionId;
+            }
+            private set 
+            {
+                sessionId = value;
+            }
+        }
 
         public bool Secure { get; private set; }
 
@@ -607,16 +621,11 @@ namespace NetFluid
 
         public void Session(string name, object obj)
         {
-            if (SessionId == null)
-                SessionId = Security.UID();
             Engine.Sessions.Set(SessionId, name, obj);
         }
 
         public T Session<T>(string name)
         {
-            if (SessionId == null)
-                SessionId = Security.UID();
-
             object k = Engine.Sessions.Get(SessionId, name);
             if (k != null)
             {
@@ -627,8 +636,6 @@ namespace NetFluid
 
         public dynamic Session(string name)
         {
-            if (SessionId == null)
-                SessionId = Security.UID();
             return Engine.Sessions.Get(SessionId, name);
         }
     }
