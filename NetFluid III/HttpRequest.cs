@@ -45,7 +45,7 @@ namespace NetFluid
         public string RawUrl;
         public string Url;
 
-        public Uri UrlReferrer;
+        public string UrlReferrer;
         public string[] UserLanguages;
 
         private Dictionary<string, QueryValue> values;

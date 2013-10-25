@@ -304,7 +304,7 @@ namespace NetFluid
                         }
                         break;
                     case "Referer":
-                        Uri.TryCreate(val, UriKind.Absolute, out Request.UrlReferrer);
+                        Request.UrlReferrer = val;
                         break;
                     case "Cookie":
 
