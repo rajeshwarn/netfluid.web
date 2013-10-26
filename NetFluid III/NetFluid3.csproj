@@ -61,6 +61,7 @@
     <Compile Include="Authentication.cs" />
     <Compile Include="Cloud\ClusterManager.cs" />
     <Compile Include="Cloud\IClusterManager.cs" />
+    <Compile Include="Collections\Persistent\PersistentDictionary.cs" />
     <Compile Include="Configuration\Interface.cs" />
     <Compile Include="Configuration\PublicFolder.cs" />
     <Compile Include="Configuration\Settings.cs" />

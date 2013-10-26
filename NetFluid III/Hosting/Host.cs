@@ -546,17 +546,20 @@ namespace NetFluid
         	string m = System.IO.Path.GetFullPath(realPath);
             string start = uriPath.EndsWith('/') ? uriPath : uriPath + "/";
 
-            foreach (string x in System.IO.Directory.GetFiles(m, "*.*", System.IO.SearchOption.AllDirectories))
+            if (System.IO.Directory.Exists(m))
             {
-                string s = x.Substring(m.Length).Replace(System.IO.Path.DirectorySeparatorChar, '/');
-
-                if (s[0] == '/')
-                    s = s.Substring(1);
-
-                string fileUri = start + s;
-                if (!immutableData.ContainsKey(fileUri))
+                foreach (string x in System.IO.Directory.GetFiles(m, "*.*", System.IO.SearchOption.AllDirectories))
                 {
-                    immutableData.Add(fileUri, System.IO.File.ReadAllBytes(x));
+                    string s = x.Substring(m.Length).Replace(System.IO.Path.DirectorySeparatorChar, '/');
+
+                    if (s[0] == '/')
+                        s = s.Substring(1);
+
+                    string fileUri = start + s;
+                    if (!immutableData.ContainsKey(fileUri))
+                    {
+                        immutableData.Add(fileUri, System.IO.File.ReadAllBytes(x));
+                    }
                 }
             }
         }
