@@ -48,10 +48,6 @@ namespace NetFluid
             if (Engine.DevMode)
                 Engine.Logger.Log(LogLevel.Debug, "Loading templates");
 
-            foreach (string item in Directory.GetFiles("./", "*.html", SearchOption.AllDirectories))
-            {
-                Get(item);
-            }
             foreach (string item in Directory.GetFiles("./", "*.htm", SearchOption.AllDirectories))
             {
                 Get(item);
@@ -81,8 +77,9 @@ namespace NetFluid
                 template = Load(path);
                 templates.AddOrUpdate(path, template, (x, y) => y);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                Engine.Logger.Log(LogLevel.Error, "Error loading template " + filename, ex);
                 template = Empty();
                 templates.AddOrUpdate(path, template, (x, y) => y);
             }
@@ -165,11 +162,18 @@ namespace NetFluid
             }
             else
             {
-                try
+                if (File.Exists(filename))
                 {
-                    stream = new FileStream(filename, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
+                    try
+                    {
+                        stream = new FileStream(filename, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
+                    }
+                    catch (FileNotFoundException)
+                    {
+                        return FileNotFound(filename);
+                    }
                 }
-                catch (FileNotFoundException)
+                else
                 {
                     return FileNotFound(filename);
                 }
@@ -299,18 +303,19 @@ namespace NetFluid
             classBuilder.AppendLine(string.Join("\r\n", usings.Distinct()));
             classBuilder.AppendLine("namespace " + @namespace + "\r\n{\r\n");
             classBuilder.AppendLine("public static class " + name + "\r\n{\r\n");
-            builder.AppendLine("#line " + parametersLine + " \"" + filename + "\"");
+            classBuilder.AppendLine("#line " + parametersLine + " \"" + filename + "\"");
             classBuilder.AppendLine("public static void Run" + parameters + "\r\n{\r\n");
             classBuilder.AppendLine(builder.ToString());
             classBuilder.AppendLine("\r\n}\r\n");
             classBuilder.AppendLine("\r\n}\r\n");
             classBuilder.AppendLine("\r\n}\r\n");
 
+
             var csc = new CSharpCodeProvider(new Dictionary<string, string> {{"CompilerVersion", "v4.0"}});
             var csc_parameters = new CompilerParameters(new string[] {}, Path.GetTempFileName(), false);
             csc_parameters.TreatWarningsAsErrors = false;
 
-            AssemblyName[] refe = Assembly.GetEntryAssembly().GetReferencedAssemblies();
+            var refe = Assembly.GetEntryAssembly().GetReferencedAssemblies();
             foreach (AssemblyName reference in refe)
             {
                 Assembly ass = Assembly.Load(reference);
@@ -324,7 +329,12 @@ namespace NetFluid
             csc_parameters.TreatWarningsAsErrors = false;
             csc_parameters.CompilerOptions = "/optimize /nowarn:108;114;3009;1685";
             csc_parameters.WarningLevel = 1;
-            CompilerResults results = csc.CompileAssemblyFromSource(csc_parameters, classBuilder.ToString());
+
+            var code = classBuilder.ToString();
+            if (Engine.DevMode)
+                File.WriteAllText(Path.Combine(Path.GetDirectoryName(filename), Path.GetFileNameWithoutExtension(filename) + ".txt"),code);
+    
+            CompilerResults results = csc.CompileAssemblyFromSource(csc_parameters, code);
 
             if (results.Errors.HasErrors)
             {

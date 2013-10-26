@@ -594,8 +594,7 @@ namespace NetFluid
             if (profiling)
             {
                 st.Stop();
-                ProfilingResults.Add(new Tuple<long, string>(Stopwatch.Frequency/st.ElapsedTicks,
-                                                             Request.Host + Request.Url));
+                ProfilingResults.Add(new Tuple<long, string>(Stopwatch.Frequency/st.ElapsedTicks,Request.Host + Request.Url));
             }
 
 
