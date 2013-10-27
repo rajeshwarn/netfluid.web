@@ -382,14 +382,12 @@ namespace NetFluid
 
                 acc += "\r\n";
 
-                string h =
-                    string.Format(
-                        "HTTP/1.1 101 Switching Protocols\r\nConnection:Upgrade\r\nUpgrade:websocket\r\nServer: NetFluid III\r\n" +
-                        acc);
+                string h = string.Format("HTTP/1.1 101 Switching Protocols\r\nConnection:Upgrade\r\nUpgrade:websocket\r\nServer: NetFluid III\r\n" + acc);
                 byte[] b = Response.ContentEncoding.GetBytes(h);
                 OutputStream.Write(b, 0, b.Length);
                 OutputStream.Flush();
 
+                HeadersSent = true;
                 OutputStream = new WebSocketStream(OutputStream);
                 InputStream = new WebSocketStream(InputStream);
                 writer = new StreamWriter(OutputStream);
