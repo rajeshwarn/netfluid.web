@@ -58,14 +58,48 @@ namespace NetFluid.Cloud
             {
                 try
                 {
-                    Source.BeginRead(InBuffer, 0, InBuffer.Length, x =>
+                    if (Source.CanRead)
                     {
-                        var k = Source.EndRead(x);
-                        Destination.BeginWrite(InBuffer, 0, k, Inbound, null);
-                    }, null);
+                        Source.BeginRead(InBuffer, 0, InBuffer.Length, x =>
+                        {
+                            var k = Source.EndRead(x);
+
+                            if (Destination.CanWrite)
+                            {
+                                Destination.BeginWrite(InBuffer, 0, k, Inbound, null);
+                            }
+                            else
+                            {
+                                Source.Close();
+                                Destination.Close();
+                                ClusterManager.Remove(this);
+                            }
+                        }, null);
+                    }
+                    else
+                    {
+                        Source.Close();
+                        Destination.Close();
+                        ClusterManager.Remove(this);
+                    }
                 }
                 catch (Exception)
                 {
+                    try
+                    {
+                        Source.Close();
+                    }
+                    catch (Exception)
+                    {
+                    }
+
+                    try
+                    {
+                        Destination.Close();
+                    }
+                    catch (Exception)
+                    {
+                    }
                     ClusterManager.Remove(this);
                 }
             }
@@ -73,14 +107,47 @@ namespace NetFluid.Cloud
             {
                 try
                 {
-                    Destination.BeginRead(OutBuffer, 0, OutBuffer.Length, x =>
+                    if (Destination.CanRead)
                     {
-                        var k = Destination.EndRead(x);
-                        Source.BeginWrite(OutBuffer, 0, k, Outbound, null);
-                    }, null);
+                        Destination.BeginRead(OutBuffer, 0, OutBuffer.Length, x =>
+                        {
+                            var k = Destination.EndRead(x);
+                            if (Source.CanWrite)
+                            {
+                                Source.BeginWrite(OutBuffer, 0, k, Outbound, null);
+                            }
+                            else
+                            {
+                                Source.Close();
+                                Destination.Close();
+                                ClusterManager.Remove(this);
+                            }
+                        }, null);
+                    }
+                    else
+                    {
+                        Source.Close();
+                        Destination.Close();
+                        ClusterManager.Remove(this);
+                    }
                 }
                 catch (Exception)
                 {
+                    try
+                    {
+                        Source.Close();
+                    }
+                    catch (Exception)
+                    {
+                    }
+
+                    try
+                    {
+                        Destination.Close();
+                    }
+                    catch (Exception)
+                    {
+                    }
                     ClusterManager.Remove(this);
                 }
             }
@@ -147,8 +214,8 @@ namespace NetFluid.Cloud
                 Task.Factory.StartNew(()=>
                 {
                     var sock = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
-                    sock.ReceiveTimeout = 5000;
-                    sock.SendTimeout = 5000;
+                    sock.ReceiveTimeout = 3000;
+                    sock.SendTimeout = 3000;
                     sock.Connect(fow);
                     Add(new State(context.InputStream, new NetworkStream(sock), context.Buffer, context.Buffer.Length));
                 });
