@@ -112,15 +112,15 @@ namespace NetFluid
 
             stream.BeginAuthenticateAsServer(certificate, x =>
             {
-                stream.EndAuthenticateAsServer(x);
-                OutputStream = stream;
-                InputStream = stream;
-
-                Response.StatusCode = StatusCode.BadRequest;
-
-                Buffer = new byte[BufferSize];
                 try
                 {
+                    stream.EndAuthenticateAsServer(x);
+                    OutputStream = stream;
+                    InputStream = stream;
+
+                    Response.StatusCode = StatusCode.BadRequest;
+
+                    Buffer = new byte[BufferSize];
                     InputStream.BeginRead(Buffer, 0, BufferSize, OnRead, this);
                 }
                 catch
@@ -220,7 +220,14 @@ namespace NetFluid
 
             if (header == "")
             {
-                InputStream.BeginRead(Buffer, 0, Buffer.Length, OnRead, this);
+                try
+                {
+                    InputStream.BeginRead(Buffer, 0, Buffer.Length, OnRead, this);
+                }
+                catch (Exception)
+                {
+                }
+
                 return;
             }
 
@@ -453,30 +460,36 @@ namespace NetFluid
 
             InputStream.BeginRead(b, 0, n, x =>
             {
-                int r = InputStream.EndRead(x);
-                read += r;
-                s.Write(b, 0, r);
-
-                if (read < total)
+                try
                 {
-                    ReadAndSave(read, total, s);
-                }
-                else
-                {
-                    s.Flush();
-                    s.Seek(0, SeekOrigin.Begin);
+                    int r = InputStream.EndRead(x);
+                    read += r;
+                    s.Write(b, 0, r);
 
-                    if (
-                        Request.Headers["Content-Type"].StartsWith(
-                            "application/x-www-form-urlencoded"))
-                        PostManager.DecodeUrl(this, s);
-                    else if (
-                        Request.Headers["Content-Type"].StartsWith(
-                            "multipart/form-data; boundary="))
-                        PostManager.DecodeMultiPart(this, s);
+                    if (read < total)
+                    {
+                        ReadAndSave(read, total, s);
+                    }
                     else
-                        InputStream = s;
-                    Engine.Serve(this);
+                    {
+                        s.Flush();
+                        s.Seek(0, SeekOrigin.Begin);
+
+                        if (
+                            Request.Headers["Content-Type"].StartsWith(
+                                "application/x-www-form-urlencoded"))
+                            PostManager.DecodeUrl(this, s);
+                        else if (
+                            Request.Headers["Content-Type"].StartsWith(
+                                "multipart/form-data; boundary="))
+                            PostManager.DecodeMultiPart(this, s);
+                        else
+                            InputStream = s;
+                        Engine.Serve(this);
+                    }
+                }
+                catch (Exception)
+                {
                 }
             }, null);
         }

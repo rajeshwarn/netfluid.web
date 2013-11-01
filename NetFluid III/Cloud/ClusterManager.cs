@@ -54,6 +54,26 @@ namespace NetFluid.Cloud
                 Outbound(null);
             }
 
+            void TryClose()
+            {
+                try
+                {
+                    Source.Close();
+                }
+                catch (Exception)
+                {
+                }
+
+                try
+                {
+                    Destination.Close();
+                }
+                catch (Exception)
+                {
+                }
+                ClusterManager.Remove(this);
+            }
+
             private void Inbound(IAsyncResult result)
             {
                 try
@@ -62,45 +82,33 @@ namespace NetFluid.Cloud
                     {
                         Source.BeginRead(InBuffer, 0, InBuffer.Length, x =>
                         {
-                            var k = Source.EndRead(x);
+                            try
+                            {
+                                var k = Source.EndRead(x);
 
-                            if (Destination.CanWrite)
-                            {
-                                Destination.BeginWrite(InBuffer, 0, k, Inbound, null);
+                                if (Destination.CanWrite)
+                                {
+                                    Destination.BeginWrite(InBuffer, 0, k, Inbound, null);
+                                }
+                                else
+                                {
+                                    TryClose();
+                                }
                             }
-                            else
+                            catch (Exception)
                             {
-                                Source.Close();
-                                Destination.Close();
-                                ClusterManager.Remove(this);
+                                TryClose();
                             }
                         }, null);
                     }
                     else
                     {
-                        Source.Close();
-                        Destination.Close();
-                        ClusterManager.Remove(this);
+                        TryClose();
                     }
                 }
                 catch (Exception)
                 {
-                    try
-                    {
-                        Source.Close();
-                    }
-                    catch (Exception)
-                    {
-                    }
-
-                    try
-                    {
-                        Destination.Close();
-                    }
-                    catch (Exception)
-                    {
-                    }
-                    ClusterManager.Remove(this);
+                    TryClose();
                 }
             }
             private void Outbound(IAsyncResult result)
@@ -111,44 +119,32 @@ namespace NetFluid.Cloud
                     {
                         Destination.BeginRead(OutBuffer, 0, OutBuffer.Length, x =>
                         {
-                            var k = Destination.EndRead(x);
-                            if (Source.CanWrite)
+                            try
                             {
-                                Source.BeginWrite(OutBuffer, 0, k, Outbound, null);
+                                var k = Destination.EndRead(x);
+                                if (Source.CanWrite)
+                                {
+                                    Source.BeginWrite(OutBuffer, 0, k, Outbound, null);
+                                }
+                                else
+                                {
+                                    TryClose();
+                                }
                             }
-                            else
+                            catch (Exception)
                             {
-                                Source.Close();
-                                Destination.Close();
-                                ClusterManager.Remove(this);
+                                TryClose();
                             }
                         }, null);
                     }
                     else
                     {
-                        Source.Close();
-                        Destination.Close();
-                        ClusterManager.Remove(this);
+                        TryClose();
                     }
                 }
                 catch (Exception)
                 {
-                    try
-                    {
-                        Source.Close();
-                    }
-                    catch (Exception)
-                    {
-                    }
-
-                    try
-                    {
-                        Destination.Close();
-                    }
-                    catch (Exception)
-                    {
-                    }
-                    ClusterManager.Remove(this);
+                    TryClose();
                 }
             }
         }
