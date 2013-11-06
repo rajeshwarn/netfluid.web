@@ -250,7 +250,15 @@ namespace NetFluid
             {
                 Request.HttpMethod = parts[0];
                 Request.RawUrl = parts[1];
-                Response.ProtocolVersion = Request.ProtocolVersion = Version.Parse(parts[2].Substring("HTTP/".Length));
+
+                try
+                {
+                    Response.ProtocolVersion = Request.ProtocolVersion = Version.Parse(parts[2].Substring("HTTP/".Length));
+                }
+                catch (Exception)
+                {
+                    Response.ProtocolVersion = Version.Parse("0.0");
+                }
 
                 Request.Get = new Dictionary<string, QueryValue>();
                 int index = parts[1].IndexOf('?');
