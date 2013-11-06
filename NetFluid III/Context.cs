@@ -506,14 +506,21 @@ namespace NetFluid
 
         private string ReadHeaders(IList<byte> b, ref int offset, int len)
         {
-            int last = offset + len;
-            for (int i = offset; i < last; i++)
-                if (i > 4 && b[i] == 10 && b[i - 1] == 13 && b[i - 2] == 10 && b[i - 3] == 13)
-                {
-                    offset = i + 1;
-                    return Request.ContentEncoding.GetString(Buffer, 0, i + 1);
-                }
-            return string.Empty;
+            try
+            {
+                int last = offset + len;
+                for (int i = offset; i < last; i++)
+                    if (i > 4 && b[i] == 10 && b[i - 1] == 13 && b[i - 2] == 10 && b[i - 3] == 13)
+                    {
+                        offset = i + 1;
+                        return Request.ContentEncoding.GetString(Buffer, 0, i + 1);
+                    }
+                return string.Empty;
+            }
+            finally
+            {
+                return string.Empty;
+            }
         }
 
         public void SendHeaders()
