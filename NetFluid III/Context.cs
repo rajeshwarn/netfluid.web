@@ -197,7 +197,17 @@ namespace NetFluid
 
         private void OnRead(IAsyncResult ares)
         {
-            int nread = InputStream.EndRead(ares);
+            int nread;
+
+            try
+            {
+                nread = InputStream.EndRead(ares);
+            }
+            catch (Exception)
+            {
+                return;
+            }
+
             ms.Write(Buffer, 0, nread);
 
             readBytes += nread;
