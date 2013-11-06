@@ -241,6 +241,8 @@ namespace NetFluid
                 return;
             }
 
+
+
             string[] lines = header.Split(new[] {'\n', '\r'}, StringSplitOptions.RemoveEmptyEntries);
 
             #region FIRST LINE
