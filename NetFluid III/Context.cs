@@ -527,10 +527,12 @@ namespace NetFluid
                     }
                 return string.Empty;
             }
-            finally
+            catch
             {
-                return string.Empty;
+                
             }
+
+            return string.Empty;
         }
 
         public void SendHeaders()
