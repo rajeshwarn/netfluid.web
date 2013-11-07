@@ -235,15 +235,15 @@ namespace NetFluid.HTTP
             var res = s.Replace("&amp;", "&")
                        .Replace("&lt;", "<")
                        .Replace("&gt;", ">")
-                       .Replace("&cent;", "¢")
-                       .Replace("&pound;", "£")
-                       .Replace("&yen;", "¥")
-                       .Replace("&euro;", "€")
+                       .Replace("&cent;", "Â¢")
+                       .Replace("&pound;", "Â£")
+                       .Replace("&yen;", "Â¥")
+                       .Replace("&euro;", "â‚¬")
 
-                       .Replace("&sect;", "§")
-                       .Replace("&copy;", "©")
-                       .Replace("&reg;", "®")
-                       .Replace("&trade;", "™")
+                       .Replace("&sect;", "Â§")
+                       .Replace("&copy;", "Â©")
+                       .Replace("&reg;", "Â®")
+                       .Replace("&trade;", "â„¢")
                        .Replace("&quot;", "\"");
 
             foreach (Match m in Regex.Matches(res, "&#(?<n>[0-9]+);"))
@@ -274,28 +274,28 @@ namespace NetFluid.HTTP
                     case '&':
                         output.Append("&amp;");
                     break;
-                    case '¢':
+                    case 'Â¢':
                         output.Append("&cent;");
                     break;
-                    case '£':
+                    case 'Â£':
                         output.Append("&pound;");
                     break;
-                    case '¥':
+                    case 'Â¥':
                         output.Append("&yen;");
                     break;
-                    case '€':
+                    case 'â‚¬':
                         output.Append("&euro;");
                     break;
-                    case '§':
+                    case 'Â§':
                         output.Append("&sect;");
                     break;
-                    case '©':
+                    case 'Â©':
                         output.Append("&copy;");
                     break;
-                    case '®':
+                    case 'Â®':
                         output.Append("&reg;");
                     break;
-                    case '™':
+                    case 'â„¢':
                         output.Append("&trade;");
                     break;
                     case '"':
