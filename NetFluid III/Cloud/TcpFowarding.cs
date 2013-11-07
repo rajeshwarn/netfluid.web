@@ -145,14 +145,14 @@ namespace NetFluid
                 if (bytesRead > 0)
                 {
                     state.DestinationSocket.BeginWrite(state.Buffer, 0, bytesRead, x =>
-                                                                                       {
-                                                                                           state.DestinationSocket.
-                                                                                               EndWrite(x);
-                                                                                           state.SourceSocket.BeginRead(
-                                                                                               state.Buffer, 0,
-                                                                                               state.Buffer.Length,
-                                                                                               OnDataReceive, state);
-                                                                                       }, null);
+                    {
+                        state.DestinationSocket.
+                            EndWrite(x);
+                        state.SourceSocket.BeginRead(
+                            state.Buffer, 0,
+                            state.Buffer.Length,
+                            OnDataReceive, state);
+                    }, null);
                 }
             }
             catch (Exception)

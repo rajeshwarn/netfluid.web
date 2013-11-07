@@ -183,7 +183,7 @@ namespace NetFluid.Cloud
 
             if (!IPAddress.TryParse(remote, out ip))
             {
-                IPAddress[] addr = Dns.GetHostAddresses(remote).Where(x => x.AddressFamily == AddressFamily.InterNetwork).ToArray();
+                var addr = Dns.GetHostAddresses(remote).Where(x => x.AddressFamily == AddressFamily.InterNetwork).ToArray();
 
                 if (addr.Length == 0)
                     throw new Exception("Host " + remote + " not found");

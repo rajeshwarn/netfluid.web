@@ -22,6 +22,7 @@
 // ********************************************************************************************************
 
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -100,10 +101,26 @@ namespace NetFluid
         private static void Finalize(Context c, MethodInfo method, object target, params object[] args)
         {
             object res = method.Invoke(target, args);
-            if (res != null && res is IResponse)
+
+            if (res==null)
+                return;
+
+            if (res is IResponse)
             {
                 var resp = res as IResponse;
                 resp.SendResponse(c);
+            }
+
+            if (res is IConvertible)
+            {
+                c.Writer.Write(res.ToString());
+                return;
+            }
+
+            if (res is IEnumerable)
+            {
+                foreach (var item in res as IEnumerable)
+                    c.Writer.Write(item.ToString());
             }
             c.Close();
         }

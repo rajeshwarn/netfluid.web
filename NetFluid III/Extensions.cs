@@ -28,11 +28,21 @@ using System.Linq;
 using System.Reflection;
 using NetFluid.Serialization;
 using NetFluid.HTTP;
+using System.Collections.Concurrent;
 
 namespace NetFluid
 {
     public static class Extensions
     {
+        #region CONCURRENT BAG
+
+        public static void Remove<T>(ConcurrentBag<T> corr, T elem)
+        {
+            corr.TryTake(out elem);
+        }
+
+        #endregion
+
         #region STRING
 
         public static bool EndsWith(this string str, char c)

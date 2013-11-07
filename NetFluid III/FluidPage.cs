@@ -90,43 +90,6 @@ namespace NetFluid
             return Context.Session(name);
         }
 
-        public void SendAsFile(byte[] bytes, string name, string mime = "text\\html")
-        {
-            Response.Headers["Content-Disposition"] = "attachment; filename=\"" + name + "\"";
-            Response.Headers["Content-Type"] = mime;
-
-            SendRaw(bytes);
-        }
-
-        public void SendAsFile(string str, string name, string mime = "text\\html")
-        {
-            Response.Headers["Content-Disposition"] = "attachment; filename=\"" + name + "\"";
-            Response.Headers["Content-Type"] = mime;
-            Context.SendHeaders();
-            Context.Writer.Write(str);
-        }
-
-        public void SendFile(string filepath, string name = null)
-        {
-            if (name == null)
-                name = Path.GetFileName(filepath);
-
-            Response.Headers["Content-Disposition"] = "attachment; filename=\"" + name + "\"";
-            Response.Headers["Content-Type"] = MimeTypes.GetType(filepath);
-            Context.SendHeaders();
-
-            var fs = new FileStream(filepath, FileMode.Open, FileAccess.Read, FileShare.Read);
-            fs.CopyTo(Context.OutputStream);
-            fs.Close();
-        }
-
-        public void Print(string msg)
-        {
-            if (!Context.HeadersSent)
-                Context.SendHeaders();
-            Context.Writer.Write(msg);
-        }
-
         public void SendRaw(byte[] bytes)
         {
             Context.SendHeaders();

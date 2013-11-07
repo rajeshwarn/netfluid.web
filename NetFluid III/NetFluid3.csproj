@@ -94,6 +94,7 @@
     <Compile Include="Responses\FileResponse.cs" />
     <Compile Include="Responses\FluidTemplate.cs" />
     <Compile Include="Responses\JSONResponse.cs" />
+    <Compile Include="Responses\StringResponse.cs" />
     <Compile Include="Responses\TemplateCompiler.cs" />
     <Compile Include="Security.cs" />
     <Compile Include="Serialization\Binary.cs" />
