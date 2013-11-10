@@ -27,6 +27,7 @@ namespace NetFluid
 {
     public interface IWebInterfaceManager
     {
+        void AddLoopBack(int port = 80);
         void AddAllAddresses(int port = 80);
         void AddInterface(IPAddress ip, int port);
         void AddInterface(IPAddress ip, int port, string certificate);

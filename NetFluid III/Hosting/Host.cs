@@ -24,6 +24,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text;
@@ -51,7 +52,7 @@ namespace NetFluid
         }
         
         PublicFolder[] folders;
-        Dictionary<string,byte[]> immutableData;
+        Dictionary<string,MemoryStream> immutableData;
         	
         static Host()
         {
@@ -70,7 +71,7 @@ namespace NetFluid
             instances = new List<FluidPage>();
             
             folders = new Host.PublicFolder[0];
-            immutableData = new Dictionary<string, byte[]>();
+            immutableData = new Dictionary<string, MemoryStream>();
         }
 
         public string RoutesMap
@@ -334,7 +335,8 @@ namespace NetFluid
 
                 #region PUBLIC FILES
                 #region IMMUTABLE
-	            byte[] content;
+	            
+                MemoryStream content;
 	            if (immutableData.TryGetValue(cnt.Request.Url, out content))
 	            {
 	                if (!string.IsNullOrEmpty(cnt.Request.Headers["If-Modified-Since"]))
@@ -349,23 +351,14 @@ namespace NetFluid
 	                    cnt.Response.Headers["Last-Modified"] = DateTime.MinValue.ToString("r");
 	                    cnt.Response.Headers["Vary"] = "Accept-Encoding";
 	                    cnt.SendHeaders();
-	                    cnt.OutputStream.BeginWrite(content, 0, content.Length, x =>
-		                {
-		                      try
-		                      {
-		                          cnt.OutputStream.EndWrite(x);
-		                          cnt.Close();
-		                      }
-		                      catch (Exception)
-		                      {
-		                      }
-		                 }, null);
+                        content.CopyTo(cnt.OutputStream);
+                        cnt.Close();
 	                }
 	                return;
 	            }
 	            #endregion
 	            
-	            foreach (PublicFolder item in folders)
+	            foreach (var item in folders)
 	            {
 	                if (cnt.Request.Url.StartsWith(item.Uri))
 	                {
@@ -575,7 +568,7 @@ namespace NetFluid
                     string fileUri = start + s;
                     if (!immutableData.ContainsKey(fileUri))
                     {
-                        immutableData.Add(fileUri, System.IO.File.ReadAllBytes(x));
+                        immutableData.Add(fileUri,new MemoryStream(System.IO.File.ReadAllBytes(x)));
                     }
                 }
             }

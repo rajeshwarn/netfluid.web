@@ -47,6 +47,11 @@ namespace NetFluid
             }
         }
 
+        public void AddLoopBack(int port = 80)
+        {
+            AddInterface(IPAddress.Loopback, port);
+        }
+
         public void AddAllAddresses(int port = 80)
         {
             Engine.Logger.Log(LogLevel.Debug, "Starting web interfaces on every ip on port " + port);

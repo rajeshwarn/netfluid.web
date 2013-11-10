@@ -56,6 +56,12 @@ namespace NetFluid
         public static ISessionManager Sessions { get; set; }
         public static IClusterManager Cluster { get; set; }
 
+        public static void StartCommandInterface()
+        {
+            var i = new CommandLineInterface();
+            i.Start();
+        }
+
         public static bool RunOnMono
         {
             get { return Type.GetType("Mono.Runtime") != null; }

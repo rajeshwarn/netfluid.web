@@ -39,7 +39,7 @@ namespace NetFluid
 {
     public class Context
     {
-        private const int BufferSize = 1024;
+        private const int BufferSize = 4096;
         private static readonly char[] separators = new[] {' '};
         private static ConcurrentBag<Tuple<long, string>> ProfilingResults;
         private static bool profiling;
@@ -516,6 +516,7 @@ namespace NetFluid
 
         private string ReadHeaders(IList<byte> b, ref int offset, int len)
         {
+
             try
             {
                 int last = offset + len;
