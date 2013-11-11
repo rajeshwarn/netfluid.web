@@ -39,7 +39,7 @@ namespace NetFluid
 {
     public class Context
     {
-        private const int BufferSize = 4096;
+        private const int BufferSize = 16384;
         private static readonly char[] separators = new[] {' '};
         private static ConcurrentBag<Tuple<long, string>> ProfilingResults;
         private static bool profiling;
