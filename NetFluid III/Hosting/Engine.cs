@@ -181,19 +181,14 @@ namespace NetFluid
         		ResolveHost(host).AddPublicFolder(uri,path);
         }
         
-        public static void Start(bool blocking=false)
+        public static void Start()
         {
             Logger.Log(LogLevel.Debug, "Starting NetFluid Engine");
             Logger.Log(LogLevel.Debug, "Loading calling assembly");
             Load(Assembly.GetEntryAssembly());
             TemplateCompiler.Preload();
             Interfaces.Start();
-
-            if (blocking)
-            {
-                BlockingCollection<object> b = new BlockingCollection<object>();
-                b.Take();
-            }
+            Logger.Log(LogLevel.Debug, "NetFluid web application running");
         }
 
         public static void LoadHost(string host, Assembly assembly)

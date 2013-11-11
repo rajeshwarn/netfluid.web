@@ -52,7 +52,7 @@ namespace NetFluid
         }
         
         PublicFolder[] folders;
-        Dictionary<string,MemoryStream> immutableData;
+        Dictionary<string,byte[]> immutableData;
         	
         static Host()
         {
@@ -71,7 +71,7 @@ namespace NetFluid
             instances = new List<FluidPage>();
             
             folders = new Host.PublicFolder[0];
-            immutableData = new Dictionary<string, MemoryStream>();
+            immutableData = new Dictionary<string, byte[]>();
         }
 
         public string RoutesMap
@@ -343,24 +343,16 @@ namespace NetFluid
                 #region PUBLIC FILES
                 #region IMMUTABLE
 	            
-                MemoryStream content;
+                byte[] content;
 	            if (immutableData.TryGetValue(cnt.Request.Url, out content))
 	            {
-	                if (!string.IsNullOrEmpty(cnt.Request.Headers["If-Modified-Since"]))
-	                {
-	                    cnt.Response.StatusCode = StatusCode.NotModified;
-	                    cnt.Close();
-	                }
-	                else
-	                {
-	                    cnt.Response.ContentType = MimeTypes.GetType(cnt.Request.Url);
-	                    cnt.Response.Headers["Cache-Control"] = "max-age=29030400";
-	                    cnt.Response.Headers["Last-Modified"] = DateTime.MinValue.ToString("r");
-	                    cnt.Response.Headers["Vary"] = "Accept-Encoding";
-	                    cnt.SendHeaders();
-                        content.CopyTo(cnt.OutputStream);
-                        cnt.Close();
-	                }
+                    cnt.Response.ContentType = MimeTypes.GetType(cnt.Request.Url);
+                    cnt.Response.Headers["Cache-Control"] = "max-age=29030400";
+                    cnt.Response.Headers["Last-Modified"] = DateTime.MinValue.ToString("r");
+                    cnt.Response.Headers["Vary"] = "Accept-Encoding";
+                    cnt.SendHeaders();
+                    cnt.OutputStream.Write(content, 0, content.Length);
+                    cnt.Close();
 	                return;
 	            }
 	            #endregion
@@ -575,7 +567,7 @@ namespace NetFluid
                     string fileUri = start + s;
                     if (!immutableData.ContainsKey(fileUri))
                     {
-                        immutableData.Add(fileUri,new MemoryStream(System.IO.File.ReadAllBytes(x)));
+                        immutableData.Add(fileUri,System.IO.File.ReadAllBytes(x));
                     }
                 }
             }
