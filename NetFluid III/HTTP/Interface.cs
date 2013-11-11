@@ -79,9 +79,9 @@ namespace NetFluid.HTTP
                 {
                     new Context(e.AcceptSocket);
                 }
-                catch (Exception)
+                catch (Exception ex)
                 {
-                    Engine.Logger.Log(LogLevel.Exception, "Error on context");
+                    Engine.Logger.Log(LogLevel.Exception, "Error on context",ex);
                 }
                 e.AcceptSocket = null;
             } while (!listenSocket.AcceptAsync(e));
