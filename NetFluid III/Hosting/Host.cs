@@ -116,14 +116,18 @@ namespace NetFluid
 
                 if (res is IConvertible)
                 {
+                    c.SendHeaders();
                     c.Writer.Write(res.ToString());
+                    c.Close();
                     return;
                 }
 
                 if (res is IEnumerable)
                 {
+                    c.SendHeaders();
                     foreach (var item in res as IEnumerable)
                         c.Writer.Write(item.ToString());
+                    c.Close();
                 }
                 c.Close();
             }

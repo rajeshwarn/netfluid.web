@@ -1,24 +1,62 @@
 ﻿
-Microsoft Visual Studio Solution File, Format Version 11.00
-# Visual Studio 2010
-# SharpDevelop 4.3
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2013
+VisualStudioVersion = 12.0.21005.1
+MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NetFluid3", "NetFluid3.csproj", "{B215459F-37FF-411C-8E6B-9CDEDB946F93}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ChiaraPlayGround", "..\ChiaraPlayGround\ChiaraPlayGround.csproj", "{3E445486-6DA6-479C-91E7-F9161BEF2A50}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "1.HelloWorld", "..\..\esempi\1.HelloWorld\1.HelloWorld.csproj", "{FA8936D5-36A3-4825-BCA8-24B685787233}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
 		net_4_0_Debug|Any CPU = net_4_0_Debug|Any CPU
 		net_4_0_Release|Any CPU = net_4_0_Release|Any CPU
 		net_4_5_Debug|Any CPU = net_4_5_Debug|Any CPU
 		net_4_5_Release|Any CPU = net_4_5_Release|Any CPU
+		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{B215459F-37FF-411C-8E6B-9CDEDB946F93}.net_4_0_Debug|Any CPU.Build.0 = net_4_0_Debug|Any CPU
+		{B215459F-37FF-411C-8E6B-9CDEDB946F93}.Debug|Any CPU.ActiveCfg = net_4_5_Debug|Any CPU
+		{B215459F-37FF-411C-8E6B-9CDEDB946F93}.Debug|Any CPU.Build.0 = net_4_5_Debug|Any CPU
 		{B215459F-37FF-411C-8E6B-9CDEDB946F93}.net_4_0_Debug|Any CPU.ActiveCfg = net_4_0_Debug|Any CPU
-		{B215459F-37FF-411C-8E6B-9CDEDB946F93}.net_4_0_Release|Any CPU.Build.0 = net_4_0_Release|Any CPU
+		{B215459F-37FF-411C-8E6B-9CDEDB946F93}.net_4_0_Debug|Any CPU.Build.0 = net_4_0_Debug|Any CPU
 		{B215459F-37FF-411C-8E6B-9CDEDB946F93}.net_4_0_Release|Any CPU.ActiveCfg = net_4_0_Release|Any CPU
-		{B215459F-37FF-411C-8E6B-9CDEDB946F93}.net_4_5_Debug|Any CPU.Build.0 = net_4_5_Debug|Any CPU
+		{B215459F-37FF-411C-8E6B-9CDEDB946F93}.net_4_0_Release|Any CPU.Build.0 = net_4_0_Release|Any CPU
 		{B215459F-37FF-411C-8E6B-9CDEDB946F93}.net_4_5_Debug|Any CPU.ActiveCfg = net_4_5_Debug|Any CPU
-		{B215459F-37FF-411C-8E6B-9CDEDB946F93}.net_4_5_Release|Any CPU.Build.0 = net_4_5_Release|Any CPU
+		{B215459F-37FF-411C-8E6B-9CDEDB946F93}.net_4_5_Debug|Any CPU.Build.0 = net_4_5_Debug|Any CPU
 		{B215459F-37FF-411C-8E6B-9CDEDB946F93}.net_4_5_Release|Any CPU.ActiveCfg = net_4_5_Release|Any CPU
+		{B215459F-37FF-411C-8E6B-9CDEDB946F93}.net_4_5_Release|Any CPU.Build.0 = net_4_5_Release|Any CPU
+		{B215459F-37FF-411C-8E6B-9CDEDB946F93}.Release|Any CPU.ActiveCfg = net_4_5_Release|Any CPU
+		{B215459F-37FF-411C-8E6B-9CDEDB946F93}.Release|Any CPU.Build.0 = net_4_5_Release|Any CPU
+		{3E445486-6DA6-479C-91E7-F9161BEF2A50}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3E445486-6DA6-479C-91E7-F9161BEF2A50}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3E445486-6DA6-479C-91E7-F9161BEF2A50}.net_4_0_Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3E445486-6DA6-479C-91E7-F9161BEF2A50}.net_4_0_Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3E445486-6DA6-479C-91E7-F9161BEF2A50}.net_4_0_Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3E445486-6DA6-479C-91E7-F9161BEF2A50}.net_4_0_Release|Any CPU.Build.0 = Release|Any CPU
+		{3E445486-6DA6-479C-91E7-F9161BEF2A50}.net_4_5_Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3E445486-6DA6-479C-91E7-F9161BEF2A50}.net_4_5_Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3E445486-6DA6-479C-91E7-F9161BEF2A50}.net_4_5_Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3E445486-6DA6-479C-91E7-F9161BEF2A50}.net_4_5_Release|Any CPU.Build.0 = Release|Any CPU
+		{3E445486-6DA6-479C-91E7-F9161BEF2A50}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3E445486-6DA6-479C-91E7-F9161BEF2A50}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FA8936D5-36A3-4825-BCA8-24B685787233}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FA8936D5-36A3-4825-BCA8-24B685787233}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FA8936D5-36A3-4825-BCA8-24B685787233}.net_4_0_Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FA8936D5-36A3-4825-BCA8-24B685787233}.net_4_0_Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FA8936D5-36A3-4825-BCA8-24B685787233}.net_4_0_Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FA8936D5-36A3-4825-BCA8-24B685787233}.net_4_0_Release|Any CPU.Build.0 = Release|Any CPU
+		{FA8936D5-36A3-4825-BCA8-24B685787233}.net_4_5_Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FA8936D5-36A3-4825-BCA8-24B685787233}.net_4_5_Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FA8936D5-36A3-4825-BCA8-24B685787233}.net_4_5_Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FA8936D5-36A3-4825-BCA8-24B685787233}.net_4_5_Release|Any CPU.Build.0 = Release|Any CPU
+		{FA8936D5-36A3-4825-BCA8-24B685787233}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FA8936D5-36A3-4825-BCA8-24B685787233}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
 	EndGlobalSection
 EndGlobal
