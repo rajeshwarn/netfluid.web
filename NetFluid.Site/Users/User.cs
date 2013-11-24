@@ -41,15 +41,6 @@ namespace NetFluidService
             var client = new MongoClient("mongodb://localhost");
             var server = client.GetServer();
             db = server.GetDatabase("netfluid");
-
-            if (Collection.FindOne()==null)
-            {
-                var anon = new User { Name = "anonymous", NiceName = "Anonymous", Mail = "anon@netfluid.org"};
-                var nf = new User { Name = "netfluid", NiceName = "NetFluid", Mail ="netfluid@netfluid.org", Status = User.UserStatus.Admin, Password = "ludmilla" };
-
-                Collection.Save(anon);
-                Collection.Save(nf);
-            }
         }
 
         static MongoCollection<User> Collection
