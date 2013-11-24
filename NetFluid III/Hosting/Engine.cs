@@ -198,8 +198,8 @@ namespace NetFluid
         {
             try
             {
-                Type[] types = assembly.GetTypes();
-                IEnumerable<Type> pages = types.Where(type => type.Inherit(typeof (FluidPage)));
+                var types = assembly.GetTypes();
+                var pages = types.Where(type => type.Inherit(typeof (FluidPage)));
 
                 foreach (Type p in pages)
                 {
