@@ -42,7 +42,7 @@ namespace NetFluid
 
         static Engine()
         {
-            MainHost = new Host();
+            MainHost = new Host("default");
             Hosts = new Dictionary<string, Host>();
 
             AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;
@@ -95,7 +95,7 @@ namespace NetFluid
         private static Host ResolveHost(string host)
         {
             if (!Hosts.ContainsKey(host))
-                Hosts.Add(host, new Host());
+                Hosts.Add(host, new Host(host));
 
             return Hosts[host];
         }
@@ -223,8 +223,8 @@ namespace NetFluid
         {
             try
             {
-                Type[] types = assembly.GetTypes();
-                IEnumerable<Type> pages = types.Where(type => type.Inherit(typeof (FluidPage)));
+                var types = assembly.GetTypes();
+                var pages = types.Where(type => type.Inherit(typeof (FluidPage)));
 
                 foreach (Type p in pages)
                 {

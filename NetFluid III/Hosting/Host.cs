@@ -36,6 +36,9 @@ namespace NetFluid
     {
         private static readonly char[] urlSeparator;
         private static readonly Dictionary<string, Type> Types;
+
+        private string name;
+
         private readonly Dictionary<StatusCode, RouteTarget> callOn;
         private readonly List<FluidPage> instances;
         private readonly Dictionary<string, RouteTarget> routes;
@@ -60,8 +63,11 @@ namespace NetFluid
             Types = new Dictionary<string, Type>();
         }
 
-        internal Host()
+        internal Host(string name)
         {
+
+            this.name = name;
+
             routes = new Dictionary<string, RouteTarget>();
             parametrized = new ParamRouteTarget[0];
             regex = new RegexRouteTarget[0];
@@ -78,7 +84,7 @@ namespace NetFluid
         {
             get
             {
-                var sb = new StringBuilder();
+                var sb = new StringBuilder(string.Format("<host name=\"{0}\">",this.name));
 
                 foreach (RegexRouteTarget item in regex)
                 {
