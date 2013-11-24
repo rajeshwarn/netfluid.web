@@ -68,37 +68,49 @@ namespace NetFluid
 
             this.name = name;
 
-            routes = new Dictionary<string, RouteTarget>();
-            parametrized = new ParamRouteTarget[0];
-            regex = new RegexRouteTarget[0];
             smallControllers = new SmallController[0];
-            callOn = new Dictionary<StatusCode, RouteTarget>();
             controllers = new Type[0];
-            instances = new List<FluidPage>();
-            
+
+            regex = new RegexRouteTarget[0];
+            parametrized = new ParamRouteTarget[0];
+            routes = new Dictionary<string, RouteTarget>();
+
             folders = new Host.PublicFolder[0];
             immutableData = new Dictionary<string, byte[]>();
+
+            callOn = new Dictionary<StatusCode, RouteTarget>();
+            
+            instances = new List<FluidPage>();
         }
 
         public string RoutesMap
         {
             get
             {
-                var sb = new StringBuilder(string.Format("<host name=\"{0}\">",this.name));
+                var sb = new StringBuilder(string.Format("<Host Name=\"{0}\">",this.name));
+
+                if (this.controllers.Length>0)
+                {
+                    sb.Append("<Controllers>");
+                    foreach (var item in smallControllers)
+                        sb.Append(string.Format("<Controller Name=\"{0}\" Conditional=\"{1}\" />", item.Name, item.Condition != null));
+
+                    sb.Append("</Controllers>");
+                }
+
+                sb.Append("<routes>");
 
                 foreach (var item in regex)
-                {
-                    sb.AppendLine("\t\tRegex:" + item.Regex + " pointing to " + item.Type.FullName + "." + item.Method.Name);
-                }
-                foreach (var item in parametrized)
-                {
-                    sb.AppendLine("\t\tParametrized:" + item.Url + " pointing to " + item.Type.FullName + "." + item.Method.Name);
-                }
-                foreach (var item in routes)
-                {
-                    sb.AppendLine("\t\tParametrized:" + item.Key + " pointing to " + item.Value.Type.FullName + "." + item.Value.Method.Name);
-                }
+                    sb.Append(string.Format("<RegexRoute Name=\"{0}\" Regex=\"{1}\" PointTo=\"{2}.{3}\" />", item.Name, item.Regex, item.Type.FullName, item.Method.Name));
 
+                foreach (var item in parametrized)
+                    sb.Append(string.Format("<ParametrizedRoute Name=\"{0}\" Template=\"{1}\" PointTo=\"{2}.{3}\" />", item.Name, item.Template, item.Type.FullName, item.Method.Name));
+
+                foreach (var item in routes)
+                    sb.Append(string.Format("<Route Name=\"{0}\" Template=\"{1}\" PointTo=\"{2}.{3}\" />", item.Value.Name, item.Key, item.Value.Type.FullName, item.Value.Method.Name));
+
+
+                sb.Append("</routes>");
                 sb.Append("</host>");
 
                 return sb.ToString();
@@ -148,17 +160,16 @@ namespace NetFluid
             try
             {
                 if (Engine.DevMode)
-                    Console.WriteLine(cnt.Request.Host + ":" + cnt.Request.Url + " - " + "Checking small controllers");
+                    Console.WriteLine(cnt.Request.Host + ":" + cnt.Request.Url + " - " + "Checking controllers");
 
                 #region SMALL CONTROLLERS
 
                 foreach (var item in smallControllers)
                 {
-                    if (item.Condition(cnt))
+                    if (item.Condition == null || item.Condition(cnt))
                     {
                         if (Engine.DevMode)
-                            Console.WriteLine(cnt.Request.Host + ":" + cnt.Request.Url + " - " +
-                                              "Calling small controller");
+                            Console.WriteLine(cnt.Request.Host + ":" + cnt.Request.Url + " - " + "Calling controller");
 
                         item.Action(cnt);
                     }
@@ -585,7 +596,7 @@ namespace NetFluid
    
         public void SetController(Action<Context> act, string name=null)
         {
-            var controller = new SmallController { Action = act, Condition = (x) => true, Name=name };
+            var controller = new SmallController { Action = act, Condition = null, Name=name };
             smallControllers = smallControllers.Push(controller);
         }
 
@@ -800,6 +811,14 @@ namespace NetFluid
             public MethodInfo Method;
             public Type Type;
             public string Url;
+
+            public string Template
+            {
+                get
+                {
+                    return Url + string.Join("/", Method.GetParameters().Select(x => "{" + x.Name + "}"));
+                }
+            }
         }
 
         #endregion
