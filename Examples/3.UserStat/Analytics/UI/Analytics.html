@@ -1,0 +1,75 @@
+﻿
+% using _3.UserStat.Analytics;
+% using System;
+% using System.Linq;
+
+% template:parameters(Report report)
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="shortcut icon" href="/ico/favicon.png">
+
+    <title>MySite user analitycs</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="/css/bootstrap.css" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="starter-template.css" rel="stylesheet">
+
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="/js/html5shiv.js"></script>
+      <script src="/js/respond.min.js"></script>
+    <![endif]-->
+  </head>
+
+  <body>
+    <div class="container">
+      <div class="starter-template">
+        <h1>MySite user analitycs</h1>
+        <h2>
+            {% report.UniqueVisitors %} unique visitors - {% report.ServedRequest %} served request
+        </h2>
+        <h2>
+            {% report.BounceFrequency %} bounce frequency
+        </h2>
+        <h2>{% report.Referrer.Count() %} referer</h2>
+        <div>
+            % if(report.Referrer.Count() > 0)
+                <table>
+                    <tr><th>From</th><th>Visitors</th></tr>
+                    % foreach(var k in report.Referrer)
+                        <tr>
+                            <td><a href="{% k.Item1 %}">{% k.Item1 %}</a></td>
+                            <td>{% k.Item2 %}</td>
+                        </tr>
+                    % end foreach
+                </table>
+            % end if
+        </div>
+        <h2>{% report.Languages.Count() %} languages</h2>
+        <div>
+            % if(report.Languages.Count() > 0)
+                <table>
+                    <tr><th>From</th><th>Visitors</th></tr>
+                    % foreach(var k in report.Languages)
+                        <tr>
+                            <td><a href="{% k.Item1 %}">{% k.Item1 %}</a></td>
+                            <td>{% k.Item2 %}</td>
+                        </tr>
+                    % end foreach
+                </table>
+            % end if
+        </div>
+      </div>
+    </div>
+    <script src="/js/jquery.js"></script>
+    <script src="/js/bootstrap.min.js"></script>
+  </body>
+</html>
