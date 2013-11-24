@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
+  <metadata>
+    <id>Microsoft.AspNet.Identity.Core.it</id>
+    <version>1.0.0</version>
+    <title>Microsoft ASP.NET Identity Core - Risorse per l'italiano</title>
+    <authors>Microsoft</authors>
+    <owners>Microsoft</owners>
+    <licenseUrl>http://www.microsoft.com/web/webpi/eula/aspnetcomponent_rtw_ITA.htm</licenseUrl>
+    <requireLicenseAcceptance>true</requireLicenseAcceptance>
+    <description>Questo pacchetto contiene gli assembly satellite per l'italiano relativi alle librerie di ASP.NET Identity Core.</description>
+    <summary>Risorse per l'italiano per il pacchetto Microsoft.AspNet.Identity.Core</summary>
+    <copyright>© Microsoft Corporation. All rights reserved.</copyright>
+    <language>it</language>
+    <tags>Identity Membership</tags>
+    <dependencies>
+      <dependency id="Microsoft.AspNet.Identity.Core" version="[1.0.0]" />
+    </dependencies>
+  </metadata>
+</package>
