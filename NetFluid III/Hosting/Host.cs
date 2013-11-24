@@ -46,7 +46,7 @@ namespace NetFluid
         private Type[] controllers;
         private ParamRouteTarget[] parametrized;
         private RegexRouteTarget[] regex;
-        private SmallControllerChecked[] smallControllers;
+        private SmallController[] smallControllers;
 
         private struct PublicFolder
         {
@@ -71,7 +71,7 @@ namespace NetFluid
             routes = new Dictionary<string, RouteTarget>();
             parametrized = new ParamRouteTarget[0];
             regex = new RegexRouteTarget[0];
-            smallControllers = new SmallControllerChecked[0];
+            smallControllers = new SmallController[0];
             callOn = new Dictionary<StatusCode, RouteTarget>();
             controllers = new Type[0];
             instances = new List<FluidPage>();
@@ -583,21 +583,19 @@ namespace NetFluid
             }
         }
    
-        public void SetController(Action<Context> act)
+        public void SetController(Action<Context> act, string name=null)
         {
-            smallControllers =
-                smallControllers.Concat(new[] {new SmallControllerChecked {Action = act, Condition = (x) => true}}).
-                    ToArray();
+            var controller = new SmallController { Action = act, Condition = (x) => true, Name=name };
+            smallControllers = smallControllers.Push(controller);
         }
 
-        public void SetController(Func<Context, bool> condition, Action<Context> act)
+        public void SetController(Func<Context, bool> condition, Action<Context> act, string name = null)
         {
-            smallControllers =
-                smallControllers.Concat(new[] {new SmallControllerChecked {Action = act, Condition = condition}}).
-                    ToArray();
+            var controller = new SmallController { Action = act, Condition = condition, Name = name };
+            smallControllers = smallControllers.Push(controller);
         }
 
-        public void SetRoute(string url, string methodFullname)
+        public void SetRoute(string url, string methodFullname, string name = null)
         {
             if (url == null)
                 throw new NullReferenceException("Null url");
@@ -614,10 +612,10 @@ namespace NetFluid
 
             instances.Add(t.CreateIstance() as FluidPage);
 
-            SetRoute(url, t, methodFullname.Substring(methodFullname.LastIndexOf('.') + 1));
+            SetRoute(url, t, methodFullname.Substring(methodFullname.LastIndexOf('.') + 1),name);
         }
 
-        public void SetRoute(string url, Type type, string method)
+        public void SetRoute(string url, Type type, string method, string name = null)
         {
             if (url == null)
                 throw new NullReferenceException("Null url");
@@ -631,7 +629,7 @@ namespace NetFluid
             if (!type.Inherit(typeof (FluidPage)))
                 throw new TypeLoadException("Routed types must inherit NetFluid.FluidPage");
 
-            var rt = new RouteTarget {Type = type, Method = type.GetMethod(method)};
+            var rt = new RouteTarget {Type = type, Method = type.GetMethod(method), Name=name};
 
             instances.Add(type.CreateIstance() as FluidPage);
 
@@ -641,7 +639,7 @@ namespace NetFluid
                 routes.Add(url, rt);
         }
 
-        public void SetRoute(string url, Type type, MethodInfo method)
+        public void SetRoute(string url, Type type, MethodInfo method, string name = null)
         {
             if (url == null)
                 throw new NullReferenceException("Null url");
@@ -656,7 +654,7 @@ namespace NetFluid
                 throw new TypeLoadException("Routed types must inherit NetFluid.FluidPage");
 
 
-            var rt = new RouteTarget {Type = type, Method = method};
+            var rt = new RouteTarget {Type = type, Method = method,Name=name};
 
             instances.Add(type.CreateIstance() as FluidPage);
 
@@ -666,7 +664,7 @@ namespace NetFluid
                 routes.Add(url, rt);
         }
 
-        public void SetParameterizedRoute(string url, string methodFullname)
+        public void SetParameterizedRoute(string url, string methodFullname, string name = null)
         {
             if (url == null)
                 throw new NullReferenceException("Null url");
@@ -683,10 +681,10 @@ namespace NetFluid
 
             instances.Add(t.CreateIstance() as FluidPage);
 
-            SetParameterizedRoute(url, t, methodFullname.Substring(methodFullname.LastIndexOf('.') + 1));
+            SetParameterizedRoute(url, t, methodFullname.Substring(methodFullname.LastIndexOf('.') + 1),name);
         }
 
-        public void SetParameterizedRoute(string url, Type type, string method)
+        public void SetParameterizedRoute(string url, Type type, string method, string name = null)
         {
             if (url == null)
                 throw new NullReferenceException("Null url");
@@ -700,14 +698,14 @@ namespace NetFluid
             if (!type.Inherit(typeof (FluidPage)))
                 throw new TypeLoadException("Routed types must inherit NetFluid.FluidPage");
 
-            var rt = new ParamRouteTarget {Type = type, Method = type.GetMethod(method), Url = url};
+            var rt = new ParamRouteTarget {Type = type, Method = type.GetMethod(method), Url = url , Name=name};
 
             instances.Add(type.CreateIstance() as FluidPage);
 
             parametrized = parametrized.Concat(new[] {rt}).OrderByDescending(x => x.Url.Length).ToArray();
         }
 
-        public void SetParameterizedRoute(string url, Type type, MethodInfo method)
+        public void SetParameterizedRoute(string url, Type type, MethodInfo method, string name = null)
         {
             if (url == null)
                 throw new NullReferenceException("Null url");
@@ -721,14 +719,14 @@ namespace NetFluid
             if (!type.Inherit(typeof (FluidPage)))
                 throw new TypeLoadException("Routed types must inherit NetFluid.FluidPage");
 
-            var rt = new ParamRouteTarget {Type = type, Method = method, Url = url};
+            var rt = new ParamRouteTarget {Type = type, Method = method, Url = url, Name=name};
 
             instances.Add(type.CreateIstance() as FluidPage);
 
             parametrized = parametrized.Concat(new[] {rt}).OrderByDescending(x => x.Url.Length).ToArray();
         }
 
-        public void SetRegexRoute(string rgx, string methodFullname)
+        public void SetRegexRoute(string rgx, string methodFullname, string name = null)
         {
             if (rgx == null)
                 throw new NullReferenceException("Null regex");
@@ -745,10 +743,10 @@ namespace NetFluid
 
             instances.Add(t.CreateIstance() as FluidPage);
 
-            SetRegexRoute(rgx, t, methodFullname.Substring(methodFullname.LastIndexOf('.') + 1));
+            SetRegexRoute(rgx, t, methodFullname.Substring(methodFullname.LastIndexOf('.') + 1),name);
         }
 
-        public void SetRegexRoute(string rgx, Type type, string method)
+        public void SetRegexRoute(string rgx, Type type, string method, string name = null)
         {
             if (rgx == null)
                 throw new NullReferenceException("Null regex");
@@ -766,14 +764,14 @@ namespace NetFluid
             if (m == null)
                 throw new TypeLoadException(type.FullName + "." + method + " not found");
 
-            var rt = new RegexRouteTarget {Type = type, Method = m, Regex = new Regex(rgx, RegexOptions.Compiled)};
+            var rt = new RegexRouteTarget {Type = type, Method = m, Regex = new Regex(rgx, RegexOptions.Compiled),Name=name};
 
             instances.Add(type.CreateIstance() as FluidPage);
 
             regex = regex.Concat(new[] {rt}).ToArray();
         }
 
-        public void SetRegexRoute(string rgx, Type type, MethodInfo method)
+        public void SetRegexRoute(string rgx, Type type, MethodInfo method, string name = null)
         {
             if (rgx == null)
                 throw new NullReferenceException("Null regex");
@@ -787,7 +785,7 @@ namespace NetFluid
             if (!type.Inherit(typeof (FluidPage)))
                 throw new TypeLoadException("Routed types must inherit NetFluid.FluidPage");
 
-            var rt = new RegexRouteTarget {Type = type, Method = method, Regex = new Regex(rgx, RegexOptions.Compiled)};
+            var rt = new RegexRouteTarget {Type = type, Method = method, Regex = new Regex(rgx, RegexOptions.Compiled),Name=name};
 
             instances.Add(type.CreateIstance() as FluidPage);
 
@@ -831,7 +829,7 @@ namespace NetFluid
 
         #region Nested type: SmallControllerChecked
 
-        private class SmallControllerChecked
+        private class SmallController
         {
             public string Name;
             public Action<Context> Action;

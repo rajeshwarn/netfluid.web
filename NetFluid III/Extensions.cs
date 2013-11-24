@@ -144,6 +144,15 @@ namespace NetFluid
 
         #endregion
 
+        #region ARRAY
+
+        public static T[] Push<T>(this T[] enu, T elem)
+        {
+            return enu.Concat(new[] { elem }).ToArray();
+        }
+
+        #endregion
+
         #region DATETIME
 
         public static double ToUnixTimestamp(this DateTime date)
