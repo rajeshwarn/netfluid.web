@@ -60,7 +60,6 @@
   <ItemGroup>
     <Compile Include="Authentication.cs" />
     <Compile Include="Cloud\ClusterManager.cs" />
-    <Compile Include="Cloud\CommandLineInterface.cs" />
     <Compile Include="Cloud\IClusterManager.cs" />
     <Compile Include="Collections\Persistent\PersistentDictionary.cs" />
     <Compile Include="Configuration\Interface.cs" />
