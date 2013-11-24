@@ -291,13 +291,13 @@ namespace NetFluid
 
         public static RouteSetter SetSmallController(Action<Context> act)
         {
-            MainHost.SetSmallController(act);
+            MainHost.SetController(act);
             return new RouteSetter();
         }
 
         public static RouteSetter SetSmallController(Func<Context, bool> condition, Action<Context> act)
         {
-            MainHost.SetSmallController(condition, act);
+            MainHost.SetController(condition, act);
             return new RouteSetter();
         }
 
@@ -361,13 +361,13 @@ namespace NetFluid
 
         public static RouteSetter SetSmallController(string host, Action<Context> act)
         {
-            ResolveHost(host).SetSmallController(act);
+            ResolveHost(host).SetController(act);
             return new RouteSetter();
         }
 
         public static RouteSetter SetSmallController(string host, Func<Context, bool> condition, Action<Context> act)
         {
-            ResolveHost(host).SetSmallController(condition, act);
+            ResolveHost(host).SetController(condition, act);
             return new RouteSetter();
         }
 

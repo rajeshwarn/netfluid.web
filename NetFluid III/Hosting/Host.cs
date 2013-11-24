@@ -86,21 +86,21 @@ namespace NetFluid
             {
                 var sb = new StringBuilder(string.Format("<host name=\"{0}\">",this.name));
 
-                foreach (RegexRouteTarget item in regex)
+                foreach (var item in regex)
                 {
-                    sb.AppendLine("\t\tRegex:" + item.Regex + " pointing to " + item.Type.FullName + "." +
-                                  item.Method.Name);
+                    sb.AppendLine("\t\tRegex:" + item.Regex + " pointing to " + item.Type.FullName + "." + item.Method.Name);
                 }
-                foreach (ParamRouteTarget item in parametrized)
+                foreach (var item in parametrized)
                 {
-                    sb.AppendLine("\t\tParametrized:" + item.Url + " pointing to " + item.Type.FullName + "." +
-                                  item.Method.Name);
+                    sb.AppendLine("\t\tParametrized:" + item.Url + " pointing to " + item.Type.FullName + "." + item.Method.Name);
                 }
                 foreach (var item in routes)
                 {
-                    sb.AppendLine("\t\tParametrized:" + item.Key + " pointing to " + item.Value.Type.FullName + "." +
-                                  item.Value.Method.Name);
+                    sb.AppendLine("\t\tParametrized:" + item.Key + " pointing to " + item.Value.Type.FullName + "." + item.Value.Method.Name);
                 }
+
+                sb.Append("</host>");
+
                 return sb.ToString();
             }
         }
@@ -583,14 +583,14 @@ namespace NetFluid
             }
         }
    
-        public void SetSmallController(Action<Context> act)
+        public void SetController(Action<Context> act)
         {
             smallControllers =
                 smallControllers.Concat(new[] {new SmallControllerChecked {Action = act, Condition = (x) => true}}).
                     ToArray();
         }
 
-        public void SetSmallController(Func<Context, bool> condition, Action<Context> act)
+        public void SetController(Func<Context, bool> condition, Action<Context> act)
         {
             smallControllers =
                 smallControllers.Concat(new[] {new SmallControllerChecked {Action = act, Condition = condition}}).
@@ -798,6 +798,7 @@ namespace NetFluid
 
         private class ParamRouteTarget
         {
+            public string Name;
             public MethodInfo Method;
             public Type Type;
             public string Url;
@@ -809,6 +810,7 @@ namespace NetFluid
 
         private class RegexRouteTarget
         {
+            public string Name;
             public MethodInfo Method;
             public Regex Regex;
             public Type Type;
@@ -820,6 +822,7 @@ namespace NetFluid
 
         private class RouteTarget
         {
+            public string Name;
             public MethodInfo Method;
             public Type Type;
         }
@@ -830,6 +833,7 @@ namespace NetFluid
 
         private class SmallControllerChecked
         {
+            public string Name;
             public Action<Context> Action;
             public Func<Context, bool> Condition;
         }
