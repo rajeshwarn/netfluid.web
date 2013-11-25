@@ -18,6 +18,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "4.WebSocket", "4.WebSocket\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NetFluid3", "..\NetFluid\NetFluid3.csproj", "{B215459F-37FF-411C-8E6B-9CDEDB946F93}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "5.Kendo", "5.Kendo\5.Kendo.csproj", "{C43586EF-2DD3-44C6-A719-76525C425868}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -88,6 +90,18 @@ Global
 		{B215459F-37FF-411C-8E6B-9CDEDB946F93}.net_4_5_Release|Any CPU.Build.0 = net_4_5_Release|Any CPU
 		{B215459F-37FF-411C-8E6B-9CDEDB946F93}.Release|Any CPU.ActiveCfg = net_4_5_Release|Any CPU
 		{B215459F-37FF-411C-8E6B-9CDEDB946F93}.Release|Any CPU.Build.0 = net_4_5_Release|Any CPU
+		{C43586EF-2DD3-44C6-A719-76525C425868}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C43586EF-2DD3-44C6-A719-76525C425868}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C43586EF-2DD3-44C6-A719-76525C425868}.net_4_0_Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C43586EF-2DD3-44C6-A719-76525C425868}.net_4_0_Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C43586EF-2DD3-44C6-A719-76525C425868}.net_4_0_Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C43586EF-2DD3-44C6-A719-76525C425868}.net_4_0_Release|Any CPU.Build.0 = Release|Any CPU
+		{C43586EF-2DD3-44C6-A719-76525C425868}.net_4_5_Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C43586EF-2DD3-44C6-A719-76525C425868}.net_4_5_Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C43586EF-2DD3-44C6-A719-76525C425868}.net_4_5_Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C43586EF-2DD3-44C6-A719-76525C425868}.net_4_5_Release|Any CPU.Build.0 = Release|Any CPU
+		{C43586EF-2DD3-44C6-A719-76525C425868}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C43586EF-2DD3-44C6-A719-76525C425868}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -7,10 +7,10 @@ namespace _1.HelloWorld
     internal class Program : FluidPage
     {
         [Route("/")]
-        public void TryMe()
+        public int TryMe()
         {
             var random = new Random();
-            Print(random.Next().ToString());
+            return random.Next();
         }
 
         private static void Main()
