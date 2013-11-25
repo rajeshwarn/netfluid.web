@@ -16,8 +16,9 @@ namespace _1.HelloWorld
         private static void Main()
         {
             Engine.Load(Assembly.GetCallingAssembly());
-            Engine.Interfaces.AddInterface("127.0.0.1", 8080,"certificato.pfx");
+            Engine.Interfaces.AddInterface("127.0.0.1", 8080);
             Engine.LoadAppConfiguration();
+            Engine.Start();
             Console.ReadLine();
         }
     }
