@@ -24,7 +24,7 @@
 using System;
 using System.Text;
 
-namespace NetFluid.HTTP
+namespace NetFluid
 {
     /// <summary>
     ///  Define methods for http authetications
