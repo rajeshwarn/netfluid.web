@@ -37,6 +37,10 @@ using NetFluid.IO;
 
 namespace NetFluid
 {
+    /// <summary>
+    /// HTTP Context.
+    /// Contains client request, server response and current variables
+    /// </summary>
     public class Context
     {
         private const int BufferSize = 16384;
@@ -46,19 +50,52 @@ namespace NetFluid
 
         private readonly MemoryStream ms;
         private readonly Stopwatch st;
+
+        /// <summary>
+        /// True if Response.Headers are already sent to the client
+        /// </summary>
         public bool HeadersSent;
+
+        /// <summary>
+        /// Read data to the client
+        /// </summary>
         public Stream InputStream;
+
+        /// <summary>
+        /// Send data to the client
+        /// </summary>
         public Stream OutputStream;
+
+        /// <summary>
+        /// Contains client request variables
+        /// </summary>
         public HttpRequest Request;
+
+        /// <summary>
+        /// Contains server response variables
+        /// </summary>
         public HttpResponse Response;
+
+        /// <summary>
+        /// Client socket
+        /// </summary>
         public Socket Socket;
-        public byte[] Buffer;
+
+        /// <summary>
+        /// Temporary buffer for incoming headers data.
+        /// Internally used for connection fowarding
+        /// </summary>
+        internal byte[] Buffer;
 
         private int position;
         private int readBytes;
         private StreamReader reader;
         private StreamWriter writer;
 
+        /// <summary>
+        /// Initialize HTTP context from client socket, reading headers and post data
+        /// </summary>
+        /// <param name="sock">Client socket</param>
         public Context(Socket sock)
         {
         	sock.SendTimeout = 5000;
@@ -89,6 +126,11 @@ namespace NetFluid
             InputStream.BeginRead(Buffer, 0, BufferSize, OnRead, this);
         }
 
+        /// <summary>
+        /// Initialize HTTPS context from client socket, reading headers and post data
+        /// </summary>
+        /// <param name="sock">Client socket</param>
+        /// <param name="certificate">PFX Certificate</param>
         public Context(Socket sock, X509Certificate2 certificate)
         {
             if (profiling)
@@ -131,6 +173,9 @@ namespace NetFluid
         }
 
         string sessionId;
+        /// <summary>
+        /// Current session identification Guid
+        /// </summary>
         public string SessionId
         {
             get
@@ -146,15 +191,27 @@ namespace NetFluid
             }
         }
 
+        /// <summary>
+        /// True if the context has been created with HTTPS
+        /// </summary>
         public bool Secure { get; private set; }
 
+        /// <summary>
+        /// True if the context is not even served
+        /// </summary>
         public bool IsOpen { get; private set; }
 
+        /// <summary>
+        /// True if the current HTTP response code is about an error
+        /// </summary>
         public bool HaveError
         {
             get { return (Response.StatusCode >= (StatusCode) 400); }
         }
 
+        /// <summary>
+        /// If true the application server will collect statistical data about performances
+        /// </summary>
         public static bool Profiling
         {
             get { return profiling; }
@@ -165,36 +222,57 @@ namespace NetFluid
             }
         }
 
+        /// <summary>
+        /// If Profiling is "on" return milliseconds used to serve each single uri 
+        /// </summary>
         public static IEnumerable<Tuple<long, string>> Profile
         {
             get { return ProfilingResults; }
         }
 
+        /// <summary>
+        /// Read string from the client
+        /// </summary>
         public StreamReader Reader
         {
             get { return reader = reader ?? new StreamReader(InputStream, Request.ContentEncoding); }
         }
 
+        /// <summary>
+        /// Write string to the client
+        /// </summary>
         public StreamWriter Writer
         {
             get { return writer = writer ?? new StreamWriter(OutputStream, Response.ContentEncoding, 1024); }
         }
 
+        /// <summary>
+        /// IP and port on wich the client connection was recieved 
+        /// </summary>
         public IPEndPoint LocalEndPoint
         {
             get { return Socket.LocalEndPoint as IPEndPoint; }
         }
 
+        /// <summary>
+        /// IP and port on wich the client connection was started 
+        /// </summary>
         public IPEndPoint RemoteEndPoint
         {
             get { return Socket.RemoteEndPoint as IPEndPoint; }
         }
 
+        /// <summary>
+        /// True if the connection came from the same machine of the server
+        /// </summary>
         public bool IsLocal
         {
             get { return IPAddress.IsLoopback(RemoteEndPoint.Address); }
         }
 
+        /// <summary>
+        /// Read request headers
+        /// </summary>
         private void OnRead(IAsyncResult ares)
         {
             int nread;
@@ -440,6 +518,9 @@ namespace NetFluid
             Engine.Serve(this);
         }
 
+        /// <summary>
+        /// OnRead has been completed but some recieved bytes belongs to request body (post data)
+        /// </summary>
         private void ReadAndSave(long read, long total, Stream s)
         {
             if (read == total)
@@ -514,6 +595,9 @@ namespace NetFluid
             }, null);
         }
 
+        /// <summary>
+        /// Dectect if OnRead has finished
+        /// </summary>
         private string ReadHeaders(IList<byte> b, ref int offset, int len)
         {
 
@@ -534,6 +618,9 @@ namespace NetFluid
             return string.Empty;
         }
 
+        /// <summary>
+        /// Send Response headers to the client
+        /// </summary>
         public void SendHeaders()
         {
             try
@@ -622,6 +709,9 @@ namespace NetFluid
             }
         }
 
+        /// <summary>
+        /// Mark the current context has served and free related resources
+        /// </summary>
         public void Close()
         {
             if (!IsOpen)
@@ -657,11 +747,20 @@ namespace NetFluid
             Socket.Close();
         }
 
+        /// <summary>
+        /// Save a variable in current session
+        /// </summary>
+        /// <param name="name">Variable name</param>
+        /// <param name="obj">Variable value</param>
         public void Session(string name, object obj)
         {
             Engine.Sessions.Set(SessionId, name, obj);
         }
 
+        /// <summary>
+        /// Retrieve the related value from current session and cast it to T
+        /// </summary>
+        /// <param name="name">Variable name</param>
         public T Session<T>(string name)
         {
             object k = Engine.Sessions.Get(SessionId, name);
@@ -672,6 +771,10 @@ namespace NetFluid
             return default(T);
         }
 
+        /// <summary>
+        /// Retrieve the related value from current session
+        /// </summary>
+        /// <param name="name">Variable name</param>
         public dynamic Session(string name)
         {
             return Engine.Sessions.Get(SessionId, name);

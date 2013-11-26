@@ -32,7 +32,7 @@ namespace NetFluid
     public class Authentication
     {
         /// <summary>
-        /// Basic authentication http://en.wikipedia.org/wiki/Basic_access_authentication
+        /// HTTP Basic authentication.
         /// Return false if the user need to be authenticated, true otherwise
         /// </summary>
         /// <param name="cnt">Current context</param>
@@ -70,6 +70,14 @@ namespace NetFluid
             return true;
         }
 
+        /// <summary>
+        /// HTTP Digest authentication.
+        /// Return false if the user need to be authenticated, true otherwise
+        /// </summary>
+        /// <param name="cnt">Current context</param>
+        /// <param name="realm">Welcome message for the user</param>
+        /// <param name="user">Username given by the client</param>
+        /// <param name="pass">Pass given by the client</param>
         public static bool Digest(Context cnt, string realm, out string user, out string pass)
         {
             user = string.Empty;
