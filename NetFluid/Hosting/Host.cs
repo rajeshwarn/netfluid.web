@@ -43,10 +43,9 @@ namespace NetFluid
         private readonly List<FluidPage> instances;
         private readonly Dictionary<string, RouteTarget> routes;
         private RouteTarget callOnAnyCode;
-        private Type[] controllers;
         private ParamRouteTarget[] parametrized;
         private RegexRouteTarget[] regex;
-        private SmallController[] smallControllers;
+        private Controller[] controllers;
 
         private struct PublicFolder
         {
@@ -68,8 +67,7 @@ namespace NetFluid
 
             this.name = name;
 
-            smallControllers = new SmallController[0];
-            controllers = new Type[0];
+            controllers = new Controller[0];
 
             regex = new RegexRouteTarget[0];
             parametrized = new ParamRouteTarget[0];
@@ -89,10 +87,10 @@ namespace NetFluid
             {
                 var sb = new StringBuilder(string.Format("<Host Name=\"{0}\">",this.name));
 
-                if (this.controllers.Length>0)
+                if (controllers.Length>0)
                 {
                     sb.Append("<Controllers>");
-                    foreach (var item in smallControllers)
+                    foreach (var item in controllers)
                         sb.Append(string.Format("<Controller Name=\"{0}\" Conditional=\"{1}\" />", item.Name, item.Condition != null));
 
                     sb.Append("</Controllers>");
@@ -164,7 +162,7 @@ namespace NetFluid
 
                 #region SMALL CONTROLLERS
 
-                foreach (var item in smallControllers)
+                foreach (var item in controllers)
                 {
                     if (item.Condition == null || item.Condition(cnt))
                     {
@@ -172,31 +170,6 @@ namespace NetFluid
                             Console.WriteLine(cnt.Request.Host + ":" + cnt.Request.Url + " - " + "Calling controller");
 
                         item.Action(cnt);
-                    }
-                    if (!cnt.IsOpen)
-                        return;
-                }
-
-                #endregion
-
-                #region CONTROLLERS
-
-                if (Engine.DevMode)
-                    Console.WriteLine(cnt.Request.Host + ":" + cnt.Request.Url + " - " + "Checking controllers");
-
-                foreach (Type t in controllers)
-                {
-                    var item = t.CreateIstance() as FluidController;
-
-                    if (Engine.DevMode)
-                        Console.WriteLine(cnt.Request.Host + ":" + cnt.Request.Url + " - " + "Checking " + t.FullName);
-
-                    item.Context = cnt;
-                    if (item.Condition())
-                    {
-                        if (Engine.DevMode)
-                            Console.WriteLine(cnt.Request.Host + ":" + cnt.Request.Url + " - " + "Calling " + t.FullName);
-                        item.Run();
                     }
                     if (!cnt.IsOpen)
                         return;
@@ -505,9 +478,6 @@ namespace NetFluid
             if (!page.Inherit(typeof (FluidPage)))
                 throw new TypeLoadException("page must inherit NetFluid.FluidPage");
 
-            if (page.Inherit(typeof (FluidController)))
-                controllers = controllers.Concat(new[] {page}).ToArray();
-
             try
             {
                 instances.Add(page.CreateIstance() as FluidPage);
@@ -596,14 +566,14 @@ namespace NetFluid
    
         public void SetController(Action<Context> act, string name=null)
         {
-            var controller = new SmallController { Action = act, Condition = null, Name=name };
-            smallControllers = smallControllers.Push(controller);
+            var controller = new Controller { Action = act, Condition = null, Name=name };
+            controllers = controllers.Push(controller);
         }
 
         public void SetController(Func<Context, bool> condition, Action<Context> act, string name = null)
         {
-            var controller = new SmallController { Action = act, Condition = condition, Name = name };
-            smallControllers = smallControllers.Push(controller);
+            var controller = new Controller { Action = act, Condition = condition, Name = name };
+            controllers = controllers.Push(controller);
         }
 
         public void SetRoute(string url, string methodFullname, string name = null)
@@ -848,7 +818,7 @@ namespace NetFluid
 
         #region Nested type: SmallControllerChecked
 
-        private class SmallController
+        private class Controller
         {
             public string Name;
             public Action<Context> Action;
