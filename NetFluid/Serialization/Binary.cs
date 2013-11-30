@@ -25,7 +25,7 @@ using System;
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
 
-namespace NetFluid.Serialization
+namespace NetFluid
 {
     public static class Binary
     {

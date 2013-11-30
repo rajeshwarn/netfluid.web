@@ -26,10 +26,16 @@ using System.IO;
 using System.Text;
 using System.Xml.Serialization;
 
-namespace NetFluid.Serialization
+namespace NetFluid
 {
     public static class XML
     {
+        public static void Serialize<T>(T obj,Stream stream)
+        {
+            var mySerializer = new XmlSerializer(typeof(T));
+            mySerializer.Serialize(stream, obj);
+        }
+
         public static string Serialize<T>(T obj)
         {
             var mySerializer = new XmlSerializer(typeof (T));

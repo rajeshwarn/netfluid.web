@@ -95,6 +95,7 @@
     <Compile Include="LogLevel.cs" />
     <Compile Include="MimeTypes.cs" />
     <Compile Include="IResponse.cs" />
+    <Compile Include="Responses\CSVResponse.cs" />
     <Compile Include="Responses\FileResponse.cs" />
     <Compile Include="Responses\FluidTemplate.cs" />
     <Compile Include="Responses\JSONResponse.cs" />
@@ -102,6 +103,8 @@
     <Compile Include="Responses\TemplateCompiler.cs" />
     <Compile Include="Security.cs" />
     <Compile Include="Serialization\Binary.cs" />
+    <Compile Include="Serialization\CSV.cs" />
+    <Compile Include="Serialization\CsvFile.cs" />
     <Compile Include="Serialization\JSON.cs" />
     <Compile Include="Serialization\JSONParser.cs" />
     <Compile Include="Serialization\XML.cs" />

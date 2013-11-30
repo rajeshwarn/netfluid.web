@@ -19,7 +19,7 @@ namespace NetFluid.Collections.Persistent
             path = Path.GetFullPath(filename);
 
             if (File.Exists(path))
-                dic = Serialization.Binary.Deserialize<ConcurrentDictionary<K, V>>(File.ReadAllBytes(path));
+                dic = Binary.Deserialize<ConcurrentDictionary<K, V>>(File.ReadAllBytes(path));
             else
                 dic = new ConcurrentDictionary<K, V>();
         }
@@ -32,7 +32,7 @@ namespace NetFluid.Collections.Persistent
             {
                 lock (dic)
                 {
-                    File.WriteAllBytes(path,Serialization.Binary.Serialize(dic));
+                    File.WriteAllBytes(path,Binary.Serialize(dic));
                 }
             });
         }
@@ -56,7 +56,7 @@ namespace NetFluid.Collections.Persistent
                 {
                     lock (dic)
                     {
-                        File.WriteAllBytes(path, Serialization.Binary.Serialize(dic));
+                        File.WriteAllBytes(path, Binary.Serialize(dic));
                     }
                 });
                 return true;
@@ -98,7 +98,7 @@ namespace NetFluid.Collections.Persistent
             {
                 lock (dic)
                 {
-                    File.WriteAllBytes(path, Serialization.Binary.Serialize(dic));
+                    File.WriteAllBytes(path, Binary.Serialize(dic));
                 }
             });
         }
@@ -132,7 +132,7 @@ namespace NetFluid.Collections.Persistent
                 {
                     lock (dic)
                     {
-                        File.WriteAllBytes(path, Serialization.Binary.Serialize(dic));
+                        File.WriteAllBytes(path, Binary.Serialize(dic));
                     }
                 });
                 return true;

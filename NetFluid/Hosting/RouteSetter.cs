@@ -32,15 +32,15 @@ namespace NetFluid
         {
         }
 
-        public RouteSetter SetSmallController(Action<Context> act)
+        public RouteSetter SetController(Action<Context> act)
         {
-            Engine.SetSmallController(act);
+            Engine.SetController(act);
             return this;
         }
 
-        public RouteSetter SetSmallController(Func<Context, bool> condition, Action<Context> act)
+        public RouteSetter SetController(Func<Context, bool> condition, Action<Context> act)
         {
-            Engine.SetSmallController(condition, act);
+            Engine.SetController(condition, act);
             return this;
         }
 
@@ -98,15 +98,15 @@ namespace NetFluid
             return this;
         }
 
-        public RouteSetter SetSmallController(string host, Action<Context> act)
+        public RouteSetter SetController(string host, Action<Context> act)
         {
-            Engine.SetSmallController(act);
+            Engine.SetController(act);
             return this;
         }
 
-        public RouteSetter SetSmallController(string host, Func<Context, bool> condition, Action<Context> act)
+        public RouteSetter SetController(string host, Func<Context, bool> condition, Action<Context> act)
         {
-            Engine.SetSmallController(condition, act);
+            Engine.SetController(condition, act);
             return this;
         }
 

@@ -129,7 +129,7 @@ namespace NetFluid
         #endregion
 
         #region ENUMERABLE
-
+        
         /// <summary>
         /// Return a random element from the collection
         /// </summary>
@@ -137,8 +137,7 @@ namespace NetFluid
         public static T Random<T>(this IEnumerable<T> source)
         {
             int c = source.Count();
-            var r = new Random();
-            return source.Skip(r.Next(c - 1)).First();
+            return source.Skip(Security.Random(c - 1)).First();
         }
 
         /// <summary>

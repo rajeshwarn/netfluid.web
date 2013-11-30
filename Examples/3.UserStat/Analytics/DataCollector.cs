@@ -4,32 +4,36 @@ using NetFluid;
 
 namespace _3.UserStat.Analytics
 {
-    class DataCollector:FluidController
+    class DataCollector
     {
-        //THIS IS THE METHOD EXECUTED EVERY TIME A CLIENT DO A REQUEST
-        public override object Run()
+        static DataCollector()
         {
-            var data = UserData.Parse(Context.SessionId);
+            //We collect data every time the server recieve a request
+            Engine.SetController(Context =>
+            {
+                var data = UserData.Parse(Context.SessionId);
 
-            if (data==null)
-            {
-                data = new UserData
+                if (data == null)
                 {
-                    Id = Context.SessionId,
-                    Interactions = new List<Interaction>(new[]{new Interaction{Timestamp = DateTime.Now, Url = Request.Url}}),
-                    Ip = Context.RemoteEndPoint.ToString(),
-                    Languages = Request.UserLanguages,
-                    Referer = Request.UrlReferrer,
-                    UserAgent = Request.UserAgent
-                };
-                UserData.Save(data);
-            }
-            else
-            {
-                data.Interactions.Add(new Interaction { Timestamp = DateTime.Now, Url = Request.Url });
-            }
-            return null;
+                    data = new UserData
+                    {
+                        Id = Context.SessionId,
+                        Interactions = new List<Interaction>(new[] { new Interaction { Timestamp = DateTime.Now, Url = Context.Request.Url } }),
+                        Ip = Context.RemoteEndPoint.ToString(),
+                        Languages = Context.Request.UserLanguages,
+                        Referer = Context.Request.UrlReferrer,
+                        UserAgent = Context.Request.UserAgent
+                    };
+                    UserData.Save(data);
+                }
+                else
+                {
+                    data.Interactions.Add(new Interaction { Timestamp = DateTime.Now, Url = Context.Request.Url });
+                }
+            });
+        
         }
+
 
         [Route("/analytics")]
         public FluidTemplate ShowData()

@@ -21,6 +21,7 @@
 // 23/10/2013    Matteo Fabbri      Inital coding
 // ********************************************************************************************************
 
+using NetFluid.Serialization;
 using System;
 using System.Collections;
 using System.Globalization;
@@ -29,7 +30,7 @@ using System.Reflection;
 using System.Text;
 using System.Text.RegularExpressions;
 
-namespace NetFluid.Serialization
+namespace NetFluid
 {
     public class JSON
     {

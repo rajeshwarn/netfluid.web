@@ -29,6 +29,15 @@ namespace NetFluid
 {
     public static class Security
     {
+        static object RandomLocker;
+        static Random RandomGenerator;
+        
+        static Security()
+        {
+            RandomLocker = new object();
+            RandomGenerator = new Random();
+        }
+
         public static string SecWebSocketAccept(string key)
         {
             const String MagicKEY = "258EAFA5-E914-47DA-95CA-C5AB0DC85B11";
@@ -55,6 +64,54 @@ namespace NetFluid
             var cryptoTransformSha1 = new SHA1CryptoServiceProvider();
             string hash = BitConverter.ToString(cryptoTransformSha1.ComputeHash(buffer)).Replace("-", "");
             return hash;
+        }
+
+        /// <summary>
+        /// Return a random value
+        /// </summary>
+        /// <returns></returns>
+        public static int Random()
+        {
+            int k;
+            lock (RandomLocker)
+            {
+                k = RandomGenerator.Next();
+                RandomGenerator = new Random(k);
+            }
+            return k;
+        }
+
+        /// <summary>
+        /// Return a random value from to 0 to max
+        /// </summary>
+        /// <param name="max">maximum value</param>
+        /// <returns></returns>
+        public static int Random(int max)
+        {
+            int k;
+            lock (RandomLocker)
+            {
+                k = RandomGenerator.Next(max);
+                RandomGenerator = new Random(k);
+            }
+            return k;
+        }
+
+        /// <summary>
+        /// Return a random value from to min to max
+        /// </summary>
+        /// <param name="min">minimun value</param>
+        /// <param name="max">maximum value</param>
+        /// <returns></returns>
+        public static int Random(int min, int max)
+        {
+            int k;
+            lock (RandomLocker)
+            {
+                k = RandomGenerator.Next(min,max);
+                RandomGenerator = new Random(k);
+            }
+            return k;
         }
 
         public static string UID()

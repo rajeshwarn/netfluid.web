@@ -275,7 +275,7 @@ namespace NetFluid
         {
             foreach (string f in fromhost)
             {
-                SetSmallController(f, (x) =>
+                SetController(f, (x) =>
                                           {
                                               x.Response.StatusCode = StatusCode.MovedPermanently;
                                               x.Response.Headers["Location"] = destination;
@@ -286,13 +286,13 @@ namespace NetFluid
 
         #region DEFAULT HOST
 
-        public static RouteSetter SetSmallController(Action<Context> act)
+        public static RouteSetter SetController(Action<Context> act)
         {
             MainHost.SetController(act);
             return new RouteSetter();
         }
 
-        public static RouteSetter SetSmallController(Func<Context, bool> condition, Action<Context> act)
+        public static RouteSetter SetController(Func<Context, bool> condition, Action<Context> act)
         {
             MainHost.SetController(condition, act);
             return new RouteSetter();
@@ -356,13 +356,13 @@ namespace NetFluid
 
         #region IN-APP HOST
 
-        public static RouteSetter SetSmallController(string host, Action<Context> act)
+        public static RouteSetter SetController(string host, Action<Context> act)
         {
             ResolveHost(host).SetController(act);
             return new RouteSetter();
         }
 
-        public static RouteSetter SetSmallController(string host, Func<Context, bool> condition, Action<Context> act)
+        public static RouteSetter SetController(string host, Func<Context, bool> condition, Action<Context> act)
         {
             ResolveHost(host).SetController(condition, act);
             return new RouteSetter();

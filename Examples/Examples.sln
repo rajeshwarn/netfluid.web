@@ -22,6 +22,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "5.Kendo", "5.Kendo\5.Kendo.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "6.Authentication", "6.Authentication\6.Authentication.csproj", "{A84A510D-3947-4299-8283-24791CF896BB}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "7.CSV", "7.CSV\7.CSV.csproj", "{C5CA41CF-F67D-4FED-81EE-B620FD36D101}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -116,6 +118,18 @@ Global
 		{A84A510D-3947-4299-8283-24791CF896BB}.net_4_5_Release|Any CPU.Build.0 = Release|Any CPU
 		{A84A510D-3947-4299-8283-24791CF896BB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A84A510D-3947-4299-8283-24791CF896BB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C5CA41CF-F67D-4FED-81EE-B620FD36D101}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C5CA41CF-F67D-4FED-81EE-B620FD36D101}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C5CA41CF-F67D-4FED-81EE-B620FD36D101}.net_4_0_Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C5CA41CF-F67D-4FED-81EE-B620FD36D101}.net_4_0_Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C5CA41CF-F67D-4FED-81EE-B620FD36D101}.net_4_0_Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C5CA41CF-F67D-4FED-81EE-B620FD36D101}.net_4_0_Release|Any CPU.Build.0 = Release|Any CPU
+		{C5CA41CF-F67D-4FED-81EE-B620FD36D101}.net_4_5_Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C5CA41CF-F67D-4FED-81EE-B620FD36D101}.net_4_5_Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C5CA41CF-F67D-4FED-81EE-B620FD36D101}.net_4_5_Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C5CA41CF-F67D-4FED-81EE-B620FD36D101}.net_4_5_Release|Any CPU.Build.0 = Release|Any CPU
+		{C5CA41CF-F67D-4FED-81EE-B620FD36D101}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C5CA41CF-F67D-4FED-81EE-B620FD36D101}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
