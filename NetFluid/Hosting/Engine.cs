@@ -286,15 +286,27 @@ namespace NetFluid
 
         #region DEFAULT HOST
 
-        public static RouteSetter SetController(Action<Context> act)
+        public static RouteSetter SetController(Func<Context,object> act,string name="")
         {
-            MainHost.SetController(act);
+            MainHost.SetController(act,name);
             return new RouteSetter();
         }
 
-        public static RouteSetter SetController(Func<Context, bool> condition, Action<Context> act)
+        public static RouteSetter SetController(Func<Context, bool> condition, Func<Context, object> act, string name = "")
         {
-            MainHost.SetController(condition, act);
+            MainHost.SetController(condition, act, name);
+            return new RouteSetter();
+        }
+
+        public static RouteSetter SetController(Action<Context> act, string name = "")
+        {
+            MainHost.SetController(act, name);
+            return new RouteSetter();
+        }
+
+        public static RouteSetter SetController(Func<Context, bool> condition, Action<Context> act, string name = "")
+        {
+            MainHost.SetController(condition, act, name);
             return new RouteSetter();
         }
 
@@ -356,15 +368,27 @@ namespace NetFluid
 
         #region IN-APP HOST
 
-        public static RouteSetter SetController(string host, Action<Context> act)
+        public static RouteSetter SetController(string host, Func<Context,object> act, string name = "")
         {
-            ResolveHost(host).SetController(act);
+            ResolveHost(host).SetController(act, name);
             return new RouteSetter();
         }
 
-        public static RouteSetter SetController(string host, Func<Context, bool> condition, Action<Context> act)
+        public static RouteSetter SetController(string host, Func<Context, bool> condition, Func<Context,object> act, string name = "")
         {
-            ResolveHost(host).SetController(condition, act);
+            ResolveHost(host).SetController(condition, act, name);
+            return new RouteSetter();
+        }
+
+        public static RouteSetter SetController(string host, Action<Context> act, string name="")
+        {
+            ResolveHost(host).SetController(act,name);
+            return new RouteSetter();
+        }
+
+        public static RouteSetter SetController(string host, Func<Context, bool> condition, Action<Context> act,string name="")
+        {
+            ResolveHost(host).SetController(condition, act,name);
             return new RouteSetter();
         }
 

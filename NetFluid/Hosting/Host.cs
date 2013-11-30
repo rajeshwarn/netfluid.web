@@ -115,36 +115,42 @@ namespace NetFluid
             }
         }
 
+        private static void SendValue(Context c, object res)
+        {
+            if (res == null)
+                return;
+
+            if (res is IResponse)
+            {
+                var resp = res as IResponse;
+                resp.SendResponse(c);
+            }
+
+            if (res is IConvertible)
+            {
+                c.SendHeaders();
+                c.Writer.Write(res.ToString());
+                c.Close();
+                return;
+            }
+
+            if (res is IEnumerable)
+            {
+                c.SendHeaders();
+                foreach (var item in res as IEnumerable)
+                    c.Writer.Write(item.ToString());
+                c.Close();
+            }
+        }
+
         private static void Finalize(Context c, MethodInfo method, object target, params object[] args)
         {
             try
             {
                 object res = method.Invoke(target, args);
 
-                if (res == null)
-                    return;
+                SendValue(c,res);
 
-                if (res is IResponse)
-                {
-                    var resp = res as IResponse;
-                    resp.SendResponse(c);
-                }
-
-                if (res is IConvertible)
-                {
-                    c.SendHeaders();
-                    c.Writer.Write(res.ToString());
-                    c.Close();
-                    return;
-                }
-
-                if (res is IEnumerable)
-                {
-                    c.SendHeaders();
-                    foreach (var item in res as IEnumerable)
-                        c.Writer.Write(item.ToString());
-                    c.Close();
-                }
                 c.Close();
             }
             catch (Exception ex)
@@ -160,7 +166,7 @@ namespace NetFluid
                 if (Engine.DevMode)
                     Console.WriteLine(cnt.Request.Host + ":" + cnt.Request.Url + " - " + "Checking controllers");
 
-                #region SMALL CONTROLLERS
+                #region CONTROLLERS
 
                 foreach (var item in controllers)
                 {
@@ -563,16 +569,29 @@ namespace NetFluid
                 }
             }
         }
-   
+
+        public void SetController(Func<Context,object> act, string name = null)
+        {
+            var controller = new Controller(act) { Condition = null, Name = name };
+            controllers = controllers.Push(controller);
+        }
+
+        public void SetController(Func<Context, bool> condition,Func<Context,object> act, string name = null)
+        {
+            var controller = new Controller(act) { Condition = condition, Name = name };
+            controllers = controllers.Push(controller);
+        }
+
+
         public void SetController(Action<Context> act, string name=null)
         {
-            var controller = new Controller { Action = act, Condition = null, Name=name };
+            var controller = new Controller(act) {Condition = null, Name=name };
             controllers = controllers.Push(controller);
         }
 
         public void SetController(Func<Context, bool> condition, Action<Context> act, string name = null)
         {
-            var controller = new Controller { Action = act, Condition = condition, Name = name };
+            var controller = new Controller(act) { Condition = condition, Name = name };
             controllers = controllers.Push(controller);
         }
 
@@ -820,9 +839,31 @@ namespace NetFluid
 
         private class Controller
         {
+            private MethodInfo methodInfo;
+            private object target;
+
             public string Name;
-            public Action<Context> Action;
             public Func<Context, bool> Condition;
+
+            public Controller(Action<Context> action)
+            {
+                target = action.Target;
+                methodInfo = action.Method;
+            }
+
+            public Controller(Func<Context,object> function)
+            {
+                target = function.Target;
+                methodInfo = function.Method;
+            }
+
+            public object Invoke(Context c)
+            {
+                if (Condition == null || !Condition(c))
+                    return null;
+
+                return methodInfo.Invoke(target, new[] {c});
+            }
         }
 
         #endregion
