@@ -25,7 +25,10 @@ using System;
 
 namespace NetFluid
 {
-    [AttributeUsage(AttributeTargets.Class | AttributeTargets.Struct | AttributeTargets.Method, AllowMultiple = true)]
+    /// <summary>
+    /// Tell to the engine to call this method on specified http status code
+    /// </summary>
+    [AttributeUsage(AttributeTargets.Method, AllowMultiple = true)]
     public class CallOn : Attribute
     {
         public StatusCode StatusCode;
