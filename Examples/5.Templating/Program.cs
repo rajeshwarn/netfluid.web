@@ -1,22 +1,26 @@
-﻿using System;
+﻿using NetFluid;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
-using NetFluid;
+using System.Text;
+using System.Threading.Tasks;
 
-namespace _4.WebSocket
+namespace _5.Kendo
 {
-    class Hoster
+    class Program
     {
-        static void Main()
+        static void Main(string[] args)
         {
             #region APPLICATION SELF HOST
             // Setup the application server, hosting the current assembly
             Engine.Load(Assembly.GetCallingAssembly());
-            
+
             // Enable console log of recieved request
             Engine.DevMode = true;
 
             // Set all files inside "Public" as public and downloadable by the client (styles, js, images..)
-            Engine.AddPublicFolder("/","./Public",true);
+            Engine.AddPublicFolder("/", "./Public", true);
 
             // Add an HTTP interface on our application server
             Engine.Interfaces.AddInterface("127.0.0.1", 8080);

@@ -1,0 +1,40 @@
+using System;
+using NetFluid;
+namespace _5.Kendo
+{
+
+public static class ____FluidTemplate530ac90c3d6f40e8947ada17193cce85
+{
+
+public static void Include(Context c, string path, params object[] args)
+{
+
+var k = new FluidTemplate(path,args);
+
+k.SendResponse(c);
+
+
+}
+
+#line 1 "C:\Users\Matteo\Desktop\NetFluid\netfluid\Examples\5.Templating\bin\Debug\UI\razor.html"
+public static void Run(NetFluid.Context Context)
+{
+
+Context.Writer.WriteLine("<html>");
+Context.Writer.WriteLine("<head>");
+Context.Writer.WriteLine("<title>Hello @Model.Name</title>");
+Context.Writer.WriteLine("</head>");
+Context.Writer.WriteLine("<body>");
+Context.Writer.WriteLine("Email: @Model.Email");
+Context.Writer.WriteLine("</body>");
+Context.Writer.WriteLine("</html>");
+
+
+}
+
+
+}
+
+
+}
+

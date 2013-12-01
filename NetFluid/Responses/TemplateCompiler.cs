@@ -305,8 +305,8 @@ namespace NetFluid
             classBuilder.AppendLine("public static class " + name + "\r\n{\r\n");
 
             #region INCLUDE FUNCTION
-            classBuilder.AppendLine("public static void Include(Context c, string path)\r\n{\r\n");
-            classBuilder.AppendLine("var k = new FluidTemplate(path);\r\n");
+            classBuilder.AppendLine("public static void Include(Context c, string path, params object[] args)\r\n{\r\n");
+            classBuilder.AppendLine("var k = new FluidTemplate(path,args);\r\n");
             classBuilder.AppendLine("k.SendResponse(c);\r\n");
             classBuilder.AppendLine("\r\n}\r\n");
             #endregion

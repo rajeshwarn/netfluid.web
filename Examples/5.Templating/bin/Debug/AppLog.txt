@@ -1,0 +1,91 @@
+01/12/2013 02.11.41	Debug	Adding http interface on 127.0.0.1:8080
+01/12/2013 02.11.41	Debug	Starting NetFluid Engine
+01/12/2013 02.11.41	Debug	Loading calling assembly
+01/12/2013 02.11.41	Debug	Loading templates
+01/12/2013 02.11.41	Debug	Templates loaded
+01/12/2013 02.11.41	Debug	Starting web interfaces
+01/12/2013 02.11.41	Debug	Starting  web interface on 127.0.0.1:8080
+01/12/2013 02.11.41	Debug	NetFluid web application running
+01/12/2013 02.11.59	Error	Template C:\Users\Matteo\Desktop\NetFluid\netfluid\Examples\5.Templating\bin\Debug\UI\fluid.html not found
+01/12/2013 02.14.46	Debug	Adding http interface on 127.0.0.1:8080
+01/12/2013 02.14.46	Debug	Starting NetFluid Engine
+01/12/2013 02.14.46	Debug	Loading calling assembly
+01/12/2013 02.14.46	Debug	Loading templates
+01/12/2013 02.14.46	Error	Runtime compilation of C:\Users\Matteo\Desktop\NetFluid\netfluid\Examples\5.Templating\bin\Debug\UI\fluid.nested.html failed
+01/12/2013 02.14.47	Error	Runtime compilation of C:\Users\Matteo\Desktop\NetFluid\netfluid\Examples\5.Templating\bin\Debug\UI\fluid.html failed
+01/12/2013 02.14.47	Debug	Templates loaded
+01/12/2013 02.14.47	Debug	Starting web interfaces
+01/12/2013 02.14.47	Debug	Starting  web interface on 127.0.0.1:8080
+01/12/2013 02.14.47	Debug	NetFluid web application running
+01/12/2013 02.20.00	Debug	Adding http interface on 127.0.0.1:8080
+01/12/2013 02.20.00	Debug	Starting NetFluid Engine
+01/12/2013 02.20.00	Debug	Loading calling assembly
+01/12/2013 02.20.00	Debug	Loading templates
+01/12/2013 02.20.01	Debug	Templates loaded
+01/12/2013 02.20.01	Debug	Starting web interfaces
+01/12/2013 02.20.01	Debug	Starting  web interface on 127.0.0.1:8080
+01/12/2013 02.20.01	Debug	NetFluid web application running
+01/12/2013 02.20.42	Debug	Adding http interface on 127.0.0.1:8080
+01/12/2013 02.20.42	Debug	Starting NetFluid Engine
+01/12/2013 02.20.42	Debug	Loading calling assembly
+01/12/2013 02.20.43	Debug	Loading templates
+01/12/2013 02.20.43	Debug	Templates loaded
+01/12/2013 02.20.43	Debug	Starting web interfaces
+01/12/2013 02.20.43	Debug	Starting  web interface on 127.0.0.1:8080
+01/12/2013 02.20.43	Debug	NetFluid web application running
+
+01/12/2013 02.20.59	Exception	Error on /razor
+				RazorEngine.Templating.TemplateCompilationException: Unable to compile template. Il nome 'Html' non esiste nel contesto corrente.
+				
+				Other compilation errors may have occurred. Check the Errors property for more information.
+				
+				   in RazorEngine.Compilation.DirectCompilerServiceBase.CompileType(TypeContext context) in c:\Users\Matteo\Desktop\NetFluid\netfluid.razor\src\Core\RazorEngine.Core\Compilation\DirectCompilerServiceBase.cs:riga 106
+				
+				   in RazorEngine.Templating.TemplateService.CreateTemplateType(String razorTemplate, Type modelType) in c:\Users\Matteo\Desktop\NetFluid\netfluid.razor\src\Core\RazorEngine.Core\Templating\TemplateService.cs:riga 256
+				
+				   in RazorEngine.Templating.TemplateService.CreateTemplate(String razorTemplate, Type templateType, Object model) in c:\Users\Matteo\Desktop\NetFluid\netfluid.razor\src\Core\RazorEngine.Core\Templating\TemplateService.cs:riga 127
+				
+				   in RazorEngine.Templating.TemplateService.Parse(String razorTemplate, Object model, DynamicViewBag viewBag, String cacheName) in c:\Users\Matteo\Desktop\NetFluid\netfluid.razor\src\Core\RazorEngine.Core\Templating\TemplateService.cs:riga 435
+				
+				   in RazorEngine.Razor.Parse(String razorTemplate, Object model) in c:\Users\Matteo\Desktop\NetFluid\netfluid.razor\src\Core\RazorEngine.Core\Razor.cs:riga 251
+				
+				   in System.Dynamic.UpdateDelegates.UpdateAndExecute3[T0,T1,T2,TRet](CallSite site, T0 arg0, T1 arg1, T2 arg2)
+				
+				   in NetFluid.Razor.RazorTemplate.SendResponse(Context cnt) in c:\Users\Matteo\Desktop\NetFluid\netfluid.razor\RazorTemplate.cs:riga 64
+				
+				   in NetFluid.Host.SendValue(Context c, Object res) in c:\Users\Matteo\Desktop\NetFluid\netfluid\NetFluid\Hosting\Host.cs:riga 126
+				
+				   in NetFluid.Host.Finalize(Context c, MethodInfo method, Object target, Object[] args) in c:\Users\Matteo\Desktop\NetFluid\netfluid\NetFluid\Hosting\Host.cs:riga 152
+
+01/12/2013 02.22.06	Exception	Error on /razor
+				RazorEngine.Templating.TemplateCompilationException: Unable to compile template. Il nome 'Html' non esiste nel contesto corrente.
+				
+				Other compilation errors may have occurred. Check the Errors property for more information.
+				
+				   in RazorEngine.Compilation.DirectCompilerServiceBase.CompileType(TypeContext context) in c:\Users\Matteo\Desktop\NetFluid\netfluid.razor\src\Core\RazorEngine.Core\Compilation\DirectCompilerServiceBase.cs:riga 106
+				
+				   in RazorEngine.Templating.TemplateService.CreateTemplateType(String razorTemplate, Type modelType) in c:\Users\Matteo\Desktop\NetFluid\netfluid.razor\src\Core\RazorEngine.Core\Templating\TemplateService.cs:riga 256
+				
+				   in RazorEngine.Templating.TemplateService.CreateTemplate(String razorTemplate, Type templateType, Object model) in c:\Users\Matteo\Desktop\NetFluid\netfluid.razor\src\Core\RazorEngine.Core\Templating\TemplateService.cs:riga 127
+				
+				   in RazorEngine.Templating.TemplateService.Parse(String razorTemplate, Object model, DynamicViewBag viewBag, String cacheName) in c:\Users\Matteo\Desktop\NetFluid\netfluid.razor\src\Core\RazorEngine.Core\Templating\TemplateService.cs:riga 435
+				
+				   in RazorEngine.Razor.Parse(String razorTemplate, Object model) in c:\Users\Matteo\Desktop\NetFluid\netfluid.razor\src\Core\RazorEngine.Core\Razor.cs:riga 251
+				
+				   in NetFluid.Razor.RazorTemplate.SendResponse(Context cnt) in c:\Users\Matteo\Desktop\NetFluid\netfluid.razor\RazorTemplate.cs:riga 64
+				
+				   in NetFluid.Host.SendValue(Context c, Object res) in c:\Users\Matteo\Desktop\NetFluid\netfluid\NetFluid\Hosting\Host.cs:riga 126
+				
+				   in NetFluid.Host.Finalize(Context c, MethodInfo method, Object target, Object[] args) in c:\Users\Matteo\Desktop\NetFluid\netfluid\NetFluid\Hosting\Host.cs:riga 152
+01/12/2013 02.24.13	Debug	Adding http interface on 127.0.0.1:8080
+01/12/2013 02.24.13	Debug	Starting NetFluid Engine
+01/12/2013 02.24.13	Debug	Loading calling assembly
+01/12/2013 02.24.13	Debug	Loading templates
+01/12/2013 02.24.38	Debug	Adding http interface on 127.0.0.1:8080
+01/12/2013 02.24.38	Debug	Starting NetFluid Engine
+01/12/2013 02.24.38	Debug	Loading calling assembly
+01/12/2013 02.24.38	Debug	Loading templates
+01/12/2013 02.24.39	Debug	Templates loaded
+01/12/2013 02.24.39	Debug	Starting web interfaces
+01/12/2013 02.24.39	Debug	Starting  web interface on 127.0.0.1:8080
+01/12/2013 02.24.39	Debug	NetFluid web application running

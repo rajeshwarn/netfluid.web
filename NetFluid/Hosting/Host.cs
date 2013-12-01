@@ -856,7 +856,7 @@ namespace NetFluid
                     return null;
                 
                 if (Engine.DevMode)
-                    Console.WriteLine(cnt.Request.Host + ":" + cnt.Request.Url + " - " + "Calling controller");
+                    Console.WriteLine(c.Request.Host + ":" + c.Request.Url + " - " + "Calling controller");
 
 
                 return methodInfo.Invoke(target, new[] {c});
