@@ -175,7 +175,7 @@ namespace NetFluid
                         if (Engine.DevMode)
                             Console.WriteLine(cnt.Request.Host + ":" + cnt.Request.Url + " - " + "Calling controller");
 
-                        item.Action(cnt);
+                        SendValue(cnt, item.Invoke(cnt));
                     }
                     if (!cnt.IsOpen)
                         return;
@@ -493,7 +493,7 @@ namespace NetFluid
                 Engine.Logger.Log(LogLevel.Error, "Failed to create instance of " + page.FullName, ex);
             }
 
-            foreach (MethodInfo m in page.GetMethods())
+            foreach (var m in page.GetMethods())
             {
                 foreach (Route ma in m.CustomAttribute<Route>())
                     SetRoute(ma.Uri, page, m);
