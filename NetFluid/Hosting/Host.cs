@@ -170,13 +170,8 @@ namespace NetFluid
 
                 foreach (var item in controllers)
                 {
-                    if (item.Condition == null || item.Condition(cnt))
-                    {
-                        if (Engine.DevMode)
-                            Console.WriteLine(cnt.Request.Host + ":" + cnt.Request.Url + " - " + "Calling controller");
-
-                        SendValue(cnt, item.Invoke(cnt));
-                    }
+                    SendValue(cnt, item.Invoke(cnt));
+                    
                     if (!cnt.IsOpen)
                         return;
                 }
@@ -859,6 +854,10 @@ namespace NetFluid
             {
                 if (Condition == null || !Condition(c))
                     return null;
+                
+                if (Engine.DevMode)
+                    Console.WriteLine(cnt.Request.Host + ":" + cnt.Request.Url + " - " + "Calling controller");
+
 
                 return methodInfo.Invoke(target, new[] {c});
             }
