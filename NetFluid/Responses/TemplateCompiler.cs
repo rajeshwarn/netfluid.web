@@ -303,6 +303,14 @@ namespace NetFluid
             classBuilder.AppendLine(string.Join("\r\n", usings.Distinct()));
             classBuilder.AppendLine("namespace " + @namespace + "\r\n{\r\n");
             classBuilder.AppendLine("public static class " + name + "\r\n{\r\n");
+
+            #region INCLUDE FUNCTION
+            classBuilder.AppendLine("public static void Include(Context c, string path)\r\n{\r\n");
+            classBuilder.AppendLine("var k = new FluidTemplate(path);\r\n");
+            classBuilder.AppendLine("k.SendResponse(c);\r\n");
+            classBuilder.AppendLine("\r\n}\r\n");
+            #endregion
+
             classBuilder.AppendLine("#line " + parametersLine + " \"" + filename + "\"");
             classBuilder.AppendLine("public static void Run" + parameters + "\r\n{\r\n");
             classBuilder.AppendLine(builder.ToString());
