@@ -516,8 +516,6 @@ namespace NetFluid
 
             foreach (Route r in page.CustomAttribute<Route>(true))
             {
-                SetRoute(r.Uri, page, "Run");
-
                 foreach (MethodInfo m in page.GetMethods())
                 {
                     foreach (Route ma in m.CustomAttribute<Route>())
