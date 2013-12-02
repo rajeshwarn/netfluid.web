@@ -357,9 +357,13 @@ namespace NetFluid
 	                if (cnt.Request.Url.StartsWith(item.Uri))
 	                {
 	                    string path = System.IO.Path.GetFullPath(item.Path + cnt.Request.Url.Replace('/', System.IO.Path.DirectorySeparatorChar));
-	
-	                    if (!path.StartsWith(item.Path))
-	                        return;
+
+                        if (!path.StartsWith(item.Path))
+                        {
+                            cnt.Response.StatusCode = StatusCode.BadRequest;
+                            cnt.Close();
+                            return;
+                        }
 	
 	                    if (System.IO.File.Exists(path))
 	                    {
@@ -537,7 +541,7 @@ namespace NetFluid
 
         public void AddPublicFolder(string uriPath, string realPath)
         {
-        	folders = (folders.Concat(new PublicFolder{Path=realPath, Uri=uriPath })).ToArray();
+            folders = (folders.Concat(new PublicFolder { Path = System.IO.Path.GetFullPath(realPath), Uri = uriPath })).ToArray();
         }
         
         public void AddImmutablePublicFolder(string uriPath, string realPath)
