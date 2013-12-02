@@ -23,8 +23,15 @@
 
 namespace NetFluid
 {
+    /// <summary>
+    /// Implement methods for complex type response
+    /// </summary>
     public interface IResponse
     {
+        /// <summary>
+        /// This method is invoked by the engine when an exposed method return the current object to transform the object into a valid http repsonse
+        /// </summary>
+        /// <param name="cnt"></param>
         void SendResponse(Context cnt);
     }
 }
