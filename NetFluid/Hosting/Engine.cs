@@ -130,6 +130,7 @@ namespace NetFluid
 
         public static bool LoadAppConfiguration()
         {
+ 
             try
             {
                 var settings = ConfigurationManager.GetSection("NetFluidSettings") as Settings;

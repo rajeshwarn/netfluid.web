@@ -66,10 +66,14 @@ namespace NetFluid
             }
         }
 
-
         public void Redirect(string url)
         {
             StatusCode = StatusCode.Found; // Found
+            Headers.Append("Location", url);
+        }
+        public void MovedPermanently(string url)
+        {
+            StatusCode = StatusCode.MovedPermanently;
             Headers.Append("Location", url);
         }
     }
