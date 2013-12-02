@@ -247,6 +247,11 @@ namespace NetFluid
             Logger.Log(LogLevel.Debug, "NetFluid web application running");
         }
 
+        /// <summary>
+        /// Load all types of assembly under a new virtual host
+        /// </summary>
+        /// <param name="host">virtual host name</param>
+        /// <param name="assembly">assembly to load</param>
         public static void LoadHost(string host, Assembly assembly)
         {
             try
@@ -275,6 +280,10 @@ namespace NetFluid
             }
         }
 
+        /// <summary>
+        /// Load all types in assembly as default webapplication
+        /// </summary>
+        /// <param name="assembly">assembly to be loaded</param>
         public static void Load(Assembly assembly)
         {
             try
@@ -303,6 +312,11 @@ namespace NetFluid
             }
         }
 
+        /// <summary>
+        /// All connection requiring the specified virtual host are fowarded to specified address
+        /// </summary>
+        /// <param name="host">On wich host connection are fowarded</param>
+        /// <param name="remote">Destination address ("ip:port")</param>
         public static void AddFowarding(string host, string remote)
         {
             IPAddress ip;
@@ -330,6 +344,11 @@ namespace NetFluid
             TcpFowarding.SetFowarding(host, new IPEndPoint(ip, port));
         }
 
+        /// <summary>
+        /// For SEO purpose. All client requesting a virtual host in fromhost list recieve a "Moved Permanently" response to destination 
+        /// </summary>
+        /// <param name="destination">The uri where you want to redirect client</param>
+        /// <param name="fromhost">Wich host you want to redirect</param>
         public static void SetRedirect(string destination, params string[] fromhost)
         {
             foreach (string f in fromhost)
@@ -344,13 +363,26 @@ namespace NetFluid
         }
 
         #region DEFAULT HOST
-
+        
+        /// <summary>
+        /// Every time the default web application recieve a request an function is invoked. If the function return a value different from null the context execution ends.
+        /// </summary>
+        /// <param name="act">Action to invoke</param>
+        /// <param name="name">Friendly name for action in hosting map</param>
+        /// <returns></returns>
         public static RouteSetter SetController(Func<Context,object> act,string name="")
         {
             MainHost.SetController(act,name);
             return new RouteSetter();
         }
 
+        /// <summary>
+        /// Every time the default web application recieve a request an function is invoked. If the function return a value different from null the context execution ends.
+        /// </summary>
+        /// <param name="condition">If true the function is invoked</param>
+        /// <param name="act">The function to invoke</param>
+        /// <param name="name">Friendly name for function in hosting map</param>
+        /// <returns></returns>
         public static RouteSetter SetController(Func<Context, bool> condition, Func<Context, object> act, string name = "")
         {
             MainHost.SetController(condition, act, name);
