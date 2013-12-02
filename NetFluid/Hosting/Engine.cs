@@ -128,9 +128,51 @@ namespace NetFluid
             }
         }
 
+        /// <summary>
+        /// Load NetFluid configuration from a custom app.config path
+        /// </summary>
+        /// <param name="path"></param>
+        /// <returns></returns>
+        public static bool LoadAppConfiguration(string path)
+        {
+            try
+            {
+                var settings = ConfigurationManager.OpenExeConfiguration(path).GetSection("NetFluidSettings") as Settings;
+
+                if (settings != null)
+                {
+                    DevMode = settings.DevMode;
+                    Sessions.SessionDuration = settings.SessionDuration;
+                    Logger.LogLevel = settings.LogLevel;
+                    Logger.LogPath = settings.LogPath;
+
+                    foreach (Interface inter in settings.Interfaces)
+                        if (string.IsNullOrEmpty(inter.Certificate))
+                            Interfaces.AddInterface(inter.IP, inter.Port);
+                        else
+                            Interfaces.AddInterface(inter.IP, inter.Port, inter.Certificate);
+
+                    foreach (PublicFolder inter in settings.PublicFolders)
+                        AddPublicFolder(inter.UriPath, inter.RealPath, inter.Immutable);
+
+                    return true;
+                }
+                Logger.Log(LogLevel.Warning, "App configuration doesn't contains a valid NetFluid section");
+                return false;
+            }
+            catch (Exception ex)
+            {
+                Logger.Log(LogLevel.Error, "Failed to load app configuration", ex);
+                return false;
+            }
+        }
+
+        /// <summary>
+        /// Load NetFluid configuration from app.config
+        /// </summary>
+        /// <returns></returns>
         public static bool LoadAppConfiguration()
         {
- 
             try
             {
                 var settings = ConfigurationManager.GetSection("NetFluidSettings") as Settings;
@@ -163,6 +205,12 @@ namespace NetFluid
             }
         }
 
+        /// <summary>
+        /// Add a file-downloadable folder
+        /// </summary>
+        /// <param name="uri">Sub files and folder will be mapped on this uri</param>
+        /// <param name="path">Physical path of mapped folder</param>
+        /// <param name="immutable">If true files are memory cached</param>
         public static void AddPublicFolder(string uri, string path, bool immutable)
         {
         	if (immutable)
@@ -170,7 +218,14 @@ namespace NetFluid
         	else
         		MainHost.AddPublicFolder(uri,path);
         }
-        
+
+        /// <summary>
+        /// Add a file-downloadable folder on specified host
+        /// </summary>
+        /// <param name="host">Virtual host of public folder</param>
+        /// <param name="uri">Sub files and folder will be mapped on this uri</param>
+        /// <param name="path">Physical path of mapped folder</param>
+        /// <param name="immutable">If true files are memory cached</param>
         public static void AddPublicFolder(string host, string uri, string path, bool immutable)
         {
         	if (immutable)
@@ -179,6 +234,9 @@ namespace NetFluid
         		ResolveHost(host).AddPublicFolder(uri,path);
         }
         
+        /// <summary>
+        /// Open all interfaces and start to serve clients
+        /// </summary>
         public static void Start()
         {
             Logger.Log(LogLevel.Debug, "Starting NetFluid Engine");
