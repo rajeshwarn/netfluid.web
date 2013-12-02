@@ -28,26 +28,86 @@ using System.Text;
 
 namespace NetFluid
 {
+    /// <summary>
+    /// Contains all the data recieved from the client
+    /// </summary>
     [Serializable]
     public class HttpRequest
     {
+        /// <summary>
+        /// Sintactic sugar for Headers["Accept-Types"]
+        /// </summary>
         public string[] AcceptTypes;
+
+        /// <summary>
+        /// Encoder detected for request headers
+        /// </summary>
         public Encoding ContentEncoding;
+
+        /// <summary>
+        /// Size in bytes of request-body. Zero if method is GET
+        /// </summary>
         public long ContentLength;
+
+        /// <summary>
+        /// Coockies recieved from the client
+        /// </summary>
         public CookieCollection Cookies;
+
+        /// <summary>
+        /// Files recieved from the client
+        /// </summary>
         public HttpFileCollection Files;
+
+        /// <summary>
+        /// Get query values
+        /// </summary>
         public Dictionary<string, QueryValue> Get;
+
+        /// <summary>
+        /// Headers of the client request
+        /// </summary>
         public WebHeaderCollection Headers;
+
+        /// <summary>
+        /// HTTP method of client request
+        /// </summary>
         public string HttpMethod;
         public bool KeepAlive;
-        public Dictionary<string, QueryValue> Post;
-        public Version ProtocolVersion;
-        public string RawUrl;
-        public string Url;
 
+        /// <summary>
+        /// Post query values
+        /// </summary>
+        public Dictionary<string, QueryValue> Post;
+        
+        /// <summary>
+        /// From HTTP1.0 to HTTP1.2
+        /// </summary>
+        public Version ProtocolVersion;
+
+        /// <summary>
+        /// Requested url undecoded
+        /// </summary>
+        public string RawUrl;
+
+        /// <summary>
+        /// Requested url decoded 
+        /// </summary>
+        public string Url;
+        
+        /// <summary>
+        /// Sintatic sugar for Headers["Referrer"]
+        /// </summary>
         public string UrlReferrer;
+
+        /// <summary>
+        /// Languages accepted by the client
+        /// </summary>
         public string[] UserLanguages;
 
+        /// <summary>
+        /// Merge of Get and post variables
+        /// </summary>
         private Dictionary<string, QueryValue> values;
 
         public HttpRequest()
@@ -58,6 +118,9 @@ namespace NetFluid
             Cookies = new CookieCollection();
         }
 
+        /// <summary>
+        /// Merge of get and post values
+        /// </summary>
         public Dictionary<string, QueryValue> Values
         {
             get
@@ -86,16 +149,25 @@ namespace NetFluid
             }
         }
 
+        /// <summary>
+        /// Sintactic sugar for Headers["Content-Type"]
+        /// </summary>
         public string ContentType
         {
             get { return Headers["Content-Type"]; }
         }
 
+        /// <summary>
+        /// Sintactic sugar for Headers["UserName-Agent"]
+        /// </summary>
         public string UserAgent
         {
             get { return Headers["UserName-Agent"]; }
         }
 
+        /// <summary>
+        ///  Sintactic sugar for Headers["Host"]
+        /// </summary>
         public string Host
         {
             get { return Headers["Host"]; }
