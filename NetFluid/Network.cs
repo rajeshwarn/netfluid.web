@@ -26,23 +26,38 @@ using System.Net.NetworkInformation;
 
 namespace NetFluid.HTTP
 {
+    /// <summary>
+    /// Return important data about the connected network
+    /// </summary>
     public class Network
     {
+        /// <summary>
+        /// All available physical network interfaces
+        /// </summary>
         public static NetworkInterface[] Interfaces
         {
             get { return NetworkInterface.GetAllNetworkInterfaces(); }
         }
 
+        /// <summary>
+        /// True if the machine is connected to the network
+        /// </summary>
         public static bool Connected
         {
             get { return NetworkInterface.GetIsNetworkAvailable(); }
         }
 
+        /// <summary>
+        /// Return the loopback physical inetrface
+        /// </summary>
         public static NetworkInterface Loopback
         {
             get { return Interfaces[NetworkInterface.LoopbackInterfaceIndex]; }
         }
 
+        /// <summary>
+        /// Return all ip address of the current machine
+        /// </summary>
         public static IPAddress[] Addresses
         {
             get { return Dns.GetHostEntry(Dns.GetHostName()).AddressList; }
