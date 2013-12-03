@@ -333,7 +333,7 @@ namespace NetFluid
             if (!IPAddress.TryParse(remote, out ip))
             {
                 IPAddress[] addr =
-                    Dns.GetHostAddresses(remote).Where(x => x.AddressFamily == AddressFamily.InterNetwork).ToArray();
+                    System.Net.Dns.GetHostAddresses(remote).Where(x => x.AddressFamily == AddressFamily.InterNetwork).ToArray();
 
                 if (addr.Length == 0)
                     throw new Exception("Host " + remote + " not found");

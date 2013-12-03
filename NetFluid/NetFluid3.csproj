@@ -181,6 +181,8 @@
     <Compile Include="Sessions\ISessionManager.cs" />
     <Compile Include="Sessions\MemorySessionManager.cs" />
     <Compile Include="Cloud\TcpFowarding.cs" />
+    <Compile Include="SMTP\SmtpRequest.cs" />
+    <Compile Include="SMTP\InboundConnector.cs" />
     <Compile Include="WebHeaderCollection.cs" />
     <Compile Include="HTTP\PostManager.cs" />
     <Compile Include="Network.cs" />

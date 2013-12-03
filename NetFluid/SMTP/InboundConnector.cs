@@ -92,10 +92,15 @@ namespace NetFluid.SMTP
 	            {
                     foreach (var recipient in request.To)
                     {
-                        Task.Factory.StartNew(() =>
+                        try
                         {
-                            OnMailRecieve(recipient,request);
-                        });
+                            OnMailRecieve(recipient, request);
+                        }
+                        catch (Exception ex)
+                        {
+
+                            throw ex;
+                        }
                     }
 	            }
 

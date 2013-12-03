@@ -60,7 +60,7 @@ namespace NetFluid.HTTP
         /// </summary>
         public static IPAddress[] Addresses
         {
-            get { return Dns.GetHostEntry(Dns.GetHostName()).AddressList; }
+            get { return System.Net.Dns.GetHostEntry(System.Net.Dns.GetHostName()).AddressList; }
         }
     }
 }
