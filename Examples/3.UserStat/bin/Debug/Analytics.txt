@@ -1,0 +1,158 @@
+using System;
+using NetFluid;
+using System.Linq;
+using _3.UserStat;
+namespace Agenda
+{
+
+public static class ____FluidTemplate9c9fb7b36dbc466386269966196c7394
+{
+
+public static void Include(Context c, string path, params object[] args)
+{
+
+var k = new FluidTemplate(path,args);
+
+k.SendResponse(c);
+
+
+}
+
+#line 4 "C:\Users\Matteo\Desktop\NetFluid\netfluid\Examples\3.UserStat\bin\Debug\Analytics.html"
+public static void Run(NetFluid.Context Context,Report report)
+{
+
+Context.Writer.WriteLine("<!DOCTYPE html>");
+Context.Writer.WriteLine("<html lang=\"en\">");
+Context.Writer.WriteLine("<head>");
+Context.Writer.WriteLine("<meta charset=\"utf-8\">");
+Context.Writer.WriteLine("<meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">");
+Context.Writer.WriteLine("<meta name=\"description\" content=\"\">");
+Context.Writer.WriteLine("<meta name=\"author\" content=\"\">");
+Context.Writer.WriteLine("<title>MySite user analitycs</title>");
+Context.Writer.WriteLine("<!-- Bootstrap core CSS -->");
+Context.Writer.WriteLine("<link href=\"http://getbootstrap.com/dist/css/bootstrap.min.css\" rel=\"stylesheet\">");
+Context.Writer.WriteLine("<!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->");
+Context.Writer.WriteLine("<!--[if lt IE 9]>");
+Context.Writer.WriteLine("<script src=\"/js/html5shiv.js\"></script>");
+Context.Writer.WriteLine("<script src=\"/js/respond.min.js\"></script>");
+Context.Writer.WriteLine("<![endif]-->");
+Context.Writer.WriteLine("</head>");
+Context.Writer.WriteLine("<body>");
+Context.Writer.WriteLine("<div class=\"container\">");
+Context.Writer.WriteLine("<div class=\"starter-template\">");
+Context.Writer.WriteLine("<h1>");
+Context.Writer.WriteLine("<a href=\"/\">MySite</a> user analitycs</h1>");
+Context.Writer.WriteLine("<h2>");
+#line 27 "C:\Users\Matteo\Desktop\NetFluid\netfluid\Examples\3.UserStat\bin\Debug\Analytics.html"
+Context.Writer.Write("");
+Context.Writer.Write(( report.UniqueVisitors )==null?"null":( report.UniqueVisitors ).ToString());
+#line 27 "C:\Users\Matteo\Desktop\NetFluid\netfluid\Examples\3.UserStat\bin\Debug\Analytics.html"
+Context.Writer.Write(" unique visitors - ");
+Context.Writer.Write(( report.ServedRequest )==null?"null":( report.ServedRequest ).ToString());
+Context.Writer.Write(" served request");
+#line 27 "C:\Users\Matteo\Desktop\NetFluid\netfluid\Examples\3.UserStat\bin\Debug\Analytics.html"
+Context.Writer.Write("");
+Context.Writer.WriteLine("</h2>");
+Context.Writer.WriteLine("<h2>");
+#line 30 "C:\Users\Matteo\Desktop\NetFluid\netfluid\Examples\3.UserStat\bin\Debug\Analytics.html"
+Context.Writer.Write("");
+Context.Writer.Write(( report.BounceFrequency )==null?"null":( report.BounceFrequency ).ToString());
+Context.Writer.Write(" bounce frequency");
+#line 30 "C:\Users\Matteo\Desktop\NetFluid\netfluid\Examples\3.UserStat\bin\Debug\Analytics.html"
+Context.Writer.Write("");
+Context.Writer.WriteLine("</h2>");
+#line 32 "C:\Users\Matteo\Desktop\NetFluid\netfluid\Examples\3.UserStat\bin\Debug\Analytics.html"
+Context.Writer.Write("<h2>");
+Context.Writer.Write(( report.Referrer.Count() )==null?"null":( report.Referrer.Count() ).ToString());
+Context.Writer.Write(" referer</h2>");
+#line 32 "C:\Users\Matteo\Desktop\NetFluid\netfluid\Examples\3.UserStat\bin\Debug\Analytics.html"
+Context.Writer.Write("");
+Context.Writer.WriteLine("<div>");
+#line 34 "C:\Users\Matteo\Desktop\NetFluid\netfluid\Examples\3.UserStat\bin\Debug\Analytics.html"
+if(report.Referrer.Count()> 0)
+{
+
+Context.Writer.WriteLine("<table>");
+Context.Writer.WriteLine("<tr><th>From</th><th>Visitors</th></tr>");
+#line 37 "C:\Users\Matteo\Desktop\NetFluid\netfluid\Examples\3.UserStat\bin\Debug\Analytics.html"
+foreach(var k in report.Referrer)
+{
+
+Context.Writer.WriteLine("<tr>");
+#line 39 "C:\Users\Matteo\Desktop\NetFluid\netfluid\Examples\3.UserStat\bin\Debug\Analytics.html"
+Context.Writer.Write("<td><a href=\"");
+Context.Writer.Write(( k.Item1 )==null?"null":( k.Item1 ).ToString());
+#line 39 "C:\Users\Matteo\Desktop\NetFluid\netfluid\Examples\3.UserStat\bin\Debug\Analytics.html"
+Context.Writer.Write("\">");
+Context.Writer.Write(( k.Item1 )==null?"null":( k.Item1 ).ToString());
+Context.Writer.Write("</a></td>");
+#line 39 "C:\Users\Matteo\Desktop\NetFluid\netfluid\Examples\3.UserStat\bin\Debug\Analytics.html"
+Context.Writer.Write("");
+#line 40 "C:\Users\Matteo\Desktop\NetFluid\netfluid\Examples\3.UserStat\bin\Debug\Analytics.html"
+Context.Writer.Write("<td>");
+Context.Writer.Write(( k.Item2 )==null?"null":( k.Item2 ).ToString());
+Context.Writer.Write("</td>");
+#line 40 "C:\Users\Matteo\Desktop\NetFluid\netfluid\Examples\3.UserStat\bin\Debug\Analytics.html"
+Context.Writer.Write("");
+Context.Writer.WriteLine("</tr>");
+#line 42 "C:\Users\Matteo\Desktop\NetFluid\netfluid\Examples\3.UserStat\bin\Debug\Analytics.html"
+}
+Context.Writer.WriteLine("</table>");
+#line 44 "C:\Users\Matteo\Desktop\NetFluid\netfluid\Examples\3.UserStat\bin\Debug\Analytics.html"
+}
+Context.Writer.WriteLine("</div>");
+#line 46 "C:\Users\Matteo\Desktop\NetFluid\netfluid\Examples\3.UserStat\bin\Debug\Analytics.html"
+Context.Writer.Write("<h2>");
+Context.Writer.Write(( report.Languages.Count() )==null?"null":( report.Languages.Count() ).ToString());
+Context.Writer.Write(" languages</h2>");
+#line 46 "C:\Users\Matteo\Desktop\NetFluid\netfluid\Examples\3.UserStat\bin\Debug\Analytics.html"
+Context.Writer.Write("");
+Context.Writer.WriteLine("<div>");
+#line 48 "C:\Users\Matteo\Desktop\NetFluid\netfluid\Examples\3.UserStat\bin\Debug\Analytics.html"
+if(report.Languages.Count()> 0)
+{
+
+Context.Writer.WriteLine("<table>");
+Context.Writer.WriteLine("<tr><th>From</th><th>Visitors</th></tr>");
+#line 51 "C:\Users\Matteo\Desktop\NetFluid\netfluid\Examples\3.UserStat\bin\Debug\Analytics.html"
+foreach(var k in report.Languages)
+{
+
+Context.Writer.WriteLine("<tr>");
+#line 53 "C:\Users\Matteo\Desktop\NetFluid\netfluid\Examples\3.UserStat\bin\Debug\Analytics.html"
+Context.Writer.Write("<td><a href=\"");
+Context.Writer.Write(( k.Item1 )==null?"null":( k.Item1 ).ToString());
+#line 53 "C:\Users\Matteo\Desktop\NetFluid\netfluid\Examples\3.UserStat\bin\Debug\Analytics.html"
+Context.Writer.Write("\">");
+Context.Writer.Write(( k.Item1 )==null?"null":( k.Item1 ).ToString());
+Context.Writer.Write("</a></td>");
+#line 53 "C:\Users\Matteo\Desktop\NetFluid\netfluid\Examples\3.UserStat\bin\Debug\Analytics.html"
+Context.Writer.Write("");
+#line 54 "C:\Users\Matteo\Desktop\NetFluid\netfluid\Examples\3.UserStat\bin\Debug\Analytics.html"
+Context.Writer.Write("<td>");
+Context.Writer.Write(( k.Item2 )==null?"null":( k.Item2 ).ToString());
+Context.Writer.Write("</td>");
+#line 54 "C:\Users\Matteo\Desktop\NetFluid\netfluid\Examples\3.UserStat\bin\Debug\Analytics.html"
+Context.Writer.Write("");
+Context.Writer.WriteLine("</tr>");
+#line 56 "C:\Users\Matteo\Desktop\NetFluid\netfluid\Examples\3.UserStat\bin\Debug\Analytics.html"
+}
+Context.Writer.WriteLine("</table>");
+#line 58 "C:\Users\Matteo\Desktop\NetFluid\netfluid\Examples\3.UserStat\bin\Debug\Analytics.html"
+}
+Context.Writer.WriteLine("</div>");
+Context.Writer.WriteLine("</div>");
+Context.Writer.WriteLine("</div>");
+Context.Writer.WriteLine("</body>");
+Context.Writer.WriteLine("</html>");
+
+
+}
+
+
+}
+
+
+}
+

@@ -27,28 +27,27 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Reflection;
+using System.Text;
 
 namespace NetFluid
 {
     public sealed class QueryValue : IConvertible, IEnumerable<string>
     {
+        public string Name { get; private set; }
         private string[] values;
 
         #region CTOR
 
         public QueryValue()
         {
+            Name = ""; 
             values = new string[0];
         }
 
-        public QueryValue(string str)
+        public QueryValue(string name, string str)
         {
+            Name = name;
             values = new[] {str};
-        }
-
-        public QueryValue(params string[] str)
-        {
-            values = str;
         }
 
         #endregion
@@ -79,10 +78,26 @@ namespace NetFluid
 
         public override string ToString()
         {
-            if (values.Length > 1)
+            var b = new StringBuilder(JSON.Escape(Name)+":");
+
+            switch (values.Length)
+            {
+                case 0:
+                    b.Append("null");
+                break;
+                case 1:
+                    b.Append(JSON.Escape(values[0]));
+                break;
+                default:
+                    b.Append("[" + string.Join(",", values.Select(x => JSON.Escape(x))) + "]");
+                break;
+            }
+
+            return b.ToString();
+            /*if (values.Length > 1)
                 return string.Join(" ", values);
 
-            return values.Length == 0 ? string.Empty : values[0];
+            return values.Length == 0 ? string.Empty : values[0];*/
         }
 
         public override int GetHashCode()
@@ -309,11 +324,6 @@ namespace NetFluid
         public static implicit operator string(QueryValue q)
         {
             return q.ToString();
-        }
-
-        public static implicit operator QueryValue(string str)
-        {
-            return new QueryValue(str);
         }
 
         #endregion

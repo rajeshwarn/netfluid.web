@@ -211,7 +211,7 @@ namespace NetFluid
         /// <param name="uri">Sub files and folder will be mapped on this uri</param>
         /// <param name="path">Physical path of mapped folder</param>
         /// <param name="immutable">If true files are memory cached</param>
-        public static void AddPublicFolder(string uri, string path, bool immutable)
+        public static void AddPublicFolder(string uri, string path, bool immutable=false)
         {
         	if (immutable)
         		MainHost.AddImmutablePublicFolder(uri,path);

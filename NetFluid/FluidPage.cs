@@ -27,7 +27,7 @@ using NetFluid.HTTP;
 
 namespace NetFluid
 {
-    public class FluidPage
+    public class FluidPage : IMethodExposer
     {
         public FluidPage()
         {
@@ -50,17 +50,17 @@ namespace NetFluid
             get { return Context.Request; }
         }
 
-        public Dictionary<string, QueryValue> Get
+        public QueryValueCollection Get
         {
-            get { return Context.Request.Get ?? (Context.Request.Get = new Dictionary<string, QueryValue>()); }
+            get { return Context.Request.Get ?? (Context.Request.Get = new QueryValueCollection()); }
         }
 
-        public Dictionary<string, QueryValue> Post
+        public QueryValueCollection Post
         {
             get
             {
                 if (Context.Request.Post == null)
-                    Context.Request.Post = new Dictionary<string, QueryValue>();
+                    Context.Request.Post = new QueryValueCollection();
                 return Context.Request.Post;
             }
         }

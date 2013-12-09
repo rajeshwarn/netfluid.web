@@ -16,12 +16,19 @@ namespace NetFluid.Collections.Persistent
 
         public PersistentDictionary(string filename)
         {
-            path = Path.GetFullPath(filename);
+            try
+            {
+                path = Path.GetFullPath(filename);
 
-            if (File.Exists(path))
-                dic = Binary.Deserialize<ConcurrentDictionary<K, V>>(File.ReadAllBytes(path));
-            else
+                if (File.Exists(path))
+                    dic = Binary.Deserialize<ConcurrentDictionary<K, V>>(File.ReadAllBytes(path));
+                else
+                    dic = new ConcurrentDictionary<K, V>();
+            }
+            catch (Exception)
+            {
                 dic = new ConcurrentDictionary<K, V>();
+            }
         }
 
         public void Add(K key, V value)

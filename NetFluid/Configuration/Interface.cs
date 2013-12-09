@@ -45,7 +45,7 @@ namespace NetFluid
         /// <summary>
         /// Port to use
         /// </summary>
-        [ConfigurationProperty("Port", DefaultValue = "8080", IsRequired = true)]
+        [ConfigurationProperty("Port", DefaultValue = "8080", IsRequired = false)]
         [IntegerValidator(MinValue = 1, MaxValue = 65000)]
         public int Port
         {

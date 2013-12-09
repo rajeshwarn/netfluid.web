@@ -24,6 +24,7 @@
 using System.Collections.Generic;
 using System.Net;
 using NetFluid.HTTP;
+using System;
 
 namespace NetFluid
 {
@@ -64,26 +65,56 @@ namespace NetFluid
 
         public void AddInterface(IPAddress ip, int port)
         {
-            Engine.Logger.Log(LogLevel.Debug, "Adding http interface on " + ip + ":" + port);
-            interfaces.Add(new WebInterface(ip, port));
+            try
+            {
+                Engine.Logger.Log(LogLevel.Debug, "Adding http interface on " + ip + ":" + port);
+                interfaces.Add(new WebInterface(ip, port));
+            }
+            catch (Exception ex)
+            {
+                Engine.Logger.Log(LogLevel.Warning, "Failed to add http interface on " + ip + ":" + port, ex);
+            }
         }
 
         public void AddInterface(IPAddress ip, int port, string certificate)
         {
-            Engine.Logger.Log(LogLevel.Debug, "Adding https interface on " + ip + ":" + port);
-            interfaces.Add(new WebInterface(ip, port, certificate));
+            try
+            {
+                Engine.Logger.Log(LogLevel.Debug, "Adding https interface on " + ip + ":" + port);
+                interfaces.Add(new WebInterface(ip, port, certificate));
+            }
+            catch (Exception ex)
+            {
+                Engine.Logger.Log(LogLevel.Warning, "Failed to add https interface on " + ip + ":" + port, ex);
+            }
+
         }
 
         public void AddInterface(string ip, int port)
         {
-            Engine.Logger.Log(LogLevel.Debug, "Adding http interface on " + ip + ":" + port);
-            interfaces.Add(new WebInterface(IPAddress.Parse(ip), port));
+            try
+            {
+                Engine.Logger.Log(LogLevel.Debug, "Adding http interface on " + ip + ":" + port);
+                interfaces.Add(new WebInterface(IPAddress.Parse(ip), port));
+            }
+            catch (Exception ex)
+            {
+                Engine.Logger.Log(LogLevel.Warning, "Failed to add http interface on " + ip + ":" + port, ex);
+            }
+
         }
 
         public void AddInterface(string ip, int port, string certificate)
         {
-            Engine.Logger.Log(LogLevel.Debug, "Adding https interface on " + ip + ":" + port);
-            interfaces.Add(new WebInterface(IPAddress.Parse(ip), port, certificate));
+            try
+            {
+                Engine.Logger.Log(LogLevel.Debug, "Adding https interface on " + ip + ":" + port);
+                interfaces.Add(new WebInterface(IPAddress.Parse(ip), port, certificate));
+            }
+            catch (Exception ex)
+            {
+                Engine.Logger.Log(LogLevel.Warning, "Failed to add https interface on " + ip + ":" + port, ex);
+            }
         }
 
         #endregion

@@ -151,6 +151,7 @@
     <Compile Include="HttpFile.cs" />
     <Compile Include="HttpFileCollection.cs" />
     <Compile Include="ILogger.cs" />
+    <Compile Include="IMethodExposer.cs" />
     <Compile Include="IO\ChunkedStream.cs" />
     <Compile Include="HTTP\Interface.cs" />
     <Compile Include="HTTP\Extensions.cs" />
@@ -165,12 +166,14 @@
     <Compile Include="LogLevel.cs" />
     <Compile Include="MimeTypes.cs" />
     <Compile Include="IResponse.cs" />
+    <Compile Include="QueryValueCollection.cs" />
     <Compile Include="Responses\CSVResponse.cs" />
     <Compile Include="Responses\FileResponse.cs" />
     <Compile Include="Responses\FluidTemplate.cs" />
     <Compile Include="Responses\JSONResponse.cs" />
     <Compile Include="Responses\StringResponse.cs" />
     <Compile Include="Responses\TemplateCompiler.cs" />
+    <Compile Include="Responses\XMLResponse.cs" />
     <Compile Include="Security.cs" />
     <Compile Include="Serialization\Binary.cs" />
     <Compile Include="Serialization\CSV.cs" />

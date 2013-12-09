@@ -217,7 +217,7 @@ namespace NetFluid
                     {
                         if (groups.Contains(parameters[i].Name))
                         {
-                            var q = new QueryValue(m.Groups[parameters[i].Name].Value);
+                            var q = new QueryValue(parameters[i].Name,m.Groups[parameters[i].Name].Value);
                             args[i] = q.Parse(parameters[i]);
                         }
                         else
@@ -270,7 +270,7 @@ namespace NetFluid
                     {
                         if (j < argUri.Length)
                         {
-                            var qv = new QueryValue(argUri[j]);
+                            var qv = new QueryValue("",argUri[j]);
                             args[j] = qv.Parse(parameters[j]);
                         }
                         else
@@ -317,8 +317,8 @@ namespace NetFluid
                     var args = new object[parameters.Length];
                     for (int i = 0; i < parameters.Length; i++)
                     {
-                        QueryValue q;
-                        if (cnt.Request.Values.TryGetValue(parameters[i].Name, out q))
+                        var q = cnt.Request.Values[parameters[i].Name];
+                        if ( q != null )
                             args[i] = q.Parse(parameters[i]);
                         else
                             args[i] = parameters[i].ParameterType.IsValueType
@@ -856,7 +856,7 @@ namespace NetFluid
 
             public object Invoke(Context c)
             {
-                if (Condition == null || !Condition(c))
+                if (Condition != null && !Condition(c))
                     return null;
                 
                 if (Engine.DevMode)

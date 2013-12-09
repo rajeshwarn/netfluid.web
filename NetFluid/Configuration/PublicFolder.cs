@@ -42,6 +42,13 @@ namespace NetFluid
             set { this["UriPath"] = value; }
         }
 
+        [ConfigurationProperty("Host", DefaultValue = "", IsRequired = false)]
+        public string Host
+        {
+            get { return (string)this["Host"]; }
+            set { this["Host"] = value; }
+        }
+
         [ConfigurationProperty("Immutable", DefaultValue = false, IsRequired = false)]
         public bool Immutable
         {

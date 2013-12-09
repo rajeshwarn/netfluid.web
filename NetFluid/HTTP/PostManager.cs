@@ -83,22 +83,19 @@ namespace NetFluid.HTTP
                     stream.Read(buffer, 0, (int) element.Length);
 
                     if (cnt.Request.Post == null)
-                        cnt.Request.Post = new Dictionary<string, QueryValue>();
+                        cnt.Request.Post = new QueryValueCollection();
 
                     var key = HttpUtility.UrlDecode(element.Name);
                     var val = HttpUtility.UrlDecode(cnt.Request.ContentEncoding.GetString(buffer));
 
-                    if (cnt.Request.Post.ContainsKey(key))
-                        cnt.Request.Post[key].Add(val);
-                    else
-                        cnt.Request.Post.Add(key, new QueryValue(val));
+                    cnt.Request.Post.Add(key, val);
                 }
             }
         }
 
         internal static void DecodeUrl(Context pdata, Stream stream)
         {
-            pdata.Request.Post = new Dictionary<string, QueryValue>();
+            pdata.Request.Post = new QueryValueCollection();
 
             var r = new byte[pdata.Request.ContentLength];
             stream.Read(r, 0, r.Length);
@@ -114,17 +111,10 @@ namespace NetFluid.HTTP
                 {
                     case 2:
                         string v = HttpUtility.UrlDecode(val[1]);
-
-                        if (pdata.Request.Post.ContainsKey(k))
-                            pdata.Request.Post[k].Add(v);
-                        else
-                            pdata.Request.Post[k] = v;
+                        pdata.Request.Post.Add(k,v);
                         break;
                     case 1:
-                        if (pdata.Request.Post.ContainsKey(k))
-                            pdata.Request.Post[k].Add("true");
-                        else
-                            pdata.Request.Post[k] = "true";
+                        pdata.Request.Post.Add(k, "true");
                         break;
                 }
             }

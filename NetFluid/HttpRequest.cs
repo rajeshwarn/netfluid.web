@@ -62,7 +62,7 @@ namespace NetFluid
         /// <summary>
         /// Get query values
         /// </summary>
-        public Dictionary<string, QueryValue> Get;
+        public QueryValueCollection Get;
 
         /// <summary>
         /// Headers of the client request
@@ -78,7 +78,7 @@ namespace NetFluid
         /// <summary>
         /// Post query values
         /// </summary>
-        public Dictionary<string, QueryValue> Post;
+        public QueryValueCollection Post;
         
         /// <summary>
         /// From HTTP1.0 to HTTP1.2
@@ -108,7 +108,7 @@ namespace NetFluid
         /// <summary>
         /// Merge of Get and post variables
         /// </summary>
-        private Dictionary<string, QueryValue> values;
+        private QueryValueCollection values;
 
         public HttpRequest()
         {
@@ -121,7 +121,7 @@ namespace NetFluid
         /// <summary>
         /// Merge of get and post values
         /// </summary>
-        public Dictionary<string, QueryValue> Values
+        public QueryValueCollection Values
         {
             get
             {
@@ -129,20 +129,17 @@ namespace NetFluid
                 {
                     if (Get != null)
                     {
-                        values = new Dictionary<string, QueryValue>(Get);
+                        values = new QueryValueCollection(Get);
 
                         if (Post != null)
                             foreach (var item in Post)
                             {
-                                if (values.ContainsKey(item.Key))
-                                    values[item.Key].Add(item.Value);
-                                else
-                                    values.Add(item.Key, item.Value);
+                                values.Add(item.Name, item);
                             }
                     }
                     else
                     {
-                        values = new Dictionary<string, QueryValue>(Post);
+                        values = new QueryValueCollection(Post);
                     }
                 }
                 return values;

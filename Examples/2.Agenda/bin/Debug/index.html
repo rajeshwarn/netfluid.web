@@ -1,0 +1,68 @@
+﻿<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta charset="utf-8"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+        <meta name="description" content=""/>
+        <meta name="author" content=""/>
+        <link rel="shortcut icon" href="/ico/favicon.png"/>
+        <meta name="msvalidate.01" content="4082DBBDF79669B31B8656ACF5A4658B" />
+        <title>Web framework for Microsoft .Net and Mono </title>
+        <!-- Bootstrap core CSS -->
+        <link href="/css/bootstrap.css" rel="stylesheet">
+        <link href="/css/my.css" rel="stylesheet" />
+        <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+        <!--[if lt IE 9]>
+            <script src="/js/html5shiv.js"> </script>
+            <script src="/js/respond.min.js"> </script>
+        <![endif]-->
+    </head>
+    <body>
+        <div class="container">
+            <div style="margin-top:50px">
+                This simple example how to pass complex types to our web exposed methods.
+                If you press UPDATE all the row below will be send to the NetFluid Engine which will recognize that the method expects an array of Person and some array of string
+                so it will take all the id and use them to invoke the static method Person.Parse to transform them into your complex type.
+                <br />
+                <strong>The match between data and type is based on parameter name into the method</strong>  
+            </div>
+            <div>
+                <input type="submit" class="btn btn-success" onclick="$('#agendaForm').submit()" value="UPDATE" />
+            </div>
+            <hr/>
+            <form id="agendaForm" method="POST" action="/update">
+                <table>
+                    <tr>
+                        <th></th><th>Name</th><th>Surname</th><th>Mail</th><th>Telephone</th>
+                    </tr>
+                    % foreach(var p in Person.All)
+                    <tr>
+                        <td>
+                            <input type="checkbox" class="form-control" name="person" value="{% p.Id %}" checked />
+                        </td>
+                        <td>
+                            <input type="text" class="form-control" name="name" value="{% p.Name %}"/>
+                        </td>
+                        <td>
+                            <input type="text" class="form-control" name="surname" value="{% p.Surname %}"/>
+                        </td>
+                        <td>
+                            <input type="tel" class="form-control" name="tel" value="{% p.Telephone %}"/>
+                        </td>
+                        <td>
+                            <input type="email" class="form-control" name="mail" value="{% p.Email %}"/>
+                        </td>
+                    </tr>
+                    % end foreach
+                </table>
+                <hr/>
+                <div>
+                    <input type="submit" class="btn btn-success" value="UPDATE" />
+                </div>
+            </form>
+        </div>
+
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"> </script>
+    </body>
+</html>

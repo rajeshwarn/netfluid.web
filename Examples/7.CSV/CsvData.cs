@@ -7,20 +7,42 @@ using System.Threading.Tasks;
 
 namespace _7.CSV
 {
+    [Route("dataservice")]
     public class CsvData:FluidPage
     {
-        IEnumerable<Client> randomList()
+        #region GENERATES IN-MEMRY RANDOM LIST
+        static IEnumerable<Client> clients;
+        static CsvData()
+        {
+            clients = randomList();
+        }
+
+        static IEnumerable<Client> randomList()
         {
             for (int i = 0; i < 10000; i++)
             {
                 yield return Client.RandomClient();
             }
         }
+        #endregion
 
-        [Route("/write")]
-        public CSVResponse<Client> Write()
+        [Route("/csv")]
+        public CSVResponse<Client> CSV()
         {
-            return new CSVResponse<Client>(randomList());
+            return new CSVResponse<Client>(CsvData.clients);
+        }
+
+
+        [Route("/xml")]
+        public XMLResponse XML()
+        {
+            return new XMLResponse(CsvData.clients);
+        }
+
+        [Route("/json")]
+        public JSONResponse JSON()
+        {
+            return new JSONResponse(CsvData.clients);
         }
     }
 }

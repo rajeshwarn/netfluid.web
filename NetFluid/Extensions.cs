@@ -223,19 +223,29 @@ namespace NetFluid
             return XML.Deserialize<T>(xml);
         }
 
+        public static void ToXML(this object obj,Stream stream)
+        {
+            XML.Serialize(obj,stream);
+        }
+
         public static string ToXML(this object obj)
         {
             return XML.Serialize(obj);
         }
 
-        public static T FromJSON<T>(this T obj, string yaml)
+        public static T FromJSON<T>(this T obj, string json)
         {
-            return JSON.Deserialize<T>(yaml);
+            return JSON.Deserialize<T>(json);
         }
 
-        public static string ToJSON(this object obj)
+        public static void ToJSON(this object obj,TextWriter writer, bool singlerow = false)
         {
-            return JSON.Serialize(obj);
+            JSON.Serialize(obj,writer, singlerow);
+        }
+
+        public static string ToJSON(this object obj,bool singlerow=false)
+        {
+            return JSON.Serialize(obj,singlerow);
         }
 
         #endregion

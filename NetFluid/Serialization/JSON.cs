@@ -25,6 +25,7 @@ using NetFluid.Serialization;
 using System;
 using System.Collections;
 using System.Globalization;
+using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text;
@@ -34,9 +35,23 @@ namespace NetFluid
 {
     public class JSON
     {
+        public static void Serialize(object json, Stream stream, bool singlerow = false)
+        {
+            var writer = new StreamWriter(stream);
+            Serialize(json, writer, 0, singlerow);
+            writer.Flush();
+            writer.Close();
+        }
+
+
+        public static void Serialize(object json, TextWriter writer, bool singlerow = false)
+        {
+            Serialize(json, writer, 0, singlerow);
+        }
+
         public static string Serialize(object json, bool singlerow = false)
         {
-            var builder = new StringBuilder();
+            var builder = new StringWriter();
             Serialize(json, builder, 0, singlerow);
             return builder.ToString();
         }
@@ -310,18 +325,18 @@ namespace NetFluid
 
         #region SERIALIZE
 
-        private static void Serialize(object obj, StringBuilder builder, int tab = 0, bool spaceless = false)
+        private static void Serialize(object obj, TextWriter builder, int tab = 0, bool spaceless = false)
         {
             string space = spaceless ? string.Empty : new string('\t', tab);
 
             if (obj == null)
             {
-                builder.Append("null");
+                builder.Write("null");
                 return;
             }
             if (obj is string)
             {
-                SerializeString(obj as string, builder);
+                builder.Write(Escape(obj as string));
                 return;
             }
             if (obj.GetType().IsArray)
@@ -331,38 +346,38 @@ namespace NetFluid
             }
             if (obj is DateTime)
             {
-                builder.Append(((DateTime) obj).ToUniversalTime().ToString());
+                builder.Write(((DateTime) obj).ToUniversalTime().ToString());
                 return;
             }
             if (obj is Enum)
             {
-                builder.Append("\"" + obj + "\"");
+                builder.Write("\"" + obj + "\"");
                 return;
             }
             if (obj is IConvertible)
             {
-                builder.Append(obj.ToString().ToLower());
+                builder.Write(obj.ToString().ToLower());
                 return;
             }
             if (obj is Guid)
             {
-                builder.Append(obj);
+                builder.Write(obj);
                 return;
             }
 
 
             if (spaceless)
-                builder.Append("{");
+                builder.Write("{");
             else
-                builder.Append("\r\n" + space + "{\r\n");
+                builder.Write("\r\n" + space + "{\r\n");
 
 
             Type type = obj.GetType();
 
             if (spaceless)
-                builder.Append("\"$type\" :" + "\"" + type.FullName + "\",");
+                builder.Write("\"$type\" :" + "\"" + type.FullName + "\",");
             else
-                builder.Append(space + "\"$type\" :" + "\"" + type.FullName + "\", \r\n");
+                builder.Write(space + "\"$type\" :" + "\"" + type.FullName + "\", \r\n");
 
             #region PROPERITIES
 
@@ -385,14 +400,15 @@ namespace NetFluid
                         continue;
                     }
 
-                    builder.Append(space);
+                    builder.Write(space);
 
-                    SerializeString(key, builder);
-                    builder.Append(":");
+                    builder.Write(Escape(key));
+
+                    builder.Write(":");
 
                     if (value == null)
                     {
-                        builder.Append("null");
+                        builder.Write("null");
                     }
                     else
                     {
@@ -400,10 +416,10 @@ namespace NetFluid
                     }
 
                     if (i != (props.Length - 1))
-                        builder.Append(",");
+                        builder.Write(",");
 
                     if (!spaceless)
-                        builder.Append("\r\n");
+                        builder.Write("\r\n");
                 }
             }
 
@@ -416,14 +432,14 @@ namespace NetFluid
                 string key = fields[i].Name;
                 object value = fields[i].GetValue(obj);
 
-                builder.Append(space);
+                builder.Write(space);
 
-                SerializeString(key, builder);
-                builder.Append(":");
+                builder.Write(Escape(key));
+                builder.Write(":");
 
                 if (value == null)
                 {
-                    builder.Append("null");
+                    builder.Write("null");
                 }
                 else
                 {
@@ -431,33 +447,33 @@ namespace NetFluid
                 }
 
                 if (i != (fields.Length - 1))
-                    builder.Append(",");
+                    builder.Write(",");
 
                 if (!spaceless)
-                    builder.Append("\r\n");
+                    builder.Write("\r\n");
             }
 
 
             if (!spaceless)
-                builder.Append(space + "}");
+                builder.Write(space + "}");
             else
-                builder.Append("}");
+                builder.Write("}");
         }
 
-        private static void SerializeArray(Array anArray, StringBuilder builder, int tab = 0, bool spaceless = false)
+        private static void SerializeArray(Array anArray, TextWriter builder, int tab = 0, bool spaceless = false)
         {
             if (anArray.Length == 0)
             {
-                builder.Append("[]");
+                builder.Write("[]");
                 return;
             }
 
             string space = spaceless ? string.Empty : new string('\t', tab);
 
             if (spaceless)
-                builder.Append("[");
+                builder.Write("[");
             else
-                builder.Append(space + "\r\n[\r\n");
+                builder.Write(space + "\r\n[\r\n");
 
             for (int i = 0; i < anArray.Length; i++)
             {
@@ -466,23 +482,24 @@ namespace NetFluid
                 Serialize(value, builder, tab + 1, spaceless);
 
                 if (i < (anArray.Length - 1))
-                    builder.Append(", ");
+                    builder.Write(", ");
 
                 if (!spaceless)
                 {
-                    builder.Append("\r\n");
+                    builder.Write("\r\n");
                 }
             }
 
             if (!spaceless)
-                builder.Append(space + "]");
+                builder.Write(space + "]");
             else
-                builder.Append("]");
+                builder.Write("]");
         }
 
-        private static void SerializeString(string aString, StringBuilder builder)
+        public static string Escape(string aString)
         {
-            builder.Append("\"");
+            var sb = new StringBuilder();
+            sb.Append("\"");
 
             char[] charArray = aString.ToCharArray();
             foreach (char c in charArray)
@@ -490,41 +507,43 @@ namespace NetFluid
                 switch (c)
                 {
                     case '"':
-                        builder.Append("\\\"");
+                        sb.Append("\\\"");
                         break;
                     case '\\':
-                        builder.Append("\\\\");
+                        sb.Append("\\\\");
                         break;
                     case '\b':
-                        builder.Append("\\b");
+                        sb.Append("\\b");
                         break;
                     case '\f':
-                        builder.Append("\\f");
+                        sb.Append("\\f");
                         break;
                     case '\n':
-                        builder.Append("\\n");
+                        sb.Append("\\n");
                         break;
                     case '\r':
-                        builder.Append("\\r");
+                        sb.Append("\\r");
                         break;
                     case '\t':
-                        builder.Append("\\t");
+                        sb.Append("\\t");
                         break;
                     default:
                         int codepoint = Convert.ToInt32(c);
                         if ((codepoint >= 32) && (codepoint <= 126))
                         {
-                            builder.Append(c);
+                            sb.Append(c);
                         }
                         else
                         {
-                            builder.Append("\\u" + Convert.ToString(codepoint, 16).PadLeft(4, '0'));
+                            sb.Append("\\u" + Convert.ToString(codepoint, 16).PadLeft(4, '0'));
                         }
                         break;
                 }
             }
 
-            builder.Append("\"");
+            sb.Append("\"");
+
+            return sb.ToString();
         }
 
         #endregion

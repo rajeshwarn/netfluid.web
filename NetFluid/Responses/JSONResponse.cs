@@ -38,7 +38,12 @@ namespace NetFluid
         {
             cnt.Response.Headers["Content-Type"] = "application/json";
             cnt.SendHeaders();
-            cnt.Writer.Write(obj.ToJSON());
+
+            if (obj is string)
+                cnt.Writer.Write(obj as string);
+            else
+                obj.ToJSON(cnt.Writer);
+
             cnt.Close();
         }
 
