@@ -67,6 +67,7 @@
     <Compile Include="Cloud\ClusterManager.cs" />
     <Compile Include="Cloud\IClusterManager.cs" />
     <Compile Include="Collections\Persistent\PersistentDictionary.cs" />
+    <Compile Include="Collections\Tree.cs" />
     <Compile Include="Configuration\Interface.cs" />
     <Compile Include="Configuration\PublicFolder.cs" />
     <Compile Include="Configuration\Settings.cs" />
@@ -160,6 +161,7 @@
     <Compile Include="HttpRequest.cs" />
     <Compile Include="HttpResponse.cs" />
     <Compile Include="HTTP\HttpUtility.cs" />
+    <Compile Include="IO\SharedFile.cs" />
     <Compile Include="IO\WebSocketStream.cs" />
     <Compile Include="IWebInterfaceManager.cs" />
     <Compile Include="Logger.cs" />

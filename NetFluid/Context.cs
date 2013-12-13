@@ -506,9 +506,18 @@ namespace NetFluid
 
             if (Request.HttpMethod != "GET" && Buffer.Length != position)
             {
-                var fs = new FileStream(Path.GetTempFileName(), FileMode.OpenOrCreate);
-                fs.Write(t, position, readBytes - position);
+                Stream fs;
+                try_again:
 
+                try
+                {
+                    fs = new FileStream(Path.GetFullPath(Path.Combine(Path.GetTempPath(),Security.UID())), FileMode.OpenOrCreate);
+                    fs.Write(t, position, readBytes - position);
+                }
+                catch (Exception)
+                {
+                    goto try_again;
+                }
                 ReadAndSave(readBytes - position, Request.ContentLength, fs);
                 return;
             }

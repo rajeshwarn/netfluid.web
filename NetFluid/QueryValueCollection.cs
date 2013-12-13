@@ -45,7 +45,7 @@ namespace NetFluid
                 values.Add(key, new QueryValue(key,value));
         }
 
-        public override string ToString()
+        public string ToJSON()
         {
             return "{" + string.Join(",",values.Values.Select(x=>x.ToString())) +"}";
         }

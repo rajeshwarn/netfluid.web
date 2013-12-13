@@ -29,7 +29,7 @@ using System.Linq;
 
 namespace NetFluid
 {
-    internal class MimeTypes
+    public static class MimeTypes
     {
         private static readonly Dictionary<string, string> mimetypes;
         private static readonly char[] separator;

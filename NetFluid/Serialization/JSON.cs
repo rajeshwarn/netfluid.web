@@ -374,10 +374,10 @@ namespace NetFluid
 
             Type type = obj.GetType();
 
-            if (spaceless)
+            /*if (spaceless)
                 builder.Write("\"$type\" :" + "\"" + type.FullName + "\",");
             else
-                builder.Write(space + "\"$type\" :" + "\"" + type.FullName + "\", \r\n");
+                builder.Write(space + "\"$type\" :" + "\"" + type.FullName + "\", \r\n");*/
 
             #region PROPERITIES
 
