@@ -48,6 +48,14 @@ namespace NetFluid
 
         #endregion
 
+        #region BYTE ARRAY
+
+        public static string ToBase64(this byte[] array)
+        {
+            return System.Convert.ToBase64String(array);
+        }
+        #endregion
+
         #region STRING
 
         /// <summary>
@@ -213,6 +221,11 @@ namespace NetFluid
             return Binary.Deserialize<T>(bytes);
         }
 
+        public static void ToBinary(this object obj,Stream stream)
+        {
+            Binary.Serialize(obj,stream);
+        }
+
         public static byte[] ToBinary(this object obj)
         {
             return Binary.Serialize(obj);
@@ -236,6 +249,11 @@ namespace NetFluid
         public static T FromJSON<T>(this T obj, string json)
         {
             return JSON.Deserialize<T>(json);
+        }
+
+        public static void ToJSON(this object obj, Stream stream, bool singlerow = false)
+        {
+            JSON.Serialize(obj, stream, singlerow);
         }
 
         public static void ToJSON(this object obj,TextWriter writer, bool singlerow = false)

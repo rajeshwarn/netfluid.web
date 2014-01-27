@@ -24,7 +24,6 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text;
@@ -37,7 +36,7 @@ namespace NetFluid
         private static readonly char[] urlSeparator;
         private static readonly Dictionary<string, Type> Types;
 
-        private string name;
+        private readonly string name;
 
         private readonly Dictionary<StatusCode, RouteTarget> callOn;
         private readonly List<FluidPage> instances;
@@ -54,7 +53,7 @@ namespace NetFluid
         }
         
         PublicFolder[] folders;
-        Dictionary<string,byte[]> immutableData;
+        readonly Dictionary<string,byte[]> immutableData;
         	
         static Host()
         {
@@ -134,24 +133,25 @@ namespace NetFluid
                 return;
             }
 
-            if (res is IEnumerable)
-            {
-                c.SendHeaders();
-                foreach (var item in res as IEnumerable)
-                    c.Writer.Write(item.ToString());
-                c.Close();
-            }
+            if (!(res is IEnumerable)) return;
+
+            c.SendHeaders();
+            foreach (var item in res as IEnumerable)
+                c.Writer.Write(item.ToString());
+            c.Close();
         }
+
 
         private static void Finalize(Context c, MethodInfo method, object target, params object[] args)
         {
             try
             {
-                object res = method.Invoke(target, args);
+                var res = method.Invoke(target, args);
 
                 SendValue(c,res);
 
-                c.Close();
+                if (!c.WebSocket)
+                    c.Close();
             }
             catch (Exception ex)
             {
@@ -213,7 +213,7 @@ namespace NetFluid
 
                     var groups = rr.Regex.GetGroupNames();
                     var args = new object[parameters.Length];
-                    for (int i = 0; i < parameters.Length; i++)
+                    for (var i = 0; i < parameters.Length; i++)
                     {
                         if (groups.Contains(parameters[i].Name))
                         {
@@ -238,7 +238,7 @@ namespace NetFluid
                 if (Engine.DevMode)
                     Console.WriteLine(cnt.Request.Host + ":" + cnt.Request.Url + " - " + "Checking parametrized routes");
 
-                for (int i = 0; i < parametrized.Length; i++)
+                for (var i = 0; i < parametrized.Length; i++)
                 {
                     if (!cnt.Request.Url.StartsWith(parametrized[i].Url))
                         continue;
@@ -254,7 +254,7 @@ namespace NetFluid
                     var page = parametrized[i].Type.CreateIstance() as FluidPage;
                     page.Context = cnt;
 
-                    ParameterInfo[] parameters = parametrized[i].Method.GetParameters();
+                    var parameters = parametrized[i].Method.GetParameters();
 
                     if (parameters.Length == 0)
                     {
@@ -262,11 +262,11 @@ namespace NetFluid
                         return;
                     }
 
-                    string[] argUri = cnt.Request.Url.Substring(parametrized[i].Url.Length).Split(urlSeparator,
+                    var argUri = cnt.Request.Url.Substring(parametrized[i].Url.Length).Split(urlSeparator,
                                                                                                   StringSplitOptions.
                                                                                                       RemoveEmptyEntries);
                     var args = new object[parameters.Length];
-                    for (int j = 0; j < parameters.Length; j++)
+                    for (var j = 0; j < parameters.Length; j++)
                     {
                         if (j < argUri.Length)
                         {
@@ -315,7 +315,7 @@ namespace NetFluid
                     }
 
                     var args = new object[parameters.Length];
-                    for (int i = 0; i < parameters.Length; i++)
+                    for (var i = 0; i < parameters.Length; i++)
                     {
                         var q = cnt.Request.Values[parameters[i].Name];
                         if ( q != null )
@@ -356,7 +356,7 @@ namespace NetFluid
 	            {
 	                if (cnt.Request.Url.StartsWith(item.Uri))
 	                {
-	                    string path = System.IO.Path.GetFullPath(item.Path + cnt.Request.Url.Replace('/', System.IO.Path.DirectorySeparatorChar));
+	                    var path = System.IO.Path.GetFullPath(item.Path + cnt.Request.Url.Substring(item.Uri.Length).Replace('/', System.IO.Path.DirectorySeparatorChar));
 
                         if (!path.StartsWith(item.Path))
                         {
@@ -430,7 +430,7 @@ namespace NetFluid
                         {
                             cnt.Writer.WriteLine("<h2>Data</h2>");
                             cnt.Writer.WriteLine("<table>");
-                            foreach (object data in ex.Data.Keys)
+                            foreach (var data in ex.Data.Keys)
                             {
                                 cnt.Writer.WriteLine("<tr><td>" + data + "</td><td>" + ex.Data[data] + "</td></tr>");
                             }
@@ -494,16 +494,16 @@ namespace NetFluid
 
             foreach (var m in page.GetMethods())
             {
-                foreach (Route ma in m.CustomAttribute<Route>())
+                foreach (var ma in m.CustomAttribute<Route>())
                     SetRoute(ma.Uri, page, m);
 
-                foreach (ParametrizedRoute ma in m.CustomAttribute<ParametrizedRoute>())
+                foreach (var ma in m.CustomAttribute<ParametrizedRoute>())
                     SetParameterizedRoute(ma.Uri, page, m);
 
-                foreach (RegexRoute ma in m.CustomAttribute<RegexRoute>())
+                foreach (var ma in m.CustomAttribute<RegexRoute>())
                     SetRegexRoute(ma.Uri, page, m);
 
-                foreach (CallOn ma in m.CustomAttribute<CallOn>())
+                foreach (var ma in m.CustomAttribute<CallOn>())
                 {
                     if (!callOn.ContainsKey(ma.StatusCode))
                         callOn.Add(ma.StatusCode, new RouteTarget {Type = page, Method = m});
@@ -513,22 +513,22 @@ namespace NetFluid
                 }
             }
 
-            foreach (Route r in page.CustomAttribute<Route>(true))
+            foreach (var r in page.CustomAttribute<Route>(true))
             {
-                foreach (MethodInfo m in page.GetMethods())
+                foreach (var m in page.GetMethods())
                 {
-                    foreach (Route ma in m.CustomAttribute<Route>())
+                    foreach (var ma in m.CustomAttribute<Route>())
                         SetRoute(r.Uri + ma.Uri, page, m);
 
-                    foreach (ParametrizedRoute ma in m.CustomAttribute<ParametrizedRoute>())
+                    foreach (var ma in m.CustomAttribute<ParametrizedRoute>())
                         SetParameterizedRoute(r.Uri + ma.Uri, page, m);
 
-                    foreach (RegexRoute ma in m.CustomAttribute<RegexRoute>())
+                    foreach (var ma in m.CustomAttribute<RegexRoute>())
                         SetRegexRoute(Regex.Escape(r.Uri) + ma.Uri, page, m);
                 }
             }
 
-            foreach (CallOn r in page.CustomAttribute<CallOn>(true))
+            foreach (var r in page.CustomAttribute<CallOn>(true))
             {
                 if (!callOn.ContainsKey(r.StatusCode))
                 {
@@ -546,19 +546,19 @@ namespace NetFluid
         
         public void AddImmutablePublicFolder(string uriPath, string realPath)
         {
-        	string m = System.IO.Path.GetFullPath(realPath);
-            string start = uriPath.EndsWith('/') ? uriPath : uriPath + "/";
+        	var m = System.IO.Path.GetFullPath(realPath);
+            var start = uriPath.EndsWith('/') ? uriPath : uriPath + "/";
 
             if (System.IO.Directory.Exists(m))
             {
-                foreach (string x in System.IO.Directory.GetFiles(m, "*.*", System.IO.SearchOption.AllDirectories))
+                foreach (var x in System.IO.Directory.GetFiles(m, "*.*", System.IO.SearchOption.AllDirectories))
                 {
-                    string s = x.Substring(m.Length).Replace(System.IO.Path.DirectorySeparatorChar, '/');
+                    var s = x.Substring(m.Length).Replace(System.IO.Path.DirectorySeparatorChar, '/');
 
                     if (s[0] == '/')
                         s = s.Substring(1);
 
-                    string fileUri = start + s;
+                    var fileUri = start + s;
                     if (!immutableData.ContainsKey(fileUri))
                     {
                         immutableData.Add(fileUri,System.IO.File.ReadAllBytes(x));
@@ -600,7 +600,7 @@ namespace NetFluid
             if (methodFullname == null)
                 throw new NullReferenceException("Null method");
 
-            Type t = GetType(methodFullname.Substring(0, methodFullname.LastIndexOf('.')));
+            var t = GetType(methodFullname.Substring(0, methodFullname.LastIndexOf('.')));
             if (t == null)
                 throw new TypeLoadException(methodFullname.Substring(0, methodFullname.LastIndexOf('.')) + " not found");
 
@@ -669,7 +669,7 @@ namespace NetFluid
             if (methodFullname == null)
                 throw new NullReferenceException("Null method");
 
-            Type t = GetType(methodFullname.Substring(0, methodFullname.LastIndexOf('.')));
+            var t = GetType(methodFullname.Substring(0, methodFullname.LastIndexOf('.')));
             if (t == null)
                 throw new TypeLoadException(methodFullname.Substring(0, methodFullname.LastIndexOf('.')) + " not found");
 
@@ -731,7 +731,7 @@ namespace NetFluid
             if (methodFullname == null)
                 throw new NullReferenceException("Null method");
 
-            Type t = GetType(methodFullname.Substring(0, methodFullname.LastIndexOf('.')));
+            var t = GetType(methodFullname.Substring(0, methodFullname.LastIndexOf('.')));
             if (t == null)
                 throw new TypeLoadException(methodFullname.Substring(0, methodFullname.LastIndexOf('.')) + " not found");
 
@@ -757,7 +757,7 @@ namespace NetFluid
             if (!type.Inherit(typeof (FluidPage)))
                 throw new TypeLoadException("Routed types must inherit NetFluid.FluidPage");
 
-            MethodInfo m = type.GetMethod(method);
+            var m = type.GetMethod(method);
             if (m == null)
                 throw new TypeLoadException(type.FullName + "." + method + " not found");
 
@@ -836,8 +836,8 @@ namespace NetFluid
 
         private class Controller
         {
-            private MethodInfo methodInfo;
-            private object target;
+            private readonly MethodInfo methodInfo;
+            private readonly object target;
 
             public string Name;
             public Func<Context, bool> Condition;

@@ -87,6 +87,12 @@ namespace NetFluid
         /// </summary>
         internal byte[] Buffer;
 
+
+        /// <summary>
+        /// True if the client is a websocket
+        /// </summary>
+        public bool WebSocket;
+
         private int position;
         private int readBytes;
         private StreamReader reader;
@@ -178,6 +184,7 @@ namespace NetFluid
         /// </summary>
         public string SessionId
         {
+
             get
             {
                 if (sessionId == null)
@@ -303,8 +310,8 @@ namespace NetFluid
                 return;
             }
 
-            byte[] t = ms.GetBuffer();
-            string header = ReadHeaders(t, ref position, t.Length - position);
+            var t = ms.GetBuffer();
+            var header = ReadHeaders(t, ref position, t.Length - position);
 
             if (header == "")
             {
@@ -321,11 +328,11 @@ namespace NetFluid
 
 
 
-            string[] lines = header.Split(new[] {'\n', '\r'}, StringSplitOptions.RemoveEmptyEntries);
+            var lines = header.Split(new[] {'\n', '\r'}, StringSplitOptions.RemoveEmptyEntries);
 
             #region FIRST LINE
 
-            string[] parts = lines[0].Split(separators, 3);
+            var parts = lines[0].Split(separators, 3);
             if (parts.Length >= 3)
             {
                 Request.HttpMethod = parts[0];
@@ -341,18 +348,18 @@ namespace NetFluid
                 }
 
                 Request.Get = new QueryValueCollection();
-                int index = parts[1].IndexOf('?');
+                var index = parts[1].IndexOf('?');
 
                 if (index >= 0)
                 {
                     Request.Url = HttpUtility.UrlDecode(parts[1].Substring(0, index));
                     parts[1] = parts[1].Substring(index + 1);
 
-                    foreach (string kv in parts[1].Split('&'))
+                    foreach (var kv in parts[1].Split('&'))
                     {
-                        int pos = kv.IndexOf('=');
-                        string val = pos == -1 ? "true" : HttpUtility.UrlDecode(kv.Substring(pos + 1));
-                        string key = pos == -1 ? HttpUtility.UrlDecode(kv) : HttpUtility.UrlDecode(kv.Substring(0, pos));
+                        var pos = kv.IndexOf('=');
+                        var val = pos == -1 ? "true" : HttpUtility.UrlDecode(kv.Substring(pos + 1));
+                        var key = pos == -1 ? HttpUtility.UrlDecode(kv) : HttpUtility.UrlDecode(kv.Substring(0, pos));
 
                         Request.Get.Add(key, val);
                     }
@@ -369,19 +376,19 @@ namespace NetFluid
 
             #endregion
 
-            for (int i = 1; i < lines.Length; i++)
+            for (var i = 1; i < lines.Length; i++)
             {
                 #region GENERIC HEADER
 
-                int colon = lines[i].IndexOf(':');
+                var colon = lines[i].IndexOf(':');
                 if (colon == -1 || colon == 0)
                 {
                     Response.StatusCode = StatusCode.BadRequest;
                     return;
                 }
 
-                string name = lines[i].Substring(0, colon).Trim();
-                string val = lines[i].Substring(colon + 1).Trim();
+                var name = lines[i].Substring(0, colon).Trim();
+                var val = lines[i].Substring(colon + 1).Trim();
 
                 Request.Headers.Set(name, val);
 
@@ -412,18 +419,18 @@ namespace NetFluid
 
                         #region COOKIE PARSING
 
-                        string[] cookieStrings = val.Split(new[] {',', ';'});
+                        var cookieStrings = val.Split(new[] {',', ';'});
                         Cookie current = null;
-                        int ProtocolVersion = 0;
-                        foreach (string cookieString in cookieStrings)
+                        var ProtocolVersion = 0;
+                        foreach (var cookieString in cookieStrings)
                         {
-                            string str = cookieString.Trim();
+                            var str = cookieString.Trim();
                             if (str.Length == 0)
                                 continue;
 
-                            int iu = str.IndexOf('=');
-                            string prop = str.Substring(0, iu);
-                            string value = str.Substring(iu + 1).Trim();
+                            var iu = str.IndexOf('=');
+                            var prop = str.Substring(0, iu);
+                            var value = str.Substring(iu + 1).Trim();
 
                             switch (prop)
                             {
@@ -447,7 +454,7 @@ namespace NetFluid
                                         Request.Cookies.Add(current);
 
                                     current = new Cookie();
-                                    int idx = str.IndexOf('=');
+                                    var idx = str.IndexOf('=');
                                     if (idx > 0)
                                     {
                                         current.Name = str.Substring(0, idx).Trim();
@@ -476,19 +483,19 @@ namespace NetFluid
 
             if (Request.Headers["Sec-WebSocket-Key"] != "")
             {
-                string acc = "Sec-WebSocket-Accept: " +
-                             Security.SecWebSocketAccept(Request.Headers["Sec-WebSocket-Key"]) + "\r\n";
+                var acc = "Sec-WebSocket-Accept: " + Security.SecWebSocketAccept(Request.Headers["Sec-WebSocket-Key"]) + "\r\n";
 
                 if (Response.Headers["Sec-WebSocket-Protocol"] != "")
                     acc += "Sec-WebSocket-Protocol: " + Request.Headers["Sec-WebSocket-Protocol"] + "\r\n";
 
                 acc += "\r\n";
 
-                string h = string.Format("HTTP/1.1 101 Switching Protocols\r\nConnection:Upgrade\r\nUpgrade:websocket\r\nServer: NetFluid III\r\n" + acc);
-                byte[] b = Response.ContentEncoding.GetBytes(h);
+                var h = string.Format("HTTP/1.1 101 Switching Protocols\r\nConnection:Upgrade\r\nUpgrade:websocket\r\nServer: NetFluid III\r\n" + acc);
+                var b = Response.ContentEncoding.GetBytes(h);
                 OutputStream.Write(b, 0, b.Length);
                 OutputStream.Flush();
 
+                WebSocket = true;
                 HeadersSent = true;
                 OutputStream = new WebSocketStream(OutputStream);
                 InputStream = new WebSocketStream(InputStream);
@@ -569,7 +576,7 @@ namespace NetFluid
             {
                 try
                 {
-                    int r = InputStream.EndRead(x);
+                    var r = InputStream.EndRead(x);
                     read += r;
                     s.Write(b, 0, r);
 
@@ -607,8 +614,8 @@ namespace NetFluid
 
             try
             {
-                int last = offset + len;
-                for (int i = offset; i < last; i++)
+                var last = offset + len;
+                for (var i = offset; i < last; i++)
                     if (i > 4 && b[i] == 10 && b[i - 1] == 13 && b[i - 2] == 10 && b[i - 3] == 13)
                     {
                         offset = i + 1;
@@ -637,8 +644,7 @@ namespace NetFluid
 
                 if (Response.ContentType != null)
                     if (Response.ContentType.IndexOf("charset=", StringComparison.Ordinal) == -1)
-                        Response.Headers.Set("Content-Type",
-                                             Response.ContentType + "; charset=" + Response.ContentEncoding.WebName);
+                        Response.Headers.Set("Content-Type",Response.ContentType + "; charset=" + Response.ContentEncoding.WebName);
                     else
                         Response.Headers.Set("Content-Type", Response.ContentType);
 
@@ -679,9 +685,9 @@ namespace NetFluid
 
                 #endregion
 
-                string h = string.Format("HTTP/{0} {1} {2}\r\n{3}\r\n", Response.ProtocolVersion, (int)Response.StatusCode,
+                var h = string.Format("HTTP/{0} {1} {2}\r\n{3}\r\n", Response.ProtocolVersion, (int)Response.StatusCode,
                                          Response.StatusDescription, Response.Headers);
-                byte[] b = Response.ContentEncoding.GetBytes(h);
+                var b = Response.ContentEncoding.GetBytes(h);
                 OutputStream.Write(b, 0, b.Length);
                 OutputStream.Flush();
 
@@ -767,7 +773,7 @@ namespace NetFluid
         /// <param name="name">Variable name</param>
         public T Session<T>(string name)
         {
-            object k = Engine.Sessions.Get(SessionId, name);
+            var k = Engine.Sessions.Get(SessionId, name);
             if (k != null)
             {
                 return (T) k;

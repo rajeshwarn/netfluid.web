@@ -35,14 +35,13 @@ namespace NetFluid
 {
     public class JSON
     {
+
         public static void Serialize(object json, Stream stream, bool singlerow = false)
         {
-            var writer = new StreamWriter(stream);
+            var writer=  new StreamWriter(stream);
             Serialize(json, writer, 0, singlerow);
             writer.Flush();
-            writer.Close();
         }
-
 
         public static void Serialize(object json, TextWriter writer, bool singlerow = false)
         {

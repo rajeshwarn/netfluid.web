@@ -61,5 +61,20 @@ namespace NetFluid
         {
             File.Copy(SavedFile, path, rewrite);
         }
+
+        public Stream Open()
+        {
+            return File.OpenRead(SavedFile);
+        }
+
+        public string ReadAllText()
+        {
+            return File.ReadAllText(SavedFile);
+        }
+
+        public byte[] ReadAllBytes()
+        {
+            return File.ReadAllBytes(SavedFile);
+        }
     }
 }

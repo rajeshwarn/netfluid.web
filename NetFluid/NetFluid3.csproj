@@ -161,6 +161,7 @@
     <Compile Include="HttpRequest.cs" />
     <Compile Include="HttpResponse.cs" />
     <Compile Include="HTTP\HttpUtility.cs" />
+    <Compile Include="IO\IRepository.cs" />
     <Compile Include="IO\SharedFile.cs" />
     <Compile Include="IO\WebSocketStream.cs" />
     <Compile Include="IWebInterfaceManager.cs" />
@@ -194,9 +195,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="QueryValue.cs" />
     <Compile Include="StatusCode.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <WCFMetadata Include="Service References\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

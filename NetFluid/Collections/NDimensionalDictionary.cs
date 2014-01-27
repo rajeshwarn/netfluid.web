@@ -17,7 +17,7 @@ namespace NetFluid.Collections
 
             public long Count
             {
-                get 
+                get
                 {
                     long count = values!=null ? values.Count : 0;
                     if (childs != null)
@@ -49,7 +49,7 @@ namespace NetFluid.Collections
 
         Node<T> root;
 
-        public void Set(T value, params object[] coordinates)
+        public void Set(T value, object[] coordinates)
         {
             if (root == null)
                 root = new Node<T>() { Level =0 };
