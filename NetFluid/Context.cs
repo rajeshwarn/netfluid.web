@@ -185,13 +185,7 @@ namespace NetFluid
         public string SessionId
         {
 
-            get
-            {
-                if (sessionId == null)
-                    sessionId = Security.UID();
-
-                return sessionId;
-            }
+            get { return sessionId ?? (sessionId = Security.UID()); }
             private set 
             {
                 sessionId = value;
@@ -319,7 +313,7 @@ namespace NetFluid
                 {
                     InputStream.BeginRead(Buffer, 0, Buffer.Length, OnRead, this);
                 }
-                catch (Exception)
+                catch
                 {
                 }
 
