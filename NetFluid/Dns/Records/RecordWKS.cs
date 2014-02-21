@@ -1,4 +1,3 @@
-using System;
 /*
  * 3.4.2. WKS RDATA format
 
@@ -44,32 +43,37 @@ In master files, both ports and protocols are expressed using mnemonics
 or decimal numbers.
 
  */
-namespace Heijden.DNS
+namespace NetFluid.DNS.Records
 {
 	public class RecordWKS : Record
 	{
-		public string ADDRESS;
-		public int PROTOCOL;
-		public byte[] BITMAP;
+        public byte A;
+        public byte B;
+        public byte C;
+        public byte D;
 
-		public RecordWKS(RecordReader rr)
-		{
-			ushort length = rr.ReadUInt16(-2);
-			ADDRESS = string.Format("{0}.{1}.{2}.{3}",
-				rr.ReadByte(),
-				rr.ReadByte(),
-				rr.ReadByte(),
-				rr.ReadByte());
-			PROTOCOL = (int)rr.ReadByte();
-			length -= 5;
-			BITMAP = new byte[length];
-			BITMAP = rr.ReadBytes(length);
-		}
+        public int Protocol;
+        public byte[] Bitmap;
 
-		public override string ToString()
-		{
-			return string.Format("{0} {1}",ADDRESS,PROTOCOL);
-		}
+        public System.Net.IPAddress Address
+        {
+            get
+            {
+                return System.Net.IPAddress.Parse(ToString());
+            }
+            set
+            {
+                var arr = value.GetAddressBytes();
+                A = arr[0];
+                B = arr[1];
+                C = arr[2];
+                D = arr[3];
+            }
+        }
 
+        public override string ToString()
+        {
+            return string.Format("{0}.{1}.{2}.{3}", A, B, C, D);
+        }
 	}
 }

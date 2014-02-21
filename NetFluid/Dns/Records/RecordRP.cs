@@ -1,4 +1,3 @@
-using System;
 /* http://tools.ietf.org/rfc/rfc1183.txt
 
 2.2. The Responsible Person RR
@@ -29,25 +28,20 @@ using System;
 
  */
 
-namespace Heijden.DNS
+namespace NetFluid.DNS.Records
 {
 	public class RecordRP : Record
 	{
-		public string MBOXDNAME;
-		public string TXTDNAME;
+        [DomainName]
+		public string Mboxdname;
 
-		public RecordRP(RecordReader rr)
-		{
-			//MBOXDNAME = rr.ReadString();
-			MBOXDNAME = rr.ReadDomainName();
-			TXTDNAME = rr.ReadDomainName();
-		}
+        [DomainName]
+		public string Txtdname;
+
 
 		public override string ToString()
 		{
-			return string.Format("{0} {1}",
-				MBOXDNAME,
-				TXTDNAME);
+			return string.Format("{0} {1}",Mboxdname,Txtdname);
 		}
 
 	}

@@ -32,7 +32,7 @@ using System;
 */
 #endregion
 
-namespace Heijden.DNS
+namespace NetFluid.DNS.Records
 {
 	public class RecordSIG : Record
 	{
@@ -43,21 +43,10 @@ namespace Heijden.DNS
 		public UInt32 SIGNATUREEXPIRATION;
 		public UInt32 SIGNATUREINCEPTION;
 		public UInt16 KEYTAG;
+
+        [DomainName]
 		public string SIGNERSNAME;
 		public string SIGNATURE;
-
-		public RecordSIG(RecordReader rr)
-		{
-			TYPECOVERED = rr.ReadUInt16();
-			ALGORITHM = rr.ReadByte();
-			LABELS = rr.ReadByte();
-			ORIGINALTTL = rr.ReadUInt32();
-			SIGNATUREEXPIRATION = rr.ReadUInt32();
-			SIGNATUREINCEPTION = rr.ReadUInt32();
-			KEYTAG = rr.ReadUInt16();
-			SIGNERSNAME = rr.ReadDomainName();
-			SIGNATURE = rr.ReadString();
-		}
 
 		public override string ToString()
 		{

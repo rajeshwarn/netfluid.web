@@ -13,6 +13,6 @@ C:\Users\Matteo\Desktop\NetFluid\netfluid\Examples\5.Templating\bin\Debug\NetFlu
 C:\Users\Matteo\Desktop\NetFluid\netfluid\Examples\5.Templating\bin\Debug\RazorEngine.pdb
 C:\Users\Matteo\Desktop\NetFluid\netfluid\Examples\5.Templating\bin\Debug\RazorEngine.xml
 C:\Users\Matteo\Desktop\NetFluid\netfluid\Examples\5.Templating\bin\Debug\System.Web.Razor.xml
-C:\Users\Matteo\Desktop\NetFluid\netfluid\Examples\5.Templating\obj\Debug\05.Templating.csprojResolveAssemblyReference.cache
 C:\Users\Matteo\Desktop\NetFluid\netfluid\Examples\5.Templating\obj\Debug\5.Templating.exe
 C:\Users\Matteo\Desktop\NetFluid\netfluid\Examples\5.Templating\obj\Debug\5.Templating.pdb
+C:\Users\Matteo\Desktop\NetFluid\netfluid\Examples\5.Templating\obj\Debug\05.Templating.csprojResolveAssemblyReference.cache

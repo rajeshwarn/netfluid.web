@@ -1,0 +1,59 @@
+<p>
+	NetFluid web applications can be compiled as libraries or as self-hosted application.
+	<br/>
+	Each webapp can contain unlimited virtual hosts running in the same C# AppDomain or you can set FastCGI forwarding on specific host-names.
+	<br/>
+	If no virtual hosts are specified, the current context is served by the default web application.
+</p>
+<p>
+	The current assembly is always loaded as default web application
+</p>
+<p>
+	<img src="articles/architecture.png" class="img-responsive" alt="web engine architecture" /> 
+</p>
+<ul>
+	<li>
+		<strong>
+			Interfaces
+		</strong>
+		:
+		<span>
+			Accepts sockets, create contexts and handles threads of requests
+		</span>
+	</li>
+	<li>
+		<strong>
+			Engine
+		</strong>:
+		<span>
+			Manage all necessary assemblies and hosts. 
+		</span>
+	</li>
+	<li>
+		<strong>
+			Fowarder
+		</strong>
+		:
+		<span>
+			Forwards specific connections to others FastCGI endpoint.
+		</span>
+	</li>
+	<li>
+		<strong>
+			Default web application
+		</strong>
+		:
+		<span>
+			Serves each request unsatisfied by the other hosts into the current application
+		</span>
+	</li>
+	<li>
+		<strong>
+			Virtual host applications
+		</strong>
+		:
+		<span>
+			Netfluid assemblies loaded under specific hostnames
+		</span>
+	</li>
+</ul>

@@ -22,6 +22,7 @@
 // ********************************************************************************************************
 
 using System;
+using System.IO;
 using System.Security.Cryptography;
 using System.Text;
 
@@ -64,6 +65,17 @@ namespace NetFluid
             var cryptoTransformSha1 = new SHA1CryptoServiceProvider();
             string hash = BitConverter.ToString(cryptoTransformSha1.ComputeHash(buffer)).Replace("-", "");
             return hash;
+        }
+
+        public static string TempFile
+        {
+            get
+            {
+                //Path.GetTempFileName() SOMETIMES RETURN THE SAME FILENAME ON TWO CALLINGS
+                string p;
+                do p = Path.Combine(Path.GetTempPath(), UID()); while (File.Exists(p));
+                return p;
+            }
         }
 
         /// <summary>

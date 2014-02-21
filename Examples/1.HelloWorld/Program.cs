@@ -27,7 +27,7 @@ namespace _1.HelloWorld
             Engine.LoadHost("admin.netfluid.org", Assembly.LoadFile("adminApp.dll"));
 
             //Virtual host www.supb.eu is FastCGI fowarded to apache.netfluid.org on port 5000
-            Engine.AddFowarding("www.supb.eu", "apache.netfluid.org:5000");
+            Engine.Cluster.AddFowarding("www.supb.eu", "apache.netfluid.org:5000");
 
             //Load netfluid setting from App.config file, return false if missing or invalid
             if (!Engine.LoadAppConfiguration())

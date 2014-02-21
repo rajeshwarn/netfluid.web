@@ -1,4 +1,3 @@
-using System;
 /*
  * http://tools.ietf.org/rfc/rfc1348.txt   
 
@@ -38,16 +37,11 @@ using System;
 
  */
 
-namespace Heijden.DNS
+namespace NetFluid.DNS.Records
 {
 	public class RecordNSAPPTR : Record
 	{
 		public string OWNER;
-
-		public RecordNSAPPTR(RecordReader rr)
-		{
-			OWNER = rr.ReadString();
-		}
 
 		public override string ToString()
 		{

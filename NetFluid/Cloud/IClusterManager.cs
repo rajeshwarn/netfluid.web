@@ -22,7 +22,6 @@
 // ********************************************************************************************************
 
 
-using System;
 namespace NetFluid.Cloud
 {
     public interface IClusterManager

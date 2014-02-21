@@ -1,20 +1,12 @@
-using System;
 /*
 
  */
 
-namespace Heijden.DNS
+namespace NetFluid.DNS.Records
 {
 	public class RecordRRSIG : Record
 	{
 		public byte[] RDATA;
-
-		public RecordRRSIG(RecordReader rr)
-		{
-			// re-read length
-			ushort RDLENGTH = rr.ReadUInt16(-2);
-			RDATA = rr.ReadBytes(RDLENGTH);
-		}
 
 		public override string ToString()
 		{

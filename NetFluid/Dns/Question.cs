@@ -1,10 +1,9 @@
 using System;
-using System.IO;
 using System.Collections.Generic;
 using System.Net;
 using System.Text;
 
-namespace Heijden.DNS
+namespace NetFluid.DNS.Records
 {
 	#region Rfc 1034/1035
 	/*
@@ -46,7 +45,7 @@ namespace Heijden.DNS
 	*/
 	#endregion
 
-	internal class Question
+	public class Question
 	{
 		private string m_QName;
 		public string QName
@@ -72,14 +71,7 @@ namespace Heijden.DNS
 			this.QClass = QClass;
 		}
 
-		public Question(RecordReader rr)
-		{
-			QName = rr.ReadDomainName();
-			QType = (QType)rr.ReadUInt16();
-			QClass = (QClass)rr.ReadUInt16();
-		}
-
-		private byte[] WriteName(string src)
+		private static IEnumerable<byte> WriteName(string src)
 		{
 			if (!src.EndsWith("."))
 				src += ".";
@@ -87,7 +79,7 @@ namespace Heijden.DNS
 			if (src == ".")
 				return new byte[1];
 
-			StringBuilder sb = new StringBuilder();
+			var sb = new StringBuilder();
 			int intI, intJ, intLen = src.Length;
 			sb.Append('\0');
 			for (intI = 0, intJ = 0; intI < intLen; intI++, intJ++)
@@ -107,7 +99,7 @@ namespace Heijden.DNS
 		{
 			get
 			{
-				List<byte> data = new List<byte>();
+				var data = new List<byte>();
 				data.AddRange(WriteName(QName));
 				data.AddRange(WriteShort((ushort)QType));
 				data.AddRange(WriteShort((ushort)QClass));
@@ -115,11 +107,10 @@ namespace Heijden.DNS
 			}
 		}
 
-		private byte[] WriteShort(ushort sValue)
+		private IEnumerable<byte> WriteShort(ushort sValue)
 		{
 			return BitConverter.GetBytes(IPAddress.HostToNetworkOrder((short)sValue));
 		}
-
 
 		public override string ToString()
 		{

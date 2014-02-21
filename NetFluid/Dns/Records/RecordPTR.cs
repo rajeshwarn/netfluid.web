@@ -1,4 +1,3 @@
-using System;
 /*
  3.3.12. PTR RDATA format
 
@@ -18,16 +17,12 @@ similar to that performed by CNAME, which identifies aliases.  See the
 description of the IN-ADDR.ARPA domain for an example.
  */
 
-namespace Heijden.DNS
+namespace NetFluid.DNS.Records
 {
 	public class RecordPTR : Record
 	{
+        [DomainName]
 		public string PTRDNAME;
-
-		public RecordPTR(RecordReader rr)
-		{
-			PTRDNAME = rr.ReadDomainName();
-		}
 
 		public override string ToString()
 		{

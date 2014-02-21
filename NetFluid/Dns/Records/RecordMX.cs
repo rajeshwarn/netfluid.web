@@ -1,6 +1,6 @@
 using System;
 
-namespace Heijden.DNS
+namespace NetFluid.DNS.Records
 {
 	/*
 	3.3.9. MX RDATA format
@@ -28,31 +28,31 @@ namespace Heijden.DNS
 
 	public class RecordMX : Record, IComparable
 	{
-		public ushort PREFERENCE;
-		public string EXCHANGE;
+		public ushort Preference;
 
-		public RecordMX(RecordReader rr)
-		{
-			PREFERENCE = rr.ReadUInt16();
-			EXCHANGE = rr.ReadDomainName();
-		}
+        [DomainName]
+		public string Exchange;
 
 		public override string ToString()
 		{
-			return string.Format("{0} {1}", PREFERENCE, EXCHANGE);
+			return string.Format("{0} {1}", Preference, Exchange);
 		}
+
+        public static implicit operator RecordMX(string s)
+        {
+            return new RecordMX() { Exchange = s, Preference = 20 };
+        }
 
 		public int CompareTo(object objA)
 		{
-			RecordMX recordMX = objA as RecordMX;
+			var recordMX = objA as RecordMX;
 			if (recordMX == null)
 				return -1;
-			else if (this.PREFERENCE > recordMX.PREFERENCE)
-				return 1;
-			else if (this.PREFERENCE < recordMX.PREFERENCE)
-				return -1;
-			else // they are the same, now compare case insensitive names
-				return string.Compare(this.EXCHANGE, recordMX.EXCHANGE, true);
+		    if (this.Preference > recordMX.Preference)
+		        return 1;
+		    if (this.Preference < recordMX.Preference)
+		        return -1;
+		    return string.Compare(this.Exchange, recordMX.Exchange, true);
 		}
 
 	}

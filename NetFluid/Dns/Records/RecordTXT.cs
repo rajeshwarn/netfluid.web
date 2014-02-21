@@ -1,4 +1,4 @@
-using System;
+
 
 #region Rfc info
 /*
@@ -18,16 +18,11 @@ depends on the domain where it is found.
 */
 #endregion
 
-namespace Heijden.DNS
+namespace NetFluid.DNS.Records
 {
 	public class RecordTXT : Record
 	{
 		public string TXT;
-
-		public RecordTXT(RecordReader rr)
-		{
-			TXT = rr.ReadString();
-		}
 
 		public override string ToString()
 		{

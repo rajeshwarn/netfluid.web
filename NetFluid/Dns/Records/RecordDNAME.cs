@@ -1,4 +1,3 @@
-using System;
 /*
  * http://tools.ietf.org/rfc/rfc2672.txt
  * 
@@ -14,16 +13,12 @@ using System;
 
  * 
  */
-namespace Heijden.DNS
+namespace NetFluid.DNS.Records
 {
 	public class RecordDNAME : Record
 	{
-		public string TARGET;
-
-		public RecordDNAME(RecordReader rr)
-		{
-			TARGET = rr.ReadDomainName();
-		}
+        [DomainName]
+        public string TARGET;
 
 		public override string ToString()
 		{

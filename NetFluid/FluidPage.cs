@@ -21,8 +21,6 @@
 // 23/10/2013    Matteo Fabbri      Inital coding
 // ********************************************************************************************************
 
-using System.Collections.Generic;
-using System.IO;
 using NetFluid.HTTP;
 
 namespace NetFluid

@@ -1,4 +1,3 @@
-using System;
 /*
  * http://www.faqs.org/rfcs/rfc2915.html
  * 
@@ -41,36 +40,28 @@ using System;
 
  */
 
-namespace Heijden.DNS
+namespace NetFluid.DNS.Records
 {
 	public class RecordNAPTR : Record
 	{
-		public ushort ORDER;
-		public ushort PREFERENCE;
-		public string FLAGS;
-		public string SERVICES;
-		public string REGEXP;
-		public string REPLACEMENT;
+		public ushort Order;
+		public ushort Preference;
+		public string Flags;
+		public string Services;
+		public string Regexp;
 
-		public RecordNAPTR(RecordReader rr)
-		{
-			ORDER = rr.ReadUInt16();
-			PREFERENCE = rr.ReadUInt16();
-			FLAGS = rr.ReadString();
-			SERVICES = rr.ReadString();
-			REGEXP = rr.ReadString();
-			REPLACEMENT = rr.ReadDomainName();
-		}
+        [DomainName]
+		public string Replacement;
 
 		public override string ToString()
 		{
 			return string.Format("{0} {1} \"{2}\" \"{3}\" \"{4}\" {5}",
-				ORDER,
-				PREFERENCE,
-				FLAGS,
-				SERVICES,
-				REGEXP,
-				REPLACEMENT);
+				Order,
+				Preference,
+				Flags,
+				Services,
+				Regexp,
+				Replacement);
 		}
 
 	}

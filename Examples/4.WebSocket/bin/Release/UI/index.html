@@ -1,0 +1,147 @@
+﻿
+
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <link href="http://getbootstrap.com/dist/css/bootstrap.css" rel="stylesheet">
+    </head>
+    <body>
+        <div class="container">
+            <div>
+                <h1>WebSocket streaming data</h1>
+                <div>
+                    <p>
+                        <!– To keep trace of who is writing what –>
+                        <span>Nickname</span>
+                        <input type="text" class="form-control" id="nick" placeholder="Nickname">
+                    </p>
+                    <p>
+                        <!– The message to be sent –>
+                        <span>Text message</span>
+                        <input type="text" class="form-control" id="msg" placeholder="Text message">
+                    </p>
+                    
+                    <!– Send the message and reset the input –>
+                    <button id="send" type="submit" class="btn btn-default">Send</button>
+                    
+                    <!– Start a brute force message spamming –>
+                    <button id="spam" type="submit" class="btn btn-default">Let's spam !</button>
+                </div>
+                <hr />
+                <!– Incoming composite will be displayed here –>
+                <div id="incoming" class="row"></div>
+
+                <!– Websocket status debugging –>
+                <h3>Socket status</h3>
+                <div id="status"></div>
+            </div>
+        </div>
+        <script src="/jquery.js"></script>
+        <script type="text/javascript">
+            $(document).ready(function ()
+            {
+                // Address of our websocket server 
+                var wsUri = "ws://localhost:8080/channel";
+
+                //Setup the websocket, if the connection has been close it will be re-open
+                function init()
+                {
+                    var sock = new WebSocket(wsUri);
+                    sock.onopen = function (evt) { $("#status").html("CONNECTING"); };
+                    sock.onclose = function (evt) { $("#status").html("CLOSED"); };
+                    sock.onerror = function (evt) { $("#status").html("ERROR"); };
+                    sock.onmessage = function (evt)
+                    {
+                        // HERE IT TAKE THE INCOMING COMPOSITE AND DISPLAY IT
+                        $("#incoming").html(evt.data);
+                    };
+                    $("#status").html("CONNECTED");
+                    return sock;
+                }
+
+                var websocket = init();
+
+                // Random color to distinguish incoming messages
+                // names used are from Twitter Boostrap Alerts css class
+                var colors = new Array();
+                colors[0] = "success";
+                colors[1] = "info";
+                colors[2] = "warning";
+                colors[3] = "danger";
+
+                function randomColor()
+                {
+                    return colors[Math.floor(Math.random()*3)];
+                }
+
+                //Formats the message inside a div and sent it to the server
+                function sendMessage(msg)
+                {
+                    var div = $("<div class=\"col-md-4 alert alert-" + randomColor() + "\"></div>");
+                    div.append($("<strong>" + $("#nick").val()+ "</strong>"));
+                    div.append($("<h3>" + msg + "</h3>"));
+                    div.append($("<small>" + (new Date().toUTCString()) + "</small>"));
+
+                    var fake = $("<div></div>");
+                    fake.append(div);
+                    var outer = fake.html();
+
+                    if (websocket.readyState == WebSocket.CLOSING || websocket.readyState == WebSocket.CLOSED)
+                        websocket = init();
+
+                    websocket.send(outer+"\r\n");
+                }
+
+                //Generate a random nickname for sender so you don't need to do it by hand
+                $("#nick").val("NetFluidUser" + Math.floor((Math.random() * 666) + 1));
+
+                //Send the message clicking on the button
+                $("#send").click(function (event)
+                {
+                    //Prevent to send empty messages
+                    if ($("#msg").val() == "")
+                        return;
+
+                    //prevent submitting or other unwanted js handlers
+                    event.preventDefault();
+
+                    //send the message in input textbox
+                    sendMessage($("#msg").val());
+
+                    //reset the input textbox
+                    $("#msg").val("");
+                });
+
+                //Send the message pressing Enter
+                $("#msg").keypress(function( event )
+                {
+                    //Prevent to send empty messages
+                    if (event.which == 13 && $("#msg").val()!="")
+                    {
+                        //prevent submitting or other unwanted js handlers
+                        event.preventDefault();
+
+                        //send the message in input textbox
+                        sendMessage($("#msg").val());
+
+                        //reset the input textbox
+                        $("#msg").val("");
+                    }
+                });
+
+                //Spam messages to the server every 50 milliseconds
+                $("#spam").click(function (event)
+                {
+                    event.preventDefault();
+                    var msg = prompt("Message", "");
+
+                    if (msg != null)
+                    {
+                        setInterval(function (){sendMessage(msg);}, 50);
+                    }
+                });
+            });
+        </script>
+    </body>
+</html> 

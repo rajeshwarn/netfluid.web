@@ -22,6 +22,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <Prefer32Bit>false</Prefer32Bit>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'net_4_0_Release|AnyCPU' ">
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
@@ -33,6 +34,7 @@
     <WarningLevel>4</WarningLevel>
     <RunCodeAnalysis>false</RunCodeAnalysis>
     <Prefer32Bit>false</Prefer32Bit>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'net_4_5_Debug|AnyCPU' ">
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
@@ -44,21 +46,27 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <Prefer32Bit>false</Prefer32Bit>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'net_4_5_Release|AnyCPU' ">
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\net_4_5_Release\</OutputPath>
-    <DefineConstants>TRACE;SECURITY_DEP;NET_4_0;NET_4_5</DefineConstants>
+    <DefineConstants>TRACE;NET_4_0;NET_4_5</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <Prefer32Bit>false</Prefer32Bit>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Microsoft.Solver.Foundation" />
     <Reference Include="System" />
     <Reference Include="System.configuration" />
     <Reference Include="System.Core" />
+    <Reference Include="System.DirectoryServices" />
+    <Reference Include="System.DirectoryServices.AccountManagement" />
+    <Reference Include="System.DirectoryServices.Protocols" />
     <Reference Include="System.Runtime.Caching" />
     <Reference Include="System.Xml" />
   </ItemGroup>
@@ -68,79 +76,82 @@
     <Compile Include="Cloud\IClusterManager.cs" />
     <Compile Include="Collections\Persistent\PersistentDictionary.cs" />
     <Compile Include="Collections\NDimensionalDictionary.cs" />
-    <Compile Include="Configuration\Interface.cs" />
-    <Compile Include="Configuration\PublicFolder.cs" />
-    <Compile Include="Configuration\Settings.cs" />
+    <Compile Include="Properties\Configuration\Interface.cs" />
+    <Compile Include="Properties\Configuration\PublicFolder.cs" />
+    <Compile Include="Properties\Configuration\Settings.cs" />
+    <Compile Include="Cron\Cron.cs" />
+    <Compile Include="Cron\CronTask.cs" />
     <Compile Include="Dns.cs" />
-    <Compile Include="Dns\Header.cs" />
-    <Compile Include="Dns\Question.cs" />
-    <Compile Include="Dns\Record.cs" />
-    <Compile Include="Dns\RecordReader.cs" />
-    <Compile Include="Dns\Records\NotUsed\RecordA6.cs" />
-    <Compile Include="Dns\Records\NotUsed\RecordAPL.cs" />
-    <Compile Include="Dns\Records\NotUsed\RecordATMA.cs" />
-    <Compile Include="Dns\Records\NotUsed\RecordCERT.cs" />
-    <Compile Include="Dns\Records\NotUsed\RecordDHCID.cs" />
-    <Compile Include="Dns\Records\NotUsed\RecordDNSKEY.cs" />
-    <Compile Include="Dns\Records\NotUsed\RecordEID.cs" />
-    <Compile Include="Dns\Records\NotUsed\RecordGID.cs" />
-    <Compile Include="Dns\Records\NotUsed\RecordHIP.cs" />
-    <Compile Include="Dns\Records\NotUsed\RecordIPSECKEY.cs" />
-    <Compile Include="Dns\Records\NotUsed\RecordNIMLOC.cs" />
-    <Compile Include="Dns\Records\NotUsed\RecordNSEC.cs" />
-    <Compile Include="Dns\Records\NotUsed\RecordNSEC3.cs" />
-    <Compile Include="Dns\Records\NotUsed\RecordNSEC3PARAM.cs" />
-    <Compile Include="Dns\Records\NotUsed\RecordOPT.cs" />
-    <Compile Include="Dns\Records\NotUsed\RecordRRSIG.cs" />
-    <Compile Include="Dns\Records\NotUsed\RecordSINK.cs" />
-    <Compile Include="Dns\Records\NotUsed\RecordSPF.cs" />
-    <Compile Include="Dns\Records\NotUsed\RecordSSHFP.cs" />
-    <Compile Include="Dns\Records\NotUsed\RecordUID.cs" />
-    <Compile Include="Dns\Records\NotUsed\RecordUINFO.cs" />
-    <Compile Include="Dns\Records\NotUsed\RecordUnknown.cs" />
-    <Compile Include="Dns\Records\NotUsed\RecordUNSPEC.cs" />
-    <Compile Include="Dns\Records\RecordA.cs" />
-    <Compile Include="Dns\Records\RecordAAAA.cs" />
-    <Compile Include="Dns\Records\RecordAFSDB.cs" />
-    <Compile Include="Dns\Records\RecordCNAME.cs" />
-    <Compile Include="Dns\Records\RecordDNAME.cs" />
-    <Compile Include="Dns\Records\RecordDS.cs" />
-    <Compile Include="Dns\Records\RecordGPOS.cs" />
-    <Compile Include="Dns\Records\RecordHINFO.cs" />
-    <Compile Include="Dns\Records\RecordISDN.cs" />
-    <Compile Include="Dns\Records\RecordKEY.cs" />
-    <Compile Include="Dns\Records\RecordKX.cs" />
-    <Compile Include="Dns\Records\RecordLOC.cs" />
-    <Compile Include="Dns\Records\RecordMB.cs" />
-    <Compile Include="Dns\Records\RecordMD.cs" />
-    <Compile Include="Dns\Records\RecordMF.cs" />
-    <Compile Include="Dns\Records\RecordMG.cs" />
-    <Compile Include="Dns\Records\RecordMINFO.cs" />
-    <Compile Include="Dns\Records\RecordMR.cs" />
-    <Compile Include="Dns\Records\RecordMX.cs" />
-    <Compile Include="Dns\Records\RecordNAPTR.cs" />
-    <Compile Include="Dns\Records\RecordNS.cs" />
-    <Compile Include="Dns\Records\RecordNSAP.cs" />
-    <Compile Include="Dns\Records\RecordNSAPPTR.cs" />
-    <Compile Include="Dns\Records\RecordNULL.cs" />
-    <Compile Include="Dns\Records\RecordNXT.cs" />
-    <Compile Include="Dns\Records\RecordPTR.cs" />
-    <Compile Include="Dns\Records\RecordPX.cs" />
-    <Compile Include="Dns\Records\RecordRP.cs" />
-    <Compile Include="Dns\Records\RecordRT.cs" />
-    <Compile Include="Dns\Records\RecordSIG.cs" />
-    <Compile Include="Dns\Records\RecordSOA.cs" />
-    <Compile Include="Dns\Records\RecordSRV.cs" />
-    <Compile Include="Dns\Records\RecordTKEY.cs" />
-    <Compile Include="Dns\Records\RecordTSIG.cs" />
-    <Compile Include="Dns\Records\RecordTXT.cs" />
-    <Compile Include="Dns\Records\RecordWKS.cs" />
-    <Compile Include="Dns\Records\RecordX25.cs" />
-    <Compile Include="Dns\Request.cs" />
-    <Compile Include="Dns\Resolver.cs" />
-    <Compile Include="Dns\Resource Record.cs" />
-    <Compile Include="Dns\Response.cs" />
-    <Compile Include="Dns\Structs.cs" />
+    <Compile Include="DNS\DomainNameAttribute.cs" />
+    <Compile Include="DNS\Header.cs" />
+    <Compile Include="DNS\Question.cs" />
+    <Compile Include="DNS\Record.cs" />
+    <Compile Include="DNS\Records\NotUsed\RecordA6.cs" />
+    <Compile Include="DNS\Records\NotUsed\RecordAPL.cs" />
+    <Compile Include="DNS\Records\NotUsed\RecordATMA.cs" />
+    <Compile Include="DNS\Records\NotUsed\RecordCERT.cs" />
+    <Compile Include="DNS\Records\NotUsed\RecordDHCID.cs" />
+    <Compile Include="DNS\Records\NotUsed\RecordDNSKEY.cs" />
+    <Compile Include="DNS\Records\NotUsed\RecordEID.cs" />
+    <Compile Include="DNS\Records\NotUsed\RecordGID.cs" />
+    <Compile Include="DNS\Records\NotUsed\RecordHIP.cs" />
+    <Compile Include="DNS\Records\NotUsed\RecordIPSECKEY.cs" />
+    <Compile Include="DNS\Records\NotUsed\RecordNIMLOC.cs" />
+    <Compile Include="DNS\Records\NotUsed\RecordNSEC.cs" />
+    <Compile Include="DNS\Records\NotUsed\RecordNSEC3.cs" />
+    <Compile Include="DNS\Records\NotUsed\RecordNSEC3PARAM.cs" />
+    <Compile Include="DNS\Records\NotUsed\RecordOPT.cs" />
+    <Compile Include="DNS\Records\NotUsed\RecordRRSIG.cs" />
+    <Compile Include="DNS\Records\NotUsed\RecordSINK.cs" />
+    <Compile Include="DNS\Records\NotUsed\RecordSPF.cs" />
+    <Compile Include="DNS\Records\NotUsed\RecordSSHFP.cs" />
+    <Compile Include="DNS\Records\NotUsed\RecordUID.cs" />
+    <Compile Include="DNS\Records\NotUsed\RecordUINFO.cs" />
+    <Compile Include="DNS\Records\NotUsed\RecordUnknown.cs" />
+    <Compile Include="DNS\Records\NotUsed\RecordUNSPEC.cs" />
+    <Compile Include="DNS\Records\RecordA.cs" />
+    <Compile Include="DNS\Records\RecordAAAA.cs" />
+    <Compile Include="DNS\Records\RecordAFSDB.cs" />
+    <Compile Include="DNS\Records\RecordCNAME.cs" />
+    <Compile Include="DNS\Records\RecordDNAME.cs" />
+    <Compile Include="DNS\Records\RecordDS.cs" />
+    <Compile Include="DNS\Records\RecordGPOS.cs" />
+    <Compile Include="DNS\Records\RecordHINFO.cs" />
+    <Compile Include="DNS\Records\RecordISDN.cs" />
+    <Compile Include="DNS\Records\RecordKEY.cs" />
+    <Compile Include="DNS\Records\RecordKX.cs" />
+    <Compile Include="DNS\Records\RecordLOC.cs" />
+    <Compile Include="DNS\Records\RecordMB.cs" />
+    <Compile Include="DNS\Records\RecordMD.cs" />
+    <Compile Include="DNS\Records\RecordMF.cs" />
+    <Compile Include="DNS\Records\RecordMG.cs" />
+    <Compile Include="DNS\Records\RecordMINFO.cs" />
+    <Compile Include="DNS\Records\RecordMR.cs" />
+    <Compile Include="DNS\Records\RecordMX.cs" />
+    <Compile Include="DNS\Records\RecordNAPTR.cs" />
+    <Compile Include="DNS\Records\RecordNS.cs" />
+    <Compile Include="DNS\Records\RecordNSAP.cs" />
+    <Compile Include="DNS\Records\RecordNSAPPTR.cs" />
+    <Compile Include="DNS\Records\RecordNULL.cs" />
+    <Compile Include="DNS\Records\RecordNXT.cs" />
+    <Compile Include="DNS\Records\RecordPTR.cs" />
+    <Compile Include="DNS\Records\RecordPX.cs" />
+    <Compile Include="DNS\Records\RecordRP.cs" />
+    <Compile Include="DNS\Records\RecordRT.cs" />
+    <Compile Include="DNS\Records\RecordSIG.cs" />
+    <Compile Include="DNS\Records\RecordSOA.cs" />
+    <Compile Include="DNS\Records\RecordSRV.cs" />
+    <Compile Include="DNS\Records\RecordTKEY.cs" />
+    <Compile Include="DNS\Records\RecordTSIG.cs" />
+    <Compile Include="DNS\Records\RecordTXT.cs" />
+    <Compile Include="DNS\Records\RecordWKS.cs" />
+    <Compile Include="DNS\Records\RecordX25.cs" />
+    <Compile Include="DNS\Request.cs" />
+    <Compile Include="DNS\Resolver.cs" />
+    <Compile Include="DNS\Response.cs" />
+    <Compile Include="DNS\Serializer.cs" />
+    <Compile Include="DNS\Structs.cs" />
+    <Compile Include="Globalization\POFile.cs" />
     <Compile Include="Hosting\CallOn.cs" />
     <Compile Include="Hosting\Engine.cs" />
     <Compile Include="Hosting\Host.cs" />
@@ -169,11 +180,80 @@
     <Compile Include="LogLevel.cs" />
     <Compile Include="MimeTypes.cs" />
     <Compile Include="IResponse.cs" />
+    <Compile Include="MIME\ContentDisposition.cs" />
+    <Compile Include="MIME\ContentEncoding.cs" />
+    <Compile Include="MIME\ContentObject.cs" />
+    <Compile Include="MIME\ContentType.cs" />
+    <Compile Include="MIME\DomainList.cs" />
+    <Compile Include="MIME\EncodingConstraint.cs" />
+    <Compile Include="MIME\Encodings\Base64Decoder.cs" />
+    <Compile Include="MIME\Encodings\Base64Encoder.cs" />
+    <Compile Include="MIME\Encodings\HexDecoder.cs" />
+    <Compile Include="MIME\Encodings\HexEncoder.cs" />
+    <Compile Include="MIME\Encodings\IMimeDecoder.cs" />
+    <Compile Include="MIME\Encodings\IMimeEncoder.cs" />
+    <Compile Include="MIME\Encodings\PassThroughDecoder.cs" />
+    <Compile Include="MIME\Encodings\PassThroughEncoder.cs" />
+    <Compile Include="MIME\Encodings\QEncoder.cs" />
+    <Compile Include="MIME\Encodings\QuotedPrintableDecoder.cs" />
+    <Compile Include="MIME\Encodings\QuotedPrintableEncoder.cs" />
+    <Compile Include="MIME\Encodings\UUDecoder.cs" />
+    <Compile Include="MIME\Encodings\UUEncoder.cs" />
+    <Compile Include="MIME\FormatOptions.cs" />
+    <Compile Include="MIME\GroupAddress.cs" />
+    <Compile Include="MIME\Header.cs" />
+    <Compile Include="MIME\HeaderId.cs" />
+    <Compile Include="MIME\HeaderList.cs" />
+    <Compile Include="MIME\HeaderListChangedEventArgs.cs" />
+    <Compile Include="MIME\IContentObject.cs" />
+    <Compile Include="MIME\InternetAddress.cs" />
+    <Compile Include="MIME\InternetAddressList.cs" />
+    <Compile Include="MIME\IO\BoundStream.cs" />
+    <Compile Include="MIME\IO\ChainedStream.cs" />
+    <Compile Include="MIME\IO\FilteredStream.cs" />
+    <Compile Include="MIME\IO\Filters\ArmoredFromFilter.cs" />
+    <Compile Include="MIME\IO\Filters\BestEncodingFilter.cs" />
+    <Compile Include="MIME\IO\Filters\CharsetFilter.cs" />
+    <Compile Include="MIME\IO\Filters\DecoderFilter.cs" />
+    <Compile Include="MIME\IO\Filters\Dos2UnixFilter.cs" />
+    <Compile Include="MIME\IO\Filters\EncoderFilter.cs" />
+    <Compile Include="MIME\IO\Filters\IMimeFilter.cs" />
+    <Compile Include="MIME\IO\Filters\MimeFilterBase.cs" />
+    <Compile Include="MIME\IO\Filters\PassThroughFilter.cs" />
+    <Compile Include="MIME\IO\Filters\TrailingWhitespaceFilter.cs" />
+    <Compile Include="MIME\IO\Filters\Unix2DosFilter.cs" />
+    <Compile Include="MIME\IO\MeasuringStream.cs" />
+    <Compile Include="MIME\IO\MemoryBlockStream.cs" />
+    <Compile Include="MIME\MailboxAddress.cs" />
+    <Compile Include="MIME\MessageIdList.cs" />
+    <Compile Include="MIME\MessagePart.cs" />
+    <Compile Include="MIME\MessagePartial.cs" />
+    <Compile Include="MIME\MimeEntity.cs" />
+    <Compile Include="MIME\MimeEntityConstructorInfo.cs" />
+    <Compile Include="MIME\MimeFormat.cs" />
+    <Compile Include="MIME\MimeMessage.cs" />
+    <Compile Include="MIME\MimeParser.cs" />
+    <Compile Include="MIME\MimePart.cs" />
+    <Compile Include="MIME\Multipart.cs" />
+    <Compile Include="MIME\Parameter.cs" />
+    <Compile Include="MIME\ParameterList.cs" />
+    <Compile Include="MIME\ParseException.cs" />
+    <Compile Include="MIME\ParserOptions.cs" />
+    <Compile Include="MIME\TextPart.cs" />
+    <Compile Include="MIME\Utils\ByteExtensions.cs" />
+    <Compile Include="MIME\Utils\CharsetUtils.cs" />
+    <Compile Include="MIME\Utils\DateUtils.cs" />
+    <Compile Include="MIME\Utils\MimeUtils.cs" />
+    <Compile Include="MIME\Utils\PackedByteArray.cs" />
+    <Compile Include="MIME\Utils\ParseUtils.cs" />
+    <Compile Include="MIME\Utils\Rfc2047.cs" />
+    <Compile Include="MIME\Utils\StringBuilderExtensions.cs" />
     <Compile Include="QueryValueCollection.cs" />
     <Compile Include="Responses\CSVResponse.cs" />
     <Compile Include="Responses\FileResponse.cs" />
     <Compile Include="Responses\FluidTemplate.cs" />
     <Compile Include="Responses\JSONResponse.cs" />
+    <Compile Include="Responses\RedirectResponse.cs" />
     <Compile Include="Responses\StringResponse.cs" />
     <Compile Include="Responses\TemplateCompiler.cs" />
     <Compile Include="Responses\XMLResponse.cs" />
@@ -186,9 +266,11 @@
     <Compile Include="Serialization\XML.cs" />
     <Compile Include="Sessions\ISessionManager.cs" />
     <Compile Include="Sessions\MemorySessionManager.cs" />
-    <Compile Include="Cloud\TcpFowarding.cs" />
+    <Compile Include="SMTP\Outbound.cs" />
+    <Compile Include="SMTP\SmtpError.cs" />
     <Compile Include="SMTP\SmtpRequest.cs" />
-    <Compile Include="SMTP\InboundConnector.cs" />
+    <Compile Include="SMTP\Inbound.cs" />
+    <Compile Include="SMTP\SmtpWarning.cs" />
     <Compile Include="WebHeaderCollection.cs" />
     <Compile Include="HTTP\PostManager.cs" />
     <Compile Include="Network.cs" />
@@ -196,6 +278,7 @@
     <Compile Include="QueryValue.cs" />
     <Compile Include="StatusCode.cs" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

@@ -43,30 +43,9 @@ namespace NetFluid
             templates = new ConcurrentDictionary<string, MethodInfo>();
         }
 
-        internal static void Preload()
-        {
-            if (Engine.DevMode)
-                Engine.Logger.Log(LogLevel.Debug, "Loading templates");
-
-            foreach (string item in Directory.GetFiles("./", "*.htm", SearchOption.AllDirectories))
-            {
-                Get(item);
-            }
-            foreach (
-                string item in
-                    Assembly.GetEntryAssembly().GetManifestResourceNames().Where(
-                        x => x.EndsWith(".htm") || x.EndsWith(".html")))
-            {
-                Get("embed:" + item);
-            }
-
-            if (Engine.DevMode)
-                Engine.Logger.Log(LogLevel.Debug, "Templates loaded");
-        }
-
         internal static MethodInfo Get(string filename)
         {
-            string path = filename.StartsWith("embed:") ? filename : Path.GetFullPath(filename);
+            var path = filename.StartsWith("embed:") ? filename : Path.GetFullPath(filename);
 
             MethodInfo template;
             if (templates.TryGetValue(path, out template))
@@ -131,9 +110,9 @@ namespace NetFluid
 
             foreach (Match m in Regex.Matches(code, "\\D\\s{2,}\\D"))
             {
-                char[] chars = m.Value.ToCharArray();
-                char first = chars.First();
-                char last = chars.Last();
+                var chars = m.Value.ToCharArray();
+                var first = chars.First();
+                var last = chars.Last();
 
                 code = code.Replace(m.Value, first + " " + last);
             }
@@ -180,14 +159,14 @@ namespace NetFluid
             }
 
             var reader = new StreamReader(stream);
-            string html = reader.ReadToEnd();
+            var html = reader.ReadToEnd();
 
-            string[] lines = html.Split(new[] {'\r', '\n'}, StringSplitOptions.RemoveEmptyEntries);
+            var lines = html.Split(new[] {'\r', '\n'}, StringSplitOptions.RemoveEmptyEntries);
 
             var builder = new StringBuilder();
             var flow = new[] {"foreach(", "for(", "if(", "while(", "do", "switch(", "else"};
-            string parameters = "(NetFluid.Context Context)";
-            int parametersLine = 1;
+            var parameters = "(NetFluid.Context Context)";
+            var parametersLine = 1;
 
             var usings = new List<string>(new[]
                                               {
@@ -195,16 +174,16 @@ namespace NetFluid
                                                   "using NetFluid;",
                                               });
 
-            for (int i = 0; i < lines.Length; i++)
+            for (var i = 0; i < lines.Length; i++)
             {
-                string r = lines[i].Trim();
+                var r = lines[i].Trim();
 
                 if (r == "")
                     continue;
 
                 if (r[0] == '%')
                 {
-                    string row = CleanCode(r.Substring(1).Trim());
+                    var row = CleanCode(r.Substring(1).Trim());
 
                     #region SPECIAL INSTRUCTIONS
 
@@ -262,12 +241,12 @@ namespace NetFluid
 
                         while (r.Contains("{%") && r.Contains("%}"))
                         {
-                            int index = r.IndexOf("{%");
-                            int index2 = r.IndexOf("%}");
+                            var index = r.IndexOf("{%");
+                            var index2 = r.IndexOf("%}");
 
-                            string variabile = r.Substring(index + 2, index2 - index - 2);
-                            string pre = r.Substring(0, index);
-                            string post = r.Substring(index2 + 2);
+                            var variabile = r.Substring(index + 2, index2 - index - 2);
+                            var pre = r.Substring(0, index);
+                            var post = r.Substring(index2 + 2);
 
                             builder.AppendLine("#line " + (i + 1) + " \"" + filename + "\"");
                             builder.AppendLine("Context.Writer.Write(\"" + Escape(pre) + "\");");
@@ -296,8 +275,8 @@ namespace NetFluid
                 }
             }
 
-            string @namespace = Assembly.GetEntryAssembly().EntryPoint.DeclaringType.Namespace;
-            string name = "____FluidTemplate" + Security.UID();
+            var @namespace = Assembly.GetEntryAssembly().EntryPoint.DeclaringType.Namespace;
+            var name = "____FluidTemplate" + Security.UID();
 
             var classBuilder = new StringBuilder();
             classBuilder.AppendLine(string.Join("\r\n", usings.Distinct()));
@@ -324,9 +303,9 @@ namespace NetFluid
             csc_parameters.TreatWarningsAsErrors = false;
 
             var refe = Assembly.GetEntryAssembly().GetReferencedAssemblies();
-            foreach (AssemblyName reference in refe)
+            foreach (var reference in refe)
             {
-                Assembly ass = Assembly.Load(reference);
+                var ass = Assembly.Load(reference);
                 csc_parameters.ReferencedAssemblies.Add(ass.Location);
             }
 
@@ -339,10 +318,8 @@ namespace NetFluid
             csc_parameters.WarningLevel = 1;
 
             var code = classBuilder.ToString();
-            if (Engine.DevMode)
-                File.WriteAllText(Path.Combine(Path.GetDirectoryName(filename), Path.GetFileNameWithoutExtension(filename) + ".txt"),code);
-    
-            CompilerResults results = csc.CompileAssemblyFromSource(csc_parameters, code);
+
+            var results = csc.CompileAssemblyFromSource(csc_parameters, code);
 
             if (results.Errors.HasErrors)
             {
@@ -401,9 +378,9 @@ namespace NetFluid
             var csc_parameters = new CompilerParameters(new string[] {}, Path.GetTempFileName(), false);
             csc_parameters.TreatWarningsAsErrors = false;
 
-            foreach (AssemblyName reference in Assembly.GetEntryAssembly().GetReferencedAssemblies())
+            foreach (var reference in Assembly.GetEntryAssembly().GetReferencedAssemblies())
             {
-                Assembly ass = Assembly.Load(reference);
+                var ass = Assembly.Load(reference);
                 csc_parameters.ReferencedAssemblies.Add(ass.Location);
             }
             csc_parameters.ReferencedAssemblies.Add(Assembly.GetEntryAssembly().Location);
@@ -413,7 +390,7 @@ namespace NetFluid
             csc_parameters.TreatWarningsAsErrors = false;
             csc_parameters.CompilerOptions = "/optimize /nowarn:108;114;3009;1685";
             csc_parameters.WarningLevel = 1;
-            CompilerResults results = csc.CompileAssemblyFromSource(csc_parameters, builder.ToString());
+            var results = csc.CompileAssemblyFromSource(csc_parameters, builder.ToString());
 
             return results.CompiledAssembly.GetTypes()[0].GetMethod("Run", BindingFlags.Static | BindingFlags.Public);
         }
@@ -452,9 +429,9 @@ namespace NetFluid
             var csc_parameters = new CompilerParameters(new string[] {}, Path.GetTempFileName(), false);
             csc_parameters.TreatWarningsAsErrors = false;
 
-            foreach (AssemblyName reference in Assembly.GetEntryAssembly().GetReferencedAssemblies())
+            foreach (var reference in Assembly.GetEntryAssembly().GetReferencedAssemblies())
             {
-                Assembly ass = Assembly.Load(reference);
+                var ass = Assembly.Load(reference);
                 csc_parameters.ReferencedAssemblies.Add(ass.Location);
             }
             csc_parameters.ReferencedAssemblies.Add(Assembly.GetEntryAssembly().Location);
@@ -464,7 +441,7 @@ namespace NetFluid
             csc_parameters.TreatWarningsAsErrors = false;
             csc_parameters.CompilerOptions = "/optimize /nowarn:108;114;3009;1685";
             csc_parameters.WarningLevel = 1;
-            CompilerResults results = csc.CompileAssemblyFromSource(csc_parameters, builder.ToString());
+            var results = csc.CompileAssemblyFromSource(csc_parameters, builder.ToString());
 
             return results.CompiledAssembly.GetTypes()[0].GetMethod("Run", BindingFlags.Static | BindingFlags.Public);
         }
@@ -495,9 +472,9 @@ namespace NetFluid
             var csc_parameters = new CompilerParameters(new string[] {}, Path.GetTempFileName(), false);
             csc_parameters.TreatWarningsAsErrors = false;
 
-            foreach (AssemblyName reference in Assembly.GetEntryAssembly().GetReferencedAssemblies())
+            foreach (var reference in Assembly.GetEntryAssembly().GetReferencedAssemblies())
             {
-                Assembly ass = Assembly.Load(reference);
+                var ass = Assembly.Load(reference);
                 csc_parameters.ReferencedAssemblies.Add(ass.Location);
             }
             csc_parameters.ReferencedAssemblies.Add(Assembly.GetEntryAssembly().Location);
@@ -507,7 +484,7 @@ namespace NetFluid
             csc_parameters.TreatWarningsAsErrors = false;
             csc_parameters.CompilerOptions = "/optimize /nowarn:108;114;3009;1685";
             csc_parameters.WarningLevel = 1;
-            CompilerResults results = csc.CompileAssemblyFromSource(csc_parameters, builder.ToString());
+            var results = csc.CompileAssemblyFromSource(csc_parameters, builder.ToString());
 
             return results.CompiledAssembly.GetTypes()[0].GetMethod("Run", BindingFlags.Static | BindingFlags.Public);
         }

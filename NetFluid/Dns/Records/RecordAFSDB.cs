@@ -1,7 +1,6 @@
-using System;
 /* http://tools.ietf.org/rfc/rfc1183.txt
 
- * 1. AFS Data Base location
+ * 1. AFS Write Base location
 
    This section defines an extension of the DNS to locate servers both
    for AFS (AFS is a registered trademark of Transarc Corporation) and
@@ -27,25 +26,18 @@ using System;
 
  */
 
-namespace Heijden.DNS
+namespace NetFluid.DNS.Records
 {
 	public class RecordAFSDB : Record
 	{
-		public ushort SUBTYPE;
-		public string HOSTNAME;
-
-		public RecordAFSDB(RecordReader rr)
-		{
-			SUBTYPE = rr.ReadUInt16();
-			//HOSTNAME = rr.ReadString();
-			HOSTNAME = rr.ReadDomainName();
-		}
+		public ushort Subtype;
+		
+        [DomainName]
+        public string Hostname;
 
 		public override string ToString()
 		{
-			return string.Format("{0} {1}",
-				SUBTYPE,
-				HOSTNAME);
+			return string.Format("{0} {1}",Subtype,Hostname);
 		}
 
 	}

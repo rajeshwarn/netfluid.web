@@ -24,6 +24,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text;
@@ -39,7 +40,7 @@ namespace NetFluid
         private readonly string name;
 
         private readonly Dictionary<StatusCode, RouteTarget> callOn;
-        private readonly List<FluidPage> instances;
+        private readonly List<IMethodExposer> instances;
         private readonly Dictionary<string, RouteTarget> routes;
         private RouteTarget callOnAnyCode;
         private ParamRouteTarget[] parametrized;
@@ -72,19 +73,19 @@ namespace NetFluid
             parametrized = new ParamRouteTarget[0];
             routes = new Dictionary<string, RouteTarget>();
 
-            folders = new Host.PublicFolder[0];
+            folders = new PublicFolder[0];
             immutableData = new Dictionary<string, byte[]>();
 
             callOn = new Dictionary<StatusCode, RouteTarget>();
             
-            instances = new List<FluidPage>();
+            instances = new List<IMethodExposer>();
         }
 
         public string RoutesMap
         {
             get
             {
-                var sb = new StringBuilder(string.Format("<Host Name=\"{0}\">",this.name));
+                var sb = new StringBuilder(string.Format("<Host Name=\"{0}\">",name));
 
                 if (controllers.Length>0)
                 {
@@ -144,19 +145,34 @@ namespace NetFluid
 
         private static void Finalize(Context c, MethodInfo method, object target, params object[] args)
         {
+            object res=null;
+
             try
             {
-                var res = method.Invoke(target, args);
-
-                SendValue(c,res);
-
-                if (!c.WebSocket)
-                    c.Close();
+                res = method.Invoke(target, args);
             }
             catch (Exception ex)
             {
+                c.Response.StatusCode = StatusCode.InternalServerError;
+
+                if (Engine.DevMode)
+                {
+                    try
+                    {
+                        c.SendHeaders();
+                        c.Writer.Write(ex.ToHTML());
+                    }
+                    catch (Exception)
+                    {
+                    }
+                }
+
                 Engine.Logger.Log(LogLevel.Exception, "Error on " + c.Request.Url, ex);
             }
+            
+            SendValue(c,res);
+            if (!c.WebSocket)
+                c.Close();
         }
 
         public void Serve(Context cnt)
@@ -197,7 +213,7 @@ namespace NetFluid
                                           rr.Type.FullName + "." + rr.Method.Name);
                     }
 
-                    var page = rr.Type.CreateIstance() as FluidPage;
+                    var page = rr.Type.CreateIstance() as IMethodExposer;
                     page.Context = cnt;
 
                     var parameters = rr.Method.GetParameters();
@@ -251,7 +267,7 @@ namespace NetFluid
                                           parametrized[i].Type.FullName + "." + parametrized[i].Method.Name);
                     }
 
-                    var page = parametrized[i].Type.CreateIstance() as FluidPage;
+                    var page = parametrized[i].Type.CreateIstance() as IMethodExposer;
                     page.Context = cnt;
 
                     var parameters = parametrized[i].Method.GetParameters();
@@ -303,7 +319,7 @@ namespace NetFluid
                                           route.Type.FullName + "." + route.Method.Name);
                     }
 
-                    var page = route.Type.CreateIstance() as FluidPage;
+                    var page = route.Type.CreateIstance() as IMethodExposer;
                     page.Context = cnt;
 
                     var parameters = route.Method.GetParameters();
@@ -356,7 +372,7 @@ namespace NetFluid
 	            {
 	                if (cnt.Request.Url.StartsWith(item.Uri))
 	                {
-	                    var path = System.IO.Path.GetFullPath(item.Path + cnt.Request.Url.Substring(item.Uri.Length).Replace('/', System.IO.Path.DirectorySeparatorChar));
+	                    var path = Path.GetFullPath(item.Path + cnt.Request.Url.Substring(item.Uri.Length).Replace('/', Path.DirectorySeparatorChar));
 
                         if (!path.StartsWith(item.Path))
                         {
@@ -365,11 +381,11 @@ namespace NetFluid
                             return;
                         }
 	
-	                    if (System.IO.File.Exists(path))
+	                    if (File.Exists(path))
 	                    {
 	                        cnt.Response.ContentType = MimeTypes.GetType(cnt.Request.Url);
 	                        cnt.SendHeaders();
-	                        var fs = new System.IO.FileStream(path, System.IO.FileMode.OpenOrCreate, System.IO.FileAccess.ReadWrite, System.IO.FileShare.ReadWrite);
+	                        var fs = new FileStream(path, FileMode.OpenOrCreate, FileAccess.ReadWrite, FileShare.ReadWrite);
 	                        fs.CopyTo(cnt.OutputStream);
 	                        cnt.Close();
 	                        return;
@@ -391,7 +407,7 @@ namespace NetFluid
                         Console.WriteLine(cnt.Request.Host + ":" + cnt.Request.Url + " - " + "Calling " +
                                           rt.Type.FullName + "." + rt.Method.Name);
 
-                    var p = rt.Type.CreateIstance() as FluidPage;
+                    var p = rt.Type.CreateIstance() as IMethodExposer;
                     p.Context = cnt;
 
                     Finalize(cnt, rt.Method, p, null);
@@ -403,7 +419,7 @@ namespace NetFluid
                         Console.WriteLine(cnt.Request.Host + ":" + cnt.Request.Url + " - " + "Calling " +
                                           callOnAnyCode.Type.FullName + "." + callOnAnyCode.Method.Name);
 
-                    var p = callOnAnyCode.Type.CreateIstance() as FluidPage;
+                    var p = callOnAnyCode.Type.CreateIstance() as IMethodExposer;
                     p.Context = cnt;
 
                     Finalize(cnt, callOnAnyCode.Method, p, null);
@@ -428,7 +444,7 @@ namespace NetFluid
                         cnt.Writer.WriteLine("<h1>" + ex.GetType().FullName + "</h1>");
                         if (ex.Data.Count > 0)
                         {
-                            cnt.Writer.WriteLine("<h2>Data</h2>");
+                            cnt.Writer.WriteLine("<h2>Write</h2>");
                             cnt.Writer.WriteLine("<table>");
                             foreach (var data in ex.Data.Keys)
                             {
@@ -480,12 +496,12 @@ namespace NetFluid
             if (page.FullName != null && !Types.ContainsKey(page.FullName))
                 Types.Add(page.FullName, page);
 
-            if (!page.Inherit(typeof (FluidPage)))
-                throw new TypeLoadException("page must inherit NetFluid.FluidPage");
+            if (!page.Implements(typeof (IMethodExposer)))
+                throw new TypeLoadException("Loaded type " + page + " must implement NetFluid.IMethodExposer interface");
 
             try
             {
-                instances.Add(page.CreateIstance() as FluidPage);
+                instances.Add(page.CreateIstance() as IMethodExposer);
             }
             catch (Exception ex)
             {
@@ -541,19 +557,29 @@ namespace NetFluid
 
         public void AddPublicFolder(string uriPath, string realPath)
         {
-            folders = (folders.Concat(new PublicFolder { Path = System.IO.Path.GetFullPath(realPath), Uri = uriPath })).ToArray();
+            var f = Path.GetFullPath(realPath);
+
+            if (f.Last() != Path.DirectorySeparatorChar)
+                f = f + Path.DirectorySeparatorChar;
+
+            var p = new PublicFolder
+            {
+                Path = f,
+                Uri = uriPath
+            };
+            folders = (folders.Concat(p)).ToArray();
         }
         
         public void AddImmutablePublicFolder(string uriPath, string realPath)
         {
-        	var m = System.IO.Path.GetFullPath(realPath);
+        	var m = Path.GetFullPath(realPath);
             var start = uriPath.EndsWith('/') ? uriPath : uriPath + "/";
 
-            if (System.IO.Directory.Exists(m))
+            if (Directory.Exists(m))
             {
-                foreach (var x in System.IO.Directory.GetFiles(m, "*.*", System.IO.SearchOption.AllDirectories))
+                foreach (var x in Directory.GetFiles(m, "*.*", SearchOption.AllDirectories))
                 {
-                    var s = x.Substring(m.Length).Replace(System.IO.Path.DirectorySeparatorChar, '/');
+                    var s = x.Substring(m.Length).Replace(Path.DirectorySeparatorChar, '/');
 
                     if (s[0] == '/')
                         s = s.Substring(1);
@@ -561,7 +587,7 @@ namespace NetFluid
                     var fileUri = start + s;
                     if (!immutableData.ContainsKey(fileUri))
                     {
-                        immutableData.Add(fileUri,System.IO.File.ReadAllBytes(x));
+                        immutableData.Add(fileUri,File.ReadAllBytes(x));
                     }
                 }
             }
@@ -604,10 +630,10 @@ namespace NetFluid
             if (t == null)
                 throw new TypeLoadException(methodFullname.Substring(0, methodFullname.LastIndexOf('.')) + " not found");
 
-            if (!t.Inherit(typeof (FluidPage)))
-                throw new TypeLoadException("Routed types must inherit NetFluid.FluidPage");
+            if (!t.Implements(typeof (IMethodExposer)))
+                throw new TypeLoadException("Routed types must implement NetFluid.IMethodExposer interface");
 
-            instances.Add(t.CreateIstance() as FluidPage);
+            instances.Add(t.CreateIstance() as IMethodExposer);
 
             SetRoute(url, t, methodFullname.Substring(methodFullname.LastIndexOf('.') + 1),name);
         }
@@ -623,12 +649,12 @@ namespace NetFluid
             if (type == null)
                 throw new NullReferenceException("Null type");
 
-            if (!type.Inherit(typeof (FluidPage)))
-                throw new TypeLoadException("Routed types must inherit NetFluid.FluidPage");
+            if (!type.Inherit(typeof (IMethodExposer)))
+                throw new TypeLoadException("Routed types must implement NetFluid.IMethodExposer");
 
             var rt = new RouteTarget {Type = type, Method = type.GetMethod(method), Name=name};
 
-            instances.Add(type.CreateIstance() as FluidPage);
+            instances.Add(type.CreateIstance() as IMethodExposer);
 
             if (routes.ContainsKey(url))
                 routes[url] = rt;
@@ -647,13 +673,13 @@ namespace NetFluid
             if (type == null)
                 throw new NullReferenceException("Null type");
 
-            if (!type.Inherit(typeof (FluidPage)))
-                throw new TypeLoadException("Routed types must inherit NetFluid.FluidPage");
+            if (!type.Implements(typeof (IMethodExposer)))
+                throw new TypeLoadException("Routed types must implement NetFluid.IMethodExposer");
 
 
             var rt = new RouteTarget {Type = type, Method = method,Name=name};
 
-            instances.Add(type.CreateIstance() as FluidPage);
+            instances.Add(type.CreateIstance() as IMethodExposer);
 
             if (routes.ContainsKey(url))
                 routes[url] = rt;
@@ -673,10 +699,10 @@ namespace NetFluid
             if (t == null)
                 throw new TypeLoadException(methodFullname.Substring(0, methodFullname.LastIndexOf('.')) + " not found");
 
-            if (!t.Inherit(typeof (FluidPage)))
-                throw new TypeLoadException("Routed types must inherit NetFluid.FluidPage");
+            if (!t.Inherit(typeof (IMethodExposer)))
+                throw new TypeLoadException("Routed types must inherit NetFluid.IMethodExposer");
 
-            instances.Add(t.CreateIstance() as FluidPage);
+            instances.Add(t.CreateIstance() as IMethodExposer);
 
             SetParameterizedRoute(url, t, methodFullname.Substring(methodFullname.LastIndexOf('.') + 1),name);
         }
@@ -692,12 +718,12 @@ namespace NetFluid
             if (type == null)
                 throw new NullReferenceException("Null type");
 
-            if (!type.Inherit(typeof (FluidPage)))
-                throw new TypeLoadException("Routed types must inherit NetFluid.FluidPage");
+            if (!type.Implements(typeof(IMethodExposer)))
+                throw new TypeLoadException("Routed types must inherit NetFluid.IMethodExposer");
 
             var rt = new ParamRouteTarget {Type = type, Method = type.GetMethod(method), Url = url , Name=name};
 
-            instances.Add(type.CreateIstance() as FluidPage);
+            instances.Add(type.CreateIstance() as IMethodExposer);
 
             parametrized = parametrized.Concat(new[] {rt}).OrderByDescending(x => x.Url.Length).ToArray();
         }
@@ -713,12 +739,12 @@ namespace NetFluid
             if (type == null)
                 throw new NullReferenceException("Null type");
 
-            if (!type.Inherit(typeof (FluidPage)))
-                throw new TypeLoadException("Routed types must inherit NetFluid.FluidPage");
+            if (!type.Implements(typeof(IMethodExposer)))
+                throw new TypeLoadException("Routed types must inherit NetFluid.IMethodExposer");
 
             var rt = new ParamRouteTarget {Type = type, Method = method, Url = url, Name=name};
 
-            instances.Add(type.CreateIstance() as FluidPage);
+            instances.Add(type.CreateIstance() as IMethodExposer);
 
             parametrized = parametrized.Concat(new[] {rt}).OrderByDescending(x => x.Url.Length).ToArray();
         }
@@ -735,10 +761,10 @@ namespace NetFluid
             if (t == null)
                 throw new TypeLoadException(methodFullname.Substring(0, methodFullname.LastIndexOf('.')) + " not found");
 
-            if (!t.Inherit(typeof (FluidPage)))
-                throw new TypeLoadException("Routed types must inherit NetFluid.FluidPage");
+            if (!t.Inherit(typeof(IMethodExposer)))
+                throw new TypeLoadException("Routed types must inherit NetFluid.IMethodExposer");
 
-            instances.Add(t.CreateIstance() as FluidPage);
+            instances.Add(t.CreateIstance() as IMethodExposer);
 
             SetRegexRoute(rgx, t, methodFullname.Substring(methodFullname.LastIndexOf('.') + 1),name);
         }
@@ -754,8 +780,8 @@ namespace NetFluid
             if (type == null)
                 throw new NullReferenceException("Null type");
 
-            if (!type.Inherit(typeof (FluidPage)))
-                throw new TypeLoadException("Routed types must inherit NetFluid.FluidPage");
+            if (!type.Implements(typeof(IMethodExposer)))
+                throw new TypeLoadException("Routed types must inherit NetFluid.IMethodExposer");
 
             var m = type.GetMethod(method);
             if (m == null)
@@ -763,7 +789,7 @@ namespace NetFluid
 
             var rt = new RegexRouteTarget {Type = type, Method = m, Regex = new Regex(rgx, RegexOptions.Compiled),Name=name};
 
-            instances.Add(type.CreateIstance() as FluidPage);
+            instances.Add(type.CreateIstance() as IMethodExposer);
 
             regex = regex.Concat(new[] {rt}).ToArray();
         }
@@ -779,12 +805,12 @@ namespace NetFluid
             if (type == null)
                 throw new NullReferenceException("Null type");
 
-            if (!type.Inherit(typeof (FluidPage)))
-                throw new TypeLoadException("Routed types must inherit NetFluid.FluidPage");
+            if (!type.Implements(typeof(IMethodExposer)))
+                throw new TypeLoadException("Routed types must inherit NetFluid.IMethodExposer");
 
             var rt = new RegexRouteTarget {Type = type, Method = method, Regex = new Regex(rgx, RegexOptions.Compiled),Name=name};
 
-            instances.Add(type.CreateIstance() as FluidPage);
+            instances.Add(type.CreateIstance() as IMethodExposer);
 
             regex = regex.Concat(new[] {rt}).ToArray();
         }

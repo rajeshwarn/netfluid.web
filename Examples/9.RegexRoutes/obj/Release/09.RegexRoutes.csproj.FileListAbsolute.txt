@@ -1,0 +1,8 @@
+C:\Users\Matteo\Desktop\NetFluid\netfluid\Examples\9.RegexRoutes\bin\Release\9.RegexRoutes.exe.config
+C:\Users\Matteo\Desktop\NetFluid\netfluid\Examples\9.RegexRoutes\bin\Release\9.RegexRoutes.exe
+C:\Users\Matteo\Desktop\NetFluid\netfluid\Examples\9.RegexRoutes\bin\Release\9.RegexRoutes.pdb
+C:\Users\Matteo\Desktop\NetFluid\netfluid\Examples\9.RegexRoutes\bin\Release\NetFluid.dll
+C:\Users\Matteo\Desktop\NetFluid\netfluid\Examples\9.RegexRoutes\bin\Release\NetFluid.pdb
+C:\Users\Matteo\Desktop\NetFluid\netfluid\Examples\9.RegexRoutes\obj\Release\9.RegexRoutes.exe
+C:\Users\Matteo\Desktop\NetFluid\netfluid\Examples\9.RegexRoutes\obj\Release\9.RegexRoutes.pdb
+C:\Users\Matteo\Desktop\NetFluid\netfluid\Examples\9.RegexRoutes\obj\Release\09.RegexRoutes.csprojResolveAssemblyReference.cache

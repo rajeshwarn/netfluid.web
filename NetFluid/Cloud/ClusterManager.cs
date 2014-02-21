@@ -24,33 +24,36 @@
 
 using System;
 using System.Collections.Concurrent;
-using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Sockets;
-using System.Text;
-using System.Threading.Tasks;
+using System.Security.Cryptography;
+using System.Threading;
 
 namespace NetFluid.Cloud
 {
     class ClusterManager:IClusterManager
     {
-        class State
+        class State : IDisposable
         {
-            public Stream Source { get; private set; }
-            public Stream Destination { get; private set; }
-            public byte[] InBuffer { get; private set; }
-            public byte[] OutBuffer { get; private set; }
+            private Context Source { get; set; }
+            private TcpClient Destination { get; set; }
+            private NetworkStream DestinationStream { get; set; }
+            private byte[] InBuffer { get; set; }
+            private byte[] OutBuffer { get; set; }
 
-            public State(Stream source, Stream destination, byte[] welcome, int size)
+            public State(Context source, IPEndPoint fow)
             {
                 Source = source;
-                Destination = destination;
-                InBuffer = new byte[65536];
-                OutBuffer = new byte[65536];
 
-                destination.BeginWrite(welcome, 0, size, Inbound, null);
+                Destination = new TcpClient {ReceiveTimeout = 100, SendTimeout = 100};
+                Destination.Connect(fow);
+                DestinationStream = Destination.GetStream();
+
+                InBuffer = new byte[256];
+                OutBuffer = new byte[256];
+
+                DestinationStream.BeginWrite(source.Buffer, 0, source.Buffer.Length, Inbound, null);
                 Outbound(null);
             }
 
@@ -71,40 +74,39 @@ namespace NetFluid.Cloud
                 catch (Exception)
                 {
                 }
-                ClusterManager.Remove(this);
+
+                Source = null;
+                Destination = null;
+                DestinationStream = null;
+                InBuffer = null;
+                OutBuffer=null;
+
+                Remove(this);
             }
 
             private void Inbound(IAsyncResult result)
             {
                 try
                 {
-                    if (Source.CanRead)
-                    {
-                        Source.BeginRead(InBuffer, 0, InBuffer.Length, x =>
-                        {
-                            try
-                            {
-                                var k = Source.EndRead(x);
+                    if (!Source.Socket.Connected || !Destination.Connected)
+                        return;
 
-                                if (Destination.CanWrite)
-                                {
-                                    Destination.BeginWrite(InBuffer, 0, k, Inbound, null);
-                                }
-                                else
-                                {
-                                    TryClose();
-                                }
-                            }
-                            catch (Exception)
-                            {
-                                TryClose();
-                            }
-                        }, null);
-                    }
-                    else
+                    Source.InputStream.BeginRead(InBuffer, 0, InBuffer.Length, x =>
                     {
-                        TryClose();
-                    }
+                        try
+                        {
+                            var k = Source.InputStream.EndRead(x);
+
+                            if (k==0)
+                                return;
+
+                            DestinationStream.BeginWrite(InBuffer, 0, k, Inbound, null);
+                        }
+                        catch (Exception)
+                        {
+                            TryClose();
+                        }
+                    }, null);
                 }
                 catch (Exception)
                 {
@@ -115,42 +117,40 @@ namespace NetFluid.Cloud
             {
                 try
                 {
-                    if (Destination.CanRead)
+                    if (!Destination.Connected || !Source.Socket.Connected)
+                        return;
+
+                    DestinationStream.BeginRead(OutBuffer, 0, OutBuffer.Length, x =>
                     {
-                        Destination.BeginRead(OutBuffer, 0, OutBuffer.Length, x =>
+                        try
                         {
-                            try
-                            {
-                                var k = Destination.EndRead(x);
-                                if (Source.CanWrite)
-                                {
-                                    Source.BeginWrite(OutBuffer, 0, k, Outbound, null);
-                                }
-                                else
-                                {
-                                    TryClose();
-                                }
-                            }
-                            catch (Exception)
-                            {
-                                TryClose();
-                            }
-                        }, null);
-                    }
-                    else
-                    {
-                        TryClose();
-                    }
+                            var k = DestinationStream.EndRead(x);
+
+                            if (k == 0)
+                                return;
+
+                            Source.OutputStream.BeginWrite(OutBuffer, 0, k, Outbound, null);
+                        }
+                        catch (Exception)
+                        {
+                            TryClose();
+                        }
+                    }, null);
                 }
                 catch (Exception)
                 {
                     TryClose();
                 }
             }
+
+            public void Dispose()
+            {
+                TryClose();
+            }
         }
 
-        static ConcurrentBag<State> States;
-        static ConcurrentDictionary<string, IPEndPoint> Targets;
+        static readonly ConcurrentBag<State> States;
+        static readonly ConcurrentDictionary<string, IPEndPoint> Targets;
 
         static ClusterManager()
         {
@@ -160,7 +160,7 @@ namespace NetFluid.Cloud
 
         static void Remove(State state)
         {
-            ClusterManager.States.TryTake(out state);
+            States.TryTake(out state);
         }
 
         static void Add(State state)
@@ -205,20 +205,36 @@ namespace NetFluid.Cloud
             IPEndPoint fow;
             Targets.TryGetValue(context.Request.Host, out fow);
 
-            if (fow != null)
-            {
-                Task.Factory.StartNew(()=>
-                {
-                    var sock = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
-                    sock.ReceiveTimeout = 3000;
-                    sock.SendTimeout = 3000;
-                    sock.Connect(fow);
-                    Add(new State(context.InputStream, new NetworkStream(sock), context.Buffer, context.Buffer.Length));
-                });
+            if (fow == null)
+                return false;
+            
+            /*var destination = new TcpClient { ReceiveTimeout = 100, SendTimeout = 100 };
+            destination.Connect(fow);
+                
+            var to = destination.GetStream();
+            to.Write(context.Buffer,0,context.Buffer.Length);
+                
+            var buffer = new byte[1024];
 
-                return true;
+            while (destination.Connected && context.Socket.Connected)
+            {
+                if (destination.Available>0)
+                {
+                    var r = to.Read(buffer, 0, destination.Available > buffer.Length ? buffer.Length: destination.Available);
+                    context.OutputStream.Write(buffer,0,r);
+                }
+                if (context.Socket.Available > 0)
+                {
+                    var r = context.InputStream.Read(buffer, 0, context.Socket.Available > buffer.Length ? buffer.Length : context.Socket.Available);
+                    to.Write(buffer, 0, r);
+                }
             }
-            return false;
+
+            destination.Close();
+            context.Close();*/
+
+            Add(new State(context,fow));
+            return true;
         }
     }
 }

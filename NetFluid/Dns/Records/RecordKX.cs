@@ -30,35 +30,30 @@ using System;
    The KX RDATA field MUST NOT be compressed.
 
  */
-namespace Heijden.DNS
+namespace NetFluid.DNS.Records
 {
 	public class RecordKX : Record, IComparable
 	{
-		public ushort PREFERENCE;
-		public string EXCHANGER;
+		public ushort Preference;
+        [DomainName]
+        public string Exchanger;
 
-		public RecordKX(RecordReader rr)
-		{
-			PREFERENCE = rr.ReadUInt16();
-			EXCHANGER = rr.ReadDomainName();
-		}
 
 		public override string ToString()
 		{
-			return string.Format("{0} {1}", PREFERENCE, EXCHANGER);
+			return string.Format("{0} {1}", Preference, Exchanger);
 		}
 
 		public int CompareTo(object objA)
 		{
-			RecordKX recordKX = objA as RecordKX;
+			var recordKX = objA as RecordKX;
 			if (recordKX == null)
 				return -1;
-			else if (this.PREFERENCE > recordKX.PREFERENCE)
-				return 1;
-			else if (this.PREFERENCE < recordKX.PREFERENCE)
-				return -1;
-			else // they are the same, now compare case insensitive names
-				return string.Compare(this.EXCHANGER, recordKX.EXCHANGER, true);
+		    if (this.Preference > recordKX.Preference)
+		        return 1;
+		    if (this.Preference < recordKX.Preference)
+		        return -1;
+		    return System.String.Compare(this.Exchanger, recordKX.Exchanger, System.StringComparison.OrdinalIgnoreCase);
 		}
 
 	}

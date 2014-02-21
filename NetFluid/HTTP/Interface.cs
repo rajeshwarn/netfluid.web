@@ -25,7 +25,6 @@ using System;
 using System.Net;
 using System.Net.Sockets;
 using System.Security.Cryptography.X509Certificates;
-using System.Threading.Tasks;
 
 namespace NetFluid.HTTP
 {
@@ -45,6 +44,7 @@ namespace NetFluid.HTTP
 
         public WebInterface(IPAddress addr, int port, X509Certificate2 certificate)
         {
+            this.certificate = certificate;
             endpoint = new IPEndPoint(addr, port);
             sock = new Socket(addr.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
             sock.Bind(endpoint);

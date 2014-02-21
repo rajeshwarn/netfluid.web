@@ -1,4 +1,3 @@
-using System;
 /*
 3.3.6. MG RDATA format (EXPERIMENTAL)
 
@@ -14,16 +13,12 @@ MGMNAME         A <domain-name> which specifies a mailbox which is a
 
 MG records cause no additional section processing.
 */
-namespace Heijden.DNS
+namespace NetFluid.DNS.Records
 {
 	public class RecordMG : Record
 	{
-		public string MGMNAME;
-
-		public RecordMG(RecordReader rr)
-		{
-			MGMNAME = rr.ReadDomainName();
-		}
+        [DomainName]
+        public string MGMNAME;
 
 		public override string ToString()
 		{

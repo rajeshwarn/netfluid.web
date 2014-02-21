@@ -1,10 +1,8 @@
 using System;
-using System.IO;
 using System.Collections.Generic;
 using System.Net;
-using System.Text;
 
-namespace Heijden.DNS
+namespace NetFluid.DNS.Records
 {
 	#region RFC specification
 	/*
@@ -124,7 +122,7 @@ namespace Heijden.DNS
 		*/
 	#endregion
 
-	internal class Header
+	public class Header
 	{
 		/// <summary>
 		/// An identifier assigned by the program
@@ -132,7 +130,7 @@ namespace Heijden.DNS
 		public ushort ID;
 
 		// internal flag
-		private ushort Flags;
+		public ushort Flags;
 
 		/// <summary>
 		/// the number of entries in the question section
@@ -158,30 +156,20 @@ namespace Heijden.DNS
 		{
 		}
 
-		public Header(RecordReader rr)
-		{
-			ID = rr.ReadUInt16();
-			Flags = rr.ReadUInt16();
-			QDCOUNT = rr.ReadUInt16();
-			ANCOUNT = rr.ReadUInt16();
-			NSCOUNT = rr.ReadUInt16();
-			ARCOUNT = rr.ReadUInt16();
-		}
 
-
-		private ushort SetBits(ushort oldValue, int position, int length, bool blnValue)
+		private static ushort SetBits(ushort oldValue, int position, int length, bool blnValue)
 		{
 			return SetBits(oldValue, position, length, blnValue ? (ushort)1 : (ushort)0);
 		}
 
-		private ushort SetBits(ushort oldValue, int position, int length, ushort newValue)
+		private static ushort SetBits(ushort oldValue, int position, int length, ushort newValue)
 		{
 			// sanity check
 			if (length <= 0 || position >= 16)
 				return oldValue;
 
 			// get some mask to put on
-			int mask = (2 << (length - 1)) - 1;
+			var mask = (2 << (length - 1)) - 1;
 
 			// clear out value
 			oldValue &= (ushort)~(mask << position);
@@ -191,14 +179,14 @@ namespace Heijden.DNS
 			return oldValue;
 		}
 
-		private ushort GetBits(ushort oldValue, int position, int length)
+		private static ushort GetBits(ushort oldValue, int position, int length)
 		{
 			// sanity check
 			if (length <= 0 || position >= 16)
 				return 0;
 
 			// get some mask to put on
-			int mask = (2 << (length - 1)) - 1;
+			var mask = (2 << (length - 1)) - 1;
 
 			// shift down to get some value and mask it
 			return (ushort)((oldValue >> position) & mask);
@@ -211,7 +199,7 @@ namespace Heijden.DNS
 		{
 			get
 			{
-				List<byte> data = new List<byte>();
+				var data = new List<byte>();
 				data.AddRange(WriteShort(ID));
 				data.AddRange(WriteShort(Flags));
 				data.AddRange(WriteShort(QDCOUNT));
@@ -222,7 +210,7 @@ namespace Heijden.DNS
 			}
 		}
 
-		private byte[] WriteShort(ushort sValue)
+		private IEnumerable<byte> WriteShort(ushort sValue)
 		{
 			return BitConverter.GetBytes(IPAddress.HostToNetworkOrder((short)sValue));
 		}

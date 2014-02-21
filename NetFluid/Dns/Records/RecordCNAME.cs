@@ -1,4 +1,3 @@
-using System;
 /*
  * 
 3.3.1. CNAME RDATA format
@@ -19,16 +18,12 @@ the description of name server logic in [RFC-1034] for details.
 
  * 
  */
-namespace Heijden.DNS
+namespace NetFluid.DNS.Records
 {
 	public class RecordCNAME : Record
 	{
-		public string CNAME;
+		[DomainName]public string CNAME;
 
-		public RecordCNAME(RecordReader rr)
-		{
-			CNAME = rr.ReadDomainName();
-		}
 
 		public override string ToString()
 		{

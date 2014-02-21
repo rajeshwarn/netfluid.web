@@ -5,4 +5,3 @@ C:\Users\Matteo\Desktop\NetFluid\netfluid\Examples\8.Configuration\bin\Debug\Net
 C:\Users\Matteo\Desktop\NetFluid\netfluid\Examples\8.Configuration\bin\Debug\NetFluid.pdb
 C:\Users\Matteo\Desktop\NetFluid\netfluid\Examples\8.Configuration\obj\Debug\8.Configuration.exe
 C:\Users\Matteo\Desktop\NetFluid\netfluid\Examples\8.Configuration\obj\Debug\8.Configuration.pdb
-C:\Users\Matteo\Desktop\NetFluid\netfluid\Examples\8.Configuration\obj\Debug\08.Configuration.csprojResolveAssemblyReference.cache

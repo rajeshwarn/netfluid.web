@@ -70,20 +70,17 @@ using System;
 
  */
 
-namespace Heijden.DNS
+namespace NetFluid.DNS.Records
 {
 	public class RecordPX : Record
 	{
 		public UInt16 PREFERENCE;
-		public string MAP822;
-		public string MAPX400;
 
-		public RecordPX(RecordReader rr)
-		{
-			PREFERENCE = rr.ReadUInt16();
-			MAP822 = rr.ReadDomainName();
-			MAPX400 = rr.ReadDomainName();
-		}
+        [DomainName]
+		public string MAP822;
+
+        [DomainName]
+		public string MAPX400;
 
 		public override string ToString()
 		{

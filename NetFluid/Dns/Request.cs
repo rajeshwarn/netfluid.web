@@ -1,38 +1,28 @@
 using System;
 using System.Collections.Generic;
-using System.Text;
 
-namespace Heijden.DNS
+namespace NetFluid.DNS.Records
 {
-	internal class Request
+	public class Request:List<Question>
 	{
 		public Header header;
 
-		private List<Question> questions;
-
 		public Request()
 		{
-			header = new Header();
-			header.OPCODE = OPCode.Query;
-			header.QDCOUNT = 0;
-
-			questions = new List<Question>();
+			header = new Header {OPCODE = OPCode.Query, QDCOUNT = 0, ID = (ushort)DateTime.Now.Millisecond};
 		}
 
-		public void AddQuestion(Question question)
-		{
-			questions.Add(question);
-		}
-
-		public byte[] Data
+		public byte[] Write
 		{
 			get
 			{
-				List<byte> data = new List<byte>();
-				header.QDCOUNT = (ushort)questions.Count;
+				var data = new List<byte>();
+				header.QDCOUNT = (ushort)Count;
 				data.AddRange(header.Data);
-				foreach (Question q in questions)
+
+				foreach (var q in this)
 					data.AddRange(q.Data);
+
 				return data.ToArray();
 			}
 		}

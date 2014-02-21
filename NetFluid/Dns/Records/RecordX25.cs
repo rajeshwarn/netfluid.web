@@ -1,4 +1,3 @@
-using System;
 /* http://tools.ietf.org/rfc/rfc1183.txt
 
 3.1. The X25 RR
@@ -11,7 +10,7 @@ using System;
 
    <PSDN-address> is required in all X25 RRs.
 
-   <PSDN-address> identifies the PSDN (Public Switched Data Network)
+   <PSDN-address> identifies the PSDN (Public Switched Write Network)
    address in the X.121 [10] numbering plan associated with <owner>.
    Its format in master files is a <character-string> syntactically
    identical to that used in TXT and HINFO.
@@ -20,7 +19,7 @@ using System;
    section processing.
 
    The <PSDN-address> is a string of decimal digits, beginning with the
-   4 digit DNIC (Data Network Identification Code), as specified in
+   4 digit DNIC (Write Network Identification Code), as specified in
    X.121. National prefixes (such as a 0) MUST NOT be used.
 
    For example:
@@ -30,21 +29,16 @@ using System;
 
  */
 
-namespace Heijden.DNS
+namespace NetFluid.DNS.Records
 {
 	public class RecordX25 : Record
 	{
-		public string PSDNADDRESS;
-
-		public RecordX25(RecordReader rr)
-		{
-			PSDNADDRESS = rr.ReadString();
-		}
+		public string PsdnAddress;
 
 		public override string ToString()
 		{
 			return string.Format("{0}",
-				PSDNADDRESS);
+				PsdnAddress);
 		}
 
 	}

@@ -1,0 +1,113 @@
+<p>
+	To set interfaces, public folders, sessions managements, sockets timeout and all the NetFluid parameters you can do it programmatically or from App.config file
+</p>
+<p>
+	To load app configuration you can use Engine.LoadAppConfiguration which load the default app configuration or Engine.LoadAppConfiguration(sting:confpath) wich load
+	another file
+</p>
+<p>
+	<h4>Engine parameters</h4>
+	<ul>
+		<li>
+			<span class="kwrd">int</span> <strong>Timeout</strong>: Set sockets timeout in milliseconds.On timeout client socket is closed and resources released.
+			If missing the default value is 300 ms.
+		</li>
+		<li>
+			<span class="kwrd">string</span> <strong>LogPath</strong>: Set the path used by engine logger
+			If missing the default value is "./AppLog.txt"
+		</li>
+		<li>
+			<span class="kwrd">bool</span> <strong>DevMode</strong>: If true show on console the context flow. Remember to turn it off in production.
+			Turned on, it show exception on client response and real status codes, otherwise in case of error the response status code is "Bad Request" and no messages is shown.
+			If missing the default value is <span class="kwrd">false</span>
+		</li>
+		<li>
+			<span class="kwrd">int</span> <strong>MaxPostSize</strong>: Maximum client payload in bytes, if it exceeds the context is closed as "Bad Request".
+			If missing the default value is 268435456 (256MB)
+		</li>
+		<li>
+			<span class="kwrd">int</span> <strong>SessionDuration</strong>: Session duration in seconds, expired all the session data of current user are trashed.
+			Sessions are started and renewed automatically if used.
+			If missing the default value is 3600 seconds (1 hour)
+		</li>
+	</ul>
+</p>
+<p>
+	<h4>Interface parameters</h4>
+	<p>
+		HTTP interfaces and HTTPS interfaces are declared in the same way, if they got a PFX certificate they are HTTPS otherwise they are HTTP
+	</p>
+	<ul>
+		<li>
+			<span class="kwrd">string</span> <strong>IP</strong>: IP on which listen. <strong>Required</strong>
+		</li>
+		<li>
+			<span class="kwrd">int</span> <strong>Port</strong>: IP on which listen. If missing the default value is 8080
+		</li>
+		<li>
+			<span class="kwrd">string</span> <strong>Certificate</strong>: PXF certificate path for HTTPS listening. If missing the interface will be HTTP
+		</li>
+	</ul>
+</p>
+<p>
+	<h4>Public folders</h4>
+	<p>
+		Map a physical path to an Uri.Files and directories inside a public folder are freely explorable and downloadable by clients.
+		A Public folder can be immutable which means that all files inside are kept in memory by NetFluid engine without taking care of changing, for
+		high performances, ideal for static contents of your web application like styles and JavaScript.
+		<br/>
+		Public folders can also be mapped on specific virtual host to setup in place contents system.
+	</p>
+	<ul>
+		<li>
+			<span class="kwrd">string</span> <strong>RealPath</strong>: Physical path of the public folder <strong>Required</strong>
+		</li>
+		<li>
+			<span class="kwrd">string</span> <strong>UriPath</strong>: Uri to map <strong>Required</strong>
+		</li>
+		<li>
+			<span class="kwrd">bool</span> <strong>Immutable</strong>: If true, files are memory cached and all changes ignored
+		</li>
+		<li>
+			<span class="kwrd">string</span> <strong>Host</strong>: Map the folder on a virtual host 
+		</li>
+	</ul>
+</p>
+<h4>Example configuration</h4>
+<!-- code formatted by http://manoli.net/csharpformat/ -->
+<pre class="csharpcode">
+<span class="kwrd">&lt;?</span><span class="html">xml</span> <span class="attr">version</span><span class="kwrd">="1.0"</span> <span class="attr">encoding</span><span class="kwrd">="utf-8"</span> ?<span class="kwrd">&gt;</span>
+<span class="kwrd">&lt;</span><span class="html">configuration</span><span class="kwrd">&gt;</span>
+  <span class="kwrd">&lt;</span><span class="html">configSections</span><span class="kwrd">&gt;</span>
+    <span class="kwrd">&lt;</span><span class="html">section</span> <span class="attr">name</span><span class="kwrd">="NetFluidSettings"</span> <span class="attr">type</span><span class="kwrd">="NetFluid.Settings, NetFluid"</span><span class="kwrd">/&gt;</span>
+    <span class="rem">&lt;!-- ATTENTION DUE TO A C# BUG configSections MUST BE THE FIRST CHILD OF CONFIGURATION --&gt;</span>
+  <span class="kwrd">&lt;/</span><span class="html">configSections</span><span class="kwrd">&gt;</span>
+  <span class="kwrd">&lt;</span><span class="html">startup</span><span class="kwrd">&gt;</span> 
+        <span class="kwrd">&lt;</span><span class="html">supportedRuntime</span> <span class="attr">version</span><span class="kwrd">="v4.0"</span> <span class="attr">sku</span><span class="kwrd">=".NETFramework,Version=v4.5"</span> <span class="kwrd">/&gt;</span>
+  <span class="kwrd">&lt;/</span><span class="html">startup</span><span class="kwrd">&gt;</span>
+  <span class="rem">&lt;!-- NetFluid settings will all parameters --&gt;</span>
+  <span class="kwrd">&lt;</span><span class="html">NetFluidSettings</span> <span class="attr">Timeout</span><span class="kwrd">="500"</span> <span class="attr">LogPath</span><span class="kwrd">="./AppLog.txt"</span> <span class="attr">LogLevel</span><span class="kwrd">="Exception"</span> <span class="attr">DevMode</span><span class="kwrd">="false"</span> <span class="attr">MaxPostSize</span><span class="kwrd">="268435456"</span> <span class="attr">SessionDuration</span><span class="kwrd">="3600"</span><span class="kwrd">&gt;</span>
+    <span class="kwrd">&lt;</span><span class="html">Interfaces</span><span class="kwrd">&gt;</span>
+      <span class="rem">&lt;!-- HTTP INTERFACE ON PORT 8080 --&gt;</span>
+      <span class="kwrd">&lt;</span><span class="html">Interface</span> <span class="attr">IP</span><span class="kwrd">="127.0.0.1"</span><span class="kwrd">/&gt;</span>
+      
+      <span class="rem">&lt;!-- HTTP INTERFACE ON PORT 80 --&gt;</span>
+      <span class="kwrd">&lt;</span><span class="html">Interface</span> <span class="attr">IP</span><span class="kwrd">="127.0.0.1"</span> <span class="attr">Port</span><span class="kwrd">="80"</span><span class="kwrd">/&gt;</span>
+
+      <span class="rem">&lt;!-- HTTPS INTERFACE ON PORT 444 --&gt;</span>
+      <span class="kwrd">&lt;</span><span class="html">Interface</span> <span class="attr">IP</span><span class="kwrd">="127.0.0.1"</span> <span class="attr">Port</span><span class="kwrd">="444"</span> <span class="attr">Certificate</span><span class="kwrd">="my.pfx"</span><span class="kwrd">/&gt;</span>
+    <span class="kwrd">&lt;/</span><span class="html">Interfaces</span><span class="kwrd">&gt;</span>
+    <span class="kwrd">&lt;</span><span class="html">PublicFolders</span><span class="kwrd">&gt;</span>
+      
+      <span class="rem">&lt;!-- PUBLIC FOLDER --&gt;</span>
+      <span class="kwrd">&lt;</span><span class="html">PublicFolder</span> <span class="attr">RealPath</span><span class="kwrd">="./upload"</span> <span class="attr">UriPath</span><span class="kwrd">="/upload"</span><span class="kwrd">/&gt;</span>
+      
+      <span class="rem">&lt;!-- MEMORY CACHED PUBLIC FOLDER --&gt;</span>
+      <span class="kwrd">&lt;</span><span class="html">PublicFolder</span> <span class="attr">RealPath</span><span class="kwrd">="./Public"</span> <span class="attr">UriPath</span><span class="kwrd">="/"</span> <span class="attr">Immutable</span><span class="kwrd">="true"</span><span class="kwrd">/&gt;</span>
+
+      <span class="rem">&lt;!-- PUBLIC FOLDER EXPOSED AS VIRTUALHOST --&gt;</span>
+      <span class="kwrd">&lt;</span><span class="html">PublicFolder</span> <span class="attr">RealPath</span><span class="kwrd">="./supb"</span> <span class="attr">UriPath</span><span class="kwrd">="/"</span> <span class="attr">Host</span><span class="kwrd">="true"</span><span class="kwrd">/&gt;</span>
+      
+    <span class="kwrd">&lt;/</span><span class="html">PublicFolders</span><span class="kwrd">&gt;</span>
+  <span class="kwrd">&lt;/</span><span class="html">NetFluidSettings</span><span class="kwrd">&gt;</span>
+<span class="kwrd">&lt;/</span><span class="html">configuration</span><span class="kwrd">&gt;</span></pre>

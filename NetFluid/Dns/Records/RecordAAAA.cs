@@ -1,4 +1,4 @@
-using System;
+
 
 #region Rfc info
 /*
@@ -9,30 +9,47 @@ using System;
  */
 #endregion
 
-namespace Heijden.DNS
+using System.Net;
+
+namespace NetFluid.DNS.Records
 {
 	public class RecordAAAA : Record
 	{
-		public System.Net.IPAddress Address;
+	    public ushort A;
+	    public ushort B;
+	    public ushort C;
+	    public ushort D;
+	    public ushort E;
+	    public ushort F;
+	    public ushort G;
+	    public ushort H;
 
-		public RecordAAAA(RecordReader rr)
-		{
-			System.Net.IPAddress.TryParse(
-				string.Format("{0:x}:{1:x}:{2:x}:{3:x}:{4:x}:{5:x}:{6:x}:{7:x}",
-				rr.ReadUInt16(),
-				rr.ReadUInt16(),
-				rr.ReadUInt16(),
-				rr.ReadUInt16(),
-				rr.ReadUInt16(),
-				rr.ReadUInt16(),
-				rr.ReadUInt16(),
-				rr.ReadUInt16()), out this.Address);
-		}
+        public static implicit operator RecordAAAA(string s)
+        {
+            return new RecordAAAA() { Address = IPAddress.Parse(s) };
+        }
 
-		public override string ToString()
-		{
-			return Address.ToString();
-		}
+
+        public System.Net.IPAddress Address
+        {
+            get
+            {
+                return System.Net.IPAddress.Parse(ToString());
+            }
+            set 
+            {
+	            var arr = value.GetAddressBytes();
+	            A = arr[0];
+	            B = arr[1];
+	            C = arr[2];
+	            D = arr[3];
+	        }
+        }
+
+        public override string ToString()
+        {
+            return string.Format("{0:x}:{1:x}:{2:x}:{3:x}:{4:x}:{5:x}:{6:x}:{7:x}", A, B, C, D, E, F, G, H);
+        }
 
 	}
 }

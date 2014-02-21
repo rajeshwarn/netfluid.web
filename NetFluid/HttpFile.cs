@@ -55,26 +55,26 @@ namespace NetFluid
         /// <summary>
         /// Temp path on server
         /// </summary>
-        internal string SavedFile;
+        public string TempFile { get; internal set; }
 
         public void SaveAs(string path, bool rewrite = true)
         {
-            File.Copy(SavedFile, path, rewrite);
+            File.Copy(TempFile, path, rewrite);
         }
 
         public Stream Open()
         {
-            return File.OpenRead(SavedFile);
+            return File.OpenRead(TempFile);
         }
 
         public string ReadAllText()
         {
-            return File.ReadAllText(SavedFile);
+            return File.ReadAllText(TempFile);
         }
 
         public byte[] ReadAllBytes()
         {
-            return File.ReadAllBytes(SavedFile);
+            return File.ReadAllBytes(TempFile);
         }
     }
 }

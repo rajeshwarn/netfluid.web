@@ -1,4 +1,3 @@
-using System;
 /* http://tools.ietf.org/rfc/rfc1183.txt
 
 3.3. The Route Through RR
@@ -52,24 +51,20 @@ using System;
 
  */
 
-namespace Heijden.DNS
+namespace NetFluid.DNS.Records
 {
 	public class RecordRT : Record
 	{
-		public ushort PREFERENCE;
-		public string INTERMEDIATEHOST;
+		public ushort Preference;
 
-		public RecordRT(RecordReader rr)
-		{
-			PREFERENCE = rr.ReadUInt16();
-			INTERMEDIATEHOST = rr.ReadDomainName();
-		}
+        [DomainName]
+		public string Intermediatehost;
 
 		public override string ToString()
 		{
 			return string.Format("{0} {1}",
-				PREFERENCE,
-				INTERMEDIATEHOST);
+				Preference,
+				Intermediatehost);
 		}
 
 	}

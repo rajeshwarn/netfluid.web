@@ -2,6 +2,6 @@ C:\Users\Matteo\Desktop\NetFluid\netfluid\Examples\1.HelloWorld\bin\Debug\1.Hell
 C:\Users\Matteo\Desktop\NetFluid\netfluid\Examples\1.HelloWorld\bin\Debug\1.HelloWorld.pdb
 C:\Users\Matteo\Desktop\NetFluid\netfluid\Examples\1.HelloWorld\bin\Debug\NetFluid.dll
 C:\Users\Matteo\Desktop\NetFluid\netfluid\Examples\1.HelloWorld\bin\Debug\NetFluid.pdb
-C:\Users\Matteo\Desktop\NetFluid\netfluid\Examples\1.HelloWorld\obj\Debug\01.HelloWorld.csprojResolveAssemblyReference.cache
 C:\Users\Matteo\Desktop\NetFluid\netfluid\Examples\1.HelloWorld\obj\Debug\1.HelloWorld.exe
 C:\Users\Matteo\Desktop\NetFluid\netfluid\Examples\1.HelloWorld\obj\Debug\1.HelloWorld.pdb
+C:\Users\Matteo\Desktop\NetFluid\netfluid\Examples\1.HelloWorld\obj\Debug\01.HelloWorld.csprojResolveAssemblyReference.cache

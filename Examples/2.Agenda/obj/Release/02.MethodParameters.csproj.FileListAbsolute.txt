@@ -1,0 +1,8 @@
+C:\Users\Matteo\Desktop\NetFluid\netfluid\Examples\2.Agenda\bin\Release\index.html
+C:\Users\Matteo\Desktop\NetFluid\netfluid\Examples\2.Agenda\bin\Release\Agenda.exe
+C:\Users\Matteo\Desktop\NetFluid\netfluid\Examples\2.Agenda\bin\Release\Agenda.pdb
+C:\Users\Matteo\Desktop\NetFluid\netfluid\Examples\2.Agenda\bin\Release\NetFluid.dll
+C:\Users\Matteo\Desktop\NetFluid\netfluid\Examples\2.Agenda\bin\Release\NetFluid.pdb
+C:\Users\Matteo\Desktop\NetFluid\netfluid\Examples\2.Agenda\obj\Release\Agenda.exe
+C:\Users\Matteo\Desktop\NetFluid\netfluid\Examples\2.Agenda\obj\Release\Agenda.pdb
+C:\Users\Matteo\Desktop\NetFluid\netfluid\Examples\2.Agenda\obj\Release\02.MethodParameters.csprojResolveAssemblyReference.cache

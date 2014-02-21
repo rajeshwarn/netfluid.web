@@ -1,4 +1,3 @@
-using System;
 /*
  3.4.1. A RDATA format
 
@@ -14,25 +13,43 @@ Hosts that have multiple Internet addresses will have multiple A
 records.
  * 
  */
-namespace Heijden.DNS
+
+using System.Net;
+
+namespace NetFluid.DNS.Records
 {
 	public class RecordA : Record
 	{
-		public System.Net.IPAddress Address;
+	    public byte A;
+	    public byte B;
+	    public byte C;
+	    public byte D;
 
-		public RecordA(RecordReader rr)
-		{
-			System.Net.IPAddress.TryParse(string.Format("{0}.{1}.{2}.{3}",
-				rr.ReadByte(),
-				rr.ReadByte(),
-				rr.ReadByte(),
-				rr.ReadByte()), out this.Address);
-		}
+	    public System.Net.IPAddress Address
+	    {
+	        get
+	        {
+                return System.Net.IPAddress.Parse(ToString());
+	        }
+	        set
+	        {
+	            var arr = value.GetAddressBytes();
+	            A = arr[0];
+	            B = arr[1];
+	            C = arr[2];
+	            D = arr[3];
+	        }
+	    }
 
-		public override string ToString()
-		{
-			return Address.ToString();
-		}
+        public static implicit operator RecordA(string s)
+        {
+            return new RecordA { Address = IPAddress.Parse(s) };
+        }
+
+	    public override string ToString()
+	    {
+	        return string.Format("{0}.{1}.{2}.{3}", A, B, C, D);
+	    }
 
 	}
 }

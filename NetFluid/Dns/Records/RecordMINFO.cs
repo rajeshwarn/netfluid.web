@@ -1,4 +1,3 @@
-using System;
 /*
  3.3.7. MINFO RDATA format (EXPERIMENTAL)
 
@@ -30,18 +29,14 @@ MINFO records cause no additional section processing.  Although these
 records can be associated with a simple mailbox, they are usually used
 with a mailing list.
  */
-namespace Heijden.DNS
+namespace NetFluid.DNS.Records
 {
 	public class RecordMINFO : Record
-	{
+    {
+        [DomainName]
 		public string RMAILBX;
+        [DomainName]
 		public string EMAILBX;
-
-		public RecordMINFO(RecordReader rr)
-		{
-			RMAILBX = rr.ReadDomainName();
-			EMAILBX = rr.ReadDomainName();
-		}
 
 		public override string ToString()
 		{

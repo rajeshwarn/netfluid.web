@@ -1,0 +1,45 @@
+<h4>Assemblies</h4>
+<p>
+	If you want to self host your web application or write a NetFluid server you need to setup the NetFluid engine.
+	<br/>
+	The current assembly is automatically loaded as default web application, any other assembly loaded through the method Engine.Load is <strong>added</strong>
+	to default web application.
+	<br/>
+	To add an assembly under a specific virtual host, use the method Engine.LoadHost
+</p>
+<h4>Interfaces and public folders</h4>
+<p>
+	Any NetFluid settings is loadable by app configuration using Engine.LoadAppConfiguration or programmatically specifying any settings way Engine methods 
+</p>
+<!-- code formatted by http://manoli.net/csharpformat/ -->
+<pre class="csharpcode">
+        <span class="kwrd">public</span> <span class="kwrd">static</span> <span class="kwrd">void</span> Main()
+        {
+            <span class="rem">//Add mywebapp.dll to the default web application</span>
+            Engine.Load(Assembly.LoadFile(<span class="str">"mywebapp.dll"</span>));
+
+            <span class="rem">//Load adminApp.dll into the virtual host admin.netfluid.org</span>
+            Engine.LoadHost(<span class="str">"admin.netfluid.org"</span>, Assembly.LoadFile(<span class="str">"adminApp.dll"</span>));
+
+            <span class="rem">//Virtual host www.supb.eu is FastCGI fowarded to apache.netfluid.org on port 5000</span>
+            Engine.AddFowarding(<span class="str">"www.supb.eu"</span>, <span class="str">"apache.netfluid.org:5000"</span>);
+
+            <span class="rem">//Load netfluid setting from App.config file, return false if missing or invalid</span>
+            <span class="kwrd">if</span> (!Engine.LoadAppConfiguration())
+            {
+                <span class="rem">//Add an http interface on any available public ip on specified port</span>
+                Engine.Interfaces.AddAllAddresses(80);
+
+                <span class="rem">//Add an http interface on ip 127.0.0.1</span>
+                Engine.Interfaces.AddLoopBack(8080);
+
+                <span class="rem">//Any files inside "./myfiles/public" folders appears under the Uri path /public</span>
+                Engine.AddPublicFolder(<span class="str">"/public"</span>, <span class="str">"./myfiles/public"</span>);
+            }
+
+            <span class="rem">//Engine start to work</span>
+            Engine.Start();
+
+            Console.ReadLine();
+        }
+</pre>

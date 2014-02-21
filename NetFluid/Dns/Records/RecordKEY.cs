@@ -35,7 +35,7 @@ using System;
 */
 #endregion
 
-namespace Heijden.DNS
+namespace NetFluid.DNS.Records
 {
 	public class RecordKEY : Record
 	{
@@ -43,14 +43,6 @@ namespace Heijden.DNS
 		public byte PROTOCOL;
 		public byte ALGORITHM;
 		public string PUBLICKEY;
-
-		public RecordKEY(RecordReader rr)
-		{
-			FLAGS = rr.ReadUInt16();
-			PROTOCOL = rr.ReadByte();
-			ALGORITHM = rr.ReadByte();
-			PUBLICKEY = rr.ReadString();
-		}
 
 		public override string ToString()
 		{

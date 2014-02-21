@@ -1,0 +1,7 @@
+C:\Users\Matteo\Desktop\NetFluid\netfluid\Examples\11.Files\bin\Debug\11.Files.exe
+C:\Users\Matteo\Desktop\NetFluid\netfluid\Examples\11.Files\bin\Debug\11.Files.pdb
+C:\Users\Matteo\Desktop\NetFluid\netfluid\Examples\11.Files\bin\Debug\NetFluid.dll
+C:\Users\Matteo\Desktop\NetFluid\netfluid\Examples\11.Files\bin\Debug\NetFluid.pdb
+C:\Users\Matteo\Desktop\NetFluid\netfluid\Examples\11.Files\obj\Debug\11.Files.exe
+C:\Users\Matteo\Desktop\NetFluid\netfluid\Examples\11.Files\obj\Debug\11.Files.pdb
+C:\Users\Matteo\Desktop\NetFluid\netfluid\Examples\11.Files\obj\Debug\10.Files.csprojResolveAssemblyReference.cache

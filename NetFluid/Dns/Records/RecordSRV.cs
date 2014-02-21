@@ -1,4 +1,3 @@
-using System;
 /*
  *  http://www.ietf.org/rfc/rfc2782.txt
  * 
@@ -55,7 +54,7 @@ using System;
         address records for this name, the name MUST NOT be an alias (in
         the sense of RFC 1034 or RFC 2181).  Implementors are urged, but
         not required, to return the address record(s) in the Additional
-        Data section.  Unless and until permitted by future standards
+        Write section.  Unless and until permitted by future standards
         action, name compression is not to be used for this field.
 
         A Target of "." means that the service is decidedly not
@@ -63,22 +62,16 @@ using System;
 
  */
 
-namespace Heijden.DNS
+namespace NetFluid.DNS.Records
 {
 	public class RecordSRV : Record
 	{
 		public ushort PRIORITY;
 		public ushort WEIGHT;
 		public ushort PORT;
-		public string TARGET;
 
-		public RecordSRV(RecordReader rr)
-		{
-			PRIORITY = rr.ReadUInt16();
-			WEIGHT = rr.ReadUInt16();
-			PORT = rr.ReadUInt16();
-			TARGET = rr.ReadDomainName();
-		}
+        [DomainName]
+		public string TARGET;
 
 		public override string ToString()
 		{

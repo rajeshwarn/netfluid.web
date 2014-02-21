@@ -1,0 +1,25 @@
+<p>
+	NetFluid run inside a security sandbox, anything not strictly specified as visible is unreachable by the outside  
+</p>
+<p>
+	There are 6 ways to expose methods and files to clients, checked in this order.
+	<ul>
+		<li>
+			<strong>Controllers</strong>: Lambda functions invoked any time the server receive a request
+		<li>
+			<strong>RegexRoutes</strong>: The method is called if the current Uri match the assigned regex, any method parameter is taken from regex groups
+		</li>
+		<li>
+			<strong>ParametrizedRoutes</strong>: Assign a variable Uri to a method, any method parameter is taken from Uri parts
+		</li>
+		<li>
+			<strong>Routes</strong>: Assign a fixed Uri to a method, any method parameter is taken from GET or POST data
+		</li>
+		<li>
+			<strong>Public folders</strong>: Assign a variable Uri to a physical folder, any files in folder is public and downloadable by the client.
+		</li>
+		<li>
+			<strong>StatusCode handlers</strong>: Assign a method to a specified status code.
+		</li>
+	</ul>
+</p>

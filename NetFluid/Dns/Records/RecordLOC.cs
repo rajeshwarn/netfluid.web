@@ -95,7 +95,7 @@ ALTITUDE     The altitude of the center of the sphere described by the
 
  */
 
-namespace Heijden.DNS
+namespace NetFluid.DNS.Records
 {
 	public class RecordLOC : Record
 	{
@@ -107,24 +107,17 @@ namespace Heijden.DNS
 		public UInt32 LONGITUDE;
 		public UInt32 ALTITUDE;
 
-		private string SizeToString(byte s)
+		private static string SizeToString(byte s)
 		{
-			string strUnit = "cm";
-			int intBase = s >> 4;
-			int intPow = s & 0x0f;
+			var strUnit = "cm";
+			var intBase = s >> 4;
+			var intPow = s & 0x0f;
 			if (intPow >= 2)
 			{
 				intPow -= 2;
 				strUnit = "m";
 			}
-			/*
-			if (intPow >= 3)
-			{
-				intPow -= 3;
-				strUnit = "km";
-			}
-			*/
-			StringBuilder sb = new StringBuilder();
+			var sb = new StringBuilder();
 			sb.AppendFormat("{0}", intBase);
 			for (; intPow > 0; intPow--)
 				sb.Append('0');
@@ -132,56 +125,30 @@ namespace Heijden.DNS
 			return sb.ToString();
 		}
 
-		private string LonToTime(UInt32 r)
+		private static string ToTime(UInt32 r, char below,char above)
 		{
-			UInt32 Mid = 2147483648; // 2^31
-			char Dir = 'E';
+			const uint Mid = 2147483648; // 2^31
+			var dir = '?';
 			if (r > Mid)
 			{
-				Dir = 'W';
-				r -= Mid;
-			}
-			double h = r / (360000.0 * 10.0);
-			double m = 60.0 * (h - (int)h);
-			double s = 60.0 * (m - (int)m);
-			return string.Format("{0} {1} {2:0.000} {3}", (int)h, (int)m, s, Dir);
-		}
-
-		private string ToTime(UInt32 r, char Below,char Above)
-		{
-			UInt32 Mid = 2147483648; // 2^31
-			char Dir = '?';
-			if (r > Mid)
-			{
-				Dir = Above;
+				dir = above;
 				r -= Mid;
 			}
 			else
 			{
-				Dir = Below;
+				dir = below;
 				r = Mid - r;
 			}
-			double h = r / (360000.0 * 10.0);
-			double m = 60.0 * (h - (int)h);
-			double s = 60.0 * (m - (int)m);
-			return string.Format("{0} {1} {2:0.000} {3}", (int)h, (int)m, s, Dir);
+			var h = r / (360000.0 * 10.0);
+			var m = 60.0 * (h - (int)h);
+			var s = 60.0 * (m - (int)m);
+			return string.Format("{0} {1} {2:0.000} {3}", (int)h, (int)m, s, dir);
 		}
 
 		private string ToAlt(UInt32 a)
 		{
-			double alt = (a / 100.0) - 100000.00;
+			var alt = (a / 100.0) - 100000.00;
 			return string.Format("{0:0.00}m", alt);
-		}
-
-		public RecordLOC(RecordReader rr)
-		{
-			VERSION = rr.ReadByte(); // must be 0!
-			SIZE = rr.ReadByte();
-			HORIZPRE = rr.ReadByte();
-			VERTPRE = rr.ReadByte();
-			LATITUDE = rr.ReadUInt32();
-			LONGITUDE = rr.ReadUInt32();
-			ALTITUDE = rr.ReadUInt32();
 		}
 
 		public override string ToString()

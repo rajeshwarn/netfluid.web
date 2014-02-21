@@ -5,4 +5,3 @@ C:\Users\Matteo\Desktop\NetFluid\netfluid\Examples\9.RegexRoutes\bin\Debug\NetFl
 C:\Users\Matteo\Desktop\NetFluid\netfluid\Examples\9.RegexRoutes\bin\Debug\NetFluid.pdb
 C:\Users\Matteo\Desktop\NetFluid\netfluid\Examples\9.RegexRoutes\obj\Debug\9.RegexRoutes.exe
 C:\Users\Matteo\Desktop\NetFluid\netfluid\Examples\9.RegexRoutes\obj\Debug\9.RegexRoutes.pdb
-C:\Users\Matteo\Desktop\NetFluid\netfluid\Examples\9.RegexRoutes\obj\Debug\09.RegexRoutes.csprojResolveAssemblyReference.cache

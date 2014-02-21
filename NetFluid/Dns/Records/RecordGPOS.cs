@@ -1,4 +1,3 @@
-using System;
 /* 
  * http://tools.ietf.org/rfc/rfc1712.txt
  * 
@@ -38,20 +37,13 @@ using System;
 
  */
 
-namespace Heijden.DNS
+namespace NetFluid.DNS.Records
 {
 	public class RecordGPOS : Record
 	{
 		public string LONGITUDE;
 		public string LATITUDE;
 		public string ALTITUDE;
-
-		public RecordGPOS(RecordReader rr)
-		{
-			LONGITUDE = rr.ReadString();
-			LATITUDE = rr.ReadString();
-			ALTITUDE = rr.ReadString();
-		}
 
 		public override string ToString()
 		{

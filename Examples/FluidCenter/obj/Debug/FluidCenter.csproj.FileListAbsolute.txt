@@ -1,0 +1,15 @@
+C:\Users\Matteo\Desktop\NetFluid\netfluid\Examples\FluidCenter\bin\Debug\FluidCenter.exe.config
+C:\Users\Matteo\Desktop\NetFluid\netfluid\Examples\FluidCenter\obj\Debug\FluidCenter.csprojResolveAssemblyReference.cache
+C:\Users\Matteo\Desktop\NetFluid\netfluid\Examples\FluidCenter\obj\Debug\FluidCenter.Properties.Resources.resources
+C:\Users\Matteo\Desktop\NetFluid\netfluid\Examples\FluidCenter\obj\Debug\FluidCenter.csproj.GenerateResource.Cache
+C:\Users\Matteo\Desktop\NetFluid\netfluid\Examples\FluidCenter\bin\Debug\FluidCenter.exe
+C:\Users\Matteo\Desktop\NetFluid\netfluid\Examples\FluidCenter\bin\Debug\FluidCenter.pdb
+C:\Users\Matteo\Desktop\NetFluid\netfluid\Examples\FluidCenter\bin\Debug\NetFluid.dll
+C:\Users\Matteo\Desktop\NetFluid\netfluid\Examples\FluidCenter\bin\Debug\NetFluid.pdb
+C:\Users\Matteo\Desktop\NetFluid\netfluid\Examples\FluidCenter\obj\Debug\FluidCenter.exe
+C:\Users\Matteo\Desktop\NetFluid\netfluid\Examples\FluidCenter\obj\Debug\FluidCenter.pdb
+C:\Users\Matteo\Desktop\NetFluid\netfluid\Examples\FluidCenter\obj\Debug\FluidCenter.frmMain.resources
+C:\Users\Matteo\Desktop\NetFluid\netfluid\Examples\FluidCenter\bin\Debug\FluidPlayer.exe
+C:\Users\Matteo\Desktop\NetFluid\netfluid\Examples\FluidCenter\bin\Debug\NetFluid.Service.exe
+C:\Users\Matteo\Desktop\NetFluid\netfluid\Examples\FluidCenter\bin\Debug\FluidPlayer.pdb
+C:\Users\Matteo\Desktop\NetFluid\netfluid\Examples\FluidCenter\bin\Debug\NetFluid.Service.pdb

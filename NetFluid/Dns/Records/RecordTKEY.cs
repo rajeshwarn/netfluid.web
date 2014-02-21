@@ -7,7 +7,7 @@ using System;
    The TKEY resource record (RR) has the structure given below.  Its RR
    type code is 249.
 
-      Field       Type         Comment
+      Field       RecordType         Comment
       -----       ----         -------
        Algorithm:   domain
        Inception:   u_int32_t
@@ -15,16 +15,17 @@ using System;
        Mode:        u_int16_t
        Error:       u_int16_t
        Key Size:    u_int16_t
-       Key Data:    octet-stream
+       Key Write:    octet-stream
        Other Size:  u_int16_t
-       Other Data:  octet-stream  undefined by this specification
+       Other Write:  octet-stream  undefined by this specification
 
  */
 
-namespace Heijden.DNS
+namespace NetFluid.DNS.Records
 {
 	public class RecordTKEY : Record
 	{
+        [DomainName]
 		public string ALGORITHM;
 		public UInt32 INCEPTION;
 		public UInt32 EXPIRATION;
@@ -34,19 +35,6 @@ namespace Heijden.DNS
 		public byte[] KEYDATA;
 		public UInt16 OTHERSIZE;
 		public byte[] OTHERDATA;
-
-		public RecordTKEY(RecordReader rr)
-		{
-			ALGORITHM = rr.ReadDomainName();
-			INCEPTION = rr.ReadUInt32();
-			EXPIRATION = rr.ReadUInt32();
-			MODE = rr.ReadUInt16();
-			ERROR = rr.ReadUInt16();
-			KEYSIZE = rr.ReadUInt16();
-			KEYDATA = rr.ReadBytes(KEYSIZE);
-			OTHERSIZE = rr.ReadUInt16();
-			OTHERDATA = rr.ReadBytes(OTHERSIZE);
-		}
 
 		public override string ToString()
 		{

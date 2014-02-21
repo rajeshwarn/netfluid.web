@@ -1,5 +1,3 @@
-using System;
-
 /*
 3.3.13. SOA RDATA format
 
@@ -67,28 +65,19 @@ reason for this provison is to allow future dynamic update facilities to
 change the SOA RR with known semantics.
 */
 
-namespace Heijden.DNS
+namespace NetFluid.DNS.Records
 {
 	public class RecordSOA : Record
 	{
+        [DomainName]
 		public string MNAME;
+        [DomainName]
 		public string RNAME;
 		public uint SERIAL;
 		public uint REFRESH;
 		public uint RETRY;
 		public uint EXPIRE;
 		public uint MINIMUM;
-
-		public RecordSOA(RecordReader rr)
-		{
-			MNAME = rr.ReadDomainName();
-			RNAME = rr.ReadDomainName();
-			SERIAL = rr.ReadUInt32();
-			REFRESH = rr.ReadUInt32();
-			RETRY = rr.ReadUInt32();
-			EXPIRE = rr.ReadUInt32();
-			MINIMUM = rr.ReadUInt32();
-		}
 
 		public override string ToString()
 		{

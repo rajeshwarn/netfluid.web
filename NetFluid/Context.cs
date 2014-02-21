@@ -44,7 +44,7 @@ namespace NetFluid
     public class Context
     {
         private const int BufferSize = 16384;
-        private static readonly char[] separators = new[] {' '};
+        private static readonly char[] separators = {' '};
         private static ConcurrentBag<Tuple<long, string>> ProfilingResults;
         private static bool profiling;
 
@@ -104,8 +104,8 @@ namespace NetFluid
         /// <param name="sock">Client socket</param>
         public Context(Socket sock)
         {
-        	sock.SendTimeout = 5000;
-            sock.ReceiveTimeout = 5000;
+        	sock.SendTimeout = 150;
+            sock.ReceiveTimeout = 150;
 
             IsOpen = true;
             Secure = false;

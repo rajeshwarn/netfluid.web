@@ -25,8 +25,11 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Net;
+using System.Net.NetworkInformation;
+using System.Net.Sockets;
 using System.Reflection;
-using NetFluid.Serialization;
+using System.Text;
 using NetFluid.HTTP;
 using System.Collections.Concurrent;
 
@@ -34,6 +37,221 @@ namespace NetFluid
 {
     public static class Extensions
     {
+        #region EXCEPTION
+
+        public static string ToHTML(this Exception ex)
+        {
+            var sb = new StringBuilder("<h1>Exception "+ex.GetType().Name+"</h1>");
+            sb.Append("<h2>" + ex.Message + "<h2>");
+            sb.Append("<h2>StackTrace</h2>");
+            sb.Append("<div>" + ex.StackTrace + "</div>");
+            if (ex.InnerException!=null)
+            {
+                sb.Append("<h2>Inner exception</h2>");
+                sb.Append(ex.InnerException.ToHTML());
+            }
+            return sb.ToString();
+        }
+        #endregion
+
+        #region IP ADDRESS
+        private static readonly IPAddress _ipv4MulticastNetworkAddress = IPAddress.Parse("224.0.0.0");
+        private static readonly IPAddress _ipv6MulticastNetworkAddress = IPAddress.Parse("FF00::");
+
+        /// <summary>
+        ///     Reverses the order of the bytes of an IPAddress
+        /// </summary>
+        /// <param name="ipAddress"> Instance of the IPAddress, that should be reversed </param>
+        /// <returns> New instance of IPAddress with reversed address </returns>
+        public static IPAddress Reverse(this IPAddress ipAddress)
+        {
+            if (ipAddress == null)
+                throw new ArgumentNullException("ipAddress");
+
+            byte[] addressBytes = ipAddress.GetAddressBytes();
+            var res = new byte[addressBytes.Length];
+
+            for (int i = 0; i < res.Length; i++)
+            {
+                res[i] = addressBytes[addressBytes.Length - i - 1];
+            }
+
+            return new IPAddress(res);
+        }
+
+        /// <summary>
+        ///     Gets the network address for a specified IPAddress and netmask
+        /// </summary>
+        /// <param name="ipAddress"> IPAddress, for that the network address should be returned </param>
+        /// <param name="netmask"> Netmask, that should be used </param>
+        /// <returns> New instance of IPAddress with the network address assigend </returns>
+        public static IPAddress GetNetworkAddress(this IPAddress ipAddress, IPAddress netmask)
+        {
+            if (ipAddress == null)
+                throw new ArgumentNullException("ipAddress");
+
+            if (netmask == null)
+                throw new ArgumentNullException("netMask");
+
+            if (ipAddress.AddressFamily != netmask.AddressFamily)
+                throw new ArgumentOutOfRangeException("netmask",
+                    "Protocoll version of ipAddress and netmask do not match");
+
+            byte[] resultBytes = ipAddress.GetAddressBytes();
+            byte[] ipAddressBytes = ipAddress.GetAddressBytes();
+            byte[] netmaskBytes = netmask.GetAddressBytes();
+
+            for (int i = 0; i < netmaskBytes.Length; i++)
+            {
+                resultBytes[i] = (byte)(ipAddressBytes[i] & netmaskBytes[i]);
+            }
+
+            return new IPAddress(resultBytes);
+        }
+
+        /// <summary>
+        ///     Gets the network address for a specified IPAddress and netmask
+        /// </summary>
+        /// <param name="ipAddress"> IPAddress, for that the network address should be returned </param>
+        /// <param name="netmask"> Netmask in CIDR format </param>
+        /// <returns> New instance of IPAddress with the network address assigend </returns>
+        public static IPAddress GetNetworkAddress(this IPAddress ipAddress, int netmask)
+        {
+            if (ipAddress == null)
+                throw new ArgumentNullException("ipAddress");
+
+            if ((ipAddress.AddressFamily == AddressFamily.InterNetwork) && ((netmask < 0) || (netmask > 32)))
+                throw new ArgumentException("Netmask have to be in range of 0 to 32 on IPv4 addresses", "netmask");
+
+            if ((ipAddress.AddressFamily == AddressFamily.InterNetworkV6) && ((netmask < 0) || (netmask > 128)))
+                throw new ArgumentException("Netmask have to be in range of 0 to 128 on IPv6 addresses", "netmask");
+
+            byte[] ipAddressBytes = ipAddress.GetAddressBytes();
+
+            for (int i = 0; i < ipAddressBytes.Length; i++)
+            {
+                if (netmask >= 8)
+                {
+                    netmask -= 8;
+                }
+                else
+                {
+                    if (BitConverter.IsLittleEndian)
+                    {
+                        ipAddressBytes[i] &= ReverseBitOrder((byte)~(255 << netmask));
+                    }
+                    netmask = 0;
+                }
+            }
+
+            return new IPAddress(ipAddressBytes);
+        }
+
+        /// <summary>
+        ///     Returns the reverse lookup address of an IPAddress
+        /// </summary>
+        /// <param name="ipAddress"> Instance of the IPAddress, that should be used </param>
+        /// <returns> A string with the reverse lookup address </returns>
+        public static string GetReverseLookupAddress(this IPAddress ipAddress)
+        {
+            if (ipAddress == null)
+                throw new ArgumentNullException("ipAddress");
+
+            var res = new StringBuilder();
+
+            byte[] addressBytes = ipAddress.GetAddressBytes();
+
+            if (ipAddress.AddressFamily == AddressFamily.InterNetwork)
+            {
+                for (int i = addressBytes.Length - 1; i >= 0; i--)
+                {
+                    res.Append(addressBytes[i]);
+                    res.Append(".");
+                }
+                res.Append("in-addr.arpa");
+            }
+            else
+            {
+                for (int i = addressBytes.Length - 1; i >= 0; i--)
+                {
+                    string hex = addressBytes[i].ToString("x2");
+                    res.Append(hex[1]);
+                    res.Append(".");
+                    res.Append(hex[0]);
+                    res.Append(".");
+                }
+
+                res.Append("ip6.arpa");
+            }
+
+            return res.ToString();
+        }
+
+        /// <summary>
+        ///     Returns a value indicating whether a ip address is a multicast address
+        /// </summary>
+        /// <param name="ipAddress"> Instance of the IPAddress, that should be used </param>
+        /// <returns> true, if the given address is a multicast address; otherwise, false </returns>
+        public static bool IsMulticast(this IPAddress ipAddress)
+        {
+            if (ipAddress == null)
+                throw new ArgumentNullException("ipAddress");
+
+            if (ipAddress.AddressFamily == AddressFamily.InterNetwork)
+            {
+                return ipAddress.GetNetworkAddress(4).Equals(_ipv4MulticastNetworkAddress);
+            }
+            return ipAddress.GetNetworkAddress(8).Equals(_ipv6MulticastNetworkAddress);
+        }
+
+        /// <summary>
+        ///     Returns the index for the interface which has the ip address assigned
+        /// </summary>
+        /// <param name="ipAddress"> The ip address to look for </param>
+        /// <returns> The index for the interface which has the ip address assigned </returns>
+        public static int GetInterfaceIndex(this IPAddress ipAddress)
+        {
+            if (ipAddress == null)
+                throw new ArgumentNullException("ipAddress");
+
+            IPInterfaceProperties interfaceProperty =
+                NetworkInterface.GetAllNetworkInterfaces()
+                    .Select(n => n.GetIPProperties())
+                    .FirstOrDefault(p => p.UnicastAddresses.Any(a => a.Address.Equals(ipAddress)));
+
+            if (interfaceProperty != null)
+            {
+                if (ipAddress.AddressFamily == AddressFamily.InterNetwork)
+                {
+                    IPv4InterfaceProperties property = interfaceProperty.GetIPv4Properties();
+                    if (property != null)
+                        return property.Index;
+                }
+                else
+                {
+                    IPv6InterfaceProperties property = interfaceProperty.GetIPv6Properties();
+                    if (property != null)
+                        return property.Index;
+                }
+            }
+
+            throw new ArgumentOutOfRangeException("ipAddress",
+                "The given ip address is not configured on the local system");
+        }
+
+        private static byte ReverseBitOrder(byte value)
+        {
+            byte result = 0;
+
+            for (int i = 0; i < 8; i++)
+            {
+                result |= (byte)((((1 << i) & value) >> i) << (7 - i));
+            }
+
+            return result;
+        }
+        #endregion
+
         #region CONCURRENT BAG
 
         /// <summary>
@@ -57,6 +275,28 @@ namespace NetFluid
         #endregion
 
         #region STRING
+
+        /// <summary>
+        /// Check if is a valid credit card number
+        /// </summary>
+        /// <param name="cc">String to check</param>
+        /// 
+        public static bool IsValidCreditCard(this string cc)
+        {
+            int[] deltas = { 0, 1, 2, 3, 4, -4, -3, -2, -1, 0 };
+            var checksum = 0;
+            var chars = cc.Where(char.IsDigit).ToArray();
+
+            for (var i = chars.Length - 1; i > -1; i--)
+            {
+                int j = chars[i] - 48;
+                checksum += j;
+                if (((i - chars.Length) % 2) == 0)
+                    checksum += deltas[j];
+            }
+
+            return ((checksum % 10) == 0);
+        }
 
         /// <summary>
         /// True if the string ends with given char
@@ -351,8 +591,9 @@ namespace NetFluid
         /// </summary>
         public static bool HasAttribute<T>(this Type type, bool inherit) where T : Attribute
         {
-            bool b = type.GetCustomAttributes(inherit).OfType<T>().Any();
-            return b;
+            var b = type.GetCustomAttributes(inherit);
+            var c = b.OfType<T>();
+            return  c.Any();
         }
         /// <summary>
         /// Return all attributes of type T of this type
@@ -405,7 +646,8 @@ namespace NetFluid
         /// </summary>
         public static bool Implements(this Type type, Type @interface)
         {
-            return type.GetInterfaces().Any(x => x.IsGenericType && x.GetGenericTypeDefinition() == @interface);
+            var ints = type.GetInterfaces();
+            return ints.Any(x => x==@interface ||  (x.IsGenericType && x.GetGenericTypeDefinition() == @interface));
         }
 
         /// <summary>

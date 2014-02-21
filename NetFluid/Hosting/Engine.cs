@@ -31,7 +31,6 @@ using System.Reflection;
 using System.Text;
 using NetFluid.Sessions;
 using NetFluid.Cloud;
-using System.Collections.Concurrent;
 
 namespace NetFluid
 {
@@ -242,7 +241,6 @@ namespace NetFluid
             Logger.Log(LogLevel.Debug, "Starting NetFluid Engine");
             Logger.Log(LogLevel.Debug, "Loading calling assembly");
             Load(Assembly.GetEntryAssembly());
-            TemplateCompiler.Preload();
             Interfaces.Start();
             Logger.Log(LogLevel.Debug, "NetFluid web application running");
         }
@@ -257,7 +255,7 @@ namespace NetFluid
             try
             {
                 var types = assembly.GetTypes();
-                var pages = types.Where(type => type.Inherit(typeof (FluidPage)));
+                var pages = types.Where(type => type.Implements(typeof (IMethodExposer)));
 
                 foreach (Type p in pages)
                 {
@@ -286,10 +284,18 @@ namespace NetFluid
         /// <param name="assembly">assembly to be loaded</param>
         public static void Load(Assembly assembly)
         {
+            Logger.Log(LogLevel.Debug,"Loading "+assembly+" into default web application");
+
             try
             {
                 var types = assembly.GetTypes();
-                var pages = types.Where(type => type.Inherit(typeof (FluidPage)));
+                var pages = types.Where(type => type.Implements(typeof (IMethodExposer)));
+
+                if (!pages.Any())
+                {
+                    Logger.Log(LogLevel.Error, "No method exposer found in "+assembly);
+                    return;
+                }
 
                 foreach (Type p in pages)
                 {
@@ -310,38 +316,6 @@ namespace NetFluid
             {
                 Logger.Log(LogLevel.Error, "Error during loading " + assembly + " as default host", ex);
             }
-        }
-
-        /// <summary>
-        /// All connection requiring the specified virtual host are fowarded to specified address
-        /// </summary>
-        /// <param name="host">On wich host connection are fowarded</param>
-        /// <param name="remote">Destination address ("ip:port")</param>
-        public static void AddFowarding(string host, string remote)
-        {
-            IPAddress ip;
-            int port = 80;
-
-            if (remote.Contains(':'))
-            {
-                if (!int.TryParse(remote.Substring(remote.LastIndexOf(':') + 1), out port))
-                    port = 80;
-
-                remote = remote.Substring(0, remote.LastIndexOf(':'));
-            }
-
-            if (!IPAddress.TryParse(remote, out ip))
-            {
-                IPAddress[] addr =
-                    System.Net.Dns.GetHostAddresses(remote).Where(x => x.AddressFamily == AddressFamily.InterNetwork).ToArray();
-
-                if (addr.Length == 0)
-                    throw new Exception("Host " + remote + " not found");
-
-                ip = addr[0];
-            }
-
-            TcpFowarding.SetFowarding(host, new IPEndPoint(ip, port));
         }
 
         /// <summary>

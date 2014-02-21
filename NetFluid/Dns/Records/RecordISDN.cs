@@ -1,4 +1,3 @@
-using System;
 /* http://tools.ietf.org/rfc/rfc1183.txt
 
 3.2. The ISDN RR
@@ -67,24 +66,16 @@ using System;
 
  */
 
-namespace Heijden.DNS
+namespace NetFluid.DNS.Records
 {
 	public class RecordISDN : Record
 	{
-		public string ISDNADDRESS;
+		public string IsdnAddress;
 		public string SA;
-
-		public RecordISDN(RecordReader rr)
-		{
-			ISDNADDRESS = rr.ReadString();
-			SA = rr.ReadString();
-		}
 
 		public override string ToString()
 		{
-			return string.Format("{0} {1}",
-				ISDNADDRESS,
-				SA);
+			return string.Format("{0} {1}",IsdnAddress,SA);
 		}
 
 	}

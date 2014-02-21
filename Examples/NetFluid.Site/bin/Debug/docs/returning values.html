@@ -1,0 +1,156 @@
+<p>
+	Basically in NetFluid you expose methods and return values.
+	<br/>
+	Exposed methods must be public, defined into a class implementing IMethodExposer and assigned to a route.
+	<br/>
+	<strong>Unrouted methods are ignored and completely invisible by the client.</strong> 
+</p>
+<h3>Returning simple values</h3>
+<p>
+	All C# primitive types and Enumerable of them are automatically serialized by the Engine so you don't need to anything.
+	In this example taken from 
+	<a href="https://github.com/matteofabbri/netfluid/blob/master/Examples/1.HelloWorld/Program.cs">
+		First example
+	</a>
+	 our method generate a random number and returns it to the client
+<!-- code formatted by http://manoli.net/csharpformat/ -->
+<pre class="csharpcode">
+[Route(<span class="str">"/"</span>)]
+<span class="kwrd">public</span> <span class="kwrd">int</span> TryMe()
+{
+    <span class="kwrd">var</span> random = <span class="kwrd">new</span> Random();
+    <span class="kwrd">return</span> random.Next();
+}
+</pre>
+</p>
+<h3>Yield to high performance</h3>
+<p>
+	Although you can return Enumerable of values, sometimes you don't want to overload your memory with an array of 1,000,000+ elements.
+	The solution is simple: yield them.
+	<br/>
+	In this example we generate and send to the client, one line at a time our site map, fetching rows from the database
+<!-- code formatted by http://manoli.net/csharpformat/ -->
+<pre class="csharpcode">
+[Route(<span class="str">"/sitemap.xml"</span>)]
+<span class="kwrd">public</span> IEnumerable&lt;<span class="kwrd">string</span>&gt; Sitemap()
+{
+	Response.ContentType = <span class="str">"application/xml"</span>;
+	yield <span class="kwrd">return</span> (<span class="str">"&lt;?xml version=\"1.0\" encoding=\"UTF-8\"?&gt;"</span>);
+	yield <span class="kwrd">return</span> (<span class="str">"&lt;urlset xmlns=\"http://www.sitemaps.org/schemas/sitemap/0.9\"&gt;"</span>);
+
+	<span class="kwrd">foreach</span> (<span class="kwrd">var</span> article <span class="kwrd">in</span> Database.Articles)
+	{
+		<span class="kwrd">var</span> d = DateTime.Now.ToString(<span class="str">"yyyy-MM-dd"</span>);
+		yield <span class="kwrd">return</span> (<span class="str">"&lt;url&gt;&lt;loc&gt;http://myblog.netfluid.org/"</span>+ article.Link +<span class="str">"&lt;/loc&gt;&lt;lastmod&gt;"</span> + d + <span class="str">"&lt;/lastmod&gt;&lt;changefreq&gt;always&lt;/changefreq&gt;&lt;priority&gt;0.8&lt;/priority&gt;&lt;/url&gt;"</span>);
+	}
+	yield <span class="kwrd">return</span> (<span class="str">"&lt;/urlset&gt;"</span>);
+}
+</pre>	
+</p>
+<h3>Web pages and templates</h3>
+<p>
+	it is very rare for your web application to shows to the user only an <span class="kwrd">int</span>, many times you need to show a <strong>webpage</strong>
+	<br/>
+	To do that just a return a FluidTemplate:
+	<!-- code formatted by http://manoli.net/csharpformat/ -->
+<pre class="csharpcode">
+[Route(<span class="str">"/"</span>)]
+<span class="kwrd">public</span> <span class="kwrd">object</span> Index()
+{
+    <span class="kwrd">return</span> <span class="kwrd">new</span> FluidTemplate(<span class="str">"index.html"</span>);
+}
+</pre>
+FluidTemplates are use a NetFluid specific set of instruction but any other kind of template can be used.
+Here you can find <a href="https://github.com/matteofabbri/netfluid.razor"> Razor template set for NetFluid </a>
+</p>
+<h3>Files</h3>
+<p>
+	The classical way to send a file to user is to put it inside a public folder, but if you want more control you can use FileResponse:
+<!-- code formatted by http://manoli.net/csharpformat/ -->
+<pre class="csharpcode">
+[Route(<span class="str">"/download"</span>)]
+<span class="kwrd">public</span> FileResponse Download()
+{
+	<span class="kwrd">string</span> user, pass;
+	<span class="kwrd">if</span> (Authentication.Basic(Context,<span class="str">"Give me your credential to download"</span>,<span class="kwrd">out</span> user, <span class="kwrd">out</span> pass)
+	{
+		<span class="kwrd">if</span> (user==<span class="str">"matteo"</span> &amp;&amp; pass==<span class="str">"lullaby"</span>)
+		{
+			<span class="kwrd">return</span> <span class="kwrd">new</span> FileResponse(<span class="str">"./myfiles/my.zip"</span>);
+		}
+	}
+	<span class="kwrd">return</span> <span class="kwrd">null</span>;
+}
+</pre>
+<h4>File response overloads</h4>
+	<ul>
+		<li>
+			<strong class="csharpcode">FileResponse(<span class="kwrd">string</span> filepath, <span class="kwrd">string</span> filename)</strong>:
+			overrides the file name 
+		</li>
+		<li>
+			<strong class="csharpcode">FileResponse(<span class="kwrd">string</span> filepath, <span class="kwrd">string</span> filename, <span class="kwrd">string</span> mimetype)</strong>:
+			overrides the file name and the mimetype 
+		</li>
+		<li>
+			<strong class="csharpcode">FileResponse(<span class="kwrd">byte</span>[] content, <span class="kwrd">string</span> filename, <span class="kwrd">string</span> mimetype)</strong>:
+			send an array of bytes faking it for a file with specified name and mime type 
+		</li>
+	</ul>
+</p>
+<h3>Complex response</h3>
+<p>
+	The simplest way to send common used complex response is to use NetFluid collection of complex responses:
+	<ul>
+		<li>
+			<strong>JSONResponse</strong>: serialize the object into JSON format and return it to client with relative content type.
+		</li>
+		<li>
+			<strong>XMLResponse</strong>: serialize the object into XML format and return it to client with relative content type.
+		</li>
+		<li>
+			<strong>CSVResponse</strong>: serialize a collection of object into CSV format and return it to client with relative content type.
+		</li>
+		<li>
+			<strong>BinaryResponse</strong>: binary serialize the object into .net binary format and return it to client with relative content type.
+		</li>
+	</ul>
+</p>
+<h3>Extending the response system</h3>
+<p>
+	To customize the response system and add your own type of response all you need to do is to return your own class implementing IResponse interface.
+	In this example we got a file response witch delete the file after sending
+</p>
+<!-- code formatted by http://manoli.net/csharpformat/ -->
+<pre class="csharpcode">
+<span class="kwrd">public</span> <span class="kwrd">class</span> OneShotFileResponse : IResponse
+{
+	<span class="kwrd">public</span> OneShotFileResponse(<span class="kwrd">string</span> filepath)
+	{
+		Path = System.IO.Path.GetFullPath(filepath);
+		FileName = System.IO.Path.GetFileName(Path);
+		MimeType = MimeTypes.GetType(Path);
+	}
+
+	<span class="kwrd">public</span> <span class="kwrd">string</span> FileName { <span class="kwrd">get</span>; <span class="kwrd">set</span>; }
+	<span class="kwrd">public</span> <span class="kwrd">string</span> Path { <span class="kwrd">get</span>; <span class="kwrd">set</span>; }
+	<span class="kwrd">public</span> <span class="kwrd">string</span> MimeType { <span class="kwrd">get</span>; <span class="kwrd">set</span>; }
+
+	<span class="rem">/// &lt;summary&gt;</span>
+	<span class="rem">/// This method is called by the engine after our web app logic</span>
+	<span class="rem">/// &lt;/summary&gt;</span>
+	<span class="rem">/// &lt;param name="cnt"&gt;&lt;/param&gt;</span>
+	<span class="kwrd">public</span> <span class="kwrd">void</span> SendResponse(Context cnt)
+	{
+		cnt.Response.Headers[<span class="str">"Content-Disposition"</span>] = <span class="str">"attachment; filename=\""</span> + FileName + <span class="str">"\""</span>;
+		cnt.Response.ContentType = MimeType;
+		cnt.SendHeaders();
+
+		<span class="kwrd">var</span> fs = <span class="kwrd">new</span> FileStream(Path, FileMode.Open, FileAccess.Read, FileShare.Read);
+		fs.CopyTo(cnt.OutputStream);
+		fs.Close();
+
+		Task.Factory.StartNew(()=&gt;File.Delete(Path));
+	}
+}
+</pre>
