@@ -85,7 +85,14 @@ namespace NetFluid.Service
         {
             foreach (var p in processes)
             {
-                p.Kill();
+                try
+                {
+                    p.Kill();
+                }
+                catch (Exception exception)
+                {
+                    File.WriteAllText(Security.UID(),exception.Message);
+                }
             }
         }
     }

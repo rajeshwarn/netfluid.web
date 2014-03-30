@@ -24,6 +24,7 @@
 using System;
 using System.Collections.Generic;
 using System.Configuration;
+using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text;
@@ -41,12 +42,34 @@ namespace NetFluid
         {
             MainHost = new Host("default");
             Hosts = new Dictionary<string, Host>();
-
+            AppDomain.CurrentDomain.AssemblyResolve += CurrentDomain_AssemblyResolve;
             AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;
             Interfaces = new InterfaceManager();
             Sessions = new MemorySessionManager();
             Cluster = new ClusterManager();
             Logger = new Logger();
+        }
+
+        static Assembly CurrentDomain_AssemblyResolve(object sender, ResolveEventArgs args)
+        {
+            foreach (var dll in Directory.GetFiles("./","*.dll"))
+            {
+                var ass = Assembly.LoadFile(Path.GetFullPath(dll));
+                if (ass!=null && ass.FullName == args.Name)
+                {
+                    return ass;
+                }
+            }
+
+            foreach (var exe in Directory.GetFiles("./", "*.exe"))
+            {
+                var ass = Assembly.LoadFile(Path.GetFullPath(exe));
+                if (ass != null && ass.FullName == args.Name)
+                {
+                    return ass;
+                }
+            }
+            return null;
         }
 
         public static ILogger Logger { get; set; }
@@ -292,7 +315,7 @@ namespace NetFluid
 
                 if (!pages.Any())
                 {
-                    Logger.Log(LogLevel.Error, "No method exposer found in "+assembly);
+                    Logger.Log(LogLevel.Error, "No method exposer found in " + assembly);
                     return;
                 }
 
@@ -309,6 +332,13 @@ namespace NetFluid
                     {
                         MainHost.Load(p);
                     }
+                }
+            }
+            catch (ReflectionTypeLoadException lex)
+            {
+                foreach (var loader in lex.LoaderExceptions)
+                {
+                    Logger.Log(LogLevel.Error, "Error during loading type " + loader.Message + " as default host",loader);
                 }
             }
             catch (Exception ex)
