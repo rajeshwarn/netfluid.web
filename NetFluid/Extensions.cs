@@ -578,6 +578,16 @@ namespace NetFluid
         #endregion
 
         #region TYPE
+
+        /// <summary>
+        /// Return all fields
+        /// </summary>
+        public static FieldInfo[] GetAllFields(this Type type)
+        {
+            return type.GetFields();
+        }
+
+
         /// <summary>
         /// Return the default value of the type
         /// </summary>

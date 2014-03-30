@@ -13,24 +13,49 @@ namespace _11.BigData
     {
         static void Main(string[] args)
         {
-            var cache = new NetFluid.Collections.NDimensionalDictionary<int>();
+            var cache = new NetFluid.Collections.InMemoryOlap();
             var rand = new Random();
-            var coords = new int[32];
 
-            for (int i = 0; i < 4096*4096; i++)
+            for (int k = 0; k < 28; k++)
             {
-                for (int j = 0; j < coords.Length; j++)
+                for (int l = 0; l < 28; l++)
                 {
-                    coords[j] = rand.Next();
-                    rand = new Random(rand.Next());
-                }
-                cache.Set(rand.Next(), coords.Cast<object>().ToArray());
-
-                if (i%1000==0)
-                {
-                    Console.WriteLine(i);
+                    for (int m = 0; m < 28; m++)
+                    {
+                        for (int n = 0; n < 28; n++)
+                        {
+                            for (int o = 0; o < 28; o++)
+                            {
+                                var value = k*l*m*n*o;
+                                cache.Set(value, k, l, m, n, o);
+                            }
+                        }
+                    }
                 }
             }
+
+            Console.WriteLine(cache.Count);
+
+            for (int j = 0; j < 5; j++)
+                for (int k = 0; k < 5; k++)
+                {
+                    for (int l = 0; l < 5; l++)
+                    {
+                        for (int m = 0; m < 5; m++)
+                        {
+                            for (int n = 0; n < 5; n++)
+                            {
+                                for (int o = 0; o < 5; o++)
+                                {
+                                    var value = j * k * l * m * n * o;
+                                    if(value!=(int)cache.Get(value, j, k, l, m, n, o))
+                                        Console.WriteLine("ERROR");
+                                }
+                            }
+                        }
+                    }
+                }
+
             Console.WriteLine("End ! :D");
             Console.ReadLine();
         }

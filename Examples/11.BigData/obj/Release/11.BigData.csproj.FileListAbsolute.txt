@@ -6,3 +6,11 @@ C:\Users\Matteo\Desktop\NetFluid\netfluid\Examples\11.BigData\bin\Release\NetFlu
 C:\Users\Matteo\Desktop\NetFluid\netfluid\Examples\11.BigData\obj\Release\11.BigData.exe
 C:\Users\Matteo\Desktop\NetFluid\netfluid\Examples\11.BigData\obj\Release\11.BigData.pdb
 C:\Users\Matteo\Desktop\NetFluid\netfluid\Examples\11.BigData\obj\Release\11.BigData.csprojResolveAssemblyReference.cache
+C:\Users\Matteo\Desktop\NetFluid\NETFLUID\netfluid\Examples\11.BigData\bin\Release\11.BigData.exe.config
+C:\Users\Matteo\Desktop\NetFluid\NETFLUID\netfluid\Examples\11.BigData\obj\Release\11.BigData.exe
+C:\Users\Matteo\Desktop\NetFluid\NETFLUID\netfluid\Examples\11.BigData\obj\Release\11.BigData.pdb
+C:\Users\Matteo\Desktop\NetFluid\NETFLUID\netfluid\Examples\11.BigData\bin\Release\11.BigData.exe
+C:\Users\Matteo\Desktop\NetFluid\NETFLUID\netfluid\Examples\11.BigData\bin\Release\11.BigData.pdb
+C:\Users\Matteo\Desktop\NetFluid\NETFLUID\netfluid\Examples\11.BigData\bin\Release\NetFluid.dll
+C:\Users\Matteo\Desktop\NetFluid\NETFLUID\netfluid\Examples\11.BigData\bin\Release\NetFluid.pdb
+C:\Users\Matteo\Desktop\NetFluid\NETFLUID\netfluid\Examples\11.BigData\obj\Release\11.BigData.csprojResolveAssemblyReference.cache

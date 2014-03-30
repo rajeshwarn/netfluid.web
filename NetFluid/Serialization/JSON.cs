@@ -343,9 +343,19 @@ namespace NetFluid
                 SerializeArray(obj as Array, builder, tab, spaceless);
                 return;
             }
+            if (obj is TimeSpan)
+            {
+                builder.Write("\"" + ((TimeSpan)obj) + "\"");
+                return;
+            }
+            if (obj is DateTimeOffset)
+            {
+                builder.Write("\"" + ((DateTimeOffset)obj).ToUniversalTime() + "\"");
+                return;
+            }
             if (obj is DateTime)
             {
-                builder.Write(((DateTime) obj).ToUniversalTime().ToString());
+                builder.Write("\"" + ((DateTime)obj).ToUniversalTime() + "\"");
                 return;
             }
             if (obj is Enum)
