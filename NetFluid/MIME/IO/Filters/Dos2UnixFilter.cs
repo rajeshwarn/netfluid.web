@@ -24,81 +24,80 @@
 // THE SOFTWARE.
 //
 
-using System;
+namespace MimeKit.IO.Filters
+{
+    /// <summary>
+    ///     A filter that will convert from Windows/DOS line endings to Unix line endings.
+    /// </summary>
+    public class Dos2UnixFilter : MimeFilterBase
+    {
+        private byte pc;
 
-namespace MimeKit.IO.Filters {
-	/// <summary>
-	/// A filter that will convert from Windows/DOS line endings to Unix line endings.
-	/// </summary>
-	public class Dos2UnixFilter : MimeFilterBase
-	{
-		byte pc;
+        private unsafe int Filter(byte* inbuf, int length, byte* outbuf)
+        {
+            byte* inend = inbuf + length;
+            byte* outptr = outbuf;
+            byte* inptr = inbuf;
 
-		/// <summary>
-		/// Initializes a new instance of the <see cref="MimeKit.IO.Filters.Dos2UnixFilter"/> class.
-		/// </summary>
-		public Dos2UnixFilter ()
-		{
-		}
+            while (inptr < inend)
+            {
+                if (*inptr == (byte) '\n')
+                {
+                    *outptr++ = *inptr;
+                }
+                else
+                {
+                    if (pc == (byte) '\r')
+                        *outptr++ = pc;
 
-		unsafe int Filter (byte* inbuf, int length, byte* outbuf)
-		{
-			byte* inend = inbuf + length;
-			byte* outptr = outbuf;
-			byte* inptr = inbuf;
+                    if (*inptr != (byte) '\r')
+                        *outptr++ = *inptr;
+                }
 
-			while (inptr < inend) {
-				if (*inptr == (byte) '\n') {
-					*outptr++ = *inptr;
-				} else {
-					if (pc == (byte) '\r')
-						*outptr++ = pc;
+                pc = *inptr++;
+            }
 
-					if (*inptr != (byte) '\r')
-						*outptr++ = *inptr;
-				}
+            return (int) (outptr - outbuf);
+        }
 
-				pc = *inptr++;
-			}
+        /// <summary>
+        ///     Filter the specified input.
+        /// </summary>
+        /// <returns>The filtered output.</returns>
+        /// <param name="input">The input buffer.</param>
+        /// <param name="startIndex">The starting index of the input buffer.</param>
+        /// <param name="length">The length of the input buffer, starting at <paramref name="startIndex" />.</param>
+        /// <param name="outputIndex">The output index.</param>
+        /// <param name="outputLength">The output length.</param>
+        /// <param name="flush">If set to <c>true</c>, all internally buffered data should be flushed to the output buffer.</param>
+        protected override byte[] Filter(byte[] input, int startIndex, int length, out int outputIndex,
+            out int outputLength, bool flush)
+        {
+            if (pc == (byte) '\r')
+                EnsureOutputSize(length + 1, false);
+            else
+                EnsureOutputSize(length, false);
 
-			return (int) (outptr - outbuf);
-		}
+            outputIndex = 0;
 
-		/// <summary>
-		/// Filter the specified input.
-		/// </summary>
-		/// <returns>The filtered output.</returns>
-		/// <param name="input">The input buffer.</param>
-		/// <param name="startIndex">The starting index of the input buffer.</param>
-		/// <param name="length">The length of the input buffer, starting at <paramref name="startIndex"/>.</param>
-		/// <param name="outputIndex">The output index.</param>
-		/// <param name="outputLength">The output length.</param>
-		/// <param name="flush">If set to <c>true</c>, all internally buffered data should be flushed to the output buffer.</param>
-		protected override byte[] Filter (byte[] input, int startIndex, int length, out int outputIndex, out int outputLength, bool flush)
-		{
-			if (pc == (byte) '\r')
-				EnsureOutputSize (length + 1, false);
-			else
-				EnsureOutputSize (length, false);
+            unsafe
+            {
+                fixed (byte* inptr = input, outptr = output)
+                {
+                    outputLength = Filter(inptr + startIndex, length, outptr);
+                }
+            }
 
-			outputIndex = 0;
+            return output;
+        }
 
-			unsafe {
-				fixed (byte* inptr = input, outptr = output) {
-					outputLength = Filter (inptr + startIndex, length, outptr);
-				}
-			}
-
-			return output;
-		}
-
-		/// <summary>
-		/// Resets the filter.
-		/// </summary>
-		public override void Reset ()
-		{
-			pc = 0;
-			base.Reset ();
-		}
-	}
+        /// <summary>
+        ///     Resets the filter.
+        /// </summary>
+        public override void Reset()
+        {
+            pc = 0;
+            base.Reset();
+        }
+    }
 }

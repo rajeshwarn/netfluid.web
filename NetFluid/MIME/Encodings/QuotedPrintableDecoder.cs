@@ -25,216 +25,239 @@
 //
 
 using System;
-
 using MimeKit.Utils;
 
-namespace MimeKit.Encodings {
-	/// <summary>
-	/// Incrementally decodes content encoded with the quoted-printable encoding.
-	/// </summary>
-	/// <remarks>
-	/// Quoted-Printable is an encoding often used in MIME to textual content outside
-	/// of the ASCII range in order to ensure that the text remains intact when sent
-	/// via 7bit transports such as SMTP.
-	/// </remarks>
-	public class QuotedPrintableDecoder : IMimeDecoder
-	{
-		enum QpDecoderState : byte {
-			PassThrough,
-			EqualSign,
-			DecodeByte
-		}
+namespace MimeKit.Encodings
+{
+    /// <summary>
+    ///     Incrementally decodes content encoded with the quoted-printable encoding.
+    /// </summary>
+    /// <remarks>
+    ///     Quoted-Printable is an encoding often used in MIME to textual content outside
+    ///     of the ASCII range in order to ensure that the text remains intact when sent
+    ///     via 7bit transports such as SMTP.
+    /// </remarks>
+    public class QuotedPrintableDecoder : IMimeDecoder
+    {
+        private readonly bool rfc2047;
+        private byte saved;
+        private QpDecoderState state;
 
-		QpDecoderState state;
-		readonly bool rfc2047;
-		byte saved;
+        /// <summary>
+        ///     Initializes a new instance of the <see cref="MimeKit.Encodings.QuotedPrintableDecoder" /> class.
+        /// </summary>
+        /// <remarks>
+        ///     Creates a new quoted-printable decoder.
+        /// </remarks>
+        /// <param name='rfc2047'>
+        ///     <c>true</c> if this decoder will be used to decode rfc2047 encoded-word payloads; <c>false</c> otherwise.
+        /// </param>
+        public QuotedPrintableDecoder(bool rfc2047)
+        {
+            this.rfc2047 = rfc2047;
+            Reset();
+        }
 
-		/// <summary>
-		/// Initializes a new instance of the <see cref="MimeKit.Encodings.QuotedPrintableDecoder"/> class.
-		/// </summary>
-		/// <remarks>
-		/// Creates a new quoted-printable decoder.
-		/// </remarks>
-		/// <param name='rfc2047'>
-		/// <c>true</c> if this decoder will be used to decode rfc2047 encoded-word payloads; <c>false</c> otherwise.
-		/// </param>
-		public QuotedPrintableDecoder (bool rfc2047)
-		{
-			this.rfc2047 = rfc2047;
-			Reset ();
-		}
+        /// <summary>
+        ///     Initializes a new instance of the <see cref="MimeKit.Encodings.QuotedPrintableDecoder" /> class.
+        /// </summary>
+        public QuotedPrintableDecoder() : this(false)
+        {
+        }
 
-		/// <summary>
-		/// Initializes a new instance of the <see cref="MimeKit.Encodings.QuotedPrintableDecoder"/> class.
-		/// </summary>
-		public QuotedPrintableDecoder () : this (false)
-		{
-		}
+        /// <summary>
+        ///     Clone the <see cref="QuotedPrintableDecoder" /> with its current state.
+        /// </summary>
+        /// <remarks>
+        ///     Creates a new <see cref="QuotedPrintableDecoder" /> with exactly the same state as the current decoder.
+        /// </remarks>
+        /// <returns>A new <see cref="QuotedPrintableDecoder" /> with identical state.</returns>
+        public IMimeDecoder Clone()
+        {
+            var decoder = new QuotedPrintableDecoder(rfc2047);
 
-		/// <summary>
-		/// Clone the <see cref="QuotedPrintableDecoder"/> with its current state.
-		/// </summary>
-		/// <remarks>
-		/// Creates a new <see cref="QuotedPrintableDecoder"/> with exactly the same state as the current decoder.
-		/// </remarks>
-		/// <returns>A new <see cref="QuotedPrintableDecoder"/> with identical state.</returns>
-		public IMimeDecoder Clone ()
-		{
-			var decoder = new QuotedPrintableDecoder (rfc2047);
+            decoder.state = state;
+            decoder.saved = saved;
 
-			decoder.state = state;
-			decoder.saved = saved;
+            return decoder;
+        }
 
-			return decoder;
-		}
+        /// <summary>
+        ///     Gets the encoding.
+        /// </summary>
+        /// <value>The encoding.</value>
+        public ContentEncoding Encoding
+        {
+            get { return ContentEncoding.QuotedPrintable; }
+        }
 
-		/// <summary>
-		/// Gets the encoding.
-		/// </summary>
-		/// <value>The encoding.</value>
-		public ContentEncoding Encoding {
-			get { return ContentEncoding.QuotedPrintable; }
-		}
+        /// <summary>
+        ///     Estimates the length of the output.
+        /// </summary>
+        /// <remarks>
+        ///     Estimates the number of bytes needed to decode the specified number of input bytes.
+        /// </remarks>
+        /// <returns>The estimated output length.</returns>
+        /// <param name='inputLength'>The input length.</param>
+        public int EstimateOutputLength(int inputLength)
+        {
+            // add an extra 3 bytes for the saved input byte from previous decode step (in case it is invalid hex)
+            return inputLength + 3;
+        }
 
-		/// <summary>
-		/// Estimates the length of the output.
-		/// </summary>
-		/// <remarks>
-		/// Estimates the number of bytes needed to decode the specified number of input bytes.
-		/// </remarks>
-		/// <returns>The estimated output length.</returns>
-		/// <param name='inputLength'>The input length.</param>
-		public int EstimateOutputLength (int inputLength)
-		{
-			// add an extra 3 bytes for the saved input byte from previous decode step (in case it is invalid hex)
-			return inputLength + 3;
-		}
+        /// <summary>
+        ///     Decodes the specified input into the output buffer.
+        /// </summary>
+        /// <returns>The number of bytes written to the output buffer.</returns>
+        /// <param name='input'>A pointer to the beginning of the input buffer.</param>
+        /// <param name='length'>The length of the input buffer.</param>
+        /// <param name='output'>A pointer to the beginning of the output buffer.</param>
+        public unsafe int Decode(byte* input, int length, byte* output)
+        {
+            byte* inend = input + length;
+            byte* outptr = output;
+            byte* inptr = input;
+            byte c;
 
-		void ValidateArguments (byte[] input, int startIndex, int length, byte[] output)
-		{
-			if (input == null)
-				throw new ArgumentNullException ("input");
+            while (inptr < inend)
+            {
+                switch (state)
+                {
+                    case QpDecoderState.PassThrough:
+                        while (inptr < inend)
+                        {
+                            c = *inptr++;
 
-			if (startIndex < 0 || startIndex > input.Length)
-				throw new ArgumentOutOfRangeException ("startIndex");
+                            if (c == '=')
+                            {
+                                state = QpDecoderState.EqualSign;
+                                break;
+                            }
+                            if (rfc2047 && c == '_')
+                            {
+                                *outptr++ = (byte) ' ';
+                            }
+                            else
+                            {
+                                *outptr++ = c;
+                            }
+                        }
+                        break;
+                    case QpDecoderState.EqualSign:
+                        c = *inptr++;
+                        if (c == '\n')
+                        {
+                            // this is a soft break ("=\n")
+                            state = QpDecoderState.PassThrough;
+                        }
+                        else
+                        {
+                            state = QpDecoderState.DecodeByte;
+                            saved = c;
+                        }
+                        break;
+                    case QpDecoderState.DecodeByte:
+                        c = *inptr++;
+                        if (c.IsXDigit() && saved.IsXDigit())
+                        {
+                            saved = saved.ToXDigit();
+                            c = c.ToXDigit();
 
-			if (length < 0 || startIndex + length > input.Length)
-				throw new ArgumentOutOfRangeException ("length");
+                            *outptr++ = (byte) ((saved << 4) | c);
+                        }
+                        else if (saved == '\r' && c == '\n')
+                        {
+                            // end-of-line
+                        }
+                        else
+                        {
+                            // invalid encoded sequence - pass it through undecoded
+                            *outptr++ = (byte) '=';
+                            *outptr++ = saved;
+                            *outptr++ = c;
+                        }
 
-			if (output == null)
-				throw new ArgumentNullException ("output");
+                        state = QpDecoderState.PassThrough;
+                        break;
+                }
+            }
 
-			if (output.Length < EstimateOutputLength (length))
-				throw new ArgumentException ("The output buffer is not large enough to contain the decoded input.", "output");
-		}
+            return (int) (outptr - output);
+        }
 
-		/// <summary>
-		/// Decodes the specified input into the output buffer.
-		/// </summary>
-		/// <returns>The number of bytes written to the output buffer.</returns>
-		/// <param name='input'>A pointer to the beginning of the input buffer.</param>
-		/// <param name='length'>The length of the input buffer.</param>
-		/// <param name='output'>A pointer to the beginning of the output buffer.</param>
-		public unsafe int Decode (byte* input, int length, byte* output)
-		{
-			byte* inend = input + length;
-			byte* outptr = output;
-			byte* inptr = input;
-			byte c;
+        /// <summary>
+        ///     Decodes the specified input into the output buffer.
+        /// </summary>
+        /// <returns>The number of bytes written to the output buffer.</returns>
+        /// <param name='input'>The input buffer.</param>
+        /// <param name='startIndex'>The starting index of the input buffer.</param>
+        /// <param name='length'>The length of the input buffer.</param>
+        /// <param name='output'>The output buffer.</param>
+        /// <exception cref="System.ArgumentNullException">
+        ///     <para><paramref name="input" /> is <c>null</c>.</para>
+        ///     <para>-or-</para>
+        ///     <para><paramref name="output" /> is <c>null</c>.</para>
+        /// </exception>
+        /// <exception cref="System.ArgumentOutOfRangeException">
+        ///     <paramref name="startIndex" /> and <paramref name="length" /> do not specify
+        ///     a valid range in the <paramref name="input" /> byte array.
+        /// </exception>
+        /// <exception cref="System.ArgumentException">
+        ///     <para><paramref name="output" /> is not large enough to contain the encoded content.</para>
+        ///     <para>
+        ///         Use the <see cref="EstimateOutputLength" /> method to properly determine the
+        ///         necessary length of the <paramref name="output" /> byte array.
+        ///     </para>
+        /// </exception>
+        public int Decode(byte[] input, int startIndex, int length, byte[] output)
+        {
+            ValidateArguments(input, startIndex, length, output);
 
-			while (inptr < inend) {
-				switch (state) {
-				case QpDecoderState.PassThrough:
-					while (inptr < inend) {
-						c = *inptr++;
+            unsafe
+            {
+                fixed (byte* inptr = input, outptr = output)
+                {
+                    return Decode(inptr + startIndex, length, outptr);
+                }
+            }
+        }
 
-						if (c == '=') {
-							state = QpDecoderState.EqualSign;
-							break;
-						} else if (rfc2047 && c == '_') {
-							*outptr++ = (byte) ' ';
-						} else {
-							*outptr++ = c;
-						}
-					}
-					break;
-				case QpDecoderState.EqualSign:
-					c = *inptr++;
-					if (c == '\n') {
-						// this is a soft break ("=\n")
-						state = QpDecoderState.PassThrough;
-					} else {
-						state = QpDecoderState.DecodeByte;
-						saved = c;
-					}
-					break;
-				case QpDecoderState.DecodeByte:
-					c = *inptr++;
-					if (c.IsXDigit () && saved.IsXDigit ()) {
-						saved = saved.ToXDigit ();
-						c = c.ToXDigit ();
+        /// <summary>
+        ///     Resets the decoder.
+        /// </summary>
+        /// <remarks>
+        ///     Resets the state of the decoder.
+        /// </remarks>
+        public void Reset()
+        {
+            state = QpDecoderState.PassThrough;
+            saved = 0;
+        }
 
-						*outptr++ = (byte) ((saved << 4) | c);
-					} else if (saved == '\r' && c == '\n') {
-						// end-of-line
-					} else {
-						// invalid encoded sequence - pass it through undecoded
-						*outptr++ = (byte) '=';
-						*outptr++ = saved;
-						*outptr++ = c;
-					}
+        private void ValidateArguments(byte[] input, int startIndex, int length, byte[] output)
+        {
+            if (input == null)
+                throw new ArgumentNullException("input");
 
-					state = QpDecoderState.PassThrough;
-					break;
-				}
-			}
+            if (startIndex < 0 || startIndex > input.Length)
+                throw new ArgumentOutOfRangeException("startIndex");
 
-			return (int) (outptr - output);
-		}
+            if (length < 0 || startIndex + length > input.Length)
+                throw new ArgumentOutOfRangeException("length");
 
-		/// <summary>
-		/// Decodes the specified input into the output buffer.
-		/// </summary>
-		/// <returns>The number of bytes written to the output buffer.</returns>
-		/// <param name='input'>The input buffer.</param>
-		/// <param name='startIndex'>The starting index of the input buffer.</param>
-		/// <param name='length'>The length of the input buffer.</param>
-		/// <param name='output'>The output buffer.</param>
-		/// <exception cref="System.ArgumentNullException">
-		/// <para><paramref name="input"/> is <c>null</c>.</para>
-		/// <para>-or-</para>
-		/// <para><paramref name="output"/> is <c>null</c>.</para>
-		/// </exception>
-		/// <exception cref="System.ArgumentOutOfRangeException">
-		/// <paramref name="startIndex"/> and <paramref name="length"/> do not specify
-		/// a valid range in the <paramref name="input"/> byte array.
-		/// </exception>
-		/// <exception cref="System.ArgumentException">
-		/// <para><paramref name="output"/> is not large enough to contain the encoded content.</para>
-		/// <para>Use the <see cref="EstimateOutputLength"/> method to properly determine the 
-		/// necessary length of the <paramref name="output"/> byte array.</para>
-		/// </exception>
-		public int Decode (byte[] input, int startIndex, int length, byte[] output)
-		{
-			ValidateArguments (input, startIndex, length, output);
+            if (output == null)
+                throw new ArgumentNullException("output");
 
-			unsafe {
-				fixed (byte* inptr = input, outptr = output) {
-					return Decode (inptr + startIndex, length, outptr);
-				}
-			}
-		}
+            if (output.Length < EstimateOutputLength(length))
+                throw new ArgumentException("The output buffer is not large enough to contain the decoded input.",
+                    "output");
+        }
 
-		/// <summary>
-		/// Resets the decoder.
-		/// </summary>
-		/// <remarks>
-		/// Resets the state of the decoder.
-		/// </remarks>
-		public void Reset ()
-		{
-			state = QpDecoderState.PassThrough;
-			saved = 0;
-		}
-	}
+        private enum QpDecoderState : byte
+        {
+            PassThrough,
+            EqualSign,
+            DecodeByte
+        }
+    }
 }

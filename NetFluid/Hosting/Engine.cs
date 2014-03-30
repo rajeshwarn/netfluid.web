@@ -136,7 +136,8 @@ namespace NetFluid
         {
             try
             {
-                var settings = ConfigurationManager.OpenExeConfiguration(path).GetSection("NetFluidSettings") as Settings;
+                var s = ConfigurationManager.OpenExeConfiguration(path).GetSection("NetFluidSettings");
+                var settings = s as Settings;
 
                 if (settings != null)
                 {

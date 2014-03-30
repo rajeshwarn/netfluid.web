@@ -25,403 +25,429 @@
 //
 
 using System;
-using System.IO;
 using System.Collections.Generic;
+using System.IO;
 
 namespace MimeKit.IO
 {
-	/// <summary>
-	/// An efficient memory stream implementation that sacrifices the ability to
-	/// get access to the internal byte buffer in order to drastically improve
-	/// performance.
-	/// </summary>
-	/// <remarks>
-	/// Instead of resizing an internal byte array, the <see cref="MemoryBlockStream"/>
-	/// chains blocks of non-contiguous memory. This helps improve performance by avoiding
-	/// unneeded copying of data from the old array to the newly allocated array as well
-	/// as the zeroing of the newly allocated array.
-	/// </remarks>
-	public class MemoryBlockStream : Stream
-	{
-		const long MaxCapacity = int.MaxValue * BlockSize;
-		const long BlockSize = 2048;
+    /// <summary>
+    ///     An efficient memory stream implementation that sacrifices the ability to
+    ///     get access to the internal byte buffer in order to drastically improve
+    ///     performance.
+    /// </summary>
+    /// <remarks>
+    ///     Instead of resizing an internal byte array, the <see cref="MemoryBlockStream" />
+    ///     chains blocks of non-contiguous memory. This helps improve performance by avoiding
+    ///     unneeded copying of data from the old array to the newly allocated array as well
+    ///     as the zeroing of the newly allocated array.
+    /// </remarks>
+    public class MemoryBlockStream : Stream
+    {
+        private const long MaxCapacity = int.MaxValue*BlockSize;
+        private const long BlockSize = 2048;
 
-		readonly List<byte[]> blocks = new List<byte[]> ();
-		long position, length;
-		bool disposed;
+        private readonly List<byte[]> blocks = new List<byte[]>();
+        private bool disposed;
+        private long length;
+        private long position;
 
-		/// <summary>
-		/// Initializes a new instance of the <see cref="MimeKit.IO.MemoryBlockStream"/> class.
-		/// </summary>
-		/// <remarks>
-		/// Creates a new <see cref="MemoryBlockStream"/> with an initial memory block
-		/// of 2048 bytes.
-		/// </remarks>
-		public MemoryBlockStream ()
-		{
-			blocks.Add (new byte[BlockSize]);
-		}
+        /// <summary>
+        ///     Initializes a new instance of the <see cref="MimeKit.IO.MemoryBlockStream" /> class.
+        /// </summary>
+        /// <remarks>
+        ///     Creates a new <see cref="MemoryBlockStream" /> with an initial memory block
+        ///     of 2048 bytes.
+        /// </remarks>
+        public MemoryBlockStream()
+        {
+            blocks.Add(new byte[BlockSize]);
+        }
 
-		/// <summary>
-		/// Copies the memory stream into a byte array.
-		/// </summary>
-		/// <remarks>
-		/// Copies all of the stream data into a newly allocated byte array.
-		/// </remarks>
-		/// <returns>The array.</returns>
-		public byte[] ToArray ()
-		{
-			var array = new byte[length];
-			int need = (int) length;
-			int arrayIndex = 0;
-			int nread = 0;
-			int block = 0;
+        /// <summary>
+        ///     Copies the memory stream into a byte array.
+        /// </summary>
+        /// <remarks>
+        ///     Copies all of the stream data into a newly allocated byte array.
+        /// </remarks>
+        /// <returns>The array.</returns>
+        public byte[] ToArray()
+        {
+            var array = new byte[length];
+            var need = (int) length;
+            int arrayIndex = 0;
+            int nread = 0;
+            int block = 0;
 
-			while (nread < length) {
-				int n = Math.Min ((int) BlockSize, need);
-				Buffer.BlockCopy (blocks[block], 0, array, arrayIndex, n);
-				arrayIndex += n;
-				nread += n;
-				need -= n;
-				block++;
-			}
+            while (nread < length)
+            {
+                int n = Math.Min((int) BlockSize, need);
+                Buffer.BlockCopy(blocks[block], 0, array, arrayIndex, n);
+                arrayIndex += n;
+                nread += n;
+                need -= n;
+                block++;
+            }
 
-			return array;
-		}
+            return array;
+        }
 
-		void CheckDisposed ()
-		{
-			if (disposed)
-				throw new ObjectDisposedException ("stream");
-		}
+        private void CheckDisposed()
+        {
+            if (disposed)
+                throw new ObjectDisposedException("stream");
+        }
 
-		#region implemented abstract members of Stream
+        /// <summary>
+        ///     Disposes the stream.
+        /// </summary>
+        /// <remarks>
+        ///     Sets the internal disposed state to <c>true</c>.
+        /// </remarks>
+        /// <param name="disposing">
+        ///     If set to <c>true</c>, the stream is being disposed
+        ///     via the <see cref="System.IO.Stream.Dispose()" /> method.
+        /// </param>
+        protected override void Dispose(bool disposing)
+        {
+            base.Dispose(disposing);
+            disposed = true;
+        }
 
-		/// <summary>
-		/// Checks whether or not the stream supports reading.
-		/// </summary>
-		/// <remarks>
-		/// The <see cref="MemoryBlockStream"/> is always readable.
-		/// </remarks>
-		/// <value><c>true</c> if the stream supports reading; otherwise, <c>false</c>.</value>
-		public override bool CanRead {
-			get { return true; }
-		}
+        #region implemented abstract members of Stream
 
-		/// <summary>
-		/// Checks whether or not the stream supports writing.
-		/// </summary>
-		/// <remarks>
-		/// The <see cref="MemoryBlockStream"/> is always writable.
-		/// </remarks>
-		/// <value><c>true</c> if the stream supports writing; otherwise, <c>false</c>.</value>
-		public override bool CanWrite {
-			get { return true; }
-		}
+        /// <summary>
+        ///     Checks whether or not the stream supports reading.
+        /// </summary>
+        /// <remarks>
+        ///     The <see cref="MemoryBlockStream" /> is always readable.
+        /// </remarks>
+        /// <value><c>true</c> if the stream supports reading; otherwise, <c>false</c>.</value>
+        public override bool CanRead
+        {
+            get { return true; }
+        }
 
-		/// <summary>
-		/// Checks whether or not the stream supports seeking.
-		/// </summary>
-		/// <remarks>
-		/// The <see cref="MemoryBlockStream"/> is always seekable.
-		/// </remarks>
-		/// <value><c>true</c> if the stream supports seeking; otherwise, <c>false</c>.</value>
-		public override bool CanSeek {
-			get { return true; }
-		}
+        /// <summary>
+        ///     Checks whether or not the stream supports writing.
+        /// </summary>
+        /// <remarks>
+        ///     The <see cref="MemoryBlockStream" /> is always writable.
+        /// </remarks>
+        /// <value><c>true</c> if the stream supports writing; otherwise, <c>false</c>.</value>
+        public override bool CanWrite
+        {
+            get { return true; }
+        }
 
-		/// <summary>
-		/// Checks whether or not reading and writing to the stream can timeout.
-		/// </summary>
-		/// <remarks>
-		/// The <see cref="MemoryBlockStream"/> does not support timing out.
-		/// </remarks>
-		/// <value><c>true</c> if reading and writing to the stream can timeout; otherwise, <c>false</c>.</value>
-		public override bool CanTimeout {
-			get { return false; }
-		}
+        /// <summary>
+        ///     Checks whether or not the stream supports seeking.
+        /// </summary>
+        /// <remarks>
+        ///     The <see cref="MemoryBlockStream" /> is always seekable.
+        /// </remarks>
+        /// <value><c>true</c> if the stream supports seeking; otherwise, <c>false</c>.</value>
+        public override bool CanSeek
+        {
+            get { return true; }
+        }
 
-		/// <summary>
-		/// Gets the length of the stream, in bytes.
-		/// </summary>
-		/// <value>The length of the stream, in bytes.</value>
-		/// <exception cref="System.ObjectDisposedException">
-		/// The stream has been disposed.
-		/// </exception>
-		public override long Length {
-			get {
-				CheckDisposed ();
+        /// <summary>
+        ///     Checks whether or not reading and writing to the stream can timeout.
+        /// </summary>
+        /// <remarks>
+        ///     The <see cref="MemoryBlockStream" /> does not support timing out.
+        /// </remarks>
+        /// <value><c>true</c> if reading and writing to the stream can timeout; otherwise, <c>false</c>.</value>
+        public override bool CanTimeout
+        {
+            get { return false; }
+        }
 
-				return length;
-			}
-		}
+        /// <summary>
+        ///     Gets the length of the stream, in bytes.
+        /// </summary>
+        /// <value>The length of the stream, in bytes.</value>
+        /// <exception cref="System.ObjectDisposedException">
+        ///     The stream has been disposed.
+        /// </exception>
+        public override long Length
+        {
+            get
+            {
+                CheckDisposed();
 
-		/// <summary>
-		/// Gets or sets the position within the current stream.
-		/// </summary>
-		/// <value>The position of the stream.</value>
-		/// <exception cref="System.IO.IOException">
-		/// An I/O error occurred.
-		/// </exception>
-		/// <exception cref="System.NotSupportedException">
-		/// The stream does not support seeking.
-		/// </exception>
-		/// <exception cref="System.ObjectDisposedException">
-		/// The stream has been disposed.
-		/// </exception>
-		public override long Position {
-			get { return position; }
-			set { Seek (value, SeekOrigin.Begin); }
-		}
+                return length;
+            }
+        }
 
-		static void ValidateArguments (byte[] buffer, int offset, int count)
-		{
-			if (buffer == null)
-				throw new ArgumentNullException ("buffer");
+        /// <summary>
+        ///     Gets or sets the position within the current stream.
+        /// </summary>
+        /// <value>The position of the stream.</value>
+        /// <exception cref="System.IO.IOException">
+        ///     An I/O error occurred.
+        /// </exception>
+        /// <exception cref="System.NotSupportedException">
+        ///     The stream does not support seeking.
+        /// </exception>
+        /// <exception cref="System.ObjectDisposedException">
+        ///     The stream has been disposed.
+        /// </exception>
+        public override long Position
+        {
+            get { return position; }
+            set { Seek(value, SeekOrigin.Begin); }
+        }
 
-			if (offset < 0 || offset > buffer.Length)
-				throw new ArgumentOutOfRangeException ("offset");
+        private static void ValidateArguments(byte[] buffer, int offset, int count)
+        {
+            if (buffer == null)
+                throw new ArgumentNullException("buffer");
 
-			if (count < 0 || offset + count > buffer.Length)
-				throw new ArgumentOutOfRangeException ("count");
-		}
+            if (offset < 0 || offset > buffer.Length)
+                throw new ArgumentOutOfRangeException("offset");
 
-		/// <summary>
-		/// Reads a sequence of bytes from the stream and advances the position
-		/// within the stream by the number of bytes read.
-		/// </summary>
-		/// <returns>The total number of bytes read into the buffer. This can be less than the number of bytes requested if that many
-		/// bytes are not currently available, or zero (0) if the end of the stream has been reached.</returns>
-		/// <param name="buffer">The buffer to read data into.</param>
-		/// <param name="offset">The offset into the buffer to start reading data.</param>
-		/// <param name="count">The number of bytes to read.</param>
-		/// <exception cref="System.ArgumentNullException">
-		/// <paramref name="buffer"/> is <c>null</c>.
-		/// </exception>
-		/// <exception cref="System.ArgumentOutOfRangeException">
-		/// <para><paramref name="offset"/> is less than zero or greater than the length of <paramref name="buffer"/>.</para>
-		/// <para>-or-</para>
-		/// <para>The <paramref name="buffer"/> is not large enough to contain <paramref name="count"/> bytes strting
-		/// at the specified <paramref name="offset"/>.</para>
-		/// </exception>
-		/// <exception cref="System.ObjectDisposedException">
-		/// The stream has been disposed.
-		/// </exception>
-		/// <exception cref="System.IO.IOException">
-		/// An I/O error occurred.
-		/// </exception>
-		public override int Read (byte[] buffer, int offset, int count)
-		{
-			CheckDisposed ();
+            if (count < 0 || offset + count > buffer.Length)
+                throw new ArgumentOutOfRangeException("count");
+        }
 
-			ValidateArguments (buffer, offset, count);
+        /// <summary>
+        ///     Reads a sequence of bytes from the stream and advances the position
+        ///     within the stream by the number of bytes read.
+        /// </summary>
+        /// <returns>
+        ///     The total number of bytes read into the buffer. This can be less than the number of bytes requested if that many
+        ///     bytes are not currently available, or zero (0) if the end of the stream has been reached.
+        /// </returns>
+        /// <param name="buffer">The buffer to read data into.</param>
+        /// <param name="offset">The offset into the buffer to start reading data.</param>
+        /// <param name="count">The number of bytes to read.</param>
+        /// <exception cref="System.ArgumentNullException">
+        ///     <paramref name="buffer" /> is <c>null</c>.
+        /// </exception>
+        /// <exception cref="System.ArgumentOutOfRangeException">
+        ///     <para><paramref name="offset" /> is less than zero or greater than the length of <paramref name="buffer" />.</para>
+        ///     <para>-or-</para>
+        ///     <para>
+        ///         The <paramref name="buffer" /> is not large enough to contain <paramref name="count" /> bytes strting
+        ///         at the specified <paramref name="offset" />.
+        ///     </para>
+        /// </exception>
+        /// <exception cref="System.ObjectDisposedException">
+        ///     The stream has been disposed.
+        /// </exception>
+        /// <exception cref="System.IO.IOException">
+        ///     An I/O error occurred.
+        /// </exception>
+        public override int Read(byte[] buffer, int offset, int count)
+        {
+            CheckDisposed();
 
-			if (position == MaxCapacity)
-				return 0;
+            ValidateArguments(buffer, offset, count);
 
-			int max = Math.Min ((int) (length - position), count);
-			int startIndex = (int) (position % BlockSize);
-			int block = (int) (position / BlockSize);
-			int nread = 0;
+            if (position == MaxCapacity)
+                return 0;
 
-			while (nread < max && block < blocks.Count) {
-				int n = Math.Min ((int) BlockSize - startIndex, max - nread);
-				Buffer.BlockCopy (blocks[block], startIndex, buffer, offset + nread, n);
-				startIndex = 0;
-				nread += n;
-				block++;
-			}
+            int max = Math.Min((int) (length - position), count);
+            var startIndex = (int) (position%BlockSize);
+            var block = (int) (position/BlockSize);
+            int nread = 0;
 
-			position += nread;
+            while (nread < max && block < blocks.Count)
+            {
+                int n = Math.Min((int) BlockSize - startIndex, max - nread);
+                Buffer.BlockCopy(blocks[block], startIndex, buffer, offset + nread, n);
+                startIndex = 0;
+                nread += n;
+                block++;
+            }
 
-			return nread;
-		}
+            position += nread;
 
-		/// <summary>
-		/// Writes a sequence of bytes to the stream and advances the current
-		/// position within this stream by the number of bytes written.
-		/// </summary>
-		/// <remarks>
-		/// Writes the entire buffer to the buffer, adding memory blocks as needed.
-		/// </remarks>
-		/// <param name='buffer'>The buffer to write.</param>
-		/// <param name='offset'>The offset of the first byte to write.</param>
-		/// <param name='count'>The number of bytes to write.</param>
-		/// <exception cref="System.ArgumentNullException">
-		/// <paramref name="buffer"/> is <c>null</c>.
-		/// </exception>
-		/// <exception cref="System.ArgumentOutOfRangeException">
-		/// <para><paramref name="offset"/> is less than zero or greater than the length of <paramref name="buffer"/>.</para>
-		/// <para>-or-</para>
-		/// <para>The <paramref name="buffer"/> is not large enough to contain <paramref name="count"/> bytes strting
-		/// at the specified <paramref name="offset"/>.</para>
-		/// </exception>
-		/// <exception cref="System.ObjectDisposedException">
-		/// The stream has been disposed.
-		/// </exception>
-		/// <exception cref="System.NotSupportedException">
-		/// The stream does not support writing.
-		/// </exception>
-		/// <exception cref="System.IO.IOException">
-		/// An I/O error occurred.
-		/// </exception>
-		public override void Write (byte[] buffer, int offset, int count)
-		{
-			CheckDisposed ();
+            return nread;
+        }
 
-			ValidateArguments (buffer, offset, count);
+        /// <summary>
+        ///     Writes a sequence of bytes to the stream and advances the current
+        ///     position within this stream by the number of bytes written.
+        /// </summary>
+        /// <remarks>
+        ///     Writes the entire buffer to the buffer, adding memory blocks as needed.
+        /// </remarks>
+        /// <param name='buffer'>The buffer to write.</param>
+        /// <param name='offset'>The offset of the first byte to write.</param>
+        /// <param name='count'>The number of bytes to write.</param>
+        /// <exception cref="System.ArgumentNullException">
+        ///     <paramref name="buffer" /> is <c>null</c>.
+        /// </exception>
+        /// <exception cref="System.ArgumentOutOfRangeException">
+        ///     <para><paramref name="offset" /> is less than zero or greater than the length of <paramref name="buffer" />.</para>
+        ///     <para>-or-</para>
+        ///     <para>
+        ///         The <paramref name="buffer" /> is not large enough to contain <paramref name="count" /> bytes strting
+        ///         at the specified <paramref name="offset" />.
+        ///     </para>
+        /// </exception>
+        /// <exception cref="System.ObjectDisposedException">
+        ///     The stream has been disposed.
+        /// </exception>
+        /// <exception cref="System.NotSupportedException">
+        ///     The stream does not support writing.
+        /// </exception>
+        /// <exception cref="System.IO.IOException">
+        ///     An I/O error occurred.
+        /// </exception>
+        public override void Write(byte[] buffer, int offset, int count)
+        {
+            CheckDisposed();
 
-			if (position + count >= MaxCapacity)
-				throw new IOException (string.Format ("Cannot exceed {0} bytes", MaxCapacity));
+            ValidateArguments(buffer, offset, count);
 
-			int startIndex = (int) (position % BlockSize);
-			long capacity = blocks.Count * BlockSize;
-			int block = (int) (position / BlockSize);
-			int nwritten = 0;
+            if (position + count >= MaxCapacity)
+                throw new IOException(string.Format("Cannot exceed {0} bytes", MaxCapacity));
 
-			while (capacity < position + count) {
-				blocks.Add (new byte[BlockSize]);
-				capacity += BlockSize;
-			}
+            var startIndex = (int) (position%BlockSize);
+            long capacity = blocks.Count*BlockSize;
+            var block = (int) (position/BlockSize);
+            int nwritten = 0;
 
-			while (nwritten < count) {
-				int n = Math.Min ((int) BlockSize - startIndex, count - nwritten);
-				Buffer.BlockCopy (buffer, offset + nwritten, blocks[block], startIndex, n);
-				startIndex = 0;
-				nwritten += n;
-				block++;
-			}
+            while (capacity < position + count)
+            {
+                blocks.Add(new byte[BlockSize]);
+                capacity += BlockSize;
+            }
 
-			position += nwritten;
+            while (nwritten < count)
+            {
+                int n = Math.Min((int) BlockSize - startIndex, count - nwritten);
+                Buffer.BlockCopy(buffer, offset + nwritten, blocks[block], startIndex, n);
+                startIndex = 0;
+                nwritten += n;
+                block++;
+            }
 
-			length = Math.Max (length, position);
-		}
+            position += nwritten;
 
-		/// <summary>
-		/// Sets the position within the current stream.
-		/// </summary>
-		/// <returns>The new position within the stream.</returns>
-		/// <param name="offset">The offset into the stream relative to the <paramref name="origin"/>.</param>
-		/// <param name="origin">The origin to seek from.</param>
-		/// <exception cref="System.ArgumentOutOfRangeException">
-		/// <paramref name="origin"/> is not a valid <see cref="System.IO.SeekOrigin"/>. 
-		/// </exception>
-		/// <exception cref="System.ObjectDisposedException">
-		/// The stream has been disposed.
-		/// </exception>
-		/// <exception cref="System.IO.IOException">
-		/// An I/O error occurred.
-		/// </exception>
-		public override long Seek (long offset, SeekOrigin origin)
-		{
-			long real;
+            length = Math.Max(length, position);
+        }
 
-			CheckDisposed ();
+        /// <summary>
+        ///     Sets the position within the current stream.
+        /// </summary>
+        /// <returns>The new position within the stream.</returns>
+        /// <param name="offset">The offset into the stream relative to the <paramref name="origin" />.</param>
+        /// <param name="origin">The origin to seek from.</param>
+        /// <exception cref="System.ArgumentOutOfRangeException">
+        ///     <paramref name="origin" /> is not a valid <see cref="System.IO.SeekOrigin" />.
+        /// </exception>
+        /// <exception cref="System.ObjectDisposedException">
+        ///     The stream has been disposed.
+        /// </exception>
+        /// <exception cref="System.IO.IOException">
+        ///     An I/O error occurred.
+        /// </exception>
+        public override long Seek(long offset, SeekOrigin origin)
+        {
+            long real;
 
-			switch (origin) {
-			case SeekOrigin.Begin:
-				real = offset;
-				break;
-			case SeekOrigin.Current:
-				real = position + offset;
-				break;
-			case SeekOrigin.End:
-				real = length + offset;
-				break;
-			default:
-				throw new ArgumentOutOfRangeException ("origin", "Invalid SeekOrigin specified");
-			}
+            CheckDisposed();
 
-			// sanity check the resultant offset
-			if (real < 0)
-				throw new IOException ("Cannot seek to a position before the beginning of the stream");
+            switch (origin)
+            {
+                case SeekOrigin.Begin:
+                    real = offset;
+                    break;
+                case SeekOrigin.Current:
+                    real = position + offset;
+                    break;
+                case SeekOrigin.End:
+                    real = length + offset;
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException("origin", "Invalid SeekOrigin specified");
+            }
 
-			if (real > MaxCapacity)
-				throw new IOException (string.Format ("Cannot exceed {0} bytes", MaxCapacity));
+            // sanity check the resultant offset
+            if (real < 0)
+                throw new IOException("Cannot seek to a position before the beginning of the stream");
 
-			// short-cut if we are seeking to our current position
-			if (real == position)
-				return position;
+            if (real > MaxCapacity)
+                throw new IOException(string.Format("Cannot exceed {0} bytes", MaxCapacity));
 
-			if (real > length)
-				throw new IOException ("Cannot seek beyond the end of the stream");
+            // short-cut if we are seeking to our current position
+            if (real == position)
+                return position;
 
-			position = real;
+            if (real > length)
+                throw new IOException("Cannot seek beyond the end of the stream");
 
-			return position;
-		}
+            position = real;
 
-		/// <summary>
-		/// Clears all buffers for this stream and causes any buffered data to be written
-		/// to the underlying device.
-		/// </summary>
-		/// <exception cref="System.ObjectDisposedException">
-		/// The stream has been disposed.
-		/// </exception>
-		public override void Flush ()
-		{
-			CheckDisposed ();
+            return position;
+        }
 
-			// nothing to do...
-		}
+        /// <summary>
+        ///     Clears all buffers for this stream and causes any buffered data to be written
+        ///     to the underlying device.
+        /// </summary>
+        /// <exception cref="System.ObjectDisposedException">
+        ///     The stream has been disposed.
+        /// </exception>
+        public override void Flush()
+        {
+            CheckDisposed();
 
-		/// <summary>
-		/// Sets the length of the stream.
-		/// </summary>
-		/// <param name='value'>The desired length of the stream in bytes.</param>
-		/// <exception cref="System.ArgumentOutOfRangeException">
-		/// <paramref name="value"/> is out of range.
-		/// </exception>
-		/// <exception cref="System.ObjectDisposedException">
-		/// The stream has been disposed.
-		/// </exception>
-		public override void SetLength (long value)
-		{
-			CheckDisposed ();
+            // nothing to do...
+        }
 
-			if (value < 0 || value > MaxCapacity)
-				throw new ArgumentOutOfRangeException ("value");
+        /// <summary>
+        ///     Sets the length of the stream.
+        /// </summary>
+        /// <param name='value'>The desired length of the stream in bytes.</param>
+        /// <exception cref="System.ArgumentOutOfRangeException">
+        ///     <paramref name="value" /> is out of range.
+        /// </exception>
+        /// <exception cref="System.ObjectDisposedException">
+        ///     The stream has been disposed.
+        /// </exception>
+        public override void SetLength(long value)
+        {
+            CheckDisposed();
 
-			long capacity = blocks.Count * BlockSize;
+            if (value < 0 || value > MaxCapacity)
+                throw new ArgumentOutOfRangeException("value");
 
-			if (value > capacity) {
-				do {
-					blocks.Add (new byte[BlockSize]);
-					capacity += BlockSize;
-				} while (capacity < value);
-			} else if (value < length) {
-				// shed any blocks that are no longer needed
-				while (capacity - value > BlockSize) {
-					blocks.RemoveAt (blocks.Count - 1);
-					capacity -= BlockSize;
-				}
+            long capacity = blocks.Count*BlockSize;
 
-				// reset the range of bytes between the new length and the old length to 0
-				int count = (int) (Math.Min (length, capacity) - value);
-				int startIndex = (int) (value % BlockSize);
-				int block = (int) (value / BlockSize);
+            if (value > capacity)
+            {
+                do
+                {
+                    blocks.Add(new byte[BlockSize]);
+                    capacity += BlockSize;
+                } while (capacity < value);
+            }
+            else if (value < length)
+            {
+                // shed any blocks that are no longer needed
+                while (capacity - value > BlockSize)
+                {
+                    blocks.RemoveAt(blocks.Count - 1);
+                    capacity -= BlockSize;
+                }
 
-				Array.Clear (blocks[block], startIndex, count);
-			}
+                // reset the range of bytes between the new length and the old length to 0
+                var count = (int) (Math.Min(length, capacity) - value);
+                var startIndex = (int) (value%BlockSize);
+                var block = (int) (value/BlockSize);
 
-			position = Math.Min (position, value);
-			length = value;
-		}
+                Array.Clear(blocks[block], startIndex, count);
+            }
 
-		#endregion
+            position = Math.Min(position, value);
+            length = value;
+        }
 
-		/// <summary>
-		/// Disposes the stream.
-		/// </summary>
-		/// <remarks>
-		/// Sets the internal disposed state to <c>true</c>.
-		/// </remarks>
-		/// <param name="disposing">If set to <c>true</c>, the stream is being disposed
-		/// via the <see cref="System.IO.Stream.Dispose()"/> method.</param>
-		protected override void Dispose (bool disposing)
-		{
-			base.Dispose (disposing);
-			disposed = true;
-		}
-	}
+        #endregion
+    }
 }

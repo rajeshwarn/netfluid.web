@@ -25,375 +25,402 @@
 //
 
 using System;
-using System.Text;
 using System.Collections;
 using System.Collections.Generic;
-
+using System.Text;
 using MimeKit.Utils;
 
-namespace MimeKit {
-	/// <summary>
-	/// A domain list.
-	/// </summary>
-	/// <remarks>
-	/// Represents a list of domains, such as those that an email was routed through.
-	/// </remarks>
-	public sealed class DomainList : IList<string>
-	{
-		readonly List<string> domains;
+namespace MimeKit
+{
+    /// <summary>
+    ///     A domain list.
+    /// </summary>
+    /// <remarks>
+    ///     Represents a list of domains, such as those that an email was routed through.
+    /// </remarks>
+    public sealed class DomainList : IList<string>
+    {
+        private readonly List<string> domains;
 
-		/// <summary>
-		/// Initializes a new instance of the <see cref="MimeKit.DomainList"/> class.
-		/// </summary>
-		/// <remarks>
-		/// Creates a new <see cref="DomainList"/> based on the domains provided.
-		/// </remarks>
-		/// <param name="domains">A domain list.</param>
+        /// <summary>
+        ///     Initializes a new instance of the <see cref="MimeKit.DomainList" /> class.
+        /// </summary>
+        /// <remarks>
+        ///     Creates a new <see cref="DomainList" /> based on the domains provided.
+        /// </remarks>
+        /// <param name="domains">A domain list.</param>
         /// <exception cref="System.ArgumentNullException">
-        /// <paramref name="domains"/> is <c>null</c>.
+        ///     <paramref name="domains" /> is <c>null</c>.
         /// </exception>
-		public DomainList (IEnumerable<string> domains)
-		{
+        public DomainList(IEnumerable<string> domains)
+        {
             if (domains == null)
-                throw new ArgumentNullException ("domains");
+                throw new ArgumentNullException("domains");
 
-			this.domains = new List<string> (domains);
-		}
+            this.domains = new List<string>(domains);
+        }
 
-		/// <summary>
-		/// Initializes a new instance of the <see cref="MimeKit.DomainList"/> class.
-		/// </summary>
-		/// <remarks>
-		/// Creates a new <see cref="DomainList"/>.
-		/// </remarks>
-		public DomainList ()
-		{
-			domains = new List<string> ();
-		}
+        /// <summary>
+        ///     Initializes a new instance of the <see cref="MimeKit.DomainList" /> class.
+        /// </summary>
+        /// <remarks>
+        ///     Creates a new <see cref="DomainList" />.
+        /// </remarks>
+        public DomainList()
+        {
+            domains = new List<string>();
+        }
 
-		#region IList implementation
+        #region IList implementation
 
-		/// <summary>
-		/// Gets the index of the requested domain, if it exists.
-		/// </summary>
-		/// <remarks>
-		/// Finds the index of the specified domain, if it exists.
-		/// </remarks>
-		/// <returns>The index of the requested domain; otherwise <value>-1</value>.</returns>
-		/// <param name="domain">The domain.</param>
-		/// <exception cref="System.ArgumentNullException">
-		/// <paramref name="domain"/> is <c>null</c>.
-		/// </exception>
-		public int IndexOf (string domain)
-		{
-			if (domain == null)
-				throw new ArgumentNullException ("domain");
+        /// <summary>
+        ///     Gets the index of the requested domain, if it exists.
+        /// </summary>
+        /// <remarks>
+        ///     Finds the index of the specified domain, if it exists.
+        /// </remarks>
+        /// <returns>The index of the requested domain; otherwise
+        ///     <value>-1</value>
+        ///     .
+        /// </returns>
+        /// <param name="domain">The domain.</param>
+        /// <exception cref="System.ArgumentNullException">
+        ///     <paramref name="domain" /> is <c>null</c>.
+        /// </exception>
+        public int IndexOf(string domain)
+        {
+            if (domain == null)
+                throw new ArgumentNullException("domain");
 
-			return domains.IndexOf (domain);
-		}
+            return domains.IndexOf(domain);
+        }
 
-		/// <summary>
-		/// Insert the domain at the specified index.
-		/// </summary>
-		/// <remarks>
-		/// Inerts the domain at the specified index in the list.
-		/// </remarks>
-		/// <param name="index">The index to insert the domain.</param>
-		/// <param name="domain">The domain to insert.</param>
-		/// <exception cref="System.ArgumentNullException">
-		/// <paramref name="domain"/> is <c>null</c>.
-		/// </exception>
-		/// <exception cref="System.ArgumentOutOfRangeException">
-		/// <paramref name="index"/> is out of range.
-		/// </exception>
-		public void Insert (int index, string domain)
-		{
-			if (domain == null)
-				throw new ArgumentNullException ("domain");
+        /// <summary>
+        ///     Insert the domain at the specified index.
+        /// </summary>
+        /// <remarks>
+        ///     Inerts the domain at the specified index in the list.
+        /// </remarks>
+        /// <param name="index">The index to insert the domain.</param>
+        /// <param name="domain">The domain to insert.</param>
+        /// <exception cref="System.ArgumentNullException">
+        ///     <paramref name="domain" /> is <c>null</c>.
+        /// </exception>
+        /// <exception cref="System.ArgumentOutOfRangeException">
+        ///     <paramref name="index" /> is out of range.
+        /// </exception>
+        public void Insert(int index, string domain)
+        {
+            if (domain == null)
+                throw new ArgumentNullException("domain");
 
-			domains.Insert (index, domain);
-			OnChanged ();
-		}
+            domains.Insert(index, domain);
+            OnChanged();
+        }
 
-		/// <summary>
-		/// Removes the domain at the specified index.
-		/// </summary>
-		/// <remarks>
-		/// Removed the domain at the specified index.
-		/// </remarks>
-		/// <param name="index">The index.</param>
-		/// <exception cref="System.ArgumentOutOfRangeException">
-		/// <paramref name="index"/> is out of range.
-		/// </exception>
-		public void RemoveAt (int index)
-		{
-			domains.RemoveAt (index);
-			OnChanged ();
-		}
+        /// <summary>
+        ///     Removes the domain at the specified index.
+        /// </summary>
+        /// <remarks>
+        ///     Removed the domain at the specified index.
+        /// </remarks>
+        /// <param name="index">The index.</param>
+        /// <exception cref="System.ArgumentOutOfRangeException">
+        ///     <paramref name="index" /> is out of range.
+        /// </exception>
+        public void RemoveAt(int index)
+        {
+            domains.RemoveAt(index);
+            OnChanged();
+        }
 
-		/// <summary>
-		/// Gets or sets the <see cref="MimeKit.DomainList"/> at the specified index.
-		/// </summary>
-		/// <param name="index">The index.</param>
-		/// <exception cref="System.ArgumentNullException">
-		/// <paramref name="value"/> is <c>null</c>.
-		/// </exception>
-		/// <exception cref="System.ArgumentOutOfRangeException">
-		/// <paramref name="index"/> is out of range.
-		/// </exception>
-		public string this [int index] {
-			get { return domains[index]; }
-			set {
-				if (value == null)
-					throw new ArgumentNullException ("value");
+        /// <summary>
+        ///     Gets or sets the <see cref="MimeKit.DomainList" /> at the specified index.
+        /// </summary>
+        /// <param name="index">The index.</param>
+        /// <exception cref="System.ArgumentNullException">
+        ///     <paramref name="value" /> is <c>null</c>.
+        /// </exception>
+        /// <exception cref="System.ArgumentOutOfRangeException">
+        ///     <paramref name="index" /> is out of range.
+        /// </exception>
+        public string this[int index]
+        {
+            get { return domains[index]; }
+            set
+            {
+                if (value == null)
+                    throw new ArgumentNullException("value");
 
-				if (domains[index] == value)
-					return;
+                if (domains[index] == value)
+                    return;
 
-				domains[index] = value;
-				OnChanged ();
-			}
-		}
+                domains[index] = value;
+                OnChanged();
+            }
+        }
 
-		#endregion
+        #endregion
 
-		#region ICollection implementation
+        #region ICollection implementation
 
-		/// <summary>
-		/// Add the specified domain.
-		/// </summary>
-		/// <remarks>
-		/// Adds the specified domain to the end of the list.
-		/// </remarks>
-		/// <param name="domain">The domain.</param>
-		/// <exception cref="System.ArgumentNullException">
-		/// <paramref name="domain"/> is <c>null</c>.
-		/// </exception>
-		public void Add (string domain)
-		{
-			if (domain == null)
-				throw new ArgumentNullException ("domain");
+        /// <summary>
+        ///     Add the specified domain.
+        /// </summary>
+        /// <remarks>
+        ///     Adds the specified domain to the end of the list.
+        /// </remarks>
+        /// <param name="domain">The domain.</param>
+        /// <exception cref="System.ArgumentNullException">
+        ///     <paramref name="domain" /> is <c>null</c>.
+        /// </exception>
+        public void Add(string domain)
+        {
+            if (domain == null)
+                throw new ArgumentNullException("domain");
 
-			domains.Add (domain);
-			OnChanged ();
-		}
+            domains.Add(domain);
+            OnChanged();
+        }
 
-		/// <summary>
-		/// Clears the domain list.
-		/// </summary>
-		/// <remarks>
-		/// Removes all of the domains in the list.
-		/// </remarks>
-		public void Clear ()
-		{
-			domains.Clear ();
-			OnChanged ();
-		}
+        /// <summary>
+        ///     Clears the domain list.
+        /// </summary>
+        /// <remarks>
+        ///     Removes all of the domains in the list.
+        /// </remarks>
+        public void Clear()
+        {
+            domains.Clear();
+            OnChanged();
+        }
 
-		/// <summary>
-		/// Checks if the <see cref="DomainList"/> contains the specified domain.
-		/// </summary>
-		/// <remarks>
-		/// Checks if the specified domain is contained with in the <see cref="DomainList"/>.
-		/// </remarks>
-		/// <returns><value>true</value> if the specified domain is contained;
-		/// otherwise <value>false</value>.</returns>
-		/// <param name="domain">The domain.</param>
-		/// <exception cref="System.ArgumentNullException">
-		/// <paramref name="domain"/> is <c>null</c>.
-		/// </exception>
-		public bool Contains (string domain)
-		{
-			if (domain == null)
-				throw new ArgumentNullException ("domain");
+        /// <summary>
+        ///     Checks if the <see cref="DomainList" /> contains the specified domain.
+        /// </summary>
+        /// <remarks>
+        ///     Checks if the specified domain is contained with in the <see cref="DomainList" />.
+        /// </remarks>
+        /// <returns>
+        ///     <value>true</value>
+        ///     if the specified domain is contained;
+        ///     otherwise
+        ///     <value>false</value>
+        ///     .
+        /// </returns>
+        /// <param name="domain">The domain.</param>
+        /// <exception cref="System.ArgumentNullException">
+        ///     <paramref name="domain" /> is <c>null</c>.
+        /// </exception>
+        public bool Contains(string domain)
+        {
+            if (domain == null)
+                throw new ArgumentNullException("domain");
 
-			return domains.Contains (domain);
-		}
+            return domains.Contains(domain);
+        }
 
-		/// <summary>
-		/// Copies all of the domains in the <see cref="MimeKit.DomainList"/> to the specified array.
-		/// </summary>
-		/// <remarks>
-		/// Copies all of the domains within the <see cref="DomainList"/> into the array,
-		/// starting at the specified array index.
-		/// </remarks>
-		/// <param name="array">The array to copy the domains to.</param>
-		/// <param name="arrayIndex">The index into the array.</param>
-		/// <exception cref="System.ArgumentNullException">
-		/// <paramref name="array"/> is <c>null</c>.
-		/// </exception>
-		/// <exception cref="System.ArgumentOutOfRangeException">
-		/// <paramref name="arrayIndex"/> is out of range.
-		/// </exception>
-		public void CopyTo (string[] array, int arrayIndex)
-		{
-			domains.CopyTo (array, arrayIndex);
-		}
+        /// <summary>
+        ///     Copies all of the domains in the <see cref="MimeKit.DomainList" /> to the specified array.
+        /// </summary>
+        /// <remarks>
+        ///     Copies all of the domains within the <see cref="DomainList" /> into the array,
+        ///     starting at the specified array index.
+        /// </remarks>
+        /// <param name="array">The array to copy the domains to.</param>
+        /// <param name="arrayIndex">The index into the array.</param>
+        /// <exception cref="System.ArgumentNullException">
+        ///     <paramref name="array" /> is <c>null</c>.
+        /// </exception>
+        /// <exception cref="System.ArgumentOutOfRangeException">
+        ///     <paramref name="arrayIndex" /> is out of range.
+        /// </exception>
+        public void CopyTo(string[] array, int arrayIndex)
+        {
+            domains.CopyTo(array, arrayIndex);
+        }
 
-		/// <summary>
-		/// Removes the specified domain.
-		/// </summary>
-		/// <remarks>
-		/// Removes the first instance of the specified domain from the list.
-		/// </remarks>
-		/// <returns><value>true</value> if the specified domain was removed;
-		/// otherwise <value>false</value>.</returns>
-		/// <param name="domain">The domain.</param>
-		/// <exception cref="System.ArgumentNullException">
-		/// <paramref name="domain"/> is <c>null</c>.
-		/// </exception>
-		public bool Remove (string domain)
-		{
-			if (domain == null)
-				throw new ArgumentNullException ("domain");
+        /// <summary>
+        ///     Removes the specified domain.
+        /// </summary>
+        /// <remarks>
+        ///     Removes the first instance of the specified domain from the list.
+        /// </remarks>
+        /// <returns>
+        ///     <value>true</value>
+        ///     if the specified domain was removed;
+        ///     otherwise
+        ///     <value>false</value>
+        ///     .
+        /// </returns>
+        /// <param name="domain">The domain.</param>
+        /// <exception cref="System.ArgumentNullException">
+        ///     <paramref name="domain" /> is <c>null</c>.
+        /// </exception>
+        public bool Remove(string domain)
+        {
+            if (domain == null)
+                throw new ArgumentNullException("domain");
 
-			if (domains.Remove (domain)) {
-				OnChanged ();
-				return true;
-			}
+            if (domains.Remove(domain))
+            {
+                OnChanged();
+                return true;
+            }
 
-			return false;
-		}
+            return false;
+        }
 
-		/// <summary>
-		/// Gets the number of domains in the <see cref="MimeKit.DomainList"/>.
-		/// </summary>
-		/// <remarks>
-		/// Indicates the number of domains in the list.
-		/// </remarks>
-		/// <value>The number of domains.</value>
-		public int Count {
-			get { return domains.Count; }
-		}
+        /// <summary>
+        ///     Gets the number of domains in the <see cref="MimeKit.DomainList" />.
+        /// </summary>
+        /// <remarks>
+        ///     Indicates the number of domains in the list.
+        /// </remarks>
+        /// <value>The number of domains.</value>
+        public int Count
+        {
+            get { return domains.Count; }
+        }
 
-		/// <summary>
-		/// Gets a value indicating whether this instance is read only.
-		/// </summary>
-		/// <remarks>
-		/// A <see cref="DomainList"/> is never read-only.
-		/// </remarks>
-		/// <value><c>true</c> if this instance is read only; otherwise, <c>false</c>.</value>
-		public bool IsReadOnly {
-			get { return false; }
-		}
+        /// <summary>
+        ///     Gets a value indicating whether this instance is read only.
+        /// </summary>
+        /// <remarks>
+        ///     A <see cref="DomainList" /> is never read-only.
+        /// </remarks>
+        /// <value><c>true</c> if this instance is read only; otherwise, <c>false</c>.</value>
+        public bool IsReadOnly
+        {
+            get { return false; }
+        }
 
-		#endregion
+        #endregion
 
-		#region IEnumerable implementation
+        #region IEnumerable implementation
 
-		/// <summary>
-		/// Gets an enumerator for the list of domains.
-		/// </summary>
-		/// <returns>The enumerator.</returns>
-		public IEnumerator<string> GetEnumerator ()
-		{
-			return domains.GetEnumerator ();
-		}
+        /// <summary>
+        ///     Gets an enumerator for the list of domains.
+        /// </summary>
+        /// <returns>The enumerator.</returns>
+        public IEnumerator<string> GetEnumerator()
+        {
+            return domains.GetEnumerator();
+        }
 
-		#endregion
+        #endregion
 
-		#region IEnumerable implementation
+        #region IEnumerable implementation
 
-		IEnumerator IEnumerable.GetEnumerator ()
-		{
-			return domains.GetEnumerator ();
-		}
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return domains.GetEnumerator();
+        }
 
-		#endregion
+        #endregion
 
-		/// <summary>
-		/// Serializes the <see cref="MimeKit.DomainList"/> to a string.
-		/// </summary>
-		/// <remarks>
-		/// Returns a newly allocated string containing the list of domains separated by commas.
-		/// </remarks>
-		/// <returns>A <see cref="System.String"/> that represents the current <see cref="MimeKit.DomainList"/>.</returns>
-		public override string ToString ()
-		{
-			StringBuilder builder = new StringBuilder ();
+        /// <summary>
+        ///     Serializes the <see cref="MimeKit.DomainList" /> to a string.
+        /// </summary>
+        /// <remarks>
+        ///     Returns a newly allocated string containing the list of domains separated by commas.
+        /// </remarks>
+        /// <returns>A <see cref="System.String" /> that represents the current <see cref="MimeKit.DomainList" />.</returns>
+        public override string ToString()
+        {
+            var builder = new StringBuilder();
 
-			for (int i = 0; i < domains.Count; i++) {
-				if (string.IsNullOrWhiteSpace (domains[i]) && builder.Length == 0)
-					continue;
+            for (int i = 0; i < domains.Count; i++)
+            {
+                if (string.IsNullOrWhiteSpace(domains[i]) && builder.Length == 0)
+                    continue;
 
-				if (builder.Length > 0)
-					builder.Append (',');
+                if (builder.Length > 0)
+                    builder.Append(',');
 
-				if (!string.IsNullOrWhiteSpace (domains[i]))
-					builder.Append ('@');
+                if (!string.IsNullOrWhiteSpace(domains[i]))
+                    builder.Append('@');
 
-				builder.Append (domains[i]);
-			}
+                builder.Append(domains[i]);
+            }
 
-			return builder.ToString ();
-		}
+            return builder.ToString();
+        }
 
-		internal event EventHandler Changed;
+        internal event EventHandler Changed;
 
-		void OnChanged ()
-		{
-			if (Changed != null)
-				Changed (this, EventArgs.Empty);
-		}
+        private void OnChanged()
+        {
+            if (Changed != null)
+                Changed(this, EventArgs.Empty);
+        }
 
-		/// <summary>
-		/// Parses a list of domains.
-		/// </summary>
-		/// <remarks>
-		/// Attempts to parse a <see cref="DomainList"/> from the text buffer starting at the
-		/// specified index. The index will only be updated if a <see cref="DomainList"/> was
-		/// successfully parsed.
-		/// </remarks>
-		/// <returns><c>true</c> if a <see cref="DomainList"/> was successfully parsed;
-		/// <c>false</c> otherwise.</returns>
-		/// <param name="text">The text buffer to parse.</param>
-		/// <param name="index">The index to start parsing.</param>
-		/// <param name="endIndex">An index of the end of the input.</param>
-		/// <param name="throwOnError">A flag indicating whether or not an
-		/// exception should be thrown on error.</param>
-		/// <param name="route">The parsed DomainList.</param>
-		internal static bool TryParse (byte[] text, ref int index, int endIndex, bool throwOnError, out DomainList route)
-		{
-			List<string> domains = new List<string> ();
-			int startIndex = index;
-			string domain;
+        /// <summary>
+        ///     Parses a list of domains.
+        /// </summary>
+        /// <remarks>
+        ///     Attempts to parse a <see cref="DomainList" /> from the text buffer starting at the
+        ///     specified index. The index will only be updated if a <see cref="DomainList" /> was
+        ///     successfully parsed.
+        /// </remarks>
+        /// <returns>
+        ///     <c>true</c> if a <see cref="DomainList" /> was successfully parsed;
+        ///     <c>false</c> otherwise.
+        /// </returns>
+        /// <param name="text">The text buffer to parse.</param>
+        /// <param name="index">The index to start parsing.</param>
+        /// <param name="endIndex">An index of the end of the input.</param>
+        /// <param name="throwOnError">
+        ///     A flag indicating whether or not an
+        ///     exception should be thrown on error.
+        /// </param>
+        /// <param name="route">The parsed DomainList.</param>
+        internal static bool TryParse(byte[] text, ref int index, int endIndex, bool throwOnError, out DomainList route)
+        {
+            var domains = new List<string>();
+            int startIndex = index;
+            string domain;
 
-			route = null;
+            route = null;
 
-			do {
-				// skip over the '@'
-				index++;
+            do
+            {
+                // skip over the '@'
+                index++;
 
-				if (index >= endIndex) {
-					if (throwOnError)
-						throw new ParseException (string.Format ("Incomplete domain-list at offset: {0}", startIndex), startIndex, index);
+                if (index >= endIndex)
+                {
+                    if (throwOnError)
+                        throw new ParseException(string.Format("Incomplete domain-list at offset: {0}", startIndex),
+                            startIndex, index);
 
-					return false;
-				}
+                    return false;
+                }
 
-				if (!ParseUtils.TryParseDomain (text, ref index, endIndex, throwOnError, out domain))
-					return false;
+                if (!ParseUtils.TryParseDomain(text, ref index, endIndex, throwOnError, out domain))
+                    return false;
 
-				domains.Add (domain);
+                domains.Add(domain);
 
-				// Note: obs-domain-list allows for null domains between commas
-				do {
-					if (!ParseUtils.SkipCommentsAndWhiteSpace (text, ref index, endIndex, throwOnError))
-						return false;
+                // Note: obs-domain-list allows for null domains between commas
+                do
+                {
+                    if (!ParseUtils.SkipCommentsAndWhiteSpace(text, ref index, endIndex, throwOnError))
+                        return false;
 
-					if (index >= endIndex || text[index] != (byte) ',')
-						break;
+                    if (index >= endIndex || text[index] != (byte) ',')
+                        break;
 
-					index++;
-				} while (true);
+                    index++;
+                } while (true);
 
-				if (!ParseUtils.SkipCommentsAndWhiteSpace (text, ref index, endIndex, throwOnError))
-					return false;
-			} while (index < text.Length && text[index] == (byte) '@');
+                if (!ParseUtils.SkipCommentsAndWhiteSpace(text, ref index, endIndex, throwOnError))
+                    return false;
+            } while (index < text.Length && text[index] == (byte) '@');
 
-			route = new DomainList (domains);
+            route = new DomainList(domains);
 
-			return true;
-		}
-	}
+            return true;
+        }
+    }
 }

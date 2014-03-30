@@ -26,294 +26,313 @@
 
 using System;
 
-namespace MimeKit.Encodings {
-	/// <summary>
-	/// Incrementally encodes content using the base64 encoding.
-	/// </summary>
-	/// <remarks>
-	/// Base64 is an encoding often used in MIME to encode binary content such
-	/// as images and other types of multi-media to ensure that the data remains
-	/// intact when sent via 7bit transports such as SMTP.
-	/// </remarks>
-	public class Base64Encoder : IMimeEncoder
-	{
-		static readonly byte[] base64_alphabet = new byte[64] {
-			0x41, 0x42, 0x43, 0x44, 0x45, 0x46, 0x47, 0x48, 0x49, 0x4A, 0x4B, 0x4C, 0x4D, 0x4E, 0x4F, 0x50,
-			0x51, 0x52, 0x53, 0x54, 0x55, 0x56, 0x57, 0x58, 0x59, 0x5A, 0x61, 0x62, 0x63, 0x64, 0x65, 0x66,
-			0x67, 0x68, 0x69, 0x6A, 0x6B, 0x6C, 0x6D, 0x6E, 0x6F, 0x70, 0x71, 0x72, 0x73, 0x74, 0x75, 0x76,
-			0x77, 0x78, 0x79, 0x7A, 0x30, 0x31, 0x32, 0x33, 0x34, 0x35, 0x36, 0x37, 0x38, 0x39, 0x2B, 0x2F
-		};
+namespace MimeKit.Encodings
+{
+    /// <summary>
+    ///     Incrementally encodes content using the base64 encoding.
+    /// </summary>
+    /// <remarks>
+    ///     Base64 is an encoding often used in MIME to encode binary content such
+    ///     as images and other types of multi-media to ensure that the data remains
+    ///     intact when sent via 7bit transports such as SMTP.
+    /// </remarks>
+    public class Base64Encoder : IMimeEncoder
+    {
+        private const int QuartetsPerLine = 18;
+        private const int MaxInputPerLine = QuartetsPerLine*3;
+        private const int MaxLineLength = (QuartetsPerLine*4) + 1;
 
-		const int QuartetsPerLine = 18;
-		const int MaxInputPerLine = QuartetsPerLine * 3;
-		const int MaxLineLength = (QuartetsPerLine * 4) + 1;
+        private static readonly byte[] base64_alphabet = new byte[64]
+        {
+            0x41, 0x42, 0x43, 0x44, 0x45, 0x46, 0x47, 0x48, 0x49, 0x4A, 0x4B, 0x4C, 0x4D, 0x4E, 0x4F, 0x50,
+            0x51, 0x52, 0x53, 0x54, 0x55, 0x56, 0x57, 0x58, 0x59, 0x5A, 0x61, 0x62, 0x63, 0x64, 0x65, 0x66,
+            0x67, 0x68, 0x69, 0x6A, 0x6B, 0x6C, 0x6D, 0x6E, 0x6F, 0x70, 0x71, 0x72, 0x73, 0x74, 0x75, 0x76,
+            0x77, 0x78, 0x79, 0x7A, 0x30, 0x31, 0x32, 0x33, 0x34, 0x35, 0x36, 0x37, 0x38, 0x39, 0x2B, 0x2F
+        };
 
-		int quartets;
-		readonly bool rfc2047;
-		byte saved1;
-		byte saved2;
-		byte saved;
+        private readonly bool rfc2047;
+        private int quartets;
+        private byte saved;
+        private byte saved1;
+        private byte saved2;
 
-		/// <summary>
-		/// Initializes a new instance of the <see cref="MimeKit.Encodings.Base64Encoder"/> class.
-		/// </summary>
-		/// <param name='rfc2047'>
-		/// <c>true</c> if this encoder will be used to encode rfc2047 encoded-word payloads; <c>false</c> otherwise.
-		/// </param>
-		internal Base64Encoder (bool rfc2047)
-		{
-			this.rfc2047 = rfc2047;
-			Reset ();
-		}
+        /// <summary>
+        ///     Initializes a new instance of the <see cref="MimeKit.Encodings.Base64Encoder" /> class.
+        /// </summary>
+        /// <param name='rfc2047'>
+        ///     <c>true</c> if this encoder will be used to encode rfc2047 encoded-word payloads; <c>false</c> otherwise.
+        /// </param>
+        internal Base64Encoder(bool rfc2047)
+        {
+            this.rfc2047 = rfc2047;
+            Reset();
+        }
 
-		/// <summary>
-		/// Initializes a new instance of the <see cref="MimeKit.Encodings.Base64Encoder"/> class.
-		/// </summary>
-		/// <remarks>
-		/// Creates a new base64 encoder.
-		/// </remarks>
-		public Base64Encoder () : this (false)
-		{
-		}
+        /// <summary>
+        ///     Initializes a new instance of the <see cref="MimeKit.Encodings.Base64Encoder" /> class.
+        /// </summary>
+        /// <remarks>
+        ///     Creates a new base64 encoder.
+        /// </remarks>
+        public Base64Encoder() : this(false)
+        {
+        }
 
-		/// <summary>
-		/// Clone the <see cref="Base64Encoder"/> with its current state.
-		/// </summary>
-		/// <remarks>
-		/// Creates a new <see cref="Base64Encoder"/> with exactly the same state as the current encoder.
-		/// </remarks>
-		/// <returns>A new <see cref="Base64Encoder"/> with identical state.</returns>
-		public IMimeEncoder Clone ()
-		{
-			var encoder = new Base64Encoder (rfc2047);
+        /// <summary>
+        ///     Clone the <see cref="Base64Encoder" /> with its current state.
+        /// </summary>
+        /// <remarks>
+        ///     Creates a new <see cref="Base64Encoder" /> with exactly the same state as the current encoder.
+        /// </remarks>
+        /// <returns>A new <see cref="Base64Encoder" /> with identical state.</returns>
+        public IMimeEncoder Clone()
+        {
+            var encoder = new Base64Encoder(rfc2047);
 
-			encoder.quartets = quartets;
-			encoder.saved1 = saved1;
-			encoder.saved2 = saved2;
-			encoder.saved = saved;
+            encoder.quartets = quartets;
+            encoder.saved1 = saved1;
+            encoder.saved2 = saved2;
+            encoder.saved = saved;
 
-			return encoder;
-		}
+            return encoder;
+        }
 
-		/// <summary>
-		/// Gets the encoding.
-		/// </summary>
-		/// <value>The encoding.</value>
-		public ContentEncoding Encoding {
-			get { return ContentEncoding.Base64; }
-		}
+        /// <summary>
+        ///     Gets the encoding.
+        /// </summary>
+        /// <value>The encoding.</value>
+        public ContentEncoding Encoding
+        {
+            get { return ContentEncoding.Base64; }
+        }
 
-		/// <summary>
-		/// Estimates the length of the output.
-		/// </summary>
-		/// <remarks>
-		/// Estimates the number of bytes needed to encode the specified number of input bytes.
-		/// </remarks>
-		/// <returns>The estimated output length.</returns>
-		/// <param name='inputLength'>The input length.</param>
-		public int EstimateOutputLength (int inputLength)
-		{
-			if (rfc2047)
-				return ((inputLength + 2) / 3) * 4;
+        /// <summary>
+        ///     Estimates the length of the output.
+        /// </summary>
+        /// <remarks>
+        ///     Estimates the number of bytes needed to encode the specified number of input bytes.
+        /// </remarks>
+        /// <returns>The estimated output length.</returns>
+        /// <param name='inputLength'>The input length.</param>
+        public int EstimateOutputLength(int inputLength)
+        {
+            if (rfc2047)
+                return ((inputLength + 2)/3)*4;
 
-			return (((inputLength + 2) / MaxInputPerLine) * MaxLineLength) + MaxLineLength;
-		}
+            return (((inputLength + 2)/MaxInputPerLine)*MaxLineLength) + MaxLineLength;
+        }
 
-		void ValidateArguments (byte[] input, int startIndex, int length, byte[] output)
-		{
-			if (input == null)
-				throw new ArgumentNullException ("input");
+        /// <summary>
+        ///     Encodes the specified input into the output buffer.
+        /// </summary>
+        /// <returns>The number of bytes written to the output buffer.</returns>
+        /// <param name='input'>The input buffer.</param>
+        /// <param name='startIndex'>The starting index of the input buffer.</param>
+        /// <param name='length'>The length of the input buffer.</param>
+        /// <param name='output'>The output buffer.</param>
+        /// <exception cref="System.ArgumentNullException">
+        ///     <para><paramref name="input" /> is <c>null</c>.</para>
+        ///     <para>-or-</para>
+        ///     <para><paramref name="output" /> is <c>null</c>.</para>
+        /// </exception>
+        /// <exception cref="System.ArgumentOutOfRangeException">
+        ///     <paramref name="startIndex" /> and <paramref name="length" /> do not specify
+        ///     a valid range in the <paramref name="input" /> byte array.
+        /// </exception>
+        /// <exception cref="System.ArgumentException">
+        ///     <para><paramref name="output" /> is not large enough to contain the encoded content.</para>
+        ///     <para>
+        ///         Use the <see cref="EstimateOutputLength" /> method to properly determine the
+        ///         necessary length of the <paramref name="output" /> byte array.
+        ///     </para>
+        /// </exception>
+        public int Encode(byte[] input, int startIndex, int length, byte[] output)
+        {
+            ValidateArguments(input, startIndex, length, output);
 
-			if (startIndex < 0 || startIndex > input.Length)
-				throw new ArgumentOutOfRangeException ("startIndex");
+            unsafe
+            {
+                fixed (byte* inptr = input, outptr = output)
+                {
+                    return Encode(inptr + startIndex, length, outptr);
+                }
+            }
+        }
 
-			if (length < 0 || startIndex + length > input.Length)
-				throw new ArgumentOutOfRangeException ("length");
+        /// <summary>
+        ///     Encodes the specified input into the output buffer, flushing any internal buffer state as well.
+        /// </summary>
+        /// <returns>The number of bytes written to the output buffer.</returns>
+        /// <param name='input'>The input buffer.</param>
+        /// <param name='startIndex'>The starting index of the input buffer.</param>
+        /// <param name='length'>The length of the input buffer.</param>
+        /// <param name='output'>The output buffer.</param>
+        /// <exception cref="System.ArgumentNullException">
+        ///     <para><paramref name="input" /> is <c>null</c>.</para>
+        ///     <para>-or-</para>
+        ///     <para><paramref name="output" /> is <c>null</c>.</para>
+        /// </exception>
+        /// <exception cref="System.ArgumentOutOfRangeException">
+        ///     <paramref name="startIndex" /> and <paramref name="length" /> do not specify
+        ///     a valid range in the <paramref name="input" /> byte array.
+        /// </exception>
+        /// <exception cref="System.ArgumentException">
+        ///     <para><paramref name="output" /> is not large enough to contain the encoded content.</para>
+        ///     <para>
+        ///         Use the <see cref="EstimateOutputLength" /> method to properly determine the
+        ///         necessary length of the <paramref name="output" /> byte array.
+        ///     </para>
+        /// </exception>
+        public int Flush(byte[] input, int startIndex, int length, byte[] output)
+        {
+            ValidateArguments(input, startIndex, length, output);
 
-			if (output == null)
-				throw new ArgumentNullException ("output");
+            unsafe
+            {
+                fixed (byte* inptr = input, outptr = output)
+                {
+                    return Flush(inptr + startIndex, length, outptr);
+                }
+            }
+        }
 
-			if (output.Length < EstimateOutputLength (length))
-				throw new ArgumentException ("The output buffer is not large enough to contain the encoded input.", "output");
-		}
+        /// <summary>
+        ///     Resets the encoder.
+        /// </summary>
+        /// <remarks>
+        ///     Resets the state of the encoder.
+        /// </remarks>
+        public void Reset()
+        {
+            quartets = 0;
+            saved1 = 0;
+            saved2 = 0;
+            saved = 0;
+        }
 
-		unsafe int Encode (byte* input, int length, byte* output)
-		{
-			if (length == 0)
-				return 0;
+        private void ValidateArguments(byte[] input, int startIndex, int length, byte[] output)
+        {
+            if (input == null)
+                throw new ArgumentNullException("input");
 
-			int remaining = length;
-			byte* outptr = output;
-			byte* inptr = input;
+            if (startIndex < 0 || startIndex > input.Length)
+                throw new ArgumentOutOfRangeException("startIndex");
 
-			if (length + saved > 2) {
-				byte* inend = inptr + length - 2;
-				int c1, c2, c3;
+            if (length < 0 || startIndex + length > input.Length)
+                throw new ArgumentOutOfRangeException("length");
 
-				if (saved < 1)
-					c1 = *inptr++;
-				else
-					c1 = saved1;
+            if (output == null)
+                throw new ArgumentNullException("output");
 
-				if (saved < 2)
-					c2 = *inptr++;
-				else
-					c2 = saved2;
+            if (output.Length < EstimateOutputLength(length))
+                throw new ArgumentException("The output buffer is not large enough to contain the encoded input.",
+                    "output");
+        }
 
-				c3 = *inptr++;
+        private unsafe int Encode(byte* input, int length, byte* output)
+        {
+            if (length == 0)
+                return 0;
 
-				do {
-					// encode our triplet into a quartet
-					*outptr++ = base64_alphabet[c1 >> 2];
-					*outptr++ = base64_alphabet[(c2 >> 4) | ((c1 & 0x3) << 4)];
-					*outptr++ = base64_alphabet[((c2 & 0x0f) << 2) | (c3 >> 6)];
-					*outptr++ = base64_alphabet[c3 & 0x3f];
+            int remaining = length;
+            byte* outptr = output;
+            byte* inptr = input;
 
-					// encode 18 quartets per line
-					if (!rfc2047 && (++quartets) >= 18) {
-						*outptr++ = (byte) '\n';
-						quartets = 0;
-					}
+            if (length + saved > 2)
+            {
+                byte* inend = inptr + length - 2;
+                int c1, c2, c3;
 
-					if (inptr >= inend)
-						break;
+                if (saved < 1)
+                    c1 = *inptr++;
+                else
+                    c1 = saved1;
 
-					c1 = *inptr++;
-					c2 = *inptr++;
-					c3 = *inptr++;
-				} while (true);
+                if (saved < 2)
+                    c2 = *inptr++;
+                else
+                    c2 = saved2;
 
-				remaining = 2 - (int) (inptr - inend);
-				saved = 0;
-			}
+                c3 = *inptr++;
 
-			if (remaining > 0) {
-				// At this point, saved can only be 0 or 1.
-				if (saved == 0) {
-					// We can have up to 2 remaining input bytes.
-					saved = (byte) remaining;
-					saved1 = *inptr++;
-					if (remaining == 2)
-						saved2 = *inptr;
-					else
-						saved2 = 0;
-				} else {
-					// We have 1 remaining input byte.
-					saved2 = *inptr++;
-					saved = 2;
-				}
-				
-			}
+                do
+                {
+                    // encode our triplet into a quartet
+                    *outptr++ = base64_alphabet[c1 >> 2];
+                    *outptr++ = base64_alphabet[(c2 >> 4) | ((c1 & 0x3) << 4)];
+                    *outptr++ = base64_alphabet[((c2 & 0x0f) << 2) | (c3 >> 6)];
+                    *outptr++ = base64_alphabet[c3 & 0x3f];
 
-			return (int) (outptr - output);
-		}
+                    // encode 18 quartets per line
+                    if (!rfc2047 && (++quartets) >= 18)
+                    {
+                        *outptr++ = (byte) '\n';
+                        quartets = 0;
+                    }
 
-		/// <summary>
-		/// Encodes the specified input into the output buffer.
-		/// </summary>
-		/// <returns>The number of bytes written to the output buffer.</returns>
-		/// <param name='input'>The input buffer.</param>
-		/// <param name='startIndex'>The starting index of the input buffer.</param>
-		/// <param name='length'>The length of the input buffer.</param>
-		/// <param name='output'>The output buffer.</param>
-		/// <exception cref="System.ArgumentNullException">
-		/// <para><paramref name="input"/> is <c>null</c>.</para>
-		/// <para>-or-</para>
-		/// <para><paramref name="output"/> is <c>null</c>.</para>
-		/// </exception>
-		/// <exception cref="System.ArgumentOutOfRangeException">
-		/// <paramref name="startIndex"/> and <paramref name="length"/> do not specify
-		/// a valid range in the <paramref name="input"/> byte array.
-		/// </exception>
-		/// <exception cref="System.ArgumentException">
-		/// <para><paramref name="output"/> is not large enough to contain the encoded content.</para>
-		/// <para>Use the <see cref="EstimateOutputLength"/> method to properly determine the 
-		/// necessary length of the <paramref name="output"/> byte array.</para>
-		/// </exception>
-		public int Encode (byte[] input, int startIndex, int length, byte[] output)
-		{
-			ValidateArguments (input, startIndex, length, output);
+                    if (inptr >= inend)
+                        break;
 
-			unsafe {
-				fixed (byte* inptr = input, outptr = output) {
-					return Encode (inptr + startIndex, length, outptr);
-				}
-			}
-		}
+                    c1 = *inptr++;
+                    c2 = *inptr++;
+                    c3 = *inptr++;
+                } while (true);
 
-		unsafe int Flush (byte* input, int length, byte* output)
-		{
-			byte* outptr = output;
-			
-			if (length > 0)
-				outptr += Encode (input, length, output);
+                remaining = 2 - (int) (inptr - inend);
+                saved = 0;
+            }
 
-			if (saved >= 1) {
-				int c1 = saved1;
-				int c2 = saved2;
+            if (remaining > 0)
+            {
+                // At this point, saved can only be 0 or 1.
+                if (saved == 0)
+                {
+                    // We can have up to 2 remaining input bytes.
+                    saved = (byte) remaining;
+                    saved1 = *inptr++;
+                    if (remaining == 2)
+                        saved2 = *inptr;
+                    else
+                        saved2 = 0;
+                }
+                else
+                {
+                    // We have 1 remaining input byte.
+                    saved2 = *inptr++;
+                    saved = 2;
+                }
+            }
 
-				*outptr++ = base64_alphabet[c1 >> 2];
-				*outptr++ = base64_alphabet[c2 >> 4 | ((c1 & 0x3) << 4)];
-				if (saved == 2)
-					*outptr++ = base64_alphabet[(c2 & 0x0f) << 2];
-				else
-					*outptr++ = (byte) '=';
-				*outptr++ = (byte) '=';
-			}
+            return (int) (outptr - output);
+        }
 
-			if (!rfc2047)
-				*outptr++ = (byte) '\n';
+        private unsafe int Flush(byte* input, int length, byte* output)
+        {
+            byte* outptr = output;
 
-			Reset ();
-			
-			return (int) (outptr - output);
-		}
+            if (length > 0)
+                outptr += Encode(input, length, output);
 
-		/// <summary>
-		/// Encodes the specified input into the output buffer, flushing any internal buffer state as well.
-		/// </summary>
-		/// <returns>The number of bytes written to the output buffer.</returns>
-		/// <param name='input'>The input buffer.</param>
-		/// <param name='startIndex'>The starting index of the input buffer.</param>
-		/// <param name='length'>The length of the input buffer.</param>
-		/// <param name='output'>The output buffer.</param>
-		/// <exception cref="System.ArgumentNullException">
-		/// <para><paramref name="input"/> is <c>null</c>.</para>
-		/// <para>-or-</para>
-		/// <para><paramref name="output"/> is <c>null</c>.</para>
-		/// </exception>
-		/// <exception cref="System.ArgumentOutOfRangeException">
-		/// <paramref name="startIndex"/> and <paramref name="length"/> do not specify
-		/// a valid range in the <paramref name="input"/> byte array.
-		/// </exception>
-		/// <exception cref="System.ArgumentException">
-		/// <para><paramref name="output"/> is not large enough to contain the encoded content.</para>
-		/// <para>Use the <see cref="EstimateOutputLength"/> method to properly determine the 
-		/// necessary length of the <paramref name="output"/> byte array.</para>
-		/// </exception>
-		public int Flush (byte[] input, int startIndex, int length, byte[] output)
-		{
-			ValidateArguments (input, startIndex, length, output);
+            if (saved >= 1)
+            {
+                int c1 = saved1;
+                int c2 = saved2;
 
-			unsafe {
-				fixed (byte* inptr = input, outptr = output) {
-					return Flush (inptr + startIndex, length, outptr);
-				}
-			}
-		}
+                *outptr++ = base64_alphabet[c1 >> 2];
+                *outptr++ = base64_alphabet[c2 >> 4 | ((c1 & 0x3) << 4)];
+                if (saved == 2)
+                    *outptr++ = base64_alphabet[(c2 & 0x0f) << 2];
+                else
+                    *outptr++ = (byte) '=';
+                *outptr++ = (byte) '=';
+            }
 
-		/// <summary>
-		/// Resets the encoder.
-		/// </summary>
-		/// <remarks>
-		/// Resets the state of the encoder.
-		/// </remarks>
-		public void Reset ()
-		{
-			quartets = 0;
-			saved1 = 0;
-			saved2 = 0;
-			saved = 0;
-		}
-	}
+            if (!rfc2047)
+                *outptr++ = (byte) '\n';
+
+            Reset();
+
+            return (int) (outptr - output);
+        }
+    }
 }

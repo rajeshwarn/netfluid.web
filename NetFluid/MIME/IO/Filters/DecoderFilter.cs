@@ -25,95 +25,100 @@
 //
 
 using System;
-
 using MimeKit.Encodings;
 
-namespace MimeKit.IO.Filters {
-	/// <summary>
-	/// A filter for decoding MIME content.
-	/// </summary>
-	public class DecoderFilter : MimeFilterBase
-	{
-		/// <summary>
-		/// Gets the decoder used by this filter.
-		/// </summary>
-		/// <value>
-		/// The decoder.
-		/// </value>
-		public IMimeDecoder Decoder {
-			get; private set;
-		}
+namespace MimeKit.IO.Filters
+{
+    /// <summary>
+    ///     A filter for decoding MIME content.
+    /// </summary>
+    public class DecoderFilter : MimeFilterBase
+    {
+        /// <summary>
+        ///     Initializes a new instance of the <see cref="MimeKit.IO.Filters.DecoderFilter" /> class.
+        /// </summary>
+        /// <param name='decoder'>
+        ///     A specific decoder for the filter to use.
+        /// </param>
+        /// <exception cref="System.ArgumentNullException">
+        ///     <paramref name="decoder" /> is <c>null</c>.
+        /// </exception>
+        public DecoderFilter(IMimeDecoder decoder)
+        {
+            if (decoder == null)
+                throw new ArgumentNullException("decoder");
 
-		/// <summary>
-		/// Gets the encoding.
-		/// </summary>
-		/// <value>
-		/// The encoding.
-		/// </value>
-		public ContentEncoding Encoding {
-			get { return Decoder.Encoding; }
-		}
+            Decoder = decoder;
+        }
 
-		/// <summary>
-		/// Initializes a new instance of the <see cref="MimeKit.IO.Filters.DecoderFilter"/> class.
-		/// </summary>
-		/// <param name='decoder'>
-		/// A specific decoder for the filter to use.
-		/// </param>
-		/// <exception cref="System.ArgumentNullException">
-		/// <paramref name="decoder"/> is <c>null</c>.
-		/// </exception>
-		public DecoderFilter (IMimeDecoder decoder)
-		{
-			if (decoder == null)
-				throw new ArgumentNullException ("decoder");
+        /// <summary>
+        ///     Gets the decoder used by this filter.
+        /// </summary>
+        /// <value>
+        ///     The decoder.
+        /// </value>
+        public IMimeDecoder Decoder { get; private set; }
 
-			Decoder = decoder;
-		}
+        /// <summary>
+        ///     Gets the encoding.
+        /// </summary>
+        /// <value>
+        ///     The encoding.
+        /// </value>
+        public ContentEncoding Encoding
+        {
+            get { return Decoder.Encoding; }
+        }
 
-		/// <summary>
-		/// Create a filter that will decode the specified encoding.
-		/// </summary>
-		/// <param name='encoding'>
-		/// The encoding to create a filter for.
-		/// </param>
-		public static IMimeFilter Create (ContentEncoding encoding)
-		{
-			switch (encoding) {
-			case ContentEncoding.Base64: return new DecoderFilter (new Base64Decoder ());
-			case ContentEncoding.QuotedPrintable: return new DecoderFilter (new QuotedPrintableDecoder ());
-			case ContentEncoding.UUEncode: return new DecoderFilter (new UUDecoder ());
-			default: return new PassThroughFilter ();
-			}
-		}
+        /// <summary>
+        ///     Create a filter that will decode the specified encoding.
+        /// </summary>
+        /// <param name='encoding'>
+        ///     The encoding to create a filter for.
+        /// </param>
+        public static IMimeFilter Create(ContentEncoding encoding)
+        {
+            switch (encoding)
+            {
+                case ContentEncoding.Base64:
+                    return new DecoderFilter(new Base64Decoder());
+                case ContentEncoding.QuotedPrintable:
+                    return new DecoderFilter(new QuotedPrintableDecoder());
+                case ContentEncoding.UUEncode:
+                    return new DecoderFilter(new UUDecoder());
+                default:
+                    return new PassThroughFilter();
+            }
+        }
 
-		/// <summary>
-		/// Filter the specified input.
-		/// </summary>
-		/// <returns>The filtered output.</returns>
-		/// <param name="input">The input buffer.</param>
-		/// <param name="startIndex">The starting index of the input buffer.</param>
-		/// <param name="length">The length of the input buffer, starting at <paramref name="startIndex"/>.</param>
-		/// <param name="outputIndex">The output index.</param>
-		/// <param name="outputLength">The output length.</param>
-		/// <param name="flush">If set to <c>true</c>, all internally buffered data should be flushed to the output buffer.</param>
-		protected override byte[] Filter (byte[] input, int startIndex, int length, out int outputIndex, out int outputLength, bool flush)
-		{
-			EnsureOutputSize (Decoder.EstimateOutputLength (length), false);
+        /// <summary>
+        ///     Filter the specified input.
+        /// </summary>
+        /// <returns>The filtered output.</returns>
+        /// <param name="input">The input buffer.</param>
+        /// <param name="startIndex">The starting index of the input buffer.</param>
+        /// <param name="length">The length of the input buffer, starting at <paramref name="startIndex" />.</param>
+        /// <param name="outputIndex">The output index.</param>
+        /// <param name="outputLength">The output length.</param>
+        /// <param name="flush">If set to <c>true</c>, all internally buffered data should be flushed to the output buffer.</param>
+        protected override byte[] Filter(byte[] input, int startIndex, int length, out int outputIndex,
+            out int outputLength, bool flush)
+        {
+            EnsureOutputSize(Decoder.EstimateOutputLength(length), false);
 
-			outputLength = Decoder.Decode (input, startIndex, length, output);
-			outputIndex = 0;
+            outputLength = Decoder.Decode(input, startIndex, length, output);
+            outputIndex = 0;
 
-			return output;
-		}
+            return output;
+        }
 
-		/// <summary>
-		/// Resets the filter.
-		/// </summary>
-		public override void Reset ()
-		{
-			Decoder.Reset ();
-			base.Reset ();
-		}
-	}
+        /// <summary>
+        ///     Resets the filter.
+        /// </summary>
+        public override void Reset()
+        {
+            Decoder.Reset();
+            base.Reset();
+        }
+    }
 }

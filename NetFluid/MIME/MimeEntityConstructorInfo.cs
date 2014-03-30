@@ -24,41 +24,34 @@
 // THE SOFTWARE.
 //
 
-using System;
 using System.Collections.Generic;
 
-namespace MimeKit {
-	/// <summary>
-	/// MIME entity constructor info.
-	/// </summary>
-	public sealed class MimeEntityConstructorInfo
-	{
-		internal ParserOptions ParserOptions {
-			get; private set;
-		}
+namespace MimeKit
+{
+    /// <summary>
+    ///     MIME entity constructor info.
+    /// </summary>
+    public sealed class MimeEntityConstructorInfo
+    {
+        internal MimeEntityConstructorInfo(ParserOptions options, ContentType ctype, IEnumerable<Header> headers,
+            bool toplevel)
+        {
+            ParserOptions = options;
+            ContentType = ctype;
+            Headers = headers;
+            IsTopLevel = toplevel;
+        }
 
-		internal ContentType ContentType {
-			get; private set;
-		}
+        private MimeEntityConstructorInfo()
+        {
+        }
 
-		internal IEnumerable<Header> Headers {
-			get; private set;
-		}
+        internal ParserOptions ParserOptions { get; private set; }
 
-		internal bool IsTopLevel {
-			get; private set;
-		}
+        internal ContentType ContentType { get; private set; }
 
-		internal MimeEntityConstructorInfo (ParserOptions options, ContentType ctype, IEnumerable<Header> headers, bool toplevel)
-		{
-			ParserOptions = options;
-			ContentType = ctype;
-			Headers = headers;
-			IsTopLevel = toplevel;
-		}
+        internal IEnumerable<Header> Headers { get; private set; }
 
-		MimeEntityConstructorInfo ()
-		{
-		}
-	}
+        internal bool IsTopLevel { get; private set; }
+    }
 }

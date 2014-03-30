@@ -13,7 +13,7 @@ namespace FluidPlayer
 
             Environment.CurrentDirectory = Path.GetDirectoryName(path);
 
-            if (!Engine.LoadAppConfiguration(path+".config"))
+            if (!Engine.LoadAppConfiguration(path))
             {
                 Engine.Logger.Log(LogLevel.Error,"App configuration not loaded, using default values");
                 Engine.AddPublicFolder("/", "./Public", false);
