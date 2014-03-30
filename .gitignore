@@ -294,3 +294,12 @@
 /NetFluid/obj/net_4_0_Debug/NetFluid.pdb
 /NetFluid/obj/net_4_0_Debug/NetFluid3.csproj.FileListAbsolute.txt
 /NetFluid/obj/net_4_0_Debug/NetFluid3.csprojResolveAssemblyReference.cache
+/FluidCenter/bin
+/FluidCenter/obj
+/FluidPlayer/bin
+/FluidPlayer/obj
+*.user
+/netfluid.service/bin
+/netfluid.service/obj
+/NetFluid.Site/bin
+/NetFluid.Site/obj/Release
