@@ -25,5 +25,10 @@ namespace FluidCenter
         {
             Program.UninstallService();
         }
+
+        private void windowsServiceToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 }

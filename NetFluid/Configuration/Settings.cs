@@ -55,7 +55,7 @@ namespace NetFluid
             set { this["DevMode"] = value; }
         }
 
-        [ConfigurationProperty("MaxPostSize", DefaultValue = 256*1024*1024, IsRequired = true)]
+        [ConfigurationProperty("MaxPostSize", DefaultValue = 256*1024*1024, IsRequired = false)]
         [IntegerValidator(MinValue = 0, MaxValue = 1024*1024*1024)]
         public int MaxPostSize
         {
@@ -63,7 +63,7 @@ namespace NetFluid
             set { this["MaxPostSize"] = value; }
         }
 
-        [ConfigurationProperty("SessionDuration", DefaultValue = 3600, IsRequired = true)]
+        [ConfigurationProperty("SessionDuration", DefaultValue = 3600, IsRequired = false)]
         [IntegerValidator(MinValue = 30, MaxValue = 1024*1024*1024)]
         public int SessionDuration
         {

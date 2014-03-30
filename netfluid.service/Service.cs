@@ -11,7 +11,9 @@ using System.ServiceProcess;
 namespace NetFluid.Service
 {
     class Service : ServiceBase
-    { 
+    {
+        private List<Process> processes;
+ 
         static void Main(string[] args)
         {
             if (args!=null && args.Length>=1 && args[0]=="debug")
@@ -30,13 +32,15 @@ namespace NetFluid.Service
         {
             Directory.SetCurrentDirectory(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location));
 
+            #region LOAD CONFIGURATION
             if (!Engine.LoadAppConfiguration())
             {
                 Engine.Interfaces.AddAllAddresses();
                 Engine.AddPublicFolder("/", "./Public", true);
                 Engine.Interfaces.AddInterface("127.0.0.1", 80);
-                Engine.Interfaces.AddInterface("127.0.0.1", 8000);   
+                Engine.Interfaces.AddInterface("127.0.0.1", 8000);
             }
+            #endregion
 
             if (!Directory.Exists("./Hosting"))
                 Directory.CreateDirectory("./Hosting");
@@ -54,9 +58,11 @@ namespace NetFluid.Service
                 hosts = hosts.FromXML(File.ReadAllText("hosts.xml"));
             }
 
+            processes = new List<Process>();
+
             hosts.ForEach(host =>
             {
-                Process.Start("FluidPlayer.exe", host.Application);
+                processes.Add(Process.Start("FluidPlayer.exe", host.Application));
                 host.Hosts.ForEach(x =>Engine.Cluster.AddFowarding(x,host.EndPoint));
             });
 
@@ -77,7 +83,10 @@ namespace NetFluid.Service
         /// </SUMMARY>
         protected override void OnStop()
         {
-            //stop any threads here and wait for them to be stopped.
+            foreach (var p in processes)
+            {
+                p.Kill();
+            }
         }
     }
 }

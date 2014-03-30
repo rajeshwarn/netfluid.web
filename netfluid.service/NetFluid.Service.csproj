@@ -61,9 +61,9 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\netfluid\NetFluid3.csproj">
+    <ProjectReference Include="..\netfluid\NetFluid4.csproj">
       <Project>{b215459f-37ff-411c-8e6b-9cdedb946f93}</Project>
-      <Name>NetFluid3</Name>
+      <Name>NetFluid4</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup />
