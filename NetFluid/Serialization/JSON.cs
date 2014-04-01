@@ -389,9 +389,10 @@ namespace NetFluid
             else
                 builder.Write(space + "\"$type\" :" + "\"" + type.FullName + "\", \r\n");*/
 
-            #region PROPERITIES
-
             var props = type.GetProperties();
+            var fields = type.GetFields();
+
+            #region PROPERITIES
 
             for (int i = 0; i < props.Length; i++)
             {
@@ -427,7 +428,7 @@ namespace NetFluid
                             Serialize(value, builder, tab + 1, spaceless);
                         }
 
-                        if (i != (props.Length - 1))
+                        if (i != (props.Length + fields.Length - 1))
                             builder.Write(",");
 
                         if (!spaceless)
@@ -438,7 +439,6 @@ namespace NetFluid
 
             #endregion
 
-            var fields = type.GetFields();
 
             for (int i = 0; i < fields.Length; i++)
             {
@@ -461,7 +461,7 @@ namespace NetFluid
                         Serialize(value, builder, tab + 1, spaceless);
                     }
 
-                    if (i != (fields.Length - 1))
+                    if (i != (props.Length + fields.Length - 1))
                         builder.Write(",");
 
                     if (!spaceless)
