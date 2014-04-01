@@ -52,6 +52,16 @@ namespace NetFluid
 
         #endregion
 
+        public bool IsMultiple
+        {
+            get { return values.Length > 2; }
+        }
+
+        public string[] ToArray()
+        {
+            return values;
+        }
+
         #region IEnumerable<string> Members
 
         IEnumerator<string> IEnumerable<string>.GetEnumerator()
@@ -89,7 +99,7 @@ namespace NetFluid
                     b.Append(JSON.Escape(values[0]));
                 break;
                 default:
-                    b.Append("[" + string.Join(",", values.Select(x => JSON.Escape(x))) + "]");
+                    b.Append("[" + string.Join(",", values.Select(JSON.Escape)) + "]");
                 break;
             }
 
@@ -236,7 +246,7 @@ namespace NetFluid
 
         bool IConvertible.ToBoolean(IFormatProvider provider)
         {
-            return values.Length == 0 ? false : bool.Parse(values[0]);
+            return values.Length != 0 && bool.Parse(values[0]);
         }
 
         byte IConvertible.ToByte(IFormatProvider provider)
