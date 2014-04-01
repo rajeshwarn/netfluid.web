@@ -69,36 +69,6 @@ namespace NetFluid
             return (T) JsonParser.Translate(typeof (T), parser.ParseValue());
         }
 
-        private static string ParseString(ref string json)
-        {
-            const string regexQuote = "^@\"(?:[^\"]+|\"\")*\"|\"(?:[^\"\\\\]+|\\\\.)*\"";
-
-            Match match = Regex.Match(json, regexQuote);
-
-            if (!match.Success)
-                return null;
-
-            json = json.Substring(match.Index + match.Value.Length);
-
-            string str =
-                match.Value.Replace("\\\"", "\"").Replace("\\\\", "\\").Replace("\\b", "\b").Replace("\\f", "\f").
-                    Replace("\\n", "\n").Replace("\\r", "\r").Replace("\\t", "\t");
-
-            foreach (Match m in Regex.Matches(str, "\\\\u[0-9a-fA-F]+"))
-            {
-                int codePoint;
-                if (Int32.TryParse(m.Value, NumberStyles.HexNumber, CultureInfo.InvariantCulture, out codePoint))
-                {
-                    str = str.Replace(m.Value, Char.ConvertFromUtf32(codePoint));
-                }
-            }
-
-            str = str.Substring(1);
-            str = str.Substring(0, str.Length - 1);
-
-            return str;
-        }
-
         #region SERIALIZE
 
         private static void Serialize(object obj, TextWriter builder, int tab = 0, bool spaceless = false, bool omitNull=false)
