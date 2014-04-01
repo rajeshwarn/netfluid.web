@@ -352,8 +352,9 @@ namespace NetFluid
                     foreach (var kv in parts[1].Split('&'))
                     {
                         var pos = kv.IndexOf('=');
-                        var val = pos == -1 ? "true" : HttpUtility.UrlDecode(kv.Substring(pos + 1));
-                        var key = pos == -1 ? HttpUtility.UrlDecode(kv) : HttpUtility.UrlDecode(kv.Substring(0, pos));
+
+                        var val = pos < 0 ? "true" : HttpUtility.UrlDecode(kv.Substring(pos + 1));
+                        var key = pos < 0  ? HttpUtility.UrlDecode(kv) : HttpUtility.UrlDecode(kv.Substring(0, pos));
 
                         Request.Get.Add(key, val);
                     }
@@ -375,7 +376,7 @@ namespace NetFluid
                 #region GENERIC HEADER
 
                 var colon = lines[i].IndexOf(':');
-                if (colon == -1 || colon == 0)
+                if (colon <= 0)
                 {
                     Response.StatusCode = StatusCode.BadRequest;
                     return;
@@ -415,7 +416,7 @@ namespace NetFluid
 
                         var cookieStrings = val.Split(new[] {',', ';'});
                         Cookie current = null;
-                        var ProtocolVersion = 0;
+                        var protocolVersion = 0;
                         foreach (var cookieString in cookieStrings)
                         {
                             var str = cookieString.Trim();
@@ -423,13 +424,13 @@ namespace NetFluid
                                 continue;
 
                             var iu = str.IndexOf('=');
-                            var prop = str.Substring(0, iu);
-                            var value = str.Substring(iu + 1).Trim();
+                            var prop = iu >=0 ? str.Substring(0, iu) : "";
+                            var value = iu >= 0 ? str.Substring(iu + 1).Trim() : ""; 
 
                             switch (prop)
                             {
                                 case "$ProtocolVersion":
-                                    ProtocolVersion = Int32.Parse(value.Unquote());
+                                    protocolVersion = Int32.Parse(value.Unquote());
                                     break;
                                 case "$Path":
                                     if (current != null)
@@ -459,7 +460,7 @@ namespace NetFluid
                                         current.Name = str.Trim();
                                         current.Value = String.Empty;
                                     }
-                                    current.Version = ProtocolVersion;
+                                    current.Version = protocolVersion;
                                     break;
                             }
                         }

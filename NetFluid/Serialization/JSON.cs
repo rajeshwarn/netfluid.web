@@ -21,6 +21,7 @@
 // 23/10/2013    Matteo Fabbri      Inital coding
 // ********************************************************************************************************
 
+using System.Xml.Schema;
 using NetFluid.Serialization;
 using System;
 using System.Collections;
@@ -43,9 +44,9 @@ namespace NetFluid
             writer.Flush();
         }
 
-        public static void Serialize(object json, TextWriter writer, bool singlerow = false)
+        public static void Serialize(object json, TextWriter writer, bool singlerow = false, bool omitNull = false)
         {
-            Serialize(json, writer, 0, singlerow);
+            Serialize(json, writer, 0, singlerow,omitNull);
         }
 
         public static string Serialize(object json, bool singlerow = false)
@@ -324,7 +325,7 @@ namespace NetFluid
 
         #region SERIALIZE
 
-        private static void Serialize(object obj, TextWriter builder, int tab = 0, bool spaceless = false)
+        private static void Serialize(object obj, TextWriter builder, int tab = 0, bool spaceless = false, bool omitNull=false)
         {
             string space = spaceless ? string.Empty : new string('\t', tab);
 
@@ -381,7 +382,7 @@ namespace NetFluid
                 builder.Write("\r\n" + space + "{\r\n");
 
 
-            Type type = obj.GetType();
+            var type = obj.GetType();
 
             /*if (spaceless)
                 builder.Write("\"$type\" :" + "\"" + type.FullName + "\",");
@@ -390,7 +391,7 @@ namespace NetFluid
 
             #region PROPERITIES
 
-            PropertyInfo[] props = type.GetProperties();
+            var props = type.GetProperties();
 
             for (int i = 0; i < props.Length; i++)
             {
@@ -409,10 +410,46 @@ namespace NetFluid
                         continue;
                     }
 
+                    if (!omitNull || value != null)
+                    {
+                        builder.Write(space);
+
+                        builder.Write(Escape(key));
+
+                        builder.Write(":");
+
+                        if (value == null)
+                        {
+                            builder.Write("null");
+                        }
+                        else
+                        {
+                            Serialize(value, builder, tab + 1, spaceless);
+                        }
+
+                        if (i != (props.Length - 1))
+                            builder.Write(",");
+
+                        if (!spaceless)
+                            builder.Write("\r\n");
+                    }
+                }
+            }
+
+            #endregion
+
+            var fields = type.GetFields();
+
+            for (int i = 0; i < fields.Length; i++)
+            {
+                string key = fields[i].Name;
+                object value = fields[i].GetValue(obj);
+
+                if (!omitNull || value != null)
+                {
                     builder.Write(space);
 
                     builder.Write(Escape(key));
-
                     builder.Write(":");
 
                     if (value == null)
@@ -424,42 +461,12 @@ namespace NetFluid
                         Serialize(value, builder, tab + 1, spaceless);
                     }
 
-                    if (i != (props.Length - 1))
+                    if (i != (fields.Length - 1))
                         builder.Write(",");
 
                     if (!spaceless)
                         builder.Write("\r\n");
                 }
-            }
-
-            #endregion
-
-            FieldInfo[] fields = type.GetFields();
-
-            for (int i = 0; i < fields.Length; i++)
-            {
-                string key = fields[i].Name;
-                object value = fields[i].GetValue(obj);
-
-                builder.Write(space);
-
-                builder.Write(Escape(key));
-                builder.Write(":");
-
-                if (value == null)
-                {
-                    builder.Write("null");
-                }
-                else
-                {
-                    Serialize(value, builder, tab + 1, spaceless);
-                }
-
-                if (i != (fields.Length - 1))
-                    builder.Write(",");
-
-                if (!spaceless)
-                    builder.Write("\r\n");
             }
 
 
