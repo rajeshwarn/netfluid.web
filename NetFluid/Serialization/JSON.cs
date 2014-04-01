@@ -222,7 +222,7 @@ namespace NetFluid
                 builder.Write("}");
         }
 
-        private static void SerializeArray(Array anArray, TextWriter builder, int tab = 0, bool spaceless = false)
+        private static void SerializeArray(Array anArray, TextWriter builder, int tab = 0, bool spaceless = false,bool omitNull=false)
         {
             if (anArray.Length == 0)
             {
@@ -241,7 +241,7 @@ namespace NetFluid
             {
                 object value = anArray.GetValue(i);
 
-                Serialize(value, builder, tab + 1, spaceless);
+                Serialize(value, builder, tab + 1, spaceless,omitNull);
 
                 if (i < (anArray.Length - 1))
                     builder.Write(", ");
