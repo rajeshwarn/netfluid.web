@@ -54,7 +54,7 @@ namespace NetFluid
 
         public bool IsMultiple
         {
-            get { return values.Length > 2; }
+            get { return values.Length >= 2; }
         }
 
         public string[] ToArray()
