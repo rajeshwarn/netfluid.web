@@ -3,16 +3,17 @@ using System.Linq;
 
 namespace NetFluid
 {
+
     public class QueryValueCollection : IEnumerable<QueryValue>
     {
-        Dictionary<string, QueryValue> values;
+        readonly Dictionary<string, QueryValue> values;
 
         public QueryValueCollection()
         {
             values = new Dictionary<string, QueryValue>();
         }
 
-        public QueryValueCollection(QueryValueCollection collection)
+        public QueryValueCollection(IEnumerable<QueryValue> collection)
         {
             values = new Dictionary<string, QueryValue>();
 
