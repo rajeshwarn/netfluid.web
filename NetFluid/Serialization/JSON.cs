@@ -87,7 +87,7 @@ namespace NetFluid
             }
             if (obj.GetType().IsArray || obj.GetType().Implements(typeof(IEnumerable)))
             {
-                SerializeArray(obj as IEnumerable, builder, tab, spaceless);
+                SerializeArray(obj as IEnumerable, builder, tab, spaceless,omitNull);
                 return;
             }
             if (obj is TimeSpan)
@@ -112,7 +112,7 @@ namespace NetFluid
             }
             if (obj is IConvertible)
             {
-                builder.Write(obj.ToString().ToLower());
+                builder.Write(Escape(obj.ToString().ToLower()));
                 return;
             }
             if (obj is Guid)
@@ -171,7 +171,7 @@ namespace NetFluid
                         }
                         else
                         {
-                            Serialize(value, builder, tab + 1, spaceless);
+                            Serialize(value, builder, tab + 1, spaceless,omitNull);
                         }
 
                         if (i != (props.Length + fields.Length - 1))
@@ -204,7 +204,7 @@ namespace NetFluid
                     }
                     else
                     {
-                        Serialize(value, builder, tab + 1, spaceless);
+                        Serialize(value, builder, tab + 1, spaceless,omitNull);
                     }
 
                     if (i != (props.Length + fields.Length - 1))
