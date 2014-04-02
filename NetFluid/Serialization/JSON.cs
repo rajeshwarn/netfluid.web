@@ -85,9 +85,9 @@ namespace NetFluid
                 builder.Write(Escape(obj as string));
                 return;
             }
-            if (obj.GetType().IsArray)
+            if (obj.GetType().IsArray || obj.GetType().Implements(typeof(IEnumerable)))
             {
-                SerializeArray(obj as Array, builder, tab, spaceless);
+                SerializeArray(obj as IEnumerable, builder, tab, spaceless);
                 return;
             }
             if (obj is TimeSpan)
@@ -222,9 +222,11 @@ namespace NetFluid
                 builder.Write("}");
         }
 
-        private static void SerializeArray(Array anArray, TextWriter builder, int tab = 0, bool spaceless = false,bool omitNull=false)
+        private static void SerializeArray(IEnumerable enumerable, TextWriter builder, int tab = 0, bool spaceless = false,bool omitNull=false)
         {
-            if (anArray.Length == 0)
+            var enumerator = enumerable.GetEnumerator();
+
+            if (!enumerator.MoveNext())
             {
                 builder.Write("[]");
                 return;
@@ -235,21 +237,14 @@ namespace NetFluid
             if (spaceless)
                 builder.Write("[");
             else
-                builder.Write(space + "\r\n[\r\n");
+                builder.Write(space + "[");
 
-            for (int i = 0; i < anArray.Length; i++)
+            Serialize(enumerator.Current, builder, tab + 1, spaceless, omitNull);
+
+            while (enumerator.MoveNext())
             {
-                object value = anArray.GetValue(i);
-
-                Serialize(value, builder, tab + 1, spaceless,omitNull);
-
-                if (i < (anArray.Length - 1))
-                    builder.Write(", ");
-
-                if (!spaceless)
-                {
-                    builder.Write("\r\n");
-                }
+                builder.Write(",");
+                Serialize(enumerator.Current, builder, tab + 1, spaceless, omitNull);
             }
 
             if (!spaceless)
