@@ -57,6 +57,22 @@ namespace NetFluid
             get { return values.Length >= 2; }
         }
 
+        public string Value
+        {
+            get
+            {
+                switch (values.Length)
+                {
+                    case 0:
+                        return "";
+                    case 1:
+                        return values[0];
+                    default:
+                        return "[" + string.Join(",",values) +"]";
+                }
+            }
+        }
+
         public string[] ToArray()
         {
             return values;
