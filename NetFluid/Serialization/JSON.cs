@@ -112,7 +112,7 @@ namespace NetFluid
             }
             if (obj is IConvertible)
             {
-                builder.Write(Escape(obj.ToString().ToLower()));
+                builder.Write(Escape(obj.ToString()));
                 return;
             }
             if (obj is Guid)
