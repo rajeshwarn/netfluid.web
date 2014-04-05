@@ -43,7 +43,7 @@ namespace NetFluid
             templates = new ConcurrentDictionary<string, MethodInfo>();
         }
 
-        internal static MethodInfo Get(string filename)
+        internal static MethodInfo Get(string filename,Type fromType)
         {
             var path = filename.StartsWith("embed:") ? filename : Path.GetFullPath(filename);
 
@@ -53,7 +53,7 @@ namespace NetFluid
 
             try
             {
-                template = Load(path);
+                template = Load(path,fromType);
                 templates.AddOrUpdate(path, template, (x, y) => y);
             }
             catch (Exception ex)
@@ -128,13 +128,13 @@ namespace NetFluid
             return code;
         }
 
-        private static MethodInfo Load(string filename)
+        private static MethodInfo Load(string filename,Type fromType)
         {
             Stream stream;
 
             if (filename.StartsWith("embed:"))
             {
-                stream = Assembly.GetEntryAssembly().GetManifestResourceStream(filename.Substring("embed:".Length));
+                stream = fromType.Assembly.GetManifestResourceStream(filename.Substring("embed:".Length));
 
                 if (stream == null)
                     return FileNotFound(filename);
@@ -275,7 +275,7 @@ namespace NetFluid
                 }
             }
 
-            var @namespace = Assembly.GetEntryAssembly().EntryPoint.DeclaringType.Namespace;
+            var @namespace = fromType.Namespace;
             var name = "____FluidTemplate" + Security.UID();
 
             var classBuilder = new StringBuilder();

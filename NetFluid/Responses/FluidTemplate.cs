@@ -36,7 +36,8 @@ namespace NetFluid
 
         public FluidTemplate(string path, params object[] parameters)
         {
-            template = TemplateCompiler.Get(path);
+            var s = new System.Diagnostics.StackFrame(1);
+            template = TemplateCompiler.Get(path, s.GetMethod().DeclaringType);
 
             if (parameters == null)
             {

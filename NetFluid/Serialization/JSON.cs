@@ -87,7 +87,7 @@ namespace NetFluid
             }
             if (obj.GetType().IsArray || obj.GetType().Implements(typeof(IEnumerable)))
             {
-                SerializeArray(obj as IEnumerable, builder, tab, spaceless,omitNull);
+                SerializeEnumerable(obj as IEnumerable, builder, tab, spaceless,omitNull);
                 return;
             }
             if (obj is TimeSpan)
@@ -222,7 +222,7 @@ namespace NetFluid
                 builder.Write("}");
         }
 
-        private static void SerializeArray(IEnumerable enumerable, TextWriter builder, int tab = 0, bool spaceless = false,bool omitNull=false)
+        private static void SerializeEnumerable(IEnumerable enumerable, TextWriter builder, int tab = 0, bool spaceless = false,bool omitNull=false)
         {
             var enumerator = enumerable.GetEnumerator();
 

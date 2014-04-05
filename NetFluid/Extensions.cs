@@ -308,6 +308,26 @@ namespace NetFluid
             return str[str.Length - 1] == c;
         }
 
+
+        /// <summary>
+        /// Replace invalid HTML chars with relative URL entities
+        /// </summary>
+        /// <param name="str">String to encoded</param>
+        public static string URLEncode(this string str)
+        {
+            return HttpUtility.UrlEncode(str);
+        }
+
+        /// <summary>
+        /// Replace HTML entities with relatives UTF-8 chars
+        /// </summary>
+        /// <param name="str">String to decoded</param>
+        public static string URLDecode(this string str)
+        {
+            return HttpUtility.UrlDecode(str);
+        }
+
+
         /// <summary>
         /// Replace invalid HTML chars with relative HTML entities
         /// </summary>
