@@ -241,8 +241,8 @@ namespace NetFluid
 
                         while (r.Contains("{%") && r.Contains("%}"))
                         {
-                            var index = r.IndexOf("{%");
-                            var index2 = r.IndexOf("%}");
+                            var index = r.IndexOf("{%", System.StringComparison.Ordinal);
+                            var index2 = r.IndexOf("%}", System.StringComparison.Ordinal);
 
                             var variabile = r.Substring(index + 2, index2 - index - 2);
                             var pre = r.Substring(0, index);
@@ -302,14 +302,14 @@ namespace NetFluid
             var csc_parameters = new CompilerParameters(new string[] {}, Path.GetTempFileName(), false);
             csc_parameters.TreatWarningsAsErrors = false;
 
-            var refe = Assembly.GetEntryAssembly().GetReferencedAssemblies();
+            var refe = fromType.Assembly.GetReferencedAssemblies();
             foreach (var reference in refe)
             {
                 var ass = Assembly.Load(reference);
                 csc_parameters.ReferencedAssemblies.Add(ass.Location);
             }
 
-            csc_parameters.ReferencedAssemblies.Add(Assembly.GetEntryAssembly().Location);
+            csc_parameters.ReferencedAssemblies.Add(fromType.Assembly.Location);
 
             csc_parameters.GenerateInMemory = true;
             csc_parameters.GenerateExecutable = false;

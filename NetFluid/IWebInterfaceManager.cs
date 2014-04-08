@@ -21,6 +21,8 @@
 // 23/10/2013    Matteo Fabbri      Inital coding
 // ********************************************************************************************************
 
+using System.Collections;
+using System.Collections.Generic;
 using System.Net;
 
 namespace NetFluid
@@ -28,7 +30,7 @@ namespace NetFluid
     /// <summary>
     /// Implements methods to create and manage system http interfaces
     /// </summary>
-    public interface IWebInterfaceManager
+    public interface IWebInterfaceManager : IEnumerable<IWebInterface>
     {
         /// <summary>
         /// Add an http interface on ip 127.0.0.1 and spefied port

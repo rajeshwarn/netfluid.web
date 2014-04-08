@@ -28,43 +28,43 @@ using System.Security.Cryptography.X509Certificates;
 
 namespace NetFluid.HTTP
 {
-    internal class WebInterface : IDisposable
+    internal class WebInterface : IDisposable, IWebInterface
     {
-        private readonly X509Certificate2 certificate;
-        private readonly IPEndPoint endpoint;
-        private readonly Socket sock;
+        public X509Certificate2 Certificate { get; private set; }
+        public IPEndPoint Endpoint { get; private set; }
+        public Socket Socket { get; private set; }
 
         public WebInterface(IPAddress addr, int port)
         {
-            endpoint = new IPEndPoint(addr, port);
-            sock = new Socket(addr.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
-            sock.Bind(endpoint);
-            sock.Listen(512);
+            Endpoint = new IPEndPoint(addr, port);
+            Socket = new Socket(addr.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
+            Socket.Bind(Endpoint);
+            Socket.Listen(512);
         }
 
         public WebInterface(IPAddress addr, int port, X509Certificate2 certificate)
         {
-            this.certificate = certificate;
-            endpoint = new IPEndPoint(addr, port);
-            sock = new Socket(addr.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
-            sock.Bind(endpoint);
-            sock.Listen(512);
+            this.Certificate = certificate;
+            Endpoint = new IPEndPoint(addr, port);
+            Socket = new Socket(addr.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
+            Socket.Bind(Endpoint);
+            Socket.Listen(512);
         }
 
         public WebInterface(IPAddress addr, int port, string certPath)
         {
-            certificate = new X509Certificate2(certPath);
-            endpoint = new IPEndPoint(addr, port);
-            sock = new Socket(addr.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
-            sock.Bind(endpoint);
-            sock.Listen(512);
+            Certificate = new X509Certificate2(certPath);
+            Endpoint = new IPEndPoint(addr, port);
+            Socket = new Socket(addr.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
+            Socket.Bind(Endpoint);
+            Socket.Listen(512);
         }
 
         #region IDisposable Members
 
         void IDisposable.Dispose()
         {
-            sock.Close();
+            Socket.Close();
         }
 
         #endregion
@@ -94,7 +94,7 @@ namespace NetFluid.HTTP
             {
                 try
                 {
-                    new Context(e.AcceptSocket, certificate);
+                    new Context(e.AcceptSocket, Certificate);
                 }
                 catch (Exception)
                 {
@@ -106,10 +106,10 @@ namespace NetFluid.HTTP
 
         public void Start()
         {
-            Engine.Logger.Log(LogLevel.Debug,"Starting " + (certificate != null ? "secure " : " ") + "web interface on " + endpoint);
+            Engine.Logger.Log(LogLevel.Debug,"Starting " + (Certificate != null ? "secure " : " ") + "web interface on " + Endpoint);
 
             var e = new SocketAsyncEventArgs();
-            if (certificate == null)
+            if (Certificate == null)
             {
                 e.Completed += OnAccept;
             }
@@ -117,7 +117,7 @@ namespace NetFluid.HTTP
             {
                 e.Completed += OnAcceptCrypt;
             }
-            sock.AcceptAsync(e);
+            Socket.AcceptAsync(e);
         }
     }
 }

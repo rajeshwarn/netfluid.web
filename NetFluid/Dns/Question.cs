@@ -85,14 +85,15 @@ namespace NetFluid.DNS.Records
 			for (intI = 0, intJ = 0; intI < intLen; intI++, intJ++)
 			{
 				sb.Append(src[intI]);
-				if (src[intI] == '.')
-				{
-					sb[intI - intJ] = (char)(intJ & 0xff);
-					intJ = -1;
-				}
+			    
+                if (src[intI] != '.')
+                    continue;
+
+			    sb[intI - intJ] = (char)(intJ & 0xff);
+			    intJ = -1;
 			}
 			sb[sb.Length - 1] = '\0';
-			return System.Text.Encoding.ASCII.GetBytes(sb.ToString());
+			return Encoding.ASCII.GetBytes(sb.ToString());
 		}
 
 		public byte[] Data
@@ -107,7 +108,7 @@ namespace NetFluid.DNS.Records
 			}
 		}
 
-		private IEnumerable<byte> WriteShort(ushort sValue)
+		private static IEnumerable<byte> WriteShort(ushort sValue)
 		{
 			return BitConverter.GetBytes(IPAddress.HostToNetworkOrder((short)sValue));
 		}

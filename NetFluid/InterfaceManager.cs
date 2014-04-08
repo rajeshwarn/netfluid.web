@@ -21,28 +21,23 @@
 // 23/10/2013    Matteo Fabbri      Inital coding
 // ********************************************************************************************************
 
+using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net;
 using NetFluid.HTTP;
 using System;
 
 namespace NetFluid
 {
-    internal class InterfaceManager : IWebInterfaceManager
+    internal class InterfaceManager : List<IWebInterface>, IWebInterfaceManager
     {
-        private readonly List<WebInterface> interfaces;
-
-        internal InterfaceManager()
-        {
-            interfaces = new List<WebInterface>();
-        }
-
         #region IWebInterfaceManager Members
 
         public void Start()
         {
             Engine.Logger.Log(LogLevel.Debug, "Starting web interfaces");
-            foreach (WebInterface item in interfaces)
+            foreach (var item in this)
             {
                 item.Start();
             }
@@ -56,7 +51,7 @@ namespace NetFluid
         public void AddAllAddresses(int port = 80)
         {
             Engine.Logger.Log(LogLevel.Debug, "Starting web interfaces on every ip on port " + port);
-            foreach (IPAddress item in Network.Addresses)
+            foreach (var item in Network.Addresses)
             {
                 //Console.WriteLine(item + ":" + port);
                 AddInterface(item, port);
@@ -68,7 +63,7 @@ namespace NetFluid
             try
             {
                 Engine.Logger.Log(LogLevel.Debug, "Adding http interface on " + ip + ":" + port);
-                interfaces.Add(new WebInterface(ip, port));
+                Add(new WebInterface(ip, port));
             }
             catch (Exception ex)
             {
@@ -81,7 +76,7 @@ namespace NetFluid
             try
             {
                 Engine.Logger.Log(LogLevel.Debug, "Adding https interface on " + ip + ":" + port);
-                interfaces.Add(new WebInterface(ip, port, certificate));
+                Add(new WebInterface(ip, port, certificate));
             }
             catch (Exception ex)
             {
@@ -95,7 +90,7 @@ namespace NetFluid
             try
             {
                 Engine.Logger.Log(LogLevel.Debug, "Adding http interface on " + ip + ":" + port);
-                interfaces.Add(new WebInterface(IPAddress.Parse(ip), port));
+                Add(new WebInterface(IPAddress.Parse(ip), port));
             }
             catch (Exception ex)
             {
@@ -109,7 +104,7 @@ namespace NetFluid
             try
             {
                 Engine.Logger.Log(LogLevel.Debug, "Adding https interface on " + ip + ":" + port);
-                interfaces.Add(new WebInterface(IPAddress.Parse(ip), port, certificate));
+                Add(new WebInterface(IPAddress.Parse(ip), port, certificate));
             }
             catch (Exception ex)
             {

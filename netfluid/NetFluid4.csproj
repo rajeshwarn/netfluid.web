@@ -163,6 +163,7 @@
     <Compile Include="Hosting\VirtualHost.cs" />
     <Compile Include="HttpFile.cs" />
     <Compile Include="HttpFileCollection.cs" />
+    <Compile Include="IWebInterface.cs" />
     <Compile Include="ILogger.cs" />
     <Compile Include="IMethodExposer.cs" />
     <Compile Include="IO\ChunkedStream.cs" />
