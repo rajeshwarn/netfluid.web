@@ -48,7 +48,7 @@ namespace NetFluid
         private static ConcurrentBag<Tuple<long, string>> ProfilingResults;
         private static bool profiling;
 
-        private readonly MemoryStream ms;
+        private readonly MemoryStream _ms;
         private readonly Stopwatch st;
 
         /// <summary>
@@ -127,7 +127,7 @@ namespace NetFluid
             InputStream = stream;
 
             Buffer = new byte[BufferSize];
-            ms = new MemoryStream(BufferSize);
+            _ms = new MemoryStream(BufferSize);
             position = 0;
             InputStream.BeginRead(Buffer, 0, BufferSize, OnRead, this);
         }
@@ -149,7 +149,7 @@ namespace NetFluid
             Socket = sock;
             Secure = true;
 
-            ms = new MemoryStream();
+            _ms = new MemoryStream();
             position = 0;
 
             Request = new HttpRequest();
@@ -287,11 +287,11 @@ namespace NetFluid
                 return;
             }
 
-            ms.Write(Buffer, 0, nread);
+            _ms.Write(Buffer, 0, nread);
 
             readBytes += nread;
 
-            if (ms.Length > 32768)
+            if (_ms.Length > 32768)
             {
                 Response.StatusCode = StatusCode.BadRequest;
                 Close();
@@ -304,7 +304,7 @@ namespace NetFluid
                 return;
             }
 
-            var t = ms.GetBuffer();
+            var t = _ms.GetBuffer();
             var header = ReadHeaders(t, ref position, t.Length - position);
 
             if (header == "")
@@ -387,15 +387,15 @@ namespace NetFluid
 
                 Request.Headers.Set(name, val);
 
-                switch (name)
+                switch (name.ToLowerInvariant())
                 {
-                    case "Accept-Language":
+                    case "accept-language":
                         Request.UserLanguages = val.Split(',');
                         break;
-                    case "Accept":
+                    case "accept":
                         Request.AcceptTypes = val.Split(',');
                         break;
-                    case "Content-Length":
+                    case "content-length":
                         try
                         {
                             Request.ContentLength = Int64.Parse(val.Trim());
@@ -407,10 +407,10 @@ namespace NetFluid
                             Response.StatusCode = StatusCode.BadRequest;
                         }
                         break;
-                    case "Referer":
+                    case "referer":
                         Request.UrlReferrer = val;
                         break;
-                    case "Cookie":
+                    case "cookie":
 
                         #region COOKIE PARSING
 
@@ -419,49 +419,57 @@ namespace NetFluid
                         var protocolVersion = 0;
                         foreach (var cookieString in cookieStrings)
                         {
-                            var str = cookieString.Trim();
-                            if (str.Length == 0)
-                                continue;
-
-                            var iu = str.IndexOf('=');
-                            var prop = iu >=0 ? str.Substring(0, iu) : "";
-                            var value = iu >= 0 ? str.Substring(iu + 1).Trim() : ""; 
-
-                            switch (prop)
+                            try
                             {
-                                case "$ProtocolVersion":
-                                    protocolVersion = Int32.Parse(value.Unquote());
-                                    break;
-                                case "$Path":
-                                    if (current != null)
-                                        current.Path = value;
-                                    break;
-                                case "$Domain":
-                                    if (current != null)
-                                        current.Domain = value;
-                                    break;
-                                case "$Port":
-                                    if (current != null)
-                                        current.Port = value;
-                                    break;
-                                default:
-                                    if (current != null)
-                                        Request.Cookies.Add(current);
+                                var str = cookieString.Trim();
+                                if (str.Length == 0)
+                                    continue;
 
-                                    current = new Cookie();
-                                    var idx = str.IndexOf('=');
-                                    if (idx > 0)
-                                    {
-                                        current.Name = str.Substring(0, idx).Trim();
-                                        current.Value = str.Substring(idx + 1).Trim();
-                                    }
-                                    else
-                                    {
-                                        current.Name = str.Trim();
-                                        current.Value = String.Empty;
-                                    }
-                                    current.Version = protocolVersion;
-                                    break;
+                                var iu = str.IndexOf('=');
+                                var prop = iu >= 0 ? str.Substring(0, iu) : "";
+                                var value = iu >= 0 ? str.Substring(iu + 1).Trim() : "";
+
+                                #region SWITCH PROPERTIES
+                                switch (prop)
+                                {
+                                    case "$ProtocolVersion":
+                                        protocolVersion = Int32.Parse(value.Unquote());
+                                        break;
+                                    case "$Path":
+                                        if (current != null)
+                                            current.Path = value;
+                                        break;
+                                    case "$Domain":
+                                        if (current != null)
+                                            current.Domain = value;
+                                        break;
+                                    case "$Port":
+                                        if (current != null)
+                                            current.Port = value;
+                                        break;
+                                    default:
+                                        if (current != null)
+                                            Request.Cookies.Add(current);
+
+                                        current = new Cookie();
+                                        var idx = str.IndexOf('=');
+                                        if (idx > 0)
+                                        {
+                                            current.Name = str.Substring(0, idx).Trim();
+                                            current.Value = str.Substring(idx + 1).Trim();
+                                        }
+                                        else
+                                        {
+                                            current.Name = str.Trim();
+                                            current.Value = String.Empty;
+                                        }
+                                        current.Version = protocolVersion;
+                                        break;
+                                }
+                                #endregion
+                            }
+                            catch (Exception)
+                            {
                             }
                         }
                         if (current != null)
@@ -476,7 +484,7 @@ namespace NetFluid
 
             #region WEBSOCKET
 
-            if (Request.Headers["Sec-WebSocket-Key"] != "")
+            if (Request.Headers.Contains("Sec-WebSocket-Key"))
             {
                 var acc = "Sec-WebSocket-Accept: " + Security.SecWebSocketAccept(Request.Headers["Sec-WebSocket-Key"]) + "\r\n";
 
