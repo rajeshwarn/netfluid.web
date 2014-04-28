@@ -1,8 +1,6 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using NetFluid;
 using System.IO;
 using System.Reflection;
 using System.ServiceProcess;
@@ -12,7 +10,7 @@ namespace NetFluid.Service
 {
     class Service : ServiceBase
     {
-        private List<Process> processes;
+        static ConcurrentDictionary<string,Host> processes;
  
         static void Main(string[] args)
         {
@@ -20,12 +18,21 @@ namespace NetFluid.Service
             {
                (new Service()).OnStart(null);
                 Console.ReadLine();
+                return;
             }
-            else
-            {
-                Run(new Service());
-            }
+            Run(new Service());
+        }
 
+        public static IEnumerable<string> Applications
+        {
+            get { return processes.Keys; }
+        }
+
+        public static Host ApplicationData(string name)
+        {
+            Host host = null;
+            processes.TryGetValue(name, out host);
+            return host;
         }
 
         protected override void OnStart(string[] args)
@@ -58,22 +65,14 @@ namespace NetFluid.Service
                 hosts = hosts.FromXML(File.ReadAllText("hosts.xml"));
             }
 
-            processes = new List<Process>();
+            processes = new ConcurrentDictionary<string, Host>();
 
             hosts.ForEach(host =>
             {
-                processes.Add(Process.Start("FluidPlayer.exe", host.Application));
+                processes.TryAdd(host.Name,host);
+                host.Start();
                 host.Hosts.ForEach(x =>Engine.Cluster.AddFowarding(x,host.EndPoint));
             });
-
-
-            if (!Directory.Exists("./Plugin"))
-                Directory.CreateDirectory("./Plugin");
-
-            foreach (var plugin in Directory.GetFiles("./Plugin","*.dll",SearchOption.AllDirectories))
-            {
-                Engine.Load(Assembly.LoadFile(plugin));
-            }
 
             Engine.Start();
         }
@@ -83,15 +82,16 @@ namespace NetFluid.Service
         /// </SUMMARY>
         protected override void OnStop()
         {
+            Engine.Logger.Log(LogLevel.Warning,"NetFluid Service is stopping");
             foreach (var p in processes)
             {
                 try
                 {
-                    p.Kill();
+                    p.Value.Kill();
                 }
                 catch (Exception exception)
                 {
-                    File.WriteAllText(Security.UID(),exception.Message);
+                    Engine.Logger.Log(LogLevel.Exception,"Error stopping "+p.Key,exception);
                 }
             }
         }
