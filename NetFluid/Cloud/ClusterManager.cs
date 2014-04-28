@@ -27,8 +27,7 @@ using System.Collections.Concurrent;
 using System.Linq;
 using System.Net;
 using System.Net.Sockets;
-using System.Security.Cryptography;
-using System.Threading;
+
 
 namespace NetFluid.Cloud
 {
@@ -202,39 +201,24 @@ namespace NetFluid.Cloud
 
         public bool Handle(Context context)
         {
-            IPEndPoint fow;
-            Targets.TryGetValue(context.Request.Host, out fow);
-
-            if (fow == null)
-                return false;
-            
-            /*var destination = new TcpClient { ReceiveTimeout = 100, SendTimeout = 100 };
-            destination.Connect(fow);
-                
-            var to = destination.GetStream();
-            to.Write(context.Buffer,0,context.Buffer.Length);
-                
-            var buffer = new byte[1024];
-
-            while (destination.Connected && context.Socket.Connected)
+            try
             {
-                if (destination.Available>0)
+                IPEndPoint fow;
+                Targets.TryGetValue(context.Request.Host, out fow);
+
+                if (fow == null)
                 {
-                    var r = to.Read(buffer, 0, destination.Available > buffer.Length ? buffer.Length: destination.Available);
-                    context.OutputStream.Write(buffer,0,r);
+                    return false;
                 }
-                if (context.Socket.Available > 0)
-                {
-                    var r = context.InputStream.Read(buffer, 0, context.Socket.Available > buffer.Length ? buffer.Length : context.Socket.Available);
-                    to.Write(buffer, 0, r);
-                }
+
+                Add(new State(context, fow));
+                return true;
             }
-
-            destination.Close();
-            context.Close();*/
-
-            Add(new State(context,fow));
-            return true;
+            catch (Exception ex)
+            {
+                Engine.Logger.Log(LogLevel.Error, "Failed to foward host " + context.Request.Host,ex);
+            }
+            return false;
         }
     }
 }

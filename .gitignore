@@ -303,3 +303,5 @@
 /netfluid.service/obj
 /NetFluid.Site/bin
 /NetFluid.Site/obj/Release
+/netfluid/obj
+/NetFluid.Site/App.config

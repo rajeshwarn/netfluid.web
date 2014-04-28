@@ -30,43 +30,76 @@ namespace NetFluid
     [Serializable]
     public class WebHeaderCollection
     {
-        private readonly Dictionary<string, List<string>> values;
+        private readonly Dictionary<string, WebHeader> values;
 
         public WebHeaderCollection()
         {
-            values = new Dictionary<string, List<string>>();
+            values = new Dictionary<string, WebHeader>();
         }
-
-        public string this[string index]
+        
+        public WebHeaderCollection(IEnumerable<WebHeader> collection)
         {
-            get { return values.ContainsKey(index) ? values[index][0] : string.Empty; }
-            set { Append(index, value); }
+            values = new Dictionary<string, WebHeader>();
+
+            foreach (var item in collection)
+            {
+                values.Add(item.Name.ToLowerInvariant(), item);
+            }
         }
 
-        public bool Has(string index)
+        public WebHeader this[string index]
+        {
+            get
+            {
+                var lower = index.ToLowerInvariant();
+
+                if (values.ContainsKey(lower))
+                    return values[lower];
+
+                var header = new WebHeader(index, "");
+                values.Add(lower,header);
+
+                return header;
+            }
+            set
+            {
+                var lower = index.ToLowerInvariant();
+
+                if (values.ContainsKey(lower))
+                    values[lower].Add(value);
+
+                values.Add(lower, new WebHeader(index,value.ToArray()));
+            }
+        }
+
+        public bool Contains(string index)
         {
             return values.ContainsKey(index);
         }
 
         public void Append(string name, string value)
         {
-            if (values.ContainsKey(name))
-                values[name].Add(value);
+            var lower = name.ToLowerInvariant();
+
+            if (values.ContainsKey(lower))
+                values[lower].Add(value);
             else
-                values.Add(name, new List<string>(new[] {value}));
+                values.Add(lower, new WebHeader(name,value));
+        }
+
+        public void Append(WebHeader header)
+        {
+            var lower = header.Name.ToLowerInvariant();
+
+            if (values.ContainsKey(lower))
+                values[lower].Add(header);
+            else
+                values.Add(lower, header);
         }
 
         public void Set(string name, string value)
         {
-            if (values.ContainsKey(name))
-            {
-                values[name].Clear();
-                values[name].Add(value);
-            }
-            else
-            {
-                values.Add(name, new List<string>(new[] {value}));
-            }
+            values[name.ToLowerInvariant()]=new WebHeader(name,value);
         }
 
         public override string ToString()
