@@ -46,22 +46,28 @@ namespace NetFluid
         {
             if (LogLevel >= lvl)
             {
-                if (ex is TargetInvocationException)
-                    ex = ex.InnerException;
-
-                do
+                try
                 {
-                    string s = ("\r\n" + DateTime.Now + "\t" + lvl.ToString() + "\t" + msg + "\r\n");
-                    if (Engine.DevMode)
-                        Console.WriteLine(s);
+                    if (ex is TargetInvocationException)
+                        ex = ex.InnerException;
 
-                    s = ex.ToString().Split('\r', '\n').Aggregate(s,
-                                                                  (current, item) =>
-                                                                  current + ("\t\t\t\t" + item + "\r\n"));
+                    do
+                    {
+                        string s = ("\r\n" + DateTime.Now + "\t" + lvl.ToString() + "\t" + msg + "\r\n");
+                        if (Engine.DevMode)
+                            Console.WriteLine(s);
 
-                    File.AppendAllText(LogPath, s);
-                    ex = ex.InnerException;
-                } while (ex != null);
+                        s = ex.ToString().Split('\r', '\n').Aggregate(s,
+                                                                      (current, item) =>
+                                                                      current + ("\t\t\t\t" + item + "\r\n"));
+
+                        File.AppendAllText(LogPath, s);
+                        ex = ex.InnerException;
+                    } while (ex != null);
+                }
+                catch (Exception)
+                {
+                }
             }
         }
 
@@ -70,13 +76,19 @@ namespace NetFluid
         {
             if (LogLevel >= lvl)
             {
-                string s = DateTime.Now + "\t" + lvl.ToString() + "\t" + msg + "\r\n";
-                if (Engine.DevMode)
+                try
                 {
-                    Console.Write(s);
-                }
+                    string s = DateTime.Now + "\t" + lvl.ToString() + "\t" + msg + "\r\n";
+                    if (Engine.DevMode)
+                    {
+                        Console.Write(s);
+                    }
 
-                File.AppendAllText(LogPath, s);
+                    File.AppendAllText(LogPath, s);
+                }
+                catch (Exception)
+                {
+                }
             }
         }
 
