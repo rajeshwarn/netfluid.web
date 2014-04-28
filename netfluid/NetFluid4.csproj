@@ -275,6 +275,7 @@
     <Compile Include="SMTP\Inbound.cs" />
     <Compile Include="SMTP\SmtpWarning.cs" />
     <Compile Include="WebClient.cs" />
+    <Compile Include="WebHeader.cs" />
     <Compile Include="WebHeaderCollection.cs" />
     <Compile Include="HTTP\PostManager.cs" />
     <Compile Include="Network.cs" />
