@@ -245,6 +245,7 @@ namespace NetFluid
         public StreamWriter Writer
         {
             get { return writer = writer ?? new StreamWriter(OutputStream, Response.ContentEncoding, 1024); }
+            internal set { writer = value; }
         }
 
         /// <summary>
@@ -385,7 +386,7 @@ namespace NetFluid
                 var name = lines[i].Substring(0, colon).Trim();
                 var val = lines[i].Substring(colon + 1).Trim();
 
-                Request.Headers.Set(name, val);
+                Request.Headers.Append(name, val);
 
                 switch (name.ToLowerInvariant())
                 {
@@ -717,8 +718,9 @@ namespace NetFluid
 
                 HeadersSent = true;
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                Console.WriteLine(ex.ToString());
             }
         }
 

@@ -21,6 +21,7 @@
 // 23/10/2013    Matteo Fabbri      Inital coding
 // ********************************************************************************************************
 
+using System;
 using System.IO;
 
 namespace NetFluid
@@ -52,6 +53,8 @@ namespace NetFluid
         public string Path { get; set; }
         public string MimeType { get; set; }
 
+        public event Action<string> OnDownloadCompleted; 
+
         #region IResponse Members
 
         public void SendResponse(Context cnt)
@@ -63,6 +66,9 @@ namespace NetFluid
             var fs = new FileStream(Path, FileMode.Open, FileAccess.Read, FileShare.Read);
             fs.CopyTo(cnt.OutputStream);
             fs.Close();
+
+            if (OnDownloadCompleted != null)
+                OnDownloadCompleted(Path);
         }
 
         #endregion

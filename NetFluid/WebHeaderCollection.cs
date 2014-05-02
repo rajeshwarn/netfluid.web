@@ -23,6 +23,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace NetFluid
@@ -47,19 +48,13 @@ namespace NetFluid
             }
         }
 
-        public WebHeader this[string index]
+        public string this[string index]
         {
             get
             {
                 var lower = index.ToLowerInvariant();
 
-                if (values.ContainsKey(lower))
-                    return values[lower];
-
-                var header = new WebHeader(index, "");
-                values.Add(lower,header);
-
-                return header;
+                return values.ContainsKey(lower) ? values[lower] : null;
             }
             set
             {
@@ -67,8 +62,8 @@ namespace NetFluid
 
                 if (values.ContainsKey(lower))
                     values[lower].Add(value);
-
-                values.Add(lower, new WebHeader(index,value.ToArray()));
+                else
+                    values.Add(lower, new WebHeader(index,value));
             }
         }
 
