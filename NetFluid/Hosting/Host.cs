@@ -525,7 +525,7 @@ namespace NetFluid
             if (!Types.ContainsKey(page.Name))
                 Types.Add(page.Name, page);
 
-            if (page.FullName != null && !Types.ContainsKey(page.FullName))
+            if (!Types.ContainsKey(page.FullName))
                 Types.Add(page.FullName, page);
 
             if (!page.Implements(typeof (IMethodExposer)))
@@ -650,7 +650,7 @@ namespace NetFluid
             controllers = controllers.Push(controller);
         }
 
-        public void SetRoute(string url, string methodFullname, string name = null)
+        public void SetRoute(string url, string methodFullname, string friendlyname = null)
         {
             if (url == null)
                 throw new NullReferenceException("Null url");
@@ -667,10 +667,10 @@ namespace NetFluid
 
             instances.Add(t.CreateIstance() as IMethodExposer);
 
-            SetRoute(url, t, methodFullname.Substring(methodFullname.LastIndexOf('.') + 1), name);
+            SetRoute(url, t, methodFullname.Substring(methodFullname.LastIndexOf('.') + 1), friendlyname);
         }
 
-        public void SetRoute(string url, Type type, string method, string name = null)
+        public void SetRoute(string url, Type type, string method, string friendlyname = null)
         {
             if (url == null)
                 throw new NullReferenceException("Null url");
@@ -684,7 +684,7 @@ namespace NetFluid
             if (!type.Inherit(typeof (IMethodExposer)))
                 throw new TypeLoadException("Routed types must implement NetFluid.IMethodExposer");
 
-            var rt = new RouteTarget {Type = type, Method = type.GetMethod(method), Name = name};
+            var rt = new RouteTarget {Type = type, Method = type.GetMethod(method), Name = friendlyname};
 
             instances.Add(type.CreateIstance() as IMethodExposer);
 
@@ -719,7 +719,7 @@ namespace NetFluid
                 routes.Add(url, rt);
         }
 
-        public void SetParameterizedRoute(string url, string methodFullname, string name = null)
+        public void SetParameterizedRoute(string url, string methodFullname, string friendlyname = null)
         {
             if (url == null)
                 throw new NullReferenceException("Null url");
@@ -736,10 +736,10 @@ namespace NetFluid
 
             instances.Add(t.CreateIstance() as IMethodExposer);
 
-            SetParameterizedRoute(url, t, methodFullname.Substring(methodFullname.LastIndexOf('.') + 1), name);
+            SetParameterizedRoute(url, t, methodFullname.Substring(methodFullname.LastIndexOf('.') + 1), friendlyname);
         }
 
-        public void SetParameterizedRoute(string url, Type type, string method, string name = null)
+        public void SetParameterizedRoute(string url, Type type, string method, string friendlyname = null)
         {
             if (url == null)
                 throw new NullReferenceException("Null url");
@@ -753,14 +753,14 @@ namespace NetFluid
             if (!type.Implements(typeof (IMethodExposer)))
                 throw new TypeLoadException("Routed types must inherit NetFluid.IMethodExposer");
 
-            var rt = new ParamRouteTarget {Type = type, Method = type.GetMethod(method), Url = url, Name = name};
+            var rt = new ParamRouteTarget {Type = type, Method = type.GetMethod(method), Url = url, Name = friendlyname};
 
             instances.Add(type.CreateIstance() as IMethodExposer);
 
             parametrized = parametrized.Concat(new[] {rt}).OrderByDescending(x => x.Url.Length).ToArray();
         }
 
-        public void SetParameterizedRoute(string url, Type type, MethodInfo method, string name = null)
+        public void SetParameterizedRoute(string url, Type type, MethodInfo method, string friendlyname = null)
         {
             if (url == null)
                 throw new NullReferenceException("Null url");
@@ -774,14 +774,14 @@ namespace NetFluid
             if (!type.Implements(typeof (IMethodExposer)))
                 throw new TypeLoadException("Routed types must inherit NetFluid.IMethodExposer");
 
-            var rt = new ParamRouteTarget {Type = type, Method = method, Url = url, Name = name};
+            var rt = new ParamRouteTarget {Type = type, Method = method, Url = url, Name = friendlyname};
 
             instances.Add(type.CreateIstance() as IMethodExposer);
 
             parametrized = parametrized.Concat(new[] {rt}).OrderByDescending(x => x.Url.Length).ToArray();
         }
 
-        public void SetRegexRoute(string rgx, string methodFullname, string name = null)
+        public void SetRegexRoute(string rgx, string methodFullname, string friendlyname = null)
         {
             if (rgx == null)
                 throw new NullReferenceException("Null regex");
@@ -798,10 +798,10 @@ namespace NetFluid
 
             instances.Add(t.CreateIstance() as IMethodExposer);
 
-            SetRegexRoute(rgx, t, methodFullname.Substring(methodFullname.LastIndexOf('.') + 1), name);
+            SetRegexRoute(rgx, t, methodFullname.Substring(methodFullname.LastIndexOf('.') + 1), friendlyname);
         }
 
-        public void SetRegexRoute(string rgx, Type type, string method, string name = null)
+        public void SetRegexRoute(string rgx, Type type, string method, string friendlyname = null)
         {
             if (rgx == null)
                 throw new NullReferenceException("Null regex");
@@ -824,7 +824,7 @@ namespace NetFluid
                 Type = type,
                 Method = m,
                 Regex = new Regex(rgx, RegexOptions.Compiled),
-                Name = name
+                Name = friendlyname
             };
 
             instances.Add(type.CreateIstance() as IMethodExposer);
@@ -832,7 +832,7 @@ namespace NetFluid
             regex = regex.Concat(new[] {rt}).ToArray();
         }
 
-        public void SetRegexRoute(string rgx, Type type, MethodInfo method, string name = null)
+        public void SetRegexRoute(string rgx, Type type, MethodInfo method, string friendlyname = null)
         {
             if (rgx == null)
                 throw new NullReferenceException("Null regex");
@@ -851,7 +851,7 @@ namespace NetFluid
                 Type = type,
                 Method = method,
                 Regex = new Regex(rgx, RegexOptions.Compiled),
-                Name = name
+                Name = friendlyname
             };
 
             instances.Add(type.CreateIstance() as IMethodExposer);
@@ -903,22 +903,22 @@ namespace NetFluid
 
         private class Controller
         {
-            private readonly MethodInfo methodInfo;
-            private readonly object target;
+            private readonly MethodInfo _methodInfo;
+            private readonly object _target;
 
             public Func<Context, bool> Condition;
             public string Name;
 
             public Controller(Action<Context> action)
             {
-                target = action.Target;
-                methodInfo = action.Method;
+                _target = action.Target;
+                _methodInfo = action.Method;
             }
 
             public Controller(Func<Context, object> function)
             {
-                target = function.Target;
-                methodInfo = function.Method;
+                _target = function.Target;
+                _methodInfo = function.Method;
             }
 
             public object Invoke(Context c)
@@ -930,7 +930,7 @@ namespace NetFluid
                     Console.WriteLine(c.Request.Host + ":" + c.Request.Url + " - " + "Calling controller");
 
 
-                return methodInfo.Invoke(target, new[] {c});
+                return _methodInfo.Invoke(_target, new[] {c});
             }
         }
 
