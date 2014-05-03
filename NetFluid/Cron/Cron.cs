@@ -65,8 +65,8 @@ namespace NetFluid.Cron
 
         private static int[] Parse(string val, IEnumerable<int> range)
         {
-            int step = 0;
-            int slashIndex = val.IndexOf('/');
+            var step = 0;
+            var slashIndex = val.IndexOf('/');
             if (slashIndex >= 0)
             {
                 step = int.Parse(val.Substring(slashIndex + 1));
@@ -76,8 +76,8 @@ namespace NetFluid.Cron
             if (val == "*")
                 return range.ToArray();
 
-            string[] parts = val.Split(new[] {','}, StringSplitOptions.RemoveEmptyEntries);
-            int[] res = parts.SelectMany(x =>
+            var parts = val.Split(new[] {','}, StringSplitOptions.RemoveEmptyEntries);
+            var res = parts.SelectMany(x =>
             {
                 int index = x.IndexOf('-');
                 if (index >= 0)
@@ -137,18 +137,18 @@ namespace NetFluid.Cron
 
         public static DateTime Next(string cron, DateTime from)
         {
-            string[] parts =
+            var parts =
                 cron.Split(new[] {' '}, StringSplitOptions.RemoveEmptyEntries).Select(x => x.Trim()).ToArray();
 
             top:
-            int[] years = Parse(parts[5], Enumerable.Range(2014, 250));
-            int[] months = Parse(parts[3], Enumerable.Range(1, 12));
-            int[] days = Parse(parts[2], Enumerable.Range(1, 31));
-            int[] hours = Parse(parts[1], Enumerable.Range(0, 24));
-            int[] minutes = Parse(parts[0], Enumerable.Range(0, 60));
+            var years = Parse(parts[5], Enumerable.Range(2014, 250));
+            var months = Parse(parts[3], Enumerable.Range(1, 12));
+            var days = Parse(parts[2], Enumerable.Range(1, 31));
+            var hours = Parse(parts[1], Enumerable.Range(0, 24));
+            var minutes = Parse(parts[0], Enumerable.Range(0, 60));
 
             bool carry = false;
-            int min = GetAndShift(minutes, ref hours, from.Minute, from.Hour, ref carry);
+            var min = GetAndShift(minutes, ref hours, from.Minute, from.Hour, ref carry);
             int hou = GetAndShift(hours, ref days, from.Hour, from.Day, ref carry);
             int day = GetAndShift(days, ref months, from.Day, from.Month, ref carry);
             int mon = GetAndShift(months, ref years, from.Month, from.Year, ref carry);
@@ -169,7 +169,7 @@ namespace NetFluid.Cron
                 goto top;
             }
 
-            int[] dweek = Parse(parts[4], Enumerable.Range(0, 7));
+            var dweek = Parse(parts[4], Enumerable.Range(0, 7));
             if (!dweek.Contains((int) dt.DayOfWeek))
             {
                 from = from + TimeSpan.FromDays(1);
