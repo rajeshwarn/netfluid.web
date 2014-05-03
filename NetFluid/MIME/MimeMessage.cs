@@ -129,7 +129,7 @@ namespace MimeKit
 
             MimeEntity body = null;
 
-            foreach (object obj in args)
+            foreach (var obj in args)
             {
                 if (obj == null)
                     continue;
@@ -149,26 +149,21 @@ namespace MimeKit
                 var headers = obj as IEnumerable<Header>;
                 if (headers != null)
                 {
-                    foreach (Header h in headers)
+                    foreach (var h in headers.Where(h => !h.Field.StartsWith("Content-", StringComparison.OrdinalIgnoreCase)))
                     {
-                        if (!h.Field.StartsWith("Content-", StringComparison.OrdinalIgnoreCase))
-                            Headers.Add(h);
+                        Headers.Add(h);
                     }
 
                     continue;
                 }
 
                 var entity = obj as MimeEntity;
-                if (entity != null)
-                {
-                    if (body != null)
-                        throw new ArgumentException("Message body should not be specified more than once.");
+                if (entity == null) throw new ArgumentException("Unknown initialization parameter: " + obj.GetType());
 
-                    body = entity;
-                    continue;
-                }
+                if (body != null)
+                    throw new ArgumentException("Message body should not be specified more than once.");
 
-                throw new ArgumentException("Unknown initialization parameter: " + obj.GetType());
+                body = entity;
             }
 
             if (body != null)
@@ -731,61 +726,6 @@ namespace MimeKit
             WriteTo(FormatOptions.Default, stream);
         }
 
-        private MailboxAddress GetMessageSigner()
-        {
-            if (ResentSender != null)
-                return ResentSender;
-
-            if (ResentFrom.Count > 0)
-                return ResentFrom.Mailboxes.FirstOrDefault();
-
-            if (Sender != null)
-                return Sender;
-
-            if (From.Count > 0)
-                return From.Mailboxes.FirstOrDefault();
-
-            return null;
-        }
-
-        private IList<MailboxAddress> GetMessageRecipients(bool includeSenders)
-        {
-            var recipients = new List<MailboxAddress>();
-
-            if (ResentSender != null || ResentFrom.Count > 0)
-            {
-                if (includeSenders)
-                {
-                    if (ResentSender != null)
-                        recipients.Add(ResentSender);
-
-                    if (ResentFrom.Count > 0)
-                        recipients.AddRange(ResentFrom.Mailboxes);
-                }
-
-                recipients.AddRange(ResentTo.Mailboxes);
-                recipients.AddRange(ResentCc.Mailboxes);
-                recipients.AddRange(ResentBcc.Mailboxes);
-            }
-            else
-            {
-                if (includeSenders)
-                {
-                    if (Sender != null)
-                        recipients.Add(Sender);
-
-                    if (From.Count > 0)
-                        recipients.AddRange(From.Mailboxes);
-                }
-
-                recipients.AddRange(To.Mailboxes);
-                recipients.AddRange(Cc.Mailboxes);
-                recipients.AddRange(Bcc.Mailboxes);
-            }
-
-            return recipients;
-        }
-
         private IEnumerable<Header> MergeHeaders()
         {
             int mesgIndex = 0, bodyIndex = 0;
@@ -856,9 +796,9 @@ namespace MimeKit
                 FormatOptions options = FormatOptions.Default;
                 var builder = new StringBuilder();
 
-                for (int i = 0; i < references.Count; i++)
+                foreach (string t in references)
                 {
-                    if (lineLength + references[i].Length >= options.MaxLineLength)
+                    if (lineLength + t.Length >= options.MaxLineLength)
                     {
                         builder.Append(options.NewLine);
                         builder.Append('\t');
@@ -870,8 +810,8 @@ namespace MimeKit
                         lineLength++;
                     }
 
-                    lineLength += references[i].Length;
-                    builder.Append(references[i]);
+                    lineLength += t.Length;
+                    builder.Append(t);
                 }
 
                 builder.Append(options.NewLine);
@@ -1031,8 +971,6 @@ namespace MimeKit
         private void HeadersChanged(object o, HeaderListChangedEventArgs e)
         {
             InternetAddressList list;
-            InternetAddress address;
-            byte[] rawValue;
             int index = 0;
 
             switch (e.Action)
@@ -1044,8 +982,9 @@ namespace MimeKit
                         break;
                     }
 
-                    rawValue = e.Header.RawValue;
+                    byte[] rawValue = e.Header.RawValue;
 
+                    InternetAddress address;
                     switch (e.Header.Id)
                     {
                         case HeaderId.MimeVersion:
