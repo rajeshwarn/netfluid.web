@@ -1,4 +1,5 @@
 using System;
+
 /* 
  * http://tools.ietf.org/rfc/rfc2163.txt
  * 
@@ -72,23 +73,19 @@ using System;
 
 namespace NetFluid.DNS.Records
 {
-	public class RecordPX : Record
-	{
-		public UInt16 PREFERENCE;
+    public class RecordPX : Record
+    {
+        [DomainName] public string MAP822;
 
-        [DomainName]
-		public string MAP822;
+        [DomainName] public string MAPX400;
+        public UInt16 PREFERENCE;
 
-        [DomainName]
-		public string MAPX400;
-
-		public override string ToString()
-		{
-			return string.Format("{0} {1} {2}",
-				PREFERENCE,
-				MAP822,
-				MAPX400);
-		}
-
-	}
+        public override string ToString()
+        {
+            return string.Format("{0} {1} {2}",
+                PREFERENCE,
+                MAP822,
+                MAPX400);
+        }
+    }
 }

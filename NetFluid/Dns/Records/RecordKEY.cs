@@ -1,6 +1,7 @@
 using System;
 
 #region Rfc info
+
 /* http://www.ietf.org/rfc/rfc2535.txt
  * 
 3.1 KEY RDATA format
@@ -33,25 +34,25 @@ using System;
    SIG RR(s) do as described in Section 4 below.
 
 */
+
 #endregion
 
 namespace NetFluid.DNS.Records
 {
-	public class RecordKEY : Record
-	{
-		public UInt16 FLAGS;
-		public byte PROTOCOL;
-		public byte ALGORITHM;
-		public string PUBLICKEY;
+    public class RecordKEY : Record
+    {
+        public byte ALGORITHM;
+        public UInt16 FLAGS;
+        public byte PROTOCOL;
+        public string PUBLICKEY;
 
-		public override string ToString()
-		{
-			return string.Format("{0} {1} {2} \"{3}\"",
-				FLAGS,
-				PROTOCOL,
-				ALGORITHM,
-				PUBLICKEY);
-		}
-
-	}
+        public override string ToString()
+        {
+            return string.Format("{0} {1} {2} \"{3}\"",
+                FLAGS,
+                PROTOCOL,
+                ALGORITHM,
+                PUBLICKEY);
+        }
+    }
 }

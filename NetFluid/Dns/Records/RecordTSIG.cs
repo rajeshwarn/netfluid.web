@@ -1,4 +1,5 @@
 using System;
+
 /*
  * http://www.ietf.org/rfc/rfc2845.txt
  * 
@@ -22,31 +23,29 @@ using System;
 
 namespace NetFluid.DNS.Records
 {
-	public class RecordTSIG : Record
-	{
-        [DomainName]
-		public string ALGORITHMNAME;
-		public long TIMESIGNED;
-		public UInt16 FUDGE;
-		public UInt16 MACSIZE;
-		public byte[] MAC;
-		public UInt16 ORIGINALID;
-		public UInt16 ERROR;
-		public UInt16 OTHERLEN;
-		public byte[] OTHERDATA;
+    public class RecordTSIG : Record
+    {
+        [DomainName] public string ALGORITHMNAME;
+        public UInt16 ERROR;
+        public UInt16 FUDGE;
+        public byte[] MAC;
+        public UInt16 MACSIZE;
+        public UInt16 ORIGINALID;
+        public byte[] OTHERDATA;
+        public UInt16 OTHERLEN;
+        public long TIMESIGNED;
 
-		public override string ToString()
-		{
-			var dateTime = new DateTime(1970, 1, 1, 0, 0, 0, 0);
-			dateTime = dateTime.AddSeconds(TIMESIGNED);
-			var printDate = dateTime.ToShortDateString() + " " + dateTime.ToShortTimeString();
-			return string.Format("{0} {1} {2} {3} {4}",
-				ALGORITHMNAME,
-				printDate,
-				FUDGE,
-				ORIGINALID,
-				ERROR);
-		}
-
-	}
+        public override string ToString()
+        {
+            var dateTime = new DateTime(1970, 1, 1, 0, 0, 0, 0);
+            dateTime = dateTime.AddSeconds(TIMESIGNED);
+            string printDate = dateTime.ToShortDateString() + " " + dateTime.ToShortTimeString();
+            return string.Format("{0} {1} {2} {3} {4}",
+                ALGORITHMNAME,
+                printDate,
+                FUDGE,
+                ORIGINALID,
+                ERROR);
+        }
+    }
 }

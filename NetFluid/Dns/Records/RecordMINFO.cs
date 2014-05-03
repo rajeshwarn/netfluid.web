@@ -29,19 +29,17 @@ MINFO records cause no additional section processing.  Although these
 records can be associated with a simple mailbox, they are usually used
 with a mailing list.
  */
+
 namespace NetFluid.DNS.Records
 {
-	public class RecordMINFO : Record
+    public class RecordMINFO : Record
     {
-        [DomainName]
-		public string RMAILBX;
-        [DomainName]
-		public string EMAILBX;
+        [DomainName] public string EMAILBX;
+        [DomainName] public string RMAILBX;
 
-		public override string ToString()
-		{
-			return string.Format("{0} {1}",RMAILBX,EMAILBX);
-		}
-
-	}
+        public override string ToString()
+        {
+            return string.Format("{0} {1}", RMAILBX, EMAILBX);
+        }
+    }
 }

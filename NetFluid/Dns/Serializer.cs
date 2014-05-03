@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using NetFluid.DNS.Records;
 
@@ -10,37 +11,41 @@ namespace NetFluid.DNS
     public class Serializer
     {
         #region DESERIALIZE
-        static byte ReadByte(Stream stream)
+
+        private static byte ReadByte(Stream stream)
         {
-            return (byte)stream.ReadByte();
+            return (byte) stream.ReadByte();
         }
-        static char ReadChar(Stream stream)
+
+        private static char ReadChar(Stream stream)
         {
-            return (char)stream.ReadByte();
+            return (char) stream.ReadByte();
         }
-        static ushort ReadUInt16(Stream stream)
+
+        private static ushort ReadUInt16(Stream stream)
         {
-            return (ushort)(stream.ReadByte() << 8 | stream.ReadByte());
+            return (ushort) (stream.ReadByte() << 8 | stream.ReadByte());
         }
-        static uint ReadUInt32(Stream ms)
+
+        private static uint ReadUInt32(Stream ms)
         {
             uint res;
 
             if (BitConverter.IsLittleEndian)
             {
-                res = (((uint)ReadByte(ms) << 24) | ((uint)ReadByte(ms) << 16) |
-                       ((uint)ReadByte(ms) << 8) | ReadByte(ms));
+                res = (((uint) ReadByte(ms) << 24) | ((uint) ReadByte(ms) << 16) |
+                       ((uint) ReadByte(ms) << 8) | ReadByte(ms));
             }
             else
             {
-                res = (ReadByte(ms) | ((uint)ReadByte(ms) << 8) |
-                       ((uint)ReadByte(ms) << 16) | ((uint)ReadByte(ms) << 24));
+                res = (ReadByte(ms) | ((uint) ReadByte(ms) << 8) |
+                       ((uint) ReadByte(ms) << 16) | ((uint) ReadByte(ms) << 24));
             }
 
             return res;
         }
 
-        static int ReadInt32(Stream ms)
+        private static int ReadInt32(Stream ms)
         {
             int res;
 
@@ -58,26 +63,26 @@ namespace NetFluid.DNS
             return res;
         }
 
-        static byte[] ReadByteArray(Stream ms,int size)
+        private static byte[] ReadByteArray(Stream ms, int size)
         {
             var value = new byte[size];
             ms.Read(value, 0, value.Length);
             return value;
         }
-        
-        static string ReadText(Stream ms)
+
+        private static string ReadText(Stream ms)
         {
-            var s = ms.ReadByte();
+            int s = ms.ReadByte();
             var b = new byte[s];
             ms.Read(b, 0, b.Length);
             return Encoding.ASCII.GetString(b);
         }
 
-        static void ParseDomainName(byte[] resultData, ref int currentPosition, StringBuilder sb)
+        private static void ParseDomainName(byte[] resultData, ref int currentPosition, StringBuilder sb)
         {
             while (true)
             {
-                if (currentPosition>=resultData.Length)
+                if (currentPosition >= resultData.Length)
                     return;
 
                 byte currentByte = resultData[currentPosition++];
@@ -92,11 +97,11 @@ namespace NetFluid.DNS
                     int pointer;
                     if (BitConverter.IsLittleEndian)
                     {
-                        pointer = (ushort)(((currentByte - 192) << 8) | resultData[currentPosition++]);
+                        pointer = (ushort) (((currentByte - 192) << 8) | resultData[currentPosition++]);
                     }
                     else
                     {
-                        pointer = (ushort)((currentByte - 192) | (resultData[currentPosition++] << 8));
+                        pointer = (ushort) ((currentByte - 192) | (resultData[currentPosition++] << 8));
                     }
 
                     ParseDomainName(resultData, ref pointer, sb);
@@ -118,7 +123,7 @@ namespace NetFluid.DNS
                         currentByte = resultData[currentPosition++];
                         if (length < 8)
                         {
-                            currentByte &= (byte)(0xff >> (8 - length));
+                            currentByte &= (byte) (0xff >> (8 - length));
                         }
 
                         sb.Append(currentByte.ToString("x2"));
@@ -142,18 +147,18 @@ namespace NetFluid.DNS
                 }
             }
         }
-        
-        static string ReadDomainName(MemoryStream stream)
+
+        private static string ReadDomainName(MemoryStream stream)
         {
             var sb = new StringBuilder();
-            var pos = (int)stream.Position;
+            var pos = (int) stream.Position;
 
             ParseDomainName(stream.ToArray(), ref pos, sb);
             stream.Position = pos;
             return (sb.Length == 0) ? String.Empty : sb.ToString(0, sb.Length - 1);
         }
 
-        static Header ReadHeader(Stream stream)
+        private static Header ReadHeader(Stream stream)
         {
             return new Header
             {
@@ -166,14 +171,14 @@ namespace NetFluid.DNS
             };
         }
 
-        static Question ReadQuestion(MemoryStream stream)
+        private static Question ReadQuestion(MemoryStream stream)
         {
-            return new Question(ReadDomainName(stream), (QType)ReadUInt16(stream), (QClass)ReadUInt16(stream));
+            return new Question(ReadDomainName(stream), (QType) ReadUInt16(stream), (QClass) ReadUInt16(stream));
         }
 
         public static Request ReadRequest(MemoryStream stream)
         {
-            var req = new Request { header = ReadHeader(stream) };
+            var req = new Request {header = ReadHeader(stream)};
 
             for (int i = 0; i < req.header.QDCOUNT; i++)
             {
@@ -182,7 +187,7 @@ namespace NetFluid.DNS
             return req;
         }
 
-        static Record TypeToRecord(RecordType type)
+        private static Record TypeToRecord(RecordType type)
         {
             switch (type)
             {
@@ -309,17 +314,17 @@ namespace NetFluid.DNS
             }
         }
 
-        static Record ReadRecord(MemoryStream ms)
+        private static Record ReadRecord(MemoryStream ms)
         {
             const int timeLived = 0;
-            var name = ReadDomainName(ms);
-            var recordType = (RecordType)ReadUInt16(ms);
-            var @class = (Class)ReadUInt16(ms);
-            var ttl = ReadUInt32(ms);
-            var rdlength = ReadUInt16(ms);
+            string name = ReadDomainName(ms);
+            var recordType = (RecordType) ReadUInt16(ms);
+            var @class = (Class) ReadUInt16(ms);
+            uint ttl = ReadUInt32(ms);
+            ushort rdlength = ReadUInt16(ms);
 
-            var record = TypeToRecord(recordType);
-            var type = record.GetType();
+            Record record = TypeToRecord(recordType);
+            Type type = record.GetType();
 
             int length = rdlength;
 
@@ -328,42 +333,42 @@ namespace NetFluid.DNS
             record.Class = @class;
             record.TTL = ttl;
 
-            var nspos = ms.Position + rdlength;
+            long nspos = ms.Position + rdlength;
 
-            foreach (var field in type.GetFields().Where(x => x.DeclaringType == type))
+            foreach (FieldInfo field in type.GetFields().Where(x => x.DeclaringType == type))
             {
-                var fieldType = field.FieldType;
+                Type fieldType = field.FieldType;
 
                 if (fieldType == typeof (byte))
                 {
-                    field.SetValue(record,(byte)ms.ReadByte());        
+                    field.SetValue(record, (byte) ms.ReadByte());
                 }
-                else if (fieldType == typeof(ushort))
+                else if (fieldType == typeof (ushort))
                 {
                     field.SetValue(record, ReadUInt16(ms));
                 }
-                else if (fieldType == typeof(int))
+                else if (fieldType == typeof (int))
                 {
                     field.SetValue(record, ReadInt32(ms));
                 }
-                else if (fieldType == typeof(uint))
+                else if (fieldType == typeof (uint))
                 {
                     field.SetValue(record, ReadUInt32(ms));
                 }
                 else if (fieldType == typeof (byte[]))
                 {
-                    field.SetValue(record, ReadByteArray(ms,length));
+                    field.SetValue(record, ReadByteArray(ms, length));
                 }
-                else if (fieldType == typeof(string))
+                else if (fieldType == typeof (string))
                 {
                     if (field.HasAttribute<DomainNameAttribute>())
-                        field.SetValue(record,ReadDomainName(ms));
+                        field.SetValue(record, ReadDomainName(ms));
                     else
                         field.SetValue(record, ReadText(ms));
                 }
             }
 
-            if (nspos>ms.Position)
+            if (nspos > ms.Position)
             {
                 ms.Position = nspos;
             }
@@ -381,26 +386,25 @@ namespace NetFluid.DNS
                 Answers = new List<Record>(),
                 Authorities = new List<Record>(),
                 Additionals = new List<Record>(),
-
                 Header = ReadHeader(ms)
             };
 
 
-            for (var intI = 0; intI < r.Header.QDCOUNT; intI++)
+            for (int intI = 0; intI < r.Header.QDCOUNT; intI++)
             {
                 r.Questions.Add(ReadQuestion(ms));
             }
 
-            for (var intI = 0; intI < r.Header.ANCOUNT; intI++)
+            for (int intI = 0; intI < r.Header.ANCOUNT; intI++)
             {
                 r.Answers.Add(ReadRecord(ms));
             }
 
-            for (var intI = 0; intI < r.Header.NSCOUNT; intI++)
+            for (int intI = 0; intI < r.Header.NSCOUNT; intI++)
             {
                 r.Authorities.Add(ReadRecord(ms));
             }
-            for (var intI = 0; intI < r.Header.ARCOUNT; intI++)
+            for (int intI = 0; intI < r.Header.ARCOUNT; intI++)
             {
                 r.Additionals.Add(ReadRecord(ms));
             }
@@ -410,59 +414,59 @@ namespace NetFluid.DNS
 
         #endregion
 
-        static void WriteUInt16(Stream ms, ushort value)
+        private static void WriteUInt16(Stream ms, ushort value)
         {
             if (BitConverter.IsLittleEndian)
             {
-                ms.WriteByte((byte)((value >> 8) & 0xff));
-                ms.WriteByte((byte)(value & 0xff));
+                ms.WriteByte((byte) ((value >> 8) & 0xff));
+                ms.WriteByte((byte) (value & 0xff));
             }
             else
             {
-                ms.WriteByte((byte)(value & 0xff));
-                ms.WriteByte((byte)((value >> 8) & 0xff));
+                ms.WriteByte((byte) (value & 0xff));
+                ms.WriteByte((byte) ((value >> 8) & 0xff));
             }
         }
 
-        static void WriteInt32(Stream ms, int value)
+        private static void WriteInt32(Stream ms, int value)
         {
             if (BitConverter.IsLittleEndian)
             {
-                ms.WriteByte((byte)((value >> 24) & 0xff));
-                ms.WriteByte((byte)((value >> 16) & 0xff));
-                ms.WriteByte((byte)((value >> 8) & 0xff));
-                ms.WriteByte((byte)(value & 0xff));
+                ms.WriteByte((byte) ((value >> 24) & 0xff));
+                ms.WriteByte((byte) ((value >> 16) & 0xff));
+                ms.WriteByte((byte) ((value >> 8) & 0xff));
+                ms.WriteByte((byte) (value & 0xff));
             }
             else
             {
-                ms.WriteByte((byte)(value & 0xff));
-                ms.WriteByte((byte)((value >> 8) & 0xff));
-                ms.WriteByte((byte)((value >> 16) & 0xff));
-                ms.WriteByte((byte)((value >> 24) & 0xff));
+                ms.WriteByte((byte) (value & 0xff));
+                ms.WriteByte((byte) ((value >> 8) & 0xff));
+                ms.WriteByte((byte) ((value >> 16) & 0xff));
+                ms.WriteByte((byte) ((value >> 24) & 0xff));
             }
         }
 
-        static void WriteUInt32(Stream ms, uint value)
+        private static void WriteUInt32(Stream ms, uint value)
         {
             if (BitConverter.IsLittleEndian)
             {
-                ms.WriteByte((byte)((value >> 24) & 0xff));
-                ms.WriteByte((byte)((value >> 16) & 0xff));
-                ms.WriteByte((byte)((value >> 8) & 0xff));
-                ms.WriteByte((byte)(value & 0xff));
+                ms.WriteByte((byte) ((value >> 24) & 0xff));
+                ms.WriteByte((byte) ((value >> 16) & 0xff));
+                ms.WriteByte((byte) ((value >> 8) & 0xff));
+                ms.WriteByte((byte) (value & 0xff));
             }
             else
             {
-                ms.WriteByte((byte)(value & 0xff));
-                ms.WriteByte((byte)((value >> 8) & 0xff));
-                ms.WriteByte((byte)((value >> 16) & 0xff));
-                ms.WriteByte((byte)((value >> 24) & 0xff));
+                ms.WriteByte((byte) (value & 0xff));
+                ms.WriteByte((byte) ((value >> 8) & 0xff));
+                ms.WriteByte((byte) ((value >> 16) & 0xff));
+                ms.WriteByte((byte) ((value >> 24) & 0xff));
             }
         }
 
-        static void WriteByteArray(Stream ms, byte[] value)
+        private static void WriteByteArray(Stream ms, byte[] value)
         {
-            ms.Write(value,0,value.Length);
+            ms.Write(value, 0, value.Length);
         }
 
         private static void WriteDomainName(Stream ms, string name)
@@ -488,64 +492,64 @@ namespace NetFluid.DNS
 
         public static void WriteText(Stream ms, string name)
         {
-            var d = Encoding.ASCII.GetBytes(name);
-            ms.Write(d,0,d.Length);
+            byte[] d = Encoding.ASCII.GetBytes(name);
+            ms.Write(d, 0, d.Length);
         }
 
-        static void WriteHeader(Stream ms, Header header)
+        private static void WriteHeader(Stream ms, Header header)
         {
-            WriteUInt16(ms,header.ID);
-            WriteUInt16(ms,header.Flags);
-            WriteUInt16(ms,header.QDCOUNT);
-            WriteUInt16(ms,header.ANCOUNT);
-            WriteUInt16(ms,header.NSCOUNT);
-            WriteUInt16(ms,header.ARCOUNT);
+            WriteUInt16(ms, header.ID);
+            WriteUInt16(ms, header.Flags);
+            WriteUInt16(ms, header.QDCOUNT);
+            WriteUInt16(ms, header.ANCOUNT);
+            WriteUInt16(ms, header.NSCOUNT);
+            WriteUInt16(ms, header.ARCOUNT);
         }
 
         public static void WriteQuestion(Stream ms, Question q)
         {
-            WriteDomainName(ms,q.QName);
-            WriteUInt16(ms,(ushort)q.QType);
-            WriteUInt16(ms, (ushort)q.QClass);
+            WriteDomainName(ms, q.QName);
+            WriteUInt16(ms, (ushort) q.QType);
+            WriteUInt16(ms, (ushort) q.QClass);
         }
 
-        static void WriteRecord(Stream ms, Record rr)
+        private static void WriteRecord(Stream ms, Record rr)
         {
             WriteDomainName(ms, rr.Name);
-            WriteUInt16(ms,(ushort)Enum.Parse(typeof(RecordType),rr.GetType().Name.Substring("Record".Length)));
-            WriteUInt16(ms,(ushort)rr.Class);
-            WriteUInt32(ms,rr.TTL);
+            WriteUInt16(ms, (ushort) Enum.Parse(typeof (RecordType), rr.GetType().Name.Substring("Record".Length)));
+            WriteUInt16(ms, (ushort) rr.Class);
+            WriteUInt32(ms, rr.TTL);
 
             var n = new MemoryStream();
             WriteRecordData(n, rr);
-            WriteUInt16(ms,(ushort)n.Length);
-            WriteByteArray(ms,n.ToArray());
+            WriteUInt16(ms, (ushort) n.Length);
+            WriteByteArray(ms, n.ToArray());
         }
 
-        static void WriteRecordData(Stream ms, Record record)
+        private static void WriteRecordData(Stream ms, Record record)
         {
-            var type = record.GetType();
-            foreach (var field in type.GetFields().Where(x=>x.DeclaringType==type))
+            Type type = record.GetType();
+            foreach (FieldInfo field in type.GetFields().Where(x => x.DeclaringType == type))
             {
-                var fieldType = field.FieldType;
-                var value = field.GetValue(record);
+                Type fieldType = field.FieldType;
+                object value = field.GetValue(record);
 
-                if (fieldType==typeof(byte))
-                    ms.WriteByte((byte)value);
-                else if(fieldType==typeof(ushort))
-                    WriteUInt16(ms,(ushort)value);
-                else if (fieldType == typeof(int))
-                    WriteInt32(ms, (int)value);
-                else if (fieldType == typeof(uint))
-                    WriteUInt32(ms, (uint)value);
-                else if (fieldType == typeof(byte[]))
-                    WriteByteArray(ms, (byte[])value);
+                if (fieldType == typeof (byte))
+                    ms.WriteByte((byte) value);
+                else if (fieldType == typeof (ushort))
+                    WriteUInt16(ms, (ushort) value);
+                else if (fieldType == typeof (int))
+                    WriteInt32(ms, (int) value);
+                else if (fieldType == typeof (uint))
+                    WriteUInt32(ms, (uint) value);
+                else if (fieldType == typeof (byte[]))
+                    WriteByteArray(ms, (byte[]) value);
                 else if (fieldType == typeof (string))
                 {
-                    if(fieldType.HasAttribute<DomainNameAttribute>(false))
+                    if (fieldType.HasAttribute<DomainNameAttribute>(false))
                         WriteDomainName(ms, (string) value);
                     else
-                        WriteText(ms,(string) value);
+                        WriteText(ms, (string) value);
                 }
             }
         }
@@ -554,14 +558,14 @@ namespace NetFluid.DNS
         {
             var ms = new MemoryStream();
 
-            response.Header.QDCOUNT = (ushort)response.Questions.Count;
-            response.Header.ANCOUNT = (ushort)response.Answers.Count;
-            response.Header.NSCOUNT = (ushort)response.Authorities.Count;
-            response.Header.ARCOUNT = (ushort)response.Additionals.Count;
+            response.Header.QDCOUNT = (ushort) response.Questions.Count;
+            response.Header.ANCOUNT = (ushort) response.Answers.Count;
+            response.Header.NSCOUNT = (ushort) response.Authorities.Count;
+            response.Header.ARCOUNT = (ushort) response.Additionals.Count;
 
-            WriteHeader(ms,response.Header);
+            WriteHeader(ms, response.Header);
 
-            response.Answers.ForEach(x=>  WriteRecord(ms,x));
+            response.Answers.ForEach(x => WriteRecord(ms, x));
             response.Authorities.ForEach(x => WriteRecord(ms, x));
             response.Additionals.ForEach(x => WriteRecord(ms, x));
 

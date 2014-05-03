@@ -64,23 +64,21 @@
 
 namespace NetFluid.DNS.Records
 {
-	public class RecordSRV : Record
-	{
-		public ushort PRIORITY;
-		public ushort WEIGHT;
-		public ushort PORT;
+    public class RecordSRV : Record
+    {
+        public ushort PORT;
+        public ushort PRIORITY;
 
-        [DomainName]
-		public string TARGET;
+        [DomainName] public string TARGET;
+        public ushort WEIGHT;
 
-		public override string ToString()
-		{
-			return string.Format("{0} {1} {2} {3}",
-				PRIORITY,
-				WEIGHT,
-				PORT,
-				TARGET);
-		}
-
-	}
+        public override string ToString()
+        {
+            return string.Format("{0} {1} {2} {3}",
+                PRIORITY,
+                WEIGHT,
+                PORT,
+                TARGET);
+        }
+    }
 }

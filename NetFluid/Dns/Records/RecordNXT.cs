@@ -1,4 +1,5 @@
 using System.Text;
+
 /*
  * http://tools.ietf.org/rfc/rfc2065.txt
  * 
@@ -38,34 +39,32 @@ using System.Text;
 
 namespace NetFluid.DNS.Records
 {
-	public class RecordNXT : Record
-	{
-        [DomainName]
-		public string NEXTDOMAINNAME;
-		public byte[] BITMAP;
+    public class RecordNXT : Record
+    {
+        public byte[] BITMAP;
+        [DomainName] public string NEXTDOMAINNAME;
 
-		private bool IsSet(int bitNr)
-		{
-			var intByte = (int)(bitNr / 8);
-			var intOffset = (bitNr % 8);
-			var b = BITMAP[intByte];
-			var intTest = 1 << intOffset;
-			if ((b & intTest) == 0)
-				return false;
-		    return true;
-		}
+        private bool IsSet(int bitNr)
+        {
+            int intByte = bitNr/8;
+            int intOffset = (bitNr%8);
+            byte b = BITMAP[intByte];
+            int intTest = 1 << intOffset;
+            if ((b & intTest) == 0)
+                return false;
+            return true;
+        }
 
 
-		public override string ToString()
-		{
-			var sb = new StringBuilder();
-			for (var bitNr = 1; bitNr < (BITMAP.Length * 8); bitNr++)
-			{
-				if (IsSet(bitNr))
-					sb.Append(" " + (RecordType)bitNr);
-			}
-			return string.Format("{0}{1}", NEXTDOMAINNAME, sb.ToString());
-		}
-
-	}
+        public override string ToString()
+        {
+            var sb = new StringBuilder();
+            for (int bitNr = 1; bitNr < (BITMAP.Length*8); bitNr++)
+            {
+                if (IsSet(bitNr))
+                    sb.Append(" " + (RecordType) bitNr);
+            }
+            return string.Format("{0}{1}", NEXTDOMAINNAME, sb);
+        }
+    }
 }

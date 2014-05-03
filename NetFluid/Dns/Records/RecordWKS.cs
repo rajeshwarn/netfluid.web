@@ -43,27 +43,27 @@ In master files, both ports and protocols are expressed using mnemonics
 or decimal numbers.
 
  */
+
+using System.Net;
+
 namespace NetFluid.DNS.Records
 {
-	public class RecordWKS : Record
-	{
+    public class RecordWKS : Record
+    {
         public byte A;
         public byte B;
+        public byte[] Bitmap;
         public byte C;
         public byte D;
 
         public int Protocol;
-        public byte[] Bitmap;
 
-        public System.Net.IPAddress Address
+        public IPAddress Address
         {
-            get
-            {
-                return System.Net.IPAddress.Parse(ToString());
-            }
+            get { return IPAddress.Parse(ToString()); }
             set
             {
-                var arr = value.GetAddressBytes();
+                byte[] arr = value.GetAddressBytes();
                 A = arr[0];
                 B = arr[1];
                 C = arr[2];
@@ -75,5 +75,5 @@ namespace NetFluid.DNS.Records
         {
             return string.Format("{0}.{1}.{2}.{3}", A, B, C, D);
         }
-	}
+    }
 }

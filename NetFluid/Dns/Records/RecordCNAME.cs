@@ -18,17 +18,17 @@ the description of name server logic in [RFC-1034] for details.
 
  * 
  */
+
 namespace NetFluid.DNS.Records
 {
-	public class RecordCNAME : Record
-	{
-		[DomainName]public string CNAME;
+    public class RecordCNAME : Record
+    {
+        [DomainName] public string CNAME;
 
 
-		public override string ToString()
-		{
-			return CNAME;
-		}
-
-	}
+        public override string ToString()
+        {
+            return CNAME;
+        }
+    }
 }

@@ -1,4 +1,5 @@
 using System;
+
 /*
  * http://tools.ietf.org/rfc/rfc2930.txt
  * 
@@ -23,28 +24,26 @@ using System;
 
 namespace NetFluid.DNS.Records
 {
-	public class RecordTKEY : Record
-	{
-        [DomainName]
-		public string ALGORITHM;
-		public UInt32 INCEPTION;
-		public UInt32 EXPIRATION;
-		public UInt16 MODE;
-		public UInt16 ERROR;
-		public UInt16 KEYSIZE;
-		public byte[] KEYDATA;
-		public UInt16 OTHERSIZE;
-		public byte[] OTHERDATA;
+    public class RecordTKEY : Record
+    {
+        [DomainName] public string ALGORITHM;
+        public UInt16 ERROR;
+        public UInt32 EXPIRATION;
+        public UInt32 INCEPTION;
+        public byte[] KEYDATA;
+        public UInt16 KEYSIZE;
+        public UInt16 MODE;
+        public byte[] OTHERDATA;
+        public UInt16 OTHERSIZE;
 
-		public override string ToString()
-		{
-			return string.Format("{0} {1} {2} {3} {4}",
-				ALGORITHM,
-				INCEPTION,
-				EXPIRATION,
-				MODE,
-				ERROR);
-		}
-
-	}
+        public override string ToString()
+        {
+            return string.Format("{0} {1} {2} {3} {4}",
+                ALGORITHM,
+                INCEPTION,
+                EXPIRATION,
+                MODE,
+                ERROR);
+        }
+    }
 }

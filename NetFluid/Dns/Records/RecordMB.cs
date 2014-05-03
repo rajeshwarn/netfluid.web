@@ -14,17 +14,16 @@ MADNAME         A <domain-name> which specifies a host which has the
 MB records cause additional section processing which looks up an A type
 RRs corresponding to MADNAME.
 */
+
 namespace NetFluid.DNS.Records
 {
-	public class RecordMB : Record
-	{
-        [DomainName]
-        public string MADNAME;
+    public class RecordMB : Record
+    {
+        [DomainName] public string MADNAME;
 
-		public override string ToString()
-		{
-			return MADNAME;
-		}
-
-	}
+        public override string ToString()
+        {
+            return MADNAME;
+        }
+    }
 }

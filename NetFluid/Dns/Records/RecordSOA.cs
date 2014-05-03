@@ -67,28 +67,26 @@ change the SOA RR with known semantics.
 
 namespace NetFluid.DNS.Records
 {
-	public class RecordSOA : Record
-	{
-        [DomainName]
-		public string MNAME;
-        [DomainName]
-		public string RNAME;
-		public uint SERIAL;
-		public uint REFRESH;
-		public uint RETRY;
-		public uint EXPIRE;
-		public uint MINIMUM;
+    public class RecordSOA : Record
+    {
+        public uint EXPIRE;
+        public uint MINIMUM;
+        [DomainName] public string MNAME;
+        public uint REFRESH;
+        public uint RETRY;
+        [DomainName] public string RNAME;
+        public uint SERIAL;
 
-		public override string ToString()
-		{
-			return string.Format("{0} {1} {2} {3} {4} {5} {6}",
-				MNAME,
-				RNAME,
-				SERIAL,
-				REFRESH,
-				RETRY,
-				EXPIRE,
-				MINIMUM);
-		}
-	}
+        public override string ToString()
+        {
+            return string.Format("{0} {1} {2} {3} {4} {5} {6}",
+                MNAME,
+                RNAME,
+                SERIAL,
+                REFRESH,
+                RETRY,
+                EXPIRE,
+                MINIMUM);
+        }
+    }
 }

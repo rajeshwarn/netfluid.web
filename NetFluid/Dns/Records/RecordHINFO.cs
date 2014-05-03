@@ -23,15 +23,14 @@ when talking between machines or operating systems of the same type.
 
 namespace NetFluid.DNS.Records
 {
-	public class RecordHINFO : Record
-	{
-		public string CPU;
-		public string OS;
+    public class RecordHINFO : Record
+    {
+        public string CPU;
+        public string OS;
 
-		public override string ToString()
-		{
-			return string.Format("CPU={0} OS={1}",CPU,OS);
-		}
-
-	}
+        public override string ToString()
+        {
+            return string.Format("CPU={0} OS={1}", CPU, OS);
+        }
+    }
 }

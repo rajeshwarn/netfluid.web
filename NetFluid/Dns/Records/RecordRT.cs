@@ -53,19 +53,16 @@
 
 namespace NetFluid.DNS.Records
 {
-	public class RecordRT : Record
-	{
-		public ushort Preference;
+    public class RecordRT : Record
+    {
+        [DomainName] public string Intermediatehost;
+        public ushort Preference;
 
-        [DomainName]
-		public string Intermediatehost;
-
-		public override string ToString()
-		{
-			return string.Format("{0} {1}",
-				Preference,
-				Intermediatehost);
-		}
-
-	}
+        public override string ToString()
+        {
+            return string.Format("{0} {1}",
+                Preference,
+                Intermediatehost);
+        }
+    }
 }

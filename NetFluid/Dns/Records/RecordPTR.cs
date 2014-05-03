@@ -19,15 +19,13 @@ description of the IN-ADDR.ARPA domain for an example.
 
 namespace NetFluid.DNS.Records
 {
-	public class RecordPTR : Record
-	{
-        [DomainName]
-		public string PTRDNAME;
+    public class RecordPTR : Record
+    {
+        [DomainName] public string PTRDNAME;
 
-		public override string ToString()
-		{
-			return PTRDNAME;
-		}
-
-	}
+        public override string ToString()
+        {
+            return PTRDNAME;
+        }
+    }
 }

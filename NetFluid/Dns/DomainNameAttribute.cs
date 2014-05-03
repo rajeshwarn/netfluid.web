@@ -2,7 +2,7 @@
 
 namespace NetFluid.DNS
 {
-    class DomainNameAttribute:Attribute
+    internal class DomainNameAttribute : Attribute
     {
     }
 }

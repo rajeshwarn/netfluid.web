@@ -2,7 +2,7 @@ using System;
 
 namespace NetFluid.DNS.Records
 {
-	/*
+    /*
 	3.3.9. MX RDATA format
 
 		+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+
@@ -26,34 +26,31 @@ namespace NetFluid.DNS.Records
 	[RFC-974].
 	*/
 
-	public class RecordMX : Record, IComparable
-	{
-		public ushort Preference;
+    public class RecordMX : Record, IComparable
+    {
+        [DomainName] public string Exchange;
+        public ushort Preference;
 
-        [DomainName]
-		public string Exchange;
+        public int CompareTo(object objA)
+        {
+            var recordMX = objA as RecordMX;
+            if (recordMX == null)
+                return -1;
+            if (Preference > recordMX.Preference)
+                return 1;
+            if (Preference < recordMX.Preference)
+                return -1;
+            return string.Compare(Exchange, recordMX.Exchange, true);
+        }
 
-		public override string ToString()
-		{
-			return string.Format("{0} {1}", Preference, Exchange);
-		}
+        public override string ToString()
+        {
+            return string.Format("{0} {1}", Preference, Exchange);
+        }
 
         public static implicit operator RecordMX(string s)
         {
-            return new RecordMX() { Exchange = s, Preference = 20 };
+            return new RecordMX {Exchange = s, Preference = 20};
         }
-
-		public int CompareTo(object objA)
-		{
-			var recordMX = objA as RecordMX;
-			if (recordMX == null)
-				return -1;
-		    if (this.Preference > recordMX.Preference)
-		        return 1;
-		    if (this.Preference < recordMX.Preference)
-		        return -1;
-		    return string.Compare(this.Exchange, recordMX.Exchange, true);
-		}
-
-	}
+    }
 }

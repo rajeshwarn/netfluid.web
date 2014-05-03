@@ -28,17 +28,14 @@
 
 namespace NetFluid.DNS.Records
 {
-	public class RecordAFSDB : Record
-	{
-		public ushort Subtype;
-		
-        [DomainName]
-        public string Hostname;
+    public class RecordAFSDB : Record
+    {
+        [DomainName] public string Hostname;
+        public ushort Subtype;
 
-		public override string ToString()
-		{
-			return string.Format("{0} {1}",Subtype,Hostname);
-		}
-
-	}
+        public override string ToString()
+        {
+            return string.Format("{0} {1}", Subtype, Hostname);
+        }
+    }
 }

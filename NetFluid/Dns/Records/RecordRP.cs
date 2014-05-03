@@ -30,19 +30,16 @@
 
 namespace NetFluid.DNS.Records
 {
-	public class RecordRP : Record
-	{
-        [DomainName]
-		public string Mboxdname;
+    public class RecordRP : Record
+    {
+        [DomainName] public string Mboxdname;
 
-        [DomainName]
-		public string Txtdname;
+        [DomainName] public string Txtdname;
 
 
-		public override string ToString()
-		{
-			return string.Format("{0} {1}",Mboxdname,Txtdname);
-		}
-
-	}
+        public override string ToString()
+        {
+            return string.Format("{0} {1}", Mboxdname, Txtdname);
+        }
+    }
 }

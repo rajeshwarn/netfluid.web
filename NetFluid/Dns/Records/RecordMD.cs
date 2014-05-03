@@ -20,17 +20,16 @@ the new scheme.  The recommended policy for dealing with MD RRs found in
 a master file is to reject them, or to convert them to MX RRs with a
 preference of 0.
  * */
+
 namespace NetFluid.DNS.Records
 {
-	public class RecordMD : Record
-	{
-        [DomainName]
-        public string MADNAME;
+    public class RecordMD : Record
+    {
+        [DomainName] public string MADNAME;
 
-	    public override string ToString()
-		{
-			return MADNAME;
-		}
-
-	}
+        public override string ToString()
+        {
+            return MADNAME;
+        }
+    }
 }

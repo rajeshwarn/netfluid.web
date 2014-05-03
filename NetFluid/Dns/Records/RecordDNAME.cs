@@ -13,17 +13,16 @@
 
  * 
  */
+
 namespace NetFluid.DNS.Records
 {
-	public class RecordDNAME : Record
-	{
-        [DomainName]
-        public string TARGET;
+    public class RecordDNAME : Record
+    {
+        [DomainName] public string TARGET;
 
-		public override string ToString()
-		{
-			return TARGET;
-		}
-
-	}
+        public override string ToString()
+        {
+            return TARGET;
+        }
+    }
 }

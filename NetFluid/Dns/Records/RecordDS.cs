@@ -1,5 +1,6 @@
 using System;
 using System.Text;
+
 /*
  * http://tools.ietf.org/rfc/rfc3658.txt
  * 
@@ -30,24 +31,23 @@ using System.Text;
 
 namespace NetFluid.DNS.Records
 {
-	public class RecordDS : Record
-	{
-		public UInt16 KEYTAG;
-		public byte ALGORITHM;
-		public byte DIGESTTYPE;
-		public byte[] DIGEST;
+    public class RecordDS : Record
+    {
+        public byte ALGORITHM;
+        public byte[] DIGEST;
+        public byte DIGESTTYPE;
+        public UInt16 KEYTAG;
 
-		public override string ToString()
-		{
-			var sb = new StringBuilder();
-			for (var intI = 0; intI < DIGEST.Length; intI++)
-				sb.AppendFormat("{0:x2}", DIGEST[intI]);
-			return string.Format("{0} {1} {2} {3}",
-				KEYTAG,
-				ALGORITHM,
-				DIGESTTYPE,
-				sb);
-		}
-
-	}
+        public override string ToString()
+        {
+            var sb = new StringBuilder();
+            for (int intI = 0; intI < DIGEST.Length; intI++)
+                sb.AppendFormat("{0:x2}", DIGEST[intI]);
+            return string.Format("{0} {1} {2} {3}",
+                KEYTAG,
+                ALGORITHM,
+                DIGESTTYPE,
+                sb);
+        }
+    }
 }

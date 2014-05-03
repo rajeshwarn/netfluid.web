@@ -1,4 +1,5 @@
 using System;
+
 /*
  * http://tools.ietf.org/rfc/rfc2230.txt
  * 
@@ -30,31 +31,30 @@ using System;
    The KX RDATA field MUST NOT be compressed.
 
  */
+
 namespace NetFluid.DNS.Records
 {
-	public class RecordKX : Record, IComparable
-	{
-		public ushort Preference;
-        [DomainName]
-        public string Exchanger;
+    public class RecordKX : Record, IComparable
+    {
+        [DomainName] public string Exchanger;
+        public ushort Preference;
 
 
-		public override string ToString()
-		{
-			return string.Format("{0} {1}", Preference, Exchanger);
-		}
+        public int CompareTo(object objA)
+        {
+            var recordKX = objA as RecordKX;
+            if (recordKX == null)
+                return -1;
+            if (Preference > recordKX.Preference)
+                return 1;
+            if (Preference < recordKX.Preference)
+                return -1;
+            return String.Compare(Exchanger, recordKX.Exchanger, StringComparison.OrdinalIgnoreCase);
+        }
 
-		public int CompareTo(object objA)
-		{
-			var recordKX = objA as RecordKX;
-			if (recordKX == null)
-				return -1;
-		    if (this.Preference > recordKX.Preference)
-		        return 1;
-		    if (this.Preference < recordKX.Preference)
-		        return -1;
-		    return System.String.Compare(this.Exchanger, recordKX.Exchanger, System.StringComparison.OrdinalIgnoreCase);
-		}
-
-	}
+        public override string ToString()
+        {
+            return string.Format("{0} {1}", Preference, Exchanger);
+        }
+    }
 }

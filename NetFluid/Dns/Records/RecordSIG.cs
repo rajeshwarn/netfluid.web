@@ -1,6 +1,7 @@
 using System;
 
 #region Rfc info
+
 /*
  * http://www.ietf.org/rfc/rfc2535.txt
  * 4.1 SIG RDATA Format
@@ -30,37 +31,36 @@ using System;
 
 
 */
+
 #endregion
 
 namespace NetFluid.DNS.Records
 {
-	public class RecordSIG : Record
-	{
-		public UInt16 TYPECOVERED;
-		public byte ALGORITHM;
-		public byte LABELS;
-		public UInt32 ORIGINALTTL;
-		public UInt32 SIGNATUREEXPIRATION;
-		public UInt32 SIGNATUREINCEPTION;
-		public UInt16 KEYTAG;
+    public class RecordSIG : Record
+    {
+        public byte ALGORITHM;
+        public UInt16 KEYTAG;
+        public byte LABELS;
+        public UInt32 ORIGINALTTL;
+        public string SIGNATURE;
+        public UInt32 SIGNATUREEXPIRATION;
+        public UInt32 SIGNATUREINCEPTION;
 
-        [DomainName]
-		public string SIGNERSNAME;
-		public string SIGNATURE;
+        [DomainName] public string SIGNERSNAME;
+        public UInt16 TYPECOVERED;
 
-		public override string ToString()
-		{
-			return string.Format("{0} {1} {2} {3} {4} {5} {6} {7} \"{8}\"",
-				TYPECOVERED,
-				ALGORITHM,
-				LABELS,
-				ORIGINALTTL,
-				SIGNATUREEXPIRATION,
-				SIGNATUREINCEPTION,
-				KEYTAG,
-				SIGNERSNAME,
-				SIGNATURE);
-		}
-
-	}
+        public override string ToString()
+        {
+            return string.Format("{0} {1} {2} {3} {4} {5} {6} {7} \"{8}\"",
+                TYPECOVERED,
+                ALGORITHM,
+                LABELS,
+                ORIGINALTTL,
+                SIGNATUREEXPIRATION,
+                SIGNATUREINCEPTION,
+                KEYTAG,
+                SIGNERSNAME,
+                SIGNATURE);
+        }
+    }
 }

@@ -2,31 +2,31 @@
 
 namespace NetFluid.DNS.Records
 {
-	public abstract class Record
-	{
-		/// The name of the node to which this resource record pertains
-		/// </summary>
-		public string Name;
+    public abstract class Record
+    {
+        /// <summary>
+        ///     Specifies type class of resource record, mostly IN but can be CS, CH or HS
+        /// </summary>
+        public Class Class;
 
-		/// <summary>
-		/// Specifies type class of resource record, mostly IN but can be CS, CH or HS 
-		/// </summary>
-		public Class Class;
-
-	    /// <summary>
-	    /// Time to live, the time interval that the resource record may be cached
-	    /// </summary>
-	    public uint TTL { get; set; }
+        /// The name of the node to which this resource record pertains
+        /// </summary>
+        public string Name;
 
 
-		public int TimeLived;
+        public int TimeLived;
 
-	    protected Record()
+        protected Record()
         {
             TimeLived = 0;
             Name = "netfluid.org";
             Class = Class.IN;
             TTL = int.MaxValue - 1;
         }
-	}
+
+        /// <summary>
+        ///     Time to live, the time interval that the resource record may be cached
+        /// </summary>
+        public uint TTL { get; set; }
+    }
 }

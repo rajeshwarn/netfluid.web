@@ -15,17 +15,16 @@ MR records cause no additional section processing.  The main use for MR
 is as a forwarding entry for a user who has moved to a different
 mailbox.
 */
+
 namespace NetFluid.DNS.Records
 {
-	public class RecordMR : Record
+    public class RecordMR : Record
     {
-        [DomainName]
-		public string NEWNAME;
+        [DomainName] public string NEWNAME;
 
-		public override string ToString()
-		{
-			return NEWNAME;
-		}
-
-	}
+        public override string ToString()
+        {
+            return NEWNAME;
+        }
+    }
 }

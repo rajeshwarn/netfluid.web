@@ -39,19 +39,18 @@
 
 namespace NetFluid.DNS.Records
 {
-	public class RecordGPOS : Record
-	{
-		public string LONGITUDE;
-		public string LATITUDE;
-		public string ALTITUDE;
+    public class RecordGPOS : Record
+    {
+        public string ALTITUDE;
+        public string LATITUDE;
+        public string LONGITUDE;
 
-		public override string ToString()
-		{
-			return string.Format("{0} {1} {2}",
-				LONGITUDE,
-				LATITUDE,
-				ALTITUDE);
-		}
-
-	}
+        public override string ToString()
+        {
+            return string.Format("{0} {1} {2}",
+                LONGITUDE,
+                LATITUDE,
+                ALTITUDE);
+        }
+    }
 }

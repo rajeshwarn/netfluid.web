@@ -42,27 +42,25 @@
 
 namespace NetFluid.DNS.Records
 {
-	public class RecordNAPTR : Record
-	{
-		public ushort Order;
-		public ushort Preference;
-		public string Flags;
-		public string Services;
-		public string Regexp;
+    public class RecordNAPTR : Record
+    {
+        public string Flags;
+        public ushort Order;
+        public ushort Preference;
+        public string Regexp;
 
-        [DomainName]
-		public string Replacement;
+        [DomainName] public string Replacement;
+        public string Services;
 
-		public override string ToString()
-		{
-			return string.Format("{0} {1} \"{2}\" \"{3}\" \"{4}\" {5}",
-				Order,
-				Preference,
-				Flags,
-				Services,
-				Regexp,
-				Replacement);
-		}
-
-	}
+        public override string ToString()
+        {
+            return string.Format("{0} {1} \"{2}\" \"{3}\" \"{4}\" {5}",
+                Order,
+                Preference,
+                Flags,
+                Services,
+                Regexp,
+                Replacement);
+        }
+    }
 }

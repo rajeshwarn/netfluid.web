@@ -1,5 +1,6 @@
 using System;
 using System.Text;
+
 /*
  * http://www.ietf.org/rfc/rfc1876.txt
  * 
@@ -97,70 +98,69 @@ ALTITUDE     The altitude of the center of the sphere described by the
 
 namespace NetFluid.DNS.Records
 {
-	public class RecordLOC : Record
-	{
-		public byte VERSION;
-		public byte SIZE;
-		public byte HORIZPRE;
-		public byte VERTPRE;
-		public UInt32 LATITUDE;
-		public UInt32 LONGITUDE;
-		public UInt32 ALTITUDE;
+    public class RecordLOC : Record
+    {
+        public UInt32 ALTITUDE;
+        public byte HORIZPRE;
+        public UInt32 LATITUDE;
+        public UInt32 LONGITUDE;
+        public byte SIZE;
+        public byte VERSION;
+        public byte VERTPRE;
 
-		private static string SizeToString(byte s)
-		{
-			var strUnit = "cm";
-			var intBase = s >> 4;
-			var intPow = s & 0x0f;
-			if (intPow >= 2)
-			{
-				intPow -= 2;
-				strUnit = "m";
-			}
-			var sb = new StringBuilder();
-			sb.AppendFormat("{0}", intBase);
-			for (; intPow > 0; intPow--)
-				sb.Append('0');
-			sb.Append(strUnit);
-			return sb.ToString();
-		}
+        private static string SizeToString(byte s)
+        {
+            string strUnit = "cm";
+            int intBase = s >> 4;
+            int intPow = s & 0x0f;
+            if (intPow >= 2)
+            {
+                intPow -= 2;
+                strUnit = "m";
+            }
+            var sb = new StringBuilder();
+            sb.AppendFormat("{0}", intBase);
+            for (; intPow > 0; intPow--)
+                sb.Append('0');
+            sb.Append(strUnit);
+            return sb.ToString();
+        }
 
-		private static string ToTime(UInt32 r, char below,char above)
-		{
-			const uint Mid = 2147483648; // 2^31
-			var dir = '?';
-			if (r > Mid)
-			{
-				dir = above;
-				r -= Mid;
-			}
-			else
-			{
-				dir = below;
-				r = Mid - r;
-			}
-			var h = r / (360000.0 * 10.0);
-			var m = 60.0 * (h - (int)h);
-			var s = 60.0 * (m - (int)m);
-			return string.Format("{0} {1} {2:0.000} {3}", (int)h, (int)m, s, dir);
-		}
+        private static string ToTime(UInt32 r, char below, char above)
+        {
+            const uint Mid = 2147483648; // 2^31
+            char dir = '?';
+            if (r > Mid)
+            {
+                dir = above;
+                r -= Mid;
+            }
+            else
+            {
+                dir = below;
+                r = Mid - r;
+            }
+            double h = r/(360000.0*10.0);
+            double m = 60.0*(h - (int) h);
+            double s = 60.0*(m - (int) m);
+            return string.Format("{0} {1} {2:0.000} {3}", (int) h, (int) m, s, dir);
+        }
 
-		private string ToAlt(UInt32 a)
-		{
-			var alt = (a / 100.0) - 100000.00;
-			return string.Format("{0:0.00}m", alt);
-		}
+        private string ToAlt(UInt32 a)
+        {
+            double alt = (a/100.0) - 100000.00;
+            return string.Format("{0:0.00}m", alt);
+        }
 
-		public override string ToString()
-		{
-			return string.Format("{0} {1} {2} {3} {4} {5}",
-				ToTime(LATITUDE,'S','N'),
-				ToTime(LONGITUDE,'W','E'),
-				ToAlt(ALTITUDE),
-				SizeToString(SIZE),
-				SizeToString(HORIZPRE),
-				SizeToString(VERTPRE));
-		}
-
-	}
+        public override string ToString()
+        {
+            return string.Format("{0} {1} {2} {3} {4} {5}",
+                ToTime(LATITUDE, 'S', 'N'),
+                ToTime(LONGITUDE, 'W', 'E'),
+                ToAlt(ALTITUDE),
+                SizeToString(SIZE),
+                SizeToString(HORIZPRE),
+                SizeToString(VERTPRE));
+        }
+    }
 }

@@ -22,17 +22,16 @@ with the host, although it is typically a strong hint.  For example,
 hosts which are name servers for either Internet (IN) or Hesiod (HS)
 class information are normally queried using IN class protocols.
  */
+
 namespace NetFluid.DNS.Records
 {
-	public class RecordNS : Record
-	{
-        [DomainName]
-		public string NSDNAME;
+    public class RecordNS : Record
+    {
+        [DomainName] public string NSDNAME;
 
-	    public override string ToString()
-		{
-			return NSDNAME;
-		}
-
-	}
+        public override string ToString()
+        {
+            return NSDNAME;
+        }
+    }
 }

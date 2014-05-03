@@ -31,15 +31,14 @@
 
 namespace NetFluid.DNS.Records
 {
-	public class RecordX25 : Record
-	{
-		public string PsdnAddress;
+    public class RecordX25 : Record
+    {
+        public string PsdnAddress;
 
-		public override string ToString()
-		{
-			return string.Format("{0}",
-				PsdnAddress);
-		}
-
-	}
+        public override string ToString()
+        {
+            return string.Format("{0}",
+                PsdnAddress);
+        }
+    }
 }

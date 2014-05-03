@@ -13,17 +13,17 @@ NULL records cause no additional section processing.  NULL RRs are not
 allowed in master files.  NULLs are used as placeholders in some
 experimental extensions of the DNS.
 */
+
 namespace NetFluid.DNS.Records
 {
-	public class RecordNULL : Record
-	{
-	    public ushort Lenght;
-		public byte[] Anything;
+    public class RecordNULL : Record
+    {
+        public byte[] Anything;
+        public ushort Lenght;
 
-		public override string ToString()
-		{
-		    return Anything.ToBase64();
-		}
-
-	}
+        public override string ToString()
+        {
+            return Anything.ToBase64();
+        }
+    }
 }

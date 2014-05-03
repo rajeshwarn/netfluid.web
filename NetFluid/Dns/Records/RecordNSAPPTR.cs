@@ -39,13 +39,13 @@
 
 namespace NetFluid.DNS.Records
 {
-	public class RecordNSAPPTR : Record
-	{
-		public string OWNER;
+    public class RecordNSAPPTR : Record
+    {
+        public string OWNER;
 
-		public override string ToString()
-		{
-			return string.Format("{0}",OWNER);
-		}
-	}
+        public override string ToString()
+        {
+            return string.Format("{0}", OWNER);
+        }
+    }
 }

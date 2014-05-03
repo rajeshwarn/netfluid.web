@@ -68,15 +68,14 @@
 
 namespace NetFluid.DNS.Records
 {
-	public class RecordISDN : Record
-	{
-		public string IsdnAddress;
-		public string SA;
+    public class RecordISDN : Record
+    {
+        public string IsdnAddress;
+        public string SA;
 
-		public override string ToString()
-		{
-			return string.Format("{0} {1}",IsdnAddress,SA);
-		}
-
-	}
+        public override string ToString()
+        {
+            return string.Format("{0} {1}", IsdnAddress, SA);
+        }
+    }
 }
