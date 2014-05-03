@@ -89,6 +89,13 @@ namespace NetFluid.Service
             Start(name);
         }
 
+        public static void Add(string name, string application, string host, string endpoint)
+        {
+            var n = new Host(name, application, host, endpoint);
+            Stop(name);
+            _hosts.AddOrUpdate(name, n, (x, y) => n);
+        }
+        
         protected override void OnStart(string[] args)
         {
             Directory.SetCurrentDirectory(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location));
@@ -124,6 +131,8 @@ namespace NetFluid.Service
             });
 
             Engine.Start();
+
+            Engine.SetController(x => new FluidTemplate("./UI/index.html"),"Update in progress");
         }
 
         /// <SUMMARY>
