@@ -52,6 +52,7 @@
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="Host.cs" />
+    <Compile Include="HostManager.cs" />
     <Compile Include="Service.cs">
       <SubType>Component</SubType>
     </Compile>

@@ -116,9 +116,7 @@ namespace NetFluid.Service
             var hosts = new List<Host>();
 
             if (File.Exists("hosts.xml"))
-            {
                 hosts = hosts.FromXML(File.ReadAllText("hosts.xml"));
-            }
 
             _hosts = new ConcurrentDictionary<string, Host>();
             _processes = new ConcurrentDictionary<string, Process>();
