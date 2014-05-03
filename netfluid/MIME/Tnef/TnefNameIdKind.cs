@@ -24,22 +24,24 @@
 // THE SOFTWARE.
 //
 
-namespace MimeKit.Tnef {
-	/// <summary>
-	/// Tne kind of TNEF name identifier.
-	/// </summary>
-	/// <remarks>
-	/// Tne kind of TNEF name identifier.
-	/// </remarks>
-	enum TnefNameIdKind {
-		/// <summary>
-		/// The property name is an integer.
-		/// </summary>
-		Id,
+namespace MimeKit.Tnef
+{
+    /// <summary>
+    ///     Tne kind of TNEF name identifier.
+    /// </summary>
+    /// <remarks>
+    ///     Tne kind of TNEF name identifier.
+    /// </remarks>
+    internal enum TnefNameIdKind
+    {
+        /// <summary>
+        ///     The property name is an integer.
+        /// </summary>
+        Id,
 
-		/// <summary>
-		/// The property name is a string.
-		/// </summary>
-		Name
-	}
+        /// <summary>
+        ///     The property name is a string.
+        /// </summary>
+        Name
+    }
 }

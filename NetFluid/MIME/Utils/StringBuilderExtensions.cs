@@ -24,77 +24,90 @@
 // THE SOFTWARE.
 //
 
-using System;
 using System.Text;
 
-namespace MimeKit.Utils {
-	static class StringBuilderExtensions
-	{
-		public static StringBuilder LineWrap (this StringBuilder text, FormatOptions options)
-		{
-			if (text.Length == 0)
-				return text;
+namespace MimeKit.Utils
+{
+    internal static class StringBuilderExtensions
+    {
+        public static StringBuilder LineWrap(this StringBuilder text, FormatOptions options)
+        {
+            if (text.Length == 0)
+                return text;
 
-			if (char.IsWhiteSpace (text[text.Length - 1])) {
-				text.Insert (text.Length - 1, options.NewLine);
-			} else {
-				text.Append (options.NewLine);
-				text.Append ('\t');
-			}
+            if (char.IsWhiteSpace(text[text.Length - 1]))
+            {
+                text.Insert(text.Length - 1, options.NewLine);
+            }
+            else
+            {
+                text.Append(options.NewLine);
+                text.Append('\t');
+            }
 
-			return text;
-		}
+            return text;
+        }
 
-		public static StringBuilder AppendFolded (this StringBuilder text, FormatOptions options, string value, ref int lineLength)
-		{
-			int wordIndex = 0;
-			int lwspIndex;
+        public static StringBuilder AppendFolded(this StringBuilder text, FormatOptions options, string value,
+            ref int lineLength)
+        {
+            int wordIndex = 0;
+            int lwspIndex;
 
-			while (wordIndex < value.Length) {
-				lwspIndex = wordIndex;
+            while (wordIndex < value.Length)
+            {
+                lwspIndex = wordIndex;
 
-				if (value[wordIndex] == '"') {
-					// quoted string; don't break these up...
-					lwspIndex++;
+                if (value[wordIndex] == '"')
+                {
+                    // quoted string; don't break these up...
+                    lwspIndex++;
 
-					while (lwspIndex < value.Length && value[lwspIndex] != '"') {
-						if (value[lwspIndex] == '\\') {
-							lwspIndex++;
+                    while (lwspIndex < value.Length && value[lwspIndex] != '"')
+                    {
+                        if (value[lwspIndex] == '\\')
+                        {
+                            lwspIndex++;
 
-							if (lwspIndex < value.Length)
-								lwspIndex++;
-						} else {
-							lwspIndex++;
-						}
-					}
+                            if (lwspIndex < value.Length)
+                                lwspIndex++;
+                        }
+                        else
+                        {
+                            lwspIndex++;
+                        }
+                    }
+                }
+                else
+                {
+                    // normal word
+                    while (lwspIndex < value.Length && !char.IsWhiteSpace(value[lwspIndex]))
+                        lwspIndex++;
+                }
 
-				} else {
-					// normal word
-					while (lwspIndex < value.Length && !char.IsWhiteSpace (value[lwspIndex]))
-						lwspIndex++;
-				}
+                int length = lwspIndex - wordIndex;
+                if (lineLength > 1 && (lineLength + length) > options.MaxLineLength)
+                {
+                    text.LineWrap(options);
+                    lineLength = 1;
+                }
 
-				int length = lwspIndex - wordIndex;
-				if (lineLength > 1 && (lineLength + length) > options.MaxLineLength) {
-					text.LineWrap (options);
-					lineLength = 1;
-				}
+                text.Append(value, wordIndex, length);
+                lineLength += length;
 
-				text.Append (value, wordIndex, length);
-				lineLength += length;
+                wordIndex = lwspIndex;
+                while (wordIndex < value.Length && char.IsWhiteSpace(value[wordIndex]))
+                    wordIndex++;
 
-				wordIndex = lwspIndex;
-				while (wordIndex < value.Length && char.IsWhiteSpace (value[wordIndex]))
-					wordIndex++;
+                if (wordIndex < value.Length && wordIndex > lwspIndex)
+                {
+                    text.Append(' ');
+                    lineLength++;
+                }
+            }
 
-				if (wordIndex < value.Length && wordIndex > lwspIndex) {
-					text.Append (' ');
-					lineLength++;
-				}
-			}
-
-			return text;
-		}
+            return text;
+        }
 
 #if DEBUG
 		public static void AppendCStringByte (this StringBuilder text, byte c)
@@ -123,6 +136,5 @@ namespace MimeKit.Utils {
 				text.AppendCStringByte (cstr[i]);
 		}
 #endif
-	}
+    }
 }
-

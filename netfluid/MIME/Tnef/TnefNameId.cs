@@ -26,64 +26,69 @@
 
 using System;
 
-namespace MimeKit.Tnef {
-	struct TnefNameId
-	{
-		readonly TnefNameIdKind kind;
-		readonly string name;
-		readonly Guid guid;
-		readonly int id;
+namespace MimeKit.Tnef
+{
+    internal struct TnefNameId
+    {
+        private readonly Guid guid;
+        private readonly int id;
+        private readonly TnefNameIdKind kind;
+        private readonly string name;
 
-		public Guid PropertySetGuid {
-			get { return guid; }
-		}
+        public TnefNameId(Guid propertySetGuid, int id)
+        {
+            kind = TnefNameIdKind.Id;
+            guid = propertySetGuid;
+            this.id = id;
+            name = null;
+        }
 
-		public TnefNameIdKind Kind {
-			get { return kind; }
-		}
+        public TnefNameId(Guid propertySetGuid, string name)
+        {
+            kind = TnefNameIdKind.Name;
+            guid = propertySetGuid;
+            this.name = name;
+            id = 0;
+        }
 
-		public string Name {
-			get { return name; }
-		}
+        public Guid PropertySetGuid
+        {
+            get { return guid; }
+        }
 
-		public int Id {
-			get { return id; }
-		}
+        public TnefNameIdKind Kind
+        {
+            get { return kind; }
+        }
 
-		public TnefNameId (Guid propertySetGuid, int id)
-		{
-			kind = TnefNameIdKind.Id;
-			guid = propertySetGuid;
-			this.id = id;
-			name = null;
-		}
+        public string Name
+        {
+            get { return name; }
+        }
 
-		public TnefNameId (Guid propertySetGuid, string name)
-		{
-			kind = TnefNameIdKind.Name;
-			guid = propertySetGuid;
-			this.name = name;
-			id = 0;
-		}
+        public int Id
+        {
+            get { return id; }
+        }
 
-		public override int GetHashCode ()
-		{
-			int hash = kind == TnefNameIdKind.Id ? id : name.GetHashCode ();
+        public override int GetHashCode()
+        {
+            int hash = kind == TnefNameIdKind.Id ? id : name.GetHashCode();
 
-			return kind.GetHashCode () ^ guid.GetHashCode () ^ hash;
-		}
+            return kind.GetHashCode() ^ guid.GetHashCode() ^ hash;
+        }
 
-		public override bool Equals (object obj)
-		{
-			if (!(obj is TnefNameId))
-				return false;
+        public override bool Equals(object obj)
+        {
+            if (!(obj is TnefNameId))
+                return false;
 
-			var v = (TnefNameId) obj;
+            var v = (TnefNameId) obj;
 
-			if (v.kind != kind || v.guid != guid)
-				return false;
+            if (v.kind != kind || v.guid != guid)
+                return false;
 
-			return kind == TnefNameIdKind.Id ? v.id == id : v.name == name;
-		}
-	}
+            return kind == TnefNameIdKind.Id ? v.id == id : v.name == name;
+        }
+    }
 }

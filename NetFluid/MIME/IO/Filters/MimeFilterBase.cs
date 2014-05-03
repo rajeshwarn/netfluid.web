@@ -26,213 +26,207 @@
 
 using System;
 
-namespace MimeKit.IO.Filters {
-	/// <summary>
-	/// A base implementation for MIME filters.
-	/// </summary>
-	/// <remarks>
-	/// A base implementation for MIME filters.
-	/// </remarks>
+namespace MimeKit.IO.Filters
+{
+    /// <summary>
+    ///     A base implementation for MIME filters.
+    /// </summary>
+    /// <remarks>
+    ///     A base implementation for MIME filters.
+    /// </remarks>
     public abstract class MimeFilterBase : IMimeFilter
     {
-		byte[] preload = null;
-		byte[] output = null;
-		byte[] inbuf = null;
-		int preloadLength;
+        private byte[] inbuf;
+        private byte[] output;
+        private byte[] preload;
+        private int preloadLength;
 
-		/// <summary>
-		/// Initializes a new instance of the <see cref="MimeKit.IO.Filters.MimeFilterBase"/> class.
-		/// </summary>
-		/// <remarks>
-		/// Creates a new <see cref="MimeFilterBase"/>.
-		/// </remarks>
-		protected MimeFilterBase ()
-		{
-		}
+        /// <summary>
+        ///     Gets the output buffer.
+        /// </summary>
+        /// <remarks>
+        ///     Gets the output buffer.
+        /// </remarks>
+        /// <value>The output buffer.</value>
+        protected byte[] OutputBuffer
+        {
+            get { return output; }
+        }
 
-		/// <summary>
-		/// Gets the output buffer.
-		/// </summary>
-		/// <remarks>
-		/// Gets the output buffer.
-		/// </remarks>
-		/// <value>The output buffer.</value>
-		protected byte[] OutputBuffer {
-			get { return output; }
-		}
+        /// <summary>
+        ///     Filters the specified input.
+        /// </summary>
+        /// <remarks>
+        ///     Filters the specified input buffer starting at the given index,
+        ///     spanning across the specified number of bytes.
+        /// </remarks>
+        /// <returns>The filtered output.</returns>
+        /// <param name="input">The input buffer.</param>
+        /// <param name="startIndex">The starting index of the input buffer.</param>
+        /// <param name="length">The number of bytes of the input to filter.</param>
+        /// <param name="outputIndex">The starting index of the output in the returned buffer.</param>
+        /// <param name="outputLength">The length of the output buffer.</param>
+        /// <exception cref="System.ArgumentNullException">
+        ///     <paramref name="input" /> is <c>null</c>.
+        /// </exception>
+        /// <exception cref="System.ArgumentOutOfRangeException">
+        ///     <paramref name="startIndex" /> and <paramref name="length" /> do not specify
+        ///     a valid range in the <paramref name="input" /> byte array.
+        /// </exception>
+        public byte[] Filter(byte[] input, int startIndex, int length, out int outputIndex, out int outputLength)
+        {
+            ValidateArguments(input, startIndex, length);
 
-		/// <summary>
-		/// Filter the specified input.
-		/// </summary>
-		/// <remarks>
-		/// Filters the specified input buffer starting at the given index,
-		/// spanning across the specified number of bytes.
-		/// </remarks>
-		/// <returns>The filtered output.</returns>
-		/// <param name="input">The input buffer.</param>
-		/// <param name="startIndex">The starting index of the input buffer.</param>
-		/// <param name="length">The length of the input buffer, starting at <paramref name="startIndex"/>.</param>
-		/// <param name="outputIndex">The output index.</param>
-		/// <param name="outputLength">The output length.</param>
-		/// <param name="flush">If set to <c>true</c>, all internally buffered data should be flushed to the output buffer.</param>
-		protected abstract byte[] Filter (byte[] input, int startIndex, int length, out int outputIndex, out int outputLength, bool flush);
+            input = PreFilter(input, ref startIndex, ref length);
 
-		static int GetIdealBufferSize (int need)
-		{
-			return (need + 63) & ~63;
-		}
+            return Filter(input, startIndex, length, out outputIndex, out outputLength, false);
+        }
 
-		byte[] PreFilter (byte[] input, ref int startIndex, ref int length)
-		{
-			if (preloadLength == 0)
-				return input;
-			
-			// We need to preload any data from a previous filter iteration into 
-			// the input buffer, so make sure that we have room...
-			int totalLength = length + preloadLength;
-			
-			if (inbuf == null || inbuf.Length < totalLength) {
-				// NOTE: Array.Resize() copies data, we don't need that (slower)
-				inbuf = new byte[GetIdealBufferSize (totalLength)];
-			}
-			
-			// Copy our preload data into our internal input buffer
-			Buffer.BlockCopy (preload, 0, inbuf, 0, preloadLength);
-			
-			// Copy our input to the end of our internal input buffer
-			Buffer.BlockCopy (input, startIndex, inbuf, preloadLength, length);
-			
-			startIndex = preloadLength;
-			length = totalLength;
-			preloadLength = 0;
-			
-			return inbuf;
-		}
+        /// <summary>
+        ///     Filters the specified input, flushing all internally buffered data to the output.
+        /// </summary>
+        /// <remarks>
+        ///     Filters the specified input buffer starting at the given index,
+        ///     spanning across the specified number of bytes.
+        /// </remarks>
+        /// <returns>The filtered output.</returns>
+        /// <param name="input">The input buffer.</param>
+        /// <param name="startIndex">The starting index of the input buffer.</param>
+        /// <param name="length">The number of bytes of the input to filter.</param>
+        /// <param name="outputIndex">The starting index of the output in the returned buffer.</param>
+        /// <param name="outputLength">The length of the output buffer.</param>
+        /// <exception cref="System.ArgumentNullException">
+        ///     <paramref name="input" /> is <c>null</c>.
+        /// </exception>
+        /// <exception cref="System.ArgumentOutOfRangeException">
+        ///     <paramref name="startIndex" /> and <paramref name="length" /> do not specify
+        ///     a valid range in the <paramref name="input" /> byte array.
+        /// </exception>
+        public byte[] Flush(byte[] input, int startIndex, int length, out int outputIndex, out int outputLength)
+        {
+            ValidateArguments(input, startIndex, length);
 
-		static void ValidateArguments (byte[] input, int startIndex, int length)
-		{
-			if (input == null)
-				throw new ArgumentNullException ("input");
+            input = PreFilter(input, ref startIndex, ref length);
 
-			if (startIndex < 0 || startIndex > input.Length)
-				throw new ArgumentOutOfRangeException ("startIndex");
+            return Filter(input, startIndex, length, out outputIndex, out outputLength, true);
+        }
 
-			if (length < 0 || length > (input.Length - startIndex))
-				throw new ArgumentOutOfRangeException ("length");
-		}
-		
-		/// <summary>
-		/// Filters the specified input.
-		/// </summary>
-		/// <remarks>
-		/// Filters the specified input buffer starting at the given index,
-		/// spanning across the specified number of bytes.
-		/// </remarks>
-		/// <returns>The filtered output.</returns>
-		/// <param name="input">The input buffer.</param>
-		/// <param name="startIndex">The starting index of the input buffer.</param>
-		/// <param name="length">The number of bytes of the input to filter.</param>
-		/// <param name="outputIndex">The starting index of the output in the returned buffer.</param>
-		/// <param name="outputLength">The length of the output buffer.</param>
-		/// <exception cref="System.ArgumentNullException">
-		/// <paramref name="input"/> is <c>null</c>.
-		/// </exception>
-		/// <exception cref="System.ArgumentOutOfRangeException">
-		/// <paramref name="startIndex"/> and <paramref name="length"/> do not specify
-		/// a valid range in the <paramref name="input"/> byte array.
-		/// </exception>
-		public byte[] Filter (byte[] input, int startIndex, int length, out int outputIndex, out int outputLength)
-		{
-			ValidateArguments (input, startIndex, length);
+        /// <summary>
+        ///     Resets the filter.
+        /// </summary>
+        /// <remarks>
+        ///     Resets the filter.
+        /// </remarks>
+        public virtual void Reset()
+        {
+            preloadLength = 0;
+        }
 
-			input = PreFilter (input, ref startIndex, ref length);
-			
-			return Filter (input, startIndex, length, out outputIndex, out outputLength, false);
-		}
-		
-		/// <summary>
-		/// Filters the specified input, flushing all internally buffered data to the output.
-		/// </summary>
-		/// <remarks>
-		/// Filters the specified input buffer starting at the given index,
-		/// spanning across the specified number of bytes.
-		/// </remarks>
-		/// <returns>The filtered output.</returns>
-		/// <param name="input">The input buffer.</param>
-		/// <param name="startIndex">The starting index of the input buffer.</param>
-		/// <param name="length">The number of bytes of the input to filter.</param>
-		/// <param name="outputIndex">The starting index of the output in the returned buffer.</param>
-		/// <param name="outputLength">The length of the output buffer.</param>
-		/// <exception cref="System.ArgumentNullException">
-		/// <paramref name="input"/> is <c>null</c>.
-		/// </exception>
-		/// <exception cref="System.ArgumentOutOfRangeException">
-		/// <paramref name="startIndex"/> and <paramref name="length"/> do not specify
-		/// a valid range in the <paramref name="input"/> byte array.
-		/// </exception>
-		public byte[] Flush (byte[] input, int startIndex, int length, out int outputIndex, out int outputLength)
-		{
-			ValidateArguments (input, startIndex, length);
+        /// <summary>
+        ///     Filter the specified input.
+        /// </summary>
+        /// <remarks>
+        ///     Filters the specified input buffer starting at the given index,
+        ///     spanning across the specified number of bytes.
+        /// </remarks>
+        /// <returns>The filtered output.</returns>
+        /// <param name="input">The input buffer.</param>
+        /// <param name="startIndex">The starting index of the input buffer.</param>
+        /// <param name="length">The length of the input buffer, starting at <paramref name="startIndex" />.</param>
+        /// <param name="outputIndex">The output index.</param>
+        /// <param name="outputLength">The output length.</param>
+        /// <param name="flush">If set to <c>true</c>, all internally buffered data should be flushed to the output buffer.</param>
+        protected abstract byte[] Filter(byte[] input, int startIndex, int length, out int outputIndex,
+            out int outputLength, bool flush);
 
-			input = PreFilter (input, ref startIndex, ref length);
+        private static int GetIdealBufferSize(int need)
+        {
+            return (need + 63) & ~63;
+        }
 
-			return Filter (input, startIndex, length, out outputIndex, out outputLength, true);
-		}
+        private byte[] PreFilter(byte[] input, ref int startIndex, ref int length)
+        {
+            if (preloadLength == 0)
+                return input;
 
-		/// <summary>
-		/// Resets the filter.
-		/// </summary>
-		/// <remarks>
-		/// Resets the filter.
-		/// </remarks>
-		public virtual void Reset ()
-		{
-			preloadLength = 0;
-		}
+            // We need to preload any data from a previous filter iteration into 
+            // the input buffer, so make sure that we have room...
+            int totalLength = length + preloadLength;
 
-		/// <summary>
-		/// Saves the remaining input for the next round of processing.
-		/// </summary>
-		/// <remarks>
-		/// Saves the remaining input for the next round of processing.
-		/// </remarks>
-		/// <param name="input">The input buffer.</param>
-		/// <param name="startIndex">The starting index of the buffer to save.</param>
-		/// <param name="length">The length of the buffer to save, starting at <paramref name="startIndex"/>.</param>
-		protected void SaveRemainingInput (byte[] input, int startIndex, int length)
-		{
-			if (length == 0)
-				return;
+            if (inbuf == null || inbuf.Length < totalLength)
+            {
+                // NOTE: Array.Resize() copies data, we don't need that (slower)
+                inbuf = new byte[GetIdealBufferSize(totalLength)];
+            }
 
-			if (preload == null || preload.Length < length)
-				preload = new byte[GetIdealBufferSize (length)];
+            // Copy our preload data into our internal input buffer
+            Buffer.BlockCopy(preload, 0, inbuf, 0, preloadLength);
 
-			Buffer.BlockCopy (input, startIndex, preload, 0, length);
-			preloadLength = length;
-		}
+            // Copy our input to the end of our internal input buffer
+            Buffer.BlockCopy(input, startIndex, inbuf, preloadLength, length);
 
-		/// <summary>
-		/// Ensures that the output buffer is greater than or equal to the specified size.
-		/// </summary>
-		/// <remarks>
-		/// Ensures that the output buffer is greater than or equal to the specified size.
-		/// </remarks>
-		/// <param name="size">The minimum size needed.</param>
-		/// <param name="keep">If set to <c>true</c>, the current output should be preserved.</param>
-		protected void EnsureOutputSize (int size, bool keep)
-		{
-			if (size == 0)
-				return;
+            startIndex = preloadLength;
+            length = totalLength;
+            preloadLength = 0;
 
-			int outputSize = output != null ? output.Length : 0;
+            return inbuf;
+        }
 
-			if (outputSize >= size)
-				return;
+        private static void ValidateArguments(byte[] input, int startIndex, int length)
+        {
+            if (input == null)
+                throw new ArgumentNullException("input");
 
-			if (keep)
-				Array.Resize<byte> (ref output, GetIdealBufferSize (size));
-			else
-				output = new byte[GetIdealBufferSize (size)];
-		}
-	}
+            if (startIndex < 0 || startIndex > input.Length)
+                throw new ArgumentOutOfRangeException("startIndex");
+
+            if (length < 0 || length > (input.Length - startIndex))
+                throw new ArgumentOutOfRangeException("length");
+        }
+
+        /// <summary>
+        ///     Saves the remaining input for the next round of processing.
+        /// </summary>
+        /// <remarks>
+        ///     Saves the remaining input for the next round of processing.
+        /// </remarks>
+        /// <param name="input">The input buffer.</param>
+        /// <param name="startIndex">The starting index of the buffer to save.</param>
+        /// <param name="length">The length of the buffer to save, starting at <paramref name="startIndex" />.</param>
+        protected void SaveRemainingInput(byte[] input, int startIndex, int length)
+        {
+            if (length == 0)
+                return;
+
+            if (preload == null || preload.Length < length)
+                preload = new byte[GetIdealBufferSize(length)];
+
+            Buffer.BlockCopy(input, startIndex, preload, 0, length);
+            preloadLength = length;
+        }
+
+        /// <summary>
+        ///     Ensures that the output buffer is greater than or equal to the specified size.
+        /// </summary>
+        /// <remarks>
+        ///     Ensures that the output buffer is greater than or equal to the specified size.
+        /// </remarks>
+        /// <param name="size">The minimum size needed.</param>
+        /// <param name="keep">If set to <c>true</c>, the current output should be preserved.</param>
+        protected void EnsureOutputSize(int size, bool keep)
+        {
+            if (size == 0)
+                return;
+
+            int outputSize = output != null ? output.Length : 0;
+
+            if (outputSize >= size)
+                return;
+
+            if (keep)
+                Array.Resize(ref output, GetIdealBufferSize(size));
+            else
+                output = new byte[GetIdealBufferSize(size)];
+        }
+    }
 }

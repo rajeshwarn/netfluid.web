@@ -24,9 +24,11 @@
 // THE SOFTWARE.
 //
 
-namespace MimeKit.Tnef {
-	enum TnefAttributeLevel {
-		Message    = 1,
-		Attachment = 2,
-	}
+namespace MimeKit.Tnef
+{
+    internal enum TnefAttributeLevel
+    {
+        Message = 1,
+        Attachment = 2,
+    }
 }

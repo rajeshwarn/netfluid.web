@@ -24,28 +24,30 @@
 // THE SOFTWARE.
 //
 
-namespace MimeKit {
-	/// <summary>
-	/// The format of the MIME stream.
-	/// </summary>
-	/// <remarks>
-	/// The format of the MIME stream.
-	/// </remarks>
-	public enum MimeFormat : byte {
-		/// <summary>
-		/// The stream contains a single MIME entity or message.
-		/// </summary>
-		Entity,
+namespace MimeKit
+{
+    /// <summary>
+    ///     The format of the MIME stream.
+    /// </summary>
+    /// <remarks>
+    ///     The format of the MIME stream.
+    /// </remarks>
+    internal enum MimeFormat : byte
+    {
+        /// <summary>
+        ///     The stream contains a single MIME entity or message.
+        /// </summary>
+        Entity,
 
-		/// <summary>
-		/// The stream is in the Unix mbox format and may contain
-		/// more than a single message.
-		/// </summary>
-		Mbox,
+        /// <summary>
+        ///     The stream is in the Unix mbox format and may contain
+        ///     more than a single message.
+        /// </summary>
+        Mbox,
 
-		/// <summary>
-		/// The default stream format.
-		/// </summary>
-		Default = Entity,
-	}
+        /// <summary>
+        ///     The default stream format.
+        /// </summary>
+        Default = Entity,
+    }
 }

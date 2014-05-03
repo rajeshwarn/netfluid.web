@@ -27,73 +27,74 @@
 using System.IO;
 using System.Threading;
 
-namespace MimeKit {
-	/// <summary>
-	/// An interface for content stream encapsulation as used by <see cref="MimeKit.MimePart"/>.
-	/// </summary>
+namespace MimeKit
+{
+    /// <summary>
+    ///     An interface for content stream encapsulation as used by <see cref="MimeKit.MimePart" />.
+    /// </summary>
     /// <remarks>
-    /// Implemented by <see cref="ContentObject"/>.
+    ///     Implemented by <see cref="ContentObject" />.
     /// </remarks>
-	public interface IContentObject
-	{
-		/// <summary>
-		/// Gets the content encoding.
-		/// </summary>
+    internal interface IContentObject
+    {
+        /// <summary>
+        ///     Gets the content encoding.
+        /// </summary>
         /// <remarks>
-        /// If the <see cref="Stream"/> is not encoded, this value will be
-        /// <see cref="ContentEncoding.Default"/>. Otherwise, it will be
-        /// set to the raw content encoding of the stream.
+        ///     If the <see cref="Stream" /> is not encoded, this value will be
+        ///     <see cref="ContentEncoding.Default" />. Otherwise, it will be
+        ///     set to the raw content encoding of the stream.
         /// </remarks>
-		/// <value>The encoding.</value>
-		ContentEncoding Encoding { get; }
+        /// <value>The encoding.</value>
+        ContentEncoding Encoding { get; }
 
-		/// <summary>
-		/// Opens the decoded content stream.
-		/// </summary>
-		/// <remarks>
-		/// Provides a means of reading the decoded content without having to first write it to another
-		/// stream using <see cref="DecodeTo(System.IO.Stream,System.Threading.CancellationToken)"/>.
-		/// </remarks>
-		/// <returns>The decoded content stream.</returns>
-		Stream Open ();
-
-		/// <summary>
-		/// Decodes the content stream into another stream.
-		/// </summary>
+        /// <summary>
+        ///     Opens the decoded content stream.
+        /// </summary>
         /// <remarks>
-        /// If the content stream is encoded, this method will decode it into the
-        /// output stream using a suitable decoder.
+        ///     Provides a means of reading the decoded content without having to first write it to another
+        ///     stream using <see cref="DecodeTo(System.IO.Stream,System.Threading.CancellationToken)" />.
         /// </remarks>
-		/// <param name="stream">The output stream.</param>
-		/// <param name="cancellationToken">A cancellation token.</param>
-		/// <exception cref="System.ArgumentNullException">
-		/// <paramref name="stream"/> is <c>null</c>.
-		/// </exception>
-		/// <exception cref="System.OperationCanceledException">
-		/// The operation was cancelled via the cancellation token.
-		/// </exception>
-		/// <exception cref="System.IO.IOException">
-		/// An I/O error occurred.
-		/// </exception>
-		void DecodeTo (Stream stream, CancellationToken cancellationToken = default (CancellationToken));
+        /// <returns>The decoded content stream.</returns>
+        Stream Open();
 
-		/// <summary>
-		/// Copies the content stream to the specified output stream.
-		/// </summary>
+        /// <summary>
+        ///     Decodes the content stream into another stream.
+        /// </summary>
         /// <remarks>
-        /// Copies the data from <see cref="Stream"/> into <paramref name="stream"/>.
+        ///     If the content stream is encoded, this method will decode it into the
+        ///     output stream using a suitable decoder.
         /// </remarks>
-		/// <param name="stream">The output stream.</param>
-		/// <param name="cancellationToken">A cancellation token.</param>
-		/// <exception cref="System.ArgumentNullException">
-		/// <paramref name="stream"/> is <c>null</c>.
-		/// </exception>
-		/// <exception cref="System.OperationCanceledException">
-		/// The operation was cancelled via the cancellation token.
-		/// </exception>
-		/// <exception cref="System.IO.IOException">
-		/// An I/O error occurred.
-		/// </exception>
-		void WriteTo (Stream stream, CancellationToken cancellationToken = default (CancellationToken));
-	}
+        /// <param name="stream">The output stream.</param>
+        /// <param name="cancellationToken">A cancellation token.</param>
+        /// <exception cref="System.ArgumentNullException">
+        ///     <paramref name="stream" /> is <c>null</c>.
+        /// </exception>
+        /// <exception cref="System.OperationCanceledException">
+        ///     The operation was cancelled via the cancellation token.
+        /// </exception>
+        /// <exception cref="System.IO.IOException">
+        ///     An I/O error occurred.
+        /// </exception>
+        void DecodeTo(Stream stream, CancellationToken cancellationToken = default (CancellationToken));
+
+        /// <summary>
+        ///     Copies the content stream to the specified output stream.
+        /// </summary>
+        /// <remarks>
+        ///     Copies the data from <see cref="Stream" /> into <paramref name="stream" />.
+        /// </remarks>
+        /// <param name="stream">The output stream.</param>
+        /// <param name="cancellationToken">A cancellation token.</param>
+        /// <exception cref="System.ArgumentNullException">
+        ///     <paramref name="stream" /> is <c>null</c>.
+        /// </exception>
+        /// <exception cref="System.OperationCanceledException">
+        ///     The operation was cancelled via the cancellation token.
+        /// </exception>
+        /// <exception cref="System.IO.IOException">
+        ///     An I/O error occurred.
+        /// </exception>
+        void WriteTo(Stream stream, CancellationToken cancellationToken = default (CancellationToken));
+    }
 }

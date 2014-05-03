@@ -24,9 +24,11 @@
 // THE SOFTWARE.
 //
 
-namespace MimeKit.Tnef {
-	enum TnefComplianceMode {
-		Loose,
-		Strict
-	}
+namespace MimeKit.Tnef
+{
+    internal enum TnefComplianceMode
+    {
+        Loose,
+        Strict
+    }
 }

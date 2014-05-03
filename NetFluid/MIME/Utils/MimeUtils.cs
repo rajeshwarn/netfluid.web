@@ -25,315 +25,335 @@
 //
 
 using System;
+using System.Collections.Generic;
 using System.Net;
 using System.Text;
-using System.Diagnostics;
-using System.Collections.Generic;
 
-namespace MimeKit.Utils {
-	/// <summary>
-	/// MIME utility methods.
-	/// </summary>
-	/// <remarks>
-	/// Various utility methods that don't belong anywhere else.
-	/// </remarks>
-	public static class MimeUtils
-	{
-		static readonly Random random = new Random ((int) DateTime.Now.Ticks);
+namespace MimeKit.Utils
+{
+    /// <summary>
+    ///     MIME utility methods.
+    /// </summary>
+    /// <remarks>
+    ///     Various utility methods that don't belong anywhere else.
+    /// </remarks>
+    public static class MimeUtils
+    {
+        private static readonly Random random = new Random((int) DateTime.Now.Ticks);
 
-		/// <summary>
-		/// Generates a Message-Id.
-		/// </summary>
-		/// <remarks>
-		/// Generates a new Message-Id using the supplied domain.
-		/// </remarks>
-		/// <returns>The message identifier.</returns>
-		/// <param name="domain">A domain to use.</param>
-		/// <exception cref="System.ArgumentNullException">
-		/// <paramref name="domain"/> is <c>null</c>.
-		/// </exception>
-		public static string GenerateMessageId (string domain)
-		{
-			if (domain == null)
-				throw new ArgumentNullException ("domain");
+        /// <summary>
+        ///     Generates a Message-Id.
+        /// </summary>
+        /// <remarks>
+        ///     Generates a new Message-Id using the supplied domain.
+        /// </remarks>
+        /// <returns>The message identifier.</returns>
+        /// <param name="domain">A domain to use.</param>
+        /// <exception cref="System.ArgumentNullException">
+        ///     <paramref name="domain" /> is <c>null</c>.
+        /// </exception>
+        public static string GenerateMessageId(string domain)
+        {
+            if (domain == null)
+                throw new ArgumentNullException("domain");
 
-			var guid = new byte[16];
+            var guid = new byte[16];
 
-			lock (random) {
-				random.NextBytes (guid);
-			}
+            lock (random)
+            {
+                random.NextBytes(guid);
+            }
 
-			return string.Format ("<{0}@{1}>", new Guid (guid), domain);
-		}
+            return string.Format("<{0}@{1}>", new Guid(guid), domain);
+        }
 
-		/// <summary>
-		/// Generates a Message-Id.
-		/// </summary>
-		/// <remarks>
-		/// Generates a new Message-Id using the local machine's domain.
-		/// </remarks>
-		/// <returns>The message identifier.</returns>
-		public static string GenerateMessageId ()
-		{
+        /// <summary>
+        ///     Generates a Message-Id.
+        /// </summary>
+        /// <remarks>
+        ///     Generates a new Message-Id using the local machine's domain.
+        /// </remarks>
+        /// <returns>The message identifier.</returns>
+        public static string GenerateMessageId()
+        {
 #if PORTABLE
 			return GenerateMessageId ("localhost.localdomain");
 #else
-			return GenerateMessageId (Dns.GetHostName ());
+            return GenerateMessageId(Dns.GetHostName());
 #endif
-		}
+        }
 
-		/// <summary>
-		/// Enumerates the message-id references such as those that can be found in
-		/// the In-Reply-To or References header.
-		/// </summary>
-		/// <remarks>
-		/// Incrementally parses Message-Ids (such as those from a References header
-		/// in a MIME message) from the supplied buffer starting at the given index
-		/// and spanning across the specified number of bytes.
-		/// </remarks>
-		/// <returns>The references.</returns>
-		/// <param name="buffer">The raw byte buffer to parse.</param>
-		/// <param name="startIndex">The index into the buffer to start parsing.</param>
-		/// <param name="length">The length of the buffer to parse.</param>
-		/// <exception cref="System.ArgumentNullException">
-		/// <paramref name="buffer"/> is <c>null</c>.
-		/// </exception>
-		/// <exception cref="System.ArgumentOutOfRangeException">
-		/// <paramref name="startIndex"/> and <paramref name="length"/> do not specify
-		/// a valid range in the byte array.
-		/// </exception>
-		public static IEnumerable<string> EnumerateReferences (byte[] buffer, int startIndex, int length)
-		{
-			int endIndex = startIndex + length;
-			int index = startIndex;
-			InternetAddress addr;
+        /// <summary>
+        ///     Enumerates the message-id references such as those that can be found in
+        ///     the In-Reply-To or References header.
+        /// </summary>
+        /// <remarks>
+        ///     Incrementally parses Message-Ids (such as those from a References header
+        ///     in a MIME message) from the supplied buffer starting at the given index
+        ///     and spanning across the specified number of bytes.
+        /// </remarks>
+        /// <returns>The references.</returns>
+        /// <param name="buffer">The raw byte buffer to parse.</param>
+        /// <param name="startIndex">The index into the buffer to start parsing.</param>
+        /// <param name="length">The length of the buffer to parse.</param>
+        /// <exception cref="System.ArgumentNullException">
+        ///     <paramref name="buffer" /> is <c>null</c>.
+        /// </exception>
+        /// <exception cref="System.ArgumentOutOfRangeException">
+        ///     <paramref name="startIndex" /> and <paramref name="length" /> do not specify
+        ///     a valid range in the byte array.
+        /// </exception>
+        public static IEnumerable<string> EnumerateReferences(byte[] buffer, int startIndex, int length)
+        {
+            int endIndex = startIndex + length;
+            int index = startIndex;
 
-			if (buffer == null)
-				throw new ArgumentNullException ("buffer");
+            if (buffer == null)
+                throw new ArgumentNullException("buffer");
 
-			if (startIndex < 0 || startIndex > buffer.Length)
-				throw new ArgumentOutOfRangeException ("startIndex");
+            if (startIndex < 0 || startIndex > buffer.Length)
+                throw new ArgumentOutOfRangeException("startIndex");
 
-			if (length < 0 || length > (buffer.Length - startIndex))
-				throw new ArgumentOutOfRangeException ("length");
+            if (length < 0 || length > (buffer.Length - startIndex))
+                throw new ArgumentOutOfRangeException("length");
 
-			do {
-				if (!ParseUtils.SkipCommentsAndWhiteSpace (buffer, ref index, endIndex, false))
-					break;
+            do
+            {
+                if (!ParseUtils.SkipCommentsAndWhiteSpace(buffer, ref index, endIndex, false))
+                    break;
 
-				if (index >= endIndex)
-					break;
+                if (index >= endIndex)
+                    break;
 
-				if (buffer[index] == '<') {
-					if (!InternetAddress.TryParseMailbox (buffer, startIndex, ref index, endIndex, "", 65001, false, out addr))
-						break;
+                if (buffer[index] == '<')
+                {
+                    InternetAddress addr;
+                    if (
+                        !InternetAddress.TryParseMailbox(buffer, startIndex, ref index, endIndex, "", 65001, false,
+                            out addr))
+                        break;
 
-					yield return ((MailboxAddress) addr).Address;
-				} else if (!ParseUtils.Skip8bitWord (buffer, ref index, endIndex, false)) {
-					index++;
-				}
-			} while (index < endIndex);
+                    yield return ((MailboxAddress) addr).Address;
+                }
+                else if (!ParseUtils.Skip8bitWord(buffer, ref index, endIndex, false))
+                {
+                    index++;
+                }
+            } while (index < endIndex);
+        }
 
-			yield break;
-		}
+        /// <summary>
+        ///     Enumerates the message-id references such as those that can be found in
+        ///     the In-Reply-To or References header.
+        /// </summary>
+        /// <remarks>
+        ///     Incrementally parses Message-Ids (such as those from a References header
+        ///     in a MIME message) from the specified text.
+        /// </remarks>
+        /// <returns>The references.</returns>
+        /// <param name="text">The text to parse.</param>
+        /// <exception cref="System.ArgumentNullException">
+        ///     <paramref name="text" /> is <c>null</c>.
+        /// </exception>
+        public static IEnumerable<string> EnumerateReferences(string text)
+        {
+            if (text == null)
+                throw new ArgumentNullException("text");
 
-		/// <summary>
-		/// Enumerates the message-id references such as those that can be found in
-		/// the In-Reply-To or References header.
-		/// </summary>
-		/// <remarks>
-		/// Incrementally parses Message-Ids (such as those from a References header
-		/// in a MIME message) from the specified text.
-		/// </remarks>
-		/// <returns>The references.</returns>
-		/// <param name="text">The text to parse.</param>
-		/// <exception cref="System.ArgumentNullException">
-		/// <paramref name="text"/> is <c>null</c>.
-		/// </exception>
-		public static IEnumerable<string> EnumerateReferences (string text)
-		{
-			if (text == null)
-				throw new ArgumentNullException ("text");
+            byte[] buffer = Encoding.UTF8.GetBytes(text);
 
-			var buffer = Encoding.UTF8.GetBytes (text);
+            return EnumerateReferences(buffer, 0, buffer.Length);
+        }
 
-			return EnumerateReferences (buffer, 0, buffer.Length);
-		}
+        /// <summary>
+        ///     Tries to parse a version from a header such as Mime-Version.
+        /// </summary>
+        /// <remarks>
+        ///     Parses a MIME version string from the supplied buffer starting at the given index
+        ///     and spanning across the specified number of bytes.
+        /// </remarks>
+        /// <returns><c>true</c>, if the version was successfully parsed, <c>false</c> otherwise.</returns>
+        /// <param name="buffer">The raw byte buffer to parse.</param>
+        /// <param name="startIndex">The index into the buffer to start parsing.</param>
+        /// <param name="length">The length of the buffer to parse.</param>
+        /// <param name="version">The parsed version.</param>
+        /// <exception cref="System.ArgumentNullException">
+        ///     <paramref name="buffer" /> is <c>null</c>.
+        /// </exception>
+        /// <exception cref="System.ArgumentOutOfRangeException">
+        ///     <paramref name="startIndex" /> and <paramref name="length" /> do not specify
+        ///     a valid range in the byte array.
+        /// </exception>
+        public static bool TryParseVersion(byte[] buffer, int startIndex, int length, out Version version)
+        {
+            if (buffer == null)
+                throw new ArgumentNullException("buffer");
 
-		/// <summary>
-		/// Tries to parse a version from a header such as Mime-Version.
-		/// </summary>
-		/// <remarks>
-		/// Parses a MIME version string from the supplied buffer starting at the given index
-		/// and spanning across the specified number of bytes.
-		/// </remarks>
-		/// <returns><c>true</c>, if the version was successfully parsed, <c>false</c> otherwise.</returns>
-		/// <param name="buffer">The raw byte buffer to parse.</param>
-		/// <param name="startIndex">The index into the buffer to start parsing.</param>
-		/// <param name="length">The length of the buffer to parse.</param>
-		/// <param name="version">The parsed version.</param>
-		/// <exception cref="System.ArgumentNullException">
-		/// <paramref name="buffer"/> is <c>null</c>.
-		/// </exception>
-		/// <exception cref="System.ArgumentOutOfRangeException">
-		/// <paramref name="startIndex"/> and <paramref name="length"/> do not specify
-		/// a valid range in the byte array.
-		/// </exception>
-		public static bool TryParseVersion (byte[] buffer, int startIndex, int length, out Version version)
-		{
-			if (buffer == null)
-				throw new ArgumentNullException ("buffer");
+            if (startIndex < 0 || startIndex > buffer.Length)
+                throw new ArgumentOutOfRangeException("startIndex");
 
-			if (startIndex < 0 || startIndex > buffer.Length)
-				throw new ArgumentOutOfRangeException ("startIndex");
+            if (length < 0 || length > (buffer.Length - startIndex))
+                throw new ArgumentOutOfRangeException("length");
 
-			if (length < 0 || length > (buffer.Length - startIndex))
-				throw new ArgumentOutOfRangeException ("length");
+            var values = new List<int>();
+            int endIndex = startIndex + length;
+            int index = startIndex;
 
-			List<int> values = new List<int> ();
-			int endIndex = startIndex + length;
-			int index = startIndex;
-			int value;
+            version = null;
 
-			version = null;
+            do
+            {
+                if (!ParseUtils.SkipCommentsAndWhiteSpace(buffer, ref index, endIndex, false) || index >= endIndex)
+                    return false;
 
-			do {
-				if (!ParseUtils.SkipCommentsAndWhiteSpace (buffer, ref index, endIndex, false) || index >= endIndex)
-					return false;
+                int value;
+                if (!ParseUtils.TryParseInt32(buffer, ref index, endIndex, out value))
+                    return false;
 
-				if (!ParseUtils.TryParseInt32 (buffer, ref index, endIndex, out value))
-					return false;
+                values.Add(value);
 
-				values.Add (value);
+                if (!ParseUtils.SkipCommentsAndWhiteSpace(buffer, ref index, endIndex, false))
+                    return false;
 
-				if (!ParseUtils.SkipCommentsAndWhiteSpace (buffer, ref index, endIndex, false))
-					return false;
+                if (index >= endIndex)
+                    break;
 
-				if (index >= endIndex)
-					break;
+                if (buffer[index++] != (byte) '.')
+                    return false;
+            } while (index < endIndex);
 
-				if (buffer[index++] != (byte) '.')
-					return false;
-			} while (index < endIndex);
+            switch (values.Count)
+            {
+                case 4:
+                    version = new Version(values[0], values[1], values[2], values[3]);
+                    break;
+                case 3:
+                    version = new Version(values[0], values[1], values[2]);
+                    break;
+                case 2:
+                    version = new Version(values[0], values[1]);
+                    break;
+                default:
+                    return false;
+            }
 
-			switch (values.Count) {
-			case 4: version = new Version (values[0], values[1], values[2], values[3]); break;
-			case 3: version = new Version (values[0], values[1], values[2]); break;
-			case 2: version = new Version (values[0], values[1]); break;
-			default: return false;
-			}
+            return true;
+        }
 
-			return true;
-		}
+        /// <summary>
+        ///     Tries to parse a version from a header such as Mime-Version.
+        /// </summary>
+        /// <remarks>
+        ///     Parses a MIME version string from the specified text.
+        /// </remarks>
+        /// <returns><c>true</c>, if the version was successfully parsed, <c>false</c> otherwise.</returns>
+        /// <param name="text">The text to parse.</param>
+        /// <param name="version">The parsed version.</param>
+        /// <exception cref="System.ArgumentNullException">
+        ///     <paramref name="text" /> is <c>null</c>.
+        /// </exception>
+        public static bool TryParseVersion(string text, out Version version)
+        {
+            if (text == null)
+                throw new ArgumentNullException("text");
 
-		/// <summary>
-		/// Tries to parse a version from a header such as Mime-Version.
-		/// </summary>
-		/// <remarks>
-		/// Parses a MIME version string from the specified text.
-		/// </remarks>
-		/// <returns><c>true</c>, if the version was successfully parsed, <c>false</c> otherwise.</returns>
-		/// <param name="text">The text to parse.</param>
-		/// <param name="version">The parsed version.</param>
-		/// <exception cref="System.ArgumentNullException">
-		/// <paramref name="text"/> is <c>null</c>.
-		/// </exception>
-		public static bool TryParseVersion (string text, out Version version)
-		{
-			if (text == null)
-				throw new ArgumentNullException ("text");
+            byte[] buffer = Encoding.UTF8.GetBytes(text);
 
-			var buffer = Encoding.UTF8.GetBytes (text);
+            return TryParseVersion(buffer, 0, buffer.Length, out version);
+        }
 
-			return TryParseVersion (buffer, 0, buffer.Length, out version);
-		}
+        /// <summary>
+        ///     Quotes the specified text.
+        /// </summary>
+        /// <remarks>
+        ///     Quotes the specified text, enclosing it in double-quotes and escaping
+        ///     any backslashes and double-quotes within.
+        /// </remarks>
+        /// <returns>The quoted text.</returns>
+        /// <param name="text">The text to quote.</param>
+        /// <exception cref="System.ArgumentNullException">
+        ///     <paramref name="text" /> is <c>null</c>.
+        /// </exception>
+        public static string Quote(string text)
+        {
+            if (text == null)
+                throw new ArgumentNullException("text");
 
-		/// <summary>
-		/// Quotes the specified text.
-		/// </summary>
-		/// <remarks>
-		/// Quotes the specified text, enclosing it in double-quotes and escaping
-		/// any backslashes and double-quotes within.
-		/// </remarks>
-		/// <returns>The quoted text.</returns>
-		/// <param name="text">The text to quote.</param>
-		/// <exception cref="System.ArgumentNullException">
-		/// <paramref name="text"/> is <c>null</c>.
-		/// </exception>
-		public static string Quote (string text)
-		{
-			if (text == null)
-				throw new ArgumentNullException ("text");
+            var sb = new StringBuilder();
 
-			var sb = new StringBuilder ();
+            sb.Append("\"");
+            foreach (char t in text)
+            {
+                if (t == '\\' || t == '"')
+                    sb.Append('\\');
+                sb.Append(t);
+            }
+            sb.Append("\"");
 
-			sb.Append ("\"");
-			for (int i = 0; i < text.Length; i++) {
-				if (text[i] == '\\' || text[i] == '"')
-					sb.Append ('\\');
-				sb.Append (text[i]);
-			}
-			sb.Append ("\"");
+            return sb.ToString();
+        }
 
-			return sb.ToString ();
-		}
+        /// <summary>
+        ///     Unquotes the specified text.
+        /// </summary>
+        /// <remarks>
+        ///     Unquotes the specified text, removing any escaped backslashes within.
+        /// </remarks>
+        /// <returns>The unquoted text.</returns>
+        /// <param name="text">The text to unquote.</param>
+        /// <exception cref="System.ArgumentNullException">
+        ///     <paramref name="text" /> is <c>null</c>.
+        /// </exception>
+        public static string Unquote(string text)
+        {
+            if (text == null)
+                throw new ArgumentNullException("text");
 
-		/// <summary>
-		/// Unquotes the specified text.
-		/// </summary>
-		/// <remarks>
-		/// Unquotes the specified text, removing any escaped backslashes within.
-		/// </remarks>
-		/// <returns>The unquoted text.</returns>
-		/// <param name="text">The text to unquote.</param>
-		/// <exception cref="System.ArgumentNullException">
-		/// <paramref name="text"/> is <c>null</c>.
-		/// </exception>
-		public static string Unquote (string text)
-		{
-			if (text == null)
-				throw new ArgumentNullException ("text");
+            int index = text.IndexOfAny(new[] {'\r', '\n', '\t', '\\', '"'});
 
-			int index = text.IndexOfAny (new [] { '\r', '\n', '\t', '\\', '"' });
+            if (index == -1)
+                return text;
 
-			if (index == -1)
-				return text;
+            var builder = new StringBuilder();
+            bool escaped = false;
+            bool quoted = false;
 
-			var builder = new StringBuilder ();
-			bool escaped = false;
-			bool quoted = false;
+            for (int i = 0; i < text.Length; i++)
+            {
+                switch (text[i])
+                {
+                    case '\r':
+                    case '\n':
+                        escaped = false;
+                        break;
+                    case '\t':
+                        builder.Append(' ');
+                        escaped = false;
+                        break;
+                    case '\\':
+                        if (escaped)
+                            builder.Append('\\');
+                        escaped = !escaped;
+                        break;
+                    case '"':
+                        if (escaped)
+                        {
+                            builder.Append('"');
+                            escaped = false;
+                        }
+                        else
+                        {
+                            quoted = !quoted;
+                        }
+                        break;
+                    default:
+                        builder.Append(text[i]);
+                        escaped = false;
+                        break;
+                }
+            }
 
-			for (int i = 0; i < text.Length; i++) {
-				switch (text[i]) {
-				case '\r':
-				case '\n':
-					escaped = false;
-					break;
-				case '\t':
-					builder.Append (' ');
-					escaped = false;
-					break;
-				case '\\':
-					if (escaped)
-						builder.Append ('\\');
-					escaped = !escaped;
-					break;
-				case '"':
-					if (escaped) {
-						builder.Append ('"');
-						escaped = false;
-					} else {
-						quoted = !quoted;
-					}
-					break;
-				default:
-					builder.Append (text[i]);
-					escaped = false;
-					break;
-				}
-			}
-
-			return builder.ToString ();
-		}
-	}
+            return builder.ToString();
+        }
+    }
 }

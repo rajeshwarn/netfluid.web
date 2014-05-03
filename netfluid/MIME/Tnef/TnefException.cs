@@ -27,57 +27,58 @@
 using System;
 using System.Runtime.Serialization;
 
-namespace MimeKit.Tnef {
-	/// <summary>
-	/// A TNEF exception.
-	/// </summary>
-	/// <remarks>
-	/// A <see cref="TnefException"/> occurs when when a TNEF stream is found to be
-	/// corrupted and cannot be read any futher.
-	/// </remarks>
+namespace MimeKit.Tnef
+{
+    /// <summary>
+    ///     A TNEF exception.
+    /// </summary>
+    /// <remarks>
+    ///     A <see cref="TnefException" /> occurs when when a TNEF stream is found to be
+    ///     corrupted and cannot be read any futher.
+    /// </remarks>
 #if !PORTABLE
-	[Serializable]
+    [Serializable]
 #endif
-	public class TnefException : FormatException
-	{
+    public class TnefException : FormatException
+    {
 #if !PORTABLE
-		/// <summary>
-		/// Initializes a new instance of the <see cref="MimeKit.Tnef.TnefException"/> class.
-		/// </summary>
-		/// <remarks>
-		/// Creates a new <see cref="TnefException"/>.
-		/// </remarks>
-		/// <param name="info">The serialization info.</param>
-		/// <param name="context">The stream context.</param>
-		/// <exception cref="System.ArgumentNullException">
-		/// <paramref name="info"/> is <c>null</c>.
-		/// </exception>
-		protected TnefException (SerializationInfo info, StreamingContext context) : base (info, context)
-		{
-		}
+        /// <summary>
+        ///     Initializes a new instance of the <see cref="MimeKit.Tnef.TnefException" /> class.
+        /// </summary>
+        /// <remarks>
+        ///     Creates a new <see cref="TnefException" />.
+        /// </remarks>
+        /// <param name="info">The serialization info.</param>
+        /// <param name="context">The stream context.</param>
+        /// <exception cref="System.ArgumentNullException">
+        ///     <paramref name="info" /> is <c>null</c>.
+        /// </exception>
+        protected TnefException(SerializationInfo info, StreamingContext context) : base(info, context)
+        {
+        }
 #endif
 
-		/// <summary>
-		/// Initializes a new instance of the <see cref="MimeKit.Tnef.TnefException"/> class.
-		/// </summary>
-		/// <remarks>
-		/// Creates a new <see cref="TnefException"/>.
-		/// </remarks>
-		/// <param name="message">The error message.</param>
-		/// <param name="innerException">The inner exception.</param>
-		public TnefException (string message, Exception innerException) : base (message, innerException)
-		{
-		}
+        /// <summary>
+        ///     Initializes a new instance of the <see cref="MimeKit.Tnef.TnefException" /> class.
+        /// </summary>
+        /// <remarks>
+        ///     Creates a new <see cref="TnefException" />.
+        /// </remarks>
+        /// <param name="message">The error message.</param>
+        /// <param name="innerException">The inner exception.</param>
+        public TnefException(string message, Exception innerException) : base(message, innerException)
+        {
+        }
 
-		/// <summary>
-		/// Initializes a new instance of the <see cref="MimeKit.Tnef.TnefException"/> class.
-		/// </summary>
-		/// <remarks>
-		/// Creates a new <see cref="TnefException"/>.
-		/// </remarks>
-		/// <param name="message">The error message.</param>
-		public TnefException (string message) : base (message)
-		{
-		}
-	}
+        /// <summary>
+        ///     Initializes a new instance of the <see cref="MimeKit.Tnef.TnefException" /> class.
+        /// </summary>
+        /// <remarks>
+        ///     Creates a new <see cref="TnefException" />.
+        /// </remarks>
+        /// <param name="message">The error message.</param>
+        public TnefException(string message) : base(message)
+        {
+        }
+    }
 }

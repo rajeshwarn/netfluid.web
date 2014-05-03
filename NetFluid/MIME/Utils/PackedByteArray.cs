@@ -28,235 +28,256 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 
-namespace MimeKit.Utils {
-	class PackedByteArray : IList<byte>
-	{
-		const int InitialBufferSize = 64;
+namespace MimeKit.Utils
+{
+    internal class PackedByteArray : IList<byte>
+    {
+        private const int InitialBufferSize = 64;
 
-		ushort[] buffer;
-		int length;
-		int cursor;
+        private ushort[] buffer;
+        private int cursor;
+        private int length;
 
-		public PackedByteArray ()
-		{
-			buffer = new ushort[InitialBufferSize];
-			Clear ();
-		}
+        public PackedByteArray()
+        {
+            buffer = new ushort[InitialBufferSize];
+            Clear();
+        }
 
-		#region ICollection implementation
+        #region ICollection implementation
 
-		public int Count {
-			get { return length; }
-		}
+        public int Count
+        {
+            get { return length; }
+        }
 
-		public bool IsReadOnly {
-			get { return false; }
-		}
+        public bool IsReadOnly
+        {
+            get { return false; }
+        }
 
-		void EnsureBufferSize (int size)
-		{
-			if (buffer.Length > size)
-				return;
+        public void Add(byte item)
+        {
+            if (cursor < 0 || item != (byte) (buffer[cursor] & 0xFF) || (buffer[cursor] & 0xFF00) == 0xFF00)
+            {
+                EnsureBufferSize(cursor + 2);
+                buffer[++cursor] = (ushort) ((1 << 8) | item);
+            }
+            else
+            {
+                buffer[cursor] += (1 << 8);
+            }
 
-			int ideal = (size + 63) & ~63;
+            length++;
+        }
 
-			Array.Resize<ushort> (ref buffer, ideal);
-		}
+        public void Clear()
+        {
+            cursor = -1;
+            length = 0;
+        }
 
-		public void Add (byte item)
-		{
-			if (cursor < 0 || item != (byte) (buffer[cursor] & 0xFF) || (buffer[cursor] & 0xFF00) == 0xFF00) {
-				EnsureBufferSize (cursor + 2);
-				buffer[++cursor] = (ushort) ((1 << 8) | item);
-			} else {
-				buffer[cursor] += (1 << 8);
-			}
+        public bool Contains(byte item)
+        {
+            for (int i = 0; i <= cursor; i++)
+            {
+                if (item == (byte) (buffer[i] & 0xFF))
+                    return true;
+            }
 
-			length++;
-		}
-		
-		public void Clear ()
-		{
-			cursor = -1;
-			length = 0;
-		}
-		
-		public bool Contains (byte item)
-		{
-			for (int i = 0; i <= cursor; i++) {
-				if (item == (byte) (buffer[i] & 0xFF))
-					return true;
-			}
+            return false;
+        }
 
-			return false;
-		}
-		
-		public void CopyTo (byte[] array, int arrayIndex)
-		{
-			if (array == null)
-				throw new ArgumentNullException ("array");
+        public void CopyTo(byte[] array, int arrayIndex)
+        {
+            if (array == null)
+                throw new ArgumentNullException("array");
 
-			if (arrayIndex < 0 || arrayIndex + length > array.Length)
-				throw new ArgumentOutOfRangeException ("arrayIndex");
+            if (arrayIndex < 0 || arrayIndex + length > array.Length)
+                throw new ArgumentOutOfRangeException("arrayIndex");
 
-			int index = arrayIndex;
-			int count;
-			byte c;
+            int index = arrayIndex;
+            int count;
+            byte c;
 
-			for (int i = 0; i <= cursor; i++) {
-				count = (buffer[i] >> 8) & 0xFF;
-				c = (byte) (buffer[i] & 0xFF);
+            for (int i = 0; i <= cursor; i++)
+            {
+                count = (buffer[i] >> 8) & 0xFF;
+                c = (byte) (buffer[i] & 0xFF);
 
-				for (int n = 0; n < count; n++)
-					array[index++] = c;
-			}
-		}
-		
-		public bool Remove (byte item)
-		{
-			int count = 0;
-			int i;
-			
-			// find the index of the element we need to remove
-			for (i = 0; i <= cursor; i++) {
-				if (item == (byte) (buffer[i] & 0xFF)) {
-					count = ((buffer[i] >> 8) & 0xFF);
-					break;
-				}
-			}
+                for (int n = 0; n < count; n++)
+                    array[index++] = c;
+            }
+        }
 
-			if (i > cursor)
-				return false;
+        public bool Remove(byte item)
+        {
+            int count = 0;
+            int i;
 
-			if (count > 1) {
-				// this byte was repeated more than once, so just decrement the count
-				buffer[i] = (ushort) (((count - 1) << 8) | item);
-			} else if (i < cursor) {
-				// to remove the element at position i, we need to shift the
-				// remaining data one item to the left
-				Array.Copy (buffer, i + 1, buffer, i, cursor - i);
-				cursor--;
-			} else {
-				// removing the last byte added
-				cursor--;
-			}
-			
-			length--;
+            // find the index of the element we need to remove
+            for (i = 0; i <= cursor; i++)
+            {
+                if (item == (byte) (buffer[i] & 0xFF))
+                {
+                    count = ((buffer[i] >> 8) & 0xFF);
+                    break;
+                }
+            }
 
-			return true;
-		}
+            if (i > cursor)
+                return false;
 
-		#endregion
+            if (count > 1)
+            {
+                // this byte was repeated more than once, so just decrement the count
+                buffer[i] = (ushort) (((count - 1) << 8) | item);
+            }
+            else if (i < cursor)
+            {
+                // to remove the element at position i, we need to shift the
+                // remaining data one item to the left
+                Array.Copy(buffer, i + 1, buffer, i, cursor - i);
+                cursor--;
+            }
+            else
+            {
+                // removing the last byte added
+                cursor--;
+            }
 
-		#region IList implementation
+            length--;
 
-		public int IndexOf (byte item)
-		{
-			int offset = 0;
+            return true;
+        }
 
-			for (int i = 0; i <= cursor; i++) {
-				if (item == (byte) (buffer[i] & 0xFF))
-					return offset;
+        private void EnsureBufferSize(int size)
+        {
+            if (buffer.Length > size)
+                return;
 
-				offset += ((buffer[i] >> 8) & 0xFF);
-			}
+            int ideal = (size + 63) & ~63;
 
-			return -1;
-		}
+            Array.Resize(ref buffer, ideal);
+        }
 
-		public void Insert (int index, byte item)
-		{
-			throw new NotSupportedException ();
-		}
+        #endregion
 
-		public void RemoveAt (int index)
-		{
-			if (index < 0 || index > length)
-				throw new ArgumentOutOfRangeException ("index");
+        #region IList implementation
 
-			int offset = 0;
-			int count = 0;
-			int i;
+        public int IndexOf(byte item)
+        {
+            int offset = 0;
 
-			// find the index of the element we need to remove
-			for (i = 0; i <= cursor; i++) {
-				count = ((buffer[i] >> 8) & 0xFF);
-				if (offset + count > index)
-					break;
+            for (int i = 0; i <= cursor; i++)
+            {
+                if (item == (byte) (buffer[i] & 0xFF))
+                    return offset;
 
-				offset += count;
-			}
+                offset += ((buffer[i] >> 8) & 0xFF);
+            }
 
-			if (count > 1) {
-				// this byte was repeated more than once, so just decrement the count
-				byte c = (byte) (buffer[i] & 0xFF);
-				buffer[i] = (ushort) (((count - 1) << 8) | c);
-			} else if (i < cursor) {
-				// to remove the element at position i, we need to shift the
-				// remaining data one item to the left
-				Array.Copy (buffer, i + 1, buffer, i, cursor - i);
-				cursor--;
-			} else {
-				// removing the last byte added
-				cursor--;
-			}
+            return -1;
+        }
 
-			length--;
-		}
+        public void Insert(int index, byte item)
+        {
+            throw new NotSupportedException();
+        }
 
-		public byte this [int index] {
-			get {
-				if (index < 0 || index > length)
-					throw new ArgumentOutOfRangeException ("index");
+        public void RemoveAt(int index)
+        {
+            if (index < 0 || index > length)
+                throw new ArgumentOutOfRangeException("index");
 
-				int offset = 0;
-				int count, i;
+            int offset = 0;
+            int count = 0;
+            int i;
 
-				for (i = 0; i <= cursor; i++) {
-					count = ((buffer[i] >> 8) & 0xFF);
-					if (offset + count > index)
-						break;
-					
-					offset += count;
-				}
+            // find the index of the element we need to remove
+            for (i = 0; i <= cursor; i++)
+            {
+                count = ((buffer[i] >> 8) & 0xFF);
+                if (offset + count > index)
+                    break;
 
-				return (byte) (buffer[i] & 0xFF);
-			}
-			set {
-				throw new NotSupportedException ();
-			}
-		}
+                offset += count;
+            }
 
-		#endregion
+            if (count > 1)
+            {
+                // this byte was repeated more than once, so just decrement the count
+                var c = (byte) (buffer[i] & 0xFF);
+                buffer[i] = (ushort) (((count - 1) << 8) | c);
+            }
+            else if (i < cursor)
+            {
+                // to remove the element at position i, we need to shift the
+                // remaining data one item to the left
+                Array.Copy(buffer, i + 1, buffer, i, cursor - i);
+                cursor--;
+            }
+            else
+            {
+                // removing the last byte added
+                cursor--;
+            }
 
-		#region IEnumerable implementation
+            length--;
+        }
 
-		public IEnumerator<byte> GetEnumerator ()
-		{
-			int count;
-			byte c;
-			
-			for (int i = 0; i <= cursor; i++) {
-				count = (buffer[i] >> 8) & 0xFF;
-				c = (byte) (buffer[i] & 0xFF);
-				
-				for (int n = 0; n < count; n++)
-					yield return c;
-			}
+        public byte this[int index]
+        {
+            get
+            {
+                if (index < 0 || index > length)
+                    throw new ArgumentOutOfRangeException("index");
 
-			yield break;
-		}
+                int offset = 0;
+                int count, i;
 
-		#endregion
+                for (i = 0; i <= cursor; i++)
+                {
+                    count = ((buffer[i] >> 8) & 0xFF);
+                    if (offset + count > index)
+                        break;
 
-		#region IEnumerable implementation
+                    offset += count;
+                }
 
-		IEnumerator IEnumerable.GetEnumerator ()
-		{
-			return GetEnumerator ();
-		}
+                return (byte) (buffer[i] & 0xFF);
+            }
+            set { throw new NotSupportedException(); }
+        }
 
-		#endregion
-	}
+        #endregion
+
+        #region IEnumerable implementation
+
+        public IEnumerator<byte> GetEnumerator()
+        {
+            int count;
+            byte c;
+
+            for (int i = 0; i <= cursor; i++)
+            {
+                count = (buffer[i] >> 8) & 0xFF;
+                c = (byte) (buffer[i] & 0xFF);
+
+                for (int n = 0; n < count; n++)
+                    yield return c;
+            }
+        }
+
+        #endregion
+
+        #region IEnumerable implementation
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return GetEnumerator();
+        }
+
+        #endregion
+    }
 }
-

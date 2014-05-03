@@ -25,198 +25,207 @@
 //
 
 using System;
-
 using MimeKit.Utils;
 
-namespace MimeKit.Encodings {
-	/// <summary>
-	/// Incrementally encodes content using a Uri hex encoding.
-	/// </summary>
-	/// <remarks>
-	/// This is mostly meant for decoding parameter values encoded using
-	/// the rules specified by rfc2184 and rfc2231.
-	/// </remarks>
-	public class HexEncoder : IMimeEncoder
-	{
-		static readonly byte[] hex_alphabet = new byte[16] {
-			0x30, 0x31, 0x32, 0x33, 0x34, 0x35, 0x36, 0x37, // '0' -> '7'
-			0x38, 0x39, 0x41, 0x42, 0x43, 0x44, 0x45, 0x46, // '8' -> 'F'
-		};
+namespace MimeKit.Encodings
+{
+    /// <summary>
+    ///     Incrementally encodes content using a Uri hex encoding.
+    /// </summary>
+    /// <remarks>
+    ///     This is mostly meant for decoding parameter values encoded using
+    ///     the rules specified by rfc2184 and rfc2231.
+    /// </remarks>
+    public class HexEncoder : IMimeEncoder
+    {
+        private static readonly byte[] hex_alphabet = new byte[16]
+        {
+            0x30, 0x31, 0x32, 0x33, 0x34, 0x35, 0x36, 0x37, // '0' -> '7'
+            0x38, 0x39, 0x41, 0x42, 0x43, 0x44, 0x45, 0x46 // '8' -> 'F'
+        };
 
-		/// <summary>
-		/// Initializes a new instance of the <see cref="MimeKit.Encodings.HexEncoder"/> class.
-		/// </summary>
-		/// <remarks>
-		/// Creates a new hex encoder.
-		/// </remarks>
-		public HexEncoder ()
-		{
-		}
+        /// <summary>
+        ///     Clone the <see cref="HexEncoder" /> with its current state.
+        /// </summary>
+        /// <remarks>
+        ///     Creates a new <see cref="HexEncoder" /> with exactly the same state as the current encoder.
+        /// </remarks>
+        /// <returns>A new <see cref="HexEncoder" /> with identical state.</returns>
+        public IMimeEncoder Clone()
+        {
+            return new HexEncoder();
+        }
 
-		/// <summary>
-		/// Clone the <see cref="HexEncoder"/> with its current state.
-		/// </summary>
-		/// <remarks>
-		/// Creates a new <see cref="HexEncoder"/> with exactly the same state as the current encoder.
-		/// </remarks>
-		/// <returns>A new <see cref="HexEncoder"/> with identical state.</returns>
-		public IMimeEncoder Clone ()
-		{
-			return new HexEncoder ();
-		}
+        /// <summary>
+        ///     Gets the encoding.
+        /// </summary>
+        /// <remarks>
+        ///     Gets the encoding that the encoder supports.
+        /// </remarks>
+        /// <value>The encoding.</value>
+        public ContentEncoding Encoding
+        {
+            get { return ContentEncoding.Default; }
+        }
 
-		/// <summary>
-		/// Gets the encoding.
-		/// </summary>
-		/// <remarks>
-		/// Gets the encoding that the encoder supports.
-		/// </remarks>
-		/// <value>The encoding.</value>
-		public ContentEncoding Encoding {
-			get { return ContentEncoding.Default; }
-		}
+        /// <summary>
+        ///     Estimates the length of the output.
+        /// </summary>
+        /// <remarks>
+        ///     Estimates the number of bytes needed to encode the specified number of input bytes.
+        /// </remarks>
+        /// <returns>The estimated output length.</returns>
+        /// <param name="inputLength">The input length.</param>
+        public int EstimateOutputLength(int inputLength)
+        {
+            return inputLength*3;
+        }
 
-		/// <summary>
-		/// Estimates the length of the output.
-		/// </summary>
-		/// <remarks>
-		/// Estimates the number of bytes needed to encode the specified number of input bytes.
-		/// </remarks>
-		/// <returns>The estimated output length.</returns>
-		/// <param name="inputLength">The input length.</param>
-		public int EstimateOutputLength (int inputLength)
-		{
-			return inputLength * 3;
-		}
+        /// <summary>
+        ///     Encodes the specified input into the output buffer.
+        /// </summary>
+        /// <remarks>
+        ///     <para>Encodes the specified input into the output buffer.</para>
+        ///     <para>
+        ///         The output buffer should be large enough to hold all of the
+        ///         encoded input. For estimating the size needed for the output buffer,
+        ///         see <see cref="EstimateOutputLength" />.
+        ///     </para>
+        /// </remarks>
+        /// <returns>The number of bytes written to the output buffer.</returns>
+        /// <param name="input">The input buffer.</param>
+        /// <param name="startIndex">The starting index of the input buffer.</param>
+        /// <param name="length">The length of the input buffer.</param>
+        /// <param name="output">The output buffer.</param>
+        /// <exception cref="System.ArgumentNullException">
+        ///     <para><paramref name="input" /> is <c>null</c>.</para>
+        ///     <para>-or-</para>
+        ///     <para><paramref name="output" /> is <c>null</c>.</para>
+        /// </exception>
+        /// <exception cref="System.ArgumentOutOfRangeException">
+        ///     <paramref name="startIndex" /> and <paramref name="length" /> do not specify
+        ///     a valid range in the <paramref name="input" /> byte array.
+        /// </exception>
+        /// <exception cref="System.ArgumentException">
+        ///     <para><paramref name="output" /> is not large enough to contain the encoded content.</para>
+        ///     <para>
+        ///         Use the <see cref="EstimateOutputLength" /> method to properly determine the
+        ///         necessary length of the <paramref name="output" /> byte array.
+        ///     </para>
+        /// </exception>
+        public int Encode(byte[] input, int startIndex, int length, byte[] output)
+        {
+            ValidateArguments(input, startIndex, length, output);
 
-		void ValidateArguments (byte[] input, int startIndex, int length, byte[] output)
-		{
-			if (input == null)
-				throw new ArgumentNullException ("input");
+            unsafe
+            {
+                fixed (byte* inptr = input, outptr = output)
+                {
+                    return Encode(inptr + startIndex, length, outptr);
+                }
+            }
+        }
 
-			if (startIndex < 0 || startIndex > input.Length)
-				throw new ArgumentOutOfRangeException ("startIndex");
+        /// <summary>
+        ///     Encodes the specified input into the output buffer, flushing any internal buffer state as well.
+        /// </summary>
+        /// <remarks>
+        ///     <para>Encodes the specified input into the output buffer, flusing any internal state as well.</para>
+        ///     <para>
+        ///         The output buffer should be large enough to hold all of the
+        ///         encoded input. For estimating the size needed for the output buffer,
+        ///         see <see cref="EstimateOutputLength" />.
+        ///     </para>
+        /// </remarks>
+        /// <returns>The number of bytes written to the output buffer.</returns>
+        /// <param name="input">The input buffer.</param>
+        /// <param name="startIndex">The starting index of the input buffer.</param>
+        /// <param name="length">The length of the input buffer.</param>
+        /// <param name="output">The output buffer.</param>
+        /// <exception cref="System.ArgumentNullException">
+        ///     <para><paramref name="input" /> is <c>null</c>.</para>
+        ///     <para>-or-</para>
+        ///     <para><paramref name="output" /> is <c>null</c>.</para>
+        /// </exception>
+        /// <exception cref="System.ArgumentOutOfRangeException">
+        ///     <paramref name="startIndex" /> and <paramref name="length" /> do not specify
+        ///     a valid range in the <paramref name="input" /> byte array.
+        /// </exception>
+        /// <exception cref="System.ArgumentException">
+        ///     <para><paramref name="output" /> is not large enough to contain the encoded content.</para>
+        ///     <para>
+        ///         Use the <see cref="EstimateOutputLength" /> method to properly determine the
+        ///         necessary length of the <paramref name="output" /> byte array.
+        ///     </para>
+        /// </exception>
+        public int Flush(byte[] input, int startIndex, int length, byte[] output)
+        {
+            ValidateArguments(input, startIndex, length, output);
 
-			if (length < 0 || length > (input.Length - startIndex))
-				throw new ArgumentOutOfRangeException ("length");
+            unsafe
+            {
+                fixed (byte* inptr = input, outptr = output)
+                {
+                    return Encode(inptr + startIndex, length, outptr);
+                }
+            }
+        }
 
-			if (output == null)
-				throw new ArgumentNullException ("output");
+        /// <summary>
+        ///     Resets the encoder.
+        /// </summary>
+        /// <remarks>
+        ///     Resets the state of the encoder.
+        /// </remarks>
+        public void Reset()
+        {
+        }
 
-			if (output.Length < EstimateOutputLength (length))
-				throw new ArgumentException ("The output buffer is not large enough to contain the encoded input.", "output");
-		}
+        private void ValidateArguments(byte[] input, int startIndex, int length, byte[] output)
+        {
+            if (input == null)
+                throw new ArgumentNullException("input");
 
-		static unsafe int Encode (byte* input, int length, byte* output)
-		{
-			if (length == 0)
-				return 0;
+            if (startIndex < 0 || startIndex > input.Length)
+                throw new ArgumentOutOfRangeException("startIndex");
 
-			byte* inend = input + length;
-			byte* outptr = output;
-			byte* inptr = input;
+            if (length < 0 || length > (input.Length - startIndex))
+                throw new ArgumentOutOfRangeException("length");
 
-			while (inptr < inend) {
-				byte c = *inptr++;
+            if (output == null)
+                throw new ArgumentNullException("output");
 
-				if (c.IsAttr ()) {
-					*outptr++ = c;
-				} else {
-					*outptr++ = (byte) '%';
-					*outptr++ = hex_alphabet[(c >> 4) & 0x0f];
-					*outptr++ = hex_alphabet[c & 0x0f];
-				}
-			}
+            if (output.Length < EstimateOutputLength(length))
+                throw new ArgumentException("The output buffer is not large enough to contain the encoded input.",
+                    "output");
+        }
 
-			return (int) (outptr - output);
-		}
+        private static unsafe int Encode(byte* input, int length, byte* output)
+        {
+            if (length == 0)
+                return 0;
 
-		/// <summary>
-		/// Encodes the specified input into the output buffer.
-		/// </summary>
-		/// <remarks>
-		/// <para>Encodes the specified input into the output buffer.</para>
-		/// <para>The output buffer should be large enough to hold all of the
-		/// encoded input. For estimating the size needed for the output buffer,
-		/// see <see cref="EstimateOutputLength"/>.</para>
-		/// </remarks>
-		/// <returns>The number of bytes written to the output buffer.</returns>
-		/// <param name="input">The input buffer.</param>
-		/// <param name="startIndex">The starting index of the input buffer.</param>
-		/// <param name="length">The length of the input buffer.</param>
-		/// <param name="output">The output buffer.</param>
-		/// <exception cref="System.ArgumentNullException">
-		/// <para><paramref name="input"/> is <c>null</c>.</para>
-		/// <para>-or-</para>
-		/// <para><paramref name="output"/> is <c>null</c>.</para>
-		/// </exception>
-		/// <exception cref="System.ArgumentOutOfRangeException">
-		/// <paramref name="startIndex"/> and <paramref name="length"/> do not specify
-		/// a valid range in the <paramref name="input"/> byte array.
-		/// </exception>
-		/// <exception cref="System.ArgumentException">
-		/// <para><paramref name="output"/> is not large enough to contain the encoded content.</para>
-		/// <para>Use the <see cref="EstimateOutputLength"/> method to properly determine the 
-		/// necessary length of the <paramref name="output"/> byte array.</para>
-		/// </exception>
-		public int Encode (byte[] input, int startIndex, int length, byte[] output)
-		{
-			ValidateArguments (input, startIndex, length, output);
+            byte* inend = input + length;
+            byte* outptr = output;
+            byte* inptr = input;
 
-			unsafe {
-				fixed (byte* inptr = input, outptr = output) {
-					return Encode (inptr + startIndex, length, outptr);
-				}
-			}
-		}
+            while (inptr < inend)
+            {
+                byte c = *inptr++;
 
-		/// <summary>
-		/// Encodes the specified input into the output buffer, flushing any internal buffer state as well.
-		/// </summary>
-		/// <remarks>
-		/// <para>Encodes the specified input into the output buffer, flusing any internal state as well.</para>
-		/// <para>The output buffer should be large enough to hold all of the
-		/// encoded input. For estimating the size needed for the output buffer,
-		/// see <see cref="EstimateOutputLength"/>.</para>
-		/// </remarks>
-		/// <returns>The number of bytes written to the output buffer.</returns>
-		/// <param name="input">The input buffer.</param>
-		/// <param name="startIndex">The starting index of the input buffer.</param>
-		/// <param name="length">The length of the input buffer.</param>
-		/// <param name="output">The output buffer.</param>
-		/// <exception cref="System.ArgumentNullException">
-		/// <para><paramref name="input"/> is <c>null</c>.</para>
-		/// <para>-or-</para>
-		/// <para><paramref name="output"/> is <c>null</c>.</para>
-		/// </exception>
-		/// <exception cref="System.ArgumentOutOfRangeException">
-		/// <paramref name="startIndex"/> and <paramref name="length"/> do not specify
-		/// a valid range in the <paramref name="input"/> byte array.
-		/// </exception>
-		/// <exception cref="System.ArgumentException">
-		/// <para><paramref name="output"/> is not large enough to contain the encoded content.</para>
-		/// <para>Use the <see cref="EstimateOutputLength"/> method to properly determine the 
-		/// necessary length of the <paramref name="output"/> byte array.</para>
-		/// </exception>
-		public int Flush (byte[] input, int startIndex, int length, byte[] output)
-		{
-			ValidateArguments (input, startIndex, length, output);
+                if (c.IsAttr())
+                {
+                    *outptr++ = c;
+                }
+                else
+                {
+                    *outptr++ = (byte) '%';
+                    *outptr++ = hex_alphabet[(c >> 4) & 0x0f];
+                    *outptr++ = hex_alphabet[c & 0x0f];
+                }
+            }
 
-			unsafe {
-				fixed (byte* inptr = input, outptr = output) {
-					return Encode (inptr + startIndex, length, outptr);
-				}
-			}
-		}
-
-		/// <summary>
-		/// Resets the encoder.
-		/// </summary>
-		/// <remarks>
-		/// Resets the state of the encoder.
-		/// </remarks>
-		public void Reset ()
-		{
-		}
-	}
+            return (int) (outptr - output);
+        }
+    }
 }
