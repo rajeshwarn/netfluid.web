@@ -5,34 +5,34 @@ namespace NetFluid.Cron
 {
     internal class CronTask
     {
-        private readonly Action action;
-        private readonly string cron;
-        private readonly Timer timer;
+        private readonly Action _action;
+        private readonly string _cron;
+        private readonly Timer _timer;
 
         public CronTask(string cron, Action action, Action completed, Action<Exception> error)
         {
-            timer = new Timer {AutoReset = true, Interval = (Cron.Next(cron) - DateTime.Now).TotalMilliseconds};
-            timer.Elapsed += timer_Elapsed;
+            _timer = new Timer {AutoReset = true, Interval = (Cron.Next(cron) - DateTime.Now).TotalMilliseconds};
+            _timer.Elapsed += timer_Elapsed;
 
-            this.action = action;
-            this.cron = cron;
+            _action = action;
+            _cron = cron;
             this.completed += completed;
             this.error += error;
 
-            timer.Enabled = true;
+            _timer.Enabled = true;
         }
 
         public CronTask(string cron, DateTime from, Action action, Action completed, Action<Exception> error)
         {
-            timer = new Timer {AutoReset = true, Interval = (Cron.Next(cron, from) - DateTime.Now).TotalMilliseconds};
-            timer.Elapsed += timer_Elapsed;
+            _timer = new Timer {AutoReset = true, Interval = (Cron.Next(cron, from) - DateTime.Now).TotalMilliseconds};
+            _timer.Elapsed += timer_Elapsed;
 
-            this.action = action;
-            this.cron = cron;
+            _action = action;
+            _cron = cron;
             this.completed += completed;
             this.error += error;
 
-            timer.Enabled = true;
+            _timer.Enabled = true;
         }
 
         private event Action completed;
@@ -40,12 +40,12 @@ namespace NetFluid.Cron
 
         private void timer_Elapsed(object sender, ElapsedEventArgs e)
         {
-            timer.Enabled = false;
-            timer.Interval = (Cron.Next(cron) - DateTime.Now).TotalMilliseconds;
+            _timer.Enabled = false;
+            _timer.Interval = (Cron.Next(_cron) - DateTime.Now).TotalMilliseconds;
 
             try
             {
-                action();
+                _action();
 
                 if (completed != null)
                     completed();
