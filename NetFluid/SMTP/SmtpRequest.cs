@@ -29,7 +29,7 @@ namespace NetFluid.SMTP
             To = new List<MailAddress>();
 
             _blobFile = Path.GetTempFileName();
-            UID = NetFluid.Security.UID();
+            UID = Security.UID();
         }
 
         public MailMessage Parse()
@@ -48,48 +48,50 @@ namespace NetFluid.SMTP
             return message;
         }
 
-        void RenderMimeEntity(MimeEntity entity, MailMessage message)
+        private static void RenderMimeEntity(MimeEntity entity, MailMessage message)
         {
-            if (entity is MessagePart)
+            while (true)
             {
-                // This entity is an attached message/rfc822 mime part.
-                var messagePart = (MessagePart)entity;
-
-                // If you'd like to render this inline instead of treating
-                // it as an attachment, you would just continue to recurse:
-                RenderMimeEntity(messagePart.Message.Body,message);
-            }
-            else if (entity is Multipart)
-            {
-                // This entity is a multipart container.
-                var multipart = (Multipart)entity;
-
-                foreach (var subpart in multipart)
-                    RenderMimeEntity(subpart,message);
-            }
-            else
-            {
-                // Everything that isn't either a MessagePart or a Multipart is a MimePart
-                var part = (MimePart)entity;
-
-                // Don't render anything that is explicitly marked as an attachment.
-                if (part.IsAttachment || entity.ContentType.Matches("image", "*"))
+                var messagePart = entity as MessagePart;
+                if (messagePart != null)
                 {
-                    var fs = new FileStream(Security.TempFile, FileMode.OpenOrCreate);
-                    part.ContentObject.DecodeTo(fs);
-                    fs.Flush(true);
-                    fs.Seek(0, SeekOrigin.Begin);
-                    var att = new Attachment(fs, part.FileName);
-                    message.Attachments.Add(att);
+                    // If you'd like to render this inline instead of treating
+                    // it as an attachment, you would just continue to recurse:
+                    entity = messagePart.Message.Body;
+                    continue;
                 }
-
-                if (part is TextPart)
+                var multipart  = entity as Multipart;
+                if (multipart != null)
                 {
-                    // This is a mime part with textual content.
-                    var text = (TextPart)part;
-                    message.Body = text.Text;
-                    message.IsBodyHtml = text.ContentType.Matches("text", "html");
+                    // This entity is a multipart container.
+
+                    foreach (var subpart in multipart)
+                        RenderMimeEntity(subpart, message);
                 }
+                else
+                {
+                    // Everything that isn't either a MessagePart or a Multipart is a MimePart
+                    var part = (MimePart) entity;
+
+                    // Don't render anything that is explicitly marked as an attachment.
+                    if (part.IsAttachment || entity.ContentType.Matches("image", "*"))
+                    {
+                        var fs = new FileStream(Security.TempFile, FileMode.OpenOrCreate);
+                        part.ContentObject.DecodeTo(fs);
+                        fs.Flush(true);
+                        fs.Seek(0, SeekOrigin.Begin);
+                        var att = new Attachment(fs, part.FileName);
+                        message.Attachments.Add(att);
+                    }
+
+                    var text = part as TextPart;
+                    if (text != null)
+                    {
+                        message.Body = text.Text;
+                        message.IsBodyHtml = text.ContentType.Matches("text", "html");
+                    }
+                }
+                break;
             }
         }
 
