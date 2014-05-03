@@ -3,15 +3,13 @@ using System.Timers;
 
 namespace NetFluid.Cron
 {
-    class CronTask
+    internal class CronTask
     {
-        readonly Timer timer;
-        readonly string cron;
-        readonly Action action;
-        event Action completed;
-        event Action<Exception> error;
- 
-        public CronTask(string cron,Action action,Action completed, Action<Exception> error)
+        private readonly Action action;
+        private readonly string cron;
+        private readonly Timer timer;
+
+        public CronTask(string cron, Action action, Action completed, Action<Exception> error)
         {
             timer = new Timer {AutoReset = true, Interval = (Cron.Next(cron) - DateTime.Now).TotalMilliseconds};
             timer.Elapsed += timer_Elapsed;
@@ -24,9 +22,9 @@ namespace NetFluid.Cron
             timer.Enabled = true;
         }
 
-        public CronTask(string cron,DateTime from, Action action, Action completed, Action<Exception> error)
+        public CronTask(string cron, DateTime from, Action action, Action completed, Action<Exception> error)
         {
-            timer = new Timer { AutoReset = true, Interval = (Cron.Next(cron,from) - DateTime.Now).TotalMilliseconds };
+            timer = new Timer {AutoReset = true, Interval = (Cron.Next(cron, from) - DateTime.Now).TotalMilliseconds};
             timer.Elapsed += timer_Elapsed;
 
             this.action = action;
@@ -37,7 +35,10 @@ namespace NetFluid.Cron
             timer.Enabled = true;
         }
 
-        void timer_Elapsed(object sender, ElapsedEventArgs e)
+        private event Action completed;
+        private event Action<Exception> error;
+
+        private void timer_Elapsed(object sender, ElapsedEventArgs e)
         {
             timer.Enabled = false;
             timer.Interval = (Cron.Next(cron) - DateTime.Now).TotalMilliseconds;
