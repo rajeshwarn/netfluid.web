@@ -30,18 +30,7 @@ using System.Text;
 using System.Linq;
 using System.Threading;
 using System.Collections.Generic;
-
-#if PORTABLE
-using Encoding = Portable.Text.Encoding;
-#endif
-
-#if ENABLE_SNM
 using System.Net.Mail;
-#endif
-
-#if ENABLE_CRYPTO
-using MimeKit.Cryptography;
-#endif
 
 using MimeKit.Utils;
 using MimeKit.IO;
@@ -1560,9 +1549,7 @@ namespace MimeKit {
 		{
 			return Load (ParserOptions.Default, fileName, cancellationToken);
 		}
-#endif // !PORTABLE
 
-#if ENABLE_SNM
 		#region System.Net.Mail support
 
 		static MimePart GetMimePart (AttachmentBase item)
@@ -1727,6 +1714,5 @@ namespace MimeKit {
 		}
 
 		#endregion
-#endif
 	}
 }
