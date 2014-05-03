@@ -32,7 +32,7 @@ namespace MimeKit.Encodings
     /// <remarks>
     ///     An interface for incrementally decoding content.
     /// </remarks>
-    public interface IMimeDecoder
+    interface IMimeDecoder
     {
         /// <summary>
         ///     Gets the encoding.

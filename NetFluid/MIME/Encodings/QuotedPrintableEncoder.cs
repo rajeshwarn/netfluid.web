@@ -37,7 +37,7 @@ namespace MimeKit.Encodings
     ///     outside of the ASCII range in order to ensure that the text remains intact
     ///     when sent via 7bit transports such as SMTP.
     /// </remarks>
-    public class QuotedPrintableEncoder : IMimeEncoder
+    class QuotedPrintableEncoder : IMimeEncoder
     {
         private const int TripletsPerLine = 23;
         private const int DesiredLineLength = TripletsPerLine*3;

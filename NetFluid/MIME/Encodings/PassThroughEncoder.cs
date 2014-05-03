@@ -34,7 +34,7 @@ namespace MimeKit.Encodings
     /// <remarks>
     ///     Simply copies data as-is from the input buffer into the output buffer.
     /// </remarks>
-    public class PassThroughEncoder : IMimeEncoder
+    class PassThroughEncoder : IMimeEncoder
     {
         /// <summary>
         ///     Initializes a new instance of the <see cref="MimeKit.Encodings.PassThroughEncoder" /> class.

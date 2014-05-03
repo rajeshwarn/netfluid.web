@@ -42,7 +42,7 @@ namespace MimeKit.Encodings
     ///         the base64 encoding, however, some older mail clients still use it.
     ///     </para>
     /// </remarks>
-    public class UUDecoder : IMimeDecoder
+    class UUDecoder : IMimeDecoder
     {
         private static readonly byte[] uudecode_rank = new byte[256]
         {

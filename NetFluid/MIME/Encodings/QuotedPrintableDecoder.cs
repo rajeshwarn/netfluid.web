@@ -37,7 +37,7 @@ namespace MimeKit.Encodings
     ///     of the ASCII range in order to ensure that the text remains intact when sent
     ///     via 7bit transports such as SMTP.
     /// </remarks>
-    public class QuotedPrintableDecoder : IMimeDecoder
+    class QuotedPrintableDecoder : IMimeDecoder
     {
         private readonly bool rfc2047;
         private byte saved;

@@ -112,7 +112,7 @@ namespace MimeKit
     ///     A MIME parser is used to parse <see cref="MimeKit.MimeMessage" /> and
     ///     <see cref="MimeKit.MimeEntity" /> objects from arbitrary streams.
     /// </remarks>
-    public class MimeParser : IEnumerable<MimeMessage>
+    class MimeParser : IEnumerable<MimeMessage>
     {
         private static readonly StringComparer icase = StringComparer.OrdinalIgnoreCase;
         private const int ReadAheadSize = 128;

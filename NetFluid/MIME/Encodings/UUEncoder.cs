@@ -42,7 +42,7 @@ namespace MimeKit.Encodings
     ///         the base64 encoding, however, some older mail clients still use it.
     ///     </para>
     /// </remarks>
-    public class UUEncoder : IMimeEncoder
+    class UUEncoder : IMimeEncoder
     {
         private const int MaxInputPerLine = 45;
         private const int MaxOutputPerLine = ((MaxInputPerLine/3)*4) + 2;

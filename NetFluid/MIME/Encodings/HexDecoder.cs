@@ -36,7 +36,7 @@ namespace MimeKit.Encodings
     ///     This is mostly meant for decoding parameter values encoded using
     ///     the rules specified by rfc2184 and rfc2231.
     /// </remarks>
-    public class HexDecoder : IMimeDecoder
+    class HexDecoder : IMimeDecoder
     {
         private byte saved;
         private HexDecoderState state;

@@ -34,7 +34,7 @@ namespace MimeKit.IO.Filters
     /// <remarks>
     ///     Uses a <see cref="IMimeEncoder" /> to incrementally encode data.
     /// </remarks>
-    public class EncoderFilter : MimeFilterBase
+    class EncoderFilter : MimeFilterBase
     {
         /// <summary>
         ///     Initializes a new instance of the <see cref="MimeKit.IO.Filters.EncoderFilter" /> class.

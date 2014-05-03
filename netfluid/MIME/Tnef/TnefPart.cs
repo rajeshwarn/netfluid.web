@@ -41,7 +41,7 @@ namespace MimeKit.Tnef
     ///         sent by Microsoft Outlook clients.
     ///     </para>
     /// </remarks>
-    public class TnefPart : MimePart
+    class TnefPart : MimePart
     {
         /// <summary>
         ///     Initializes a new instance of the <see cref="MimeKit.Tnef.TnefPart" /> class.

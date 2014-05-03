@@ -40,7 +40,7 @@ namespace MimeKit.Utils
     /// <remarks>
     ///     Utility methods for encoding and decoding rfc2047 encoded-word tokens.
     /// </remarks>
-    public static class Rfc2047
+    static class Rfc2047
     {
         private static bool IsAscii(byte c)
         {

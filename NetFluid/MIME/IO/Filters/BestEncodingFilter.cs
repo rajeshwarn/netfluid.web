@@ -35,7 +35,7 @@ namespace MimeKit.IO.Filters
     ///     Keeps track of the content that gets passed through the filter in order to
     ///     determine the most efficient <see cref="ContentEncoding" /> to use.
     /// </remarks>
-    public class BestEncodingFilter : IMimeFilter
+    class BestEncodingFilter : IMimeFilter
     {
         private readonly byte[] marker = new byte[6];
         private int count0, count8;

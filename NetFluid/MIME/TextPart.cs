@@ -49,7 +49,7 @@ namespace MimeKit
     ///         http://www.ietf.org/rfc/rfc2046.txt
     ///     </para>
     /// </remarks>
-    public class TextPart : MimePart
+    class TextPart : MimePart
     {
         /// <summary>
         ///     Initializes a new instance of the <see cref="MimeKit.TextPart" /> class.

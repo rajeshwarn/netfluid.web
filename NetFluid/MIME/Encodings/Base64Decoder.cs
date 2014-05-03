@@ -36,7 +36,7 @@ namespace MimeKit.Encodings
     ///     as images and other types of multi-media to ensure that the data remains
     ///     intact when sent via 7bit transports such as SMTP.
     /// </remarks>
-    public class Base64Decoder : IMimeDecoder
+    class Base64Decoder : IMimeDecoder
     {
         private static readonly byte[] base64_rank = new byte[256]
         {

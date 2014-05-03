@@ -36,7 +36,7 @@ namespace MimeKit.Encodings
     ///     as images and other types of multi-media to ensure that the data remains
     ///     intact when sent via 7bit transports such as SMTP.
     /// </remarks>
-    public class Base64Encoder : IMimeEncoder
+    class Base64Encoder : IMimeEncoder
     {
         private const int QuartetsPerLine = 18;
         private const int MaxInputPerLine = QuartetsPerLine*3;

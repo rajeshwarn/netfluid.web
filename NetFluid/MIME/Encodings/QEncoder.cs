@@ -57,7 +57,7 @@ namespace MimeKit.Encodings
     ///     of the ASCII range within an rfc2047 encoded-word token in order to ensure that
     ///     the text remains intact when sent via 7bit transports such as SMTP.
     /// </remarks>
-    public class QEncoder : IMimeEncoder
+    class QEncoder : IMimeEncoder
     {
         private static readonly byte[] hex_alphabet = new byte[16]
         {
