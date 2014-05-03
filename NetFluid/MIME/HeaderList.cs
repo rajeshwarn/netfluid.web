@@ -83,10 +83,7 @@ namespace MimeKit
                     throw new ArgumentOutOfRangeException("id");
 
                 Header header;
-                if (table.TryGetValue(id.ToHeaderName(), out header))
-                    return header.Value;
-
-                return null;
+                return table.TryGetValue(id.ToHeaderName(), out header) ? header.Value : null;
             }
             set
             {

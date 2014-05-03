@@ -233,7 +233,8 @@ namespace MimeKit
         /// <summary>
         ///     Gets the index of the requested parameter, if it exists.
         /// </summary>
-        /// <returns>The index of the requested parameter; otherwise
+        /// <returns>
+        ///     The index of the requested parameter; otherwise
         ///     <value>-1</value>
         ///     .
         /// </returns>
@@ -424,7 +425,8 @@ namespace MimeKit
         /// <summary>
         ///     Gets the index of the requested parameter, if it exists.
         /// </summary>
-        /// <returns>The index of the requested parameter; otherwise
+        /// <returns>
+        ///     The index of the requested parameter; otherwise
         ///     <value>-1</value>
         ///     .
         /// </returns>
@@ -550,17 +552,15 @@ namespace MimeKit
         private static bool TryParseNameValuePair(byte[] text, ref int index, int endIndex, bool throwOnError,
             out NameValuePair pair)
         {
-            int valueIndex, startIndex;
             bool encoded = false;
             int? id = null;
-            string name;
 
             pair = null;
 
             if (!ParseUtils.SkipCommentsAndWhiteSpace(text, ref index, endIndex, throwOnError))
                 return false;
 
-            startIndex = index;
+            int startIndex = index;
             if (!SkipParamName(text, ref index, endIndex))
             {
                 if (throwOnError)
@@ -570,7 +570,7 @@ namespace MimeKit
                 return false;
             }
 
-            name = Encoding.ASCII.GetString(text, startIndex, index - startIndex);
+            string name = Encoding.ASCII.GetString(text, startIndex, index - startIndex);
 
             if (!ParseUtils.SkipCommentsAndWhiteSpace(text, ref index, endIndex, throwOnError))
                 return false;
@@ -671,7 +671,7 @@ namespace MimeKit
                 }
             }
 
-            valueIndex = index;
+            int valueIndex = index;
 
             if (text[index] == (byte) '"')
                 ParseUtils.SkipQuoted(text, ref index, endIndex, throwOnError);
@@ -693,7 +693,6 @@ namespace MimeKit
         private static bool TryGetCharset(byte[] text, ref int index, int endIndex, out string charset)
         {
             int startIndex = index;
-            int charsetEnd;
             int i;
 
             charset = null;
@@ -707,7 +706,7 @@ namespace MimeKit
             if (i == startIndex || i == endIndex)
                 return false;
 
-            charsetEnd = i;
+            int charsetEnd = i;
 
             for (i++; i < endIndex; i++)
             {
@@ -729,11 +728,11 @@ namespace MimeKit
         {
             int endIndex = startIndex + count;
             int index = startIndex;
-            string charset;
 
             // Note: decoder is only null if this is the first segment
             if (decoder == null)
             {
+                string charset;
                 if (TryGetCharset(text, ref index, endIndex, out charset))
                 {
                     try

@@ -293,12 +293,12 @@ namespace MimeKit
         {
             var builder = new StringBuilder();
 
-            for (int i = 0; i < references.Count; i++)
+            foreach (string t in references)
             {
                 if (builder.Length > 0)
                     builder.Append(' ');
 
-                builder.Append(references[i]);
+                builder.Append(t);
             }
 
             return builder.ToString();

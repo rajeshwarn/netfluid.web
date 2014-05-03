@@ -394,15 +394,12 @@ namespace MimeKit
         internal static bool TryParse(ParserOptions options, byte[] text, ref int index, int endIndex, bool throwOnError,
             out ContentDisposition disposition)
         {
-            string type;
-            int atom;
-
             disposition = null;
 
             if (!ParseUtils.SkipCommentsAndWhiteSpace(text, ref index, endIndex, throwOnError))
                 return false;
 
-            atom = index;
+            int atom = index;
             if (!ParseUtils.SkipAtom(text, ref index, endIndex))
             {
                 if (throwOnError)
@@ -411,13 +408,12 @@ namespace MimeKit
                 return false;
             }
 
-            type = Encoding.ASCII.GetString(text, atom, index - atom);
+            string type = Encoding.ASCII.GetString(text, atom, index - atom);
 
             if (!ParseUtils.SkipCommentsAndWhiteSpace(text, ref index, endIndex, throwOnError))
                 return false;
 
-            disposition = new ContentDisposition();
-            disposition.disposition = type;
+            disposition = new ContentDisposition {disposition = type};
 
             if (index >= endIndex)
                 return true;

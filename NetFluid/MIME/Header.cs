@@ -25,6 +25,7 @@
 //
 
 using System;
+using System.Linq;
 using System.Text;
 using MimeKit.Utils;
 
@@ -135,10 +136,9 @@ namespace MimeKit
             if (field.Length == 0)
                 throw new ArgumentException("Header field names are not allowed to be empty.", "field");
 
-            for (int i = 0; i < field.Length; i++)
+            if (field.Any(t => t > 127 || !IsAtom((byte) t)))
             {
-                if (field[i] > 127 || !IsAtom((byte) field[i]))
-                    throw new ArgumentException("Illegal characters in header field name.", "field");
+                throw new ArgumentException("Illegal characters in header field name.", "field");
             }
 
             if (value == null)
@@ -230,13 +230,7 @@ namespace MimeKit
         /// </exception>
         public string Value
         {
-            get
-            {
-                if (textValue == null)
-                    textValue = Unfold(Rfc2047.DecodeText(Options, RawValue));
-
-                return textValue;
-            }
+            get { return textValue ?? (textValue = Unfold(Rfc2047.DecodeText(Options, RawValue))); }
             set { SetValue(Encoding.UTF8, value); }
         }
 
@@ -330,8 +324,6 @@ namespace MimeKit
         /// <param name="text">The header text.</param>
         public static unsafe string Unfold(string text)
         {
-            int startIndex;
-            int endIndex;
             int i = 0;
 
             if (text == null)
@@ -343,8 +335,8 @@ namespace MimeKit
             if (i == text.Length)
                 return string.Empty;
 
-            startIndex = i;
-            endIndex = i;
+            int startIndex = i;
+            int endIndex = i;
 
             while (i < text.Length)
             {

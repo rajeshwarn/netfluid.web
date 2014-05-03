@@ -42,10 +42,6 @@ namespace MimeKit
             IsTopLevel = toplevel;
         }
 
-        private MimeEntityConstructorInfo()
-        {
-        }
-
         internal ParserOptions ParserOptions { get; private set; }
 
         internal ContentType ContentType { get; private set; }

@@ -79,16 +79,13 @@ namespace MimeKit
 
         static FormatOptions()
         {
-            Default = new FormatOptions();
-            Default.MaxLineLength = 72;
-            Default.WriteHeaders = true;
-
-            if (Environment.NewLine.Length == 1)
-                Default.NewLineFormat = NewLineFormat.Unix;
-            else
-                Default.NewLineFormat = NewLineFormat.Dos;
-
-            Default.HiddenHeaders = new HashSet<HeaderId>();
+            Default = new FormatOptions
+            {
+                MaxLineLength = 72,
+                WriteHeaders = true,
+                NewLineFormat = Environment.NewLine.Length == 1 ? NewLineFormat.Unix : NewLineFormat.Dos,
+                HiddenHeaders = new HashSet<HeaderId>()
+            };
         }
 
         /// <summary>
@@ -165,11 +162,13 @@ namespace MimeKit
         /// </remarks>
         public FormatOptions Clone()
         {
-            var options = new FormatOptions();
-            options.MaxLineLength = MaxLineLength;
-            options.NewLineFormat = NewLineFormat;
-            options.HiddenHeaders = new HashSet<HeaderId>(HiddenHeaders);
-            options.WriteHeaders = true;
+            var options = new FormatOptions
+            {
+                MaxLineLength = MaxLineLength,
+                NewLineFormat = NewLineFormat,
+                HiddenHeaders = new HashSet<HeaderId>(HiddenHeaders),
+                WriteHeaders = true
+            };
             return options;
         }
     }

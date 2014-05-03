@@ -134,7 +134,6 @@ namespace MimeKit
             cancellationToken.ThrowIfCancellationRequested();
 
             var buf = new byte[4096];
-            int nread;
 
             content.Seek(0, SeekOrigin.Begin);
 
@@ -143,6 +142,7 @@ namespace MimeKit
                 do
                 {
                     cancellationToken.ThrowIfCancellationRequested();
+                    int nread;
                     if ((nread = content.Read(buf, 0, buf.Length)) <= 0)
                         break;
 

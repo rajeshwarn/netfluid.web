@@ -416,28 +416,24 @@ namespace MimeKit
             var canonical = new StringBuilder();
             bool dash = true;
             HeaderId id;
-            char c;
 
             if (name == null)
                 throw new ArgumentNullException("name");
 
-            for (int i = 0; i < name.Length; i++)
+            foreach (char t in name)
             {
-                if (name[i] == '-')
+                if (t == '-')
                 {
                     dash = true;
                     continue;
                 }
 
-                c = dash ? char.ToUpperInvariant(name[i]) : char.ToLowerInvariant(name[i]);
+                char c = dash ? char.ToUpperInvariant(t) : char.ToLowerInvariant(t);
                 canonical.Append(c);
                 dash = false;
             }
 
-            if (!Enum.TryParse(canonical.ToString(), out id))
-                return HeaderId.Unknown;
-
-            return id;
+            return !Enum.TryParse(canonical.ToString(), out id) ? HeaderId.Unknown : id;
         }
     }
 }

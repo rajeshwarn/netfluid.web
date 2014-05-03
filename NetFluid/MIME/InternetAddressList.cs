@@ -442,7 +442,6 @@ namespace MimeKit
             bool throwOnError, out List<InternetAddress> addresses)
         {
             var list = new List<InternetAddress>();
-            InternetAddress address;
 
             addresses = null;
 
@@ -462,6 +461,7 @@ namespace MimeKit
                 if (isGroup && text[index] == (byte) ';')
                     break;
 
+                InternetAddress address;
                 if (!InternetAddress.TryParse(options, text, ref index, endIndex, throwOnError, out address))
                 {
                     // skip this address...

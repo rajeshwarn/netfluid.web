@@ -225,11 +225,11 @@ namespace MimeKit
             }
 
             length = Math.Min(maxLength, length);
-            int ratio, count, n;
 
             do
             {
-                count = encoder.GetByteCount(chars, index, length, true);
+                int count = encoder.GetByteCount(chars, index, length, true);
+                int ratio;
                 if (count > maxLength && length > 1)
                 {
                     ratio = (int) Math.Round(count/(double) length);
@@ -262,7 +262,7 @@ namespace MimeKit
                     }
                 }
 
-                n = hex.EstimateOutputLength(count);
+                int n = hex.EstimateOutputLength(count);
                 if (encoded.Length < n)
                     Array.Resize(ref encoded, n);
 

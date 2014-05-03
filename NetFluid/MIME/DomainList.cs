@@ -27,6 +27,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using MimeKit.Utils;
 
@@ -330,18 +331,15 @@ namespace MimeKit
         {
             var builder = new StringBuilder();
 
-            for (int i = 0; i < domains.Count; i++)
+            foreach (var t in domains.Where(t => !string.IsNullOrWhiteSpace(t) || builder.Length != 0))
             {
-                if (string.IsNullOrWhiteSpace(domains[i]) && builder.Length == 0)
-                    continue;
-
                 if (builder.Length > 0)
                     builder.Append(',');
 
-                if (!string.IsNullOrWhiteSpace(domains[i]))
+                if (!string.IsNullOrWhiteSpace(t))
                     builder.Append('@');
 
-                builder.Append(domains[i]);
+                builder.Append(t);
             }
 
             return builder.ToString();
@@ -379,7 +377,6 @@ namespace MimeKit
         {
             var domains = new List<string>();
             int startIndex = index;
-            string domain;
 
             route = null;
 
@@ -397,6 +394,7 @@ namespace MimeKit
                     return false;
                 }
 
+                string domain;
                 if (!ParseUtils.TryParseDomain(text, ref index, endIndex, throwOnError, out domain))
                     return false;
 

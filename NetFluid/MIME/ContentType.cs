@@ -25,6 +25,7 @@
 //
 
 using System;
+using System.Linq;
 using System.Text;
 using MimeKit.Utils;
 
@@ -70,10 +71,9 @@ namespace MimeKit
             if (mediaType.Length == 0)
                 throw new ArgumentException("The type is not allowed to be empty.", "mediaType");
 
-            for (int i = 0; i < mediaType.Length; i++)
+            if (mediaType.Any(t => t >= 127 || !IsAtom((byte) t)))
             {
-                if (mediaType[i] >= 127 || !IsAtom((byte) mediaType[i]))
-                    throw new ArgumentException("Illegal characters in type.", "mediaType");
+                throw new ArgumentException("Illegal characters in type.", "mediaType");
             }
 
             if (mediaSubtype == null)
@@ -82,10 +82,9 @@ namespace MimeKit
             if (mediaSubtype.Length == 0)
                 throw new ArgumentException("The subtype is not allowed to be empty.", "mediaSubtype");
 
-            for (int i = 0; i < mediaSubtype.Length; i++)
+            if (mediaSubtype.Any(t => t >= 127 || !IsToken((byte) t)))
             {
-                if (mediaSubtype[i] >= 127 || !IsToken((byte) mediaSubtype[i]))
-                    throw new ArgumentException("Illegal characters in subtype.", "mediaSubtype");
+                throw new ArgumentException("Illegal characters in subtype.", "mediaSubtype");
             }
 
             Parameters = new ParameterList();
@@ -119,10 +118,9 @@ namespace MimeKit
                 if (value.Length == 0)
                     throw new ArgumentException("MediaType is not allowed to be empty.", "value");
 
-                for (int i = 0; i < value.Length; i++)
+                if (value.Any(t => t > 127 || !IsAtom((byte) t)))
                 {
-                    if (value[i] > 127 || !IsAtom((byte) value[i]))
-                        throw new ArgumentException("Illegal characters in media type.", "value");
+                    throw new ArgumentException("Illegal characters in media type.", "value");
                 }
 
                 if (type == value)
@@ -160,10 +158,9 @@ namespace MimeKit
                 if (value.Length == 0)
                     throw new ArgumentException("MediaSubtype is not allowed to be empty.", "value");
 
-                for (int i = 0; i < value.Length; i++)
+                if (value.Any(t => t > 127 || !IsToken((byte) t)))
                 {
-                    if (value[i] > 127 || !IsToken((byte) value[i]))
-                        throw new ArgumentException("Illegal characters in media subtype.", "value");
+                    throw new ArgumentException("Illegal characters in media subtype.", "value");
                 }
 
                 if (subtype == value)
@@ -394,15 +391,12 @@ namespace MimeKit
         internal static bool TryParse(ParserOptions options, byte[] text, ref int index, int endIndex, bool throwOnError,
             out ContentType contentType)
         {
-            string type, subtype;
-            int start;
-
             contentType = null;
 
             if (!ParseUtils.SkipCommentsAndWhiteSpace(text, ref index, endIndex, throwOnError))
                 return false;
 
-            start = index;
+            int start = index;
             if (!SkipType(text, ref index, endIndex))
             {
                 if (throwOnError)
@@ -411,7 +405,7 @@ namespace MimeKit
                 return false;
             }
 
-            type = Encoding.ASCII.GetString(text, start, index - start);
+            string type = Encoding.ASCII.GetString(text, start, index - start);
 
             if (!ParseUtils.SkipCommentsAndWhiteSpace(text, ref index, endIndex, throwOnError))
                 return false;
@@ -439,7 +433,7 @@ namespace MimeKit
                 return false;
             }
 
-            subtype = Encoding.ASCII.GetString(text, start, index - start);
+            string subtype = Encoding.ASCII.GetString(text, start, index - start);
 
             if (!ParseUtils.SkipCommentsAndWhiteSpace(text, ref index, endIndex, throwOnError))
                 return false;
