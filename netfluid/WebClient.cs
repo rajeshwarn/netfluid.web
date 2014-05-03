@@ -1,14 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Net;
-using System.Text;
 
 namespace NetFluid
 {
     public class WebClient
     {
+        /// <summary>
+        /// Download specified as a stream
+        /// </summary>
+        /// <param name="uri">uri to download</param>
+        /// <param name="accept">comma separated accepted mime types</param>
+        /// <returns></returns>
         public static Stream GetStream(Uri uri, string accept = "text/html, text/plain")
         {
             var request = (HttpWebRequest)WebRequest.Create(uri);
@@ -25,6 +29,12 @@ namespace NetFluid
             return response.GetResponseStream();
         }
 
+        /// <summary>
+        /// Download specified as lines of text
+        /// </summary>
+        /// <param name="uri">uri to download</param>
+        /// <param name="accept">comma separated accepted mime types</param>
+        /// <returns></returns>
         public static IEnumerable<string> GetLines(Uri uri, string accept = "text/html, text/plain")
         {
             var request = (HttpWebRequest)WebRequest.Create(uri);
@@ -46,6 +56,12 @@ namespace NetFluid
             }
         }
 
+        /// <summary>
+        /// Download specified as a string
+        /// </summary>
+        /// <param name="uri">uri to download</param>
+        /// <param name="accept">comma separated accepted mime types</param>
+        /// <returns></returns>
         public static string GetString(Uri uri, string accept = "text/html, text/plain")
         {
             var request = (HttpWebRequest)WebRequest.Create(uri);
