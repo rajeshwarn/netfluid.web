@@ -175,8 +175,6 @@
     <Compile Include="HttpRequest.cs" />
     <Compile Include="HttpResponse.cs" />
     <Compile Include="HTTP\HttpUtility.cs" />
-    <Compile Include="IO\IRepository.cs" />
-    <Compile Include="IO\SharedFile.cs" />
     <Compile Include="IO\WebSocketStream.cs" />
     <Compile Include="IWebInterfaceManager.cs" />
     <Compile Include="Logger.cs" />
