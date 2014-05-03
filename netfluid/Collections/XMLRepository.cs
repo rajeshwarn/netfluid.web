@@ -73,6 +73,5 @@ namespace NetFluid.Collections
         {
             return GetEnumerator();
         }
-
     }
 }
