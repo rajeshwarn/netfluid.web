@@ -515,7 +515,7 @@ namespace NetFluid
 
         private static Type GetType(string type)
         {
-            Type t = null;
+            Type t;
             Types.TryGetValue(type, out t);
             return t;
         }
@@ -625,28 +625,28 @@ namespace NetFluid
             }
         }
 
-        public void SetController(Func<Context, object> act, string name = null)
+        public void SetController(Func<Context, object> act, string friendlyname = null)
         {
-            var controller = new Controller(act) {Condition = null, Name = name};
+            var controller = new Controller(act) { Condition = null, Name = friendlyname };
             controllers = controllers.Push(controller);
         }
 
-        public void SetController(Func<Context, bool> condition, Func<Context, object> act, string name = null)
+        public void SetController(Func<Context, bool> condition, Func<Context, object> act, string friendlyname = null)
         {
-            var controller = new Controller(act) {Condition = condition, Name = name};
+            var controller = new Controller(act) {Condition = condition, Name = friendlyname};
             controllers = controllers.Push(controller);
         }
 
 
-        public void SetController(Action<Context> act, string name = null)
+        public void SetController(Action<Context> act, string friendlyname = null)
         {
-            var controller = new Controller(act) {Condition = null, Name = name};
+            var controller = new Controller(act) { Condition = null, Name = friendlyname };
             controllers = controllers.Push(controller);
         }
 
-        public void SetController(Func<Context, bool> condition, Action<Context> act, string name = null)
+        public void SetController(Func<Context, bool> condition, Action<Context> act, string friendlyname = null)
         {
-            var controller = new Controller(act) {Condition = condition, Name = name};
+            var controller = new Controller(act) { Condition = condition, Name = friendlyname };
             controllers = controllers.Push(controller);
         }
 
