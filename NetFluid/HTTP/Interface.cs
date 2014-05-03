@@ -30,10 +30,6 @@ namespace NetFluid.HTTP
 {
     internal class WebInterface : IDisposable, IWebInterface
     {
-        public X509Certificate2 Certificate { get; private set; }
-        public IPEndPoint Endpoint { get; private set; }
-        public Socket Socket { get; private set; }
-
         public WebInterface(IPAddress addr, int port)
         {
             Endpoint = new IPEndPoint(addr, port);
@@ -44,7 +40,7 @@ namespace NetFluid.HTTP
 
         public WebInterface(IPAddress addr, int port, X509Certificate2 certificate)
         {
-            this.Certificate = certificate;
+            Certificate = certificate;
             Endpoint = new IPEndPoint(addr, port);
             Socket = new Socket(addr.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
             Socket.Bind(Endpoint);
@@ -68,6 +64,27 @@ namespace NetFluid.HTTP
         }
 
         #endregion
+
+        public X509Certificate2 Certificate { get; private set; }
+        public IPEndPoint Endpoint { get; private set; }
+        public Socket Socket { get; private set; }
+
+        public void Start()
+        {
+            Engine.Logger.Log(LogLevel.Debug,
+                "Starting " + (Certificate != null ? "secure " : " ") + "web interface on " + Endpoint);
+
+            var e = new SocketAsyncEventArgs();
+            if (Certificate == null)
+            {
+                e.Completed += OnAccept;
+            }
+            else
+            {
+                e.Completed += OnAcceptCrypt;
+            }
+            Socket.AcceptAsync(e);
+        }
 
         private static void OnAccept(object sender, SocketAsyncEventArgs e)
         {
@@ -100,22 +117,6 @@ namespace NetFluid.HTTP
                 }
                 e.AcceptSocket = null; // to enable reuse
             } while (!listenSocket.AcceptAsync(e));
-        }
-
-        public void Start()
-        {
-            Engine.Logger.Log(LogLevel.Debug,"Starting " + (Certificate != null ? "secure " : " ") + "web interface on " + Endpoint);
-
-            var e = new SocketAsyncEventArgs();
-            if (Certificate == null)
-            {
-                e.Completed += OnAccept;
-            }
-            else
-            {
-                e.Completed += OnAcceptCrypt;
-            }
-            Socket.AcceptAsync(e);
         }
     }
 }

@@ -136,11 +136,10 @@ namespace NetFluid.HTTP
                 return "";
 
             if (
-                s.Where(c => (c < '0') || (c < 'A' && c > '9') || (c > 'Z' && c < 'a') || (c > 'z')).All(
-                    c => NotEncoded(c)))
+                s.Where(c => (c < '0') || (c < 'A' && c > '9') || (c > 'Z' && c < 'a') || (c > 'z')).All(NotEncoded))
                 return s;
 
-            var enc = Encoding.UTF8;
+            Encoding enc = Encoding.UTF8;
             var bytes = new byte[enc.GetMaxByteCount(s.Length)];
             int realLen = enc.GetBytes(s, 0, s.Length, bytes, 0);
             return enc.GetString(UrlEncodeToBytes(bytes, 0, realLen));
@@ -232,19 +231,18 @@ namespace NetFluid.HTTP
             if (string.IsNullOrEmpty(s))
                 return "";
 
-            var res = s.Replace("&amp;", "&")
-                       .Replace("&lt;", "<")
-                       .Replace("&gt;", ">")
-                       .Replace("&cent;", "¢")
-                       .Replace("&pound;", "£")
-                       .Replace("&yen;", "¥")
-                       .Replace("&euro;", "€")
-
-                       .Replace("&sect;", "§")
-                       .Replace("&copy;", "©")
-                       .Replace("&reg;", "®")
-                       .Replace("&trade;", "™")
-                       .Replace("&quot;", "\"");
+            string res = s.Replace("&amp;", "&")
+                .Replace("&lt;", "<")
+                .Replace("&gt;", ">")
+                .Replace("&cent;", "¢")
+                .Replace("&pound;", "£")
+                .Replace("&yen;", "¥")
+                .Replace("&euro;", "€")
+                .Replace("&sect;", "§")
+                .Replace("&copy;", "©")
+                .Replace("&reg;", "®")
+                .Replace("&trade;", "™")
+                .Replace("&quot;", "\"");
 
             foreach (Match m in Regex.Matches(res, "&#(?<n>[0-9]+);"))
             {
@@ -267,37 +265,37 @@ namespace NetFluid.HTTP
                 {
                     case '<':
                         output.Append("&lt;");
-                    break;
+                        break;
                     case '>':
                         output.Append("&gt;");
-                    break;
+                        break;
                     case '&':
                         output.Append("&amp;");
-                    break;
+                        break;
                     case '¢':
                         output.Append("&cent;");
-                    break;
+                        break;
                     case '£':
                         output.Append("&pound;");
-                    break;
+                        break;
                     case '¥':
                         output.Append("&yen;");
-                    break;
+                        break;
                     case '€':
                         output.Append("&euro;");
-                    break;
+                        break;
                     case '§':
                         output.Append("&sect;");
-                    break;
+                        break;
                     case '©':
                         output.Append("&copy;");
-                    break;
+                        break;
                     case '®':
                         output.Append("&reg;");
-                    break;
+                        break;
                     case '™':
                         output.Append("&trade;");
-                    break;
+                        break;
                     case '"':
                         output.Append("&quot;");
                         break;
@@ -312,7 +310,7 @@ namespace NetFluid.HTTP
                         {
                             output.Append(s[i]);
                         }
-                    break;
+                        break;
                 }
             return output.ToString();
         }
