@@ -479,12 +479,11 @@ namespace MimeKit
         /// <param name="header">The header being added, changed or removed.</param>
         protected virtual void OnHeadersChanged(HeaderListChangedAction action, Header header)
         {
-            string text;
-
             switch (action)
             {
                 case HeaderListChangedAction.Added:
                 case HeaderListChangedAction.Changed:
+                    string text;
                     switch (header.Id)
                     {
                         case HeaderId.ContentDisposition:
@@ -506,11 +505,7 @@ namespace MimeKit
                             break;
                         case HeaderId.ContentBase:
                             text = header.Value.Trim();
-
-                            if (Uri.IsWellFormedUriString(text, UriKind.Absolute))
-                                baseUri = new Uri(text, UriKind.Absolute);
-                            else
-                                baseUri = null;
+                            baseUri = Uri.IsWellFormedUriString(text, UriKind.Absolute) ? new Uri(text, UriKind.Absolute) : null;
                             break;
                         case HeaderId.ContentId:
                             contentId =

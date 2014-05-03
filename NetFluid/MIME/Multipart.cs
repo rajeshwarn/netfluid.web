@@ -77,7 +77,7 @@ namespace MimeKit
     ///         Content-Location headers.
     ///     </para>
     /// </remarks>
-    public class Multipart : MimeEntity, IList<MimeEntity>
+    internal class Multipart : MimeEntity, IList<MimeEntity>
     {
         private static readonly Random random = new Random((int) DateTime.Now.Ticks);
         private readonly List<MimeEntity> children;
@@ -266,14 +266,13 @@ namespace MimeKit
             var base64 = new Base64Encoder(true);
             var digest = new byte[16];
             var buf = new byte[24];
-            int length;
 
             lock (random)
             {
                 random.NextBytes(digest);
             }
 
-            length = base64.Flush(digest, 0, digest.Length, buf);
+            int length = base64.Flush(digest, 0, digest.Length, buf);
 
             return "=-" + Encoding.ASCII.GetString(buf, 0, length);
         }
@@ -281,13 +280,12 @@ namespace MimeKit
         private static string FoldPreambleOrEpilogue(FormatOptions options, string text)
         {
             var builder = new StringBuilder();
-            int startIndex, wordIndex;
             int lineLength = 0;
             int index = 0;
 
             while (index < text.Length)
             {
-                startIndex = index;
+                int startIndex = index;
 
                 while (index < text.Length)
                 {
@@ -304,7 +302,7 @@ namespace MimeKit
                     index++;
                 }
 
-                wordIndex = index;
+                int wordIndex = index;
 
                 while (index < text.Length && !char.IsWhiteSpace(text[index]))
                     index++;

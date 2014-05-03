@@ -46,7 +46,7 @@ namespace MimeKit
     /// <remarks>
     ///     A leaf-node MIME part that contains content such as the message body text or an attachment.
     /// </remarks>
-    public class MimePart : MimeEntity
+    internal class MimePart : MimeEntity
     {
         private static readonly string[] ContentTransferEncodings =
         {
@@ -245,10 +245,7 @@ namespace MimeKit
                 if (md5sum == value)
                     return;
 
-                if (value != null)
-                    md5sum = value.Trim();
-                else
-                    md5sum = null;
+                md5sum = value != null ? value.Trim() : null;
 
                 if (value != null)
                     SetHeader("Content-Md5", md5sum);
@@ -564,9 +561,6 @@ namespace MimeKit
         /// <param name="header">The header being added, changed or removed.</param>
         protected override void OnHeadersChanged(HeaderListChangedAction action, Header header)
         {
-            string text;
-            int value;
-
             base.OnHeadersChanged(action, header);
 
             switch (action)
@@ -576,7 +570,7 @@ namespace MimeKit
                     switch (header.Id)
                     {
                         case HeaderId.ContentTransferEncoding:
-                            text = header.Value.Trim().ToLowerInvariant();
+                            string text = header.Value.Trim().ToLowerInvariant();
 
                             switch (text)
                             {
@@ -607,6 +601,7 @@ namespace MimeKit
                             }
                             break;
                         case HeaderId.ContentDuration:
+                            int value;
                             if (int.TryParse(header.Value, out value))
                                 duration = value;
                             else
