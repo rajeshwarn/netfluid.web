@@ -78,27 +78,27 @@ namespace NetFluid.IO
             else if (count >= 126 && count <= 65535)
             {
                 bytesFormatted.AddRange(new[]
-                                            {
-                                                (byte) 126,
-                                                (byte) ((count >> 8) & 255),
-                                                (byte) (count & 255)
-                                            });
+                {
+                    (byte) 126,
+                    (byte) ((count >> 8) & 255),
+                    (byte) (count & 255)
+                });
                 indexStartRawData = 4;
             }
             else
             {
                 bytesFormatted.AddRange(new[]
-                                            {
-                                                (byte) 127,
-                                                (byte) ((count >> 56) & 255),
-                                                (byte) ((count >> 48) & 255),
-                                                (byte) ((count >> 40) & 255),
-                                                (byte) ((count >> 32) & 255),
-                                                (byte) ((count >> 24) & 255),
-                                                (byte) ((count >> 16) & 255),
-                                                (byte) ((count >> 8) & 255),
-                                                (byte) (count & 255)
-                                            });
+                {
+                    (byte) 127,
+                    (byte) ((count >> 56) & 255),
+                    (byte) ((count >> 48) & 255),
+                    (byte) ((count >> 40) & 255),
+                    (byte) ((count >> 32) & 255),
+                    (byte) ((count >> 24) & 255),
+                    (byte) ((count >> 16) & 255),
+                    (byte) ((count >> 8) & 255),
+                    (byte) (count & 255)
+                });
                 indexStartRawData = 10;
             }
             // put raw data at the correct index
