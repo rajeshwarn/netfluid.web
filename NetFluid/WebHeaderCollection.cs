@@ -54,7 +54,7 @@ namespace NetFluid
             {
                 var lower = index.ToLowerInvariant();
 
-                return values.ContainsKey(lower) ? values[lower] : null;
+                return values.ContainsKey(lower) ? values[lower].ToString() : string.Empty;
             }
             set
             {
@@ -69,7 +69,7 @@ namespace NetFluid
 
         public bool Contains(string index)
         {
-            return values.ContainsKey(index);
+            return values.ContainsKey(index.ToLowerInvariant());
         }
 
         public void Append(string name, string value)

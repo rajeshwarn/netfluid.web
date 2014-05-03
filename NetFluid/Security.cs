@@ -49,6 +49,16 @@ namespace NetFluid
             return Convert.ToBase64String(sha1Hash);
         }
 
+        public static string SHA1Checksum(string file)
+        {
+            using (var stream = File.OpenRead(file))
+            {
+                var sha = new SHA256Managed();
+                var checksum = sha.ComputeHash(stream);
+                return BitConverter.ToString(checksum).Replace("-", String.Empty);
+            }
+        }
+
         public static byte[] Base64Decode(string str)
         {
             return Convert.FromBase64String(str);

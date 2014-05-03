@@ -23,13 +23,8 @@
 
 using System;
 using System.CodeDom.Compiler;
-using System.Globalization;
-using System.IO;
-using System.IO.Compression;
 using System.Linq;
-using System.Net;
 using System.Reflection;
-using MimeKit.IO;
 
 namespace NetFluid
 {
@@ -74,23 +69,8 @@ namespace NetFluid
         {
             _context = cnt;
             param[0] = cnt;
-
-            if (cnt.Request.ProtocolVersion == HttpVersion.Version10)
-            {
-                var old = cnt.OutputStream;
-                cnt.OutputStream = new MemoryStream();
-                cnt.Writer = new StreamWriter(cnt.OutputStream, cnt.Response.ContentEncoding, 1024);
-                template.Invoke(null, param);
-                cnt.Response.Headers["Content-Length"] = cnt.OutputStream.Length.ToString(CultureInfo.InvariantCulture);
-                cnt.SendHeaders();
-                cnt.OutputStream.CopyTo(old);
-                old.Flush();
-            }
-            else
-            {
-                _context.SendHeaders();
-                template.Invoke(null, param);
-            }
+            _context.SendHeaders();
+            template.Invoke(null, param);
         }
 
         #endregion

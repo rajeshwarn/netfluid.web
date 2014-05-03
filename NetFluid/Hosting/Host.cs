@@ -27,8 +27,11 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Runtime.Caching;
 using System.Text;
 using System.Text.RegularExpressions;
+using System.Threading.Tasks;
+using NetFluid.HTTP;
 
 namespace NetFluid
 {
@@ -55,7 +58,9 @@ namespace NetFluid
         
         PublicFolder[] folders;
         readonly Dictionary<string,byte[]> immutableData;
-        	
+
+        private readonly MemoryCache ETagCache;
+
         static Host()
         {
             urlSeparator = new[] {'/'};
@@ -79,6 +84,8 @@ namespace NetFluid
             callOn = new Dictionary<StatusCode, RouteTarget>();
             
             instances = new List<IMethodExposer>();
+
+            ETagCache = MemoryCache.Default;
         }
 
         public string RoutesMap
@@ -357,10 +364,19 @@ namespace NetFluid
                 byte[] content;
 	            if (immutableData.TryGetValue(cnt.Request.Url, out content))
 	            {
+	                if (cnt.Request.Headers.Contains("If-None-Match"))
+	                {
+	                    cnt.Response.StatusCode = StatusCode.NotModified;
+                        return;
+	                }
+
                     cnt.Response.ContentType = MimeTypes.GetType(cnt.Request.Url);
                     cnt.Response.Headers["Cache-Control"] = "max-age=29030400";
                     cnt.Response.Headers["Last-Modified"] = DateTime.MinValue.ToString("r");
                     cnt.Response.Headers["Vary"] = "Accept-Encoding";
+
+                    //Fake ETag for immutable files
+                    cnt.Response.Headers["ETag"] = Security.UID();
                     cnt.SendHeaders();
                     cnt.OutputStream.Write(content, 0, content.Length);
                     cnt.Close();
@@ -370,27 +386,43 @@ namespace NetFluid
 	            
 	            foreach (var item in folders)
 	            {
-	                if (cnt.Request.Url.StartsWith(item.Uri))
-	                {
-	                    var path = Path.GetFullPath(item.Path + cnt.Request.Url.Substring(item.Uri.Length).Replace('/', Path.DirectorySeparatorChar));
+	                if (!cnt.Request.Url.StartsWith(item.Uri))
+                        continue;
 
-                        if (!path.StartsWith(item.Path))
-                        {
-                            cnt.Response.StatusCode = StatusCode.BadRequest;
-                            cnt.Close();
-                            return;
-                        }
-	
-	                    if (File.Exists(path))
+	                var path = Path.GetFullPath(item.Path + cnt.Request.Url.Substring(item.Uri.Length).Replace('/', Path.DirectorySeparatorChar));
+
+	                if (!path.StartsWith(item.Path))
+	                {
+	                    cnt.Response.StatusCode = StatusCode.BadRequest;
+	                    cnt.Close();
+	                    return;
+	                }
+
+	                if (!File.Exists(path))
+                        continue;
+
+	                var etag = ETagCache.Get(path) as string;
+	                if (etag != null)
+	                {
+	                    cnt.Response.Headers["ETag"] = "\""+etag +"\"";
+	                    if (cnt.Request.Headers.Contains("If-None-Match") && cnt.Request.Headers["If-None-Match"].Unquote()==etag)
 	                    {
-	                        cnt.Response.ContentType = MimeTypes.GetType(cnt.Request.Url);
-	                        cnt.SendHeaders();
-	                        var fs = new FileStream(path, FileMode.OpenOrCreate, FileAccess.ReadWrite, FileShare.ReadWrite);
-	                        fs.CopyTo(cnt.OutputStream);
+	                        cnt.Response.StatusCode = StatusCode.NotModified;
 	                        cnt.Close();
 	                        return;
 	                    }
 	                }
+	                else
+	                {
+	                    ETagCache.Add(path, Security.SHA1Checksum(path), DateTimeOffset.Now + TimeSpan.FromHours(1));
+	                }
+	                cnt.Response.ContentType = MimeTypes.GetType(cnt.Request.Url);
+	                cnt.SendHeaders();
+	                var fs = new FileStream(path, FileMode.OpenOrCreate, FileAccess.ReadWrite, FileShare.ReadWrite);
+	                fs.CopyTo(cnt.OutputStream);
+	                cnt.Close();
+	                fs.Close();
+	                return;
 	            }
 	            
 	            #endregion
