@@ -13,45 +13,20 @@ namespace NetFluid.Service
         public string Application;
         public List<string> Hosts;
         public string EndPoint;
-
-        [NonSerialized]
-        public Process Process;
-
-        [NonSerialized]
-        public bool Closing;
+        public bool Stopped;
 
         public Host()
         {
-            Closing = false;
         }
 
-        public Host(string app, string name, string endpoint)
+        public Host(string name, string app, string host, string endpoint)
         {
+            Name = name;
             Application = Path.GetFullPath(app);
-            Hosts = new List<string> {name};
+            Hosts = new List<string> {host};
 
             EndPoint = endpoint;
-            Closing = false;
-        }
-
-        public void Start()
-        {
-            Process = Process.Start("FluidPlayer.exe", Application);
-            Process.Exited += (x, y) =>
-            {
-                if (!Closing)
-                {
-                    Engine.Logger.Log(LogLevel.Error,"Host "+Name+" unexpected termination, restarting");
-                    Process = Process.Start("FluidPlayer.exe", Application);
-                }
-
-            };
-        }
-
-        public void Kill()
-        {
-            Closing = true;
-            Process.Kill();
+            Stopped = false;
         }
     }
 }

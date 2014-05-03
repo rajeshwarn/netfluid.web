@@ -30,7 +30,6 @@ using System.Reflection;
 using System.Runtime.Caching;
 using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 using NetFluid.HTTP;
 
 namespace NetFluid
@@ -39,27 +38,19 @@ namespace NetFluid
     {
         private static readonly char[] urlSeparator;
         private static readonly Dictionary<string, Type> Types;
-
-        private readonly string name;
+        private readonly MemoryCache ETagCache;
 
         private readonly Dictionary<StatusCode, RouteTarget> callOn;
+        private readonly Dictionary<string, byte[]> immutableData;
         private readonly List<IMethodExposer> instances;
+        private readonly string name;
         private readonly Dictionary<string, RouteTarget> routes;
         private RouteTarget callOnAnyCode;
-        private ParamRouteTarget[] parametrized;
-        private RegexRouteTarget[] regex;
         private Controller[] controllers;
 
-        private struct PublicFolder
-        {
-            public string Path;
-            public string Uri;
-        }
-        
-        PublicFolder[] folders;
-        readonly Dictionary<string,byte[]> immutableData;
-
-        private readonly MemoryCache ETagCache;
+        private PublicFolder[] folders;
+        private ParamRouteTarget[] parametrized;
+        private RegexRouteTarget[] regex;
 
         static Host()
         {
@@ -69,7 +60,6 @@ namespace NetFluid
 
         internal Host(string name)
         {
-
             this.name = name;
 
             controllers = new Controller[0];
@@ -82,7 +72,7 @@ namespace NetFluid
             immutableData = new Dictionary<string, byte[]>();
 
             callOn = new Dictionary<StatusCode, RouteTarget>();
-            
+
             instances = new List<IMethodExposer>();
 
             ETagCache = MemoryCache.Default;
@@ -92,27 +82,31 @@ namespace NetFluid
         {
             get
             {
-                var sb = new StringBuilder(string.Format("<Host Name=\"{0}\">",name));
+                var sb = new StringBuilder(string.Format("<Host Name=\"{0}\">", name));
 
-                if (controllers.Length>0)
+                if (controllers.Length > 0)
                 {
                     sb.Append("<Controllers>");
-                    foreach (var item in controllers)
-                        sb.Append(string.Format("<Controller Name=\"{0}\" Conditional=\"{1}\" />", item.Name, item.Condition != null));
+                    foreach (Controller item in controllers)
+                        sb.Append(string.Format("<Controller Name=\"{0}\" Conditional=\"{1}\" />", item.Name,
+                            item.Condition != null));
 
                     sb.Append("</Controllers>");
                 }
 
                 sb.Append("<routes>");
 
-                foreach (var item in regex)
-                    sb.Append(string.Format("<RegexRoute Name=\"{0}\" Regex=\"{1}\" PointTo=\"{2}.{3}\" />", item.Name, item.Regex, item.Type.FullName, item.Method.Name));
+                foreach (RegexRouteTarget item in regex)
+                    sb.Append(string.Format("<RegexRoute Name=\"{0}\" Regex=\"{1}\" PointTo=\"{2}.{3}\" />", item.Name,
+                        item.Regex, item.Type.FullName, item.Method.Name));
 
-                foreach (var item in parametrized)
-                    sb.Append(string.Format("<ParametrizedRoute Name=\"{0}\" Template=\"{1}\" PointTo=\"{2}.{3}\" />", item.Name, item.Template, item.Type.FullName, item.Method.Name));
+                foreach (ParamRouteTarget item in parametrized)
+                    sb.Append(string.Format("<ParametrizedRoute Name=\"{0}\" Template=\"{1}\" PointTo=\"{2}.{3}\" />",
+                        item.Name, item.Template, item.Type.FullName, item.Method.Name));
 
                 foreach (var item in routes)
-                    sb.Append(string.Format("<Route Name=\"{0}\" Template=\"{1}\" PointTo=\"{2}.{3}\" />", item.Value.Name, item.Key, item.Value.Type.FullName, item.Value.Method.Name));
+                    sb.Append(string.Format("<Route Name=\"{0}\" Template=\"{1}\" PointTo=\"{2}.{3}\" />",
+                        item.Value.Name, item.Key, item.Value.Type.FullName, item.Value.Method.Name));
 
 
                 sb.Append("</routes>");
@@ -144,7 +138,7 @@ namespace NetFluid
             if (!(res is IEnumerable)) return;
 
             c.SendHeaders();
-            foreach (var item in res as IEnumerable)
+            foreach (object item in res as IEnumerable)
                 c.Writer.Write(item.ToString());
             c.Close();
         }
@@ -152,7 +146,7 @@ namespace NetFluid
 
         private static void Finalize(Context c, MethodInfo method, object target, params object[] args)
         {
-            object res=null;
+            object res = null;
 
             try
             {
@@ -176,8 +170,8 @@ namespace NetFluid
 
                 Engine.Logger.Log(LogLevel.Exception, "Error on " + c.Request.Url, ex);
             }
-            
-            SendValue(c,res);
+
+            SendValue(c, res);
             if (!c.WebSocket)
                 c.Close();
         }
@@ -191,10 +185,10 @@ namespace NetFluid
 
                 #region CONTROLLERS
 
-                foreach (var item in controllers)
+                foreach (Controller item in controllers)
                 {
                     SendValue(cnt, item.Invoke(cnt));
-                    
+
                     if (!cnt.IsOpen)
                         return;
                 }
@@ -206,9 +200,9 @@ namespace NetFluid
 
                 #region REGEX
 
-                foreach (var rr in regex)
+                foreach (RegexRouteTarget rr in regex)
                 {
-                    var m = rr.Regex.Match(cnt.Request.Url);
+                    Match m = rr.Regex.Match(cnt.Request.Url);
 
                     if (!m.Success)
                         continue;
@@ -234,20 +228,20 @@ namespace NetFluid
                     if (Engine.DevMode)
                         Console.WriteLine(cnt.Request.Host + ":" + cnt.Request.Url + " - " + "Parsing arguments");
 
-                    var groups = rr.Regex.GetGroupNames();
+                    string[] groups = rr.Regex.GetGroupNames();
                     var args = new object[parameters.Length];
-                    for (var i = 0; i < parameters.Length; i++)
+                    for (int i = 0; i < parameters.Length; i++)
                     {
                         if (groups.Contains(parameters[i].Name))
                         {
-                            var q = new QueryValue(parameters[i].Name,m.Groups[parameters[i].Name].Value);
+                            var q = new QueryValue(parameters[i].Name, m.Groups[parameters[i].Name].Value);
                             args[i] = q.Parse(parameters[i]);
                         }
                         else
                         {
                             args[i] = parameters[i].ParameterType.IsValueType
-                                          ? Activator.CreateInstance(parameters[i].ParameterType)
-                                          : null;
+                                ? Activator.CreateInstance(parameters[i].ParameterType)
+                                : null;
                         }
                     }
                     Finalize(cnt, rr.Method, page, args);
@@ -261,7 +255,7 @@ namespace NetFluid
                 if (Engine.DevMode)
                     Console.WriteLine(cnt.Request.Host + ":" + cnt.Request.Url + " - " + "Checking parametrized routes");
 
-                for (var i = 0; i < parametrized.Length; i++)
+                for (int i = 0; i < parametrized.Length; i++)
                 {
                     if (!cnt.Request.Url.StartsWith(parametrized[i].Url))
                         continue;
@@ -277,7 +271,7 @@ namespace NetFluid
                     var page = parametrized[i].Type.CreateIstance() as IMethodExposer;
                     page.Context = cnt;
 
-                    var parameters = parametrized[i].Method.GetParameters();
+                    ParameterInfo[] parameters = parametrized[i].Method.GetParameters();
 
                     if (parameters.Length == 0)
                     {
@@ -285,22 +279,22 @@ namespace NetFluid
                         return;
                     }
 
-                    var argUri = cnt.Request.Url.Substring(parametrized[i].Url.Length).Split(urlSeparator,
-                                                                                                  StringSplitOptions.
-                                                                                                      RemoveEmptyEntries);
+                    string[] argUri = cnt.Request.Url.Substring(parametrized[i].Url.Length).Split(urlSeparator,
+                        StringSplitOptions.
+                            RemoveEmptyEntries);
                     var args = new object[parameters.Length];
-                    for (var j = 0; j < parameters.Length; j++)
+                    for (int j = 0; j < parameters.Length; j++)
                     {
                         if (j < argUri.Length)
                         {
-                            var qv = new QueryValue("",argUri[j]);
+                            var qv = new QueryValue("", argUri[j]);
                             args[j] = qv.Parse(parameters[j]);
                         }
                         else
                         {
                             args[j] = parameters[j].ParameterType.IsValueType
-                                          ? Activator.CreateInstance(parameters[j].ParameterType)
-                                          : null;
+                                ? Activator.CreateInstance(parameters[j].ParameterType)
+                                : null;
                         }
                     }
 
@@ -329,7 +323,7 @@ namespace NetFluid
                     var page = route.Type.CreateIstance() as IMethodExposer;
                     page.Context = cnt;
 
-                    var parameters = route.Method.GetParameters();
+                    ParameterInfo[] parameters = route.Method.GetParameters();
 
                     if (parameters.Length == 0)
                     {
@@ -338,15 +332,15 @@ namespace NetFluid
                     }
 
                     var args = new object[parameters.Length];
-                    for (var i = 0; i < parameters.Length; i++)
+                    for (int i = 0; i < parameters.Length; i++)
                     {
-                        var q = cnt.Request.Values[parameters[i].Name];
-                        if ( q != null )
+                        QueryValue q = cnt.Request.Values[parameters[i].Name];
+                        if (q != null)
                             args[i] = q.Parse(parameters[i]);
                         else
                             args[i] = parameters[i].ParameterType.IsValueType
-                                          ? Activator.CreateInstance(parameters[i].ParameterType)
-                                          : null;
+                                ? Activator.CreateInstance(parameters[i].ParameterType)
+                                : null;
                     }
 
                     Finalize(cnt, route.Method, page, args);
@@ -359,16 +353,17 @@ namespace NetFluid
                     Console.WriteLine(cnt.Request.Host + ":" + cnt.Request.Url + " - " + "Looking for a public folder");
 
                 #region PUBLIC FILES
+
                 #region IMMUTABLE
-	            
+
                 byte[] content;
-	            if (immutableData.TryGetValue(cnt.Request.Url, out content))
-	            {
-	                if (cnt.Request.Headers.Contains("If-None-Match"))
-	                {
-	                    cnt.Response.StatusCode = StatusCode.NotModified;
+                if (immutableData.TryGetValue(cnt.Request.Url, out content))
+                {
+                    if (cnt.Request.Headers.Contains("If-None-Match"))
+                    {
+                        cnt.Response.StatusCode = StatusCode.NotModified;
                         return;
-	                }
+                    }
 
                     cnt.Response.ContentType = MimeTypes.GetType(cnt.Request.Url);
                     cnt.Response.Headers["Cache-Control"] = "max-age=29030400";
@@ -380,52 +375,57 @@ namespace NetFluid
                     cnt.SendHeaders();
                     cnt.OutputStream.Write(content, 0, content.Length);
                     cnt.Close();
-	                return;
-	            }
-	            #endregion
-	            
-	            foreach (var item in folders)
-	            {
-	                if (!cnt.Request.Url.StartsWith(item.Uri))
+                    return;
+                }
+
+                #endregion
+
+                foreach (var item in folders)
+                {
+                    if (!cnt.Request.Url.StartsWith(item.Uri))
                         continue;
 
-	                var path = Path.GetFullPath(item.Path + cnt.Request.Url.Substring(item.Uri.Length).Replace('/', Path.DirectorySeparatorChar));
+                    string path =
+                        Path.GetFullPath(item.Path +
+                                         cnt.Request.Url.Substring(item.Uri.Length)
+                                             .Replace('/', Path.DirectorySeparatorChar));
 
-	                if (!path.StartsWith(item.Path))
-	                {
-	                    cnt.Response.StatusCode = StatusCode.BadRequest;
-	                    cnt.Close();
-	                    return;
-	                }
+                    if (!path.StartsWith(item.Path))
+                    {
+                        cnt.Response.StatusCode = StatusCode.BadRequest;
+                        cnt.Close();
+                        return;
+                    }
 
-	                if (!File.Exists(path))
+                    if (!File.Exists(path))
                         continue;
 
-	                var etag = ETagCache.Get(path) as string;
-	                if (etag != null)
-	                {
-	                    cnt.Response.Headers["ETag"] = "\""+etag +"\"";
-	                    if (cnt.Request.Headers.Contains("If-None-Match") && cnt.Request.Headers["If-None-Match"].Unquote()==etag)
-	                    {
-	                        cnt.Response.StatusCode = StatusCode.NotModified;
-	                        cnt.Close();
-	                        return;
-	                    }
-	                }
-	                else
-	                {
-	                    ETagCache.Add(path, Security.SHA1Checksum(path), DateTimeOffset.Now + TimeSpan.FromHours(1));
-	                }
-	                cnt.Response.ContentType = MimeTypes.GetType(cnt.Request.Url);
-	                cnt.SendHeaders();
-	                var fs = new FileStream(path, FileMode.OpenOrCreate, FileAccess.ReadWrite, FileShare.ReadWrite);
-	                fs.CopyTo(cnt.OutputStream);
-	                cnt.Close();
-	                fs.Close();
-	                return;
-	            }
-	            
-	            #endregion
+                    var etag = ETagCache.Get(path) as string;
+                    if (etag != null)
+                    {
+                        cnt.Response.Headers["ETag"] = "\"" + etag + "\"";
+                        if (cnt.Request.Headers.Contains("If-None-Match") &&
+                            cnt.Request.Headers["If-None-Match"].Unquote() == etag)
+                        {
+                            cnt.Response.StatusCode = StatusCode.NotModified;
+                            cnt.Close();
+                            return;
+                        }
+                    }
+                    else
+                    {
+                        ETagCache.Add(path, Security.SHA1Checksum(path), DateTimeOffset.Now + TimeSpan.FromHours(1));
+                    }
+                    cnt.Response.ContentType = MimeTypes.GetType(cnt.Request.Url);
+                    cnt.SendHeaders();
+                    var fs = new FileStream(path, FileMode.OpenOrCreate, FileAccess.ReadWrite, FileShare.ReadWrite);
+                    fs.CopyTo(cnt.OutputStream);
+                    cnt.Close();
+                    fs.Close();
+                    return;
+                }
+
+                #endregion
 
                 if (Engine.DevMode)
                     Console.WriteLine(cnt.Request.Host + ":" + cnt.Request.Url + " - " + "Checking status code handlers");
@@ -478,7 +478,7 @@ namespace NetFluid
                         {
                             cnt.Writer.WriteLine("<h2>Write</h2>");
                             cnt.Writer.WriteLine("<table>");
-                            foreach (var data in ex.Data.Keys)
+                            foreach (object data in ex.Data.Keys)
                             {
                                 cnt.Writer.WriteLine("<tr><td>" + data + "</td><td>" + ex.Data[data] + "</td></tr>");
                             }
@@ -540,18 +540,18 @@ namespace NetFluid
                 Engine.Logger.Log(LogLevel.Error, "Failed to create instance of " + page.FullName, ex);
             }
 
-            foreach (var m in page.GetMethods())
+            foreach (MethodInfo m in page.GetMethods())
             {
-                foreach (var ma in m.CustomAttribute<Route>())
+                foreach (Route ma in m.CustomAttribute<Route>())
                     SetRoute(ma.Uri, page, m);
 
-                foreach (var ma in m.CustomAttribute<ParametrizedRoute>())
+                foreach (ParametrizedRoute ma in m.CustomAttribute<ParametrizedRoute>())
                     SetParameterizedRoute(ma.Uri, page, m);
 
-                foreach (var ma in m.CustomAttribute<RegexRoute>())
+                foreach (RegexRoute ma in m.CustomAttribute<RegexRoute>())
                     SetRegexRoute(ma.Uri, page, m);
 
-                foreach (var ma in m.CustomAttribute<CallOn>())
+                foreach (CallOn ma in m.CustomAttribute<CallOn>())
                 {
                     if (!callOn.ContainsKey(ma.StatusCode))
                         callOn.Add(ma.StatusCode, new RouteTarget {Type = page, Method = m});
@@ -561,22 +561,22 @@ namespace NetFluid
                 }
             }
 
-            foreach (var r in page.CustomAttribute<Route>(true))
+            foreach (Route r in page.CustomAttribute<Route>(true))
             {
-                foreach (var m in page.GetMethods())
+                foreach (MethodInfo m in page.GetMethods())
                 {
-                    foreach (var ma in m.CustomAttribute<Route>())
+                    foreach (Route ma in m.CustomAttribute<Route>())
                         SetRoute(r.Uri + ma.Uri, page, m);
 
-                    foreach (var ma in m.CustomAttribute<ParametrizedRoute>())
+                    foreach (ParametrizedRoute ma in m.CustomAttribute<ParametrizedRoute>())
                         SetParameterizedRoute(r.Uri + ma.Uri, page, m);
 
-                    foreach (var ma in m.CustomAttribute<RegexRoute>())
+                    foreach (RegexRoute ma in m.CustomAttribute<RegexRoute>())
                         SetRegexRoute(Regex.Escape(r.Uri) + ma.Uri, page, m);
                 }
             }
 
-            foreach (var r in page.CustomAttribute<CallOn>(true))
+            foreach (CallOn r in page.CustomAttribute<CallOn>(true))
             {
                 if (!callOn.ContainsKey(r.StatusCode))
                 {
@@ -589,7 +589,7 @@ namespace NetFluid
 
         public void AddPublicFolder(string uriPath, string realPath)
         {
-            var f = Path.GetFullPath(realPath);
+            string f = Path.GetFullPath(realPath);
 
             if (f.Last() != Path.DirectorySeparatorChar)
                 f = f + Path.DirectorySeparatorChar;
@@ -601,52 +601,52 @@ namespace NetFluid
             };
             folders = (folders.Concat(p)).ToArray();
         }
-        
+
         public void AddImmutablePublicFolder(string uriPath, string realPath)
         {
-        	var m = Path.GetFullPath(realPath);
-            var start = uriPath.EndsWith('/') ? uriPath : uriPath + "/";
+            string m = Path.GetFullPath(realPath);
+            string start = uriPath.EndsWith('/') ? uriPath : uriPath + "/";
 
             if (Directory.Exists(m))
             {
-                foreach (var x in Directory.GetFiles(m, "*.*", SearchOption.AllDirectories))
+                foreach (string x in Directory.GetFiles(m, "*.*", SearchOption.AllDirectories))
                 {
-                    var s = x.Substring(m.Length).Replace(Path.DirectorySeparatorChar, '/');
+                    string s = x.Substring(m.Length).Replace(Path.DirectorySeparatorChar, '/');
 
                     if (s[0] == '/')
                         s = s.Substring(1);
 
-                    var fileUri = start + s;
+                    string fileUri = start + s;
                     if (!immutableData.ContainsKey(fileUri))
                     {
-                        immutableData.Add(fileUri,File.ReadAllBytes(x));
+                        immutableData.Add(fileUri, File.ReadAllBytes(x));
                     }
                 }
             }
         }
 
-        public void SetController(Func<Context,object> act, string name = null)
+        public void SetController(Func<Context, object> act, string name = null)
         {
-            var controller = new Controller(act) { Condition = null, Name = name };
+            var controller = new Controller(act) {Condition = null, Name = name};
             controllers = controllers.Push(controller);
         }
 
-        public void SetController(Func<Context, bool> condition,Func<Context,object> act, string name = null)
+        public void SetController(Func<Context, bool> condition, Func<Context, object> act, string name = null)
         {
-            var controller = new Controller(act) { Condition = condition, Name = name };
+            var controller = new Controller(act) {Condition = condition, Name = name};
             controllers = controllers.Push(controller);
         }
 
 
-        public void SetController(Action<Context> act, string name=null)
+        public void SetController(Action<Context> act, string name = null)
         {
-            var controller = new Controller(act) {Condition = null, Name=name };
+            var controller = new Controller(act) {Condition = null, Name = name};
             controllers = controllers.Push(controller);
         }
 
         public void SetController(Func<Context, bool> condition, Action<Context> act, string name = null)
         {
-            var controller = new Controller(act) { Condition = condition, Name = name };
+            var controller = new Controller(act) {Condition = condition, Name = name};
             controllers = controllers.Push(controller);
         }
 
@@ -658,7 +658,7 @@ namespace NetFluid
             if (methodFullname == null)
                 throw new NullReferenceException("Null method");
 
-            var t = GetType(methodFullname.Substring(0, methodFullname.LastIndexOf('.')));
+            Type t = GetType(methodFullname.Substring(0, methodFullname.LastIndexOf('.')));
             if (t == null)
                 throw new TypeLoadException(methodFullname.Substring(0, methodFullname.LastIndexOf('.')) + " not found");
 
@@ -667,7 +667,7 @@ namespace NetFluid
 
             instances.Add(t.CreateIstance() as IMethodExposer);
 
-            SetRoute(url, t, methodFullname.Substring(methodFullname.LastIndexOf('.') + 1),name);
+            SetRoute(url, t, methodFullname.Substring(methodFullname.LastIndexOf('.') + 1), name);
         }
 
         public void SetRoute(string url, Type type, string method, string name = null)
@@ -684,7 +684,7 @@ namespace NetFluid
             if (!type.Inherit(typeof (IMethodExposer)))
                 throw new TypeLoadException("Routed types must implement NetFluid.IMethodExposer");
 
-            var rt = new RouteTarget {Type = type, Method = type.GetMethod(method), Name=name};
+            var rt = new RouteTarget {Type = type, Method = type.GetMethod(method), Name = name};
 
             instances.Add(type.CreateIstance() as IMethodExposer);
 
@@ -709,7 +709,7 @@ namespace NetFluid
                 throw new TypeLoadException("Routed types must implement NetFluid.IMethodExposer");
 
 
-            var rt = new RouteTarget {Type = type, Method = method,Name=name};
+            var rt = new RouteTarget {Type = type, Method = method, Name = name};
 
             instances.Add(type.CreateIstance() as IMethodExposer);
 
@@ -727,7 +727,7 @@ namespace NetFluid
             if (methodFullname == null)
                 throw new NullReferenceException("Null method");
 
-            var t = GetType(methodFullname.Substring(0, methodFullname.LastIndexOf('.')));
+            Type t = GetType(methodFullname.Substring(0, methodFullname.LastIndexOf('.')));
             if (t == null)
                 throw new TypeLoadException(methodFullname.Substring(0, methodFullname.LastIndexOf('.')) + " not found");
 
@@ -736,7 +736,7 @@ namespace NetFluid
 
             instances.Add(t.CreateIstance() as IMethodExposer);
 
-            SetParameterizedRoute(url, t, methodFullname.Substring(methodFullname.LastIndexOf('.') + 1),name);
+            SetParameterizedRoute(url, t, methodFullname.Substring(methodFullname.LastIndexOf('.') + 1), name);
         }
 
         public void SetParameterizedRoute(string url, Type type, string method, string name = null)
@@ -750,10 +750,10 @@ namespace NetFluid
             if (type == null)
                 throw new NullReferenceException("Null type");
 
-            if (!type.Implements(typeof(IMethodExposer)))
+            if (!type.Implements(typeof (IMethodExposer)))
                 throw new TypeLoadException("Routed types must inherit NetFluid.IMethodExposer");
 
-            var rt = new ParamRouteTarget {Type = type, Method = type.GetMethod(method), Url = url , Name=name};
+            var rt = new ParamRouteTarget {Type = type, Method = type.GetMethod(method), Url = url, Name = name};
 
             instances.Add(type.CreateIstance() as IMethodExposer);
 
@@ -771,10 +771,10 @@ namespace NetFluid
             if (type == null)
                 throw new NullReferenceException("Null type");
 
-            if (!type.Implements(typeof(IMethodExposer)))
+            if (!type.Implements(typeof (IMethodExposer)))
                 throw new TypeLoadException("Routed types must inherit NetFluid.IMethodExposer");
 
-            var rt = new ParamRouteTarget {Type = type, Method = method, Url = url, Name=name};
+            var rt = new ParamRouteTarget {Type = type, Method = method, Url = url, Name = name};
 
             instances.Add(type.CreateIstance() as IMethodExposer);
 
@@ -789,16 +789,16 @@ namespace NetFluid
             if (methodFullname == null)
                 throw new NullReferenceException("Null method");
 
-            var t = GetType(methodFullname.Substring(0, methodFullname.LastIndexOf('.')));
+            Type t = GetType(methodFullname.Substring(0, methodFullname.LastIndexOf('.')));
             if (t == null)
                 throw new TypeLoadException(methodFullname.Substring(0, methodFullname.LastIndexOf('.')) + " not found");
 
-            if (!t.Inherit(typeof(IMethodExposer)))
+            if (!t.Inherit(typeof (IMethodExposer)))
                 throw new TypeLoadException("Routed types must inherit NetFluid.IMethodExposer");
 
             instances.Add(t.CreateIstance() as IMethodExposer);
 
-            SetRegexRoute(rgx, t, methodFullname.Substring(methodFullname.LastIndexOf('.') + 1),name);
+            SetRegexRoute(rgx, t, methodFullname.Substring(methodFullname.LastIndexOf('.') + 1), name);
         }
 
         public void SetRegexRoute(string rgx, Type type, string method, string name = null)
@@ -812,14 +812,20 @@ namespace NetFluid
             if (type == null)
                 throw new NullReferenceException("Null type");
 
-            if (!type.Implements(typeof(IMethodExposer)))
+            if (!type.Implements(typeof (IMethodExposer)))
                 throw new TypeLoadException("Routed types must inherit NetFluid.IMethodExposer");
 
-            var m = type.GetMethod(method);
+            MethodInfo m = type.GetMethod(method);
             if (m == null)
                 throw new TypeLoadException(type.FullName + "." + method + " not found");
 
-            var rt = new RegexRouteTarget {Type = type, Method = m, Regex = new Regex(rgx, RegexOptions.Compiled),Name=name};
+            var rt = new RegexRouteTarget
+            {
+                Type = type,
+                Method = m,
+                Regex = new Regex(rgx, RegexOptions.Compiled),
+                Name = name
+            };
 
             instances.Add(type.CreateIstance() as IMethodExposer);
 
@@ -837,10 +843,16 @@ namespace NetFluid
             if (type == null)
                 throw new NullReferenceException("Null type");
 
-            if (!type.Implements(typeof(IMethodExposer)))
+            if (!type.Implements(typeof (IMethodExposer)))
                 throw new TypeLoadException("Routed types must inherit NetFluid.IMethodExposer");
 
-            var rt = new RegexRouteTarget {Type = type, Method = method, Regex = new Regex(rgx, RegexOptions.Compiled),Name=name};
+            var rt = new RegexRouteTarget
+            {
+                Type = type,
+                Method = method,
+                Regex = new Regex(rgx, RegexOptions.Compiled),
+                Name = name
+            };
 
             instances.Add(type.CreateIstance() as IMethodExposer);
 
@@ -851,17 +863,14 @@ namespace NetFluid
 
         private class ParamRouteTarget
         {
-            public string Name;
             public MethodInfo Method;
+            public string Name;
             public Type Type;
             public string Url;
 
             public string Template
             {
-                get
-                {
-                    return Url + string.Join("/", Method.GetParameters().Select(x => "{" + x.Name + "}"));
-                }
+                get { return Url + string.Join("/", Method.GetParameters().Select(x => "{" + x.Name + "}")); }
             }
         }
 
@@ -871,8 +880,8 @@ namespace NetFluid
 
         private class RegexRouteTarget
         {
-            public string Name;
             public MethodInfo Method;
+            public string Name;
             public Regex Regex;
             public Type Type;
         }
@@ -883,8 +892,8 @@ namespace NetFluid
 
         private class RouteTarget
         {
-            public string Name;
             public MethodInfo Method;
+            public string Name;
             public Type Type;
         }
 
@@ -897,8 +906,8 @@ namespace NetFluid
             private readonly MethodInfo methodInfo;
             private readonly object target;
 
-            public string Name;
             public Func<Context, bool> Condition;
+            public string Name;
 
             public Controller(Action<Context> action)
             {
@@ -906,7 +915,7 @@ namespace NetFluid
                 methodInfo = action.Method;
             }
 
-            public Controller(Func<Context,object> function)
+            public Controller(Func<Context, object> function)
             {
                 target = function.Target;
                 methodInfo = function.Method;
@@ -916,7 +925,7 @@ namespace NetFluid
             {
                 if (Condition != null && !Condition(c))
                     return null;
-                
+
                 if (Engine.DevMode)
                     Console.WriteLine(c.Request.Host + ":" + c.Request.Url + " - " + "Calling controller");
 
@@ -926,5 +935,11 @@ namespace NetFluid
         }
 
         #endregion
+
+        private struct PublicFolder
+        {
+            public string Path;
+            public string Uri;
+        }
     }
 }
