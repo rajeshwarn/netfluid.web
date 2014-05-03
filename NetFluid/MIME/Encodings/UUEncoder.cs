@@ -3,7 +3,7 @@
 //
 // Author: Jeffrey Stedfast <jeff@xamarin.com>
 //
-// Copyright (c) 2012 Jeffrey Stedfast
+// Copyright (c) 2013-2014 Xamarin Inc.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -26,370 +26,348 @@
 
 using System;
 
-namespace MimeKit.Encodings
-{
-    /// <summary>
-    ///     Incrementally encodes content using the Unix-to-Unix encoding.
-    /// </summary>
-    /// <remarks>
-    ///     <para>
-    ///         The UUEncoding is an encoding that predates MIME and was used to encode
-    ///         binary content such as images and other types of multi-media to ensure
-    ///         that the data remained intact when sent via 7bit transports such as SMTP.
-    ///     </para>
-    ///     <para>
-    ///         These days, the UUEncoding has largely been deprecated in favour of
-    ///         the base64 encoding, however, some older mail clients still use it.
-    ///     </para>
-    /// </remarks>
-    public class UUEncoder : IMimeEncoder
-    {
-        private const int MaxInputPerLine = 45;
-        private const int MaxOutputPerLine = ((MaxInputPerLine/3)*4) + 2;
+namespace MimeKit.Encodings {
+	/// <summary>
+	/// Incrementally encodes content using the Unix-to-Unix encoding.
+	/// </summary>
+	/// <remarks>
+	/// <para>The UUEncoding is an encoding that predates MIME and was used to encode
+	/// binary content such as images and other types of multi-media to ensure
+	/// that the data remained intact when sent via 7bit transports such as SMTP.</para>
+	/// <para>These days, the UUEncoding has largely been deprecated in favour of
+	/// the base64 encoding, however, some older mail clients still use it.</para>
+	/// </remarks>
+	public class UUEncoder : IMimeEncoder
+	{
+		const int MaxInputPerLine = 45;
+		const int MaxOutputPerLine = ((MaxInputPerLine / 3) * 4) + 2;
 
-        private readonly byte[] uubuf = new byte[60];
-        private byte nsaved;
-        private uint saved;
-        private byte uulen;
+		readonly byte[] uubuf = new byte[60];
+		uint saved;
+		byte nsaved;
+		byte uulen;
 
-        /// <summary>
-        ///     Initializes a new instance of the <see cref="MimeKit.Encodings.UUEncoder" /> class.
-        /// </summary>
-        /// <remarks>
-        ///     Creates a new Unix-to-Unix encoder.
-        /// </remarks>
-        public UUEncoder()
-        {
-            Reset();
-        }
+		/// <summary>
+		/// Initializes a new instance of the <see cref="MimeKit.Encodings.UUEncoder"/> class.
+		/// </summary>
+		/// <remarks>
+		/// Creates a new Unix-to-Unix encoder.
+		/// </remarks>
+		public UUEncoder ()
+		{
+			Reset ();
+		}
 
-        /// <summary>
-        ///     Clone the <see cref="UUEncoder" /> with its current state.
-        /// </summary>
-        /// <remarks>
-        ///     Creates a new <see cref="UUEncoder" /> with exactly the same state as the current encoder.
-        /// </remarks>
-        /// <returns>A new <see cref="UUEncoder" /> with identical state.</returns>
-        public IMimeEncoder Clone()
-        {
-            var encoder = new UUEncoder();
+		/// <summary>
+		/// Clone the <see cref="UUEncoder"/> with its current state.
+		/// </summary>
+		/// <remarks>
+		/// Creates a new <see cref="UUEncoder"/> with exactly the same state as the current encoder.
+		/// </remarks>
+		/// <returns>A new <see cref="UUEncoder"/> with identical state.</returns>
+		public IMimeEncoder Clone ()
+		{
+			var encoder = new UUEncoder ();
 
-            Array.Copy(uubuf, encoder.uubuf, uubuf.Length);
-            encoder.nsaved = nsaved;
-            encoder.saved = saved;
-            encoder.uulen = uulen;
+			Array.Copy (uubuf, encoder.uubuf, uubuf.Length);
+			encoder.nsaved = nsaved;
+			encoder.saved = saved;
+			encoder.uulen = uulen;
 
-            return encoder;
-        }
+			return encoder;
+		}
 
-        /// <summary>
-        ///     Gets the encoding.
-        /// </summary>
-        /// <value>The encoding.</value>
-        public ContentEncoding Encoding
-        {
-            get { return ContentEncoding.UUEncode; }
-        }
+		/// <summary>
+		/// Gets the encoding.
+		/// </summary>
+		/// <remarks>
+		/// Gets the encoding that the encoder supports.
+		/// </remarks>
+		/// <value>The encoding.</value>
+		public ContentEncoding Encoding
+		{
+			get { return ContentEncoding.UUEncode; }
+		}
 
-        /// <summary>
-        ///     Estimates the length of the output.
-        /// </summary>
-        /// <remarks>
-        ///     Estimates the number of bytes needed to encode the specified number of input bytes.
-        /// </remarks>
-        /// <returns>The estimated output length.</returns>
-        /// <param name='inputLength'>The input length.</param>
-        public int EstimateOutputLength(int inputLength)
-        {
-            return (((inputLength + 2)/MaxInputPerLine)*MaxOutputPerLine) + MaxOutputPerLine + 2;
-        }
+		/// <summary>
+		/// Estimates the length of the output.
+		/// </summary>
+		/// <remarks>
+		/// Estimates the number of bytes needed to encode the specified number of input bytes.
+		/// </remarks>
+		/// <returns>The estimated output length.</returns>
+		/// <param name="inputLength">The input length.</param>
+		public int EstimateOutputLength (int inputLength)
+		{
+			return (((inputLength + 2) / MaxInputPerLine) * MaxOutputPerLine) + MaxOutputPerLine + 2;
+		}
 
-        /// <summary>
-        ///     Encodes the specified input into the output buffer.
-        /// </summary>
-        /// <returns>The number of bytes written to the output buffer.</returns>
-        /// <param name='input'>The input buffer.</param>
-        /// <param name='startIndex'>The starting index of the input buffer.</param>
-        /// <param name='length'>The length of the input buffer.</param>
-        /// <param name='output'>The output buffer.</param>
-        /// <exception cref="System.ArgumentNullException">
-        ///     <para><paramref name="input" /> is <c>null</c>.</para>
-        ///     <para>-or-</para>
-        ///     <para><paramref name="output" /> is <c>null</c>.</para>
-        /// </exception>
-        /// <exception cref="System.ArgumentOutOfRangeException">
-        ///     <paramref name="startIndex" /> and <paramref name="length" /> do not specify
-        ///     a valid range in the <paramref name="input" /> byte array.
-        /// </exception>
-        /// <exception cref="System.ArgumentException">
-        ///     <para><paramref name="output" /> is not large enough to contain the encoded content.</para>
-        ///     <para>
-        ///         Use the <see cref="EstimateOutputLength" /> method to properly determine the
-        ///         necessary length of the <paramref name="output" /> byte array.
-        ///     </para>
-        /// </exception>
-        public int Encode(byte[] input, int startIndex, int length, byte[] output)
-        {
-            ValidateArguments(input, startIndex, length, output);
+		void ValidateArguments (byte[] input, int startIndex, int length, byte[] output)
+		{
+			if (input == null)
+				throw new ArgumentNullException ("input");
 
-            unsafe
-            {
-                fixed (byte* inptr = input, outptr = output, uuptr = uubuf)
-                {
-                    return Encode(inptr + startIndex, length, output, outptr, uuptr);
-                }
-            }
-        }
+			if (startIndex < 0 || startIndex > input.Length)
+				throw new ArgumentOutOfRangeException ("startIndex");
 
-        /// <summary>
-        ///     Encodes the specified input into the output buffer, flushing any internal buffer state as well.
-        /// </summary>
-        /// <returns>The number of bytes written to the output buffer.</returns>
-        /// <param name='input'>The input buffer.</param>
-        /// <param name='startIndex'>The starting index of the input buffer.</param>
-        /// <param name='length'>The length of the input buffer.</param>
-        /// <param name='output'>The output buffer.</param>
-        /// <exception cref="System.ArgumentNullException">
-        ///     <para><paramref name="input" /> is <c>null</c>.</para>
-        ///     <para>-or-</para>
-        ///     <para><paramref name="output" /> is <c>null</c>.</para>
-        /// </exception>
-        /// <exception cref="System.ArgumentOutOfRangeException">
-        ///     <paramref name="startIndex" /> and <paramref name="length" /> do not specify
-        ///     a valid range in the <paramref name="input" /> byte array.
-        /// </exception>
-        /// <exception cref="System.ArgumentException">
-        ///     <para><paramref name="output" /> is not large enough to contain the encoded content.</para>
-        ///     <para>
-        ///         Use the <see cref="EstimateOutputLength" /> method to properly determine the
-        ///         necessary length of the <paramref name="output" /> byte array.
-        ///     </para>
-        /// </exception>
-        public int Flush(byte[] input, int startIndex, int length, byte[] output)
-        {
-            ValidateArguments(input, startIndex, length, output);
+			if (length < 0 || length > (input.Length - startIndex))
+				throw new ArgumentOutOfRangeException ("length");
 
-            unsafe
-            {
-                fixed (byte* inptr = input, outptr = output, uuptr = uubuf)
-                {
-                    return Flush(inptr + startIndex, length, output, outptr, uuptr);
-                }
-            }
-        }
+			if (output == null)
+				throw new ArgumentNullException ("output");
 
-        /// <summary>
-        ///     Resets the encoder.
-        /// </summary>
-        /// <remarks>
-        ///     Resets the state of the encoder.
-        /// </remarks>
-        public void Reset()
-        {
-            nsaved = 0;
-            saved = 0;
-            uulen = 0;
-        }
+			if (output.Length < EstimateOutputLength (length))
+				throw new ArgumentException ("The output buffer is not large enough to contain the encoded input.", "output");
+		}
 
-        private void ValidateArguments(byte[] input, int startIndex, int length, byte[] output)
-        {
-            if (input == null)
-                throw new ArgumentNullException("input");
+		static byte Encode (int c)
+		{
+			return c != 0 ? (byte) (c + 0x20) : (byte) '`';
+		}
 
-            if (startIndex < 0 || startIndex > input.Length)
-                throw new ArgumentOutOfRangeException("startIndex");
+		unsafe int Encode (byte* input, int length, byte[] outbuf, byte* output, byte *uuptr)
+		{
+			if (length == 0)
+				return 0;
+			
+			byte* inend = input + length;
+			byte* outptr = output;
+			byte* inptr = input;
+			byte* bufptr;
+			byte b0, b1, b2;
+			
+			if ((length + uulen) < 45) {
+				// not enough input to write a full uuencoded line
+				bufptr = uuptr + ((uulen / 3) * 4);
+			} else {
+				bufptr = outptr + 1;
+				
+				if (uulen > 0) {
+					// copy the previous call's uubuf to output
+					Array.Copy (uubuf, 0, outbuf, (int) (bufptr - outptr), ((uulen / 3) * 4));
+					bufptr += ((uulen / 3) * 4);
+				}
+			}
+			
+			if (nsaved == 2) {
+				b0 = (byte) ((saved >> 8) & 0xFF);
+				b1 = (byte) (saved & 0xFF);
+				b2 = *inptr++;
+				nsaved = 0;
+				saved = 0;
 
-            if (length < 0 || startIndex + length > input.Length)
-                throw new ArgumentOutOfRangeException("length");
+				// convert 3 input bytes into 4 uuencoded bytes
+				*bufptr++ = Encode ((b0 >> 2) & 0x3F);
+				*bufptr++ = Encode (((b0 << 4) | ((b1 >> 4) & 0x0F)) & 0x3F);
+				*bufptr++ = Encode (((b1 << 2) | ((b2 >> 6) & 0x03)) & 0x3F);
+				*bufptr++ = Encode (b2 & 0x3F);
 
-            if (output == null)
-                throw new ArgumentNullException("output");
+				uulen += 3;
+			} else if (nsaved == 1) {
+				if ((inptr + 2) < inend) {
+					b0 = (byte) (saved & 0xFF);
+					b1 = *inptr++;
+					b2 = *inptr++;
+					nsaved = 0;
+					saved = 0;
 
-            if (output.Length < EstimateOutputLength(length))
-                throw new ArgumentException("The output buffer is not large enough to contain the encoded input.",
-                    "output");
-        }
+					// convert 3 input bytes into 4 uuencoded bytes
+					*bufptr++ = Encode ((b0 >> 2) & 0x3F);
+					*bufptr++ = Encode (((b0 << 4) | ((b1 >> 4) & 0x0F)) & 0x3F);
+					*bufptr++ = Encode (((b1 << 2) | ((b2 >> 6) & 0x03)) & 0x3F);
+					*bufptr++ = Encode (b2 & 0x3F);
 
-        private static byte Encode(int c)
-        {
-            return c != 0 ? (byte) (c + 0x20) : (byte) '`';
-        }
+					uulen += 3;
+				} else {
+					while (inptr < inend) {
+						saved = (saved << 8) | *inptr++;
+						nsaved++;
+					}
+				}
+			}
+			
+			while (inptr < inend) {
+				while (uulen < 45 && (inptr + 3) <= inend) {
+					b0 = *inptr++;
+					b1 = *inptr++;
+					b2 = *inptr++;
 
-        private unsafe int Encode(byte* input, int length, byte[] outbuf, byte* output, byte* uuptr)
-        {
-            if (length == 0)
-                return 0;
+					// convert 3 input bytes into 4 uuencoded bytes
+					*bufptr++ = Encode ((b0 >> 2) & 0x3F);
+					*bufptr++ = Encode (((b0 << 4) | ((b1 >> 4) & 0x0F)) & 0x3F);
+					*bufptr++ = Encode (((b1 << 2) | ((b2 >> 6) & 0x03)) & 0x3F);
+					*bufptr++ = Encode (b2 & 0x3F);
 
-            byte* inend = input + length;
-            byte* outptr = output;
-            byte* inptr = input;
-            byte* bufptr;
-            byte b0, b1, b2;
+					uulen += 3;
+				}
 
-            if ((length + uulen) < 45)
-            {
-                // not enough input to write a full uuencoded line
-                bufptr = uuptr + ((uulen/3)*4);
-            }
-            else
-            {
-                bufptr = outptr + 1;
+				if (uulen >= 45) {
+					// output the uu line length
+					*outptr = Encode (uulen);
+					outptr += ((uulen / 3) * 4) + 1;
+					*outptr++ = (byte) '\n';
+					uulen = 0;
 
-                if (uulen > 0)
-                {
-                    // copy the previous call's uubuf to output
-                    Array.Copy(uubuf, 0, outbuf, (int) (bufptr - outptr), ((uulen/3)*4));
-                    bufptr += ((uulen/3)*4);
-                }
-            }
+					if ((inptr + 45) <= inend) {
+						// we have enough input to output another full line
+						bufptr = outptr + 1;
+					} else {
+						bufptr = uuptr;
+					}
+				} else {
+					// not enough input to continue...
+					for (nsaved = 0, saved = 0; inptr < inend; nsaved++)
+						saved = (saved << 8) | *inptr++;
+				}
+			}
 
-            if (nsaved == 2)
-            {
-                b0 = (byte) ((saved >> 8) & 0xFF);
-                b1 = (byte) (saved & 0xFF);
-                b2 = *inptr++;
-                nsaved = 0;
-                saved = 0;
+			return (int) (outptr - output);
+		}
 
-                // convert 3 input bytes into 4 uuencoded bytes
-                *bufptr++ = Encode((b0 >> 2) & 0x3F);
-                *bufptr++ = Encode(((b0 << 4) | ((b1 >> 4) & 0x0F)) & 0x3F);
-                *bufptr++ = Encode(((b1 << 2) | ((b2 >> 6) & 0x03)) & 0x3F);
-                *bufptr++ = Encode(b2 & 0x3F);
+		/// <summary>
+		/// Encodes the specified input into the output buffer.
+		/// </summary>
+		/// <remarks>
+		/// <para>Encodes the specified input into the output buffer.</para>
+		/// <para>The output buffer should be large enough to hold all of the
+		/// encoded input. For estimating the size needed for the output buffer,
+		/// see <see cref="EstimateOutputLength"/>.</para>
+		/// </remarks>
+		/// <returns>The number of bytes written to the output buffer.</returns>
+		/// <param name="input">The input buffer.</param>
+		/// <param name="startIndex">The starting index of the input buffer.</param>
+		/// <param name="length">The length of the input buffer.</param>
+		/// <param name="output">The output buffer.</param>
+		/// <exception cref="System.ArgumentNullException">
+		/// <para><paramref name="input"/> is <c>null</c>.</para>
+		/// <para>-or-</para>
+		/// <para><paramref name="output"/> is <c>null</c>.</para>
+		/// </exception>
+		/// <exception cref="System.ArgumentOutOfRangeException">
+		/// <paramref name="startIndex"/> and <paramref name="length"/> do not specify
+		/// a valid range in the <paramref name="input"/> byte array.
+		/// </exception>
+		/// <exception cref="System.ArgumentException">
+		/// <para><paramref name="output"/> is not large enough to contain the encoded content.</para>
+		/// <para>Use the <see cref="EstimateOutputLength"/> method to properly determine the 
+		/// necessary length of the <paramref name="output"/> byte array.</para>
+		/// </exception>
+		public int Encode (byte[] input, int startIndex, int length, byte[] output)
+		{
+			ValidateArguments (input, startIndex, length, output);
 
-                uulen += 3;
-            }
-            else if (nsaved == 1)
-            {
-                if ((inptr + 2) < inend)
-                {
-                    b0 = (byte) (saved & 0xFF);
-                    b1 = *inptr++;
-                    b2 = *inptr++;
-                    nsaved = 0;
-                    saved = 0;
+			unsafe {
+				fixed (byte* inptr = input, outptr = output, uuptr = uubuf) {
+					return Encode (inptr + startIndex, length, output, outptr, uuptr);
+				}
+			}
+		}
 
-                    // convert 3 input bytes into 4 uuencoded bytes
-                    *bufptr++ = Encode((b0 >> 2) & 0x3F);
-                    *bufptr++ = Encode(((b0 << 4) | ((b1 >> 4) & 0x0F)) & 0x3F);
-                    *bufptr++ = Encode(((b1 << 2) | ((b2 >> 6) & 0x03)) & 0x3F);
-                    *bufptr++ = Encode(b2 & 0x3F);
+		unsafe int Flush (byte* input, int length, byte[] outbuf, byte* output, byte* uuptr)
+		{
+			byte* outptr = output;
 
-                    uulen += 3;
-                }
-                else
-                {
-                    while (inptr < inend)
-                    {
-                        saved = (saved << 8) | *inptr++;
-                        nsaved++;
-                    }
-                }
-            }
+			if (length > 0)
+				outptr += Encode (input, length, outbuf, output, uuptr);
 
-            while (inptr < inend)
-            {
-                while (uulen < 45 && (inptr + 3) <= inend)
-                {
-                    b0 = *inptr++;
-                    b1 = *inptr++;
-                    b2 = *inptr++;
+			byte* bufptr = uuptr + ((uulen / 3) * 4);
+			byte uufill = 0;
 
-                    // convert 3 input bytes into 4 uuencoded bytes
-                    *bufptr++ = Encode((b0 >> 2) & 0x3F);
-                    *bufptr++ = Encode(((b0 << 4) | ((b1 >> 4) & 0x0F)) & 0x3F);
-                    *bufptr++ = Encode(((b1 << 2) | ((b2 >> 6) & 0x03)) & 0x3F);
-                    *bufptr++ = Encode(b2 & 0x3F);
+			if (nsaved > 0) {
+				while (nsaved < 3) {
+					saved <<= 8;
+					uufill++;
+					nsaved++;
+				}
+				
+				if (nsaved == 3) {
+					// convert 3 input bytes into 4 uuencoded bytes
+					byte b0, b1, b2;
+					
+					b0 = (byte) ((saved >> 16) & 0xFF);
+					b1 = (byte) ((saved >> 8) & 0xFF);
+					b2 = (byte) (saved & 0xFF);
+					
+					*bufptr++ = Encode ((b0 >> 2) & 0x3F);
+					*bufptr++ = Encode (((b0 << 4) | ((b1 >> 4) & 0x0F)) & 0x3F);
+					*bufptr++ = Encode (((b1 << 2) | ((b2 >> 6) & 0x03)) & 0x3F);
+					*bufptr++ = Encode (b2 & 0x3F);
+					
+					uulen += 3;
+					nsaved = 0;
+					saved = 0;
+				}
+			}
+			
+			if (uulen > 0) {
+				int copylen = ((uulen / 3) * 4);
+				
+				*outptr++ = Encode ((uulen - uufill) & 0xFF);
+				Array.Copy (uubuf, 0, outbuf, (int) (outptr - output), copylen);
+				outptr += copylen;
 
-                    uulen += 3;
-                }
+				*outptr++ = (byte) '\n';
+				uulen = 0;
+			}
+			
+			*outptr++ = Encode (uulen & 0xff);
+			*outptr++ = (byte) '\n';
 
-                if (uulen >= 45)
-                {
-                    // output the uu line length
-                    *outptr = Encode(uulen);
-                    outptr += ((uulen/3)*4) + 1;
-                    *outptr++ = (byte) '\n';
-                    uulen = 0;
+			Reset ();
 
-                    if ((inptr + 45) <= inend)
-                    {
-                        // we have enough input to output another full line
-                        bufptr = outptr + 1;
-                    }
-                    else
-                    {
-                        bufptr = uuptr;
-                    }
-                }
-                else
-                {
-                    // not enough input to continue...
-                    for (nsaved = 0, saved = 0; inptr < inend; nsaved++)
-                        saved = (saved << 8) | *inptr++;
-                }
-            }
+			return (int) (outptr - output);
+		}
 
-            return (int) (outptr - output);
-        }
+		/// <summary>
+		/// Encodes the specified input into the output buffer, flushing any internal buffer state as well.
+		/// </summary>
+		/// <remarks>
+		/// <para>Encodes the specified input into the output buffer, flusing any internal state as well.</para>
+		/// <para>The output buffer should be large enough to hold all of the
+		/// encoded input. For estimating the size needed for the output buffer,
+		/// see <see cref="EstimateOutputLength"/>.</para>
+		/// </remarks>
+		/// <returns>The number of bytes written to the output buffer.</returns>
+		/// <param name="input">The input buffer.</param>
+		/// <param name="startIndex">The starting index of the input buffer.</param>
+		/// <param name="length">The length of the input buffer.</param>
+		/// <param name="output">The output buffer.</param>
+		/// <exception cref="System.ArgumentNullException">
+		/// <para><paramref name="input"/> is <c>null</c>.</para>
+		/// <para>-or-</para>
+		/// <para><paramref name="output"/> is <c>null</c>.</para>
+		/// </exception>
+		/// <exception cref="System.ArgumentOutOfRangeException">
+		/// <paramref name="startIndex"/> and <paramref name="length"/> do not specify
+		/// a valid range in the <paramref name="input"/> byte array.
+		/// </exception>
+		/// <exception cref="System.ArgumentException">
+		/// <para><paramref name="output"/> is not large enough to contain the encoded content.</para>
+		/// <para>Use the <see cref="EstimateOutputLength"/> method to properly determine the 
+		/// necessary length of the <paramref name="output"/> byte array.</para>
+		/// </exception>
+		public int Flush (byte[] input, int startIndex, int length, byte[] output)
+		{
+			ValidateArguments (input, startIndex, length, output);
 
-        private unsafe int Flush(byte* input, int length, byte[] outbuf, byte* output, byte* uuptr)
-        {
-            byte* outptr = output;
+			unsafe {
+				fixed (byte* inptr = input, outptr = output, uuptr = uubuf) {
+					return Flush (inptr + startIndex, length, output, outptr, uuptr);
+				}
+			}
+		}
 
-            if (length > 0)
-                outptr += Encode(input, length, outbuf, output, uuptr);
-
-            byte* bufptr = uuptr + ((uulen/3)*4);
-            byte uufill = 0;
-
-            if (nsaved > 0)
-            {
-                while (nsaved < 3)
-                {
-                    saved <<= 8;
-                    uufill++;
-                    nsaved++;
-                }
-
-                if (nsaved == 3)
-                {
-                    // convert 3 input bytes into 4 uuencoded bytes
-                    byte b0, b1, b2;
-
-                    b0 = (byte) ((saved >> 16) & 0xFF);
-                    b1 = (byte) ((saved >> 8) & 0xFF);
-                    b2 = (byte) (saved & 0xFF);
-
-                    *bufptr++ = Encode((b0 >> 2) & 0x3F);
-                    *bufptr++ = Encode(((b0 << 4) | ((b1 >> 4) & 0x0F)) & 0x3F);
-                    *bufptr++ = Encode(((b1 << 2) | ((b2 >> 6) & 0x03)) & 0x3F);
-                    *bufptr++ = Encode(b2 & 0x3F);
-
-                    uulen += 3;
-                    nsaved = 0;
-                    saved = 0;
-                }
-            }
-
-            if (uulen > 0)
-            {
-                int copylen = ((uulen/3)*4);
-
-                *outptr++ = Encode((uulen - uufill) & 0xFF);
-                Array.Copy(uubuf, 0, outbuf, (int) (outptr - output), copylen);
-                outptr += copylen;
-
-                *outptr++ = (byte) '\n';
-                uulen = 0;
-            }
-
-            *outptr++ = Encode(uulen & 0xff);
-            *outptr++ = (byte) '\n';
-
-            Reset();
-
-            return (int) (outptr - output);
-        }
-    }
+		/// <summary>
+		/// Resets the encoder.
+		/// </summary>
+		/// <remarks>
+		/// Resets the state of the encoder.
+		/// </remarks>
+		public void Reset ()
+		{
+			nsaved = 0;
+			saved = 0;
+			uulen = 0;
+		}
+	}
 }

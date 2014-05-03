@@ -26,217 +26,232 @@
 
 using System;
 
-namespace MimeKit.IO.Filters
-{
-    /// <summary>
-    ///     A filter that can be used to determine the most efficient Content-Transfer-Encoding.
-    /// </summary>
-    /// <remarks>
-    ///     Keeps track of the content that gets passed through the filter in order to
-    ///     determine the most efficient <see cref="ContentEncoding" /> to use.
-    /// </remarks>
-    public class BestEncodingFilter : IMimeFilter
-    {
-        private readonly byte[] marker = new byte[6];
-        private int count0, count8;
-        private bool hasMarker;
-        private int linelen;
-        private int markerLength;
-        private int maxline;
-        private bool midline;
-        private int total;
+namespace MimeKit.IO.Filters {
+	/// <summary>
+	/// A filter that can be used to determine the most efficient Content-Transfer-Encoding.
+	/// </summary>
+	/// <remarks>
+	/// Keeps track of the content that gets passed through the filter in order to
+	/// determine the most efficient <see cref="ContentEncoding"/> to use.
+	/// </remarks>
+	public class BestEncodingFilter : IMimeFilter
+	{
+		readonly byte[] marker = new byte[6];
+		bool midline, hasMarker;
+		int maxline, linelen;
+		int count0, count8;
+		int markerLength;
+		int total;
 
-        /// <summary>
-        ///     Gets the best encoding given the specified constraints.
-        /// </summary>
-        /// <returns>The best encoding.</returns>
-        /// <param name="constraint">The encoding constraint.</param>
-        public ContentEncoding GetBestEncoding(EncodingConstraint constraint)
-        {
-            switch (constraint)
-            {
-                case EncodingConstraint.SevenBit:
-                    if (count0 > 0)
-                        return ContentEncoding.Base64;
+		/// <summary>
+		/// Initializes a new instance of the <see cref="BestEncodingFilter"/> class.
+		/// </summary>
+		/// <remarks>
+		/// Creates a new <see cref="BestEncodingFilter"/>.
+		/// </remarks>
+		public BestEncodingFilter ()
+		{
+		}
 
-                    if (count8 > 0)
-                    {
-                        if (count8 >= (int) (total*(17.0/100.0)))
-                            return ContentEncoding.Base64;
+		/// <summary>
+		/// Gets the best encoding given the specified constraints.
+		/// </summary>
+		/// <remarks>
+		/// Gets the best encoding given the specified constraints.
+		/// </remarks>
+		/// <returns>The best encoding.</returns>
+		/// <param name="constraint">The encoding constraint.</param>
+		public ContentEncoding GetBestEncoding (EncodingConstraint constraint)
+		{
+			switch (constraint) {
+			case EncodingConstraint.SevenBit:
+				if (count0 > 0)
+					return ContentEncoding.Base64;
 
-                        return ContentEncoding.QuotedPrintable;
-                    }
+				if (count8 > 0) {
+					if (count8 >= (int) (total * (17.0 / 100.0)))
+						return ContentEncoding.Base64;
 
-                    if (maxline > 998)
-                        return ContentEncoding.QuotedPrintable;
+					return ContentEncoding.QuotedPrintable;
+				}
 
-                    break;
-                case EncodingConstraint.EightBit:
-                    if (count0 > 0)
-                        return ContentEncoding.Base64;
+				if (maxline > 998)
+					return ContentEncoding.QuotedPrintable;
 
-                    if (maxline > 998)
-                        return ContentEncoding.QuotedPrintable;
+				break;
+			case EncodingConstraint.EightBit:
+				if (count0 > 0)
+					return ContentEncoding.Base64;
 
-                    if (count8 > 0)
-                        return ContentEncoding.EightBit;
+				if (maxline > 998)
+					return ContentEncoding.QuotedPrintable;
 
-                    break;
-                case EncodingConstraint.None:
-                    if (count0 > 0)
-                        return ContentEncoding.Binary;
+				if (count8 > 0)
+					return ContentEncoding.EightBit;
 
-                    if (count8 > 0)
-                        return ContentEncoding.EightBit;
+				break;
+			case EncodingConstraint.None:
+				if (count0 > 0)
+					return ContentEncoding.Binary;
 
-                    break;
-            }
+				if (count8 > 0)
+					return ContentEncoding.EightBit;
 
-            if (hasMarker)
-                return ContentEncoding.QuotedPrintable;
+				break;
+			}
 
-            return ContentEncoding.SevenBit;
-        }
+			if (hasMarker)
+				return ContentEncoding.QuotedPrintable;
 
-        #region IMimeFilter implementation
+			return ContentEncoding.SevenBit;
+		}
 
-        /// <summary>
-        ///     Filters the specified input.
-        /// </summary>
-        /// <param name='input'>The input buffer.</param>
-        /// <param name='startIndex'>The starting index of the input buffer.</param>
-        /// <param name='length'>The number of bytes of the input to filter.</param>
-        /// <param name='outputIndex'>The starting index of the output in the returned buffer.</param>
-        /// <param name='outputLength'>The length of the output buffer.</param>
-        /// <exception cref="System.ArgumentNullException">
-        ///     <paramref name="input" /> is <c>null</c>.
-        /// </exception>
-        /// <exception cref="System.ArgumentOutOfRangeException">
-        ///     <paramref name="startIndex" /> and <paramref name="length" /> do not specify
-        ///     a valid range in the <paramref name="input" /> byte array.
-        /// </exception>
-        public byte[] Filter(byte[] input, int startIndex, int length, out int outputIndex, out int outputLength)
-        {
-            ValidateArguments(input, startIndex, length);
+		#region IMimeFilter implementation
 
-            unsafe
-            {
-                fixed (byte* inptr = input)
-                {
-                    Scan(inptr + startIndex, inptr + startIndex + length);
-                }
-            }
+		static unsafe bool IsMboxMarker (byte[] marker)
+		{
+			const uint FromMask = 0xFFFFFFFF;
+			const uint From     = 0x6D6F7246;
 
-            maxline = Math.Max(maxline, linelen);
-            total += length;
+			fixed (byte* buf = marker) {
+				uint* word = (uint*) buf;
 
-            outputIndex = startIndex;
-            outputLength = length;
+				if ((*word & FromMask) != From)
+					return false;
 
-            return input;
-        }
+				return *(buf + 4) == (byte) ' ';
+			}
+		}
 
-        /// <summary>
-        ///     Filters the specified input, flushing all internally buffered data to the output.
-        /// </summary>
-        /// <param name='input'>The input buffer.</param>
-        /// <param name='startIndex'>The starting index of the input buffer.</param>
-        /// <param name='length'>The number of bytes of the input to filter.</param>
-        /// <param name='outputIndex'>The starting index of the output in the returned buffer.</param>
-        /// <param name='outputLength'>The length of the output buffer.</param>
-        /// <exception cref="System.ArgumentNullException">
-        ///     <paramref name="input" /> is <c>null</c>.
-        /// </exception>
-        /// <exception cref="System.ArgumentOutOfRangeException">
-        ///     <paramref name="startIndex" /> and <paramref name="length" /> do not specify
-        ///     a valid range in the <paramref name="input" /> byte array.
-        /// </exception>
-        public byte[] Flush(byte[] input, int startIndex, int length, out int outputIndex, out int outputLength)
-        {
-            return Filter(input, startIndex, length, out outputIndex, out outputLength);
-        }
+		unsafe void Scan (byte* inptr, byte* inend)
+		{
+			while (inptr < inend) {
+				if (midline) {
+					byte c = 0;
 
-        /// <summary>
-        ///     Resets the filter.
-        /// </summary>
-        public void Reset()
-        {
-            hasMarker = false;
-            markerLength = 0;
-            midline = false;
-            linelen = 0;
-            maxline = 0;
-            count0 = 0;
-            count8 = 0;
-            total = 0;
-        }
+					while (inptr < inend && (c = *inptr++) != (byte) '\n') {
+						if (c == 0)
+							count0++;
+						else if ((c & 0x80) != 0)
+							count8++;
 
-        private static unsafe bool IsMboxMarker(byte[] marker)
-        {
-            const uint FromMask = 0xFFFFFFFF;
-            const uint From = 0x6D6F7246;
+						if (!hasMarker && markerLength > 0 && markerLength < 5)
+							marker[markerLength++] = c;
 
-            fixed (byte* buf = marker)
-            {
-                var word = (uint*) buf;
+						linelen++;
+					}
 
-                if ((*word & FromMask) != From)
-                    return false;
+					if (c == (byte) '\n') {
+						maxline = Math.Max (maxline, linelen);
+						midline = false;
+						linelen = 0;
+					}
+				}
 
-                return *(buf + 4) == (byte) ' ';
-            }
-        }
+				// check our from-save buffer for "From "
+				if (!hasMarker && markerLength == 5 && IsMboxMarker (marker))
+					hasMarker = true;
 
-        private unsafe void Scan(byte* inptr, byte* inend)
-        {
-            while (inptr < inend)
-            {
-                if (midline)
-                {
-                    byte c = 0;
+				markerLength = 0;
+				midline = true;
+			}
+		}
 
-                    while (inptr < inend && (c = *inptr++) != (byte) '\n')
-                    {
-                        if (c == 0)
-                            count0++;
-                        else if ((c & 0x80) != 0)
-                            count8++;
+		static void ValidateArguments (byte[] input, int startIndex, int length)
+		{
+			if (input == null)
+				throw new ArgumentNullException ("input");
 
-                        if (!hasMarker && markerLength > 0 && markerLength < 5)
-                            marker[markerLength++] = c;
+			if (startIndex < 0 || startIndex > input.Length)
+				throw new ArgumentOutOfRangeException ("startIndex");
 
-                        linelen++;
-                    }
+			if (length < 0 || length > (input.Length - startIndex))
+				throw new ArgumentOutOfRangeException ("length");
+		}
 
-                    if (c == (byte) '\n')
-                    {
-                        maxline = Math.Max(maxline, linelen);
-                        midline = false;
-                        linelen = 0;
-                    }
-                }
+		/// <summary>
+		/// Filters the specified input.
+		/// </summary>
+		/// <remarks>
+		/// Filters the specified input buffer starting at the given index,
+		/// spanning across the specified number of bytes.
+		/// </remarks>
+		/// <returns>The filtered output.</returns>
+		/// <param name="input">The input buffer.</param>
+		/// <param name="startIndex">The starting index of the input buffer.</param>
+		/// <param name="length">The number of bytes of the input to filter.</param>
+		/// <param name="outputIndex">The starting index of the output in the returned buffer.</param>
+		/// <param name="outputLength">The length of the output buffer.</param>
+		/// <exception cref="System.ArgumentNullException">
+		/// <paramref name="input"/> is <c>null</c>.
+		/// </exception>
+		/// <exception cref="System.ArgumentOutOfRangeException">
+		/// <paramref name="startIndex"/> and <paramref name="length"/> do not specify
+		/// a valid range in the <paramref name="input"/> byte array.
+		/// </exception>
+		public byte[] Filter (byte[] input, int startIndex, int length, out int outputIndex, out int outputLength)
+		{
+			ValidateArguments (input, startIndex, length);
 
-                // check our from-save buffer for "From "
-                if (!hasMarker && markerLength == 5 && IsMboxMarker(marker))
-                    hasMarker = true;
+			unsafe {
+				fixed (byte* inptr = input) {
+					Scan (inptr + startIndex, inptr + startIndex + length);
+				}
+			}
 
-                markerLength = 0;
-                midline = true;
-            }
-        }
+			maxline = Math.Max (maxline, linelen);
+			total += length;
 
-        private static void ValidateArguments(byte[] input, int startIndex, int length)
-        {
-            if (input == null)
-                throw new ArgumentNullException("input");
+			outputIndex = startIndex;
+			outputLength = length;
 
-            if (startIndex < 0 || startIndex > input.Length)
-                throw new ArgumentOutOfRangeException("startIndex");
+			return input;
+		}
 
-            if (length < 0 || startIndex + length > input.Length)
-                throw new ArgumentOutOfRangeException("length");
-        }
+		/// <summary>
+		/// Filters the specified input, flushing all internally buffered data to the output.
+		/// </summary>
+		/// <remarks>
+		/// Filters the specified input buffer starting at the given index,
+		/// spanning across the specified number of bytes.
+		/// </remarks>
+		/// <returns>The filtered output.</returns>
+		/// <param name="input">The input buffer.</param>
+		/// <param name="startIndex">The starting index of the input buffer.</param>
+		/// <param name="length">The number of bytes of the input to filter.</param>
+		/// <param name="outputIndex">The starting index of the output in the returned buffer.</param>
+		/// <param name="outputLength">The length of the output buffer.</param>
+		/// <exception cref="System.ArgumentNullException">
+		/// <paramref name="input"/> is <c>null</c>.
+		/// </exception>
+		/// <exception cref="System.ArgumentOutOfRangeException">
+		/// <paramref name="startIndex"/> and <paramref name="length"/> do not specify
+		/// a valid range in the <paramref name="input"/> byte array.
+		/// </exception>
+		public byte[] Flush (byte[] input, int startIndex, int length, out int outputIndex, out int outputLength)
+		{
+			return Filter (input, startIndex, length, out outputIndex, out outputLength);
+		}
 
-        #endregion
-    }
+		/// <summary>
+		/// Resets the filter.
+		/// </summary>
+		/// <remarks>
+		/// Resets the filter.
+		/// </remarks>
+		public void Reset ()
+		{
+			hasMarker = false;
+			markerLength = 0;
+			midline = false;
+			linelen = 0;
+			maxline = 0;
+			count0 = 0;
+			count8 = 0;
+			total = 0;
+		}
+
+		#endregion
+	}
 }
+

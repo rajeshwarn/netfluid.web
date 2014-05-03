@@ -3,7 +3,7 @@
 //
 // Author: Jeffrey Stedfast <jeff@xamarin.com>
 //
-// Copyright (c) 2012 Jeffrey Stedfast
+// Copyright (c) 2013-2014 Xamarin Inc.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -26,109 +26,115 @@
 
 using MimeKit.Utils;
 
-namespace MimeKit.IO.Filters
-{
-    /// <summary>
-    ///     A filter for stripping trailing whitespace from lines in a textual stream.
-    /// </summary>
-    public class TrailingWhitespaceFilter : MimeFilterBase
-    {
-        private readonly PackedByteArray lwsp = new PackedByteArray();
+namespace MimeKit.IO.Filters {
+	/// <summary>
+	/// A filter for stripping trailing whitespace from lines in a textual stream.
+	/// </summary>
+	/// <remarks>
+	/// Strips trailing whitespace from lines in a textual stream.
+	/// </remarks>
+	public class TrailingWhitespaceFilter : MimeFilterBase
+	{
+		readonly PackedByteArray lwsp = new PackedByteArray ();
 
-        private unsafe int Filter(byte* inbuf, int length, byte* outbuf)
-        {
-            byte* inend = inbuf + length;
-            byte* outptr = outbuf;
-            byte* inptr = inbuf;
-            int count = 0;
+		/// <summary>
+		/// Initializes a new instance of the <see cref="MimeKit.IO.Filters.TrailingWhitespaceFilter"/> class.
+		/// </summary>
+		/// <remarks>
+		/// Creates a new <see cref="TrailingWhitespaceFilter"/>.
+		/// </remarks>
+		public TrailingWhitespaceFilter ()
+		{
+		}
 
-            while (inptr < inend)
-            {
-                if ((*inptr).IsBlank())
-                {
-                    lwsp.Add(*inptr);
-                }
-                else if (*inptr == (byte) '\r')
-                {
-                    *outptr++ = *inptr;
-                    lwsp.Clear();
-                    count++;
-                }
-                else if (*inptr == (byte) '\n')
-                {
-                    *outptr++ = *inptr;
-                    lwsp.Clear();
-                    count++;
-                }
-                else
-                {
-                    if (lwsp.Count > 0)
-                    {
-                        lwsp.CopyTo(output, count);
-                        outptr += lwsp.Count;
-                        count += lwsp.Count;
-                        lwsp.Clear();
-                    }
+		unsafe int Filter (byte* inbuf, int length, byte* outbuf)
+		{
+			byte* inend = inbuf + length;
+			byte* outptr = outbuf;
+			byte* inptr = inbuf;
+			int count = 0;
 
-                    *outptr++ = *inptr;
-                    count++;
-                }
+			while (inptr < inend) {
+				if ((*inptr).IsBlank ()) {
+					lwsp.Add (*inptr);
+				} else if (*inptr == (byte) '\r') {
+					*outptr++ = *inptr;
+					lwsp.Clear ();
+					count++;
+				} else if (*inptr == (byte) '\n') {
+					*outptr++ = *inptr;
+					lwsp.Clear ();
+					count++;
+				} else {
+					if (lwsp.Count > 0) {
+						lwsp.CopyTo (OutputBuffer, count);
+						outptr += lwsp.Count;
+						count += lwsp.Count;
+						lwsp.Clear ();
+					}
 
-                inptr++;
-            }
+					*outptr++ = *inptr;
+					count++;
+				}
 
-            return count;
-        }
+				inptr++;
+			}
 
-        /// <summary>
-        ///     Filter the specified input.
-        /// </summary>
-        /// <returns>The filtered output.</returns>
-        /// <param name="input">The input buffer.</param>
-        /// <param name="startIndex">The starting index of the input buffer.</param>
-        /// <param name="length">The length of the input buffer, starting at <paramref name="startIndex" />.</param>
-        /// <param name="outputIndex">The output index.</param>
-        /// <param name="outputLength">The output length.</param>
-        /// <param name="flush">If set to <c>true</c>, all internally buffered data should be flushed to the output buffer.</param>
-        protected override byte[] Filter(byte[] input, int startIndex, int length, out int outputIndex,
-            out int outputLength, bool flush)
-        {
-            if (length == 0)
-            {
-                if (flush)
-                    lwsp.Clear();
+			return count;
+		}
 
-                outputIndex = startIndex;
-                outputLength = length;
+		/// <summary>
+		/// Filter the specified input.
+		/// </summary>
+		/// <remarks>
+		/// Filters the specified input buffer starting at the given index,
+		/// spanning across the specified number of bytes.
+		/// </remarks>
+		/// <returns>The filtered output.</returns>
+		/// <param name="input">The input buffer.</param>
+		/// <param name="startIndex">The starting index of the input buffer.</param>
+		/// <param name="length">The length of the input buffer, starting at <paramref name="startIndex"/>.</param>
+		/// <param name="outputIndex">The output index.</param>
+		/// <param name="outputLength">The output length.</param>
+		/// <param name="flush">If set to <c>true</c>, all internally buffered data should be flushed to the output buffer.</param>
+		protected override byte[] Filter (byte[] input, int startIndex, int length, out int outputIndex, out int outputLength, bool flush)
+		{
+			if (length == 0) {
+				if (flush)
+					lwsp.Clear ();
 
-                return input;
-            }
+				outputIndex = startIndex;
+				outputLength = length;
 
-            EnsureOutputSize(length + lwsp.Count, false);
+				return input;
+			}
 
-            unsafe
-            {
-                fixed (byte* inptr = input, outptr = output)
-                {
-                    outputLength = Filter(inptr + startIndex, length, outptr);
-                }
-            }
+			EnsureOutputSize (length + lwsp.Count, false);
 
-            if (flush)
-                lwsp.Clear();
+			unsafe {
+				fixed (byte* inptr = input, outptr = OutputBuffer) {
+					outputLength = Filter (inptr + startIndex, length, outptr);
+				}
+			}
 
-            outputIndex = 0;
+			if (flush)
+				lwsp.Clear ();
 
-            return output;
-        }
+			outputIndex = 0;
 
-        /// <summary>
-        ///     Resets the filter.
-        /// </summary>
-        public override void Reset()
-        {
-            lwsp.Clear();
-            base.Reset();
-        }
-    }
+			return OutputBuffer;
+		}
+
+		/// <summary>
+		/// Resets the filter.
+		/// </summary>
+		/// <remarks>
+		/// Resets the filter.
+		/// </remarks>
+		public override void Reset ()
+		{
+			lwsp.Clear ();
+			base.Reset ();
+		}
+	}
 }

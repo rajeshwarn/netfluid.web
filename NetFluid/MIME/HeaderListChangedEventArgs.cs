@@ -3,7 +3,7 @@
 //
 // Author: Jeffrey Stedfast <jeff@xamarin.com>
 //
-// Copyright (c) 2012 Jeffrey Stedfast
+// Copyright (c) 2013-2014 Xamarin Inc.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -26,47 +26,49 @@
 
 using System;
 
-namespace MimeKit
-{
-    /// <summary>
-    ///     Header list changed action.
-    /// </summary>
+namespace MimeKit {
+	/// <summary>
+	/// Header list changed action.
+	/// </summary>
     /// <remarks>
-    ///     Specifies the way that a <see cref="HeaderList" /> was changed.
+    /// Specifies the way that a <see cref="HeaderList"/> was changed.
     /// </remarks>
-    public enum HeaderListChangedAction
-    {
-        /// <summary>
-        ///     A header was added.
-        /// </summary>
-        Added,
+	public enum HeaderListChangedAction {
+		/// <summary>
+		/// A header was added.
+		/// </summary>
+		Added,
 
-        /// <summary>
-        ///     A header was changed.
-        /// </summary>
-        Changed,
+		/// <summary>
+		/// A header was changed.
+		/// </summary>
+		Changed,
 
-        /// <summary>
-        ///     A header was removed.
-        /// </summary>
-        Removed,
+		/// <summary>
+		/// A header was removed.
+		/// </summary>
+		Removed,
 
-        /// <summary>
-        ///     The header list was cleared.
-        /// </summary>
-        Cleared
-    }
+		/// <summary>
+		/// The header list was cleared.
+		/// </summary>
+		Cleared
+	}
 
-    internal class HeaderListChangedEventArgs : EventArgs
-    {
-        internal HeaderListChangedEventArgs(Header header, HeaderListChangedAction action)
-        {
-            Header = header;
-            Action = action;
-        }
+	class HeaderListChangedEventArgs : EventArgs
+	{
+		internal HeaderListChangedEventArgs (Header header, HeaderListChangedAction action)
+		{
+			Header = header;
+			Action = action;
+		}
 
-        public HeaderListChangedAction Action { get; private set; }
+		public HeaderListChangedAction Action {
+			get; private set;
+		}
 
-        public Header Header { get; private set; }
-    }
+		public Header Header {
+			get; private set;
+		}
+	}
 }
