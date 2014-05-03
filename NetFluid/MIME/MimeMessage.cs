@@ -1321,9 +1321,7 @@ namespace MimeKit {
 		void HeadersChanged (object o, HeaderListChangedEventArgs e)
 		{
 			InternetAddressList list;
-			InternetAddress address;
-			byte[] rawValue;
-			int index = 0;
+		    int index = 0;
 
 			switch (e.Action) {
 			case HeaderListChangedAction.Added:
@@ -1332,9 +1330,10 @@ namespace MimeKit {
 					break;
 				}
 
-				rawValue = e.Header.RawValue;
+				byte[] rawValue = e.Header.RawValue;
 
-				switch (e.Header.Id) {
+			        InternetAddress address;
+			        switch (e.Header.Id) {
 				case HeaderId.MimeVersion:
 					MimeUtils.TryParseVersion (rawValue, 0, rawValue.Length, out version);
 					break;
@@ -1604,9 +1603,9 @@ namespace MimeKit {
 				throw new ArgumentNullException ("message");
 
 			var headers = new List<Header> ();
-			foreach (var field in message.Headers.AllKeys) {
-				foreach (var value in message.Headers.GetValues (field))
-					headers.Add (new Header (field, value));
+			foreach (var field in message.Headers.AllKeys)
+            {
+			    headers.AddRange(message.Headers.GetValues(field).Select(value => new Header(field, value)));
 			}
 
 			var msg = new MimeMessage (ParserOptions.Default, headers);
