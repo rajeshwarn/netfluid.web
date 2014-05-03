@@ -53,13 +53,13 @@ namespace NetFluid
 
                     do
                     {
-                        string s = ("\r\n" + DateTime.Now + "\t" + lvl.ToString() + "\t" + msg + "\r\n");
+                        string s = ("\r\n" + DateTime.Now + "\t" + lvl + "\t" + msg + "\r\n");
                         if (Engine.DevMode)
                             Console.WriteLine(s);
 
                         s = ex.ToString().Split('\r', '\n').Aggregate(s,
-                                                                      (current, item) =>
-                                                                      current + ("\t\t\t\t" + item + "\r\n"));
+                            (current, item) =>
+                                current + ("\t\t\t\t" + item + "\r\n"));
 
                         File.AppendAllText(LogPath, s);
                         ex = ex.InnerException;
@@ -78,7 +78,7 @@ namespace NetFluid
             {
                 try
                 {
-                    string s = DateTime.Now + "\t" + lvl.ToString() + "\t" + msg + "\r\n";
+                    string s = DateTime.Now + "\t" + lvl + "\t" + msg + "\r\n";
                     if (Engine.DevMode)
                     {
                         Console.Write(s);

@@ -27,13 +27,13 @@ using System.Text;
 namespace NetFluid
 {
     /// <summary>
-    ///  Define methods for http authetications
+    ///     Define methods for http authetications
     /// </summary>
     public class Authentication
     {
         /// <summary>
-        /// HTTP Basic authentication.
-        /// Return false if the user need to be authenticated, true otherwise
+        ///     HTTP Basic authentication.
+        ///     Return false if the user need to be authenticated, true otherwise
         /// </summary>
         /// <param name="cnt">Current context</param>
         /// <param name="realm">Welcome message for the user</param>
@@ -71,8 +71,8 @@ namespace NetFluid
         }
 
         /// <summary>
-        /// HTTP Digest authentication.
-        /// Return false if the user need to be authenticated, true otherwise
+        ///     HTTP Digest authentication.
+        ///     Return false if the user need to be authenticated, true otherwise
         /// </summary>
         /// <param name="cnt">Current context</param>
         /// <param name="realm">Welcome message for the user</param>
@@ -89,9 +89,9 @@ namespace NetFluid
             {
                 cnt.Response.StatusCode = StatusCode.AuthorizationRequired;
                 cnt.Response.Headers.Append("WWW-Authenticate",
-                                            string.Format(
-                                                "Digest realm=\"{0}\", nonce=\"{1}\", opaque=\"{2}\", stale=false, algorithm=MD5, qop=auth",
-                                                realm, Guid.NewGuid().ToString("N"), Guid.NewGuid().ToString("N")));
+                    string.Format(
+                        "Digest realm=\"{0}\", nonce=\"{1}\", opaque=\"{2}\", stale=false, algorithm=MD5, qop=auth",
+                        realm, Guid.NewGuid().ToString("N"), Guid.NewGuid().ToString("N")));
                 cnt.SendHeaders();
                 return false;
             }

@@ -4,13 +4,11 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Reflection;
-using System.Text;
 
 namespace NetFluid
 {
     public sealed class WebHeader : IConvertible, IEnumerable<string>
     {
-        public string Name { get; private set; }
         private string[] values;
 
         #region CTOR
@@ -24,7 +22,7 @@ namespace NetFluid
         public WebHeader(string name, string str)
         {
             Name = name;
-            values = new[] { str };
+            values = new[] {str};
         }
 
         public WebHeader(string name, IEnumerable<string> str)
@@ -34,6 +32,8 @@ namespace NetFluid
         }
 
         #endregion
+
+        public string Name { get; private set; }
 
         public bool IsMultiple
         {
@@ -61,20 +61,6 @@ namespace NetFluid
             return values;
         }
 
-        #region IEnumerable<string> Members
-
-        IEnumerator<string> IEnumerable<string>.GetEnumerator()
-        {
-            return ((IEnumerable<string>)values).GetEnumerator();
-        }
-
-        IEnumerator IEnumerable.GetEnumerator()
-        {
-            return values.GetEnumerator();
-        }
-
-        #endregion
-
         internal void Add(WebHeader q)
         {
             values = values.Concat(q.values).ToArray();
@@ -82,7 +68,7 @@ namespace NetFluid
 
         internal void Add(string s)
         {
-            values = values.Concat(new[] { s }).ToArray();
+            values = values.Concat(new[] {s}).ToArray();
         }
 
         public override string ToString()
@@ -113,39 +99,39 @@ namespace NetFluid
 
         internal object Parse(ParameterInfo x)
         {
-            if (x.ParameterType.IsArray || x.GetCustomAttributes(typeof(ParamArrayAttribute), false).Length > 0)
+            if (x.ParameterType.IsArray || x.GetCustomAttributes(typeof (ParamArrayAttribute), false).Length > 0)
             {
                 #region ARRAY
 
                 Type elemType = x.ParameterType.GetElementType();
-                if (elemType == typeof(string))
+                if (elemType == typeof (string))
                     return values;
-                if (elemType == typeof(byte))
+                if (elemType == typeof (byte))
                     return (values.Select(byte.Parse)).ToArray();
-                if (elemType == typeof(char))
+                if (elemType == typeof (char))
                     return (values.Select(char.Parse)).ToArray();
-                if (elemType == typeof(decimal))
+                if (elemType == typeof (decimal))
                     return (values.Select(decimal.Parse)).ToArray();
-                if (elemType == typeof(Int16))
+                if (elemType == typeof (Int16))
                     return (values.Select(Int16.Parse)).ToArray();
-                if (elemType == typeof(UInt16))
+                if (elemType == typeof (UInt16))
                     return (values.Select(UInt16.Parse)).ToArray();
-                if (elemType == typeof(Int32))
+                if (elemType == typeof (Int32))
                     return (values.Select(Int32.Parse)).ToArray();
-                if (elemType == typeof(UInt32))
+                if (elemType == typeof (UInt32))
                     return (values.Select(UInt32.Parse)).ToArray();
-                if (elemType == typeof(Int64))
+                if (elemType == typeof (Int64))
                     return (values.Select(Int64.Parse)).ToArray();
-                if (elemType == typeof(UInt64))
+                if (elemType == typeof (UInt64))
                     return (values.Select(UInt64.Parse)).ToArray();
-                if (elemType == typeof(float))
+                if (elemType == typeof (float))
                     return (values.Select(float.Parse)).ToArray();
-                if (elemType == typeof(double))
+                if (elemType == typeof (double))
                     return (values.Select(double.Parse)).ToArray();
-                if (elemType == typeof(DateTime))
+                if (elemType == typeof (DateTime))
                     return (values.Select(DateTime.Parse)).ToArray();
 
-                if (elemType == typeof(bool))
+                if (elemType == typeof (bool))
                 {
                     return values.Select(y =>
                     {
@@ -157,57 +143,59 @@ namespace NetFluid
                 if (elemType.IsEnum)
                     return values.Select(y => Enum.Parse(elemType, y)).ToArray();
 
-                var parsemethod = elemType.GetMethod("Parse", BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic);
+                MethodInfo parsemethod = elemType.GetMethod("Parse",
+                    BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic);
                 if (parsemethod != null)
                 {
-                    var r = Array.CreateInstance(elemType, values.Length);
+                    Array r = Array.CreateInstance(elemType, values.Length);
 
                     for (int i = 0; i < r.Length; i++)
                     {
-                        var o = parsemethod.Invoke(null, new[] { values[i] });
+                        object o = parsemethod.Invoke(null, new[] {values[i]});
                         r.SetValue(o, i);
                     }
 
                     return r;
                 }
+
                 #endregion
             }
 
             #region VALORI
 
-            var myType = x.ParameterType;
+            Type myType = x.ParameterType;
 
             if (values.Length == 0 || (values.Length == 1 && string.IsNullOrEmpty(values[0])))
                 return myType.IsValueType ? Activator.CreateInstance(myType) : null;
 
-            if (myType == typeof(string))
+            if (myType == typeof (string))
                 return values[0];
-            if (myType == typeof(byte))
+            if (myType == typeof (byte))
                 return byte.Parse(values[0]);
-            if (myType == typeof(char))
+            if (myType == typeof (char))
                 return char.Parse(values[0]);
-            if (myType == typeof(decimal))
+            if (myType == typeof (decimal))
                 return decimal.Parse(values[0]);
-            if (myType == typeof(Int16))
+            if (myType == typeof (Int16))
                 return Int16.Parse(values[0]);
-            if (myType == typeof(UInt16))
+            if (myType == typeof (UInt16))
                 return UInt16.Parse(values[0]);
-            if (myType == typeof(Int32))
+            if (myType == typeof (Int32))
                 return Int32.Parse(values[0]);
-            if (myType == typeof(UInt32))
+            if (myType == typeof (UInt32))
                 return UInt32.Parse(values[0]);
-            if (myType == typeof(Int64))
+            if (myType == typeof (Int64))
                 return Int64.Parse(values[0]);
-            if (myType == typeof(UInt64))
+            if (myType == typeof (UInt64))
                 return UInt64.Parse(values[0]);
-            if (myType == typeof(float))
+            if (myType == typeof (float))
                 return float.Parse(values[0]);
-            if (myType == typeof(double))
+            if (myType == typeof (double))
                 return double.Parse(values[0]);
-            if (myType == typeof(DateTime))
+            if (myType == typeof (DateTime))
                 return DateTime.Parse(values[0]);
 
-            if (myType == typeof(bool))
+            if (myType == typeof (bool))
             {
                 string t = values[0].ToLower(CultureInfo.InvariantCulture);
                 return t == "true" || t == "on" || t == "yes";
@@ -216,13 +204,24 @@ namespace NetFluid
             if (myType.IsEnum)
                 return Enum.Parse(myType, values[0]);
 
-            var method = myType.GetMethod("Parse", BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic);
+            MethodInfo method = myType.GetMethod("Parse",
+                BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic);
             if (method != null)
-                return method.Invoke(null, new[] { values[0] });
+                return method.Invoke(null, new[] {values[0]});
 
             #endregion
 
             return myType.IsValueType ? Activator.CreateInstance(myType) : null;
+        }
+
+        public bool StartsWith(string str)
+        {
+            return values.Any(x => x.StartsWith(str));
+        }
+
+        public bool Contains(string gzip)
+        {
+            return values.Any(x => x.Contains(gzip));
         }
 
         #region ICONVERTIBLE
@@ -239,7 +238,7 @@ namespace NetFluid
 
         byte IConvertible.ToByte(IFormatProvider provider)
         {
-            return values.Length == 0 ? (byte)0 : byte.Parse(values[0]);
+            return values.Length == 0 ? (byte) 0 : byte.Parse(values[0]);
         }
 
         char IConvertible.ToChar(IFormatProvider provider)
@@ -264,7 +263,7 @@ namespace NetFluid
 
         short IConvertible.ToInt16(IFormatProvider provider)
         {
-            return values.Length == 0 ? (short)0 : short.Parse(values[0]);
+            return values.Length == 0 ? (short) 0 : short.Parse(values[0]);
         }
 
         int IConvertible.ToInt32(IFormatProvider provider)
@@ -279,7 +278,7 @@ namespace NetFluid
 
         sbyte IConvertible.ToSByte(IFormatProvider provider)
         {
-            return values.Length == 0 ? (sbyte)0 : sbyte.Parse(values[0]);
+            return values.Length == 0 ? (sbyte) 0 : sbyte.Parse(values[0]);
         }
 
         float IConvertible.ToSingle(IFormatProvider provider)
@@ -302,7 +301,7 @@ namespace NetFluid
 
         ushort IConvertible.ToUInt16(IFormatProvider provider)
         {
-            return values.Length == 0 ? (ushort)0 : ushort.Parse(values[0]);
+            return values.Length == 0 ? (ushort) 0 : ushort.Parse(values[0]);
         }
 
         uint IConvertible.ToUInt32(IFormatProvider provider)
@@ -326,19 +325,23 @@ namespace NetFluid
 
         public static implicit operator WebHeader(string q)
         {
-            return new WebHeader("",q);
+            return new WebHeader("", q);
         }
 
         #endregion
 
-        public bool StartsWith(string str)
+        #region IEnumerable<string> Members
+
+        IEnumerator<string> IEnumerable<string>.GetEnumerator()
         {
-            return values.Any(x => x.StartsWith(str));
+            return ((IEnumerable<string>) values).GetEnumerator();
         }
 
-        public bool Contains(string gzip)
+        IEnumerator IEnumerable.GetEnumerator()
         {
-            return values.Any(x => x.Contains(gzip));
+            return values.GetEnumerator();
         }
+
+        #endregion
     }
 }

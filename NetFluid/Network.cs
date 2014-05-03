@@ -21,6 +21,7 @@
 // 23/10/2013    Matteo Fabbri      Inital coding
 // ********************************************************************************************************
 
+using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.NetworkInformation;
@@ -28,12 +29,12 @@ using System.Net.NetworkInformation;
 namespace NetFluid
 {
     /// <summary>
-    /// Return important data about the connected network
+    ///     Return important data about the connected network
     /// </summary>
     public class Network
     {
         /// <summary>
-        /// All available physical network interfaces
+        ///     All available physical network interfaces
         /// </summary>
         public static NetworkInterface[] Interfaces
         {
@@ -41,7 +42,7 @@ namespace NetFluid
         }
 
         /// <summary>
-        /// True if the machine is connected to the network
+        ///     True if the machine is connected to the network
         /// </summary>
         public static bool Connected
         {
@@ -49,7 +50,7 @@ namespace NetFluid
         }
 
         /// <summary>
-        /// Return the loopback physical inetrface
+        ///     Return the loopback physical inetrface
         /// </summary>
         public static NetworkInterface Loopback
         {
@@ -57,7 +58,7 @@ namespace NetFluid
         }
 
         /// <summary>
-        /// Return all ip address of the current machine
+        ///     Return all ip address of the current machine
         /// </summary>
         public static IPAddress[] Addresses
         {
@@ -65,53 +66,57 @@ namespace NetFluid
         }
 
         /// <summary>
-        /// Gets a list of default DNS servers used by system
+        ///     Gets a list of default DNS servers used by system
         /// </summary>
         /// <returns></returns>
         public static IPAddress[] Dns
         {
             get
             {
-                var adapters = NetworkInterface.GetAllNetworkInterfaces().Where(x =>x.OperationalStatus == OperationalStatus.Up);
+                IEnumerable<NetworkInterface> adapters =
+                    NetworkInterface.GetAllNetworkInterfaces().Where(x => x.OperationalStatus == OperationalStatus.Up);
                 return adapters.SelectMany(x => x.GetIPProperties().DnsAddresses).ToArray();
             }
         }
 
         /// <summary>
-        /// Gets a list of default DHCP servers used by system
+        ///     Gets a list of default DHCP servers used by system
         /// </summary>
         /// <returns></returns>
         public static IPAddress[] Dhcp
         {
             get
             {
-                var adapters = NetworkInterface.GetAllNetworkInterfaces().Where(x => x.OperationalStatus == OperationalStatus.Up);
+                IEnumerable<NetworkInterface> adapters =
+                    NetworkInterface.GetAllNetworkInterfaces().Where(x => x.OperationalStatus == OperationalStatus.Up);
                 return adapters.SelectMany(x => x.GetIPProperties().DhcpServerAddresses).ToArray();
             }
         }
 
         /// <summary>
-        /// Gets a list of default gateways used by system
+        ///     Gets a list of default gateways used by system
         /// </summary>
         /// <returns></returns>
         public static IPAddress[] Gateways
         {
             get
             {
-                var adapters = NetworkInterface.GetAllNetworkInterfaces().Where(x => x.OperationalStatus == OperationalStatus.Up);
-                return adapters.SelectMany(x => x.GetIPProperties().GatewayAddresses.Select(y=>y.Address)).ToArray();
+                IEnumerable<NetworkInterface> adapters =
+                    NetworkInterface.GetAllNetworkInterfaces().Where(x => x.OperationalStatus == OperationalStatus.Up);
+                return adapters.SelectMany(x => x.GetIPProperties().GatewayAddresses.Select(y => y.Address)).ToArray();
             }
         }
 
         /// <summary>
-        /// Gets a list of default gateways used by system
+        ///     Gets a list of default gateways used by system
         /// </summary>
         /// <returns></returns>
         public static IPAddress[] Wins
         {
             get
             {
-                var adapters = NetworkInterface.GetAllNetworkInterfaces().Where(x => x.OperationalStatus == OperationalStatus.Up);
+                IEnumerable<NetworkInterface> adapters =
+                    NetworkInterface.GetAllNetworkInterfaces().Where(x => x.OperationalStatus == OperationalStatus.Up);
                 return adapters.SelectMany(x => x.GetIPProperties().WinsServersAddresses).ToArray();
             }
         }

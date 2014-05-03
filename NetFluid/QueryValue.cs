@@ -33,14 +33,13 @@ namespace NetFluid
 {
     public sealed class QueryValue : IConvertible, IEnumerable<string>
     {
-        public string Name { get; private set; }
         private string[] values;
 
         #region CTOR
 
         public QueryValue()
         {
-            Name = ""; 
+            Name = "";
             values = new string[0];
         }
 
@@ -51,6 +50,8 @@ namespace NetFluid
         }
 
         #endregion
+
+        public string Name { get; private set; }
 
         public bool IsMultiple
         {
@@ -68,7 +69,7 @@ namespace NetFluid
                     case 1:
                         return values[0];
                     default:
-                        return "[" + string.Join(",",values) +"]";
+                        return "[" + string.Join(",", values) + "]";
                 }
             }
         }
@@ -77,20 +78,6 @@ namespace NetFluid
         {
             return values;
         }
-
-        #region IEnumerable<string> Members
-
-        IEnumerator<string> IEnumerable<string>.GetEnumerator()
-        {
-            return ((IEnumerable<string>) values).GetEnumerator();
-        }
-
-        IEnumerator IEnumerable.GetEnumerator()
-        {
-            return values.GetEnumerator();
-        }
-
-        #endregion
 
         internal void Add(QueryValue q)
         {
@@ -104,19 +91,19 @@ namespace NetFluid
 
         public override string ToString()
         {
-            var b = new StringBuilder(JSON.Escape(Name)+":");
+            var b = new StringBuilder(JSON.Escape(Name) + ":");
 
             switch (values.Length)
             {
                 case 0:
                     b.Append("null");
-                break;
+                    break;
                 case 1:
                     b.Append(JSON.Escape(values[0]));
-                break;
+                    break;
                 default:
                     b.Append("[" + string.Join(",", values.Select(JSON.Escape)) + "]");
-                break;
+                    break;
             }
 
             return b.ToString();
@@ -176,34 +163,36 @@ namespace NetFluid
                 if (elemType == typeof (bool))
                 {
                     return values.Select(y =>
-                                             {
-                                                 string t = y.ToLower(CultureInfo.InvariantCulture);
-                                                 return (t == "true" || t == "on" || t == "yes");
-                                             }).ToArray();
+                    {
+                        string t = y.ToLower(CultureInfo.InvariantCulture);
+                        return (t == "true" || t == "on" || t == "yes");
+                    }).ToArray();
                 }
 
                 if (elemType.IsEnum)
                     return values.Select(y => Enum.Parse(elemType, y)).ToArray();
 
-                var parsemethod = elemType.GetMethod("Parse", BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic);
+                MethodInfo parsemethod = elemType.GetMethod("Parse",
+                    BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic);
                 if (parsemethod != null)
                 {
-                    var r = Array.CreateInstance(elemType, values.Length);
+                    Array r = Array.CreateInstance(elemType, values.Length);
 
                     for (int i = 0; i < r.Length; i++)
                     {
-                        var o = parsemethod.Invoke(null, new[] {values[i]});
-                        r.SetValue(o,i);
+                        object o = parsemethod.Invoke(null, new[] {values[i]});
+                        r.SetValue(o, i);
                     }
 
                     return r;
                 }
+
                 #endregion
             }
 
             #region VALORI
 
-            var myType = x.ParameterType;
+            Type myType = x.ParameterType;
 
             if (values.Length == 0 || (values.Length == 1 && string.IsNullOrEmpty(values[0])))
                 return myType.IsValueType ? Activator.CreateInstance(myType) : null;
@@ -244,7 +233,8 @@ namespace NetFluid
             if (myType.IsEnum)
                 return Enum.Parse(myType, values[0]);
 
-            var method = myType.GetMethod("Parse",BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic);
+            MethodInfo method = myType.GetMethod("Parse",
+                BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic);
             if (method != null)
                 return method.Invoke(null, new[] {values[0]});
 
@@ -350,6 +340,20 @@ namespace NetFluid
         public static implicit operator string(QueryValue q)
         {
             return q.ToString();
+        }
+
+        #endregion
+
+        #region IEnumerable<string> Members
+
+        IEnumerator<string> IEnumerable<string>.GetEnumerator()
+        {
+            return ((IEnumerable<string>) values).GetEnumerator();
+        }
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return values.GetEnumerator();
         }
 
         #endregion

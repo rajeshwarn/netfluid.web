@@ -22,10 +22,10 @@
 // ********************************************************************************************************
 
 using System;
+using System.Globalization;
 using System.Net;
 using System.Text;
 using NetFluid.HTTP;
-using System.Globalization;
 
 namespace NetFluid
 {
@@ -45,10 +45,10 @@ namespace NetFluid
         public HttpResponse()
         {
             StatusDescription = "OK";
-            
+
             Headers = new WebHeaderCollection();
-            Headers.Append("Server","NetFluid III");
-            Headers.Append("Date",DateTime.UtcNow.ToString("r", CultureInfo.InvariantCulture));
+            Headers.Append("Server", "NetFluid III");
+            Headers.Append("Date", DateTime.UtcNow.ToString("r", CultureInfo.InvariantCulture));
 
             ContentType = "text/html; charset=utf-8";
             ProtocolVersion = HttpVersion.Version11;
@@ -71,6 +71,7 @@ namespace NetFluid
             StatusCode = StatusCode.Found; // Found
             Headers.Append("Location", url);
         }
+
         public void MovedPermanently(string url)
         {
             StatusCode = StatusCode.MovedPermanently;

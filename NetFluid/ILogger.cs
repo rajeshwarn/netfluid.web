@@ -26,29 +26,29 @@ using System;
 namespace NetFluid
 {
     /// <summary>
-    /// Implements methods for system logger
+    ///     Implements methods for system logger
     /// </summary>
     public interface ILogger
     {
         /// <summary>
-        /// Get or set the current log level.Messages under this level are ignored and not logged
+        ///     Get or set the current log level.Messages under this level are ignored and not logged
         /// </summary>
         LogLevel LogLevel { get; set; }
 
         /// <summary>
-        /// Get or set path of the logs
+        ///     Get or set path of the logs
         /// </summary>
         string LogPath { get; set; }
 
         /// <summary>
-        /// Log a message
+        ///     Log a message
         /// </summary>
         /// <param name="lvl">Log level of the message</param>
         /// <param name="msg">The message be be logged</param>
         void Log(LogLevel lvl, string msg);
 
         /// <summary>
-        /// Log an exception
+        ///     Log an exception
         /// </summary>
         /// <param name="lvl">Log level of the exception</param>
         /// <param name="msg">A presentation message</param>

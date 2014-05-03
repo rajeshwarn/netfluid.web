@@ -38,8 +38,8 @@ using NetFluid.IO;
 namespace NetFluid
 {
     /// <summary>
-    /// HTTP Context.
-    /// Contains client request, server response and current variables
+    ///     HTTP Context.
+    ///     Contains client request, server response and current variables
     /// </summary>
     public class Context
     {
@@ -52,59 +52,60 @@ namespace NetFluid
         private readonly Stopwatch st;
 
         /// <summary>
-        /// True if Response.Headers are already sent to the client
+        ///     Temporary buffer for incoming headers data.
+        ///     Internally used for connection fowarding
+        /// </summary>
+        internal byte[] Buffer;
+
+        /// <summary>
+        ///     True if Response.Headers are already sent to the client
         /// </summary>
         public bool HeadersSent;
 
         /// <summary>
-        /// Read data to the client
+        ///     Read data to the client
         /// </summary>
         public Stream InputStream;
 
         /// <summary>
-        /// Send data to the client
+        ///     Send data to the client
         /// </summary>
         public Stream OutputStream;
 
         /// <summary>
-        /// Contains client request variables
+        ///     Contains client request variables
         /// </summary>
         public HttpRequest Request;
 
         /// <summary>
-        /// Contains server response variables
+        ///     Contains server response variables
         /// </summary>
         public HttpResponse Response;
 
         /// <summary>
-        /// Client socket
+        ///     Client socket
         /// </summary>
         public Socket Socket;
 
-        /// <summary>
-        /// Temporary buffer for incoming headers data.
-        /// Internally used for connection fowarding
-        /// </summary>
-        internal byte[] Buffer;
-
 
         /// <summary>
-        /// True if the client is a websocket
+        ///     True if the client is a websocket
         /// </summary>
         public bool WebSocket;
 
         private int position;
         private int readBytes;
         private StreamReader reader;
+        private string sessionId;
         private StreamWriter writer;
 
         /// <summary>
-        /// Initialize HTTP context from client socket, reading headers and post data
+        ///     Initialize HTTP context from client socket, reading headers and post data
         /// </summary>
         /// <param name="sock">Client socket</param>
         public Context(Socket sock)
         {
-        	sock.SendTimeout = 150;
+            sock.SendTimeout = 150;
             sock.ReceiveTimeout = 150;
 
             IsOpen = true;
@@ -133,7 +134,7 @@ namespace NetFluid
         }
 
         /// <summary>
-        /// Initialize HTTPS context from client socket, reading headers and post data
+        ///     Initialize HTTPS context from client socket, reading headers and post data
         /// </summary>
         /// <param name="sock">Client socket</param>
         /// <param name="certificate">PFX Certificate</param>
@@ -178,32 +179,27 @@ namespace NetFluid
             }, null);
         }
 
-        string sessionId;
         /// <summary>
-        /// Current session identification Guid
+        ///     Current session identification Guid
         /// </summary>
         public string SessionId
         {
-
             get { return sessionId ?? (sessionId = Security.UID()); }
-            private set 
-            {
-                sessionId = value;
-            }
+            private set { sessionId = value; }
         }
 
         /// <summary>
-        /// True if the context has been created with HTTPS
+        ///     True if the context has been created with HTTPS
         /// </summary>
         public bool Secure { get; private set; }
 
         /// <summary>
-        /// True if the context is not even served
+        ///     True if the context is not even served
         /// </summary>
         public bool IsOpen { get; private set; }
 
         /// <summary>
-        /// True if the current HTTP response code is about an error
+        ///     True if the current HTTP response code is about an error
         /// </summary>
         public bool HaveError
         {
@@ -211,7 +207,7 @@ namespace NetFluid
         }
 
         /// <summary>
-        /// If true the application server will collect statistical data about performances
+        ///     If true the application server will collect statistical data about performances
         /// </summary>
         public static bool Profiling
         {
@@ -224,7 +220,7 @@ namespace NetFluid
         }
 
         /// <summary>
-        /// If Profiling is "on" return milliseconds used to serve each single uri 
+        ///     If Profiling is "on" return milliseconds used to serve each single uri
         /// </summary>
         public static IEnumerable<Tuple<long, string>> Profile
         {
@@ -232,7 +228,7 @@ namespace NetFluid
         }
 
         /// <summary>
-        /// Read string from the client
+        ///     Read string from the client
         /// </summary>
         public StreamReader Reader
         {
@@ -240,7 +236,7 @@ namespace NetFluid
         }
 
         /// <summary>
-        /// Write string to the client
+        ///     Write string to the client
         /// </summary>
         public StreamWriter Writer
         {
@@ -249,7 +245,7 @@ namespace NetFluid
         }
 
         /// <summary>
-        /// IP and port on wich the client connection was recieved 
+        ///     IP and port on wich the client connection was recieved
         /// </summary>
         public IPEndPoint LocalEndPoint
         {
@@ -257,7 +253,7 @@ namespace NetFluid
         }
 
         /// <summary>
-        /// IP and port on wich the client connection was started 
+        ///     IP and port on wich the client connection was started
         /// </summary>
         public IPEndPoint RemoteEndPoint
         {
@@ -265,7 +261,7 @@ namespace NetFluid
         }
 
         /// <summary>
-        /// True if the connection came from the same machine of the server
+        ///     True if the connection came from the same machine of the server
         /// </summary>
         public bool IsLocal
         {
@@ -273,7 +269,7 @@ namespace NetFluid
         }
 
         /// <summary>
-        /// Read request headers
+        ///     Read request headers
         /// </summary>
         private void OnRead(IAsyncResult ares)
         {
@@ -305,8 +301,8 @@ namespace NetFluid
                 return;
             }
 
-            var t = _ms.GetBuffer();
-            var header = ReadHeaders(t, ref position, t.Length - position);
+            byte[] t = _ms.GetBuffer();
+            string header = ReadHeaders(t, ref position, t.Length - position);
 
             if (header == "")
             {
@@ -322,12 +318,11 @@ namespace NetFluid
             }
 
 
-
-            var lines = header.Split(new[] {'\n', '\r'}, StringSplitOptions.RemoveEmptyEntries);
+            string[] lines = header.Split(new[] {'\n', '\r'}, StringSplitOptions.RemoveEmptyEntries);
 
             #region FIRST LINE
 
-            var parts = lines[0].Split(separators, 3);
+            string[] parts = lines[0].Split(separators, 3);
             if (parts.Length >= 3)
             {
                 Request.HttpMethod = parts[0];
@@ -335,7 +330,8 @@ namespace NetFluid
 
                 try
                 {
-                    Response.ProtocolVersion = Request.ProtocolVersion = Version.Parse(parts[2].Substring("HTTP/".Length));
+                    Response.ProtocolVersion =
+                        Request.ProtocolVersion = Version.Parse(parts[2].Substring("HTTP/".Length));
                 }
                 catch (Exception)
                 {
@@ -343,19 +339,19 @@ namespace NetFluid
                 }
 
                 Request.Get = new QueryValueCollection();
-                var index = parts[1].IndexOf('?');
+                int index = parts[1].IndexOf('?');
 
                 if (index >= 0)
                 {
                     Request.Url = HttpUtility.UrlDecode(parts[1].Substring(0, index));
                     parts[1] = parts[1].Substring(index + 1);
 
-                    foreach (var kv in parts[1].Split('&'))
+                    foreach (string kv in parts[1].Split('&'))
                     {
-                        var pos = kv.IndexOf('=');
+                        int pos = kv.IndexOf('=');
 
-                        var val = pos < 0 ? "true" : HttpUtility.UrlDecode(kv.Substring(pos + 1));
-                        var key = pos < 0  ? HttpUtility.UrlDecode(kv) : HttpUtility.UrlDecode(kv.Substring(0, pos));
+                        string val = pos < 0 ? "true" : HttpUtility.UrlDecode(kv.Substring(pos + 1));
+                        string key = pos < 0 ? HttpUtility.UrlDecode(kv) : HttpUtility.UrlDecode(kv.Substring(0, pos));
 
                         Request.Get.Add(key, val);
                     }
@@ -372,19 +368,19 @@ namespace NetFluid
 
             #endregion
 
-            for (var i = 1; i < lines.Length; i++)
+            for (int i = 1; i < lines.Length; i++)
             {
                 #region GENERIC HEADER
 
-                var colon = lines[i].IndexOf(':');
+                int colon = lines[i].IndexOf(':');
                 if (colon <= 0)
                 {
                     Response.StatusCode = StatusCode.BadRequest;
                     return;
                 }
 
-                var name = lines[i].Substring(0, colon).Trim();
-                var val = lines[i].Substring(colon + 1).Trim();
+                string name = lines[i].Substring(0, colon).Trim();
+                string val = lines[i].Substring(colon + 1).Trim();
 
                 Request.Headers.Append(name, val);
 
@@ -415,22 +411,23 @@ namespace NetFluid
 
                         #region COOKIE PARSING
 
-                        var cookieStrings = val.Split(new[] {',', ';'});
+                        string[] cookieStrings = val.Split(new[] {',', ';'});
                         Cookie current = null;
-                        var protocolVersion = 0;
-                        foreach (var cookieString in cookieStrings)
+                        int protocolVersion = 0;
+                        foreach (string cookieString in cookieStrings)
                         {
                             try
                             {
-                                var str = cookieString.Trim();
+                                string str = cookieString.Trim();
                                 if (str.Length == 0)
                                     continue;
 
-                                var iu = str.IndexOf('=');
-                                var prop = iu >= 0 ? str.Substring(0, iu) : "";
-                                var value = iu >= 0 ? str.Substring(iu + 1).Trim() : "";
+                                int iu = str.IndexOf('=');
+                                string prop = iu >= 0 ? str.Substring(0, iu) : "";
+                                string value = iu >= 0 ? str.Substring(iu + 1).Trim() : "";
 
                                 #region SWITCH PROPERTIES
+
                                 switch (prop)
                                 {
                                     case "$ProtocolVersion":
@@ -453,7 +450,7 @@ namespace NetFluid
                                             Request.Cookies.Add(current);
 
                                         current = new Cookie();
-                                        var idx = str.IndexOf('=');
+                                        int idx = str.IndexOf('=');
                                         if (idx > 0)
                                         {
                                             current.Name = str.Substring(0, idx).Trim();
@@ -467,6 +464,7 @@ namespace NetFluid
                                         current.Version = protocolVersion;
                                         break;
                                 }
+
                                 #endregion
                             }
                             catch (Exception)
@@ -487,15 +485,19 @@ namespace NetFluid
 
             if (Request.Headers.Contains("Sec-WebSocket-Key"))
             {
-                var acc = "Sec-WebSocket-Accept: " + Security.SecWebSocketAccept(Request.Headers["Sec-WebSocket-Key"]) + "\r\n";
+                string acc = "Sec-WebSocket-Accept: " +
+                             Security.SecWebSocketAccept(Request.Headers["Sec-WebSocket-Key"]) + "\r\n";
 
                 if (Response.Headers["Sec-WebSocket-Protocol"] != "")
                     acc += "Sec-WebSocket-Protocol: " + Request.Headers["Sec-WebSocket-Protocol"] + "\r\n";
 
                 acc += "\r\n";
 
-                var h = string.Format("HTTP/1.1 101 Switching Protocols\r\nConnection:Upgrade\r\nUpgrade:websocket\r\nServer: NetFluid III\r\n" + acc);
-                var b = Response.ContentEncoding.GetBytes(h);
+                string h =
+                    string.Format(
+                        "HTTP/1.1 101 Switching Protocols\r\nConnection:Upgrade\r\nUpgrade:websocket\r\nServer: NetFluid III\r\n" +
+                        acc);
+                byte[] b = Response.ContentEncoding.GetBytes(h);
                 OutputStream.Write(b, 0, b.Length);
                 OutputStream.Flush();
 
@@ -522,7 +524,8 @@ namespace NetFluid
 
                 try
                 {
-                    fs = new FileStream(Path.GetFullPath(Path.Combine(Path.GetTempPath(),Security.UID())), FileMode.OpenOrCreate);
+                    fs = new FileStream(Path.GetFullPath(Path.Combine(Path.GetTempPath(), Security.UID())),
+                        FileMode.OpenOrCreate);
                     fs.Write(t, position, readBytes - position);
                 }
                 catch (Exception)
@@ -536,7 +539,7 @@ namespace NetFluid
         }
 
         /// <summary>
-        /// OnRead has been completed but some recieved bytes belongs to request body (post data)
+        ///     OnRead has been completed but some recieved bytes belongs to request body (post data)
         /// </summary>
         private void ReadAndSave(long read, long total, Stream s)
         {
@@ -580,7 +583,7 @@ namespace NetFluid
             {
                 try
                 {
-                    var r = InputStream.EndRead(x);
+                    int r = InputStream.EndRead(x);
                     read += r;
                     s.Write(b, 0, r);
 
@@ -611,15 +614,14 @@ namespace NetFluid
         }
 
         /// <summary>
-        /// Dectect if OnRead has finished
+        ///     Dectect if OnRead has finished
         /// </summary>
         private string ReadHeaders(IList<byte> b, ref int offset, int len)
         {
-
             try
             {
-                var last = offset + len;
-                for (var i = offset; i < last; i++)
+                int last = offset + len;
+                for (int i = offset; i < last; i++)
                     if (i > 4 && b[i] == 10 && b[i - 1] == 13 && b[i - 2] == 10 && b[i - 3] == 13)
                     {
                         offset = i + 1;
@@ -634,7 +636,7 @@ namespace NetFluid
         }
 
         /// <summary>
-        /// Send Response headers to the client
+        ///     Send Response headers to the client
         /// </summary>
         public void SendHeaders()
         {
@@ -648,13 +650,14 @@ namespace NetFluid
 
                 if (Response.ContentType != null)
                     if (Response.ContentType.IndexOf("charset=", StringComparison.Ordinal) == -1)
-                        Response.Headers.Set("Content-Type",Response.ContentType + "; charset=" + Response.ContentEncoding.WebName);
+                        Response.Headers.Set("Content-Type",
+                            Response.ContentType + "; charset=" + Response.ContentEncoding.WebName);
                     else
                         Response.Headers.Set("Content-Type", Response.ContentType);
 
 
                 // They sent both KeepAlive: true and Connection: close!?
-                if (!Response.KeepAlive || Response.StatusCode >= (StatusCode)400)
+                if (!Response.KeepAlive || Response.StatusCode >= (StatusCode) 400)
                 {
                     Response.Headers.Set("Connection", "close");
                 }
@@ -689,9 +692,10 @@ namespace NetFluid
 
                 #endregion
 
-                var h = string.Format("HTTP/{0} {1} {2}\r\n{3}\r\n", Response.ProtocolVersion, (int)Response.StatusCode,
-                                         Response.StatusDescription, Response.Headers);
-                var b = Response.ContentEncoding.GetBytes(h);
+                string h = string.Format("HTTP/{0} {1} {2}\r\n{3}\r\n", Response.ProtocolVersion,
+                    (int) Response.StatusCode,
+                    Response.StatusDescription, Response.Headers);
+                byte[] b = Response.ContentEncoding.GetBytes(h);
                 OutputStream.Write(b, 0, b.Length);
                 OutputStream.Flush();
 
@@ -725,7 +729,7 @@ namespace NetFluid
         }
 
         /// <summary>
-        /// Mark the current context has served and free related resources
+        ///     Mark the current context has served and free related resources
         /// </summary>
         public void Close()
         {
@@ -738,7 +742,8 @@ namespace NetFluid
             if (profiling)
             {
                 st.Stop();
-                ProfilingResults.Add(new Tuple<long, string>(Stopwatch.Frequency/st.ElapsedTicks,Request.Host + Request.Url));
+                ProfilingResults.Add(new Tuple<long, string>(Stopwatch.Frequency/st.ElapsedTicks,
+                    Request.Host + Request.Url));
             }
 
 
@@ -763,7 +768,7 @@ namespace NetFluid
         }
 
         /// <summary>
-        /// Save a variable in current session
+        ///     Save a variable in current session
         /// </summary>
         /// <param name="name">Variable name</param>
         /// <param name="obj">Variable value</param>
@@ -773,12 +778,12 @@ namespace NetFluid
         }
 
         /// <summary>
-        /// Retrieve the related value from current session and cast it to T
+        ///     Retrieve the related value from current session and cast it to T
         /// </summary>
         /// <param name="name">Variable name</param>
         public T Session<T>(string name)
         {
-            var k = Engine.Sessions.Get(SessionId, name);
+            object k = Engine.Sessions.Get(SessionId, name);
             if (k != null)
             {
                 return (T) k;
@@ -787,7 +792,7 @@ namespace NetFluid
         }
 
         /// <summary>
-        /// Retrieve the related value from current session
+        ///     Retrieve the related value from current session
         /// </summary>
         /// <param name="name">Variable name</param>
         public dynamic Session(string name)

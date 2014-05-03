@@ -21,61 +21,62 @@
 // 23/10/2013    Matteo Fabbri      Inital coding
 // ********************************************************************************************************
 
-using System.Collections;
 using System.Collections.Generic;
 using System.Net;
 
 namespace NetFluid
 {
     /// <summary>
-    /// Implements methods to create and manage system http interfaces
+    ///     Implements methods to create and manage system http interfaces
     /// </summary>
     public interface IWebInterfaceManager : IEnumerable<IWebInterface>
     {
         /// <summary>
-        /// Add an http interface on ip 127.0.0.1 and spefied port
+        ///     Add an http interface on ip 127.0.0.1 and spefied port
         /// </summary>
         /// <param name="port">Port on wich listening.80 by default</param>
         void AddLoopBack(int port = 80);
 
         /// <summary>
-        /// Add an http interface on any available ip excluding loopback on specified port.
+        ///     Add an http interface on any available ip excluding loopback on specified port.
         /// </summary>
         /// <param name="port">Port on wich listening.80 by default</param>
         void AddAllAddresses(int port = 80);
 
         /// <summary>
-        /// Add an http interface on specified ip and port
+        ///     Add an http interface on specified ip and port
         /// </summary>
         /// <param name="ip"></param>
         /// <param name="port"></param>
         void AddInterface(IPAddress ip, int port);
 
         /// <summary>
-        /// Add an HTTPS interface on specified ip and port
+        ///     Add an HTTPS interface on specified ip and port
         /// </summary>
-        /// <param name="ip">Ip on wich listening/param>
-        /// <param name="port">Port on wich listening</param>
-        /// <param name="certificate">Path of pfx certificate</param>
+        /// <param name="ip">
+        ///     Ip on wich listening/param>
+        ///     <param name="port">Port on wich listening</param>
+        ///     <param name="certificate">Path of pfx certificate</param>
         void AddInterface(IPAddress ip, int port, string certificate);
 
         /// <summary>
-        /// Add an http interface on specified ip and port
+        ///     Add an http interface on specified ip and port
         /// </summary>
         /// <param name="ip"></param>
         /// <param name="port"></param>
         void AddInterface(string ip, int port);
 
         /// <summary>
-        /// Add an HTTPS interface on specified ip and port
+        ///     Add an HTTPS interface on specified ip and port
         /// </summary>
-        /// <param name="ip">Ip on wich listening/param>
-        /// <param name="port">Port on wich listening</param>
-        /// <param name="certificate">Path of pfx certificate</param>
+        /// <param name="ip">
+        ///     Ip on wich listening/param>
+        ///     <param name="port">Port on wich listening</param>
+        ///     <param name="certificate">Path of pfx certificate</param>
         void AddInterface(string ip, int port, string certificate);
 
         /// <summary>
-        /// Start to accept and serve clients
+        ///     Start to accept and serve clients
         /// </summary>
         void Start();
     }

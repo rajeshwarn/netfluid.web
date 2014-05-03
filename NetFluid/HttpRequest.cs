@@ -28,84 +28,85 @@ using System.Text;
 namespace NetFluid
 {
     /// <summary>
-    /// Contains all the data recieved from the client
+    ///     Contains all the data recieved from the client
     /// </summary>
     [Serializable]
     public class HttpRequest
     {
         /// <summary>
-        /// Sintactic sugar for Headers["Accept-Types"]
+        ///     Sintactic sugar for Headers["Accept-Types"]
         /// </summary>
         public string[] AcceptTypes;
 
         /// <summary>
-        /// Encoder detected for request headers
+        ///     Encoder detected for request headers
         /// </summary>
         public Encoding ContentEncoding;
 
         /// <summary>
-        /// Size in bytes of request-body. Zero if method is GET
+        ///     Size in bytes of request-body. Zero if method is GET
         /// </summary>
         public long ContentLength;
 
         /// <summary>
-        /// Coockies recieved from the client
+        ///     Coockies recieved from the client
         /// </summary>
         public CookieCollection Cookies;
 
         /// <summary>
-        /// Files recieved from the client
+        ///     Files recieved from the client
         /// </summary>
         public HttpFileCollection Files;
 
         /// <summary>
-        /// Get query values
+        ///     Get query values
         /// </summary>
         public QueryValueCollection Get;
 
         /// <summary>
-        /// Headers of the client request
+        ///     Headers of the client request
         /// </summary>
         public WebHeaderCollection Headers;
 
         /// <summary>
-        /// HTTP method of client request
+        ///     HTTP method of client request
         /// </summary>
         public string HttpMethod;
+
         public bool KeepAlive;
 
         /// <summary>
-        /// Post query values
+        ///     Post query values
         /// </summary>
         public QueryValueCollection Post;
-        
+
         /// <summary>
-        /// From HTTP1.0 to HTTP1.2
+        ///     From HTTP1.0 to HTTP1.2
         /// </summary>
         public Version ProtocolVersion;
 
         /// <summary>
-        /// Requested url undecoded
+        ///     Requested url undecoded
         /// </summary>
         public string RawUrl;
 
         /// <summary>
-        /// Requested url decoded 
+        ///     Requested url decoded
         /// </summary>
         public string Url;
-        
+
         /// <summary>
-        /// Sintatic sugar for Headers["Referrer"]
+        ///     Sintatic sugar for Headers["Referrer"]
         /// </summary>
         public string UrlReferrer;
 
         /// <summary>
-        /// Languages accepted by the client
+        ///     Languages accepted by the client
         /// </summary>
         public string[] UserLanguages;
 
         /// <summary>
-        /// Merge of Get and post variables
+        ///     Merge of Get and post variables
         /// </summary>
         private QueryValueCollection values;
 
@@ -118,7 +119,7 @@ namespace NetFluid
         }
 
         /// <summary>
-        /// Merge of get and post values
+        ///     Merge of get and post values
         /// </summary>
         public QueryValueCollection Values
         {
@@ -131,7 +132,7 @@ namespace NetFluid
                         values = new QueryValueCollection(Get);
 
                         if (Post != null)
-                            foreach (var item in Post)
+                            foreach (QueryValue item in Post)
                             {
                                 values.Add(item.Name, item);
                             }
@@ -146,7 +147,7 @@ namespace NetFluid
         }
 
         /// <summary>
-        /// Sintactic sugar for Headers["Content-Type"]
+        ///     Sintactic sugar for Headers["Content-Type"]
         /// </summary>
         public string ContentType
         {
@@ -154,7 +155,7 @@ namespace NetFluid
         }
 
         /// <summary>
-        /// Sintactic sugar for Headers["UserName-Agent"]
+        ///     Sintactic sugar for Headers["UserName-Agent"]
         /// </summary>
         public string UserAgent
         {
@@ -162,7 +163,7 @@ namespace NetFluid
         }
 
         /// <summary>
-        ///  Sintactic sugar for Headers["Host"]
+        ///     Sintactic sugar for Headers["Host"]
         /// </summary>
         public string Host
         {

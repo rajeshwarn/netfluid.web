@@ -36,8 +36,6 @@ namespace NetFluid
             Context = cnt;
         }
 
-        public Context Context { get; set; }
-
         public HttpResponse Response
         {
             get { return Context.Response; }
@@ -67,6 +65,8 @@ namespace NetFluid
         {
             get { return Context.Request.Files ?? (Context.Request.Files = new HttpFileCollection()); }
         }
+
+        public Context Context { get; set; }
 
         public virtual object Run()
         {

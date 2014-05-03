@@ -8,14 +8,14 @@ namespace NetFluid
     public class WebClient
     {
         /// <summary>
-        /// Download specified as a stream
+        ///     Download specified as a stream
         /// </summary>
         /// <param name="uri">uri to download</param>
         /// <param name="accept">comma separated accepted mime types</param>
         /// <returns></returns>
         public static Stream GetStream(Uri uri, string accept = "text/html, text/plain")
         {
-            var request = (HttpWebRequest)WebRequest.Create(uri);
+            var request = (HttpWebRequest) WebRequest.Create(uri);
             request.AllowAutoRedirect = true;
             request.UserAgent = "NetFluid Scraper Agent";
             request.Accept = accept;
@@ -25,19 +25,19 @@ namespace NetFluid
             request.AutomaticDecompression = DecompressionMethods.None;
             request.Timeout = 10000;
 
-            var response = request.GetResponse();
+            WebResponse response = request.GetResponse();
             return response.GetResponseStream();
         }
 
         /// <summary>
-        /// Download specified as lines of text
+        ///     Download specified as lines of text
         /// </summary>
         /// <param name="uri">uri to download</param>
         /// <param name="accept">comma separated accepted mime types</param>
         /// <returns></returns>
         public static IEnumerable<string> GetLines(Uri uri, string accept = "text/html, text/plain")
         {
-            var request = (HttpWebRequest)WebRequest.Create(uri);
+            var request = (HttpWebRequest) WebRequest.Create(uri);
             request.AllowAutoRedirect = true;
             request.UserAgent = "NetFluid Scraper Agent";
             request.Accept = accept;
@@ -47,8 +47,8 @@ namespace NetFluid
             request.AutomaticDecompression = DecompressionMethods.None;
             request.Timeout = 10000;
 
-            var response = request.GetResponse();
-            var liner= new StreamReader(response.GetResponseStream());
+            WebResponse response = request.GetResponse();
+            var liner = new StreamReader(response.GetResponseStream());
 
             while (!liner.EndOfStream)
             {
@@ -57,14 +57,14 @@ namespace NetFluid
         }
 
         /// <summary>
-        /// Download specified as a string
+        ///     Download specified as a string
         /// </summary>
         /// <param name="uri">uri to download</param>
         /// <param name="accept">comma separated accepted mime types</param>
         /// <returns></returns>
         public static string GetString(Uri uri, string accept = "text/html, text/plain")
         {
-            var request = (HttpWebRequest)WebRequest.Create(uri);
+            var request = (HttpWebRequest) WebRequest.Create(uri);
             request.AllowAutoRedirect = true;
             request.UserAgent = "NetFluid Scraper Agent";
             request.Accept = accept;
@@ -74,7 +74,7 @@ namespace NetFluid
             request.AutomaticDecompression = DecompressionMethods.None;
             request.Timeout = 10000;
 
-            var response = request.GetResponse();
+            WebResponse response = request.GetResponse();
             var liner = new StreamReader(response.GetResponseStream());
             return liner.ReadToEnd();
         }

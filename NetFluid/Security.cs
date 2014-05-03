@@ -30,13 +30,24 @@ namespace NetFluid
 {
     public static class Security
     {
-        static object RandomLocker;
-        static Random RandomGenerator;
-        
+        private static readonly object RandomLocker;
+        private static Random RandomGenerator;
+
         static Security()
         {
             RandomLocker = new object();
             RandomGenerator = new Random();
+        }
+
+        public static string TempFile
+        {
+            get
+            {
+                //Path.GetTempFileName() SOMETIMES RETURN THE SAME FILENAME ON TWO CALLINGS
+                string p;
+                do p = Path.Combine(Path.GetTempPath(), UID()); while (File.Exists(p));
+                return p;
+            }
         }
 
         public static string SecWebSocketAccept(string key)
@@ -51,10 +62,10 @@ namespace NetFluid
 
         public static string SHA1Checksum(string file)
         {
-            using (var stream = File.OpenRead(file))
+            using (FileStream stream = File.OpenRead(file))
             {
                 var sha = new SHA256Managed();
-                var checksum = sha.ComputeHash(stream);
+                byte[] checksum = sha.ComputeHash(stream);
                 return BitConverter.ToString(checksum).Replace("-", String.Empty);
             }
         }
@@ -77,19 +88,8 @@ namespace NetFluid
             return hash;
         }
 
-        public static string TempFile
-        {
-            get
-            {
-                //Path.GetTempFileName() SOMETIMES RETURN THE SAME FILENAME ON TWO CALLINGS
-                string p;
-                do p = Path.Combine(Path.GetTempPath(), UID()); while (File.Exists(p));
-                return p;
-            }
-        }
-
         /// <summary>
-        /// Return a random value
+        ///     Return a random value
         /// </summary>
         /// <returns></returns>
         public static int Random()
@@ -104,7 +104,7 @@ namespace NetFluid
         }
 
         /// <summary>
-        /// Return a random value from to 0 to max
+        ///     Return a random value from to 0 to max
         /// </summary>
         /// <param name="max">maximum value</param>
         /// <returns></returns>
@@ -120,7 +120,7 @@ namespace NetFluid
         }
 
         /// <summary>
-        /// Return a random value from to min to max
+        ///     Return a random value from to min to max
         /// </summary>
         /// <param name="min">minimun value</param>
         /// <param name="max">maximum value</param>
@@ -130,7 +130,7 @@ namespace NetFluid
             int k;
             lock (RandomLocker)
             {
-                k = RandomGenerator.Next(min,max);
+                k = RandomGenerator.Next(min, max);
                 RandomGenerator = new Random(k);
             }
             return k;

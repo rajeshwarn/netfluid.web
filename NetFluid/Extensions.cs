@@ -22,6 +22,7 @@
 // ********************************************************************************************************
 
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -31,7 +32,6 @@ using System.Net.Sockets;
 using System.Reflection;
 using System.Text;
 using NetFluid.HTTP;
-using System.Collections.Concurrent;
 
 namespace NetFluid
 {
@@ -41,20 +41,22 @@ namespace NetFluid
 
         public static string ToHTML(this Exception ex)
         {
-            var sb = new StringBuilder("<h1>Exception "+ex.GetType().Name+"</h1>");
+            var sb = new StringBuilder("<h1>Exception " + ex.GetType().Name + "</h1>");
             sb.Append("<h2>" + ex.Message + "<h2>");
             sb.Append("<h2>StackTrace</h2>");
             sb.Append("<div>" + ex.StackTrace + "</div>");
-            if (ex.InnerException!=null)
+            if (ex.InnerException != null)
             {
                 sb.Append("<h2>Inner exception</h2>");
                 sb.Append(ex.InnerException.ToHTML());
             }
             return sb.ToString();
         }
+
         #endregion
 
         #region IP ADDRESS
+
         private static readonly IPAddress _ipv4MulticastNetworkAddress = IPAddress.Parse("224.0.0.0");
         private static readonly IPAddress _ipv6MulticastNetworkAddress = IPAddress.Parse("FF00::");
 
@@ -103,7 +105,7 @@ namespace NetFluid
 
             for (int i = 0; i < netmaskBytes.Length; i++)
             {
-                resultBytes[i] = (byte)(ipAddressBytes[i] & netmaskBytes[i]);
+                resultBytes[i] = (byte) (ipAddressBytes[i] & netmaskBytes[i]);
             }
 
             return new IPAddress(resultBytes);
@@ -138,7 +140,7 @@ namespace NetFluid
                 {
                     if (BitConverter.IsLittleEndian)
                     {
-                        ipAddressBytes[i] &= ReverseBitOrder((byte)~(255 << netmask));
+                        ipAddressBytes[i] &= ReverseBitOrder((byte) ~(255 << netmask));
                     }
                     netmask = 0;
                 }
@@ -245,17 +247,18 @@ namespace NetFluid
 
             for (int i = 0; i < 8; i++)
             {
-                result |= (byte)((((1 << i) & value) >> i) << (7 - i));
+                result |= (byte) ((((1 << i) & value) >> i) << (7 - i));
             }
 
             return result;
         }
+
         #endregion
 
         #region CONCURRENT BAG
 
         /// <summary>
-        /// Sintactic sugar for corr.TryTake(out elem);
+        ///     Sintactic sugar for corr.TryTake(out elem);
         /// </summary>
         /// <param name="corr">Concurrent bag on wich remove the element</param>
         /// <param name="elem">Element to be removed</param>
@@ -270,36 +273,36 @@ namespace NetFluid
 
         public static string ToBase64(this byte[] array)
         {
-            return System.Convert.ToBase64String(array);
+            return Convert.ToBase64String(array);
         }
+
         #endregion
 
         #region STRING
 
         /// <summary>
-        /// Check if is a valid credit card number
+        ///     Check if is a valid credit card number
         /// </summary>
         /// <param name="cc">String to check</param>
-        /// 
         public static bool IsValidCreditCard(this string cc)
         {
-            int[] deltas = { 0, 1, 2, 3, 4, -4, -3, -2, -1, 0 };
-            var checksum = 0;
-            var chars = cc.Where(char.IsDigit).ToArray();
+            int[] deltas = {0, 1, 2, 3, 4, -4, -3, -2, -1, 0};
+            int checksum = 0;
+            char[] chars = cc.Where(char.IsDigit).ToArray();
 
-            for (var i = chars.Length - 1; i > -1; i--)
+            for (int i = chars.Length - 1; i > -1; i--)
             {
                 int j = chars[i] - 48;
                 checksum += j;
-                if (((i - chars.Length) % 2) == 0)
+                if (((i - chars.Length)%2) == 0)
                     checksum += deltas[j];
             }
 
-            return ((checksum % 10) == 0);
+            return ((checksum%10) == 0);
         }
 
         /// <summary>
-        /// True if the string ends with given char
+        ///     True if the string ends with given char
         /// </summary>
         /// <param name="str">String to checked</param>
         /// <param name="c">Char to be found</param>
@@ -310,7 +313,7 @@ namespace NetFluid
 
 
         /// <summary>
-        /// Replace invalid HTML chars with relative URL entities
+        ///     Replace invalid HTML chars with relative URL entities
         /// </summary>
         /// <param name="str">String to encoded</param>
         public static string URLEncode(this string str)
@@ -319,7 +322,7 @@ namespace NetFluid
         }
 
         /// <summary>
-        /// Replace HTML entities with relatives UTF-8 chars
+        ///     Replace HTML entities with relatives UTF-8 chars
         /// </summary>
         /// <param name="str">String to decoded</param>
         public static string URLDecode(this string str)
@@ -329,7 +332,7 @@ namespace NetFluid
 
 
         /// <summary>
-        /// Replace invalid HTML chars with relative HTML entities
+        ///     Replace invalid HTML chars with relative HTML entities
         /// </summary>
         /// <param name="str">String to encoded</param>
         public static string HTMLEncode(this string str)
@@ -338,7 +341,7 @@ namespace NetFluid
         }
 
         /// <summary>
-        /// Replace HTML entities with relatives UTF-8 chars
+        ///     Replace HTML entities with relatives UTF-8 chars
         /// </summary>
         /// <param name="str">String to decoded</param>
         public static string HTMLDecode(this string str)
@@ -347,7 +350,7 @@ namespace NetFluid
         }
 
         /// <summary>
-        /// Remove all HTML tags
+        ///     Remove all HTML tags
         /// </summary>
         /// <param name="str">String to be cleaned</param>
         public static string StripHTML(this string source)
@@ -397,9 +400,9 @@ namespace NetFluid
         #endregion
 
         #region ENUMERABLE
-        
+
         /// <summary>
-        /// Return a random element from the collection
+        ///     Return a random element from the collection
         /// </summary>
         /// <param name="source">The collection</param>
         public static T Random<T>(this IEnumerable<T> source)
@@ -409,7 +412,7 @@ namespace NetFluid
         }
 
         /// <summary>
-        /// Split the collection in batch of N elements
+        ///     Split the collection in batch of N elements
         /// </summary>
         /// <param name="source">Collection to be splitted</param>
         /// <param name="batchSize">Length of the batch</param>
@@ -428,7 +431,7 @@ namespace NetFluid
         }
 
         /// <summary>
-        /// Apply an action on any elements in the collections
+        ///     Apply an action on any elements in the collections
         /// </summary>
         /// <param name="enu">The collection</param>
         /// <param name="batchSize">The action</param>
@@ -441,11 +444,11 @@ namespace NetFluid
         }
 
         /// <summary>
-        /// Sintactic sugar for enu.Concat(new[]{elem})
+        ///     Sintactic sugar for enu.Concat(new[]{elem})
         /// </summary>
         public static IEnumerable<T> Concat<T>(this IEnumerable<T> enu, T elem)
         {
-        	return enu.Concat(new[]{elem});
+            return enu.Concat(new[] {elem});
         }
 
         #endregion
@@ -453,18 +456,19 @@ namespace NetFluid
         #region ARRAY
 
         /// <summary>
-        /// Sintactic sugar for enu.Concat(new[] { elem }).ToArray()
+        ///     Sintactic sugar for enu.Concat(new[] { elem }).ToArray()
         /// </summary>
         public static T[] Push<T>(this T[] enu, T elem)
         {
-            return enu.Concat(new[] { elem }).ToArray();
+            return enu.Concat(new[] {elem}).ToArray();
         }
 
         #endregion
 
         #region DATETIME
+
         /// <summary>
-        /// Convert datetime in number of seconds from 00:00:00 1/1/1970
+        ///     Convert datetime in number of seconds from 00:00:00 1/1/1970
         /// </summary>
         public static double ToUnixTimestamp(this DateTime date)
         {
@@ -481,9 +485,9 @@ namespace NetFluid
             return Binary.Deserialize<T>(bytes);
         }
 
-        public static void ToBinary(this object obj,Stream stream)
+        public static void ToBinary(this object obj, Stream stream)
         {
-            Binary.Serialize(obj,stream);
+            Binary.Serialize(obj, stream);
         }
 
         public static byte[] ToBinary(this object obj)
@@ -496,9 +500,9 @@ namespace NetFluid
             return XML.Deserialize<T>(xml);
         }
 
-        public static void ToXML(this object obj,Stream stream)
+        public static void ToXML(this object obj, Stream stream)
         {
-            XML.Serialize(obj,stream);
+            XML.Serialize(obj, stream);
         }
 
         public static string ToXML(this object obj)
@@ -516,14 +520,14 @@ namespace NetFluid
             JSON.Serialize(obj, stream, singlerow);
         }
 
-        public static void ToJSON(this object obj,TextWriter writer, bool singlerow = false)
+        public static void ToJSON(this object obj, TextWriter writer, bool singlerow = false)
         {
-            JSON.Serialize(obj,writer, singlerow);
+            JSON.Serialize(obj, writer, singlerow);
         }
 
-        public static string ToJSON(this object obj,bool singlerow=false)
+        public static string ToJSON(this object obj, bool singlerow = false)
         {
-            return JSON.Serialize(obj,singlerow);
+            return JSON.Serialize(obj, singlerow);
         }
 
         #endregion
@@ -531,7 +535,7 @@ namespace NetFluid
         #region METHODINFO
 
         /// <summary>
-        /// Return True if this method has an attribute of type T
+        ///     Return True if this method has an attribute of type T
         /// </summary>
         public static bool HasAttribute<T>(this MethodInfo type) where T : Attribute
         {
@@ -540,7 +544,7 @@ namespace NetFluid
         }
 
         /// <summary>
-        /// Return all attributes of type T of this method
+        ///     Return all attributes of type T of this method
         /// </summary>
         public static T[] CustomAttribute<T>(this MethodInfo type) where T : Attribute
         {
@@ -550,16 +554,18 @@ namespace NetFluid
         #endregion
 
         #region FIELD INFO
+
         /// <summary>
-        /// Return True if this field has an attribute of type T
+        ///     Return True if this field has an attribute of type T
         /// </summary>
         public static bool HasAttribute<T>(this FieldInfo type) where T : Attribute
         {
             bool b = type.GetCustomAttributes(false).OfType<T>().Any();
             return b;
         }
+
         /// <summary>
-        /// Return all attributes of type T of this field
+        ///     Return all attributes of type T of this field
         /// </summary>
         public static T[] CustomAttribute<T>(this FieldInfo type) where T : Attribute
         {
@@ -571,7 +577,7 @@ namespace NetFluid
         #region PROPERTYINFO
 
         /// <summary>
-        /// Retrieve the value of this property for object obj
+        ///     Retrieve the value of this property for object obj
         /// </summary>
         public static object GetValue(this PropertyInfo pi, object obj)
         {
@@ -579,7 +585,7 @@ namespace NetFluid
         }
 
         /// <summary>
-        /// Return True if this property has an attribute of type T
+        ///     Return True if this property has an attribute of type T
         /// </summary>
         public static bool HasAttribute<T>(this PropertyInfo type) where T : Attribute
         {
@@ -588,7 +594,7 @@ namespace NetFluid
         }
 
         /// <summary>
-        /// Return all attributes of type T of this property
+        ///     Return all attributes of type T of this property
         /// </summary>
         public static T[] CustomAttribute<T>(this PropertyInfo type) where T : Attribute
         {
@@ -600,7 +606,7 @@ namespace NetFluid
         #region TYPE
 
         /// <summary>
-        /// Return all fields
+        ///     Return all fields
         /// </summary>
         public static FieldInfo[] GetAllFields(this Type type)
         {
@@ -609,7 +615,7 @@ namespace NetFluid
 
 
         /// <summary>
-        /// Return the default value of the type
+        ///     Return the default value of the type
         /// </summary>
         public static object DefaultValue(this Type type)
         {
@@ -617,16 +623,17 @@ namespace NetFluid
         }
 
         /// <summary>
-        /// True if this method define an attribute of type T
+        ///     True if this method define an attribute of type T
         /// </summary>
         public static bool HasAttribute<T>(this Type type, bool inherit) where T : Attribute
         {
-            var b = type.GetCustomAttributes(inherit);
-            var c = b.OfType<T>();
-            return  c.Any();
+            object[] b = type.GetCustomAttributes(inherit);
+            IEnumerable<T> c = b.OfType<T>();
+            return c.Any();
         }
+
         /// <summary>
-        /// Return all attributes of type T of this type
+        ///     Return all attributes of type T of this type
         /// </summary>
         public static T[] CustomAttribute<T>(this Type type, bool inherit) where T : Attribute
         {
@@ -634,7 +641,7 @@ namespace NetFluid
         }
 
         /// <summary>
-        /// Return all inherited types
+        ///     Return all inherited types
         /// </summary>
         public static Type[] Ancestor(this Type me)
         {
@@ -652,8 +659,8 @@ namespace NetFluid
         }
 
         /// <summary>
-        /// True if the type inherit the given one
-        /// Runtime equivalent of "is" operator
+        ///     True if the type inherit the given one
+        ///     Runtime equivalent of "is" operator
         /// </summary>
         /// <param name="type">Anchestor to be checked</param>
         public static bool Inherit(this Type me, Type type)
@@ -672,30 +679,31 @@ namespace NetFluid
         }
 
         /// <summary>
-        /// True if the type implements the given interface
+        ///     True if the type implements the given interface
         /// </summary>
         public static bool Implements(this Type type, Type @interface)
         {
-            var ints = type.GetInterfaces();
-            return ints.Any(x => x==@interface ||  (x.IsGenericType && x.GetGenericTypeDefinition() == @interface));
+            Type[] ints = type.GetInterfaces();
+            return ints.Any(x => x == @interface || (x.IsGenericType && x.GetGenericTypeDefinition() == @interface));
         }
 
         /// <summary>
-        /// Create an instance of the type
+        ///     Create an instance of the type
         /// </summary>
         /// <param name="obj">Consructor parameters.None to use default constructor</param>
         public static object CreateIstance(this Type type, params object[] obj)
         {
             return (obj == null || obj.Length == 0)
-                       ? Activator.CreateInstance(type)
-                       : Activator.CreateInstance(type, obj);
+                ? Activator.CreateInstance(type)
+                : Activator.CreateInstance(type, obj);
         }
 
         #endregion
 
         #region STREAM
+
         /// <summary>
-        /// Read all bytes into the stream
+        ///     Read all bytes into the stream
         /// </summary>
         public static byte[] BinaryRead(this Stream s)
         {

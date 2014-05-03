@@ -23,7 +23,6 @@
 
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
 
 namespace NetFluid
@@ -37,12 +36,12 @@ namespace NetFluid
         {
             values = new Dictionary<string, WebHeader>();
         }
-        
+
         public WebHeaderCollection(IEnumerable<WebHeader> collection)
         {
             values = new Dictionary<string, WebHeader>();
 
-            foreach (var item in collection)
+            foreach (WebHeader item in collection)
             {
                 values.Add(item.Name.ToLowerInvariant(), item);
             }
@@ -52,18 +51,18 @@ namespace NetFluid
         {
             get
             {
-                var lower = index.ToLowerInvariant();
+                string lower = index.ToLowerInvariant();
 
                 return values.ContainsKey(lower) ? values[lower].ToString() : string.Empty;
             }
             set
             {
-                var lower = index.ToLowerInvariant();
+                string lower = index.ToLowerInvariant();
 
                 if (values.ContainsKey(lower))
                     values[lower].Add(value);
                 else
-                    values.Add(lower, new WebHeader(index,value));
+                    values.Add(lower, new WebHeader(index, value));
             }
         }
 
@@ -74,17 +73,17 @@ namespace NetFluid
 
         public void Append(string name, string value)
         {
-            var lower = name.ToLowerInvariant();
+            string lower = name.ToLowerInvariant();
 
             if (values.ContainsKey(lower))
                 values[lower].Add(value);
             else
-                values.Add(lower, new WebHeader(name,value));
+                values.Add(lower, new WebHeader(name, value));
         }
 
         public void Append(WebHeader header)
         {
-            var lower = header.Name.ToLowerInvariant();
+            string lower = header.Name.ToLowerInvariant();
 
             if (values.ContainsKey(lower))
                 values[lower].Add(header);
@@ -94,7 +93,7 @@ namespace NetFluid
 
         public void Set(string name, string value)
         {
-            values[name.ToLowerInvariant()]=new WebHeader(name,value);
+            values[name.ToLowerInvariant()] = new WebHeader(name, value);
         }
 
         public override string ToString()

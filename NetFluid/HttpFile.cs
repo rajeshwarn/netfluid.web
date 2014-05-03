@@ -28,32 +28,32 @@ namespace NetFluid
     public sealed class HttpFile
     {
         /// <summary>
-        /// Mimetype of recieved file
+        ///     Mimetype of recieved file
         /// </summary>
         public string ContentType;
 
         /// <summary>
-        /// Extension of recieved file.Empty if missing
+        ///     Extension of recieved file.Empty if missing
         /// </summary>
         public string Extension;
 
         /// <summary>
-        /// Original filename
+        ///     Original filename
         /// </summary>
         public string FileName;
 
         /// <summary>
-        /// Original filename without extension
+        ///     Original filename without extension
         /// </summary>
         public string FileNameWithoutExtesion;
 
         /// <summary>
-        /// Post variable name in request
+        ///     Post variable name in request
         /// </summary>
         public string Name;
 
         /// <summary>
-        /// Temp path on server
+        ///     Temp path on server
         /// </summary>
         public string TempFile { get; internal set; }
 
