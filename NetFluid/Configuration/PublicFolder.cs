@@ -45,7 +45,7 @@ namespace NetFluid
         [ConfigurationProperty("Host", DefaultValue = "", IsRequired = false)]
         public string Host
         {
-            get { return (string)this["Host"]; }
+            get { return (string) this["Host"]; }
             set { this["Host"] = value; }
         }
 

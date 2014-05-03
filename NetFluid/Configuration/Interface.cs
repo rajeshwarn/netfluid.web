@@ -28,12 +28,12 @@ using System.Configuration;
 namespace NetFluid
 {
     /// <summary>
-    /// Define app.config settings for system http and https interfaces
+    ///     Define app.config settings for system http and https interfaces
     /// </summary>
     public class Interface : ConfigurationElement
     {
         /// <summary>
-        /// Ip to use
+        ///     Ip to use
         /// </summary>
         [ConfigurationProperty("IP", DefaultValue = "127.0.0.1", IsRequired = true)]
         public String IP
@@ -43,7 +43,7 @@ namespace NetFluid
         }
 
         /// <summary>
-        /// Port to use
+        ///     Port to use
         /// </summary>
         [ConfigurationProperty("Port", DefaultValue = "8080", IsRequired = false)]
         [IntegerValidator(MinValue = 1, MaxValue = 65000)]
@@ -54,7 +54,7 @@ namespace NetFluid
         }
 
         /// <summary>
-        /// Pfx certificate path if you want to use https on this interface
+        ///     Pfx certificate path if you want to use https on this interface
         /// </summary>
         [ConfigurationProperty("Certificate", DefaultValue = "", IsRequired = false)]
         public String Certificate
