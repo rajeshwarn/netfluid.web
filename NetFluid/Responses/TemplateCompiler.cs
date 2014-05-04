@@ -327,6 +327,11 @@ namespace NetFluid
                 {
                     return CompilationError(results.Errors, filename);
                 }
+
+                foreach (CompilerError err in results.Errors)
+                {
+                    Engine.Logger.Log(LogLevel.Error,"Compilation error "+err.ErrorNumber+" "+err.ErrorText+" on line "+err.Line+" of file "+err.FileName);
+                }
                 FluidTemplate.OnError(results.Errors);
             }
 
