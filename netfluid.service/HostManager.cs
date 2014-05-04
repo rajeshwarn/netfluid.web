@@ -6,7 +6,12 @@ using System.Threading.Tasks;
 
 namespace NetFluid.Service
 {
-    class HostManager
+    public class HostManager:FluidPage
     {
+        [Route("/")]
+        public IResponse Home()
+        {
+            return new FluidTemplate(Context.IsLocal ? "./UI/admin.html": "./UI/index.html");
+        }
     }
 }

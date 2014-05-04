@@ -29,3 +29,4 @@ C:\Users\Matteo\Desktop\NetFluid\REPOSITORY\FluidCenter\obj\Release\FluidCenter.
 C:\Users\Matteo\Desktop\NetFluid\REPOSITORY\FluidCenter\obj\Release\FluidCenter.exe
 C:\Users\Matteo\Desktop\NetFluid\REPOSITORY\FluidCenter\obj\Release\FluidCenter.pdb
 C:\Users\Matteo\Desktop\NetFluid\REPOSITORY\FluidCenter\bin\Release\UI\index.html
+C:\Users\Matteo\Desktop\NetFluid\REPOSITORY\FluidCenter\bin\Release\UI\admin.html

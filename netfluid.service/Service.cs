@@ -3,15 +3,17 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using System.Reflection;
 using System.ServiceProcess;
+using NetFluid.Collections;
 
 
 namespace NetFluid.Service
 {
     class Service : ServiceBase
     {
-        static ConcurrentDictionary<string,Host> _hosts;
+        static XMLRepository<Host> _hosts;
         static ConcurrentDictionary<string, Process> _processes;
  
         static void Main(string[] args)
@@ -27,22 +29,20 @@ namespace NetFluid.Service
 
         public static IEnumerable<string> Applications
         {
-            get { return _hosts.Keys; }
+            get { return _hosts.Select(x=>x.Name); }
         }
 
         public static Host ApplicationData(string name)
         {
-            Host host = null;
-            _hosts.TryGetValue(name, out host);
-            return host;
+            return _hosts.FirstOrDefault(x => x.Name == name);
         }
 
         public static Host Stop(string name)
         {
             Process process;
-            Host host;
+            var host = _hosts.FirstOrDefault(x => x.Name == name);
 
-            if (_hosts.TryGetValue(name,out host) && _processes.TryGetValue(name, out process))
+            if (host!=null && _processes.TryGetValue(name, out process))
             {
                 process.Kill();
                 Start(host.Name);
@@ -52,8 +52,8 @@ namespace NetFluid.Service
 
         public static Host Start(string name)
         {
-            Host host;
-            if (!_hosts.TryGetValue(name, out host))
+            Host host = _hosts.FirstOrDefault(x => x.Name == name);
+            if (host==null)
                 return null;
 
             var process = Process.Start("FluidPlayer.exe", host.Application);
@@ -93,7 +93,8 @@ namespace NetFluid.Service
         {
             var n = new Host(name, application, host, endpoint);
             Stop(name);
-            _hosts.AddOrUpdate(name, n, (x, y) => n);
+            _hosts.Remove(x=>x.Name==name);
+            _hosts.Add(n);
         }
         
         protected override void OnStart(string[] args)
@@ -113,24 +114,18 @@ namespace NetFluid.Service
             if (!Directory.Exists("./Hosting"))
                 Directory.CreateDirectory("./Hosting");
 
-            var hosts = new List<Host>();
-
-            if (File.Exists("hosts.xml"))
-                hosts = hosts.FromXML(File.ReadAllText("hosts.xml"));
-
-            _hosts = new ConcurrentDictionary<string, Host>();
+            _hosts = new XMLRepository<Host>("hosts.xml");
             _processes = new ConcurrentDictionary<string, Process>();
 
-            hosts.ForEach(host =>
+            _hosts.ForEach(host =>
             {
-                _hosts.TryAdd(host.Name,host);
                 host.Hosts.ForEach(x =>Engine.Cluster.AddFowarding(x,host.EndPoint));
                 Start(host.Name);
             });
 
             Engine.Start();
 
-            Engine.SetController(x => new FluidTemplate("./UI/index.html"),"Update in progress");
+            //Engine.SetController(x => new FluidTemplate("./UI/index.html"),"Update in progress");
         }
 
         /// <SUMMARY>
@@ -143,11 +138,11 @@ namespace NetFluid.Service
             {
                 try
                 {
-                    Stop(p.Key);
+                    Stop(p.Name);
                 }
                 catch (Exception exception)
                 {
-                    Engine.Logger.Log(LogLevel.Exception,"Error stopping "+p.Key,exception);
+                    Engine.Logger.Log(LogLevel.Exception,"Error stopping "+p.Name,exception);
                 }
             }
         }

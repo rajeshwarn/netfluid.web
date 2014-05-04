@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
@@ -44,6 +45,12 @@ namespace NetFluid.Collections
         public void Add(IEnumerable<T> elem)
         {
             list.AddRange(elem);
+            Save();
+        }
+
+        public void Remove(Predicate<T> elem)
+        {
+            list.RemoveAll(elem);
             Save();
         }
 
