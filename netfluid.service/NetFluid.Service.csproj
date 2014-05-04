@@ -62,6 +62,10 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\FluidPlayer\FluidPlayer.csproj">
+      <Project>{c17e4967-1758-4707-b35b-accfac426939}</Project>
+      <Name>FluidPlayer</Name>
+    </ProjectReference>
     <ProjectReference Include="..\netfluid\NetFluid4.csproj">
       <Project>{b215459f-37ff-411c-8e6b-9cdedb946f93}</Project>
       <Name>NetFluid4</Name>
