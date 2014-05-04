@@ -11,6 +11,12 @@ namespace FluidPlayer
         {
             var path = Path.GetFullPath(string.Join(" ", args));
 
+            if (!File.Exists(path))
+            {
+                Engine.Logger.Log(LogLevel.SystemException,"Specified path "+path+" doesn't exist");
+                return;
+            }
+
             Environment.CurrentDirectory = Path.GetDirectoryName(path);
 
             if (!Engine.LoadAppConfiguration(path))

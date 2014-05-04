@@ -28,6 +28,12 @@ namespace NetFluid.Service
             Run(new Service());
         }
 
+        public static bool IsUp(string name)
+        {
+            Process p;
+            return _processes.TryGetValue(name, out p) && !p.HasExited;
+        }
+
         public static IEnumerable<Host> Applications
         {
             get { return _hosts; }
@@ -40,7 +46,14 @@ namespace NetFluid.Service
 
             if (host!=null && _processes.TryGetValue(name, out process))
             {
-                process.Kill();
+                try
+                {
+                    process.Kill();
+                }
+                catch (Exception)
+                {
+                }
+
                 Start(host.Name);
             }
             return host;
@@ -51,31 +64,35 @@ namespace NetFluid.Service
             Host host = _hosts.FirstOrDefault(x => x.Name == name);
             if (host==null)
                 return null;
-
-            var process = Process.Start("FluidPlayer.exe", host.Application);
-
-            if (process == null) return host;
-            
-            process.Exited += (x, y) =>
+            try
             {
-                if (!host.Stopped)
-                {
-                    Engine.Logger.Log(LogLevel.Error, "Host " + host.Name + " unexpected termination, restarting");
-                    process = Process.Start("FluidPlayer.exe", host.Application);
-                }
-            };
+                var process = Process.Start("FluidPlayer.exe", host.Application);
 
-            _processes.AddOrUpdate(name, process, (x, y) =>
+                process.Exited += (x, y) =>
+                {
+                    if (!host.Stopped)
+                    {
+                        Engine.Logger.Log(LogLevel.Error, "Host " + host.Name + " unexpected termination, restarting");
+                        Start(name);
+                    }
+                };
+
+                _processes.AddOrUpdate(name, process, (x, y) =>
+                {
+                    try
+                    {
+                        y.Kill();
+                    }
+                    catch (Exception)
+                    {
+                    }
+                    return process;
+                });
+            }
+            catch (Exception)
             {
-                try
-                {
-                    y.Kill();
-                }
-                catch (Exception)
-                {
-                }
-                return process;
-            });
+
+            }
             return host;
         }
 
