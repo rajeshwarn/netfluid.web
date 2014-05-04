@@ -4,8 +4,35 @@
 <head>
     <meta charset="utf-8" />
     <title></title>
+    <link href="http://getbootstrap.com/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
-<body>
-
+    <body>
+        <table class="table">
+            % foreach(var host in Service.Applications)
+            <tr>
+                <th>Name</th>
+                <th>Path</th>
+                <th>Host names</th>
+                <th>Run on</th>
+            </tr>
+            <tr>
+                <td>{% host.Name %}</td>
+                <td>{% host.Application %}</td>
+                <td>
+                    % foreach(var hostname in host.Hosts)
+                        {% hostname %}
+                    % end foreach
+                </td>
+                <td>
+                    {% host.EndPoint %}<
+                </td>
+                <td>
+                    <a class="btn btn-success">start</a>
+                    <a class="btn btn-danger">stop</a>
+                    <a class="btn btn-warning">restart</a>
+                </td>
+            </tr>
+            % end foreach
+        </table>
 </body>
 </html>

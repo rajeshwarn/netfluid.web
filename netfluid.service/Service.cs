@@ -11,7 +11,7 @@ using NetFluid.Collections;
 
 namespace NetFluid.Service
 {
-    class Service : ServiceBase
+    public class Service : ServiceBase
     {
         static XMLRepository<Host> _hosts;
         static ConcurrentDictionary<string, Process> _processes;
@@ -21,20 +21,16 @@ namespace NetFluid.Service
             if (args!=null && args.Length>=1 && args[0]=="debug")
             {
                (new Service()).OnStart(null);
+               Engine.DevMode = true;
                 Console.ReadLine();
                 return;
             }
             Run(new Service());
         }
 
-        public static IEnumerable<string> Applications
+        public static IEnumerable<Host> Applications
         {
-            get { return _hosts.Select(x=>x.Name); }
-        }
-
-        public static Host ApplicationData(string name)
-        {
-            return _hosts.FirstOrDefault(x => x.Name == name);
+            get { return _hosts; }
         }
 
         public static Host Stop(string name)

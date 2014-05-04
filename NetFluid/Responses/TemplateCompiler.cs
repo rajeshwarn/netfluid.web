@@ -324,9 +324,7 @@ namespace NetFluid
             if (results.Errors.HasErrors)
             {
                 if (Engine.DevMode)
-                {
                     return CompilationError(results.Errors, filename);
-                }
 
                 foreach (CompilerError err in results.Errors)
                 {
