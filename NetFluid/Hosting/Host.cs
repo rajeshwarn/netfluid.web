@@ -34,7 +34,7 @@ using NetFluid.HTTP;
 
 namespace NetFluid
 {
-    internal class Host
+    public class Host
     {
         private static readonly char[] UrlSeparator;
         private static readonly Dictionary<string, Type> Types;
