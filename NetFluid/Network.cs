@@ -25,6 +25,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.NetworkInformation;
+using System.Net.Sockets;
 
 namespace NetFluid
 {
@@ -33,6 +34,19 @@ namespace NetFluid
     /// </summary>
     public class Network
     {
+        /// <summary>
+        /// Broadcast a message on the local network
+        /// </summary>
+        /// <param name="message">message to send</param>
+        /// <param name="port">recievers port</param>
+        public static void Broadcast(byte[] message, int port)
+        {
+            var udp = new UdpClient();
+            var endpoint = new IPEndPoint(IPAddress.Broadcast, port);
+            udp.Send(message, message.Length, endpoint);
+            udp.Close();
+        }
+
         /// <summary>
         ///     All available physical network interfaces
         /// </summary>
@@ -87,7 +101,7 @@ namespace NetFluid
         {
             get
             {
-                IEnumerable<NetworkInterface> adapters =
+                var adapters =
                     NetworkInterface.GetAllNetworkInterfaces().Where(x => x.OperationalStatus == OperationalStatus.Up);
                 return adapters.SelectMany(x => x.GetIPProperties().DhcpServerAddresses).ToArray();
             }

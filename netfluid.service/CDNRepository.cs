@@ -11,6 +11,7 @@ namespace NetFluid.Service
         static CDNRepository()
         {
             cdn = new XMLRepository<CDN>("cdn.xml");
+            cdn.ForEach(x=>Engine.AddPublicFolder(x.Host,"/",x.Path,false));
         }
 
         public static IEnumerable<CDN> CDN
