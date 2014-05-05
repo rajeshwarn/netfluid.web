@@ -96,6 +96,12 @@ namespace NetFluid.Service
                     RedirectStandardOutput = true
                 };
 
+                if (host.Username != null && host.Password != null)
+                {
+                    info.UserName = host.Username;
+                    Security.Secure(host.Password);
+                }
+
                 var process = Process.Start(info);
 
                 process.Exited += (x, y) =>

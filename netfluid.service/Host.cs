@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Security;
 
 
 namespace NetFluid.Service
@@ -14,5 +15,8 @@ namespace NetFluid.Service
         public List<string> Hosts;
         public string EndPoint;
         public bool Enabled;
+
+        public string Username;
+        public string Password;
     }
 }
