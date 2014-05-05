@@ -1,4 +1,6 @@
-﻿namespace NetFluid.Service
+﻿using NetFluid.Responses;
+
+namespace NetFluid.Service
 {
     [Route("host")]
     public class HostManager:FluidPage
@@ -15,7 +17,7 @@
             if (!Context.IsLocal) return new FluidTemplate("./UI/index.html");
 
             HostRepository.Start(id);
-            return new FluidTemplate("./UI/admin.html");
+            return new RedirectResponse("/");
         }
         
         [ParametrizedRoute("/stop")]
@@ -24,7 +26,7 @@
             if (!Context.IsLocal) return new FluidTemplate("./UI/index.html");
 
             HostRepository.Stop(id);
-            return new FluidTemplate("./UI/admin.html");
+            return new RedirectResponse("/");
         }
 
         [ParametrizedRoute("/restart")]
@@ -33,7 +35,7 @@
             if (!Context.IsLocal) return new FluidTemplate("./UI/index.html");
 
             HostRepository.ReStart(id);
-            return new FluidTemplate("./UI/admin.html");
+            return new RedirectResponse("/");
         }
 
         [ParametrizedRoute("/delete")]
@@ -42,7 +44,7 @@
             if (!Context.IsLocal) return new FluidTemplate("./UI/index.html");
 
             HostRepository.Delete(id);
-            return new FluidTemplate("./UI/admin.html");
+            return new RedirectResponse("/");
         }
 
         [Route("/update")]
@@ -51,7 +53,7 @@
             if (!Context.IsLocal) return new FluidTemplate("./UI/index.html");
 
             HostRepository.Update(id, name, application, hosts, endpoint, enabled, username, password);
-            return new FluidTemplate("./UI/admin.html");
+            return new RedirectResponse("/");
         }
 
         [Route("/add")]
@@ -60,7 +62,7 @@
             if (!Context.IsLocal) return new FluidTemplate("./UI/index.html");
 
             HostRepository.Add(name, application, hosts, endpoint, enabled, username, password);
-            return new FluidTemplate("./UI/admin.html");
+            return new RedirectResponse("/");
         }
     }
 }

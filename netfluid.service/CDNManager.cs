@@ -1,4 +1,6 @@
-﻿namespace NetFluid.Service
+﻿using NetFluid.Responses;
+
+namespace NetFluid.Service
 {
     [Route("cdn")]
     class CDNManager:FluidPage
@@ -8,7 +10,7 @@
         {
             if (!Context.IsLocal) return new FluidTemplate("./UI/index.html");
             CDNRepository.Update(id,host,path);
-            return new FluidTemplate("./UI/admin.html");
+            return new RedirectResponse("/");
         }
 
         [Route("add")]
@@ -16,7 +18,7 @@
         {
             if (!Context.IsLocal) return new FluidTemplate("./UI/index.html");
             CDNRepository.Add(host,path);
-            return new FluidTemplate("./UI/admin.html");
+            return new RedirectResponse("/");
         }
 
         [ParametrizedRoute("delete")]
@@ -24,7 +26,7 @@
         {
             if (!Context.IsLocal) return new FluidTemplate("./UI/index.html");
             CDNRepository.Delete(id);
-            return new FluidTemplate("./UI/admin.html");
+            return new RedirectResponse("/");
         }
     }
 }

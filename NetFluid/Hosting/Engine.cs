@@ -35,12 +35,12 @@ namespace NetFluid
 {
     public static class Engine
     {
-        private static readonly Dictionary<string, Host> Hosts;
+        private static readonly Dictionary<string, Host> _hosts;
 
         static Engine()
         {
             DefaultHost = new Host("default");
-            Hosts = new Dictionary<string, Host>();
+            _hosts = new Dictionary<string, Host>();
             AppDomain.CurrentDomain.AssemblyResolve += CurrentDomain_AssemblyResolve;
             AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;
             Interfaces = new InterfaceManager();
@@ -67,15 +67,20 @@ namespace NetFluid
         public static ISessionManager Sessions { get; set; }
         public static IClusterManager Cluster { get; set; }
 
+        public static IEnumerable<Host> Hosts
+        {
+            get { return _hosts.Values; }
+        }
+
         public static string[] Hostnames
         {
-            get { return Hosts.Keys.ToArray(); }
+            get { return _hosts.Keys.ToArray(); }
         }
 
         public static Host Host(string name)
         {
             Host h;
-            Hosts.TryGetValue(name, out h);
+            _hosts.TryGetValue(name, out h);
             return h;
         }
 
@@ -93,7 +98,7 @@ namespace NetFluid
                 var sb = new StringBuilder("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
                 sb.AppendLine("<application>");
                 sb.AppendLine("<hosts>");
-                foreach (var item in Hosts)
+                foreach (var item in _hosts)
                 {
                     sb.AppendLine(item.Value.RoutesMap);
                 }
@@ -114,11 +119,11 @@ namespace NetFluid
         private static Host ResolveHost(string host)
         {
             Host h;
-            if (Hosts.TryGetValue(host, out h))
+            if (_hosts.TryGetValue(host, out h))
                 return h;
 
             h=new Host(host);
-            Hosts.Add(host, h);
+            _hosts.Add(host, h);
 
             return h;
         }
@@ -131,7 +136,7 @@ namespace NetFluid
             try
             {
                 Host host;
-                if (Hosts.TryGetValue(cnt.Request.Host, out host))
+                if (_hosts.TryGetValue(cnt.Request.Host, out host))
                 {
                     if (DevMode)
                         Console.WriteLine(cnt.Request.Host + cnt.Request.Url + " - Using host " + cnt.Request.Host);

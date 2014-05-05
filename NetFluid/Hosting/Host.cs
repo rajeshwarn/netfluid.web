@@ -36,6 +36,13 @@ namespace NetFluid
 {
     public class Host
     {
+        class Folder
+        {
+            public bool Immutable;
+            public string Path;
+            public string Uri;
+        }
+
         private static readonly char[] UrlSeparator;
         private static readonly Dictionary<string, Type> Types;
         private readonly MemoryCache _eTagCache;
@@ -48,7 +55,9 @@ namespace NetFluid
         private RouteTarget _callOnAnyCode;
         private Controller[] _controllers;
 
-        private PublicFolder[] _folders;
+        private Folder[] _folders;
+        private Folder[] _immutableFolders;
+
         private ParamRouteTarget[] parametrized;
         private RegexRouteTarget[] regex;
 
@@ -60,7 +69,7 @@ namespace NetFluid
 
         internal Host(string name)
         {
-            this._name = name;
+            _name = name;
 
             _controllers = new Controller[0];
 
@@ -68,14 +77,27 @@ namespace NetFluid
             parametrized = new ParamRouteTarget[0];
             routes = new Dictionary<string, RouteTarget>();
 
-            _folders = new PublicFolder[0];
+            _folders = new Folder[0];
             _immutableData = new Dictionary<string, byte[]>();
+            _immutableFolders = new Folder[0];
 
             _callOn = new Dictionary<StatusCode, RouteTarget>();
 
             _instances = new List<IMethodExposer>();
 
             _eTagCache = MemoryCache.Default;
+        }
+
+        public PublicFolder[] PublicFolders
+        {
+            get 
+            {
+                return _folders.Concat(_immutableFolders).Select(x =>
+                {
+                    var r = new PublicFolder {Host = _name, Immutable = x.Immutable, RealPath = x.Path, UriPath = x.Uri};
+                    return r;
+                }).ToArray();
+            }
         }
 
         public string RoutesMap
@@ -142,7 +164,6 @@ namespace NetFluid
                 c.Writer.Write(item.ToString());
             c.Close();
         }
-
 
         private static void Finalize(Context c, MethodInfo method, object target, params object[] args)
         {
@@ -540,18 +561,18 @@ namespace NetFluid
                 Engine.Logger.Log(LogLevel.Error, "Failed to create instance of " + page.FullName, ex);
             }
 
-            foreach (MethodInfo m in page.GetMethods())
+            foreach (var m in page.GetMethods())
             {
-                foreach (Route ma in m.CustomAttribute<Route>())
+                foreach (var ma in m.CustomAttribute<Route>())
                     SetRoute(ma.Uri, page, m);
 
-                foreach (ParametrizedRoute ma in m.CustomAttribute<ParametrizedRoute>())
+                foreach (var ma in m.CustomAttribute<ParametrizedRoute>())
                     SetParameterizedRoute(ma.Uri, page, m);
 
-                foreach (RegexRoute ma in m.CustomAttribute<RegexRoute>())
+                foreach (var ma in m.CustomAttribute<RegexRoute>())
                     SetRegexRoute(ma.Uri, page, m);
 
-                foreach (CallOn ma in m.CustomAttribute<CallOn>())
+                foreach (var ma in m.CustomAttribute<CallOn>())
                 {
                     if (!_callOn.ContainsKey(ma.StatusCode))
                         _callOn.Add(ma.StatusCode, new RouteTarget {Type = page, Method = m});
@@ -587,6 +608,14 @@ namespace NetFluid
             }
         }
 
+        public void Add(PublicFolder folder)
+        {
+            if (folder.Immutable)
+                AddImmutablePublicFolder(folder.UriPath, folder.RealPath);
+            else
+                AddPublicFolder(folder.UriPath, folder.RealPath);
+        }
+
         public void AddPublicFolder(string uriPath, string realPath)
         {
             if (!Directory.Exists(realPath))
@@ -600,10 +629,11 @@ namespace NetFluid
             if (f.Last() != Path.DirectorySeparatorChar)
                 f = f + Path.DirectorySeparatorChar;
 
-            var p = new PublicFolder
+            var p = new Folder
             {
                 Path = f,
-                Uri = uriPath
+                Uri = uriPath,
+                Immutable = false
             };
             _folders = (_folders.Concat(p)).ToArray();
         }
@@ -619,9 +649,9 @@ namespace NetFluid
                 return;
             }
 
-            foreach (string x in Directory.GetFiles(m, "*.*", SearchOption.AllDirectories))
+            foreach (var x in Directory.GetFiles(m, "*.*", SearchOption.AllDirectories))
             {
-                string s = x.Substring(m.Length).Replace(Path.DirectorySeparatorChar, '/');
+                var s = x.Substring(m.Length).Replace(Path.DirectorySeparatorChar, '/');
 
                 if (s[0] == '/')
                     s = s.Substring(1);
@@ -630,6 +660,7 @@ namespace NetFluid
                 if (!_immutableData.ContainsKey(fileUri))
                     _immutableData.Add(fileUri, File.ReadAllBytes(x));
             }
+            _immutableFolders = _immutableFolders.Concat(new Folder {Immutable = true, Path = m, Uri = uriPath}).ToArray();
         }
 
         public void SetController(Func<Context, object> act, string friendlyname = null)
@@ -942,11 +973,5 @@ namespace NetFluid
         }
 
         #endregion
-
-        private struct PublicFolder
-        {
-            public string Path;
-            public string Uri;
-        }
     }
 }
