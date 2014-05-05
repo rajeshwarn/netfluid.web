@@ -1,7 +1,4 @@
-﻿using System;
-using System.IO;
-
-namespace NetFluid.Service
+﻿namespace NetFluid.Service
 {
     [Route("host")]
     public class HostManager:FluidPage

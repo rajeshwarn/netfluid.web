@@ -13,6 +13,8 @@ C:\Users\Matteo\Desktop\NetFluid\netfluid\Examples\FluidCenter\bin\Release\NetFl
 C:\Users\Matteo\Desktop\NetFluid\netfluid\Examples\FluidCenter\bin\Release\NetFluid.pdb
 C:\Users\Matteo\Desktop\NetFluid\netfluid\Examples\FluidCenter\obj\Release\FluidCenter.exe
 C:\Users\Matteo\Desktop\NetFluid\netfluid\Examples\FluidCenter\obj\Release\FluidCenter.pdb
+C:\Users\Matteo\Desktop\NetFluid\REPOSITORY\FluidCenter\bin\Release\UI\admin.html
+C:\Users\Matteo\Desktop\NetFluid\REPOSITORY\FluidCenter\bin\Release\UI\index.html
 C:\Users\Matteo\Desktop\NetFluid\REPOSITORY\FluidCenter\bin\Release\FluidCenter.exe.config
 C:\Users\Matteo\Desktop\NetFluid\REPOSITORY\FluidCenter\bin\Release\FluidCenter.exe
 C:\Users\Matteo\Desktop\NetFluid\REPOSITORY\FluidCenter\bin\Release\FluidCenter.pdb
@@ -28,5 +30,3 @@ C:\Users\Matteo\Desktop\NetFluid\REPOSITORY\FluidCenter\obj\Release\FluidCenter.
 C:\Users\Matteo\Desktop\NetFluid\REPOSITORY\FluidCenter\obj\Release\FluidCenter.csproj.GenerateResource.Cache
 C:\Users\Matteo\Desktop\NetFluid\REPOSITORY\FluidCenter\obj\Release\FluidCenter.exe
 C:\Users\Matteo\Desktop\NetFluid\REPOSITORY\FluidCenter\obj\Release\FluidCenter.pdb
-C:\Users\Matteo\Desktop\NetFluid\REPOSITORY\FluidCenter\bin\Release\UI\index.html
-C:\Users\Matteo\Desktop\NetFluid\REPOSITORY\FluidCenter\bin\Release\UI\admin.html

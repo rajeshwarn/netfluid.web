@@ -40,6 +40,7 @@ namespace NetFluid.Service
 
             Engine.Start();
             HostRepository.Start();
+            Engine.DevMode = true;
         }
 
 
