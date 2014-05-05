@@ -99,7 +99,7 @@ namespace NetFluid.Service
                 if (host.Username != null && host.Password != null)
                 {
                     info.UserName = host.Username;
-                    Security.Secure(host.Password);
+                    info.Password = Security.Secure(host.Password);
                 }
 
                 var process = Process.Start(info);
