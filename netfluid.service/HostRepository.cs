@@ -159,5 +159,10 @@ namespace NetFluid.Service
 
             return n;
         }
+
+        public static void Delete(string id)
+        {
+            _hosts.Remove(x=>x.Id==id);
+        }
     }
 }

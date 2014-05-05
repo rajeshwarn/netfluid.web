@@ -39,6 +39,15 @@ namespace NetFluid.Service
             return new FluidTemplate("./UI/admin.html");
         }
 
+        [ParametrizedRoute("/delete")]
+        public IResponse Delete(string id)
+        {
+            if (!Context.IsLocal) return new FluidTemplate("./UI/index.html");
+
+            HostRepository.Delete(id);
+            return new FluidTemplate("./UI/admin.html");
+        }
+
         [Route("/update")]
         public IResponse Update(string id, string name, string application, string hosts, string endpoint, bool enabled)
         {
