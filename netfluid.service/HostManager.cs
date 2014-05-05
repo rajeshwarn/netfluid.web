@@ -1,5 +1,8 @@
-﻿namespace NetFluid.Service
+﻿using System.IO;
+
+namespace NetFluid.Service
 {
+    [Route("host")]
     public class HostManager:FluidPage
     {
         [Route("/")]
@@ -18,6 +21,7 @@
             }
             return new FluidTemplate("./UI/index.html");
         }
+        
         [ParametrizedRoute("/stop")]
         public IResponse Stop(string name)
         {
@@ -30,7 +34,7 @@
         }
 
         [ParametrizedRoute("/restart")]
-        public IResponse ResStart(string name)
+        public IResponse ReStart(string name)
         {
             if (Context.IsLocal)
             {
@@ -38,6 +42,12 @@
                 return new FluidTemplate("./UI/admin.html");
             }
             return new FluidTemplate("./UI/index.html");
+        }
+
+        [Route("/update")]
+        public IResponse Update(string id, string name, string application, string hosts, string endpoint, bool enabled)
+        {
+            
         }
     }
 }

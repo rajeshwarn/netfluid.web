@@ -53,8 +53,7 @@ namespace NetFluid.Service
                 catch (Exception)
                 {
                 }
-
-                Start(host.Name);
+                _processes.TryRemove(name, out process);
             }
             return host;
         }
@@ -70,7 +69,7 @@ namespace NetFluid.Service
 
                 process.Exited += (x, y) =>
                 {
-                    if (!host.Stopped)
+                    if (host.Enabled)
                     {
                         Engine.Logger.Log(LogLevel.Error, "Host " + host.Name + " unexpected termination, restarting");
                         Start(name);
@@ -102,9 +101,17 @@ namespace NetFluid.Service
             Start(name);
         }
 
-        public static void Add(string name, string application, string host, string endpoint)
+        public static void Add(string name, string application, string host, string endpoint, bool enabled)
         {
-            var n = new Host(name, application, host, endpoint);
+            var n = new Host
+            {
+                Id = Security.UID(),
+                Name = name,
+                Application = application,
+                Hosts = new List<string>(host.Split(new []{'\r','\n'},StringSplitOptions.RemoveEmptyEntries)),
+                Enabled = enabled,
+                EndPoint = endpoint
+            };
             Stop(name);
             _hosts.Remove(x=>x.Name==name);
             _hosts.Add(n);
