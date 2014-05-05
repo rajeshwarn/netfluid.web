@@ -55,6 +55,29 @@
                                                 <input type="checkbox" name="enabled" id="updateHostRun">Enabled
                                             </label>
                                         </div>
+                                        <div class="panel-group" id="accordion">
+                                            <div class="panel panel-default">
+                                                <div class="panel-heading">
+                                                    <h4 class="panel-title">
+                                                        <a data-toggle="collapse" data-parent="#accordion" href="#collapseUserHost">
+                                                            Username and password
+                                                        </a>
+                                                    </h4>
+                                                </div>
+                                                <div id="collapseUserHost" class="panel-collapse collapse">
+                                                    <div class="panel-body">
+                                                        <div class="form-group">
+                                                            <label for="updateHostUsername">Username</label>
+                                                            <input type="text" name="username" class="form-control" id="updateHostUsername" value="" />
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label for="updateHostPassword">Password</label>
+                                                            <input type="text" name="password" class="form-control" id="updateHostPassword" value="" />
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
                                         <input type="submit" class="btn btn-primary" value="save changes" />
                                     </form>
                                 </div>
@@ -142,6 +165,29 @@
                                                             <a class="btn btn-success" href="/host/start/{% host.Id %}">start</a>
                                                             <a class="btn btn-danger" href="/host/stop/{% host.Id %}">stop</a>
                                                             <a class="btn btn-warning" href="/host/restart/{% host.Id %}">restart</a>
+                                                        </div>
+                                                    </div>
+                                                    <div class="panel-group" id="accordion">
+                                                        <div class="panel panel-default">
+                                                            <div class="panel-heading">
+                                                                <h4 class="panel-title">
+                                                                    <a data-toggle="collapse" data-parent="#accordion" href="#collapseUserHost{% host.Id %}">
+                                                                        Username and password
+                                                                    </a>
+                                                                </h4>
+                                                            </div>
+                                                            <div id="collapseUserHost{% host.Id %}" class="panel-collapse collapse">
+                                                                <div class="panel-body">
+                                                                    <div class="form-group">
+                                                                        <label for="updateHostUsername">Username</label>
+                                                                        <input type="text" name="username" class="form-control" id="updateHostUsername" value="{% host.Username ?? "" %}">
+                                                                    </div>
+                                                                    <div class="form-group">
+                                                                        <label for="updateHostPassword">Password</label>
+                                                                        <input type="text" name="password" class="form-control" id="updateHostPassword" value="{% host.Password ?? "" %}">
+                                                                    </div>
+                                                                </div>
+                                                            </div>
                                                         </div>
                                                     </div>
                                                     <div class="panel-group" id="accordion">

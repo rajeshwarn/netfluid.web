@@ -49,20 +49,20 @@ namespace NetFluid.Service
         }
 
         [Route("/update")]
-        public IResponse Update(string id, string name, string application, string hosts, string endpoint, bool enabled)
+        public IResponse Update(string id, string name, string application, string hosts, string endpoint, bool enabled, string username, string password)
         {
             if (!Context.IsLocal) return new FluidTemplate("./UI/index.html");
 
-            HostRepository.Update(id, name, application, hosts, endpoint, enabled);
+            HostRepository.Update(id, name, application, hosts, endpoint, enabled, username, password);
             return new FluidTemplate("./UI/admin.html");
         }
 
         [Route("/add")]
-        public IResponse Update(string name, string application, string hosts, string endpoint, bool enabled)
+        public IResponse Update(string name, string application, string hosts, string endpoint, bool enabled, string username, string password)
         {
             if (!Context.IsLocal) return new FluidTemplate("./UI/index.html");
 
-            HostRepository.Add(name, application, hosts, endpoint, enabled);
+            HostRepository.Add(name, application, hosts, endpoint, enabled, username, password);
             return new FluidTemplate("./UI/admin.html");
         }
     }

@@ -96,6 +96,8 @@ namespace NetFluid.Service
                     RedirectStandardOutput = true
                 };
 
+                var k = host.Username ?? "";
+
                 if (host.Username != null && host.Password != null)
                 {
                     info.UserName = host.Username;
@@ -143,7 +145,7 @@ namespace NetFluid.Service
             return _hosts.FirstOrDefault(x => x.Id == id);
         }
 
-        public static Host Update(string id, string name, string application, string host, string endpoint, bool enabled)
+        public static Host Update(string id, string name, string application, string host, string endpoint, bool enabled, string username, string password)
         {
             var h = Get(id);
 
@@ -154,6 +156,8 @@ namespace NetFluid.Service
                 h.Hosts = new List<string>(host.Split(new[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries));
                 h.EndPoint = endpoint;
                 h.Enabled = enabled;
+                h.Username = username;
+                h.Password = password;
             }
 
             if (enabled)
@@ -164,7 +168,7 @@ namespace NetFluid.Service
             return h;
         }
 
-        public static Host Add(string name, string application, string host, string endpoint, bool enabled)
+        public static Host Add(string name, string application, string host, string endpoint, bool enabled, string username, string password)
         {
             var n = new Host
             {
@@ -173,7 +177,9 @@ namespace NetFluid.Service
                 Application = application,
                 Hosts = new List<string>(host.Split(new[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries)),
                 Enabled = enabled,
-                EndPoint = endpoint
+                EndPoint = endpoint,
+                Username = username,
+                Password = password
             };
 
             if(!enabled)
