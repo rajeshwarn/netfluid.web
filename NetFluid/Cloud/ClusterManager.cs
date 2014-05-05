@@ -56,15 +56,24 @@ namespace NetFluid.Cloud
 
             if (!IPAddress.TryParse(remote, out ip))
             {
-                IPAddress[] addr =
-                    System.Net.Dns.GetHostAddresses(remote)
+
+
+                try
+                {
+                    IPAddress[] addr = System.Net.Dns.GetHostAddresses(remote)
                         .Where(x => x.AddressFamily == AddressFamily.InterNetwork)
                         .ToArray();
 
-                if (addr.Length == 0)
-                    throw new Exception("Host " + remote + " not found");
+                    if (addr.Length == 0)
+                        throw new Exception("Host " + remote + " not found");
 
-                ip = addr[0];
+                    ip = addr[0];
+                }
+                catch (Exception)
+                {
+                    Engine.Logger.Log(LogLevel.Error,"Add fowarding, unknow host "+remote);
+                }
+
             }
 
             Targets.TryAdd(host, new IPEndPoint(ip, port));

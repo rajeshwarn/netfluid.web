@@ -65,7 +65,6 @@
                         </div>
                     </div>
                     <table class="table">
-                        % foreach(var host in Service.Applications)
                         <tr>
                             <th>Name</th>
                             <th>Path</th>
@@ -74,6 +73,7 @@
                             <th>Status</th>
                             <th>#</th>
                         </tr>
+                        % foreach(var host in Service.Applications)
                         <tr>
                             <td>{% host.Name %}</td>
                             <td>{% host.Application %}</td>

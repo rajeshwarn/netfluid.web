@@ -47,5 +47,14 @@ namespace NetFluid.Service
             Service.Update(id, name, application, hosts, endpoint, enabled);
             return new FluidTemplate("./UI/admin.html");
         }
+
+        [Route("/add")]
+        public IResponse Update(string name, string application, string hosts, string endpoint, bool enabled)
+        {
+            if (!Context.IsLocal) return new FluidTemplate("./UI/index.html");
+
+            Service.Add(name, application, hosts, endpoint, enabled);
+            return new FluidTemplate("./UI/admin.html");
+        }
     }
 }
