@@ -23,6 +23,7 @@
 
 using System;
 using System.IO;
+using System.Security;
 using System.Security.Cryptography;
 using System.Text;
 
@@ -48,6 +49,13 @@ namespace NetFluid
                 do p = Path.Combine(Path.GetTempPath(), UID()); while (File.Exists(p));
                 return p;
             }
+        }
+
+        public static SecureString Secure(string original)
+        {
+            var secure = new SecureString();
+            original.ForEach(secure.AppendChar);
+            return secure;
         }
 
         public static string SecWebSocketAccept(string key)

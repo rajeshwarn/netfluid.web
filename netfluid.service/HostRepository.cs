@@ -2,7 +2,9 @@
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
+using System.Security;
 using NetFluid.Collections;
 
 namespace NetFluid.Service
@@ -17,12 +19,19 @@ namespace NetFluid.Service
             _hosts = new XMLRepository<Host>("hosts.xml");
             _processes = new ConcurrentDictionary<string, Process>();
 
+
+            if (!Directory.Exists("./Hosting"))
+                Directory.CreateDirectory("./Hosting");
+
+        }
+
+        public static void Start()
+        {
             _hosts.ForEach(host =>
             {
                 host.Hosts.ForEach(x => Engine.Cluster.AddFowarding(x, host.EndPoint));
-                Start(host.Name);
+                Start(host.Id);
             });
-
         }
 
         public static void Stop()

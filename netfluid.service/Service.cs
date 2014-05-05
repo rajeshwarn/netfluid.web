@@ -30,7 +30,6 @@ namespace NetFluid.Service
         {
             Directory.SetCurrentDirectory(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location));
 
-            #region LOAD CONFIGURATION
             if (!Engine.LoadAppConfiguration())
             {
                 Engine.Interfaces.AddAllAddresses();
@@ -38,14 +37,9 @@ namespace NetFluid.Service
                 Engine.Interfaces.AddInterface("127.0.0.1", 80);
                 Engine.Interfaces.AddInterface("127.0.0.1", 8000);
             }
-            #endregion
-
-            if (!Directory.Exists("./Hosting"))
-                Directory.CreateDirectory("./Hosting");
 
             Engine.Start();
-
-            //Engine.SetController(x => new FluidTemplate("./UI/index.html"),"Update in progress");
+            HostRepository.Start();
         }
 
 
