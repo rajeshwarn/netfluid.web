@@ -35,12 +35,11 @@ namespace NetFluid
 {
     public static class Engine
     {
-        private static readonly Host MainHost;
         private static readonly Dictionary<string, Host> Hosts;
 
         static Engine()
         {
-            MainHost = new Host("default");
+            DefaultHost = new Host("default");
             Hosts = new Dictionary<string, Host>();
             AppDomain.CurrentDomain.AssemblyResolve += CurrentDomain_AssemblyResolve;
             AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;
@@ -62,6 +61,7 @@ namespace NetFluid
             return Directory.GetFiles("./", "*.exe").Select(exe => Assembly.LoadFile(Path.GetFullPath(exe))).FirstOrDefault(ass => ass != null && ass.FullName == args.Name);
         }
 
+        private static readonly Host DefaultHost;
         public static ILogger Logger { get; set; }
         public static IWebInterfaceManager Interfaces { get; set; }
         public static ISessionManager Sessions { get; set; }
@@ -139,7 +139,7 @@ namespace NetFluid
                     if (DevMode)
                         Console.WriteLine(cnt.Request.Host + cnt.Request.Url + " - Using default web application");
 
-                    MainHost.Serve(cnt);
+                    DefaultHost.Serve(cnt);
                 }
             }
             catch (Exception ex)
@@ -237,9 +237,9 @@ namespace NetFluid
         public static void AddPublicFolder(string uri, string path, bool immutable=false)
         {
         	if (immutable)
-        		MainHost.AddImmutablePublicFolder(uri,path);
+        		DefaultHost.AddImmutablePublicFolder(uri,path);
         	else
-        		MainHost.AddPublicFolder(uri,path);
+        		DefaultHost.AddPublicFolder(uri,path);
         }
 
         /// <summary>
@@ -332,7 +332,7 @@ namespace NetFluid
                     }
                     else
                     {
-                        MainHost.Load(p);
+                        DefaultHost.Load(p);
                     }
                 }
             }
@@ -377,7 +377,7 @@ namespace NetFluid
         /// <returns></returns>
         public static RouteSetter SetController(Func<Context,object> act,string name="")
         {
-            MainHost.SetController(act,name);
+            DefaultHost.SetController(act,name);
             return new RouteSetter();
         }
 
@@ -390,73 +390,73 @@ namespace NetFluid
         /// <returns></returns>
         public static RouteSetter SetController(Func<Context, bool> condition, Func<Context, object> act, string name = "")
         {
-            MainHost.SetController(condition, act, name);
+            DefaultHost.SetController(condition, act, name);
             return new RouteSetter();
         }
 
         public static RouteSetter SetController(Action<Context> act, string name = "")
         {
-            MainHost.SetController(act, name);
+            DefaultHost.SetController(act, name);
             return new RouteSetter();
         }
 
         public static RouteSetter SetController(Func<Context, bool> condition, Action<Context> act, string name = "")
         {
-            MainHost.SetController(condition, act, name);
+            DefaultHost.SetController(condition, act, name);
             return new RouteSetter();
         }
 
         public static RouteSetter SetRoute(string url, string methodFullname)
         {
-            MainHost.SetRoute(url, methodFullname);
+            DefaultHost.SetRoute(url, methodFullname);
             return new RouteSetter();
         }
 
         public static RouteSetter SetRoute(string url, Type type, string method)
         {
-            MainHost.SetRoute(url, type, method);
+            DefaultHost.SetRoute(url, type, method);
             return new RouteSetter();
         }
 
         public static RouteSetter SetRoute(string url, Type type, MethodInfo method)
         {
-            MainHost.SetRoute(url, type, method);
+            DefaultHost.SetRoute(url, type, method);
             return new RouteSetter();
         }
 
         public static RouteSetter SetParameterizedRoute(string url, string methodFullname)
         {
-            MainHost.SetParameterizedRoute(url, methodFullname);
+            DefaultHost.SetParameterizedRoute(url, methodFullname);
             return new RouteSetter();
         }
 
         public static RouteSetter SetParameterizedRoute(string url, Type type, string method)
         {
-            MainHost.SetParameterizedRoute(url, type, method);
+            DefaultHost.SetParameterizedRoute(url, type, method);
             return new RouteSetter();
         }
 
         public static RouteSetter SetParameterizedRoute(string url, Type type, MethodInfo method)
         {
-            MainHost.SetParameterizedRoute(url, type, method);
+            DefaultHost.SetParameterizedRoute(url, type, method);
             return new RouteSetter();
         }
 
         public static RouteSetter SetRegexRoute(string rgx, string methodFullname)
         {
-            MainHost.SetRegexRoute(rgx, methodFullname);
+            DefaultHost.SetRegexRoute(rgx, methodFullname);
             return new RouteSetter();
         }
 
         public static RouteSetter SetRegexRoute(string rgx, Type type, string method)
         {
-            MainHost.SetRegexRoute(rgx, type, method);
+            DefaultHost.SetRegexRoute(rgx, type, method);
             return new RouteSetter();
         }
 
         public static RouteSetter SetRegexRoute(string rgx, Type type, MethodInfo method)
         {
-            MainHost.SetRegexRoute(rgx, type, method);
+            DefaultHost.SetRegexRoute(rgx, type, method);
             return new RouteSetter();
         }
 
