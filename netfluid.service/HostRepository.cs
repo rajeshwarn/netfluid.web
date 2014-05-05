@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Security;
 using NetFluid.Collections;
 
 namespace NetFluid.Service
@@ -87,7 +86,17 @@ namespace NetFluid.Service
                 return null;
             try
             {
-                var process = Process.Start("FluidPlayer.exe", host.Application);
+                var info = new ProcessStartInfo()
+                {
+                    FileName = "FluidPlayer.exe",
+                    Arguments = host.Application,
+                    UseShellExecute = false,
+                    RedirectStandardError = true,
+                    RedirectStandardInput = true,
+                    RedirectStandardOutput = true
+                };
+
+                var process = Process.Start(info);
 
                 process.Exited += (x, y) =>
                 {
