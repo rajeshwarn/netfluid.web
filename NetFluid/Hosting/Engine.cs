@@ -113,10 +113,14 @@ namespace NetFluid
 
         private static Host ResolveHost(string host)
         {
-            if (!Hosts.ContainsKey(host))
-                Hosts.Add(host, new Host(host));
+            Host h;
+            if (Hosts.TryGetValue(host, out h))
+                return h;
 
-            return Hosts[host];
+            h=new Host(host);
+            Hosts.Add(host, h);
+
+            return h;
         }
 
         internal static void Serve(Context cnt)
