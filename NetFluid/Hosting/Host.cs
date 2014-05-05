@@ -561,22 +561,22 @@ namespace NetFluid
                 }
             }
 
-            foreach (Route r in page.CustomAttribute<Route>(true))
+            foreach (var r in page.CustomAttribute<Route>(true))
             {
-                foreach (MethodInfo m in page.GetMethods())
+                foreach (var m in page.GetMethods())
                 {
-                    foreach (Route ma in m.CustomAttribute<Route>())
+                    foreach (var ma in m.CustomAttribute<Route>())
                         SetRoute(r.Uri + ma.Uri, page, m);
 
-                    foreach (ParametrizedRoute ma in m.CustomAttribute<ParametrizedRoute>())
+                    foreach (var ma in m.CustomAttribute<ParametrizedRoute>())
                         SetParameterizedRoute(r.Uri + ma.Uri, page, m);
 
-                    foreach (RegexRoute ma in m.CustomAttribute<RegexRoute>())
+                    foreach (var ma in m.CustomAttribute<RegexRoute>())
                         SetRegexRoute(Regex.Escape(r.Uri) + ma.Uri, page, m);
                 }
             }
 
-            foreach (CallOn r in page.CustomAttribute<CallOn>(true))
+            foreach (var r in page.CustomAttribute<CallOn>(true))
             {
                 if (!_callOn.ContainsKey(r.StatusCode))
                 {
