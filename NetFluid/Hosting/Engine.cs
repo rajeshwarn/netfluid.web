@@ -72,6 +72,13 @@ namespace NetFluid
             get { return Hosts.Keys.ToArray(); }
         }
 
+        public static Host Host(string name)
+        {
+            Host h;
+            Hosts.TryGetValue(name, out h);
+            return h;
+        }
+
         public static bool RunOnMono
         {
             get { return Type.GetType("Mono.Runtime") != null; }
