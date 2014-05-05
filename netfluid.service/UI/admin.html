@@ -3,85 +3,56 @@
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <title></title>
     <link href="http://getbootstrap.com/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
     <body>
-        <table class="table">
-            % foreach(var host in Service.Applications)
-            <tr>
-                <th>Name</th>
-                <th>Path</th>
-                <th>Host names</th>
-                <th>Run on</th>
-                <th>Status</th>
-            </tr>
-            <tr>
-                <td>{% host.Name %}</td>
-                <td>{% host.Application %}</td>
-                <td>
-                    % foreach(var hostname in host.Hosts)
-                    <div>{% hostname %}</div>
-                    % end foreach
-                </td>
-                <td>
-                    {% host.EndPoint %}
-                </td>
-                <td>
-                    % if(Service.IsUp(host.Name))
-                        <div class="btn btn-success"><strong>UP</strong></div>
-                    % else
-                        <div class="btn btn-danger"><strong>DOWN</strong></div>
-                    % end if
-                </td>
-                <td>
-                    <a class="btn btn-success" href="/host/start/{% host.Id %}">start</a>
-                    <a class="btn btn-danger" href="/host/stop/{% host.Id %}">stop</a>
-                    <a class="btn btn-warning" href="/host/restart/{% host.Id %}">restart</a>
-                </td>
-                <td>
-                    <button class="btn btn-primary" data-toggle="modal" data-target="#myModal">
-                        update
-                    </button>
+        <div class="container">
+            <div class="row">
+                <div class="col-md-2">
+                    <li>
+                        <ul>
+                            <a href="#host">Hosts</a>
+                        </ul>
+                    </li>
+                </div>
+                <div class="col-md-10">
+                    <h2 id="host">
+                        <span>Hosted applications</span>
+                        <button class="btn btn-success" data-toggle="modal" data-target="#ModalAddHost">
+                            add new
+                        </button>
+                    </h2>
                     <!-- Modal -->
-                    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                    <div class="modal fade" id="ModalAddHost" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
                         <div class="modal-dialog">
                             <div class="modal-content">
                                 <div class="modal-header">
                                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                                    <h4 class="modal-title" id="myModalLabel">{% host.Name %}</h4>
+                                    <h4 class="modal-title" id="myModalLabel">Add new application</h4>
                                 </div>
                                 <div class="modal-body">
-                                    <form method="POST" action="/host/update">
-                                        <input type="hidden" name="id" value="{% host.Id %}"/>
+                                    <form method="POST" action="/host/add">
                                         <div class="form-group">
                                             <label for="updateHostName">Name</label>
-                                            <input type="text" name="name" class="form-control" id="updateHostName" value="{% host.Name %}">
+                                            <input type="text" name="name" class="form-control" id="updateHostName" value="">
                                         </div>
                                         <div class="form-group">
                                             <label for="updateHostName">Path</label>
-                                            <input type="text" name="application" class="form-control" id="updateHostPath" value="{% host.Application %}">
+                                            <input type="text" name="application" class="form-control" id="updateHostPath" value="">
                                         </div>
                                         <div class="form-group">
-                                            <label for="updateHostValues">Matched hosts</label>
-                                            <textarea name="hosts" class="form-control" id="updateHostValues">
-                                                % foreach(var m in host.Hosts)
-                                                    {% m+"\r\n" %}
-                                                % end foreach
-                                            </textarea>
+                                            <label for="updateHostValues">Matched hosts <small class="text-muted">(line separated)</small></label>
+                                            <textarea name="hosts" class="form-control" id="updateHostValues"></textarea>
                                         </div>
                                         <div class="form-group">
                                             <label for="updateHostEndPoint">Run on</label>
-                                            <input type="text" name="endpoint" class="form-control" id="updateHostEndPoint" value="{% host.EndPoint %}">
+                                            <input type="text" name="endpoint" class="form-control" id="updateHostEndPoint" value="">
                                         </div>
                                         <div class="checkbox">
                                             <label>
-                                                % if(host.Enabled)
-                                                    <input type="checkbox" name="enabled" id="updateHostRun" checked="checked">
-                                                % else
-                                                    <input type="checkbox" name="enabled" id="updateHostRun">
-                                                % end if
-                                                Enabled
+                                                <input type="checkbox" name="enabled" id="updateHostRun">Enabled
                                             </label>
                                         </div>
                                         <input type="submit" class="btn btn-primary" value="save changes" />
@@ -93,11 +64,103 @@
                             </div>
                         </div>
                     </div>
-                </td>
-            </tr>
-            % end foreach
-        </table>
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
-        <script src="http://getbootstrap.com/dist/js/bootstrap.min.js"></script>
+                    <table class="table">
+                        % foreach(var host in Service.Applications)
+                        <tr>
+                            <th>Name</th>
+                            <th>Path</th>
+                            <th>Host names</th>
+                            <th>Run on</th>
+                            <th>Status</th>
+                            <th>#</th>
+                        </tr>
+                        <tr>
+                            <td>{% host.Name %}</td>
+                            <td>{% host.Application %}</td>
+                            <td>
+                                % foreach(var hostname in host.Hosts)
+                                <div>{% hostname %}</div>
+                                % end foreach
+                            </td>
+                            <td>
+                                {% host.EndPoint %}
+                            </td>
+                            <td>
+                                % if(Service.IsUp(host.Name))
+                                <div class="btn btn-success"><strong>UP</strong></div>
+                                % else
+                                <div class="btn btn-danger"><strong>DOWN</strong></div>
+                                % end if
+                            </td>
+                            <td>
+                                <button class="btn btn-primary" data-toggle="modal" data-target="#myModal">
+                                    update
+                                </button>
+                                <!-- Modal -->
+                                <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                                                <h4 class="modal-title" id="myModalLabel">{% host.Name %}</h4>
+                                            </div>
+                                            <div class="modal-body">
+                                                <form method="POST" action="/host/update">
+                                                    <input type="hidden" name="id" value="{% host.Id %}" />
+                                                    <div class="form-group">
+                                                        <label for="updateHostName">Name</label>
+                                                        <input type="text" name="name" class="form-control" id="updateHostName" value="{% host.Name %}">
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label for="updateHostName">Path</label>
+                                                        <input type="text" name="application" class="form-control" id="updateHostPath" value="{% host.Application %}">
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label for="updateHostValues">Matched hosts</label>
+                                                        <textarea name="hosts" class="form-control" id="updateHostValues">
+                                                            % foreach(var m in host.Hosts)
+                                                            {% m+"\r\n" %}
+                                                            % end foreach
+                                                        </textarea>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label for="updateHostEndPoint">Run on</label>
+                                                        <input type="text" name="endpoint" class="form-control" id="updateHostEndPoint" value="{% host.EndPoint %}">
+                                                    </div>
+                                                    <div class="checkbox">
+                                                        <label>
+                                                            % if(host.Enabled)
+                                                            <input type="checkbox" name="enabled" id="updateHostRun" checked="checked">
+                                                            % else
+                                                            <input type="checkbox" name="enabled" id="updateHostRun">
+                                                            % end if
+                                                            Enabled
+                                                        </label>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <div class="btn-group">
+                                                            <a class="btn btn-success" href="/host/start/{% host.Id %}">start</a>
+                                                            <a class="btn btn-danger" href="/host/stop/{% host.Id %}">stop</a>
+                                                            <a class="btn btn-warning" href="/host/restart/{% host.Id %}">restart</a>
+                                                        </div>
+                                                    </div>
+                                                    <input type="submit" class="btn btn-primary" value="save changes" />
+                                                </form>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-default" data-dismiss="modal">close</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                        % end foreach
+                    </table>
+                </div>
+                <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+                <script src="http://getbootstrap.com/dist/js/bootstrap.min.js"></script>
+            </div>
+        </div>
 </body>
 </html>
