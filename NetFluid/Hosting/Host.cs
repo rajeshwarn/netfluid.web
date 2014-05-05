@@ -610,8 +610,8 @@ namespace NetFluid
 
         public void AddImmutablePublicFolder(string uriPath, string realPath)
         {
-            string m = Path.GetFullPath(realPath);
-            string start = uriPath.EndsWith('/') ? uriPath : uriPath + "/";
+            var m = Path.GetFullPath(realPath);
+            var start = uriPath.EndsWith('/') ? uriPath : uriPath + "/";
 
             if (!Directory.Exists(m))
             {
@@ -628,9 +628,7 @@ namespace NetFluid
 
                 string fileUri = start + s;
                 if (!_immutableData.ContainsKey(fileUri))
-                {
                     _immutableData.Add(fileUri, File.ReadAllBytes(x));
-                }
             }
         }
 

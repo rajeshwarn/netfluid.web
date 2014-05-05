@@ -52,24 +52,14 @@ namespace NetFluid
 
         static Assembly CurrentDomain_AssemblyResolve(object sender, ResolveEventArgs args)
         {
-            foreach (var dll in Directory.GetFiles("./","*.dll"))
-            {
-                var ass = Assembly.LoadFile(Path.GetFullPath(dll));
-                if (ass!=null && ass.FullName == args.Name)
-                {
-                    return ass;
-                }
-            }
+            foreach (
+                var ass in
+                    Directory.GetFiles("./", "*.dll")
+                        .Select(dll => Assembly.LoadFile(Path.GetFullPath(dll)))
+                        .Where(ass => ass != null && ass.FullName == args.Name))
+                return ass;
 
-            foreach (var exe in Directory.GetFiles("./", "*.exe"))
-            {
-                var ass = Assembly.LoadFile(Path.GetFullPath(exe));
-                if (ass != null && ass.FullName == args.Name)
-                {
-                    return ass;
-                }
-            }
-            return null;
+            return Directory.GetFiles("./", "*.exe").Select(exe => Assembly.LoadFile(Path.GetFullPath(exe))).FirstOrDefault(ass => ass != null && ass.FullName == args.Name);
         }
 
         public static ILogger Logger { get; set; }
