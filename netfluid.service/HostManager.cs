@@ -13,29 +13,29 @@ namespace NetFluid.Service
         }
 
         [ParametrizedRoute("/start")]
-        public IResponse Start(string name)
+        public IResponse Start(string id)
         {
             if (!Context.IsLocal) return new FluidTemplate("./UI/index.html");
 
-            Service.Start(name);
+            Service.Start(id);
             return new FluidTemplate("./UI/admin.html");
         }
         
         [ParametrizedRoute("/stop")]
-        public IResponse Stop(string name)
+        public IResponse Stop(string id)
         {
             if (!Context.IsLocal) return new FluidTemplate("./UI/index.html");
 
-            Service.Stop(name);
+            Service.Stop(id);
             return new FluidTemplate("./UI/admin.html");
         }
 
         [ParametrizedRoute("/restart")]
-        public IResponse ReStart(string name)
+        public IResponse ReStart(string id)
         {
             if (!Context.IsLocal) return new FluidTemplate("./UI/index.html");
 
-            Service.ReStart(name);
+            Service.ReStart(id);
             return new FluidTemplate("./UI/admin.html");
         }
 
@@ -43,9 +43,9 @@ namespace NetFluid.Service
         public IResponse Update(string id, string name, string application, string hosts, string endpoint, bool enabled)
         {
             if (!Context.IsLocal) return new FluidTemplate("./UI/index.html");
-
-            Request.Values.ForEach(x=>Console.WriteLine(x.ToString()));
-            return null;
+            
+            Service.Update(id, name, application, hosts, endpoint, enabled);
+            return new FluidTemplate("./UI/admin.html");
         }
     }
 }

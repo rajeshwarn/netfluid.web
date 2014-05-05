@@ -20,7 +20,7 @@ namespace NetFluid.Collections
                 list = XML.Deserialize<List<T>>(File.ReadAllText(path));
         }
 
-        private void Save()
+        public void Save()
         {
             Task.Factory.StartNew(() =>
             {

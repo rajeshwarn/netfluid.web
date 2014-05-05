@@ -39,12 +39,12 @@ namespace NetFluid.Service
             get { return _hosts; }
         }
 
-        public static Host Stop(string name)
+        public static Host Stop(string id)
         {
             Process process;
-            var host = _hosts.FirstOrDefault(x => x.Name == name);
+            var host = Get(id);
 
-            if (host!=null && _processes.TryGetValue(name, out process))
+            if (host!=null && _processes.TryGetValue(id, out process))
             {
                 try
                 {
@@ -53,14 +53,15 @@ namespace NetFluid.Service
                 catch (Exception)
                 {
                 }
-                _processes.TryRemove(name, out process);
+                _processes.TryRemove(id, out process);
             }
             return host;
         }
 
-        public static Host Start(string name)
+        public static Host Start(string id)
         {
-            Host host = _hosts.FirstOrDefault(x => x.Name == name);
+            var host = Get(id);
+
             if (host==null)
                 return null;
             try
@@ -72,11 +73,11 @@ namespace NetFluid.Service
                     if (host.Enabled)
                     {
                         Engine.Logger.Log(LogLevel.Error, "Host " + host.Name + " unexpected termination, restarting");
-                        Start(name);
+                        Start(id);
                     }
                 };
 
-                _processes.AddOrUpdate(name, process, (x, y) =>
+                _processes.AddOrUpdate(id, process, (x, y) =>
                 {
                     try
                     {
@@ -95,13 +96,39 @@ namespace NetFluid.Service
             return host;
         }
 
-        public static void ReStart(string name)
+        public static void ReStart(string id)
         {
-            Stop(name);
-            Start(name);
+            Stop(id);
+            Start(id);
         }
 
-        public static void Add(string name, string application, string host, string endpoint, bool enabled)
+        public static Host Get(string id)
+        {
+            return _hosts.FirstOrDefault(x => x.Id == id);
+        }
+
+        public static Host Update(string id,string name, string application, string host, string endpoint, bool enabled)
+        {
+            var h = Get(id);
+
+            if (h != null)
+            {
+                h.Name = name;
+                h.Application = application;
+                h.Hosts = new List<string>(host.Split(new []{'\r','\n'},StringSplitOptions.RemoveEmptyEntries));
+                h.EndPoint = endpoint;
+                h.Enabled = enabled;
+            }
+
+            if (enabled)
+                Start(id);
+
+            _hosts.Save();
+
+            return h;
+        }
+
+        public static Host Add(string name, string application, string host, string endpoint, bool enabled)
         {
             var n = new Host
             {
@@ -115,6 +142,8 @@ namespace NetFluid.Service
             Stop(name);
             _hosts.Remove(x=>x.Name==name);
             _hosts.Add(n);
+
+            return n;
         }
         
         protected override void OnStart(string[] args)
