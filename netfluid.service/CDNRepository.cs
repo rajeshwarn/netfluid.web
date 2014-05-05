@@ -37,7 +37,7 @@ namespace NetFluid.Service
 
         public static void Add(string host, string path)
         {
-            cdn.Add(new CDN
+            cdn.Save(new CDN
             {
                 Id = Security.UID(),
                 Host = host,

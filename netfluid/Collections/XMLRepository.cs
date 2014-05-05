@@ -20,6 +20,12 @@ namespace NetFluid.Collections
                 list = XML.Deserialize<List<T>>(File.ReadAllText(path));
         }
 
+
+        public int Count
+        {
+            get { return list.Count; }
+        }
+
         public void Save()
         {
             Task.Factory.StartNew(() =>
@@ -31,18 +37,13 @@ namespace NetFluid.Collections
             });
         }
 
-        public void Add(T elem)
+        public void Save(T elem)
         {
             list.Add(elem);
             Save();
         }
 
-        public int Count
-        {
-            get { return list.Count; }
-        }
-
-        public void Add(IEnumerable<T> elem)
+        public void Save(IEnumerable<T> elem)
         {
             list.AddRange(elem);
             Save();

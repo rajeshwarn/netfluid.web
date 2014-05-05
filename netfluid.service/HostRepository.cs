@@ -163,7 +163,7 @@ namespace NetFluid.Service
             if (enabled)
                 Start(id);
 
-            _hosts.Save();
+            _hosts.Save(h);
 
             return h;
         }
@@ -185,7 +185,7 @@ namespace NetFluid.Service
             if(!enabled)
                 Stop(n.Id);
 
-            _hosts.Save();
+            _hosts.Save(n);
 
             return n;
         }
