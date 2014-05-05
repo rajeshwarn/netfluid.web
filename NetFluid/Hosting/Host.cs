@@ -589,7 +589,13 @@ namespace NetFluid
 
         public void AddPublicFolder(string uriPath, string realPath)
         {
-            string f = Path.GetFullPath(realPath);
+            if (!Directory.Exists(realPath))
+            {
+                Engine.Logger.Log(LogLevel.Error,"Failed to add public folder, directory is missing "+realPath);
+                return;
+            }
+
+            var f = Path.GetFullPath(realPath);
 
             if (f.Last() != Path.DirectorySeparatorChar)
                 f = f + Path.DirectorySeparatorChar;
@@ -607,20 +613,23 @@ namespace NetFluid
             string m = Path.GetFullPath(realPath);
             string start = uriPath.EndsWith('/') ? uriPath : uriPath + "/";
 
-            if (Directory.Exists(m))
+            if (!Directory.Exists(m))
             {
-                foreach (string x in Directory.GetFiles(m, "*.*", SearchOption.AllDirectories))
+                Engine.Logger.Log(LogLevel.Error, "Failed to add public folder, directory is missing " + realPath);
+                return;
+            }
+
+            foreach (string x in Directory.GetFiles(m, "*.*", SearchOption.AllDirectories))
+            {
+                string s = x.Substring(m.Length).Replace(Path.DirectorySeparatorChar, '/');
+
+                if (s[0] == '/')
+                    s = s.Substring(1);
+
+                string fileUri = start + s;
+                if (!_immutableData.ContainsKey(fileUri))
                 {
-                    string s = x.Substring(m.Length).Replace(Path.DirectorySeparatorChar, '/');
-
-                    if (s[0] == '/')
-                        s = s.Substring(1);
-
-                    string fileUri = start + s;
-                    if (!_immutableData.ContainsKey(fileUri))
-                    {
-                        _immutableData.Add(fileUri, File.ReadAllBytes(x));
-                    }
+                    _immutableData.Add(fileUri, File.ReadAllBytes(x));
                 }
             }
         }

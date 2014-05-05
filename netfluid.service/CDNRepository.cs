@@ -43,6 +43,8 @@ namespace NetFluid.Service
                 Host = host,
                 Path = path
             });
+
+            Engine.AddPublicFolder(host,"/",path,false);
         }
 
         public static void Delete(string id)
