@@ -67,6 +67,11 @@ namespace NetFluid
         public static ISessionManager Sessions { get; set; }
         public static IClusterManager Cluster { get; set; }
 
+        public static string[] Hostnames
+        {
+            get { return Hosts.Keys.ToArray(); }
+        }
+
         public static bool RunOnMono
         {
             get { return Type.GetType("Mono.Runtime") != null; }
