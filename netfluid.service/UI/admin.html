@@ -73,31 +73,31 @@
                             <th>Status</th>
                             <th>#</th>
                         </tr>
-                        % foreach(var host in Service.Applications)
+                        % foreach(var host in HostRepository.Applications)
                         <tr>
                             <td>{% host.Name %}</td>
                             <td>{% host.Application %}</td>
                             <td>
                                 % foreach(var hostname in host.Hosts)
-                                <div>{% hostname %}</div>
+                                    <div>{% hostname %}</div>
                                 % end foreach
                             </td>
                             <td>
                                 {% host.EndPoint %}
                             </td>
                             <td>
-                                % if(Service.IsUp(host.Name))
-                                <div class="btn btn-success"><strong>UP</strong></div>
+                                % if(HostRepository.IsUp(host.Name))
+                                    <div class="btn btn-success"><strong>UP</strong></div>
                                 % else
-                                <div class="btn btn-danger"><strong>DOWN</strong></div>
+                                    <div class="btn btn-danger"><strong>DOWN</strong></div>
                                 % end if
                             </td>
                             <td>
-                                <button class="btn btn-primary" data-toggle="modal" data-target="#myModal">
-                                    update
+                                <button class="btn btn-primary" data-toggle="modal" data-target="#ModalUpdateHost{% host.Id %}">
+                                    manage
                                 </button>
                                 <!-- Modal -->
-                                <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                                <div class="modal fade" id="ModalUpdateHost{% host.Id %}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
                                     <div class="modal-dialog">
                                         <div class="modal-content">
                                             <div class="modal-header">
@@ -142,6 +142,22 @@
                                                             <a class="btn btn-success" href="/host/start/{% host.Id %}">start</a>
                                                             <a class="btn btn-danger" href="/host/stop/{% host.Id %}">stop</a>
                                                             <a class="btn btn-warning" href="/host/restart/{% host.Id %}">restart</a>
+                                                        </div>
+                                                    </div>
+                                                    <div class="panel-group" id="accordion">
+                                                        <div class="panel panel-default">
+                                                            <div class="panel-heading">
+                                                                <h4 class="panel-title">
+                                                                    <a data-toggle="collapse" data-parent="#accordion" href="#collapseDeleteHost{% host.Id %}">
+                                                                        Delete this hosted application
+                                                                    </a>
+                                                                </h4>
+                                                            </div>
+                                                            <div id="collapseDeleteHost{% host.Id %}" class="panel-collapse collapse">
+                                                                <div class="panel-body">
+                                                                    Are  you sure ? <a class="btn btn-danger" href="/host/delete/{% host.Id %}">delete</a>
+                                                                </div>
+                                                            </div>
                                                         </div>
                                                     </div>
                                                     <input type="submit" class="btn btn-primary" value="save changes" />

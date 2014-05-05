@@ -17,7 +17,7 @@ namespace NetFluid.Service
         {
             if (!Context.IsLocal) return new FluidTemplate("./UI/index.html");
 
-            Service.Start(id);
+            HostRepository.Start(id);
             return new FluidTemplate("./UI/admin.html");
         }
         
@@ -26,7 +26,7 @@ namespace NetFluid.Service
         {
             if (!Context.IsLocal) return new FluidTemplate("./UI/index.html");
 
-            Service.Stop(id);
+            HostRepository.Stop(id);
             return new FluidTemplate("./UI/admin.html");
         }
 
@@ -35,7 +35,7 @@ namespace NetFluid.Service
         {
             if (!Context.IsLocal) return new FluidTemplate("./UI/index.html");
 
-            Service.ReStart(id);
+            HostRepository.ReStart(id);
             return new FluidTemplate("./UI/admin.html");
         }
 
@@ -43,8 +43,8 @@ namespace NetFluid.Service
         public IResponse Update(string id, string name, string application, string hosts, string endpoint, bool enabled)
         {
             if (!Context.IsLocal) return new FluidTemplate("./UI/index.html");
-            
-            Service.Update(id, name, application, hosts, endpoint, enabled);
+
+            HostRepository.Update(id, name, application, hosts, endpoint, enabled);
             return new FluidTemplate("./UI/admin.html");
         }
 
@@ -53,7 +53,7 @@ namespace NetFluid.Service
         {
             if (!Context.IsLocal) return new FluidTemplate("./UI/index.html");
 
-            Service.Add(name, application, hosts, endpoint, enabled);
+            HostRepository.Add(name, application, hosts, endpoint, enabled);
             return new FluidTemplate("./UI/admin.html");
         }
     }

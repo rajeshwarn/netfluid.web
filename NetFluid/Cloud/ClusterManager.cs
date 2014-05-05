@@ -56,11 +56,9 @@ namespace NetFluid.Cloud
 
             if (!IPAddress.TryParse(remote, out ip))
             {
-
-
                 try
                 {
-                    IPAddress[] addr = System.Net.Dns.GetHostAddresses(remote)
+                    var addr = System.Net.Dns.GetHostAddresses(remote)
                         .Where(x => x.AddressFamily == AddressFamily.InterNetwork)
                         .ToArray();
 
@@ -72,8 +70,8 @@ namespace NetFluid.Cloud
                 catch (Exception)
                 {
                     Engine.Logger.Log(LogLevel.Error,"Add fowarding, unknow host "+remote);
+                    return;
                 }
-
             }
 
             Targets.TryAdd(host, new IPEndPoint(ip, port));
