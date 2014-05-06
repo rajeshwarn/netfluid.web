@@ -214,9 +214,9 @@ namespace NetFluid.Responses
                     {
                         usings.Add(row);
                     }
-                    else if (row.StartsWith("template:parameters"))
+                    else if (row.StartsWith("parameters:"))
                     {
-                        parameters = row.Substring("template:parameters".Length);
+                        parameters = row.Substring("parameters:".Length);
 
                         if (parameters == "()")
                             parameters = "(NetFluid.Context Context)";
