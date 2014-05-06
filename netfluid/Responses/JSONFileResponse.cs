@@ -38,12 +38,14 @@ namespace NetFluid
 
         #region IResponse Members
 
-        public void SendResponse(Context cnt)
+        public void SetHeaders(Context cnt)
         {
             cnt.Response.Headers["Content-Disposition"] = "attachment; filename=\"" + FileName + "\"";
             cnt.Response.ContentType = "application/json";
-            cnt.SendHeaders();
+        }
 
+        public void SendResponse(Context cnt)
+        {
             if (Object is string)
                 cnt.Writer.Write(Object as string);
             else

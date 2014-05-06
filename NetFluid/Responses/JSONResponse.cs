@@ -34,11 +34,13 @@ namespace NetFluid
 
         #region IResponse Members
 
-        public void SendResponse(Context cnt)
+        public void SetHeaders(Context cnt)
         {
             cnt.Response.Headers["Content-Type"] = "application/json";
-            cnt.SendHeaders();
+        }
 
+        public void SendResponse(Context cnt)
+        {
             if (obj is string)
                 cnt.Writer.Write(obj as string);
             else

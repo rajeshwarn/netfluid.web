@@ -29,6 +29,12 @@ namespace NetFluid
     public interface IResponse
     {
         /// <summary>
+        /// Set response headers
+        /// </summary>
+        /// <param name="cnt"></param>
+        void SetHeaders(Context cnt);
+
+        /// <summary>
         ///     This method is invoked by the engine when an exposed method return the current object to transform the object into
         ///     a valid http repsonse
         /// </summary>

@@ -57,12 +57,14 @@ namespace NetFluid
 
         #region IResponse Members
 
-        public void SendResponse(Context cnt)
+        public void SetHeaders(Context cnt)
         {
             cnt.Response.Headers["Content-Disposition"] = "attachment; filename=\"" + FileName + "\"";
             cnt.Response.ContentType = MimeType;
-            cnt.SendHeaders();
+        }
 
+        public void SendResponse(Context cnt)
+        {
             var fs = new FileStream(Path, FileMode.Open, FileAccess.Read, FileShare.Read);
 
             #region TO BE IMPLEMENTED

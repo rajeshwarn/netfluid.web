@@ -66,6 +66,11 @@ namespace NetFluid
 
         #region IResponse Members
 
+        public void SetHeaders(Context cnt)
+        {
+            
+        }
+
         public void SendResponse(Context cnt)
         {
             _context = cnt;

@@ -149,7 +149,20 @@ namespace NetFluid
             if (res is IResponse)
             {
                 var resp = res as IResponse;
+                if (c.Request.HttpMethod.ToLowerInvariant() == "head")
+                {
+                    resp.SetHeaders(c);
+                    c.SendHeaders();
+                    return;
+                }
+
                 resp.SendResponse(c);
+            }
+
+            if (c.Request.HttpMethod.ToLowerInvariant()=="head")
+            {
+                c.SendHeaders();
+                return;
             }
 
             if (res is IConvertible)

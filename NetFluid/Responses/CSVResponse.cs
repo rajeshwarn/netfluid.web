@@ -15,10 +15,13 @@ namespace NetFluid
             TextQualifier = '"';
         }
 
-        public void SendResponse(Context cnt)
+        public void SetHeaders(Context cnt)
         {
             cnt.Response.ContentType = "application/csv";
-            cnt.SendHeaders();
+        }
+
+        public void SendResponse(Context cnt)
+        {
             CSV.Serialize(Collection, cnt.Writer, FieldSeparator, TextQualifier);
             cnt.Writer.Flush();
             cnt.Close();

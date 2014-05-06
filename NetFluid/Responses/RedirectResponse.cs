@@ -8,10 +8,14 @@
         {
             Uri = to;
         }
-        public void SendResponse(Context cnt)
+
+        public void SetHeaders(Context cnt)
         {
             cnt.Response.Redirect(Uri);
-            cnt.Close();
+        }
+
+        public void SendResponse(Context cnt)
+        {
         }
     }
 }

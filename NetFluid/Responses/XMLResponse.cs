@@ -2,18 +2,20 @@
 {
     public class XMLResponse:IResponse
     {
-        object obj;
+        readonly object obj;
 
         public XMLResponse(object obj)
         {
             this.obj = obj;
         }
 
-        public void SendResponse(Context cnt)
+        public void SetHeaders(Context cnt)
         {
             cnt.Response.ContentType = "application/xml";
-            cnt.SendHeaders();
+        }
 
+        public void SendResponse(Context cnt)
+        {
             obj.ToXML(cnt.OutputStream);
         }
     }
