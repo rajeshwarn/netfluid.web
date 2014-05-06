@@ -64,6 +64,29 @@ namespace NetFluid
             cnt.SendHeaders();
 
             var fs = new FileStream(Path, FileMode.Open, FileAccess.Read, FileShare.Read);
+
+            #region TO BE IMPLEMENTED
+            /*if (cnt.Request.Headers.Contains("Range") && cnt.Request.Headers["Range"].StartsWith("bytes="))
+            {
+                var r = cnt.Request.Headers["Range"].Substring("bytes=".Length);
+                var index = r.IndexOf('/');
+
+                if (index >= 0) r = r.Substring(0, index);
+
+                var parts = r.Split(new[]{'-'}, StringSplitOptions.None);
+
+                var from = int.Parse(parts[0] == string.Empty ? "0" : parts[0]);
+                var to = int.Parse(parts[1] == string.Empty ? "0" : parts[1]);
+
+                fs.Seek(from, SeekOrigin.Begin);
+
+                if (to!=0)
+                {
+                    fs.CopyTo(cnt.);
+                }
+            }*/
+            #endregion
+
             fs.CopyTo(cnt.OutputStream);
             fs.Close();
 

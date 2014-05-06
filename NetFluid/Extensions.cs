@@ -712,6 +712,35 @@ namespace NetFluid
         #endregion
 
         #region STREAM
+        /// <summary>
+        /// Copy the specified size of stream into the second
+        /// </summary>
+        /// <param name="input"></param>
+        /// <param name="output"></param>
+        /// <param name="size"></param>
+        public static void CopyTo(this Stream input, Stream output, int size)
+        {
+            var rest = size % 32768;
+            var chunks = (size - rest)/32768;
+            var buffer = new byte[32768];
+            int read;
+
+            for (var i = 0; i < chunks; i++)
+            {
+                read = input.Read(buffer, 0, buffer.Length);
+                
+                if(read < 0)
+                    throw new IOException("failed to read");
+
+                if (read < buffer.Length)
+                    rest += buffer.Length - read;
+
+                output.Write(buffer, 0, read);
+            }
+            buffer = new byte[rest];
+            read = input.Read(buffer, 0, buffer.Length);
+            output.Write(buffer, 0, read);
+        }
 
         /// <summary>
         ///     Read all bytes into the stream
