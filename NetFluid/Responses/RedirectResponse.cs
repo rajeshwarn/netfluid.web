@@ -1,4 +1,4 @@
-﻿namespace NetFluid.Responses
+﻿namespace NetFluid
 {
     public class RedirectResponse:IResponse
     {

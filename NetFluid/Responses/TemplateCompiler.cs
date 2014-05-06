@@ -32,7 +32,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using Microsoft.CSharp;
 
-namespace NetFluid
+namespace NetFluid.Responses
 {
     internal class TemplateCompiler
     {
