@@ -48,7 +48,8 @@ namespace NetFluid
 
             Headers = new WebHeaderCollection();
             Headers.Append("Server", "NetFluid III");
-            Headers.Append("Date", DateTime.UtcNow.ToString("r", CultureInfo.InvariantCulture));
+            Headers.Append("Date", DateTime.Now.ToGMT());
+            Headers.Append("Accept-Ranges:","bytes");
 
             ContentType = "text/html; charset=utf-8";
             ProtocolVersion = HttpVersion.Version11;

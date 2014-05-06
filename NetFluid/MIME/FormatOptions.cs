@@ -26,9 +26,9 @@
 
 using System;
 using System.Collections.Generic;
-using MimeKit.IO.Filters;
+using NetFluid.MIME.IO.Filters;
 
-namespace MimeKit
+namespace NetFluid.MIME
 {
     /// <summary>
     ///     A New-Line format.
@@ -83,7 +83,7 @@ namespace MimeKit
         }
 
         /// <summary>
-        ///     Initializes a new instance of the <see cref="MimeKit.FormatOptions" /> class.
+        ///     Initializes a new instance of the <see cref="FormatOptions" /> class.
         /// </summary>
         /// <remarks>
         ///     Creates a new set of formatting options for use with methods such as
@@ -168,7 +168,7 @@ namespace MimeKit
         }
 
         /// <summary>
-        ///     Clones an instance of <see cref="MimeKit.FormatOptions" />.
+        ///     Clones an instance of <see cref="FormatOptions" />.
         /// </summary>
         /// <remarks>
         ///     Clones the formatting options.

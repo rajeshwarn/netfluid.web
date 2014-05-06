@@ -26,7 +26,7 @@
 
 using System;
 
-namespace MimeKit.Tnef
+namespace NetFluid.MIME.Tnef
 {
     [Flags]
     internal enum TnefComplianceStatus

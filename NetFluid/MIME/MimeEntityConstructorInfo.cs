@@ -26,7 +26,7 @@
 
 using System.Collections.Generic;
 
-namespace MimeKit
+namespace NetFluid.MIME
 {
     /// <summary>
     ///     MIME entity constructor info.

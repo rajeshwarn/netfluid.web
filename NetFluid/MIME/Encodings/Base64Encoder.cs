@@ -26,7 +26,7 @@
 
 using System;
 
-namespace MimeKit.Encodings
+namespace NetFluid.MIME.Encodings
 {
     /// <summary>
     ///     Incrementally encodes content using the base64 encoding.
@@ -57,7 +57,7 @@ namespace MimeKit.Encodings
         private byte saved2;
 
         /// <summary>
-        ///     Initializes a new instance of the <see cref="MimeKit.Encodings.Base64Encoder" /> class.
+        ///     Initializes a new instance of the <see cref="Base64Encoder" /> class.
         /// </summary>
         /// <param name="rfc2047">
         ///     <c>true</c> if this encoder will be used to encode rfc2047 encoded-word payloads; <c>false</c> otherwise.
@@ -69,7 +69,7 @@ namespace MimeKit.Encodings
         }
 
         /// <summary>
-        ///     Initializes a new instance of the <see cref="MimeKit.Encodings.Base64Encoder" /> class.
+        ///     Initializes a new instance of the <see cref="Base64Encoder" /> class.
         /// </summary>
         /// <remarks>
         ///     Creates a new base64 encoder.

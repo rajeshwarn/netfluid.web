@@ -27,9 +27,9 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using MimeKit.IO.Filters;
+using NetFluid.MIME.IO.Filters;
 
-namespace MimeKit.Tnef
+namespace NetFluid.MIME.Tnef
 {
     /// <summary>
     ///     A MIME part containing Microsoft TNEF data.
@@ -44,16 +44,16 @@ namespace MimeKit.Tnef
     class TnefPart : MimePart
     {
         /// <summary>
-        ///     Initializes a new instance of the <see cref="MimeKit.Tnef.TnefPart" /> class.
+        ///     Initializes a new instance of the <see cref="TnefPart" /> class.
         /// </summary>
-        /// <remarks>This constructor is used by <see cref="MimeKit.MimeParser" />.</remarks>
+        /// <remarks>This constructor is used by <see cref="MimeParser" />.</remarks>
         /// <param name="entity">Information used by the constructor.</param>
         public TnefPart(MimeEntityConstructorInfo entity) : base(entity)
         {
         }
 
         /// <summary>
-        ///     Initializes a new instance of the <see cref="MimeKit.Tnef.TnefPart" /> class.
+        ///     Initializes a new instance of the <see cref="TnefPart" /> class.
         /// </summary>
         /// <remarks>
         ///     Creates a new <see cref="TnefPart" /> with a Content-Type of application/vnd.ms-tnef
@@ -300,16 +300,16 @@ namespace MimeKit.Tnef
         }
 
         /// <summary>
-        ///     Converts the TNEF content into a <see cref="MimeKit.MimeMessage" />.
+        ///     Converts the TNEF content into a <see cref="MimeMessage" />.
         /// </summary>
         /// <remarks>
-        ///     TNEF data often contains properties that map to <see cref="MimeKit.MimeMessage" />
+        ///     TNEF data often contains properties that map to <see cref="MimeMessage" />
         ///     headers. TNEF data also often contains file attachments which will be
         ///     mapped to MIME parts.
         /// </remarks>
         /// <returns>A message representing the TNEF data in MIME format.</returns>
         /// <exception cref="System.InvalidOperationException">
-        ///     The <see cref="MimeKit.MimePart.ContentObject" /> property is <c>null</c>.
+        ///     The <see cref="MimePart.ContentObject" /> property is <c>null</c>.
         /// </exception>
         public MimeMessage ConvertToMessage()
         {
@@ -330,7 +330,7 @@ namespace MimeKit.Tnef
         /// </remarks>
         /// <returns>The attachments.</returns>
         /// <exception cref="System.InvalidOperationException">
-        ///     The <see cref="MimeKit.MimePart.ContentObject" /> property is <c>null</c>.
+        ///     The <see cref="MimePart.ContentObject" /> property is <c>null</c>.
         /// </exception>
         public IEnumerable<MimePart> ExtractAttachments()
         {

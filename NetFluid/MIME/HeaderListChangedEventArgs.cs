@@ -26,7 +26,7 @@
 
 using System;
 
-namespace MimeKit
+namespace NetFluid.MIME
 {
     /// <summary>
     ///     Header list changed action.

@@ -4,7 +4,7 @@ using System.IO;
 using System.Net.Mail;
 using System.Net.Mime;
 using System.Net.Sockets;
-using MimeKit;
+using NetFluid.MIME;
 
 namespace NetFluid.SMTP
 {

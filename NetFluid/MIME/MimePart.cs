@@ -28,9 +28,9 @@ using System;
 using System.IO;
 using System.Text;
 using System.Threading;
-using MimeKit.Encodings;
-using MimeKit.IO;
-using MimeKit.IO.Filters;
+using NetFluid.MIME.Encodings;
+using NetFluid.MIME.IO;
+using NetFluid.MIME.IO.Filters;
 #if PORTABLE
 using Encoding = Portable.Text.Encoding;
 using MD5 = MimeKit.Cryptography.MD5;
@@ -38,7 +38,7 @@ using MD5 = MimeKit.Cryptography.MD5;
 using MD5 = System.Security.Cryptography.MD5CryptoServiceProvider;
 #endif
 
-namespace MimeKit
+namespace NetFluid.MIME
 {
     /// <summary>
     ///     A leaf-node MIME part that contains content such as the message body text or an attachment.
@@ -59,17 +59,17 @@ namespace MimeKit
         private string md5sum;
 
         /// <summary>
-        ///     Initializes a new instance of the <see cref="MimeKit.MimePart" /> class
+        ///     Initializes a new instance of the <see cref="MimePart" /> class
         ///     based on the <see cref="MimeEntityConstructorInfo" />.
         /// </summary>
-        /// <remarks>This constructor is used by <see cref="MimeKit.MimeParser" />.</remarks>
+        /// <remarks>This constructor is used by <see cref="MimeParser" />.</remarks>
         /// <param name="entity">Information used by the constructor.</param>
         public MimePart(MimeEntityConstructorInfo entity) : base(entity)
         {
         }
 
         /// <summary>
-        ///     Initializes a new instance of the <see cref="MimeKit.MimePart" /> class
+        ///     Initializes a new instance of the <see cref="MimePart" /> class
         ///     with the specified media type and subtype.
         /// </summary>
         /// <remarks>
@@ -87,7 +87,7 @@ namespace MimeKit
         /// </exception>
         /// <exception cref="System.ArgumentException">
         ///     <para>
-        ///         <paramref name="args" /> contains more than one <see cref="MimeKit.IContentObject" /> or
+        ///         <paramref name="args" /> contains more than one <see cref="IContentObject" /> or
         ///         <see cref="System.IO.Stream" />.
         ///     </para>
         ///     <para>-or-</para>
@@ -134,7 +134,7 @@ namespace MimeKit
         }
 
         /// <summary>
-        ///     Initializes a new instance of the <see cref="MimeKit.MimePart" /> class
+        ///     Initializes a new instance of the <see cref="MimePart" /> class
         ///     with the specified media type and subtype.
         /// </summary>
         /// <remarks>
@@ -152,7 +152,7 @@ namespace MimeKit
         }
 
         /// <summary>
-        ///     Initializes a new instance of the <see cref="MimeKit.MimePart" /> class
+        ///     Initializes a new instance of the <see cref="MimePart" /> class
         ///     with the specified content type.
         /// </summary>
         /// <remarks>
@@ -167,7 +167,7 @@ namespace MimeKit
         }
 
         /// <summary>
-        ///     Initializes a new instance of the <see cref="MimeKit.MimePart" /> class
+        ///     Initializes a new instance of the <see cref="MimePart" /> class
         ///     with the specified content type.
         /// </summary>
         /// <remarks>
@@ -177,7 +177,7 @@ namespace MimeKit
         /// <exception cref="System.ArgumentNullException">
         ///     <paramref name="contentType" /> is <c>null</c>.
         /// </exception>
-        /// <exception cref="MimeKit.ParseException">
+        /// <exception cref="ParseException">
         ///     <paramref name="contentType" /> could not be parsed.
         /// </exception>
         public MimePart(string contentType) : base(ContentType.Parse(contentType))
@@ -185,7 +185,7 @@ namespace MimeKit
         }
 
         /// <summary>
-        ///     Initializes a new instance of the <see cref="MimeKit.MimePart" /> class
+        ///     Initializes a new instance of the <see cref="MimePart" /> class
         ///     with the default Content-Type of application/octet-stream.
         /// </summary>
         /// <remarks>
@@ -475,7 +475,7 @@ namespace MimeKit
         }
 
         /// <summary>
-        ///     Writes the <see cref="MimeKit.MimePart" /> to the specified output stream.
+        ///     Writes the <see cref="MimePart" /> to the specified output stream.
         /// </summary>
         /// <remarks>
         ///     Writes the MIME part to the output stream.

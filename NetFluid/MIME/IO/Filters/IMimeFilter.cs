@@ -24,7 +24,7 @@
 // THE SOFTWARE.
 //
 
-namespace MimeKit.IO.Filters
+namespace NetFluid.MIME.IO.Filters
 {
     /// <summary>
     ///     An interface for incrementally filtering data.

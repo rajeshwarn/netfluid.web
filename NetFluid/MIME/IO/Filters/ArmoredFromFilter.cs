@@ -27,7 +27,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace MimeKit.IO.Filters
+namespace NetFluid.MIME.IO.Filters
 {
     /// <summary>
     ///     A filter that armors lines beginning with "From " by encoding the 'F' with the

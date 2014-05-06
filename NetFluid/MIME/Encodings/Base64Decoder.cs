@@ -26,7 +26,7 @@
 
 using System;
 
-namespace MimeKit.Encodings
+namespace NetFluid.MIME.Encodings
 {
     /// <summary>
     ///     Incrementally decodes content encoded with the base64 encoding.
@@ -63,7 +63,7 @@ namespace MimeKit.Encodings
         private uint saved;
 
         /// <summary>
-        ///     Initializes a new instance of the <see cref="MimeKit.Encodings.Base64Decoder" /> class.
+        ///     Initializes a new instance of the <see cref="Base64Decoder" /> class.
         /// </summary>
         /// <remarks>
         ///     Creates a new base64 decoder.

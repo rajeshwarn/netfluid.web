@@ -24,7 +24,7 @@
 // THE SOFTWARE.
 //
 
-namespace MimeKit.Tnef
+namespace NetFluid.MIME.Tnef
 {
     internal enum TnefAttributeLevel
     {

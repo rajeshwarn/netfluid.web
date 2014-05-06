@@ -27,7 +27,7 @@
 using System;
 using System.Runtime.Serialization;
 
-namespace MimeKit
+namespace NetFluid.MIME
 {
     /// <summary>
     ///     A Parse exception as thrown by the various Parse methods in MimeKit.
@@ -43,7 +43,7 @@ namespace MimeKit
     public class ParseException : FormatException
     {
         /// <summary>
-        ///     Initializes a new instance of the <see cref="MimeKit.ParseException" /> class.
+        ///     Initializes a new instance of the <see cref="ParseException" /> class.
         /// </summary>
         /// <remarks>
         ///     Creates a new <see cref="ParseException" />.
@@ -63,7 +63,7 @@ namespace MimeKit
         }
 
         /// <summary>
-        ///     Initializes a new instance of the <see cref="MimeKit.ParseException" /> class.
+        ///     Initializes a new instance of the <see cref="ParseException" /> class.
         /// </summary>
         /// <remarks>
         ///     Creates a new <see cref="ParseException" />.
@@ -80,7 +80,7 @@ namespace MimeKit
         }
 
         /// <summary>
-        ///     Initializes a new instance of the <see cref="MimeKit.ParseException" /> class.
+        ///     Initializes a new instance of the <see cref="ParseException" /> class.
         /// </summary>
         /// <remarks>
         ///     Creates a new <see cref="ParseException" />.

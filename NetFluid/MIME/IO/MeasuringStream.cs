@@ -27,7 +27,7 @@
 using System;
 using System.IO;
 
-namespace MimeKit.IO
+namespace NetFluid.MIME.IO
 {
     /// <summary>
     ///     A stream useful for measuring the amount of data written.

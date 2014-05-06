@@ -28,10 +28,10 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using MimeKit.IO;
-using MimeKit.Utils;
+using NetFluid.MIME.IO;
+using NetFluid.MIME.Utils;
 
-namespace MimeKit
+namespace NetFluid.MIME
 {
     /// <summary>
     ///     A MIME part containing a partial message as its content.
@@ -47,16 +47,16 @@ namespace MimeKit
     internal class MessagePartial : MimePart
     {
         /// <summary>
-        ///     Initializes a new instance of the <see cref="MimeKit.MessagePartial" /> class.
+        ///     Initializes a new instance of the <see cref="MessagePartial" /> class.
         /// </summary>
-        /// <remarks>This constructor is used by <see cref="MimeKit.MimeParser" />.</remarks>
+        /// <remarks>This constructor is used by <see cref="MimeParser" />.</remarks>
         /// <param name="entity">Information used by the constructor.</param>
         public MessagePartial(MimeEntityConstructorInfo entity) : base(entity)
         {
         }
 
         /// <summary>
-        ///     Initializes a new instance of the <see cref="MimeKit.MessagePartial" /> class.
+        ///     Initializes a new instance of the <see cref="MessagePartial" /> class.
         /// </summary>
         /// <remarks>
         ///     <para>Creates a new message/partial entity.</para>

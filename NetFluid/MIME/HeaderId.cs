@@ -27,7 +27,7 @@
 using System;
 using System.Text;
 
-namespace MimeKit
+namespace NetFluid.MIME
 {
     /// <summary>
     ///     An enumeration of common header fields.

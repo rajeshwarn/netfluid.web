@@ -30,9 +30,9 @@ using Encoding = Portable.Text.Encoding;
 using System;
 using System.Collections.Generic;
 using System.Text;
-using MimeKit.Utils;
+using NetFluid.MIME.Utils;
 
-namespace MimeKit
+namespace NetFluid.MIME
 {
     /// <summary>
     ///     An internet address, as specified by rfc0822.
@@ -60,7 +60,7 @@ namespace MimeKit
         private string name;
 
         /// <summary>
-        ///     Initializes a new instance of the <see cref="MimeKit.InternetAddress" /> class.
+        ///     Initializes a new instance of the <see cref="InternetAddress" /> class.
         /// </summary>
         /// <remarks>
         ///     Initializes the <see cref="Encoding" /> and <see cref="Name" /> properties of the internet address.
@@ -162,7 +162,7 @@ namespace MimeKit
         internal event EventHandler Changed;
 
         /// <summary>
-        ///     Raises the internal changed event used by <see cref="MimeKit.MimeMessage" /> to keep headers in sync.
+        ///     Raises the internal changed event used by <see cref="MimeMessage" /> to keep headers in sync.
         /// </summary>
         /// <remarks>
         ///     This method is called whenever a property of the internet address is changed.
@@ -568,7 +568,7 @@ namespace MimeKit
         }
 
         /// <summary>
-        ///     Tries to parse the given input buffer into a new <see cref="MimeKit.InternetAddress" /> instance.
+        ///     Tries to parse the given input buffer into a new <see cref="InternetAddress" /> instance.
         /// </summary>
         /// <remarks>
         ///     Parses a single <see cref="MailboxAddress" /> or <see cref="GroupAddress" />. If the buffer contains
@@ -626,7 +626,7 @@ namespace MimeKit
         }
 
         /// <summary>
-        ///     Tries to parse the given input buffer into a new <see cref="MimeKit.InternetAddress" /> instance.
+        ///     Tries to parse the given input buffer into a new <see cref="InternetAddress" /> instance.
         /// </summary>
         /// <remarks>
         ///     Parses a single <see cref="MailboxAddress" /> or <see cref="GroupAddress" />. If the buffer contains
@@ -650,7 +650,7 @@ namespace MimeKit
         }
 
         /// <summary>
-        ///     Tries to parse the given input buffer into a new <see cref="MimeKit.InternetAddress" /> instance.
+        ///     Tries to parse the given input buffer into a new <see cref="InternetAddress" /> instance.
         /// </summary>
         /// <remarks>
         ///     Parses a single <see cref="MailboxAddress" /> or <see cref="GroupAddress" />. If the buffer contains
@@ -702,7 +702,7 @@ namespace MimeKit
         }
 
         /// <summary>
-        ///     Tries to parse the given input buffer into a new <see cref="MimeKit.InternetAddress" /> instance.
+        ///     Tries to parse the given input buffer into a new <see cref="InternetAddress" /> instance.
         /// </summary>
         /// <remarks>
         ///     Parses a single <see cref="MailboxAddress" /> or <see cref="GroupAddress" />. If the buffer contains
@@ -724,7 +724,7 @@ namespace MimeKit
         }
 
         /// <summary>
-        ///     Tries to parse the given input buffer into a new <see cref="MimeKit.InternetAddress" /> instance.
+        ///     Tries to parse the given input buffer into a new <see cref="InternetAddress" /> instance.
         /// </summary>
         /// <remarks>
         ///     Parses a single <see cref="MailboxAddress" /> or <see cref="GroupAddress" />. If the buffer contains
@@ -769,7 +769,7 @@ namespace MimeKit
         }
 
         /// <summary>
-        ///     Tries to parse the given input buffer into a new <see cref="MimeKit.InternetAddress" /> instance.
+        ///     Tries to parse the given input buffer into a new <see cref="InternetAddress" /> instance.
         /// </summary>
         /// <remarks>
         ///     Parses a single <see cref="MailboxAddress" /> or <see cref="GroupAddress" />. If the buffer contains
@@ -787,7 +787,7 @@ namespace MimeKit
         }
 
         /// <summary>
-        ///     Tries to parse the given text into a new <see cref="MimeKit.InternetAddress" /> instance.
+        ///     Tries to parse the given text into a new <see cref="InternetAddress" /> instance.
         /// </summary>
         /// <remarks>
         ///     Parses a single <see cref="MailboxAddress" /> or <see cref="GroupAddress" />. If the text contains
@@ -831,7 +831,7 @@ namespace MimeKit
         }
 
         /// <summary>
-        ///     Tries to parse the given text into a new <see cref="MimeKit.InternetAddress" /> instance.
+        ///     Tries to parse the given text into a new <see cref="InternetAddress" /> instance.
         /// </summary>
         /// <remarks>
         ///     Parses a single <see cref="MailboxAddress" /> or <see cref="GroupAddress" />. If the text contains
@@ -849,13 +849,13 @@ namespace MimeKit
         }
 
         /// <summary>
-        ///     Parses the given input buffer into a new <see cref="MimeKit.InternetAddress" /> instance.
+        ///     Parses the given input buffer into a new <see cref="InternetAddress" /> instance.
         /// </summary>
         /// <remarks>
         ///     Parses a single <see cref="MailboxAddress" /> or <see cref="GroupAddress" />. If the buffer contains
         ///     more data, then parsing will fail.
         /// </remarks>
-        /// <returns>The parsed <see cref="MimeKit.InternetAddress" />.</returns>
+        /// <returns>The parsed <see cref="InternetAddress" />.</returns>
         /// <param name="options">The parser options to use.</param>
         /// <param name="buffer">The input buffer.</param>
         /// <param name="startIndex">The starting index of the input buffer.</param>
@@ -869,7 +869,7 @@ namespace MimeKit
         ///     <paramref name="startIndex" /> and <paramref name="length" /> do not specify
         ///     a valid range in the byte array.
         /// </exception>
-        /// <exception cref="MimeKit.ParseException">
+        /// <exception cref="ParseException">
         ///     <paramref name="buffer" /> could not be parsed.
         /// </exception>
         public static InternetAddress Parse(ParserOptions options, byte[] buffer, int startIndex, int length)
@@ -901,13 +901,13 @@ namespace MimeKit
         }
 
         /// <summary>
-        ///     Parses the given input buffer into a new <see cref="MimeKit.InternetAddress" /> instance.
+        ///     Parses the given input buffer into a new <see cref="InternetAddress" /> instance.
         /// </summary>
         /// <remarks>
         ///     Parses a single <see cref="MailboxAddress" /> or <see cref="GroupAddress" />. If the buffer contains
         ///     more data, then parsing will fail.
         /// </remarks>
-        /// <returns>The parsed <see cref="MimeKit.InternetAddress" />.</returns>
+        /// <returns>The parsed <see cref="InternetAddress" />.</returns>
         /// <param name="buffer">The input buffer.</param>
         /// <param name="startIndex">The starting index of the input buffer.</param>
         /// <param name="length">The number of bytes in the input buffer to parse.</param>
@@ -918,7 +918,7 @@ namespace MimeKit
         ///     <paramref name="startIndex" /> and <paramref name="length" /> do not specify
         ///     a valid range in the byte array.
         /// </exception>
-        /// <exception cref="MimeKit.ParseException">
+        /// <exception cref="ParseException">
         ///     <paramref name="buffer" /> could not be parsed.
         /// </exception>
         public static InternetAddress Parse(byte[] buffer, int startIndex, int length)
@@ -927,13 +927,13 @@ namespace MimeKit
         }
 
         /// <summary>
-        ///     Parses the given input buffer into a new <see cref="MimeKit.InternetAddress" /> instance.
+        ///     Parses the given input buffer into a new <see cref="InternetAddress" /> instance.
         /// </summary>
         /// <remarks>
         ///     Parses a single <see cref="MailboxAddress" /> or <see cref="GroupAddress" />. If the buffer contains
         ///     more data, then parsing will fail.
         /// </remarks>
-        /// <returns>The parsed <see cref="MimeKit.InternetAddress" />.</returns>
+        /// <returns>The parsed <see cref="InternetAddress" />.</returns>
         /// <param name="options">The parser options to use.</param>
         /// <param name="buffer">The input buffer.</param>
         /// <param name="startIndex">The starting index of the input buffer.</param>
@@ -945,7 +945,7 @@ namespace MimeKit
         /// <exception cref="System.ArgumentOutOfRangeException">
         ///     <paramref name="startIndex" />is out of range.
         /// </exception>
-        /// <exception cref="MimeKit.ParseException">
+        /// <exception cref="ParseException">
         ///     <paramref name="buffer" /> could not be parsed.
         /// </exception>
         public static InternetAddress Parse(ParserOptions options, byte[] buffer, int startIndex)
@@ -974,13 +974,13 @@ namespace MimeKit
         }
 
         /// <summary>
-        ///     Parses the given input buffer into a new <see cref="MimeKit.InternetAddress" /> instance.
+        ///     Parses the given input buffer into a new <see cref="InternetAddress" /> instance.
         /// </summary>
         /// <remarks>
         ///     Parses a single <see cref="MailboxAddress" /> or <see cref="GroupAddress" />. If the buffer contains
         ///     more data, then parsing will fail.
         /// </remarks>
-        /// <returns>The parsed <see cref="MimeKit.InternetAddress" />.</returns>
+        /// <returns>The parsed <see cref="InternetAddress" />.</returns>
         /// <param name="buffer">The input buffer.</param>
         /// <param name="startIndex">The starting index of the input buffer.</param>
         /// <exception cref="System.ArgumentNullException">
@@ -989,7 +989,7 @@ namespace MimeKit
         /// <exception cref="System.ArgumentOutOfRangeException">
         ///     <paramref name="startIndex" /> is out of range.
         /// </exception>
-        /// <exception cref="MimeKit.ParseException">
+        /// <exception cref="ParseException">
         ///     <paramref name="buffer" /> could not be parsed.
         /// </exception>
         public static InternetAddress Parse(byte[] buffer, int startIndex)
@@ -998,13 +998,13 @@ namespace MimeKit
         }
 
         /// <summary>
-        ///     Parses the given input buffer into a new <see cref="MimeKit.InternetAddress" /> instance.
+        ///     Parses the given input buffer into a new <see cref="InternetAddress" /> instance.
         /// </summary>
         /// <remarks>
         ///     Parses a single <see cref="MailboxAddress" /> or <see cref="GroupAddress" />. If the buffer contains
         ///     more data, then parsing will fail.
         /// </remarks>
-        /// <returns>The parsed <see cref="MimeKit.InternetAddress" />.</returns>
+        /// <returns>The parsed <see cref="InternetAddress" />.</returns>
         /// <param name="options">The parser options to use.</param>
         /// <param name="buffer">The input buffer.</param>
         /// <exception cref="System.ArgumentNullException">
@@ -1012,7 +1012,7 @@ namespace MimeKit
         ///     <para>-or-</para>
         ///     <para><paramref name="buffer" /> is <c>null</c>.</para>
         /// </exception>
-        /// <exception cref="MimeKit.ParseException">
+        /// <exception cref="ParseException">
         ///     <paramref name="buffer" /> could not be parsed.
         /// </exception>
         public static InternetAddress Parse(ParserOptions options, byte[] buffer)
@@ -1038,18 +1038,18 @@ namespace MimeKit
         }
 
         /// <summary>
-        ///     Parses the given input buffer into a new <see cref="MimeKit.InternetAddress" /> instance.
+        ///     Parses the given input buffer into a new <see cref="InternetAddress" /> instance.
         /// </summary>
         /// <remarks>
         ///     Parses a single <see cref="MailboxAddress" /> or <see cref="GroupAddress" />. If the buffer contains
         ///     more data, then parsing will fail.
         /// </remarks>
-        /// <returns>The parsed <see cref="MimeKit.InternetAddress" />.</returns>
+        /// <returns>The parsed <see cref="InternetAddress" />.</returns>
         /// <param name="buffer">The input buffer.</param>
         /// <exception cref="System.ArgumentNullException">
         ///     <paramref name="buffer" /> is <c>null</c>.
         /// </exception>
-        /// <exception cref="MimeKit.ParseException">
+        /// <exception cref="ParseException">
         ///     <paramref name="buffer" /> could not be parsed.
         /// </exception>
         public static InternetAddress Parse(byte[] buffer)
@@ -1058,13 +1058,13 @@ namespace MimeKit
         }
 
         /// <summary>
-        ///     Parses the given text into a new <see cref="MimeKit.InternetAddress" /> instance.
+        ///     Parses the given text into a new <see cref="InternetAddress" /> instance.
         /// </summary>
         /// <remarks>
         ///     Parses a single <see cref="MailboxAddress" /> or <see cref="GroupAddress" />. If the text contains
         ///     more data, then parsing will fail.
         /// </remarks>
-        /// <returns>The parsed <see cref="MimeKit.InternetAddress" />.</returns>
+        /// <returns>The parsed <see cref="InternetAddress" />.</returns>
         /// <param name="options">The parser options to use.</param>
         /// <param name="text">The text.</param>
         /// <exception cref="System.ArgumentNullException">
@@ -1072,7 +1072,7 @@ namespace MimeKit
         ///     <para>-or-</para>
         ///     <para><paramref name="text" /> is <c>null</c>.</para>
         /// </exception>
-        /// <exception cref="MimeKit.ParseException">
+        /// <exception cref="ParseException">
         ///     <paramref name="text" /> could not be parsed.
         /// </exception>
         public static InternetAddress Parse(ParserOptions options, string text)
@@ -1099,18 +1099,18 @@ namespace MimeKit
         }
 
         /// <summary>
-        ///     Parses the given text into a new <see cref="MimeKit.InternetAddress" /> instance.
+        ///     Parses the given text into a new <see cref="InternetAddress" /> instance.
         /// </summary>
         /// <remarks>
         ///     Parses a single <see cref="MailboxAddress" /> or <see cref="GroupAddress" />. If the text contains
         ///     more data, then parsing will fail.
         /// </remarks>
-        /// <returns>The parsed <see cref="MimeKit.InternetAddress" />.</returns>
+        /// <returns>The parsed <see cref="InternetAddress" />.</returns>
         /// <param name="text">The text.</param>
         /// <exception cref="System.ArgumentNullException">
         ///     <paramref name="text" /> is <c>null</c>.
         /// </exception>
-        /// <exception cref="MimeKit.ParseException">
+        /// <exception cref="ParseException">
         ///     <paramref name="text" /> could not be parsed.
         /// </exception>
         public static InternetAddress Parse(string text)

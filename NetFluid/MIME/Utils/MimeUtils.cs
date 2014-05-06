@@ -29,7 +29,7 @@ using System.Collections.Generic;
 using System.Net;
 using System.Text;
 
-namespace MimeKit.Utils
+namespace NetFluid.MIME.Utils
 {
     /// <summary>
     ///     MIME utility methods.
@@ -79,7 +79,7 @@ namespace MimeKit.Utils
 #if PORTABLE
 			return GenerateMessageId ("localhost.localdomain");
 #else
-            return GenerateMessageId(Dns.GetHostName());
+            return GenerateMessageId(System.Net.Dns.GetHostName());
 #endif
         }
 

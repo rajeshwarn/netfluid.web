@@ -24,7 +24,7 @@
 // THE SOFTWARE.
 //
 
-namespace MimeKit
+namespace NetFluid.MIME
 {
     /// <summary>
     ///     A content encoding constraint.

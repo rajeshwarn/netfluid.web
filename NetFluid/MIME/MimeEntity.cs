@@ -30,10 +30,10 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading;
-using MimeKit.IO;
-using MimeKit.Utils;
+using NetFluid.MIME.IO;
+using NetFluid.MIME.Utils;
 
-namespace MimeKit
+namespace NetFluid.MIME
 {
     /// <summary>
     ///     An abstract MIME entity.
@@ -55,7 +55,7 @@ namespace MimeKit
         private Uri baseUri;
 
         /// <summary>
-        ///     Initializes a new instance of the <see cref="MimeKit.MimeEntity" /> class
+        ///     Initializes a new instance of the <see cref="MimeEntity" /> class
         ///     based on the <see cref="MimeEntityConstructorInfo" />.
         /// </summary>
         /// <remarks>
@@ -84,7 +84,7 @@ namespace MimeKit
         }
 
         /// <summary>
-        ///     Initializes a new instance of the <see cref="MimeKit.MimeEntity" /> class.
+        ///     Initializes a new instance of the <see cref="MimeEntity" /> class.
         /// </summary>
         /// <remarks>
         ///     Initializes the <see cref="ContentType" /> based on the provided media type and subtype.
@@ -101,7 +101,7 @@ namespace MimeKit
         }
 
         /// <summary>
-        ///     Initializes a new instance of the <see cref="MimeKit.MimeEntity" /> class.
+        ///     Initializes a new instance of the <see cref="MimeEntity" /> class.
         /// </summary>
         /// <remarks>
         ///     Initializes the <see cref="ContentType" /> to the one provided.
@@ -323,7 +323,7 @@ namespace MimeKit
         }
 
         /// <summary>
-        ///     Writes the <see cref="MimeKit.MimeEntity" /> to the specified output stream.
+        ///     Writes the <see cref="MimeEntity" /> to the specified output stream.
         /// </summary>
         /// <remarks>
         ///     <para>Writes the headers to the output stream, followed by a blank line.</para>
@@ -361,7 +361,7 @@ namespace MimeKit
         }
 
         /// <summary>
-        ///     Writes the <see cref="MimeKit.MimeEntity" /> to the specified output stream.
+        ///     Writes the <see cref="MimeEntity" /> to the specified output stream.
         /// </summary>
         /// <remarks>
         ///     Writes the entity to the output stream.

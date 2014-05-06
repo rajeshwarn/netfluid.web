@@ -27,7 +27,7 @@
 using System;
 using System.Runtime.Serialization;
 
-namespace MimeKit.Tnef
+namespace NetFluid.MIME.Tnef
 {
     /// <summary>
     ///     A TNEF exception.
@@ -43,7 +43,7 @@ namespace MimeKit.Tnef
     {
 #if !PORTABLE
         /// <summary>
-        ///     Initializes a new instance of the <see cref="MimeKit.Tnef.TnefException" /> class.
+        ///     Initializes a new instance of the <see cref="TnefException" /> class.
         /// </summary>
         /// <remarks>
         ///     Creates a new <see cref="TnefException" />.
@@ -59,7 +59,7 @@ namespace MimeKit.Tnef
 #endif
 
         /// <summary>
-        ///     Initializes a new instance of the <see cref="MimeKit.Tnef.TnefException" /> class.
+        ///     Initializes a new instance of the <see cref="TnefException" /> class.
         /// </summary>
         /// <remarks>
         ///     Creates a new <see cref="TnefException" />.
@@ -71,7 +71,7 @@ namespace MimeKit.Tnef
         }
 
         /// <summary>
-        ///     Initializes a new instance of the <see cref="MimeKit.Tnef.TnefException" /> class.
+        ///     Initializes a new instance of the <see cref="TnefException" /> class.
         /// </summary>
         /// <remarks>
         ///     Creates a new <see cref="TnefException" />.

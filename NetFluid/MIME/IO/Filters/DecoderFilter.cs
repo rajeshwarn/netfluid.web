@@ -25,9 +25,9 @@
 //
 
 using System;
-using MimeKit.Encodings;
+using NetFluid.MIME.Encodings;
 
-namespace MimeKit.IO.Filters
+namespace NetFluid.MIME.IO.Filters
 {
     /// <summary>
     ///     A filter for decoding MIME content.
@@ -38,7 +38,7 @@ namespace MimeKit.IO.Filters
     class DecoderFilter : MimeFilterBase
     {
         /// <summary>
-        ///     Initializes a new instance of the <see cref="MimeKit.IO.Filters.DecoderFilter" /> class.
+        ///     Initializes a new instance of the <see cref="DecoderFilter" /> class.
         /// </summary>
         /// <remarks>
         ///     Creates a new <see cref="DecoderFilter" /> using the specified decoder.

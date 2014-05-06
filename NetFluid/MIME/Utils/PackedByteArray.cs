@@ -28,7 +28,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 
-namespace MimeKit.Utils
+namespace NetFluid.MIME.Utils
 {
     internal class PackedByteArray : IList<byte>
     {

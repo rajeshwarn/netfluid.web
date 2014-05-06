@@ -24,7 +24,7 @@
 // THE SOFTWARE.
 //
 
-namespace MimeKit.IO.Filters
+namespace NetFluid.MIME.IO.Filters
 {
     /// <summary>
     ///     A filter that simply passes data through without any processing.

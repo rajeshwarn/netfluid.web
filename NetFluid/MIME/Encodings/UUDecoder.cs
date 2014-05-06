@@ -26,7 +26,7 @@
 
 using System;
 
-namespace MimeKit.Encodings
+namespace NetFluid.MIME.Encodings
 {
     /// <summary>
     ///     Incrementally decodes content encoded with the Unix-to-Unix encoding.
@@ -71,7 +71,7 @@ namespace MimeKit.Encodings
         private byte uulen;
 
         /// <summary>
-        ///     Initializes a new instance of the <see cref="MimeKit.Encodings.UUDecoder" /> class.
+        ///     Initializes a new instance of the <see cref="UUDecoder" /> class.
         /// </summary>
         /// <remarks>
         ///     Creates a new Unix-to-Unix decoder.
@@ -86,7 +86,7 @@ namespace MimeKit.Encodings
         }
 
         /// <summary>
-        ///     Initializes a new instance of the <see cref="MimeKit.Encodings.UUDecoder" /> class.
+        ///     Initializes a new instance of the <see cref="UUDecoder" /> class.
         /// </summary>
         /// <remarks>
         ///     Creates a new Unix-to-Unix decoder.

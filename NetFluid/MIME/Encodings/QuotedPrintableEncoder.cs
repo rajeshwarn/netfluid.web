@@ -25,9 +25,9 @@
 //
 
 using System;
-using MimeKit.Utils;
+using NetFluid.MIME.Utils;
 
-namespace MimeKit.Encodings
+namespace NetFluid.MIME.Encodings
 {
     /// <summary>
     ///     Incrementally encodes content using the quoted-printable encoding.
@@ -53,7 +53,7 @@ namespace MimeKit.Encodings
         private short saved;
 
         /// <summary>
-        ///     Initializes a new instance of the <see cref="MimeKit.Encodings.QuotedPrintableEncoder" /> class.
+        ///     Initializes a new instance of the <see cref="QuotedPrintableEncoder" /> class.
         /// </summary>
         /// <remarks>
         ///     Creates a new quoted-printable encoder.

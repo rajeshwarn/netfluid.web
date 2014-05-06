@@ -25,9 +25,9 @@
 //
 
 using System;
-using MimeKit.Utils;
+using NetFluid.MIME.Utils;
 
-namespace MimeKit.Encodings
+namespace NetFluid.MIME.Encodings
 {
     /// <summary>
     ///     Incrementally decodes content encoded with the quoted-printable encoding.
@@ -44,7 +44,7 @@ namespace MimeKit.Encodings
         private QpDecoderState state;
 
         /// <summary>
-        ///     Initializes a new instance of the <see cref="MimeKit.Encodings.QuotedPrintableDecoder" /> class.
+        ///     Initializes a new instance of the <see cref="QuotedPrintableDecoder" /> class.
         /// </summary>
         /// <remarks>
         ///     Creates a new quoted-printable decoder.
@@ -59,7 +59,7 @@ namespace MimeKit.Encodings
         }
 
         /// <summary>
-        ///     Initializes a new instance of the <see cref="MimeKit.Encodings.QuotedPrintableDecoder" /> class.
+        ///     Initializes a new instance of the <see cref="QuotedPrintableDecoder" /> class.
         /// </summary>
         /// <remarks>
         ///     Creates a new quoted-printable decoder.

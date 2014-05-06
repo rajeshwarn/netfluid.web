@@ -33,11 +33,11 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using System.Threading;
-using MimeKit.Encodings;
-using MimeKit.IO.Filters;
-using MimeKit.Utils;
+using NetFluid.MIME.Encodings;
+using NetFluid.MIME.IO.Filters;
+using NetFluid.MIME.Utils;
 
-namespace MimeKit
+namespace NetFluid.MIME
 {
     /// <summary>
     ///     A multipart MIME entity which may contain a collection of MIME entities.
@@ -85,9 +85,9 @@ namespace MimeKit
         private string preamble;
 
         /// <summary>
-        ///     Initializes a new instance of the <see cref="MimeKit.Multipart" /> class.
+        ///     Initializes a new instance of the <see cref="Multipart" /> class.
         /// </summary>
-        /// <remarks>This constructor is used by <see cref="MimeKit.MimeParser" />.</remarks>
+        /// <remarks>This constructor is used by <see cref="MimeParser" />.</remarks>
         /// <param name="entity">Information used by the constructor.</param>
         public Multipart(MimeEntityConstructorInfo entity) : base(entity)
         {
@@ -95,7 +95,7 @@ namespace MimeKit
         }
 
         /// <summary>
-        ///     Initializes a new instance of the <see cref="MimeKit.Multipart" /> class.
+        ///     Initializes a new instance of the <see cref="Multipart" /> class.
         /// </summary>
         /// <remarks>
         ///     Creates a new <see cref="Multipart" /> with the specified subtype.
@@ -132,7 +132,7 @@ namespace MimeKit
         }
 
         /// <summary>
-        ///     Initializes a new instance of the <see cref="MimeKit.Multipart" /> class.
+        ///     Initializes a new instance of the <see cref="Multipart" /> class.
         /// </summary>
         /// <remarks>
         ///     Creates a new <see cref="Multipart" /> with the specified subtype.
@@ -148,7 +148,7 @@ namespace MimeKit
         }
 
         /// <summary>
-        ///     Initializes a new instance of the <see cref="MimeKit.Multipart" /> class.
+        ///     Initializes a new instance of the <see cref="Multipart" /> class.
         /// </summary>
         /// <remarks>
         ///     Creates a new <see cref="Multipart" /> with a ContentType of multipart/mixed.
@@ -341,7 +341,7 @@ namespace MimeKit
         }
 
         /// <summary>
-        ///     Writes the <see cref="MimeKit.Multipart" /> to the specified output stream.
+        ///     Writes the <see cref="Multipart" /> to the specified output stream.
         /// </summary>
         /// <remarks>
         ///     Writes the multipart MIME entity and its subparts to the output stream.

@@ -24,7 +24,7 @@
 // THE SOFTWARE.
 //
 
-namespace MimeKit.Tnef
+namespace NetFluid.MIME.Tnef
 {
     /// <summary>
     ///     Tne kind of TNEF name identifier.

@@ -26,7 +26,7 @@
 
 using System;
 
-namespace MimeKit.Tnef
+namespace NetFluid.MIME.Tnef
 {
     internal struct TnefNameId
     {

@@ -24,7 +24,7 @@
 // THE SOFTWARE.
 //
 
-namespace MimeKit.Tnef
+namespace NetFluid.MIME.Tnef
 {
     /// <summary>
     ///     The type of value that a TNEF property contains.

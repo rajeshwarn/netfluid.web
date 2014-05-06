@@ -30,9 +30,9 @@ using Encoding = Portable.Text.Encoding;
 using System;
 using System.Linq;
 using System.Text;
-using MimeKit.Utils;
+using NetFluid.MIME.Utils;
 
-namespace MimeKit
+namespace NetFluid.MIME
 {
     /// <summary>
     ///     A class representing a Message or MIME header.
@@ -46,7 +46,7 @@ namespace MimeKit
         private string textValue;
 
         /// <summary>
-        ///     Initializes a new instance of the <see cref="MimeKit.Header" /> class.
+        ///     Initializes a new instance of the <see cref="Header" /> class.
         /// </summary>
         /// <remarks>
         ///     Creates a new message or entity header for the specified field and
@@ -86,7 +86,7 @@ namespace MimeKit
         }
 
         /// <summary>
-        ///     Initializes a new instance of the <see cref="MimeKit.Header" /> class.
+        ///     Initializes a new instance of the <see cref="Header" /> class.
         /// </summary>
         /// <remarks>
         ///     Creates a new message or entity header for the specified field and
@@ -105,7 +105,7 @@ namespace MimeKit
         }
 
         /// <summary>
-        ///     Initializes a new instance of the <see cref="MimeKit.Header" /> class.
+        ///     Initializes a new instance of the <see cref="Header" /> class.
         /// </summary>
         /// <remarks>
         ///     Creates a new message or entity header for the specified field and
@@ -155,7 +155,7 @@ namespace MimeKit
         }
 
         /// <summary>
-        ///     Initializes a new instance of the <see cref="MimeKit.Header" /> class.
+        ///     Initializes a new instance of the <see cref="Header" /> class.
         /// </summary>
         /// <remarks>
         ///     Creates a new message or entity header for the specified field and
@@ -432,7 +432,7 @@ namespace MimeKit
         }
 
         /// <summary>
-        ///     Tries to parse the given input buffer into a new <see cref="MimeKit.Header" /> instance.
+        ///     Tries to parse the given input buffer into a new <see cref="Header" /> instance.
         /// </summary>
         /// <remarks>
         ///     Parses a header from the supplied buffer starting at the given index
@@ -477,7 +477,7 @@ namespace MimeKit
         }
 
         /// <summary>
-        ///     Tries to parse the given input buffer into a new <see cref="MimeKit.Header" /> instance.
+        ///     Tries to parse the given input buffer into a new <see cref="Header" /> instance.
         /// </summary>
         /// <remarks>
         ///     Parses a header from the supplied buffer starting at the given index
@@ -501,7 +501,7 @@ namespace MimeKit
         }
 
         /// <summary>
-        ///     Tries to parse the given input buffer into a new <see cref="MimeKit.Header" /> instance.
+        ///     Tries to parse the given input buffer into a new <see cref="Header" /> instance.
         /// </summary>
         /// <remarks>
         ///     Parses a header from the supplied buffer starting at the specified index.
@@ -527,7 +527,7 @@ namespace MimeKit
         }
 
         /// <summary>
-        ///     Tries to parse the given input buffer into a new <see cref="MimeKit.Header" /> instance.
+        ///     Tries to parse the given input buffer into a new <see cref="Header" /> instance.
         /// </summary>
         /// <remarks>
         ///     Parses a header from the supplied buffer starting at the specified index.
@@ -550,7 +550,7 @@ namespace MimeKit
         }
 
         /// <summary>
-        ///     Tries to parse the given input buffer into a new <see cref="MimeKit.Header" /> instance.
+        ///     Tries to parse the given input buffer into a new <see cref="Header" /> instance.
         /// </summary>
         /// <remarks>
         ///     Parses a header from the specified buffer.
@@ -570,7 +570,7 @@ namespace MimeKit
         }
 
         /// <summary>
-        ///     Tries to parse the given input buffer into a new <see cref="MimeKit.Header" /> instance.
+        ///     Tries to parse the given input buffer into a new <see cref="Header" /> instance.
         /// </summary>
         /// <remarks>
         ///     Parses a header from the specified buffer.
@@ -587,7 +587,7 @@ namespace MimeKit
         }
 
         /// <summary>
-        ///     Tries to parse the given text into a new <see cref="MimeKit.Header" /> instance.
+        ///     Tries to parse the given text into a new <see cref="Header" /> instance.
         /// </summary>
         /// <remarks>
         ///     Parses a header from the specified text.
@@ -621,7 +621,7 @@ namespace MimeKit
         }
 
         /// <summary>
-        ///     Tries to parse the given text into a new <see cref="MimeKit.Header" /> instance.
+        ///     Tries to parse the given text into a new <see cref="Header" /> instance.
         /// </summary>
         /// <remarks>
         ///     Parses a header from the specified text.

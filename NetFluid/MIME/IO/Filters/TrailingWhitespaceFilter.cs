@@ -24,9 +24,9 @@
 // THE SOFTWARE.
 //
 
-using MimeKit.Utils;
+using NetFluid.MIME.Utils;
 
-namespace MimeKit.IO.Filters
+namespace NetFluid.MIME.IO.Filters
 {
     /// <summary>
     ///     A filter for stripping trailing whitespace from lines in a textual stream.

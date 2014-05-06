@@ -30,9 +30,9 @@ using Encoding = Portable.Text.Encoding;
 using System;
 using System.Collections.Generic;
 using System.Text;
-using MimeKit.Encodings;
+using NetFluid.MIME.Encodings;
 
-namespace MimeKit.Utils
+namespace NetFluid.MIME.Utils
 {
     /// <summary>
     ///     Utility methods for encoding and decoding rfc2047 encoded-word tokens.

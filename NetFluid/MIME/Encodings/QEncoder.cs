@@ -25,9 +25,9 @@
 //
 
 using System;
-using MimeKit.Utils;
+using NetFluid.MIME.Utils;
 
-namespace MimeKit.Encodings
+namespace NetFluid.MIME.Encodings
 {
     /// <summary>
     ///     Q-Encoding mode.
@@ -68,7 +68,7 @@ namespace MimeKit.Encodings
         private readonly CharType mask;
 
         /// <summary>
-        ///     Initializes a new instance of the <see cref="MimeKit.Encodings.QEncoder" /> class.
+        ///     Initializes a new instance of the <see cref="QEncoder" /> class.
         /// </summary>
         /// <remarks>
         ///     Creates a new rfc2047 quoted-printable encoder.

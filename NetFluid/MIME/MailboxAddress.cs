@@ -28,9 +28,9 @@ using System;
 using System.Collections.Generic;
 using System.Net.Mail;
 using System.Text;
-using MimeKit.Utils;
+using NetFluid.MIME.Utils;
 
-namespace MimeKit
+namespace NetFluid.MIME
 {
     /// <summary>
     ///     A mailbox address, as specified by rfc822.
@@ -44,7 +44,7 @@ namespace MimeKit
         private string address;
 
         /// <summary>
-        ///     Initializes a new instance of the <see cref="MimeKit.MailboxAddress" /> class.
+        ///     Initializes a new instance of the <see cref="MailboxAddress" /> class.
         /// </summary>
         /// <remarks>
         ///     Creates a new <see cref="MailboxAddress" /> with the specified name, address and route. The
@@ -73,7 +73,7 @@ namespace MimeKit
         }
 
         /// <summary>
-        ///     Initializes a new instance of the <see cref="MimeKit.MailboxAddress" /> class.
+        ///     Initializes a new instance of the <see cref="MailboxAddress" /> class.
         /// </summary>
         /// <remarks>
         ///     Creates a new <see cref="MailboxAddress" /> with the specified name, address and route.
@@ -92,7 +92,7 @@ namespace MimeKit
         }
 
         /// <summary>
-        ///     Initializes a new instance of the <see cref="MimeKit.MailboxAddress" /> class.
+        ///     Initializes a new instance of the <see cref="MailboxAddress" /> class.
         /// </summary>
         /// <remarks>
         ///     Creates a new <see cref="MailboxAddress" /> with the specified name and address. The
@@ -115,7 +115,7 @@ namespace MimeKit
         }
 
         /// <summary>
-        ///     Initializes a new instance of the <see cref="MimeKit.MailboxAddress" /> class.
+        ///     Initializes a new instance of the <see cref="MailboxAddress" /> class.
         /// </summary>
         /// <remarks>
         ///     Creates a new <see cref="MailboxAddress" /> with the specified name and address.
@@ -304,7 +304,7 @@ namespace MimeKit
         }
 
         /// <summary>
-        ///     Tries to parse the given input buffer into a new <see cref="MimeKit.MailboxAddress" /> instance.
+        ///     Tries to parse the given input buffer into a new <see cref="MailboxAddress" /> instance.
         /// </summary>
         /// <remarks>
         ///     Parses a single <see cref="MailboxAddress" />. If the the address is not a mailbox address or
@@ -342,7 +342,7 @@ namespace MimeKit
         }
 
         /// <summary>
-        ///     Tries to parse the given input buffer into a new <see cref="MimeKit.MailboxAddress" /> instance.
+        ///     Tries to parse the given input buffer into a new <see cref="MailboxAddress" /> instance.
         /// </summary>
         /// <remarks>
         ///     Parses a single <see cref="MailboxAddress" />. If the the address is not a mailbox address or
@@ -366,7 +366,7 @@ namespace MimeKit
         }
 
         /// <summary>
-        ///     Tries to parse the given input buffer into a new <see cref="MimeKit.MailboxAddress" /> instance.
+        ///     Tries to parse the given input buffer into a new <see cref="MailboxAddress" /> instance.
         /// </summary>
         /// <remarks>
         ///     Parses a single <see cref="MailboxAddress" />. If the the address is not a mailbox address or
@@ -401,7 +401,7 @@ namespace MimeKit
         }
 
         /// <summary>
-        ///     Tries to parse the given input buffer into a new <see cref="MimeKit.MailboxAddress" /> instance.
+        ///     Tries to parse the given input buffer into a new <see cref="MailboxAddress" /> instance.
         /// </summary>
         /// <remarks>
         ///     Parses a single <see cref="MailboxAddress" />. If the the address is not a mailbox address or
@@ -423,7 +423,7 @@ namespace MimeKit
         }
 
         /// <summary>
-        ///     Tries to parse the given input buffer into a new <see cref="MimeKit.MailboxAddress" /> instance.
+        ///     Tries to parse the given input buffer into a new <see cref="MailboxAddress" /> instance.
         /// </summary>
         /// <remarks>
         ///     Parses a single <see cref="MailboxAddress" />. If the the address is not a mailbox address or
@@ -454,7 +454,7 @@ namespace MimeKit
         }
 
         /// <summary>
-        ///     Tries to parse the given input buffer into a new <see cref="MimeKit.MailboxAddress" /> instance.
+        ///     Tries to parse the given input buffer into a new <see cref="MailboxAddress" /> instance.
         /// </summary>
         /// <remarks>
         ///     Parses a single <see cref="MailboxAddress" />. If the the address is not a mailbox address or
@@ -472,7 +472,7 @@ namespace MimeKit
         }
 
         /// <summary>
-        ///     Tries to parse the given text into a new <see cref="MimeKit.MailboxAddress" /> instance.
+        ///     Tries to parse the given text into a new <see cref="MailboxAddress" /> instance.
         /// </summary>
         /// <remarks>
         ///     Parses a single <see cref="MailboxAddress" />. If the the address is not a mailbox address or
@@ -501,7 +501,7 @@ namespace MimeKit
         }
 
         /// <summary>
-        ///     Tries to parse the given text into a new <see cref="MimeKit.MailboxAddress" /> instance.
+        ///     Tries to parse the given text into a new <see cref="MailboxAddress" /> instance.
         /// </summary>
         /// <remarks>
         ///     Parses a single <see cref="MailboxAddress" />. If the the address is not a mailbox address or
@@ -552,19 +552,19 @@ namespace MimeKit
         #region IEquatable implementation
 
         /// <summary>
-        ///     Determines whether the specified <see cref="MimeKit.MailboxAddress" /> is equal to the current
-        ///     <see cref="MimeKit.MailboxAddress" />.
+        ///     Determines whether the specified <see cref="MailboxAddress" /> is equal to the current
+        ///     <see cref="MailboxAddress" />.
         /// </summary>
         /// <remarks>
         ///     Compares two mailbox addresses to determine if they are identical or not.
         /// </remarks>
         /// <param name="other">
-        ///     The <see cref="MimeKit.MailboxAddress" /> to compare with the current
-        ///     <see cref="MimeKit.MailboxAddress" />.
+        ///     The <see cref="MailboxAddress" /> to compare with the current
+        ///     <see cref="MailboxAddress" />.
         /// </param>
         /// <returns>
-        ///     <c>true</c> if the specified <see cref="MimeKit.MailboxAddress" /> is equal to the current
-        ///     <see cref="MimeKit.MailboxAddress" />; otherwise, <c>false</c>.
+        ///     <c>true</c> if the specified <see cref="MailboxAddress" /> is equal to the current
+        ///     <see cref="MailboxAddress" />; otherwise, <c>false</c>.
         /// </returns>
         public bool Equals(MailboxAddress other)
         {

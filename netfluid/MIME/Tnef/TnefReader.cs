@@ -32,7 +32,7 @@ using System.Text;
 using Encoding = Portable.Text.Encoding;
 #endif
 
-namespace MimeKit.Tnef
+namespace NetFluid.MIME.Tnef
 {
     internal class TnefReader : IDisposable
     {
@@ -53,7 +53,7 @@ namespace MimeKit.Tnef
         private int version;
 
         /// <summary>
-        ///     Initializes a new instance of the <see cref="MimeKit.Tnef.TnefReader" /> class.
+        ///     Initializes a new instance of the <see cref="TnefReader" /> class.
         /// </summary>
         /// <param name="inputStream">The input stream.</param>
         /// <param name="defaultMessageCodepage">The default message codepage.</param>
@@ -97,7 +97,7 @@ namespace MimeKit.Tnef
         }
 
         /// <summary>
-        ///     Initializes a new instance of the <see cref="MimeKit.Tnef.TnefReader" /> class.
+        ///     Initializes a new instance of the <see cref="TnefReader" /> class.
         /// </summary>
         /// <param name="inputStream">The input stream.</param>
         /// <exception cref="System.ArgumentNullException">
@@ -824,15 +824,15 @@ namespace MimeKit.Tnef
         #region IDisposable implementation
 
         /// <summary>
-        ///     Releases all resource used by the <see cref="MimeKit.Tnef.TnefReader" /> object.
+        ///     Releases all resource used by the <see cref="TnefReader" /> object.
         /// </summary>
         /// <remarks>
-        ///     Call <see cref="Dispose()" /> when you are finished using the <see cref="MimeKit.Tnef.TnefReader" />. The
-        ///     <see cref="Dispose()" /> method leaves the <see cref="MimeKit.Tnef.TnefReader" /> in an unusable state. After
+        ///     Call <see cref="Dispose()" /> when you are finished using the <see cref="TnefReader" />. The
+        ///     <see cref="Dispose()" /> method leaves the <see cref="TnefReader" /> in an unusable state. After
         ///     calling
-        ///     <see cref="Dispose()" />, you must release all references to the <see cref="MimeKit.Tnef.TnefReader" /> so the
+        ///     <see cref="Dispose()" />, you must release all references to the <see cref="TnefReader" /> so the
         ///     garbage
-        ///     collector can reclaim the memory that the <see cref="MimeKit.Tnef.TnefReader" /> was occupying.
+        ///     collector can reclaim the memory that the <see cref="TnefReader" /> was occupying.
         /// </remarks>
         public void Dispose()
         {

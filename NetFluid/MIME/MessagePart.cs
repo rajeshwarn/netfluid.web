@@ -28,10 +28,10 @@ using System;
 using System.IO;
 using System.Threading;
 
-namespace MimeKit
+namespace NetFluid.MIME
 {
     /// <summary>
-    ///     A MIME part containing a <see cref="MimeKit.MimeMessage" /> as its content.
+    ///     A MIME part containing a <see cref="MimeMessage" /> as its content.
     /// </summary>
     /// <remarks>
     ///     Represents MIME entities such as those with a Content-Type of message/rfc822 or message/news.
@@ -39,16 +39,16 @@ namespace MimeKit
     internal class MessagePart : MimeEntity
     {
         /// <summary>
-        ///     Initializes a new instance of the <see cref="MimeKit.MessagePart" /> class.
+        ///     Initializes a new instance of the <see cref="MessagePart" /> class.
         /// </summary>
-        /// <remarks>This constructor is used by <see cref="MimeKit.MimeParser" />.</remarks>
+        /// <remarks>This constructor is used by <see cref="MimeParser" />.</remarks>
         /// <param name="entity">Information used by the constructor.</param>
         public MessagePart(MimeEntityConstructorInfo entity) : base(entity)
         {
         }
 
         /// <summary>
-        ///     Initializes a new instance of the <see cref="MimeKit.MessagePart" /> class.
+        ///     Initializes a new instance of the <see cref="MessagePart" /> class.
         /// </summary>
         /// <remarks>
         ///     Creates a new <see cref="MessagePart" />.
@@ -61,7 +61,7 @@ namespace MimeKit
         ///     <para><paramref name="args" /> is <c>null</c>.</para>
         /// </exception>
         /// <exception cref="System.ArgumentException">
-        ///     <para><paramref name="args" /> contains more than one <see cref="MimeKit.MimeMessage" />.</para>
+        ///     <para><paramref name="args" /> contains more than one <see cref="MimeMessage" />.</para>
         ///     <para>-or-</para>
         ///     <para><paramref name="args" /> contains one or more arguments of an unknown type.</para>
         /// </exception>
@@ -95,7 +95,7 @@ namespace MimeKit
         }
 
         /// <summary>
-        ///     Initializes a new instance of the <see cref="MimeKit.MessagePart" /> class.
+        ///     Initializes a new instance of the <see cref="MessagePart" /> class.
         /// </summary>
         /// <remarks>
         ///     Creates a new MIME message entity with the specified subtype.
@@ -109,7 +109,7 @@ namespace MimeKit
         }
 
         /// <summary>
-        ///     Initializes a new instance of the <see cref="MimeKit.MessagePart" /> class.
+        ///     Initializes a new instance of the <see cref="MessagePart" /> class.
         /// </summary>
         /// <remarks>
         ///     Creates a new message/rfc822 MIME entity.
@@ -128,7 +128,7 @@ namespace MimeKit
         public MimeMessage Message { get; set; }
 
         /// <summary>
-        ///     Writes the <see cref="MimeKit.MessagePart" /> to the output stream.
+        ///     Writes the <see cref="MessagePart" /> to the output stream.
         /// </summary>
         /// <remarks>
         ///     Writes the MIME entity and its message to the output stream.

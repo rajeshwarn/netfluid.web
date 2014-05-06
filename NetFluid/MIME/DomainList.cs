@@ -28,9 +28,9 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Text;
-using MimeKit.Utils;
+using NetFluid.MIME.Utils;
 
-namespace MimeKit
+namespace NetFluid.MIME
 {
     /// <summary>
     ///     A domain list.
@@ -43,7 +43,7 @@ namespace MimeKit
         private readonly List<string> domains;
 
         /// <summary>
-        ///     Initializes a new instance of the <see cref="MimeKit.DomainList" /> class.
+        ///     Initializes a new instance of the <see cref="DomainList" /> class.
         /// </summary>
         /// <remarks>
         ///     Creates a new <see cref="DomainList" /> based on the domains provided.
@@ -61,7 +61,7 @@ namespace MimeKit
         }
 
         /// <summary>
-        ///     Initializes a new instance of the <see cref="MimeKit.DomainList" /> class.
+        ///     Initializes a new instance of the <see cref="DomainList" /> class.
         /// </summary>
         /// <remarks>
         ///     Creates a new <see cref="DomainList" />.
@@ -225,7 +225,7 @@ namespace MimeKit
         }
 
         /// <summary>
-        ///     Copies all of the domains in the <see cref="MimeKit.DomainList" /> to the specified array.
+        ///     Copies all of the domains in the <see cref="DomainList" /> to the specified array.
         /// </summary>
         /// <remarks>
         ///     Copies all of the domains within the <see cref="DomainList" /> into the array,
@@ -275,7 +275,7 @@ namespace MimeKit
         }
 
         /// <summary>
-        ///     Gets the number of domains in the <see cref="MimeKit.DomainList" />.
+        ///     Gets the number of domains in the <see cref="DomainList" />.
         /// </summary>
         /// <remarks>
         ///     Indicates the number of domains in the list.

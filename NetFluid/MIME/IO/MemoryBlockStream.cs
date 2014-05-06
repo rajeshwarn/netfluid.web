@@ -28,7 +28,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 
-namespace MimeKit.IO
+namespace NetFluid.MIME.IO
 {
     /// <summary>
     ///     An efficient memory stream implementation that sacrifices the ability to
@@ -52,7 +52,7 @@ namespace MimeKit.IO
         private long position;
 
         /// <summary>
-        ///     Initializes a new instance of the <see cref="MimeKit.IO.MemoryBlockStream" /> class.
+        ///     Initializes a new instance of the <see cref="MemoryBlockStream" /> class.
         /// </summary>
         /// <remarks>
         ///     Creates a new <see cref="MemoryBlockStream" /> with an initial memory block

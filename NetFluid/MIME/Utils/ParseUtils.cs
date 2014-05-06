@@ -26,7 +26,7 @@
 
 using System.Text;
 
-namespace MimeKit.Utils
+namespace NetFluid.MIME.Utils
 {
     internal static class ParseUtils
     {

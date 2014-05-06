@@ -28,10 +28,10 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
-using MimeKit.IO;
-using MimeKit.IO.Filters;
+using NetFluid.MIME.IO;
+using NetFluid.MIME.IO.Filters;
 
-namespace MimeKit
+namespace NetFluid.MIME
 {
     /// <summary>
     ///     A collection of attachments.
@@ -46,7 +46,7 @@ namespace MimeKit
         private readonly bool linked;
 
         /// <summary>
-        ///     Initializes a new instance of the <see cref="MimeKit.AttachmentCollection" /> class.
+        ///     Initializes a new instance of the <see cref="AttachmentCollection" /> class.
         /// </summary>
         /// <remarks>
         ///     <para>Creates a new <see cref="AttachmentCollection" />.</para>
@@ -63,7 +63,7 @@ namespace MimeKit
         }
 
         /// <summary>
-        ///     Initializes a new instance of the <see cref="MimeKit.AttachmentCollection" /> class.
+        ///     Initializes a new instance of the <see cref="AttachmentCollection" /> class.
         /// </summary>
         /// <remarks>
         ///     Creates a new <see cref="AttachmentCollection" />.

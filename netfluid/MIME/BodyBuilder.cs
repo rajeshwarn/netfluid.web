@@ -24,7 +24,7 @@
 // THE SOFTWARE.
 //
 
-namespace MimeKit
+namespace NetFluid.MIME
 {
     /// <summary>
     ///     A message body builder.
@@ -35,7 +35,7 @@ namespace MimeKit
     internal class BodyBuilder
     {
         /// <summary>
-        ///     Initializes a new instance of the <see cref="MimeKit.BodyBuilder" /> class.
+        ///     Initializes a new instance of the <see cref="BodyBuilder" /> class.
         /// </summary>
         /// <remarks>
         ///     Creates a new <see cref="BodyBuilder" />.

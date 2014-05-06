@@ -30,11 +30,11 @@ using Encoding = Portable.Text.Encoding;
 using System;
 using System.IO;
 using System.Text;
-using MimeKit.IO;
-using MimeKit.IO.Filters;
-using MimeKit.Utils;
+using NetFluid.MIME.IO;
+using NetFluid.MIME.IO.Filters;
+using NetFluid.MIME.Utils;
 
-namespace MimeKit
+namespace NetFluid.MIME
 {
     /// <summary>
     ///     A Textual MIME part.
@@ -52,16 +52,16 @@ namespace MimeKit
     class TextPart : MimePart
     {
         /// <summary>
-        ///     Initializes a new instance of the <see cref="MimeKit.TextPart" /> class.
+        ///     Initializes a new instance of the <see cref="TextPart" /> class.
         /// </summary>
-        /// <remarks>This constructor is used by <see cref="MimeKit.MimeParser" />.</remarks>
+        /// <remarks>This constructor is used by <see cref="MimeParser" />.</remarks>
         /// <param name="entity">Information used by the constructor.</param>
         public TextPart(MimeEntityConstructorInfo entity) : base(entity)
         {
         }
 
         /// <summary>
-        ///     Initializes a new instance of the <see cref="MimeKit.TextPart" />
+        ///     Initializes a new instance of the <see cref="TextPart" />
         ///     class with the specified text subtype.
         /// </summary>
         /// <remarks>
@@ -123,7 +123,7 @@ namespace MimeKit
         }
 
         /// <summary>
-        ///     Initializes a new instance of the <see cref="MimeKit.TextPart" />
+        ///     Initializes a new instance of the <see cref="TextPart" />
         ///     class with the specified text subtype.
         /// </summary>
         /// <remarks>
@@ -138,7 +138,7 @@ namespace MimeKit
         }
 
         /// <summary>
-        ///     Initializes a new instance of the <see cref="MimeKit.TextPart" />
+        ///     Initializes a new instance of the <see cref="TextPart" />
         ///     class with a Content-Type of text/plain.
         /// </summary>
         /// <remarks>

@@ -25,7 +25,6 @@ namespace NetFluid.DNS.Records
     {
         [DomainName] public string CNAME;
 
-
         public override string ToString()
         {
             return CNAME;

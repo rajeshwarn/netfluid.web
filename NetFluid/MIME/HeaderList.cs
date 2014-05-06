@@ -30,12 +30,12 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using System.Threading;
-using MimeKit.IO;
+using NetFluid.MIME.IO;
 
-namespace MimeKit
+namespace NetFluid.MIME
 {
     /// <summary>
-    ///     A list of <see cref="MimeKit.Header" />s.
+    ///     A list of <see cref="Header" />s.
     /// </summary>
     /// <remarks>
     ///     Represents a list of headers as found in a <see cref="MimeMessage" />
@@ -58,7 +58,7 @@ namespace MimeKit
         }
 
         /// <summary>
-        ///     Initializes a new instance of the <see cref="MimeKit.HeaderList" /> class.
+        ///     Initializes a new instance of the <see cref="HeaderList" /> class.
         /// </summary>
         /// <remarks>
         ///     Creates a new empty header list.
@@ -202,7 +202,7 @@ namespace MimeKit
         }
 
         /// <summary>
-        ///     Checks if the <see cref="MimeKit.HeaderList" /> contains a header with the specified field name.
+        ///     Checks if the <see cref="HeaderList" /> contains a header with the specified field name.
         /// </summary>
         /// <remarks>
         ///     Determines whether or not the header list contains the specified header.
@@ -227,7 +227,7 @@ namespace MimeKit
         }
 
         /// <summary>
-        ///     Checks if the <see cref="MimeKit.HeaderList" /> contains a header with the specified field name.
+        ///     Checks if the <see cref="HeaderList" /> contains a header with the specified field name.
         /// </summary>
         /// <remarks>
         ///     Determines whether or not the header list contains the specified header.
@@ -531,7 +531,7 @@ namespace MimeKit
         }
 
         /// <summary>
-        ///     Writes the <see cref="MimeKit.HeaderList" /> to the specified output stream.
+        ///     Writes the <see cref="HeaderList" /> to the specified output stream.
         /// </summary>
         /// <remarks>
         ///     Writes all of the headers to the output stream.
@@ -581,7 +581,7 @@ namespace MimeKit
         }
 
         /// <summary>
-        ///     Writes the <see cref="MimeKit.HeaderList" /> to the specified output stream.
+        ///     Writes the <see cref="HeaderList" /> to the specified output stream.
         /// </summary>
         /// <remarks>
         ///     Writes all of the headers to the output stream.
@@ -626,7 +626,7 @@ namespace MimeKit
         #region ICollection implementation
 
         /// <summary>
-        ///     Gets the number of headers in the <see cref="MimeKit.HeaderList" />.
+        ///     Gets the number of headers in the <see cref="HeaderList" />.
         /// </summary>
         /// <remarks>
         ///     Indicates the number of headers in the list.
@@ -716,7 +716,7 @@ namespace MimeKit
         }
 
         /// <summary>
-        ///     Copies all of the headers in the <see cref="MimeKit.HeaderList" /> to the specified array.
+        ///     Copies all of the headers in the <see cref="HeaderList" /> to the specified array.
         /// </summary>
         /// <remarks>
         ///     Copies all of the headers within the <see cref="HeaderList" /> into the array,
@@ -938,10 +938,10 @@ namespace MimeKit
         }
 
         /// <summary>
-        ///     Gets or sets the <see cref="MimeKit.Header" /> at the specified index.
+        ///     Gets or sets the <see cref="Header" /> at the specified index.
         /// </summary>
         /// <remarks>
-        ///     Gets or sets the <see cref="MimeKit.Header" /> at the specified index.
+        ///     Gets or sets the <see cref="Header" /> at the specified index.
         /// </remarks>
         /// <value>The header at the specified index.</value>
         /// <param name="index">The index.</param>

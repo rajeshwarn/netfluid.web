@@ -27,9 +27,9 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
-using MimeKit.Utils;
+using NetFluid.MIME.Utils;
 
-namespace MimeKit
+namespace NetFluid.MIME
 {
     /// <summary>
     ///     An address group, as specified by rfc0822.
@@ -41,7 +41,7 @@ namespace MimeKit
     internal class GroupAddress : InternetAddress, IEquatable<GroupAddress>
     {
         /// <summary>
-        ///     Initializes a new instance of the <see cref="MimeKit.GroupAddress" /> class.
+        ///     Initializes a new instance of the <see cref="GroupAddress" /> class.
         /// </summary>
         /// <remarks>
         ///     Creates a new <see cref="GroupAddress" /> with the specified name and list of addresses. The
@@ -61,7 +61,7 @@ namespace MimeKit
         }
 
         /// <summary>
-        ///     Initializes a new instance of the <see cref="MimeKit.GroupAddress" /> class.
+        ///     Initializes a new instance of the <see cref="GroupAddress" /> class.
         /// </summary>
         /// <remarks>
         ///     Creates a new <see cref="GroupAddress" /> with the specified name and list of addresses.
@@ -73,7 +73,7 @@ namespace MimeKit
         }
 
         /// <summary>
-        ///     Initializes a new instance of the <see cref="MimeKit.GroupAddress" /> class.
+        ///     Initializes a new instance of the <see cref="GroupAddress" /> class.
         /// </summary>
         /// <remarks>
         ///     Creates a new <see cref="GroupAddress" /> with the specified name. The specified
@@ -91,7 +91,7 @@ namespace MimeKit
         }
 
         /// <summary>
-        ///     Initializes a new instance of the <see cref="MimeKit.GroupAddress" /> class.
+        ///     Initializes a new instance of the <see cref="GroupAddress" /> class.
         /// </summary>
         /// <remarks>
         ///     Creates a new <see cref="GroupAddress" /> with the specified name.
@@ -209,7 +209,7 @@ namespace MimeKit
         }
 
         /// <summary>
-        ///     Tries to parse the given input buffer into a new <see cref="MimeKit.GroupAddress" /> instance.
+        ///     Tries to parse the given input buffer into a new <see cref="GroupAddress" /> instance.
         /// </summary>
         /// <remarks>
         ///     Parses a single <see cref="GroupAddress" />. If the the address is not a group address or
@@ -247,7 +247,7 @@ namespace MimeKit
         }
 
         /// <summary>
-        ///     Tries to parse the given input buffer into a new <see cref="MimeKit.GroupAddress" /> instance.
+        ///     Tries to parse the given input buffer into a new <see cref="GroupAddress" /> instance.
         /// </summary>
         /// <remarks>
         ///     Parses a single <see cref="GroupAddress" />. If the the address is not a group address or
@@ -271,7 +271,7 @@ namespace MimeKit
         }
 
         /// <summary>
-        ///     Tries to parse the given input buffer into a new <see cref="MimeKit.GroupAddress" /> instance.
+        ///     Tries to parse the given input buffer into a new <see cref="GroupAddress" /> instance.
         /// </summary>
         /// <remarks>
         ///     Parses a single <see cref="GroupAddress" />. If the the address is not a group address or
@@ -306,7 +306,7 @@ namespace MimeKit
         }
 
         /// <summary>
-        ///     Tries to parse the given input buffer into a new <see cref="MimeKit.GroupAddress" /> instance.
+        ///     Tries to parse the given input buffer into a new <see cref="GroupAddress" /> instance.
         /// </summary>
         /// <remarks>
         ///     Parses a single <see cref="GroupAddress" />. If the the address is not a group address or
@@ -328,7 +328,7 @@ namespace MimeKit
         }
 
         /// <summary>
-        ///     Tries to parse the given input buffer into a new <see cref="MimeKit.GroupAddress" /> instance.
+        ///     Tries to parse the given input buffer into a new <see cref="GroupAddress" /> instance.
         /// </summary>
         /// <remarks>
         ///     Parses a single <see cref="GroupAddress" />. If the the address is not a group address or
@@ -359,7 +359,7 @@ namespace MimeKit
         }
 
         /// <summary>
-        ///     Tries to parse the given input buffer into a new <see cref="MimeKit.GroupAddress" /> instance.
+        ///     Tries to parse the given input buffer into a new <see cref="GroupAddress" /> instance.
         /// </summary>
         /// <remarks>
         ///     Parses a single <see cref="GroupAddress" />. If the the address is not a group address or
@@ -377,7 +377,7 @@ namespace MimeKit
         }
 
         /// <summary>
-        ///     Tries to parse the given text into a new <see cref="MimeKit.GroupAddress" /> instance.
+        ///     Tries to parse the given text into a new <see cref="GroupAddress" /> instance.
         /// </summary>
         /// <remarks>
         ///     Parses a single <see cref="GroupAddress" />. If the the address is not a group address or
@@ -406,7 +406,7 @@ namespace MimeKit
         }
 
         /// <summary>
-        ///     Tries to parse the given text into a new <see cref="MimeKit.GroupAddress" /> instance.
+        ///     Tries to parse the given text into a new <see cref="GroupAddress" /> instance.
         /// </summary>
         /// <remarks>
         ///     Parses a single <see cref="GroupAddress" />. If the the address is not a group address or
@@ -426,19 +426,19 @@ namespace MimeKit
         #region IEquatable implementation
 
         /// <summary>
-        ///     Determines whether the specified <see cref="MimeKit.GroupAddress" /> is equal to the current
-        ///     <see cref="MimeKit.GroupAddress" />.
+        ///     Determines whether the specified <see cref="GroupAddress" /> is equal to the current
+        ///     <see cref="GroupAddress" />.
         /// </summary>
         /// <remarks>
         ///     Compares two group addresses to determine if they are identical or not.
         /// </remarks>
         /// <param name="other">
-        ///     The <see cref="MimeKit.GroupAddress" /> to compare with the current
-        ///     <see cref="MimeKit.GroupAddress" />.
+        ///     The <see cref="GroupAddress" /> to compare with the current
+        ///     <see cref="GroupAddress" />.
         /// </param>
         /// <returns>
-        ///     <c>true</c> if the specified <see cref="MimeKit.GroupAddress" /> is equal to the current
-        ///     <see cref="MimeKit.GroupAddress" />; otherwise, <c>false</c>.
+        ///     <c>true</c> if the specified <see cref="GroupAddress" /> is equal to the current
+        ///     <see cref="GroupAddress" />; otherwise, <c>false</c>.
         /// </returns>
         public bool Equals(GroupAddress other)
         {

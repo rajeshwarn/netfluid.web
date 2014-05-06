@@ -26,7 +26,7 @@
 
 using System;
 
-namespace MimeKit.IO.Filters
+namespace NetFluid.MIME.IO.Filters
 {
     /// <summary>
     ///     A base implementation for MIME filters.

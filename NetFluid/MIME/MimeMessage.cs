@@ -32,10 +32,10 @@ using System.Net.Mail;
 using System.Net.Mime;
 using System.Text;
 using System.Threading;
-using MimeKit.IO;
-using MimeKit.Utils;
+using NetFluid.MIME.IO;
+using NetFluid.MIME.Utils;
 
-namespace MimeKit
+namespace NetFluid.MIME
 {
     /// <summary>
     ///     A MIME message.
@@ -119,7 +119,7 @@ namespace MimeKit
         }
 
         /// <summary>
-        ///     Initializes a new instance of the <see cref="MimeKit.MimeMessage" /> class.
+        ///     Initializes a new instance of the <see cref="MimeMessage" /> class.
         /// </summary>
         /// <remarks>
         ///     Creates a new <see cref="MimeMessage" />.
@@ -129,7 +129,7 @@ namespace MimeKit
         ///     <paramref name="args" /> is <c>null</c>.
         /// </exception>
         /// <exception cref="System.ArgumentException">
-        ///     <para><paramref name="args" /> contains more than one <see cref="MimeKit.MimeEntity" />.</para>
+        ///     <para><paramref name="args" /> contains more than one <see cref="MimeEntity" />.</para>
         ///     <para>-or-</para>
         ///     <para><paramref name="args" /> contains one or more arguments of an unknown type.</para>
         /// </exception>
@@ -201,7 +201,7 @@ namespace MimeKit
         }
 
         /// <summary>
-        ///     Initializes a new instance of the <see cref="MimeKit.MimeMessage" /> class.
+        ///     Initializes a new instance of the <see cref="MimeMessage" /> class.
         /// </summary>
         /// <remarks>
         ///     Creates a new MIME message.
@@ -609,7 +609,7 @@ namespace MimeKit
         ///         a message.
         ///     </para>
         ///     <para>
-        ///         <see cref="MimeKit.Utils.MimeUtils.GenerateMessageId()" /> can be used
+        ///         <see cref="MimeUtils.GenerateMessageId()" /> can be used
         ///         to generate this value.
         ///     </para>
         /// </remarks>
@@ -656,7 +656,7 @@ namespace MimeKit
         ///         a message.
         ///     </para>
         ///     <para>
-        ///         <see cref="MimeKit.Utils.MimeUtils.GenerateMessageId()" /> can be used
+        ///         <see cref="MimeUtils.GenerateMessageId()" /> can be used
         ///         to generate this value.
         ///     </para>
         /// </remarks>

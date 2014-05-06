@@ -26,7 +26,7 @@
 
 using System;
 
-namespace MimeKit.Encodings
+namespace NetFluid.MIME.Encodings
 {
     /// <summary>
     ///     A pass-through decoder implementing the <see cref="IMimeDecoder" /> interface.
@@ -37,7 +37,7 @@ namespace MimeKit.Encodings
     class PassThroughDecoder : IMimeDecoder
     {
         /// <summary>
-        ///     Initializes a new instance of the <see cref="MimeKit.Encodings.PassThroughDecoder" /> class.
+        ///     Initializes a new instance of the <see cref="PassThroughDecoder" /> class.
         /// </summary>
         /// <param name="encoding">The encoding to return in the <see cref="Encoding" /> property.</param>
         /// <remarks>

@@ -29,9 +29,9 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Net.Mail;
 using System.Text;
-using MimeKit.Utils;
+using NetFluid.MIME.Utils;
 
-namespace MimeKit
+namespace NetFluid.MIME
 {
     /// <summary>
     ///     A list of email addresses.
@@ -58,7 +58,7 @@ namespace MimeKit
         private readonly List<InternetAddress> list = new List<InternetAddress>();
 
         /// <summary>
-        ///     Initializes a new instance of the <see cref="MimeKit.InternetAddressList" /> class.
+        ///     Initializes a new instance of the <see cref="InternetAddressList" /> class.
         /// </summary>
         /// <remarks>
         ///     Creates a new <see cref="InternetAddressList" /> containing the supplied addresses.
@@ -80,7 +80,7 @@ namespace MimeKit
         }
 
         /// <summary>
-        ///     Initializes a new instance of the <see cref="MimeKit.InternetAddressList" /> class.
+        ///     Initializes a new instance of the <see cref="InternetAddressList" /> class.
         /// </summary>
         /// <remarks>
         ///     Creates a new, empty, <see cref="InternetAddressList" />.
@@ -90,10 +90,10 @@ namespace MimeKit
         }
 
         /// <summary>
-        ///     Recursively gets all of the mailboxes contained within the <see cref="MimeKit.InternetAddressList" />.
+        ///     Recursively gets all of the mailboxes contained within the <see cref="InternetAddressList" />.
         /// </summary>
         /// <remarks>
-        ///     This API is useful for collecting a flattened list of <see cref="MimeKit.MailboxAddress" />
+        ///     This API is useful for collecting a flattened list of <see cref="MailboxAddress" />
         ///     recipients for use with sending via SMTP or for encrypting via S/MIME or PGP/MIME.
         /// </remarks>
         /// <value>The mailboxes.</value>
@@ -184,10 +184,10 @@ namespace MimeKit
         }
 
         /// <summary>
-        ///     Gets or sets the <see cref="MimeKit.InternetAddress" /> at the specified index.
+        ///     Gets or sets the <see cref="InternetAddress" /> at the specified index.
         /// </summary>
         /// <remarks>
-        ///     Gets or sets the <see cref="MimeKit.InternetAddress" /> at the specified index.
+        ///     Gets or sets the <see cref="InternetAddress" /> at the specified index.
         /// </remarks>
         /// <value>The internet address at the specified index.</value>
         /// <param name="index">The index of the address to get or set.</param>
@@ -218,7 +218,7 @@ namespace MimeKit
         #region ICollection implementation
 
         /// <summary>
-        ///     Gets the number of addresses in the <see cref="MimeKit.InternetAddressList" />.
+        ///     Gets the number of addresses in the <see cref="InternetAddressList" />.
         /// </summary>
         /// <remarks>
         ///     Indicates the number of addresses in the list.
@@ -277,7 +277,7 @@ namespace MimeKit
         }
 
         /// <summary>
-        ///     Checks if the <see cref="MimeKit.InternetAddressList" /> contains the specified address.
+        ///     Checks if the <see cref="InternetAddressList" /> contains the specified address.
         /// </summary>
         /// <remarks>
         ///     Determines whether or not the address list contains the specified address.
@@ -302,7 +302,7 @@ namespace MimeKit
         }
 
         /// <summary>
-        ///     Copies all of the addresses in the <see cref="MimeKit.InternetAddressList" /> to the specified array.
+        ///     Copies all of the addresses in the <see cref="InternetAddressList" /> to the specified array.
         /// </summary>
         /// <remarks>
         ///     Copies all of the addresses within the <see cref="InternetAddressList" /> into the array,
@@ -413,20 +413,20 @@ namespace MimeKit
         #region IEquatable implementation
 
         /// <summary>
-        ///     Determines whether the specified <see cref="MimeKit.InternetAddressList" /> is equal to the current
-        ///     <see cref="MimeKit.InternetAddressList" />.
+        ///     Determines whether the specified <see cref="InternetAddressList" /> is equal to the current
+        ///     <see cref="InternetAddressList" />.
         /// </summary>
         /// <remarks>
-        ///     Determines whether the specified <see cref="MimeKit.InternetAddressList" /> is equal to the current
-        ///     <see cref="MimeKit.InternetAddressList" />.
+        ///     Determines whether the specified <see cref="InternetAddressList" /> is equal to the current
+        ///     <see cref="InternetAddressList" />.
         /// </remarks>
         /// <param name="other">
-        ///     The <see cref="MimeKit.InternetAddressList" /> to compare with the current
-        ///     <see cref="MimeKit.InternetAddressList" />.
+        ///     The <see cref="InternetAddressList" /> to compare with the current
+        ///     <see cref="InternetAddressList" />.
         /// </param>
         /// <returns>
-        ///     <c>true</c> if the specified <see cref="MimeKit.InternetAddressList" /> is equal to the current
-        ///     <see cref="MimeKit.InternetAddressList" />; otherwise, <c>false</c>.
+        ///     <c>true</c> if the specified <see cref="InternetAddressList" /> is equal to the current
+        ///     <see cref="InternetAddressList" />; otherwise, <c>false</c>.
         /// </returns>
         public bool Equals(InternetAddressList other)
         {
@@ -593,7 +593,7 @@ namespace MimeKit
         }
 
         /// <summary>
-        ///     Tries to parse the given input buffer into a new <see cref="MimeKit.InternetAddressList" /> instance.
+        ///     Tries to parse the given input buffer into a new <see cref="InternetAddressList" /> instance.
         /// </summary>
         /// <remarks>
         ///     Parses a list of addresses from the supplied buffer starting at the given index
@@ -644,7 +644,7 @@ namespace MimeKit
         }
 
         /// <summary>
-        ///     Tries to parse the given input buffer into a new <see cref="MimeKit.InternetAddressList" /> instance.
+        ///     Tries to parse the given input buffer into a new <see cref="InternetAddressList" /> instance.
         /// </summary>
         /// <remarks>
         ///     Parses a list of addresses from the supplied buffer starting at the given index
@@ -668,7 +668,7 @@ namespace MimeKit
         }
 
         /// <summary>
-        ///     Tries to parse the given input buffer into a new <see cref="MimeKit.InternetAddressList" /> instance.
+        ///     Tries to parse the given input buffer into a new <see cref="InternetAddressList" /> instance.
         /// </summary>
         /// <remarks>
         ///     Parses a list of addresses from the supplied buffer starting at the specified index.
@@ -713,7 +713,7 @@ namespace MimeKit
         }
 
         /// <summary>
-        ///     Tries to parse the given input buffer into a new <see cref="MimeKit.InternetAddressList" /> instance.
+        ///     Tries to parse the given input buffer into a new <see cref="InternetAddressList" /> instance.
         /// </summary>
         /// <remarks>
         ///     Parses a list of addresses from the supplied buffer starting at the specified index.
@@ -734,7 +734,7 @@ namespace MimeKit
         }
 
         /// <summary>
-        ///     Tries to parse the given input buffer into a new <see cref="MimeKit.InternetAddressList" /> instance.
+        ///     Tries to parse the given input buffer into a new <see cref="InternetAddressList" /> instance.
         /// </summary>
         /// <remarks>
         ///     Parses a list of addresses from the specified buffer.
@@ -771,7 +771,7 @@ namespace MimeKit
         }
 
         /// <summary>
-        ///     Tries to parse the given input buffer into a new <see cref="MimeKit.InternetAddressList" /> instance.
+        ///     Tries to parse the given input buffer into a new <see cref="InternetAddressList" /> instance.
         /// </summary>
         /// <remarks>
         ///     Parses a list of addresses from the specified buffer.
@@ -788,7 +788,7 @@ namespace MimeKit
         }
 
         /// <summary>
-        ///     Tries to parse the given text into a new <see cref="MimeKit.InternetAddressList" /> instance.
+        ///     Tries to parse the given text into a new <see cref="InternetAddressList" /> instance.
         /// </summary>
         /// <remarks>
         ///     Parses a list of addresses from the specified text.
@@ -826,7 +826,7 @@ namespace MimeKit
         }
 
         /// <summary>
-        ///     Tries to parse the given text into a new <see cref="MimeKit.InternetAddressList" /> instance.
+        ///     Tries to parse the given text into a new <see cref="InternetAddressList" /> instance.
         /// </summary>
         /// <remarks>
         ///     Parses a list of addresses from the specified text.
@@ -843,13 +843,13 @@ namespace MimeKit
         }
 
         /// <summary>
-        ///     Parses the given input buffer into a new <see cref="MimeKit.InternetAddressList" /> instance.
+        ///     Parses the given input buffer into a new <see cref="InternetAddressList" /> instance.
         /// </summary>
         /// <remarks>
         ///     Parses a list of addresses from the supplied buffer starting at the given index
         ///     and spanning across the specified number of bytes.
         /// </remarks>
-        /// <returns>The parsed <see cref="MimeKit.InternetAddressList" />.</returns>
+        /// <returns>The parsed <see cref="InternetAddressList" />.</returns>
         /// <param name="options">The parser options to use.</param>
         /// <param name="buffer">The input buffer.</param>
         /// <param name="startIndex">The starting index of the input buffer.</param>
@@ -863,7 +863,7 @@ namespace MimeKit
         ///     <paramref name="startIndex" /> and <paramref name="length" /> do not specify
         ///     a valid range in the byte array.
         /// </exception>
-        /// <exception cref="MimeKit.ParseException">
+        /// <exception cref="ParseException">
         ///     <paramref name="buffer" /> could not be parsed.
         /// </exception>
         public static InternetAddressList Parse(ParserOptions options, byte[] buffer, int startIndex, int length)
@@ -889,13 +889,13 @@ namespace MimeKit
         }
 
         /// <summary>
-        ///     Parses the given input buffer into a new <see cref="MimeKit.InternetAddressList" /> instance.
+        ///     Parses the given input buffer into a new <see cref="InternetAddressList" /> instance.
         /// </summary>
         /// <remarks>
         ///     Parses a list of addresses from the supplied buffer starting at the given index
         ///     and spanning across the specified number of bytes.
         /// </remarks>
-        /// <returns>The parsed <see cref="MimeKit.InternetAddressList" />.</returns>
+        /// <returns>The parsed <see cref="InternetAddressList" />.</returns>
         /// <param name="buffer">The input buffer.</param>
         /// <param name="startIndex">The starting index of the input buffer.</param>
         /// <param name="length">The number of bytes in the input buffer to parse.</param>
@@ -906,7 +906,7 @@ namespace MimeKit
         ///     <paramref name="startIndex" /> and <paramref name="length" /> do not specify
         ///     a valid range in the byte array.
         /// </exception>
-        /// <exception cref="MimeKit.ParseException">
+        /// <exception cref="ParseException">
         ///     <paramref name="buffer" /> could not be parsed.
         /// </exception>
         public static InternetAddressList Parse(byte[] buffer, int startIndex, int length)
@@ -915,12 +915,12 @@ namespace MimeKit
         }
 
         /// <summary>
-        ///     Parses the given input buffer into a new <see cref="MimeKit.InternetAddressList" /> instance.
+        ///     Parses the given input buffer into a new <see cref="InternetAddressList" /> instance.
         /// </summary>
         /// <remarks>
         ///     Parses a list of addresses from the supplied buffer starting at the specified index.
         /// </remarks>
-        /// <returns>The parsed <see cref="MimeKit.InternetAddressList" />.</returns>
+        /// <returns>The parsed <see cref="InternetAddressList" />.</returns>
         /// <param name="options">The parser options to use.</param>
         /// <param name="buffer">The input buffer.</param>
         /// <param name="startIndex">The starting index of the input buffer.</param>
@@ -932,7 +932,7 @@ namespace MimeKit
         /// <exception cref="System.ArgumentOutOfRangeException">
         ///     <paramref name="startIndex" />is out of range.
         /// </exception>
-        /// <exception cref="MimeKit.ParseException">
+        /// <exception cref="ParseException">
         ///     <paramref name="buffer" /> could not be parsed.
         /// </exception>
         public static InternetAddressList Parse(ParserOptions options, byte[] buffer, int startIndex)
@@ -955,12 +955,12 @@ namespace MimeKit
         }
 
         /// <summary>
-        ///     Parses the given input buffer into a new <see cref="MimeKit.InternetAddressList" /> instance.
+        ///     Parses the given input buffer into a new <see cref="InternetAddressList" /> instance.
         /// </summary>
         /// <remarks>
         ///     Parses a list of addresses from the supplied buffer starting at the specified index.
         /// </remarks>
-        /// <returns>The parsed <see cref="MimeKit.InternetAddressList" />.</returns>
+        /// <returns>The parsed <see cref="InternetAddressList" />.</returns>
         /// <param name="buffer">The input buffer.</param>
         /// <param name="startIndex">The starting index of the input buffer.</param>
         /// <exception cref="System.ArgumentNullException">
@@ -969,7 +969,7 @@ namespace MimeKit
         /// <exception cref="System.ArgumentOutOfRangeException">
         ///     <paramref name="startIndex" /> is out of range.
         /// </exception>
-        /// <exception cref="MimeKit.ParseException">
+        /// <exception cref="ParseException">
         ///     <paramref name="buffer" /> could not be parsed.
         /// </exception>
         public static InternetAddressList Parse(byte[] buffer, int startIndex)
@@ -978,12 +978,12 @@ namespace MimeKit
         }
 
         /// <summary>
-        ///     Parses the given input buffer into a new <see cref="MimeKit.InternetAddressList" /> instance.
+        ///     Parses the given input buffer into a new <see cref="InternetAddressList" /> instance.
         /// </summary>
         /// <remarks>
         ///     Parses a list of addresses from the specified buffer.
         /// </remarks>
-        /// <returns>The parsed <see cref="MimeKit.InternetAddressList" />.</returns>
+        /// <returns>The parsed <see cref="InternetAddressList" />.</returns>
         /// <param name="options">The parser options to use.</param>
         /// <param name="buffer">The input buffer.</param>
         /// <exception cref="System.ArgumentNullException">
@@ -991,7 +991,7 @@ namespace MimeKit
         ///     <para>-or-</para>
         ///     <para><paramref name="buffer" /> is <c>null</c>.</para>
         /// </exception>
-        /// <exception cref="MimeKit.ParseException">
+        /// <exception cref="ParseException">
         ///     <paramref name="buffer" /> could not be parsed.
         /// </exception>
         public static InternetAddressList Parse(ParserOptions options, byte[] buffer)
@@ -1011,17 +1011,17 @@ namespace MimeKit
         }
 
         /// <summary>
-        ///     Parses the given input buffer into a new <see cref="MimeKit.InternetAddressList" /> instance.
+        ///     Parses the given input buffer into a new <see cref="InternetAddressList" /> instance.
         /// </summary>
         /// <remarks>
         ///     Parses a list of addresses from the specified buffer.
         /// </remarks>
-        /// <returns>The parsed <see cref="MimeKit.InternetAddressList" />.</returns>
+        /// <returns>The parsed <see cref="InternetAddressList" />.</returns>
         /// <param name="buffer">The input buffer.</param>
         /// <exception cref="System.ArgumentNullException">
         ///     <paramref name="buffer" /> is <c>null</c>.
         /// </exception>
-        /// <exception cref="MimeKit.ParseException">
+        /// <exception cref="ParseException">
         ///     <paramref name="buffer" /> could not be parsed.
         /// </exception>
         public static InternetAddressList Parse(byte[] buffer)
@@ -1030,12 +1030,12 @@ namespace MimeKit
         }
 
         /// <summary>
-        ///     Parses the given text into a new <see cref="MimeKit.InternetAddressList" /> instance.
+        ///     Parses the given text into a new <see cref="InternetAddressList" /> instance.
         /// </summary>
         /// <remarks>
         ///     Parses a list of addresses from the specified text.
         /// </remarks>
-        /// <returns>The parsed <see cref="MimeKit.InternetAddressList" />.</returns>
+        /// <returns>The parsed <see cref="InternetAddressList" />.</returns>
         /// <param name="options">The parser options to use.</param>
         /// <param name="text">The text.</param>
         /// <exception cref="System.ArgumentNullException">
@@ -1043,7 +1043,7 @@ namespace MimeKit
         ///     <para>-or-</para>
         ///     <para><paramref name="text" /> is <c>null</c>.</para>
         /// </exception>
-        /// <exception cref="MimeKit.ParseException">
+        /// <exception cref="ParseException">
         ///     <paramref name="text" /> could not be parsed.
         /// </exception>
         public static InternetAddressList Parse(ParserOptions options, string text)
@@ -1064,17 +1064,17 @@ namespace MimeKit
         }
 
         /// <summary>
-        ///     Parses the given text into a new <see cref="MimeKit.InternetAddressList" /> instance.
+        ///     Parses the given text into a new <see cref="InternetAddressList" /> instance.
         /// </summary>
         /// <remarks>
         ///     Parses a list of addresses from the specified text.
         /// </remarks>
-        /// <returns>The parsed <see cref="MimeKit.InternetAddressList" />.</returns>
+        /// <returns>The parsed <see cref="InternetAddressList" />.</returns>
         /// <param name="text">The text.</param>
         /// <exception cref="System.ArgumentNullException">
         ///     <paramref name="text" /> is <c>null</c>.
         /// </exception>
-        /// <exception cref="MimeKit.ParseException">
+        /// <exception cref="ParseException">
         ///     <paramref name="text" /> could not be parsed.
         /// </exception>
         public static InternetAddressList Parse(string text)

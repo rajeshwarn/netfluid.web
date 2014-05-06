@@ -27,9 +27,9 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using MimeKit.IO.Filters;
+using NetFluid.MIME.IO.Filters;
 
-namespace MimeKit.IO
+namespace NetFluid.MIME.IO
 {
     /// <summary>
     ///     A stream which filters data as it is read or written.
@@ -51,7 +51,7 @@ namespace MimeKit.IO
         private byte[] readbuf;
 
         /// <summary>
-        ///     Initializes a new instance of the <see cref="MimeKit.IO.FilteredStream" /> class.
+        ///     Initializes a new instance of the <see cref="FilteredStream" /> class.
         /// </summary>
         /// <remarks>
         ///     Creates a filtered stream using the specified source stream.

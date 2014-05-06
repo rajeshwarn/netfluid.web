@@ -27,7 +27,7 @@
 using System;
 using System.IO;
 
-namespace MimeKit.Tnef
+namespace NetFluid.MIME.Tnef
 {
     /// <summary>
     ///     A stream for reading raw values from a <see cref="TnefReader" /> or <see cref="TnefPropertyReader" />.
@@ -42,7 +42,7 @@ namespace MimeKit.Tnef
         private bool disposed;
 
         /// <summary>
-        ///     Initializes a new instance of the <see cref="MimeKit.Tnef.TnefReaderStream" /> class.
+        ///     Initializes a new instance of the <see cref="TnefReaderStream" /> class.
         /// </summary>
         /// <remarks>
         ///     Creates a stream for reading a raw value from the <see cref="TnefReader" />.

@@ -26,9 +26,9 @@
 
 using System;
 using System.Text;
-using MimeKit.Utils;
+using NetFluid.MIME.Utils;
 
-namespace MimeKit
+namespace NetFluid.MIME
 {
     /// <summary>
     ///     A class representing a Content-Disposition header value.
@@ -61,7 +61,7 @@ namespace MimeKit
         private ParameterList parameters;
 
         /// <summary>
-        ///     Initializes a new instance of the <see cref="MimeKit.ContentDisposition" /> class.
+        ///     Initializes a new instance of the <see cref="ContentDisposition" /> class.
         /// </summary>
         /// <remarks>
         ///     The disposition should either be <see cref="ContentDisposition.Attachment" />
@@ -81,7 +81,7 @@ namespace MimeKit
         }
 
         /// <summary>
-        ///     Initializes a new instance of the <see cref="MimeKit.ContentDisposition" /> class.
+        ///     Initializes a new instance of the <see cref="ContentDisposition" /> class.
         /// </summary>
         /// <remarks>
         ///     This is identical to <see cref="ContentDisposition(string)" /> with a disposition
@@ -330,7 +330,7 @@ namespace MimeKit
         }
 
         /// <summary>
-        ///     Serializes the <see cref="MimeKit.ContentDisposition" /> to a string,
+        ///     Serializes the <see cref="ContentDisposition" /> to a string,
         ///     optionally encoding the parameters.
         /// </summary>
         /// <remarks>
@@ -364,14 +364,14 @@ namespace MimeKit
 
         /// <summary>
         ///     Returns a <see cref="System.String" /> that represents the current
-        ///     <see cref="MimeKit.ContentDisposition" />.
+        ///     <see cref="ContentDisposition" />.
         /// </summary>
         /// <remarks>
         ///     Creates a string-representation of the <see cref="ContentDisposition" />.
         /// </remarks>
         /// <returns>
         ///     A <see cref="System.String" /> that represents the current
-        ///     <see cref="MimeKit.ContentDisposition" />.
+        ///     <see cref="ContentDisposition" />.
         /// </returns>
         public override string ToString()
         {
@@ -448,7 +448,7 @@ namespace MimeKit
         }
 
         /// <summary>
-        ///     Tries to parse the given input buffer into a new <see cref="MimeKit.ContentDisposition" /> instance.
+        ///     Tries to parse the given input buffer into a new <see cref="ContentDisposition" /> instance.
         /// </summary>
         /// <remarks>
         ///     Parses a Content-Disposition value from the supplied buffer starting at the given index
@@ -490,7 +490,7 @@ namespace MimeKit
         }
 
         /// <summary>
-        ///     Tries to parse the given input buffer into a new <see cref="MimeKit.ContentDisposition" /> instance.
+        ///     Tries to parse the given input buffer into a new <see cref="ContentDisposition" /> instance.
         /// </summary>
         /// <remarks>
         ///     Parses a Content-Disposition value from the supplied buffer starting at the given index
@@ -514,7 +514,7 @@ namespace MimeKit
         }
 
         /// <summary>
-        ///     Tries to parse the given input buffer into a new <see cref="MimeKit.ContentDisposition" /> instance.
+        ///     Tries to parse the given input buffer into a new <see cref="ContentDisposition" /> instance.
         /// </summary>
         /// <remarks>
         ///     Parses a Content-Disposition value from the supplied buffer starting at the specified index.
@@ -550,7 +550,7 @@ namespace MimeKit
         }
 
         /// <summary>
-        ///     Tries to parse the given input buffer into a new <see cref="MimeKit.ContentDisposition" /> instance.
+        ///     Tries to parse the given input buffer into a new <see cref="ContentDisposition" /> instance.
         /// </summary>
         /// <remarks>
         ///     Parses a Content-Disposition value from the supplied buffer starting at the specified index.
@@ -571,7 +571,7 @@ namespace MimeKit
         }
 
         /// <summary>
-        ///     Tries to parse the given input buffer into a new <see cref="MimeKit.ContentDisposition" /> instance.
+        ///     Tries to parse the given input buffer into a new <see cref="ContentDisposition" /> instance.
         /// </summary>
         /// <remarks>
         ///     Parses a Content-Disposition value from the specified buffer.
@@ -599,7 +599,7 @@ namespace MimeKit
         }
 
         /// <summary>
-        ///     Tries to parse the given input buffer into a new <see cref="MimeKit.ContentDisposition" /> instance.
+        ///     Tries to parse the given input buffer into a new <see cref="ContentDisposition" /> instance.
         /// </summary>
         /// <remarks>
         ///     Parses a Content-Disposition value from the specified buffer.
@@ -616,7 +616,7 @@ namespace MimeKit
         }
 
         /// <summary>
-        ///     Tries to parse the given text into a new <see cref="MimeKit.ContentDisposition" /> instance.
+        ///     Tries to parse the given text into a new <see cref="ContentDisposition" /> instance.
         /// </summary>
         /// <remarks>
         ///     Parses a Content-Disposition value from the supplied text.
@@ -639,13 +639,13 @@ namespace MimeKit
         }
 
         /// <summary>
-        ///     Parse the specified input buffer into a new instance of the <see cref="MimeKit.ContentDisposition" /> class.
+        ///     Parse the specified input buffer into a new instance of the <see cref="ContentDisposition" /> class.
         /// </summary>
         /// <remarks>
         ///     Parses a Content-Disposition value from the supplied buffer starting at the given index
         ///     and spanning across the specified number of bytes.
         /// </remarks>
-        /// <returns>The parsed <see cref="MimeKit.ContentDisposition" />.</returns>
+        /// <returns>The parsed <see cref="ContentDisposition" />.</returns>
         /// <param name="options">The parser options.</param>
         /// <param name="buffer">The input buffer.</param>
         /// <param name="startIndex">The start index of the buffer.</param>
@@ -659,7 +659,7 @@ namespace MimeKit
         ///     <paramref name="startIndex" /> and <paramref name="length" /> do not specify
         ///     a valid range in the byte array.
         /// </exception>
-        /// <exception cref="MimeKit.ParseException">
+        /// <exception cref="ParseException">
         ///     The <paramref name="buffer" /> could not be parsed.
         /// </exception>
         public static ContentDisposition Parse(ParserOptions options, byte[] buffer, int startIndex, int length)
@@ -685,13 +685,13 @@ namespace MimeKit
         }
 
         /// <summary>
-        ///     Parse the specified input buffer into a new instance of the <see cref="MimeKit.ContentDisposition" /> class.
+        ///     Parse the specified input buffer into a new instance of the <see cref="ContentDisposition" /> class.
         /// </summary>
         /// <remarks>
         ///     Parses a Content-Disposition value from the supplied buffer starting at the given index
         ///     and spanning across the specified number of bytes.
         /// </remarks>
-        /// <returns>The parsed <see cref="MimeKit.ContentDisposition" />.</returns>
+        /// <returns>The parsed <see cref="ContentDisposition" />.</returns>
         /// <param name="buffer">The input buffer.</param>
         /// <param name="startIndex">The start index of the buffer.</param>
         /// <param name="length">The length of the buffer.</param>
@@ -702,7 +702,7 @@ namespace MimeKit
         ///     <paramref name="startIndex" /> and <paramref name="length" /> do not specify
         ///     a valid range in the byte array.
         /// </exception>
-        /// <exception cref="MimeKit.ParseException">
+        /// <exception cref="ParseException">
         ///     The <paramref name="buffer" /> could not be parsed.
         /// </exception>
         public static ContentDisposition Parse(byte[] buffer, int startIndex, int length)
@@ -711,12 +711,12 @@ namespace MimeKit
         }
 
         /// <summary>
-        ///     Parse the specified input buffer into a new instance of the <see cref="MimeKit.ContentDisposition" /> class.
+        ///     Parse the specified input buffer into a new instance of the <see cref="ContentDisposition" /> class.
         /// </summary>
         /// <remarks>
         ///     Parses a Content-Disposition value from the supplied buffer starting at the specified index.
         /// </remarks>
-        /// <returns>The parsed <see cref="MimeKit.ContentDisposition" />.</returns>
+        /// <returns>The parsed <see cref="ContentDisposition" />.</returns>
         /// <param name="options">The parser options.</param>
         /// <param name="buffer">The input buffer.</param>
         /// <param name="startIndex">The start index of the buffer.</param>
@@ -728,7 +728,7 @@ namespace MimeKit
         /// <exception cref="System.ArgumentOutOfRangeException">
         ///     <paramref name="startIndex" /> is out of range.
         /// </exception>
-        /// <exception cref="MimeKit.ParseException">
+        /// <exception cref="ParseException">
         ///     The <paramref name="buffer" /> could not be parsed.
         /// </exception>
         public static ContentDisposition Parse(ParserOptions options, byte[] buffer, int startIndex)
@@ -751,12 +751,12 @@ namespace MimeKit
         }
 
         /// <summary>
-        ///     Parse the specified input buffer into a new instance of the <see cref="MimeKit.ContentDisposition" /> class.
+        ///     Parse the specified input buffer into a new instance of the <see cref="ContentDisposition" /> class.
         /// </summary>
         /// <remarks>
         ///     Parses a Content-Disposition value from the supplied buffer starting at the specified index.
         /// </remarks>
-        /// <returns>The parsed <see cref="MimeKit.ContentDisposition" />.</returns>
+        /// <returns>The parsed <see cref="ContentDisposition" />.</returns>
         /// <param name="buffer">The input buffer.</param>
         /// <param name="startIndex">The start index of the buffer.</param>
         /// <exception cref="System.ArgumentNullException">
@@ -765,7 +765,7 @@ namespace MimeKit
         /// <exception cref="System.ArgumentOutOfRangeException">
         ///     <paramref name="startIndex" /> is out of range.
         /// </exception>
-        /// <exception cref="MimeKit.ParseException">
+        /// <exception cref="ParseException">
         ///     The <paramref name="buffer" /> could not be parsed.
         /// </exception>
         public static ContentDisposition Parse(byte[] buffer, int startIndex)
@@ -774,12 +774,12 @@ namespace MimeKit
         }
 
         /// <summary>
-        ///     Parse the specified input buffer into a new instance of the <see cref="MimeKit.ContentDisposition" /> class.
+        ///     Parse the specified input buffer into a new instance of the <see cref="ContentDisposition" /> class.
         /// </summary>
         /// <remarks>
         ///     Parses a Content-Disposition value from the supplied buffer.
         /// </remarks>
-        /// <returns>The parsed <see cref="MimeKit.ContentDisposition" />.</returns>
+        /// <returns>The parsed <see cref="ContentDisposition" />.</returns>
         /// <param name="options">The parser options.</param>
         /// <param name="buffer">The input buffer.</param>
         /// <exception cref="System.ArgumentNullException">
@@ -787,7 +787,7 @@ namespace MimeKit
         ///     <para>-or-</para>
         ///     <para><paramref name="buffer" /> is <c>null</c>.</para>
         /// </exception>
-        /// <exception cref="MimeKit.ParseException">
+        /// <exception cref="ParseException">
         ///     The <paramref name="buffer" /> could not be parsed.
         /// </exception>
         public static ContentDisposition Parse(ParserOptions options, byte[] buffer)
@@ -807,17 +807,17 @@ namespace MimeKit
         }
 
         /// <summary>
-        ///     Parse the specified input buffer into a new instance of the <see cref="MimeKit.ContentDisposition" /> class.
+        ///     Parse the specified input buffer into a new instance of the <see cref="ContentDisposition" /> class.
         /// </summary>
         /// <remarks>
         ///     Parses a Content-Disposition value from the supplied buffer.
         /// </remarks>
-        /// <returns>The parsed <see cref="MimeKit.ContentDisposition" />.</returns>
+        /// <returns>The parsed <see cref="ContentDisposition" />.</returns>
         /// <param name="buffer">The input buffer.</param>
         /// <exception cref="System.ArgumentNullException">
         ///     <paramref name="buffer" /> is <c>null</c>.
         /// </exception>
-        /// <exception cref="MimeKit.ParseException">
+        /// <exception cref="ParseException">
         ///     The <paramref name="buffer" /> could not be parsed.
         /// </exception>
         public static ContentDisposition Parse(byte[] buffer)
@@ -826,17 +826,17 @@ namespace MimeKit
         }
 
         /// <summary>
-        ///     Parse the specified text into a new instance of the <see cref="MimeKit.ContentDisposition" /> class.
+        ///     Parse the specified text into a new instance of the <see cref="ContentDisposition" /> class.
         /// </summary>
         /// <remarks>
         ///     Parses a Content-Disposition value from the specified text.
         /// </remarks>
-        /// <returns>The parsed <see cref="MimeKit.ContentDisposition" />.</returns>
+        /// <returns>The parsed <see cref="ContentDisposition" />.</returns>
         /// <param name="text">The input text.</param>
         /// <exception cref="System.ArgumentNullException">
         ///     <paramref name="text" /> is <c>null</c>.
         /// </exception>
-        /// <exception cref="MimeKit.ParseException">
+        /// <exception cref="ParseException">
         ///     The <paramref name="text" /> could not be parsed.
         /// </exception>
         public static ContentDisposition Parse(string text)

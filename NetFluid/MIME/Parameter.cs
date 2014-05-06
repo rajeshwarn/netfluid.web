@@ -27,10 +27,10 @@
 using System;
 using System.Linq;
 using System.Text;
-using MimeKit.Encodings;
-using MimeKit.Utils;
+using NetFluid.MIME.Encodings;
+using NetFluid.MIME.Utils;
 
-namespace MimeKit
+namespace NetFluid.MIME
 {
     /// <summary>
     ///     A header parameter as found in the Content-Type and Content-Disposition headers.

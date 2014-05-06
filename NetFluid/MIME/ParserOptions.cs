@@ -28,8 +28,9 @@ using System;
 using System.Collections.Generic;
 using System.Reflection;
 using System.Text;
+using NetFluid.MIME.Utils;
 
-namespace MimeKit
+namespace NetFluid.MIME
 {
     /// <summary>
     ///     Parser options as used by <see cref="MimeParser" /> as well as various Parse and TryParse methods in MimeKit.
@@ -54,7 +55,7 @@ namespace MimeKit
         private readonly Dictionary<string, ConstructorInfo> mimeTypes = new Dictionary<string, ConstructorInfo>();
 
         /// <summary>
-        ///     Initializes a new instance of the <see cref="MimeKit.ParserOptions" /> class.
+        ///     Initializes a new instance of the <see cref="ParserOptions" /> class.
         /// </summary>
         /// <remarks>
         ///     By default, new instances of <see cref="ParserOptions" /> enable rfc2047 work-arounds
@@ -97,8 +98,8 @@ namespace MimeKit
         ///     Gets or sets the charset encoding to use as a fallback for 8bit headers.
         /// </summary>
         /// <remarks>
-        ///     <see cref="MimeKit.Utils.Rfc2047.DecodeText(ParserOptions, byte[])" /> and
-        ///     <see cref="MimeKit.Utils.Rfc2047.DecodePhrase(ParserOptions, byte[])" />
+        ///     <see cref="Rfc2047.DecodeText(ParserOptions, byte[])" /> and
+        ///     <see cref="Rfc2047.DecodePhrase(ParserOptions, byte[])" />
         ///     use this charset encoding as a fallback when decoding 8bit text into unicode. The first
         ///     charset encoding attempted is UTF-8, followed by this charset encoding, before finally
         ///     falling back to iso-8859-1.
@@ -107,7 +108,7 @@ namespace MimeKit
         public Encoding CharsetEncoding { get; set; }
 
         /// <summary>
-        ///     Clones an instance of <see cref="MimeKit.ParserOptions" />.
+        ///     Clones an instance of <see cref="ParserOptions" />.
         /// </summary>
         /// <remarks>
         ///     Clones a set of options, allowing you to change a specific option

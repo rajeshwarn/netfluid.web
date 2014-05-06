@@ -28,7 +28,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace MimeKit.Utils
+namespace NetFluid.MIME.Utils
 {
     internal static class CharsetUtils
     {

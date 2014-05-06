@@ -26,7 +26,7 @@
 
 using System;
 
-namespace MimeKit.IO.Filters
+namespace NetFluid.MIME.IO.Filters
 {
     /// <summary>
     ///     A filter that can be used to determine the most efficient Content-Transfer-Encoding.

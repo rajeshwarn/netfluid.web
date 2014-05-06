@@ -26,7 +26,7 @@
 
 using System;
 
-namespace MimeKit.Utils
+namespace NetFluid.MIME.Utils
 {
     [Flags]
     internal enum CharType : ushort

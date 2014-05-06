@@ -33,7 +33,7 @@ using System.Text;
 using Encoding = Portable.Text.Encoding;
 #endif
 
-namespace MimeKit
+namespace NetFluid.MIME
 {
     /// <summary>
     ///     A list of Message-Ids.
@@ -173,7 +173,7 @@ namespace MimeKit
         }
 
         /// <summary>
-        ///     Gets or sets the <see cref="MimeKit.MessageIdList" /> at the specified index.
+        ///     Gets or sets the <see cref="MessageIdList" /> at the specified index.
         /// </summary>
         /// <remarks>
         ///     Gets or sets the Message-Id at the specified index.
@@ -333,7 +333,7 @@ namespace MimeKit
         }
 
         /// <summary>
-        ///     Gets the number of Message-Ids in the <see cref="MimeKit.MessageIdList" />.
+        ///     Gets the number of Message-Ids in the <see cref="MessageIdList" />.
         /// </summary>
         /// <remarks>
         ///     Indicates the number of Message-Ids in the list.

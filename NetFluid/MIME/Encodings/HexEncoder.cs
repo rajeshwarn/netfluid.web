@@ -25,9 +25,9 @@
 //
 
 using System;
-using MimeKit.Utils;
+using NetFluid.MIME.Utils;
 
-namespace MimeKit.Encodings
+namespace NetFluid.MIME.Encodings
 {
     /// <summary>
     ///     Incrementally encodes content using a Uri hex encoding.

@@ -27,7 +27,7 @@
 using System;
 using System.IO;
 
-namespace MimeKit.IO
+namespace NetFluid.MIME.IO
 {
     /// <summary>
     ///     A bounded stream, confined to reading and writing data to a limited subset of the overall source stream.
@@ -49,7 +49,7 @@ namespace MimeKit.IO
         private long position;
 
         /// <summary>
-        ///     Initializes a new instance of the <see cref="MimeKit.IO.BoundStream" /> class.
+        ///     Initializes a new instance of the <see cref="BoundStream" /> class.
         /// </summary>
         /// <remarks>
         ///     If the <paramref name="endBoundary" /> is less than <c>0</c>, then the end of the stream
@@ -124,7 +124,7 @@ namespace MimeKit.IO
 
         /// <summary>
         ///     Checks whether or not the underlying stream will remain open after
-        ///     the <see cref="MimeKit.IO.BoundStream" /> is disposed.
+        ///     the <see cref="BoundStream" /> is disposed.
         /// </summary>
         /// <value>
         ///     <c>true</c> if the underlying stream should remain open after the

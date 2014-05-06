@@ -28,7 +28,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 
-namespace MimeKit.IO
+namespace NetFluid.MIME.IO
 {
     /// <summary>
     ///     A chained stream.
@@ -47,7 +47,7 @@ namespace MimeKit.IO
         private long position;
 
         /// <summary>
-        ///     Initializes a new instance of the <see cref="MimeKit.IO.ChainedStream" /> class.
+        ///     Initializes a new instance of the <see cref="ChainedStream" /> class.
         /// </summary>
         /// <remarks>
         ///     Creates a new <see cref="ChainedStream" />.

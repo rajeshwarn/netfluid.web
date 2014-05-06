@@ -24,9 +24,9 @@
 // THE SOFTWARE.
 //
 
-using MimeKit.Encodings;
+using NetFluid.MIME.Encodings;
 
-namespace MimeKit.IO.Filters
+namespace NetFluid.MIME.IO.Filters
 {
     /// <summary>
     ///     A filter for encoding MIME content.
@@ -37,7 +37,7 @@ namespace MimeKit.IO.Filters
     class EncoderFilter : MimeFilterBase
     {
         /// <summary>
-        ///     Initializes a new instance of the <see cref="MimeKit.IO.Filters.EncoderFilter" /> class.
+        ///     Initializes a new instance of the <see cref="EncoderFilter" /> class.
         /// </summary>
         /// <remarks>
         ///     Creates a new <see cref="EncoderFilter" /> using the specified encoder.

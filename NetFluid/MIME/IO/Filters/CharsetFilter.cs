@@ -33,7 +33,7 @@ using Encoder = Portable.Text.Encoder;
 using Decoder = Portable.Text.Decoder;
 #endif
 
-namespace MimeKit.IO.Filters
+namespace NetFluid.MIME.IO.Filters
 {
     /// <summary>
     ///     A charset filter for incrementally converting text streams from
@@ -49,7 +49,7 @@ namespace MimeKit.IO.Filters
         private readonly Encoder encoder;
 
         /// <summary>
-        ///     Initializes a new instance of the <see cref="MimeKit.IO.Filters.CharsetFilter" /> class.
+        ///     Initializes a new instance of the <see cref="CharsetFilter" /> class.
         /// </summary>
         /// <remarks>
         ///     Creates a new <see cref="CharsetFilter" /> to convert text from the specified
@@ -73,7 +73,7 @@ namespace MimeKit.IO.Filters
         }
 
         /// <summary>
-        ///     Initializes a new instance of the <see cref="MimeKit.IO.Filters.CharsetFilter" /> class.
+        ///     Initializes a new instance of the <see cref="CharsetFilter" /> class.
         /// </summary>
         /// <remarks>
         ///     Creates a new <see cref="CharsetFilter" /> to convert text from the specified
@@ -97,7 +97,7 @@ namespace MimeKit.IO.Filters
         }
 
         /// <summary>
-        ///     Initializes a new instance of the <see cref="MimeKit.IO.Filters.CharsetFilter" /> class.
+        ///     Initializes a new instance of the <see cref="CharsetFilter" /> class.
         /// </summary>
         /// <remarks>
         ///     Creates a new <see cref="CharsetFilter" /> to convert text from the specified

@@ -28,10 +28,10 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Text;
-using MimeKit.Encodings;
-using MimeKit.Utils;
+using NetFluid.MIME.Encodings;
+using NetFluid.MIME.Utils;
 
-namespace MimeKit
+namespace NetFluid.MIME
 {
     /// <summary>
     ///     A list of parameters, as found in the Content-Type and Content-Disposition headers.
@@ -47,7 +47,7 @@ namespace MimeKit
         private readonly Dictionary<string, Parameter> table;
 
         /// <summary>
-        ///     Initializes a new instance of the <see cref="MimeKit.ParameterList" /> class.
+        ///     Initializes a new instance of the <see cref="ParameterList" /> class.
         /// </summary>
         /// <remarks>
         ///     Creates a new parameter list.
@@ -110,7 +110,7 @@ namespace MimeKit
         #region ICollection implementation
 
         /// <summary>
-        ///     Gets the number of parameters in the <see cref="MimeKit.ParameterList" />.
+        ///     Gets the number of parameters in the <see cref="ParameterList" />.
         /// </summary>
         /// <remarks>
         ///     Indicates the number of parameters in the list.
@@ -180,7 +180,7 @@ namespace MimeKit
         }
 
         /// <summary>
-        ///     Checks if the <see cref="MimeKit.ParameterList" /> contains the specified parameter.
+        ///     Checks if the <see cref="ParameterList" /> contains the specified parameter.
         /// </summary>
         /// <remarks>
         ///     Determines whether or not the parameter list contains the specified parameter.
@@ -338,10 +338,10 @@ namespace MimeKit
         }
 
         /// <summary>
-        ///     Gets or sets the <see cref="MimeKit.Parameter" /> at the specified index.
+        ///     Gets or sets the <see cref="Parameter" /> at the specified index.
         /// </summary>
         /// <remarks>
-        ///     Gets or sets the <see cref="MimeKit.Parameter" /> at the specified index.
+        ///     Gets or sets the <see cref="Parameter" /> at the specified index.
         /// </remarks>
         /// <value>The parameter at the specified index.</value>
         /// <param name="index">The index.</param>
@@ -451,7 +451,7 @@ namespace MimeKit
         }
 
         /// <summary>
-        ///     Checks if the <see cref="MimeKit.ParameterList" /> contains a parameter with the specified name.
+        ///     Checks if the <see cref="ParameterList" /> contains a parameter with the specified name.
         /// </summary>
         /// <remarks>
         ///     Determines whether or not the parameter list contains a parameter with the specified name.

@@ -32,7 +32,7 @@ using Encoding = Portable.Text.Encoding;
 using Encoding = System.Text.Encoding;
 #endif
 
-namespace MimeKit.Tnef
+namespace NetFluid.MIME.Tnef
 {
     internal class TnefPropertyReader
     {
@@ -1422,7 +1422,7 @@ namespace MimeKit.Tnef
         }
 
         /// <summary>
-        ///     Serves as a hash function for a <see cref="MimeKit.Tnef.TnefPropertyReader" /> object.
+        ///     Serves as a hash function for a <see cref="TnefPropertyReader" /> object.
         /// </summary>
         /// <returns>
         ///     A hash code for this instance that is suitable for use in hashing algorithms
@@ -1435,15 +1435,15 @@ namespace MimeKit.Tnef
 
         /// <summary>
         ///     Determines whether the specified <see cref="System.Object" /> is equal to the current
-        ///     <see cref="MimeKit.Tnef.TnefPropertyReader" />.
+        ///     <see cref="TnefPropertyReader" />.
         /// </summary>
         /// <param name="obj">
         ///     The <see cref="System.Object" /> to compare with the current
-        ///     <see cref="MimeKit.Tnef.TnefPropertyReader" />.
+        ///     <see cref="TnefPropertyReader" />.
         /// </param>
         /// <returns>
         ///     <c>true</c> if the specified <see cref="System.Object" /> is equal to the current
-        ///     <see cref="MimeKit.Tnef.TnefPropertyReader" />; otherwise, <c>false</c>.
+        ///     <see cref="TnefPropertyReader" />; otherwise, <c>false</c>.
         /// </returns>
         public override bool Equals(object obj)
         {

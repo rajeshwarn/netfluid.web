@@ -24,11 +24,13 @@
 // THE SOFTWARE.
 //
 
-namespace MimeKit
+using NetFluid.MIME.Encodings;
+
+namespace NetFluid.MIME
 {
     /// <summary>
     ///     An enumeration of all supported content transfer encodings.
-    ///     <seealso cref="MimeKit.MimePart.ContentTransferEncoding" />.
+    ///     <seealso cref="MimePart.ContentTransferEncoding" />.
     /// </summary>
     /// <remarks>
     ///     Some older mail software is unable to properly deal with
@@ -73,7 +75,7 @@ namespace MimeKit
 
         /// <summary>
         ///     The base64 content transfer encoding.
-        ///     <seealso cref="MimeKit.Encodings.Base64Encoder" />.
+        ///     <seealso cref="Base64Encoder" />.
         /// </summary>
         /// <remarks>
         ///     This encoding is typically used for encoding binary data
@@ -84,7 +86,7 @@ namespace MimeKit
 
         /// <summary>
         ///     The quoted printable content transfer encoding.
-        ///     <seealso cref="MimeKit.Encodings.QuotedPrintableEncoder" />.
+        ///     <seealso cref="QuotedPrintableEncoder" />.
         /// </summary>
         /// <remarks>
         ///     This encoding is used for textual content that is in a charset
@@ -96,7 +98,7 @@ namespace MimeKit
 
         /// <summary>
         ///     The uuencode content transfer encoding.
-        ///     <seealso cref="MimeKit.Encodings.UUEncoder" />.
+        ///     <seealso cref="UUEncoder" />.
         /// </summary>
         /// <remarks>
         ///     This is an obsolete encoding meant for encoding binary

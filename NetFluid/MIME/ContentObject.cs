@@ -27,13 +27,13 @@
 using System;
 using System.IO;
 using System.Threading;
-using MimeKit.IO;
-using MimeKit.IO.Filters;
+using NetFluid.MIME.IO;
+using NetFluid.MIME.IO.Filters;
 
-namespace MimeKit
+namespace NetFluid.MIME
 {
     /// <summary>
-    ///     Encapsulates a content stream used by <see cref="MimeKit.MimePart" />.
+    ///     Encapsulates a content stream used by <see cref="MimePart" />.
     /// </summary>
     /// <remarks>
     ///     A <see cref="ContentObject" /> represents the content of a <see cref="MimePart" />.
@@ -44,11 +44,11 @@ namespace MimeKit
         private readonly Stream content;
 
         /// <summary>
-        ///     Initializes a new instance of the <see cref="MimeKit.ContentObject" /> class.
+        ///     Initializes a new instance of the <see cref="ContentObject" /> class.
         /// </summary>
         /// <remarks>
-        ///     When creating new <see cref="MimeKit.MimePart" />s, the <paramref name="encoding" />
-        ///     should typically be <see cref="MimeKit.ContentEncoding.Default" /> unless the
+        ///     When creating new <see cref="MimePart" />s, the <paramref name="encoding" />
+        ///     should typically be <see cref="ContentEncoding.Default" /> unless the
         ///     <paramref name="stream" /> has already been encoded.
         /// </remarks>
         /// <param name="stream">The content stream.</param>
