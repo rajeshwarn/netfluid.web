@@ -24,6 +24,7 @@
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Net;
@@ -466,6 +467,16 @@ namespace NetFluid
         #endregion
 
         #region DATETIME
+
+        /// <summary>
+        /// GMT ( http headers ) conversion of datetime
+        /// </summary>
+        /// <param name="date"></param>
+        /// <returns></returns>
+        public static string ToGMT(this DateTime date)
+        {
+            return date.ToUniversalTime().ToString("r", CultureInfo.InvariantCulture);
+        }
 
         /// <summary>
         ///     Convert datetime in number of seconds from 00:00:00 1/1/1970
