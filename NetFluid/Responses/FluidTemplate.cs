@@ -47,7 +47,7 @@ namespace NetFluid
                 return;
             }
 
-            object[] defaultValues = template.GetParameters().Select(x => x.ParameterType.DefaultValue()).ToArray();
+            var defaultValues = template.GetParameters().Select(x => x.ParameterType.DefaultValue()).ToArray();
 
             if (defaultValues.Length > 1)
             {
@@ -73,9 +73,7 @@ namespace NetFluid
 
         public void SendResponse(Context cnt)
         {
-            _context = cnt;
             param[0] = cnt;
-            _context.SendHeaders();
             template.Invoke(null, param);
         }
 

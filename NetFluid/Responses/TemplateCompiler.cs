@@ -241,8 +241,8 @@ namespace NetFluid.Responses
 
                         while (r.Contains("{%") && r.Contains("%}"))
                         {
-                            var index = r.IndexOf("{%", System.StringComparison.Ordinal);
-                            var index2 = r.IndexOf("%}", System.StringComparison.Ordinal);
+                            var index = r.IndexOf("{%", StringComparison.Ordinal);
+                            var index2 = r.IndexOf("%}", StringComparison.Ordinal);
 
                             var variabile = r.Substring(index + 2, index2 - index - 2);
                             var pre = r.Substring(0, index);
