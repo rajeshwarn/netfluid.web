@@ -40,6 +40,11 @@ namespace NetFluid.DNS.Records
             }
         }
 
+        public static RecordA Parse(string s)
+        {
+            return new RecordA { Address = IPAddress.Parse(s) };
+        }
+
         public static implicit operator RecordA(string s)
         {
             return new RecordA {Address = IPAddress.Parse(s)};

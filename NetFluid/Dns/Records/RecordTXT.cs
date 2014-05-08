@@ -27,6 +27,11 @@ namespace NetFluid.DNS.Records
     {
         public string TXT;
 
+        public static RecordTXT Parse(string s)
+        {
+            return new RecordTXT { TXT = s };
+        }
+
         public override string ToString()
         {
             return string.Format("\"{0}\"", TXT);

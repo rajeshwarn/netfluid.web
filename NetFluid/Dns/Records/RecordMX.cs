@@ -1,4 +1,5 @@
 using System;
+using System.Net;
 
 namespace NetFluid.DNS.Records
 {
@@ -47,6 +48,11 @@ namespace NetFluid.DNS.Records
         public override string ToString()
         {
             return string.Format("{0} {1}", Preference, Exchange);
+        }
+
+        public static RecordMX Parse(string s)
+        {
+            return new RecordMX { Exchange = s, Preference = 20};
         }
 
         public static implicit operator RecordMX(string s)
