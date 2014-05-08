@@ -62,8 +62,11 @@
 
  */
 
+using System;
+
 namespace NetFluid.DNS.Records
 {
+        [Serializable]
     public class RecordSRV : Record
     {
         public ushort PORT;

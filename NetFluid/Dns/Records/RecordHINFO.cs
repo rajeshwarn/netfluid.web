@@ -21,8 +21,11 @@ main use is for protocols such as FTP that can use special procedures
 when talking between machines or operating systems of the same type.
  */
 
+using System;
+
 namespace NetFluid.DNS.Records
 {
+        [Serializable]
     public class RecordHINFO : Record
     {
         public string CPU;

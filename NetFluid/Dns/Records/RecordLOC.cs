@@ -98,6 +98,7 @@ ALTITUDE     The altitude of the center of the sphere described by the
 
 namespace NetFluid.DNS.Records
 {
+        [Serializable]
     public class RecordLOC : Record
     {
         public UInt32 ALTITUDE;

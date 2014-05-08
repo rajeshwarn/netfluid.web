@@ -28,8 +28,11 @@
 
  */
 
+using System;
+
 namespace NetFluid.DNS.Records
 {
+        [Serializable]
     public class RecordRP : Record
     {
         [DomainName] public string Mboxdname;

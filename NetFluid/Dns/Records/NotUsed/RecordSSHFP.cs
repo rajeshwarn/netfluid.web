@@ -2,8 +2,12 @@
 
  */
 
+using System;
+
 namespace NetFluid.DNS.Records
 {
+
+[Serializable]
     public class RecordSSHFP : Record
     {
         public byte[] RDATA;

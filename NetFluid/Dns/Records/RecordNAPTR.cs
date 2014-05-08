@@ -40,8 +40,11 @@
 
  */
 
+using System;
+
 namespace NetFluid.DNS.Records
 {
+        [Serializable]
     public class RecordNAPTR : Record
     {
         public string Flags;

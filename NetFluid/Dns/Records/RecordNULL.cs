@@ -14,8 +14,11 @@ allowed in master files.  NULLs are used as placeholders in some
 experimental extensions of the DNS.
 */
 
+using System;
+
 namespace NetFluid.DNS.Records
 {
+        [Serializable]
     public class RecordNULL : Record
     {
         public byte[] Anything;

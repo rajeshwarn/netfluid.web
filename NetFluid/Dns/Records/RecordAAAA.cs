@@ -9,10 +9,12 @@
 
 #endregion
 
+using System;
 using System.Net;
 
 namespace NetFluid.DNS.Records
 {
+        [Serializable]
     public class RecordAAAA : Record
     {
         public ushort A;

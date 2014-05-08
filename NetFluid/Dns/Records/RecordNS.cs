@@ -23,8 +23,11 @@ hosts which are name servers for either Internet (IN) or Hesiod (HS)
 class information are normally queried using IN class protocols.
  */
 
+using System;
+
 namespace NetFluid.DNS.Records
 {
+        [Serializable]
     public class RecordNS : Record
     {
         [DomainName] public string NSDNAME;

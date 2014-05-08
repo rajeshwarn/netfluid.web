@@ -23,6 +23,7 @@ using System;
 
 namespace NetFluid.DNS.Records
 {
+        [Serializable]
     public class RecordTSIG : Record
     {
         [DomainName] public string ALGORITHMNAME;

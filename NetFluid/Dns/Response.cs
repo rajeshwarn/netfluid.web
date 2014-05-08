@@ -1,8 +1,11 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using NetFluid.DNS.Records;
 
-namespace NetFluid.DNS.Records
+namespace NetFluid.DNS
 {
+        [Serializable]
     public class Response
     {
         /// <summary>

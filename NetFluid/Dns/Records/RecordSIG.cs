@@ -36,6 +36,7 @@ using System;
 
 namespace NetFluid.DNS.Records
 {
+        [Serializable]
     public class RecordSIG : Record
     {
         public byte ALGORITHM;

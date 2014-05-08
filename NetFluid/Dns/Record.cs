@@ -1,7 +1,10 @@
 // Stuff records are made of
 
+using System;
+
 namespace NetFluid.DNS.Records
 {
+    [Serializable]
     public abstract class Record
     {
         /// <summary>

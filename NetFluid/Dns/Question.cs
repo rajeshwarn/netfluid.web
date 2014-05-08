@@ -48,6 +48,7 @@ namespace NetFluid.DNS.Records
 
     #endregion
 
+        [Serializable]
     public class Question
     {
         public QClass QClass;

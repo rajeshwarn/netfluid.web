@@ -16,8 +16,11 @@ is as a forwarding entry for a user who has moved to a different
 mailbox.
 */
 
+using System;
+
 namespace NetFluid.DNS.Records
 {
+        [Serializable]
     public class RecordMR : Record
     {
         [DomainName] public string NEWNAME;

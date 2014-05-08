@@ -24,6 +24,7 @@ using System;
 
 namespace NetFluid.DNS.Records
 {
+        [Serializable]
     public class RecordTKEY : Record
     {
         [DomainName] public string ALGORITHM;

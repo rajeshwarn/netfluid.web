@@ -2,8 +2,11 @@
 
  */
 
+using System;
+
 namespace NetFluid.DNS.Records
 {
+            [Serializable]
     public class RecordSPF : Record
     {
         public byte[] RDATA;

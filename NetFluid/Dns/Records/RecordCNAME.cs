@@ -19,8 +19,11 @@ the description of name server logic in [RFC-1034] for details.
  * 
  */
 
+using System;
+
 namespace NetFluid.DNS.Records
 {
+        [Serializable]
     public class RecordCNAME : Record
     {
         [DomainName] public string CNAME;

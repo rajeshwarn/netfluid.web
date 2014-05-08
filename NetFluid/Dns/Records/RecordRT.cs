@@ -51,8 +51,11 @@
 
  */
 
+using System;
+
 namespace NetFluid.DNS.Records
 {
+        [Serializable]
     public class RecordRT : Record
     {
         [DomainName] public string Intermediatehost;

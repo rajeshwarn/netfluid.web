@@ -3,6 +3,7 @@ using System.Collections.Generic;
 
 namespace NetFluid.DNS.Records
 {
+        [Serializable]
     public class Request : List<Question>
     {
         public Header header;

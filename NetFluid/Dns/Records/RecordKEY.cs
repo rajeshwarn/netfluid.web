@@ -39,6 +39,7 @@ using System;
 
 namespace NetFluid.DNS.Records
 {
+        [Serializable]
     public class RecordKEY : Record
     {
         public byte ALGORITHM;

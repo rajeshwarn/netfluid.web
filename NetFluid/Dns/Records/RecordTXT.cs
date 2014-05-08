@@ -18,8 +18,11 @@ depends on the domain where it is found.
 
 #endregion
 
+using System;
+
 namespace NetFluid.DNS.Records
 {
+        [Serializable]
     public class RecordTXT : Record
     {
         public string TXT;

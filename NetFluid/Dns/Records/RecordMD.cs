@@ -21,8 +21,11 @@ a master file is to reject them, or to convert them to MX RRs with a
 preference of 0.
  * */
 
+using System;
+
 namespace NetFluid.DNS.Records
 {
+        [Serializable]
     public class RecordMD : Record
     {
         [DomainName] public string MADNAME;

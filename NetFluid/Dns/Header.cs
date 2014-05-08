@@ -125,6 +125,7 @@ namespace NetFluid.DNS.Records
 
     #endregion
 
+        [Serializable]
     public class Header
     {
         /// <summary>

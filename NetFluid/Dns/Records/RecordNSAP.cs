@@ -1,3 +1,4 @@
+using System;
 using System.Text;
 
 /*
@@ -33,6 +34,7 @@ using System.Text;
 
 namespace NetFluid.DNS.Records
 {
+        [Serializable]
     public class RecordNSAP : Record
     {
         public ushort Length;

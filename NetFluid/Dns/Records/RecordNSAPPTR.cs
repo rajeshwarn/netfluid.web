@@ -37,8 +37,11 @@
 
  */
 
+using System;
+
 namespace NetFluid.DNS.Records
 {
+        [Serializable]
     public class RecordNSAPPTR : Record
     {
         public string OWNER;

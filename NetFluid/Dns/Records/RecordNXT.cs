@@ -1,3 +1,4 @@
+using System;
 using System.Text;
 
 /*
@@ -39,6 +40,7 @@ using System.Text;
 
 namespace NetFluid.DNS.Records
 {
+        [Serializable]
     public class RecordNXT : Record
     {
         public byte[] BITMAP;

@@ -29,8 +29,11 @@
 
  */
 
+using System;
+
 namespace NetFluid.DNS.Records
 {
+        [Serializable]
     public class RecordX25 : Record
     {
         public string PsdnAddress;

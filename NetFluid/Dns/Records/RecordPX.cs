@@ -73,6 +73,7 @@ using System;
 
 namespace NetFluid.DNS.Records
 {
+        [Serializable]
     public class RecordPX : Record
     {
         [DomainName] public string MAP822;

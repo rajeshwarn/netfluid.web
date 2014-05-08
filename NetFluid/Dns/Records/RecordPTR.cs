@@ -17,8 +17,11 @@ similar to that performed by CNAME, which identifies aliases.  See the
 description of the IN-ADDR.ARPA domain for an example.
  */
 
+using System;
+
 namespace NetFluid.DNS.Records
 {
+        [Serializable]
     public class RecordPTR : Record
     {
         [DomainName] public string PTRDNAME;

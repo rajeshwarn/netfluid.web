@@ -44,10 +44,12 @@ or decimal numbers.
 
  */
 
+using System;
 using System.Net;
 
 namespace NetFluid.DNS.Records
 {
+        [Serializable]
     public class RecordWKS : Record
     {
         public byte A;

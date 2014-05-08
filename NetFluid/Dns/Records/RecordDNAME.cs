@@ -14,8 +14,11 @@
  * 
  */
 
+using System;
+
 namespace NetFluid.DNS.Records
 {
+        [Serializable]
     public class RecordDNAME : Record
     {
         [DomainName] public string TARGET;

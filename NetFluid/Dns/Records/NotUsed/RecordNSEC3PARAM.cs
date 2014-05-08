@@ -1,9 +1,13 @@
+
 /*
 
  */
 
+using System;
+
 namespace NetFluid.DNS.Records
 {
+        [Serializable]
     public class RecordNSEC3PARAM : Record
     {
         public byte[] RDATA;

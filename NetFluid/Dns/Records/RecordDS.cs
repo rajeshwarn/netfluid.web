@@ -31,6 +31,7 @@ using System.Text;
 
 namespace NetFluid.DNS.Records
 {
+        [Serializable]
     public class RecordDS : Record
     {
         public byte ALGORITHM;

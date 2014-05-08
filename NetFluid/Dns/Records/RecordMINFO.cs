@@ -30,8 +30,11 @@ records can be associated with a simple mailbox, they are usually used
 with a mailing list.
  */
 
+using System;
+
 namespace NetFluid.DNS.Records
 {
+        [Serializable]
     public class RecordMINFO : Record
     {
         [DomainName] public string EMAILBX;

@@ -15,8 +15,11 @@ MB records cause additional section processing which looks up an A type
 RRs corresponding to MADNAME.
 */
 
+using System;
+
 namespace NetFluid.DNS.Records
 {
+        [Serializable]
     public class RecordMB : Record
     {
         [DomainName] public string MADNAME;

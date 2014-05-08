@@ -14,8 +14,11 @@ MGMNAME         A <domain-name> which specifies a mailbox which is a
 MG records cause no additional section processing.
 */
 
+using System;
+
 namespace NetFluid.DNS.Records
 {
+        [Serializable]
     public class RecordMG : Record
     {
         [DomainName] public string MGMNAME;

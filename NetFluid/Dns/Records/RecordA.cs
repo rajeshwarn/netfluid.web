@@ -14,10 +14,12 @@ records.
  * 
  */
 
+using System;
 using System.Net;
 
 namespace NetFluid.DNS.Records
 {
+        [Serializable]
     public class RecordA : Record
     {
         public byte A;

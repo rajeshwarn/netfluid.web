@@ -65,8 +65,11 @@ reason for this provison is to allow future dynamic update facilities to
 change the SOA RR with known semantics.
 */
 
+using System;
+
 namespace NetFluid.DNS.Records
 {
+        [Serializable]
     public class RecordSOA : Record
     {
         public uint EXPIRE;
