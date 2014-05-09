@@ -27,6 +27,7 @@ using System.Configuration;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Security.Principal;
 using System.Text;
 using NetFluid.Sessions;
 using NetFluid.Cloud;
@@ -82,6 +83,11 @@ namespace NetFluid
             Host h;
             _hosts.TryGetValue(name, out h);
             return h;
+        }
+
+        public static WindowsIdentity CurrentUser
+        {
+            get { return WindowsIdentity.GetCurrent(); }
         }
 
         public static bool RunOnMono

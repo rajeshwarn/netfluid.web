@@ -12,7 +12,7 @@ namespace NetFluid.Service
         public string Id;
         public string Name;
         public string Application;
-        public List<string> Hosts;
+        public string[] Hosts;
         public string EndPoint;
         public bool Enabled;
 

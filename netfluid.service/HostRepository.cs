@@ -83,7 +83,7 @@ namespace NetFluid.Service
             var host = Get(id);
 
             if (host == null)
-                return null;
+                return null;  
             try
             {
                 var info = new ProcessStartInfo()
@@ -145,20 +145,9 @@ namespace NetFluid.Service
             return _hosts.FirstOrDefault(x => x.Id == id);
         }
 
-        public static Host Update(string id, string name, string application, string host, string endpoint, bool enabled, string username, string password)
+        public Host Update(Host host)
         {
-            var h = Get(id);
-
-            if (h != null)
-            {
-                h.Name = name;
-                h.Application = application;
-                h.Hosts = new List<string>(host.Split(new[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries));
-                h.EndPoint = endpoint;
-                h.Enabled = enabled;
-                h.Username = username;
-                h.Password = password;
-            }
+            var h = 
 
             if (enabled)
                 Start(id);
@@ -168,26 +157,16 @@ namespace NetFluid.Service
             return h;
         }
 
-        public static Host Add(string name, string application, string host, string endpoint, bool enabled, string username, string password)
+        public static Host Add(Host host)
         {
-            var n = new Host
-            {
-                Id = Security.UID(),
-                Name = name,
-                Application = application,
-                Hosts = new List<string>(host.Split(new[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries)),
-                Enabled = enabled,
-                EndPoint = endpoint,
-                Username = username,
-                Password = password
-            };
+            host.Id = Security.UID();
 
-            if(!enabled)
-                Stop(n.Id);
+            if(!host.Enabled)
+                Stop(host.Id);
 
-            _hosts.Save(n);
+            _hosts.Save(host);
 
-            return n;
+            return host;
         }
 
         public static void Delete(string id)

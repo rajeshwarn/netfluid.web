@@ -31,6 +31,7 @@ using System.Net;
 using System.Net.NetworkInformation;
 using System.Net.Sockets;
 using System.Reflection;
+using System.Security.Principal;
 using System.Text;
 using NetFluid.HTTP;
 
@@ -38,6 +39,29 @@ namespace NetFluid
 {
     public static class Extensions
     {
+        #region WINDOWS IDENTITY
+        public static bool IsAdministrator(this WindowsIdentity user)
+        {
+            //bool value to hold our return value
+            bool isAdmin;
+            try
+            {
+                //get the currently logged in user
+                var principal = new WindowsPrincipal(user);
+                isAdmin = principal.IsInRole(WindowsBuiltInRole.Administrator);
+            }
+            catch (UnauthorizedAccessException ex)
+            {
+                isAdmin = false;
+            }
+            catch (Exception ex)
+            {
+                isAdmin = false;
+            }
+            return isAdmin;
+        }
+        #endregion
+
         #region EXCEPTION
 
         public static string ToHTML(this Exception ex)

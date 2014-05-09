@@ -15,6 +15,23 @@
             width: 190px;
         }
     </style>
+    <script>
+
+        function addValue(to, name)
+        {
+            var div = $('<div>').addClass("input-group").addClass("input-group-sm");
+            var addon = $('<span>').addClass('input-group-addon').text('x');
+            addon.click(function ()
+            {
+                div.remove();
+            });
+            var ctrl = $('<input/>').attr({ type: 'text', name: name }).addClass("form-control");
+            div.append(addon);
+            div.append(ctrl);
+
+            $(to).append(div);
+        }
+    </script>
 </head>
     <body>
         <div class="container">
@@ -63,8 +80,20 @@
                                             <input type="text" name="application" class="form-control" id="updateHostPath" value="">
                                         </div>
                                         <div class="form-group">
-                                            <label for="updateHostValues">Matched hosts <small class="text-muted">(line separated)</small></label>
-                                            <textarea name="hosts" class="form-control" id="updateHostValues"></textarea>
+                                            <label for="updateHostValues">
+                                                <span>Matched hosts</span>
+                                                <div class="btn-group btn-group-sm">
+                                                    <button type="button" class="btn btn-success" onclick="addValue('#updateHostValues','hosts')">
+                                                        <span class="glyphicon glyphicon-plus"></span>
+                                                    </button>
+                                                </div>
+                                            </label>
+                                            <div id="updateHostValues">
+                                                <div class="input-group input-group-sm">
+                                                    <span class="input-group-addon">#</span>
+                                                    <input class="form-control" name="hosts" type="text">
+                                                </div>
+                                            </div>
                                         </div>
                                         <div class="form-group">
                                             <label for="updateHostEndPoint">Run on</label>
