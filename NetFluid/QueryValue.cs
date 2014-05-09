@@ -126,13 +126,13 @@ namespace NetFluid
             return obj.ToString().Equals(ToString());
         }
 
-        internal object Parse(ParameterInfo x)
+        internal object Parse(Type x)
         {
-            if (x.ParameterType.IsArray || x.GetCustomAttributes(typeof (ParamArrayAttribute), false).Length > 0)
+            if (x.IsArray)
             {
                 #region ARRAY
 
-                var elemType = x.ParameterType.GetElementType();
+                var elemType = x.GetElementType();
                 if (elemType == typeof (string))
                     return values;
                 if (elemType == typeof (byte))
@@ -191,55 +191,53 @@ namespace NetFluid
 
             #region VALORI
 
-            Type myType = x.ParameterType;
-
             if (values.Length == 0 || (values.Length == 1 && string.IsNullOrEmpty(values[0])))
-                return myType.IsValueType ? Activator.CreateInstance(myType) : null;
+                return x.IsValueType ? Activator.CreateInstance(x) : null;
 
-            if (myType == typeof (string))
+            if (x == typeof (string))
                 return values[0];
-            if (myType == typeof (byte))
+            if (x == typeof (byte))
                 return byte.Parse(values[0]);
-            if (myType == typeof (char))
+            if (x == typeof (char))
                 return char.Parse(values[0]);
-            if (myType == typeof (decimal))
+            if (x == typeof (decimal))
                 return decimal.Parse(values[0]);
-            if (myType == typeof (Int16))
+            if (x == typeof (Int16))
                 return Int16.Parse(values[0]);
-            if (myType == typeof (UInt16))
+            if (x == typeof (UInt16))
                 return UInt16.Parse(values[0]);
-            if (myType == typeof (Int32))
+            if (x == typeof (Int32))
                 return Int32.Parse(values[0]);
-            if (myType == typeof (UInt32))
+            if (x == typeof (UInt32))
                 return UInt32.Parse(values[0]);
-            if (myType == typeof (Int64))
+            if (x == typeof (Int64))
                 return Int64.Parse(values[0]);
-            if (myType == typeof (UInt64))
+            if (x == typeof (UInt64))
                 return UInt64.Parse(values[0]);
-            if (myType == typeof (float))
+            if (x == typeof (float))
                 return float.Parse(values[0]);
-            if (myType == typeof (double))
+            if (x == typeof (double))
                 return double.Parse(values[0]);
-            if (myType == typeof (DateTime))
+            if (x == typeof (DateTime))
                 return DateTime.Parse(values[0]);
 
-            if (myType == typeof (bool))
+            if (x == typeof (bool))
             {
                 string t = values[0].ToLower(CultureInfo.InvariantCulture);
                 return t == "true" || t == "on" || t == "yes";
             }
 
-            if (myType.IsEnum)
-                return Enum.Parse(myType, values[0]);
+            if (x.IsEnum)
+                return Enum.Parse(x, values[0]);
 
-            MethodInfo method = myType.GetMethod("Parse",
+            MethodInfo method = x.GetMethod("Parse",
                 BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic);
             if (method != null)
                 return method.Invoke(null, new[] {values[0]});
 
             #endregion
 
-            return myType.IsValueType ? Activator.CreateInstance(myType) : null;
+            return x.IsValueType ? Activator.CreateInstance(x) : null;
         }
 
         #region ICONVERTIBLE

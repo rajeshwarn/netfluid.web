@@ -272,7 +272,7 @@ namespace NetFluid
                         if (groups.Contains(parameters[i].Name))
                         {
                             var q = new QueryValue(parameters[i].Name, m.Groups[parameters[i].Name].Value);
-                            args[i] = q.Parse(parameters[i]);
+                            args[i] = q.Parse(parameters[i].ParameterType);
                         }
                         else
                         {
@@ -323,7 +323,7 @@ namespace NetFluid
                         if (j < argUri.Length)
                         {
                             var qv = new QueryValue("", argUri[j]);
-                            args[j] = qv.Parse(parameters[j]);
+                            args[j] = qv.Parse(parameters[j].ParameterType);
                         }
                         else
                         {
@@ -371,7 +371,7 @@ namespace NetFluid
                     {
                         var q = cnt.Request.Values[parameters[i].Name];
                         if (q != null)
-                            args[i] = q.Parse(parameters[i]);
+                            args[i] = q.Parse(parameters[i].ParameterType);
                         else
                             args[i] = parameters[i].MissingValue();
                     }

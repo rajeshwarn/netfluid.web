@@ -1,6 +1,9 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices.ComTypes;
+using System.Security.Permissions;
 
 namespace NetFluid
 {
@@ -17,7 +20,7 @@ namespace NetFluid
         {
             values = new Dictionary<string, QueryValue>();
 
-            foreach (QueryValue item in collection)
+            foreach (var item in collection)
             {
                 Add(item.Name, item);
             }
@@ -47,7 +50,7 @@ namespace NetFluid
             return values.Values.GetEnumerator();
         }
 
-        public bool Defines(string name)
+        public bool Contains(string name)
         {
             return values.ContainsKey(name);
         }
@@ -71,6 +74,39 @@ namespace NetFluid
         public string ToJSON()
         {
             return "{" + string.Join(",", values.Values.Select(x => x.ToString())) + "}";
+        }
+
+        IEnumerator<QueryValue> IEnumerable<QueryValue>.GetEnumerator()
+        {
+            return GetEnumerator();
+        }
+
+        public override int GetHashCode()
+        {
+            return values.GetHashCode();
+        }
+
+        public override string ToString()
+        {
+            return ToJSON();
+        }
+
+        public T ToObject<T>()
+        {
+            var type = typeof (T);
+            var obj = type.CreateIstance();
+
+            foreach (var field in type.GetFields())
+            {
+                foreach (var name in values.Keys)
+                {
+                    if (String.Equals(name, field.Name, StringComparison.InvariantCultureIgnoreCase))
+                    {
+                        field.SetValue(obj,values[name].Parse(field.FieldType));
+                    }
+                }
+            }
+            return (T)obj;
         }
     }
 }
