@@ -9,24 +9,31 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title></title>
     <link href="http://getbootstrap.com/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .affix {
+            position: fixed;
+            width: 190px;
+        }
+    </style>
 </head>
     <body>
         <div class="container">
             <div class="row">
-                <div class="col-md-2">
+                <div id="category-nav" class="col-md-2">
                     <div data-spy="affix" data-offset-top="60" data-offset-bottom="200">
-                        <ul class="list-group">
-                            <li class="list-group-item">
-                                <a href="#host">Hosted applications</a>
+                        <ul id="sidemenu" class="nav">
+                            <li>
+                                <a href="#host">Hosting</a>
                             </li>
-                            <li class="list-group-item">
-                                <a href="#cdn">Content delivery networks</a>
+                            <li>
+                                <a href="#cdn">CDN</a>
                             </li>
-                            <li class="list-group-item">
+                            <li>
                                 <a href="#dns">DNS</a>
                             </li>
-                            <li class="list-group-item">Porta ac consectetur ac</li>
-                            <li class="list-group-item">Vestibulum at eros</li>
+                            <li>
+                                <a href="#dns">SMTP</a>
+                            </li>
                         </ul>
                     </div>
                 </div>
@@ -352,6 +359,11 @@
             </div>
             <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
             <script src="http://getbootstrap.com/dist/js/bootstrap.min.js"></script>
+            <script>
+                $(window).resize(function () {
+                    $('#category-nav.affix').width($('#sidemenu').width());
+                });
+            </script>
         </div>
 </body>
 </html>

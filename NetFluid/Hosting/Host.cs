@@ -222,7 +222,7 @@ namespace NetFluid
 
                 #region CONTROLLERS
 
-                foreach (Controller item in _controllers)
+                foreach (var item in _controllers)
                 {
                     SendValue(cnt, item.Invoke(cnt));
 
@@ -237,9 +237,9 @@ namespace NetFluid
 
                 #region REGEX
 
-                foreach (RegexRouteTarget rr in regex)
+                foreach (var rr in regex)
                 {
-                    Match m = rr.Regex.Match(cnt.Request.Url);
+                    var m = rr.Regex.Match(cnt.Request.Url);
 
                     if (!m.Success)
                         continue;
@@ -265,7 +265,7 @@ namespace NetFluid
                     if (Engine.DevMode)
                         Console.WriteLine(cnt.Request.Host + ":" + cnt.Request.Url + " - " + "Parsing arguments");
 
-                    string[] groups = rr.Regex.GetGroupNames();
+                    var groups = rr.Regex.GetGroupNames();
                     var args = new object[parameters.Length];
                     for (int i = 0; i < parameters.Length; i++)
                     {
@@ -308,7 +308,7 @@ namespace NetFluid
                     var page = parametrized[i].Type.CreateIstance() as IMethodExposer;
                     page.Context = cnt;
 
-                    ParameterInfo[] parameters = parametrized[i].Method.GetParameters();
+                    var parameters = parametrized[i].Method.GetParameters();
 
                     if (parameters.Length == 0)
                     {
@@ -316,9 +316,7 @@ namespace NetFluid
                         return;
                     }
 
-                    string[] argUri = cnt.Request.Url.Substring(parametrized[i].Url.Length).Split(UrlSeparator,
-                        StringSplitOptions.
-                            RemoveEmptyEntries);
+                    var argUri = cnt.Request.Url.Substring(parametrized[i].Url.Length).Split(UrlSeparator,StringSplitOptions.RemoveEmptyEntries);
                     var args = new object[parameters.Length];
                     for (int j = 0; j < parameters.Length; j++)
                     {
@@ -360,7 +358,7 @@ namespace NetFluid
                     var page = route.Type.CreateIstance() as IMethodExposer;
                     page.Context = cnt;
 
-                    ParameterInfo[] parameters = route.Method.GetParameters();
+                    var parameters = route.Method.GetParameters();
 
                     if (parameters.Length == 0)
                     {
@@ -371,13 +369,11 @@ namespace NetFluid
                     var args = new object[parameters.Length];
                     for (int i = 0; i < parameters.Length; i++)
                     {
-                        QueryValue q = cnt.Request.Values[parameters[i].Name];
+                        var q = cnt.Request.Values[parameters[i].Name];
                         if (q != null)
                             args[i] = q.Parse(parameters[i]);
                         else
-                            args[i] = parameters[i].ParameterType.IsValueType
-                                ? Activator.CreateInstance(parameters[i].ParameterType)
-                                : null;
+                            args[i] = parameters[i].MissingValue();
                     }
 
                     Finalize(cnt, route.Method, page, args);
@@ -385,6 +381,7 @@ namespace NetFluid
                 }
 
                 #endregion
+
 
                 if (Engine.DevMode)
                     Console.WriteLine(cnt.Request.Host + ":" + cnt.Request.Url + " - " + "Looking for a public folder");

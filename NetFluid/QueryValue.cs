@@ -132,7 +132,7 @@ namespace NetFluid
             {
                 #region ARRAY
 
-                Type elemType = x.ParameterType.GetElementType();
+                var elemType = x.ParameterType.GetElementType();
                 if (elemType == typeof (string))
                     return values;
                 if (elemType == typeof (byte))
@@ -172,15 +172,14 @@ namespace NetFluid
                 if (elemType.IsEnum)
                     return values.Select(y => Enum.Parse(elemType, y)).ToArray();
 
-                MethodInfo parsemethod = elemType.GetMethod("Parse",
-                    BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic);
+                var parsemethod = elemType.GetMethod("Parse", BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic);
                 if (parsemethod != null)
                 {
-                    Array r = Array.CreateInstance(elemType, values.Length);
+                    var r = Array.CreateInstance(elemType, values.Length);
 
                     for (int i = 0; i < r.Length; i++)
                     {
-                        object o = parsemethod.Invoke(null, new[] {values[i]});
+                        var o = parsemethod.Invoke(null, new[] {values[i]});
                         r.SetValue(o, i);
                     }
 

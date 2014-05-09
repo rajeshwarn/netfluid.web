@@ -614,6 +614,21 @@ namespace NetFluid
 
         #endregion
 
+        #region PARAMETERINFO
+
+        public static object MissingValue(this ParameterInfo info)
+        {
+            if (info.IsOptional)
+                return Type.Missing;
+
+           if(info.HasDefaultValue)
+               return info.DefaultValue;
+
+            return   info.ParameterType.IsValueType ? Activator.CreateInstance(info.ParameterType): null;
+        }
+
+        #endregion
+
         #region TYPE
 
         /// <summary>
