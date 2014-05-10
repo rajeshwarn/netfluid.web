@@ -43,10 +43,6 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\mongocsharpdriver.1.9.0\lib\net35\MongoDB.Bson.dll</HintPath>
     </Reference>
-    <Reference Include="MongoDB.Driver, Version=1.9.0.200, Culture=neutral, PublicKeyToken=f686731cfb9cc103, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\mongocsharpdriver.1.9.0\lib\net35\MongoDB.Driver.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration.Install" />
     <Reference Include="System.Core" />
@@ -69,7 +65,6 @@
     <Compile Include="DNSManager.cs" />
     <Compile Include="Host.cs" />
     <Compile Include="HostManager.cs" />
-    <Compile Include="HostRepository.cs" />
     <Compile Include="Service.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -83,6 +78,10 @@
     <ProjectReference Include="..\FluidPlayer\FluidPlayer.csproj">
       <Project>{c17e4967-1758-4707-b35b-accfac426939}</Project>
       <Name>FluidPlayer</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\NetFluid.Mongo\NetFluid.Mongo.csproj">
+      <Project>{e18b5ed4-6375-442d-9e5c-f288fc959fe3}</Project>
+      <Name>NetFluid.Mongo</Name>
     </ProjectReference>
     <ProjectReference Include="..\netfluid\NetFluid4.csproj">
       <Project>{b215459f-37ff-411c-8e6b-9cdedb946f93}</Project>

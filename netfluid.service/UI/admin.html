@@ -137,7 +137,7 @@
                         </div>
                     </div>
                     
-                    % if(HostRepository.Applications.Count() > 0)
+                    % if(HostManager.Applications.Count() > 0)
                         <table class="table">
                             <tr>
                                 <th>Name</th>
@@ -147,7 +147,7 @@
                                 <th>Status</th>
                                 <th>#</th>
                             </tr>
-                            % foreach(var host in HostRepository.Applications)
+                            % foreach(var host in HostManager.Applications)
                             <tr>
                                 <td>{% host.Name %}</td>
                                 <td>{% host.Application %}</td>
@@ -160,7 +160,7 @@
                                     {% host.EndPoint %}
                                 </td>
                                 <td>
-                                    % if(HostRepository.IsUp(host.Name))
+                                    % if(HostManager.IsUp(host.Id))
                                     <div class="btn btn-success"><strong>UP</strong></div>
                                     % else
                                     <div class="btn btn-danger"><strong>DOWN</strong></div>

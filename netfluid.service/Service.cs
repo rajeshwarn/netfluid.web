@@ -39,7 +39,7 @@ namespace NetFluid.Service
             }
 
             Engine.Start();
-            HostRepository.Start();
+            HostManager.Start();
             Engine.DevMode = true;
         }
 
@@ -47,7 +47,7 @@ namespace NetFluid.Service
         protected override void OnStop()
         {
             Engine.Logger.Log(LogLevel.Warning,"NetFluid Service is stopping");
-            HostRepository.Stop();
+            HostManager.Stop();
         }
     }
 }

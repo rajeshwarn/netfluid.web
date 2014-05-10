@@ -1,0 +1,9 @@
+C:\Users\Matteo\Desktop\NetFluid\REPOSITORY\NetFluid.Mongo\bin\Release\NetFluid.Mongo.dll
+C:\Users\Matteo\Desktop\NetFluid\REPOSITORY\NetFluid.Mongo\bin\Release\NetFluid.Mongo.pdb
+C:\Users\Matteo\Desktop\NetFluid\REPOSITORY\NetFluid.Mongo\bin\Release\MongoDB.Bson.dll
+C:\Users\Matteo\Desktop\NetFluid\REPOSITORY\NetFluid.Mongo\bin\Release\MongoDB.Driver.dll
+C:\Users\Matteo\Desktop\NetFluid\REPOSITORY\NetFluid.Mongo\bin\Release\MongoDB.Bson.xml
+C:\Users\Matteo\Desktop\NetFluid\REPOSITORY\NetFluid.Mongo\bin\Release\MongoDB.Driver.xml
+C:\Users\Matteo\Desktop\NetFluid\REPOSITORY\NetFluid.Mongo\obj\Release\NetFluid.Mongo.csprojResolveAssemblyReference.cache
+C:\Users\Matteo\Desktop\NetFluid\REPOSITORY\NetFluid.Mongo\obj\Release\NetFluid.Mongo.dll
+C:\Users\Matteo\Desktop\NetFluid\REPOSITORY\NetFluid.Mongo\obj\Release\NetFluid.Mongo.pdb
