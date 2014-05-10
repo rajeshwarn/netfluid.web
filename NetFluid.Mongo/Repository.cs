@@ -33,13 +33,13 @@ namespace NetFluid.Mongo
             get
             {
                 var b = ObjectId.Parse(id);
-                return Collection.FindOne(Query.EQ("DatabaseId", b));
+                return Collection.FindOne(Query.EQ("Id", b));
             }
         }
 
         public void Save(T obj)
         {
-            Collection.Remove(Query.EQ("DatabaseId", obj.Id));
+            Collection.Save(obj);
         }
 
         public void Remove(T obj)

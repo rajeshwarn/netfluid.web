@@ -8,7 +8,7 @@ using NetFluid.Mongo;
 
 namespace NetFluid.Service
 {
-    [Route("host")]
+    [Route("/host")]
     public class HostManager:FluidPage
     {
         private static readonly Repository<Host> hosts;
@@ -71,40 +71,18 @@ namespace NetFluid.Service
             get { return hosts; }
         }
 
-        [Route("/")]
-        public IResponse Home()
+        [ParametrizedRoute("delete")]
+        public IResponse Delete(string id)
         {
-            if (!Context.IsLocal) return new FluidTemplate("./UI/index.html");
-
-            var host = Context.Request.Values.ToObject<Host>(); 
-
-            switch (Request.HttpMethod)
-            {
-                case "POST":
-                    return Add(host);
-                case "PUT":
-                    return Update(host);
-                case "DELETE":
-                    return Delete(host);
-            }
-            return new FluidTemplate("./UI/admin.html");
-        }
-
-        public static IResponse Delete(Host host)
-        {
-            hosts.Remove(host);
+            hosts.Remove(hosts[id]);
             return new RedirectResponse("/");
         }
 
-        public static IResponse Update(Host host)
+        [Route("update")]
+        [Route("add")]
+        public IResponse Update()
         {
-            hosts.Save(host);
-            return new RedirectResponse("/");
-        }
-
-        public static IResponse Add(Host host)
-        {
-            hosts.Save(host);
+            hosts.Save(Request.Values.ToObject<Host>());
             return new RedirectResponse("/");
         }
 

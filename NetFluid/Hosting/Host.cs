@@ -140,11 +140,11 @@ namespace NetFluid
 
         private static void SendValue(Context c, object res)
         {
-            if (res == null)
+            /*if (res == null)
             {
                 c.SendHeaders();
                 return;
-            }
+            }*/
 
             if (res is IResponse)
             {
