@@ -1,31 +1,37 @@
-﻿using NetFluid.Responses;
+﻿using MongoDB.Bson;
+using NetFluid.Mongo;
+using NetFluid.Responses;
 
 namespace NetFluid.Service
 {
     [Route("cdn")]
     class CDNManager:FluidPage
     {
-        [Route("update")]
-        public IResponse Update(string id, string host, string path)
+        private static readonly Repository<CDN> hosts;
+
+        static CDNManager()
         {
-            if (!Context.IsLocal) return new FluidTemplate("./UI/index.html");
-            CDNRepository.Update(id,host,path);
-            return new RedirectResponse("/");
+            hosts = new Repository<CDN>("mongodb://localhost", "NetFluidService");
         }
 
+        [Route("update")]
         [Route("add")]
-        public IResponse Add(string host, string path)
+        public IResponse Update()
         {
-            if (!Context.IsLocal) return new FluidTemplate("./UI/index.html");
-            CDNRepository.Add(host,path);
+            var h = Request.Values.ToObject<CDN>();
+
+            if (Request.Values.Contains("id"))
+                h.Id = ObjectId.Parse(Request.Values["id"].Value);
+
+            hosts.Save(h);
+
             return new RedirectResponse("/");
         }
 
         [ParametrizedRoute("delete")]
         public IResponse Delete(string id)
         {
-            if (!Context.IsLocal) return new FluidTemplate("./UI/index.html");
-            CDNRepository.Delete(id);
+            hosts.Remove(hosts[id]);
             return new RedirectResponse("/");
         }
     }

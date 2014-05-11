@@ -59,7 +59,6 @@
     <Compile Include="AccessManager.cs" />
     <Compile Include="CDN.cs" />
     <Compile Include="CDNManager.cs" />
-    <Compile Include="CDNRepository.cs" />
     <Compile Include="CustomServiceInstaller.cs">
       <SubType>Component</SubType>
     </Compile>

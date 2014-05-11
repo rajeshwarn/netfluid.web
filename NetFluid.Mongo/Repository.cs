@@ -33,7 +33,8 @@ namespace NetFluid.Mongo
             get
             {
                 var b = ObjectId.Parse(id);
-                return Collection.FindOne(Query.EQ("Id", b));
+                var h= Collection.FindOne(Query.EQ("_id", b));
+                return h;
             }
         }
 
@@ -44,7 +45,7 @@ namespace NetFluid.Mongo
 
         public void Remove(T obj)
         {
-            Collection.Remove(Query.EQ("DatabaseId", obj.Id));
+            Collection.Remove(Query.EQ("_id", obj.Id));
         }
 
         public IEnumerator<T> GetEnumerator()

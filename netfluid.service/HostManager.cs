@@ -82,15 +82,18 @@ namespace NetFluid.Service
         [Route("add")]
         public IResponse Update()
         {
-            hosts.Save(Request.Values.ToObject<Host>());
+            var h = Request.Values.ToObject<Host>();
+
+            if (Request.Values.Contains("id"))
+                h.Id = ObjectId.Parse(Request.Values["id"].Value);
+
+            hosts.Save(h);
             return new RedirectResponse("/");
         }
 
         [ParametrizedRoute("/start")]
         public IResponse Start(string id)
         {
-            if (!Context.IsLocal) return new FluidTemplate("./UI/index.html");
-
             var host = hosts[id];
 
             if (host == null)
@@ -116,8 +119,6 @@ namespace NetFluid.Service
         [ParametrizedRoute("/stop")]
         public IResponse Stop(string id)
         {
-            if (!Context.IsLocal) return new FluidTemplate("./UI/index.html");
-            
             Stop(hosts[id]);
 
             return new RedirectResponse("/");
@@ -126,8 +127,6 @@ namespace NetFluid.Service
         [ParametrizedRoute("/restart")]
         public IResponse ReStart(string id)
         {
-            if (!Context.IsLocal) return new FluidTemplate("./UI/index.html");
-
             var host = hosts[id];
             
             Stop(host);
