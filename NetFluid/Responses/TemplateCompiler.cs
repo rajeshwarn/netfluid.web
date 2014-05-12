@@ -315,6 +315,12 @@ namespace NetFluid.Responses
 
             csc_parameters.ReferencedAssemblies.Add(fromType.Assembly.Location);
 
+            //FORCE SYSTEM.CORE REFERENCE
+            if (csc_parameters.ReferencedAssemblies.Cast<string>().All(ass => Path.GetFileName(ass) != "System.Core.dll"))
+            {
+                csc_parameters.ReferencedAssemblies.Add(typeof(System.Linq.Enumerable).Assembly.Location);
+            }
+
             csc_parameters.GenerateInMemory = true;
             csc_parameters.GenerateExecutable = false;
             csc_parameters.TreatWarningsAsErrors = false;
@@ -391,9 +397,6 @@ namespace NetFluid.Responses
                 csc_parameters.ReferencedAssemblies.Add(ass.Location);
             }
             csc_parameters.ReferencedAssemblies.Add(Assembly.GetEntryAssembly().Location);
-            
-            if(csc_parameters.ReferencedAssemblies.Cast<string>().All(ass => Path.GetFileName(ass) != "System.Core.dll"))
-                csc_parameters.ReferencedAssemblies.Add("System.Core.dll");
 
             csc_parameters.GenerateInMemory = true;
             csc_parameters.GenerateExecutable = false;
@@ -401,6 +404,7 @@ namespace NetFluid.Responses
             csc_parameters.CompilerOptions = "/optimize /nowarn:108;114;3009;1685";
             csc_parameters.WarningLevel = 1;
             var results = csc.CompileAssemblyFromSource(csc_parameters, builder.ToString());
+
 
             return results.CompiledAssembly.GetTypes()[0].GetMethod("Run", BindingFlags.Static | BindingFlags.Public);
         }
