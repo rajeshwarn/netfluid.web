@@ -230,8 +230,7 @@ namespace NetFluid
             if (x.IsEnum)
                 return Enum.Parse(x, values[0]);
 
-            MethodInfo method = x.GetMethod("Parse",
-                BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic);
+            var method = x.GetMethod("Parse",BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic);
             if (method != null)
                 return method.Invoke(null, new[] {values[0]});
 

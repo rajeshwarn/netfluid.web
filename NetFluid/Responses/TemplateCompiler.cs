@@ -391,6 +391,9 @@ namespace NetFluid.Responses
                 csc_parameters.ReferencedAssemblies.Add(ass.Location);
             }
             csc_parameters.ReferencedAssemblies.Add(Assembly.GetEntryAssembly().Location);
+            
+            if(csc_parameters.ReferencedAssemblies.Cast<string>().All(ass => Path.GetFileName(ass) != "System.Core.dll"))
+                csc_parameters.ReferencedAssemblies.Add("System.Core.dll");
 
             csc_parameters.GenerateInMemory = true;
             csc_parameters.GenerateExecutable = false;
