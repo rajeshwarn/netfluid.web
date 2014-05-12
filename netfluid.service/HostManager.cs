@@ -61,10 +61,10 @@ namespace NetFluid.Service
             }
         }
 
-        public static bool IsUp(string id)
+        public static bool IsUp(ObjectId id)
         {
             Process p;
-            return Processes.TryGetValue(id, out p) && !p.HasExited;
+            return Processes.TryGetValue(id.ToString(), out p) && !p.HasExited;
         }
 
         public static IEnumerable<Host> Applications

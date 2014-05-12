@@ -161,18 +161,18 @@
                                     {% host.EndPoint %}
                                 </td>
                                 <td>
-                                    % if(HostManager.IsUp(host.Id))
+                                    % if(HostManager.IsUp(host._id))
                                     <div class="btn btn-success"><strong>UP</strong></div>
                                     % else
                                     <div class="btn btn-danger"><strong>DOWN</strong></div>
                                     % end if
                                 </td>
                                 <td>
-                                    <button class="btn btn-primary" data-toggle="modal" data-target="#ModalUpdateHost{% host.Id %}">
+                                    <button class="btn btn-primary" data-toggle="modal" data-target="#ModalUpdateHost{% host._id %}">
                                         manage
                                     </button>
                                     <!-- Modal -->
-                                    <div class="modal fade" id="ModalUpdateHost{% host.Id %}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                                    <div class="modal fade" id="ModalUpdateHost{% host._id %}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
                                         <div class="modal-dialog">
                                             <div class="modal-content">
                                                 <div class="modal-header">
@@ -181,7 +181,7 @@
                                                 </div>
                                                 <div class="modal-body">
                                                     <form method="post" action="/host/update">
-                                                        <input type="hidden" name="id" value="{% host.Id %}" />
+                                                        <input type="hidden" name="id" value="{% host._id %}" />
                                                         <div class="form-group">
                                                             <label for="updateHostName">Name</label>
                                                             <input type="text" name="name" class="form-control" id="updateHostName" value="{% host.Name %}" required />
@@ -194,12 +194,12 @@
                                                             <label for="updateHostValues">
                                                                 <span>Matched hosts</span>
                                                                 <div class="btn-group btn-group-sm">
-                                                                    <button type="button" class="btn btn-success" onclick="addValue('#updateHostValues{% host.Id %}','hosts','')">
+                                                                    <button type="button" class="btn btn-success" onclick="addValue('#updateHostValues{% host._id %}','hosts','')">
                                                                         <span class="glyphicon glyphicon-plus"></span>
                                                                     </button>
                                                                 </div>
                                                             </label>
-                                                            <div id="updateHostValues{% host.Id %}">
+                                                            <div id="updateHostValues{% host._id %}">
                                                                 <div class="input-group input-group-sm">
                                                                     <span class="input-group-addon">#</span>
                                                                     <input class="form-control" name="hosts" type="text" value="{% host.Hosts.First() %}" required />
@@ -208,7 +208,7 @@
                                                                     $(function()
                                                                     {
                                                                         % foreach(var m in host.Hosts.Skip(1))
-                                                                            addValue('#updateHostValues{% host.Id %}', 'hosts', '{% m %}');
+                                                                            addValue('#updateHostValues{% host._id %}', 'hosts', '{% m %}');
                                                                         % end foreach
                                                                     });
                                                                 </script>
@@ -230,21 +230,21 @@
                                                         </div>
                                                         <div class="form-group">
                                                             <div class="btn-group">
-                                                                <a class="btn btn-success" href="/host/start/{% host.Id %}">start</a>
-                                                                <a class="btn btn-danger" href="/host/stop/{% host.Id %}">stop</a>
-                                                                <a class="btn btn-warning" href="/host/restart/{% host.Id %}">restart</a>
+                                                                <a class="btn btn-success" href="/host/start/{% host._id %}">start</a>
+                                                                <a class="btn btn-danger" href="/host/stop/{% host._id %}">stop</a>
+                                                                <a class="btn btn-warning" href="/host/restart/{% host._id %}">restart</a>
                                                             </div>
                                                         </div>
                                                         <div class="panel-group" id="accordion">
                                                             <div class="panel panel-default">
                                                                 <div class="panel-heading">
                                                                     <h4 class="panel-title">
-                                                                        <a data-toggle="collapse" data-parent="#accordion" href="#collapseUserHost{% host.Id %}">
+                                                                        <a data-toggle="collapse" data-parent="#accordion" href="#collapseUserHost{% host._id %}">
                                                                             Username and password
                                                                         </a>
                                                                     </h4>
                                                                 </div>
-                                                                <div id="collapseUserHost{% host.Id %}" class="panel-collapse collapse">
+                                                                <div id="collapseUserHost{% host._id %}" class="panel-collapse collapse">
                                                                     <div class="panel-body">
                                                                         <div class="form-group">
                                                                             <label for="updateHostUsername">Username</label>
@@ -262,14 +262,14 @@
                                                             <div class="panel panel-default">
                                                                 <div class="panel-heading">
                                                                     <h4 class="panel-title">
-                                                                        <a data-toggle="collapse" data-parent="#accordion" href="#collapseDeleteHost{% host.Id %}">
+                                                                        <a data-toggle="collapse" data-parent="#accordion" href="#collapseDeleteHost{% host._id %}">
                                                                             Delete this hosted application
                                                                         </a>
                                                                     </h4>
                                                                 </div>
-                                                                <div id="collapseDeleteHost{% host.Id %}" class="panel-collapse collapse">
+                                                                <div id="collapseDeleteHost{% host._id %}" class="panel-collapse collapse">
                                                                     <div class="panel-body">
-                                                                        Are  you sure ? <a class="btn btn-danger" href="/host/delete/{% host.Id %}">delete</a>
+                                                                        Are  you sure ? <a class="btn btn-danger" href="/host/delete/{% host._id %}">delete</a>
                                                                     </div>
                                                                 </div>
                                                             </div>
@@ -346,39 +346,39 @@
                                 <td>{% cdn.Host %}</td>
                                 <td>{% cdn.Path %}</td>
                                 <td>
-                                    <button class="btn btn-primary" data-toggle="modal" data-target="#ModalUpdateCDN{% cdn.Id %}">
+                                    <button class="btn btn-primary" data-toggle="modal" data-target="#ModalUpdateCDN{% cdn._id %}">
                                         manage
                                     </button>
-                                    <div class="modal fade" id="ModalUpdateCDN{% cdn.Id %}" tabindex="-1" role="dialog" aria-labelledby="addCDNLabel{% cdn.Id %}" aria-hidden="true">
+                                    <div class="modal fade" id="ModalUpdateCDN{% cdn._id %}" tabindex="-1" role="dialog" aria-labelledby="addCDNLabel{% cdn._id %}" aria-hidden="true">
                                         <div class="modal-dialog">
                                             <div class="modal-content">
                                                 <div class="modal-header">
                                                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                                                    <h4 class="modal-title" id="addCDNLabel{% cdn.Id %}">Modify CDN</h4>
+                                                    <h4 class="modal-title" id="addCDNLabel{% cdn._id %}">Modify CDN</h4>
                                                 </div>
                                                 <div class="modal-body">
                                                     <form method="POST" action="/cdn/add">
-                                                        <input type="hidden" name="id" value="{% cdn.Id %}" />
+                                                        <input type="hidden" name="id" value="{% cdn._id %}" />
                                                         <div class="form-group">
-                                                            <label for="addCDNHost{% cdn.Id %}">Host</label>
-                                                            <input type="text" class="form-control" name="host" id="addCDNHost{% cdn.Id %}" value="{% cdn.Host %}">
+                                                            <label for="addCDNHost{% cdn._id %}">Host</label>
+                                                            <input type="text" class="form-control" name="host" id="addCDNHost{% cdn._id %}" value="{% cdn.Host %}">
                                                         </div>
                                                         <div class="form-group">
-                                                            <label for="addCDNPath{% cdn.Id %}">Path</label>
-                                                            <input type="text" class="form-control" name="path" id="addCDNPath{% cdn.Id %}" value="{% cdn.Path %}">
+                                                            <label for="addCDNPath{% cdn._id %}">Path</label>
+                                                            <input type="text" class="form-control" name="path" id="addCDNPath{% cdn._id %}" value="{% cdn.Path %}">
                                                         </div>
                                                         <div class="panel-group" id="accordion">
                                                             <div class="panel panel-default">
                                                                 <div class="panel-heading">
                                                                     <h4 class="panel-title">
-                                                                        <a data-toggle="collapse" data-parent="#accordion" href="#collapseDeleteHost{% cdn.Id %}">
+                                                                        <a data-toggle="collapse" data-parent="#accordion" href="#collapseDeleteHost{% cdn._id %}">
                                                                             Delete this CDN
                                                                         </a>
                                                                     </h4>
                                                                 </div>
-                                                                <div id="collapseDeleteHost{% cdn.Id %}" class="panel-collapse collapse">
+                                                                <div id="collapseDeleteHost{% cdn._id %}" class="panel-collapse collapse">
                                                                     <div class="panel-body">
-                                                                        Are  you sure ? <a class="btn btn-danger" href="/cdn/delete/{% cdn.Id %}">delete</a>
+                                                                        Are  you sure ? <a class="btn btn-danger" href="/cdn/delete/{% cdn._id %}">delete</a>
                                                                     </div>
                                                                 </div>
                                                             </div>
@@ -458,10 +458,10 @@
                                         {% a.Address %}
                                     </td>
                                     <td>
-                                        <button class="btn btn-success" data-toggle="modal" data-target="#ModalUpdateRecordA{% a.Id %}">
+                                        <button class="btn btn-success" data-toggle="modal" data-target="#ModalUpdateRecordA{% a._id %}">
                                             manage
                                         </button>
-                                        <div class="modal fade" id="ModalUpdateRecordA{% a.Id %}" tabindex="-1" role="dialog" aria-labelledby="AddRecordALabel" aria-hidden="true">
+                                        <div class="modal fade" id="ModalUpdateRecordA{% a._id %}" tabindex="-1" role="dialog" aria-labelledby="AddRecordALabel" aria-hidden="true">
                                             <div class="modal-dialog">
                                                 <div class="modal-content">
                                                     <div class="modal-header">
