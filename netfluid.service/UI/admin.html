@@ -401,6 +401,98 @@
                     <h2 id="dns">
                         <span>DNS</span>
                     </h2>
+                    <h3>
+                        Record A
+                        <!-- Button trigger modal -->
+                        <button class="btn btn-success" data-toggle="modal" data-target="#ModalAddRecordA">
+                            Add new
+                        </button>
+                    </h3> 
+                    <div class="modal fade" id="ModalAddRecordA" tabindex="-1" role="dialog" aria-labelledby="AddRecordALabel" aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                                    <h4 class="modal-title" id="AddRecordALabel">Add DNS record A</h4>
+                                </div>
+                                <div class="modal-body">
+                                    <form method="POST" action="/dns/add">
+                                        <input type="hidden" name="type" value="A"/>
+                                        <div class="form-group">
+                                            <label for="AddRecordAHost">Domain</label>
+                                            <input type="text" name="name" class="form-control" id="AddRecordAHost" placeholder="netfuid.org">
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="AddRecordAIP">IP</label>
+                                            <input type="text" name="address" class="form-control" id="AddRecordAIP" placeholder="23.12.46.91">
+                                        </div>
+                                        <input type="submit" class="btn btn-primary" value="Add" />
+                                    </form>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    % if(DNSManager.A.Count()==0)
+                        <div class="panel panel-default">
+                            <div class="panel-body">
+                                No active DNS records
+                            </div>
+                        </div>
+                    % else
+                        <table class="table">
+                            <tr>
+                                <th>Domain</th>
+                                <th>Address</th>
+                                <th></th>
+                                <th></th>
+                            </tr>
+                            % foreach(var a in DNSManager.A)
+                                <tr>
+                                    <td>
+                                        {% a.Name %}
+                                    </td>
+                                    <td>
+                                        {% a.Address %}
+                                    </td>
+                                    <td>
+                                        <button class="btn btn-success" data-toggle="modal" data-target="#ModalUpdateRecordA{% a.Id %}">
+                                            manage
+                                        </button>
+                                        <div class="modal fade" id="ModalUpdateRecordA{% a.Id %}" tabindex="-1" role="dialog" aria-labelledby="AddRecordALabel" aria-hidden="true">
+                                            <div class="modal-dialog">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                                                        <h4 class="modal-title" id="AddRecordALabel">Add DNS record A</h4>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        <form method="POST" action="/dns/add">
+                                                            <input type="hidden" name="type" value="A" />
+                                                            <div class="form-group">
+                                                                <label for="AddRecordAHost">Domain</label>
+                                                                <input type="text" name="name" class="form-control" id="AddRecordAHost" placeholder="netfuid.org">
+                                                            </div>
+                                                            <div class="form-group">
+                                                                <label for="AddRecordAIP">IP</label>
+                                                                <input type="text" name="address" class="form-control" id="AddRecordAIP" placeholder="23.12.46.91">
+                                                            </div>
+                                                            <input type="submit" class="btn btn-primary" value="Add" />
+                                                        </form>
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+                            % end foreach
+                        </table>
+                    % end if
                 </div>
             </div>
             <script src="http://getbootstrap.com/dist/js/bootstrap.min.js"></script>

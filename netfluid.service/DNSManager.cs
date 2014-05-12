@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using NetFluid.DNS;
 using NetFluid.DNS.Records;
 using NetFluid.Mongo;
@@ -10,13 +7,23 @@ using NetFluid.Mongo;
 namespace NetFluid.Service
 {
     [Route("dns")]
-    class DnsManager:FluidPage
+    public class DNSManager:FluidPage
     {
-        private static readonly Repository<Record> records;
- 
-        static DnsManager()
+        public static Repository<Record> Records { get; private set; }
+
+        public static IEnumerable<RecordA> A { get { return Records.OfType<RecordA>(); } }
+
+        public static IEnumerable<RecordAAAA> AAAA { get { return Records.OfType<RecordAAAA>(); } }
+
+        public static IEnumerable<RecordCNAME> CNAME { get { return Records.OfType<RecordCNAME>(); } }
+
+        public static IEnumerable<RecordMX> MX { get { return Records.OfType<RecordMX>(); } }
+
+        public static IEnumerable<RecordTXT> TXT { get { return Records.OfType<RecordTXT>(); } }
+
+        static DNSManager()
         {
-            records = new Repository<Record>("mongodb://localhost", "NetFluidService");
+            Records = new Repository<Record>("mongodb://localhost", "NetFluidService");
         }
 
         [Route("update")]
@@ -44,7 +51,7 @@ namespace NetFluid.Service
                 break;
             }
 
-            records.Save(record);
+            Records.Save(record);
 
             return new RedirectResponse("/");
         }
