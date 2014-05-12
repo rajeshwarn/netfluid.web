@@ -98,7 +98,7 @@ namespace NetFluid.Service
 
             var process = host.Start();
 
-            Processes.AddOrUpdate(host.Id, process, (x, y) =>
+            Processes.AddOrUpdate(id, process, (x, y) =>
             {
                 try
                 {
