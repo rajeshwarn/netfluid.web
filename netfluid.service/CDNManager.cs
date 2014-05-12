@@ -5,13 +5,13 @@ using NetFluid.Responses;
 namespace NetFluid.Service
 {
     [Route("cdn")]
-    class CDNManager:FluidPage
+    public class CDNManager:FluidPage
     {
-        private static readonly Repository<CDN> hosts;
+        public static Repository<CDN> CDN { get; private set;  }
 
         static CDNManager()
         {
-            hosts = new Repository<CDN>("mongodb://localhost", "NetFluidService");
+            CDN = new Repository<CDN>("mongodb://localhost", "NetFluidService");
         }
 
         [Route("update")]
@@ -19,11 +19,7 @@ namespace NetFluid.Service
         public IResponse Update()
         {
             var h = Request.Values.ToObject<CDN>();
-
-            if (Request.Values.Contains("id"))
-                h.Id = ObjectId.Parse(Request.Values["id"].Value);
-
-            hosts.Save(h);
+            CDN.Save(h);
 
             return new RedirectResponse("/");
         }
@@ -31,7 +27,7 @@ namespace NetFluid.Service
         [ParametrizedRoute("delete")]
         public IResponse Delete(string id)
         {
-            hosts.Remove(hosts[id]);
+            CDN.Remove(CDN[id]);
             return new RedirectResponse("/");
         }
     }

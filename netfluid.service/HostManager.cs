@@ -2,7 +2,6 @@
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
 using MongoDB.Bson;
 using NetFluid.Mongo;
 
@@ -11,18 +10,18 @@ namespace NetFluid.Service
     [Route("/host")]
     public class HostManager:FluidPage
     {
-        private static readonly Repository<Host> hosts;
-        private static readonly ConcurrentDictionary<ObjectId, Process> _processes;
+        private static readonly Repository<Host> Hosts;
+        private static readonly ConcurrentDictionary<string, Process> Processes;
 
         static HostManager()
         {
-            hosts = new Repository<Host>("mongodb://localhost", "NetFluidService");
-            _processes = new ConcurrentDictionary<ObjectId, Process>();
+            Hosts = new Repository<Host>("mongodb://localhost", "NetFluidService");
+            Processes = new ConcurrentDictionary<string, Process>();
         }
 
         public static void Start()
         {
-            hosts.ForEach(host =>
+            Hosts.ForEach(host =>
             {
                 host.Hosts.ForEach(x => Engine.Cluster.AddFowarding(x, host.EndPoint));
                 host.Start();
@@ -34,7 +33,7 @@ namespace NetFluid.Service
             try
             {
                 Process process;
-                if (host != null && _processes.TryGetValue(host.Id, out process))
+                if (host != null && Processes.TryGetValue(host.Id, out process))
                 {
                     try
                     {
@@ -43,7 +42,7 @@ namespace NetFluid.Service
                     catch (Exception)
                     {
                     }
-                    _processes.TryRemove(host.Id, out process);
+                    Processes.TryRemove(host.Id, out process);
                 }
             }
             catch (Exception exception)
@@ -54,7 +53,7 @@ namespace NetFluid.Service
 
         public static void Stop()
         {
-            foreach (var p in hosts)
+            foreach (var p in Hosts)
             {
                 Stop(p);
             }
@@ -63,18 +62,18 @@ namespace NetFluid.Service
         public static bool IsUp(ObjectId id)
         {
             Process p;
-            return _processes.TryGetValue(id, out p) && !p.HasExited;
+            return Processes.TryGetValue(id, out p) && !p.HasExited;
         }
 
         public static IEnumerable<Host> Applications
         {
-            get { return hosts; }
+            get { return Hosts; }
         }
 
         [ParametrizedRoute("delete")]
         public IResponse Delete(string id)
         {
-            hosts.Remove(hosts[id]);
+            Hosts.Remove(Hosts[id]);
             return new RedirectResponse("/");
         }
 
@@ -83,25 +82,21 @@ namespace NetFluid.Service
         public IResponse Update()
         {
             var h = Request.Values.ToObject<Host>();
-
-            if (Request.Values.Contains("id"))
-                h.Id = ObjectId.Parse(Request.Values["id"].Value);
-
-            hosts.Save(h);
+            Hosts.Save(h);
             return new RedirectResponse("/");
         }
 
         [ParametrizedRoute("/start")]
         public IResponse Start(string id)
         {
-            var host = hosts[id];
+            var host = Hosts[id];
 
             if (host == null)
                 return null;
 
             var process = host.Start();
 
-            _processes.AddOrUpdate(host.Id, process, (x, y) =>
+            Processes.AddOrUpdate(host.Id, process, (x, y) =>
             {
                 try
                 {
@@ -119,7 +114,7 @@ namespace NetFluid.Service
         [ParametrizedRoute("/stop")]
         public IResponse Stop(string id)
         {
-            Stop(hosts[id]);
+            Stop(Hosts[id]);
 
             return new RedirectResponse("/");
         }
@@ -127,7 +122,7 @@ namespace NetFluid.Service
         [ParametrizedRoute("/restart")]
         public IResponse ReStart(string id)
         {
-            var host = hosts[id];
+            var host = Hosts[id];
             
             Stop(host);
 

@@ -63,6 +63,7 @@
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="DNSManager.cs" />
+    <Compile Include="DNSZone.cs" />
     <Compile Include="Host.cs" />
     <Compile Include="HostManager.cs" />
     <Compile Include="Service.cs">

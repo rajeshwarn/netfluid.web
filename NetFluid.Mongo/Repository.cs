@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using MongoDB.Bson;
-using MongoDB.Bson.Serialization.Attributes;
 using MongoDB.Driver;
 using MongoDB.Driver.Builders;
 using MongoDB.Driver.Linq;
@@ -32,9 +31,7 @@ namespace NetFluid.Mongo
         {
             get
             {
-                var b = ObjectId.Parse(id);
-                var h= Collection.FindOne(Query.EQ("_id", b));
-                return h;
+                return Collection.FindOne(Query.EQ("_id", ObjectId.Parse(id)));
             }
         }
 
@@ -43,9 +40,14 @@ namespace NetFluid.Mongo
             Collection.Save(obj);
         }
 
+        public void Remove(string id)
+        {
+            Collection.Remove(Query.EQ("_id", ObjectId.Parse(id)));
+        }
+
         public void Remove(T obj)
         {
-            Collection.Remove(Query.EQ("_id", obj.Id));
+            Collection.Remove(Query.EQ("_id",ObjectId.Parse(obj.Id)));
         }
 
         public IEnumerator<T> GetEnumerator()

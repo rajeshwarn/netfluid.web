@@ -8,6 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title></title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
     <link href="http://getbootstrap.com/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
         .affix {
@@ -17,7 +18,7 @@
     </style>
     <script>
 
-        function addValue(to, name)
+        function addValue(to, name,value)
         {
             var div = $('<div>').addClass("input-group").addClass("input-group-sm");
             var addon = $('<span>').addClass('input-group-addon').text('x');
@@ -25,7 +26,7 @@
             {
                 div.remove();
             });
-            var ctrl = $('<input/>').attr({ type: 'text', name: name }).addClass("form-control");
+            var ctrl = $('<input/>').attr({ type: 'text', name: name, value:value }).addClass("form-control");
             div.append(addon);
             div.append(ctrl);
 
@@ -73,17 +74,17 @@
                                     <form method="POST" action="/host/add">
                                         <div class="form-group">
                                             <label for="updateHostName">Name</label>
-                                            <input type="text" name="name" class="form-control" id="updateHostName" value="">
+                                            <input required type="text" name="name" class="form-control" id="updateHostName" value="" />
                                         </div>
                                         <div class="form-group">
                                             <label for="updateHostName">Path</label>
-                                            <input type="text" name="application" class="form-control" id="updateHostPath" value="">
+                                            <input required type="text" name="application" class="form-control" id="updateHostPath" value="" />
                                         </div>
                                         <div class="form-group">
                                             <label for="updateHostValues">
                                                 <span>Matched hosts</span>
                                                 <div class="btn-group btn-group-sm">
-                                                    <button type="button" class="btn btn-success" onclick="addValue('#updateHostValues','hosts')">
+                                                    <button type="button" class="btn btn-success" onclick="addValue('#updateHostValues','hosts','')">
                                                         <span class="glyphicon glyphicon-plus"></span>
                                                     </button>
                                                 </div>
@@ -91,13 +92,13 @@
                                             <div id="updateHostValues">
                                                 <div class="input-group input-group-sm">
                                                     <span class="input-group-addon">#</span>
-                                                    <input class="form-control" name="hosts" type="text">
+                                                    <input class="form-control" name="hosts" type="text" required />
                                                 </div>
                                             </div>
                                         </div>
                                         <div class="form-group">
                                             <label for="updateHostEndPoint">Run on</label>
-                                            <input type="text" name="endpoint" class="form-control" id="updateHostEndPoint" value="">
+                                            <input type="text" name="endpoint" class="form-control" id="updateHostEndPoint" value="" />
                                         </div>
                                         <div class="checkbox">
                                             <label>
@@ -183,23 +184,39 @@
                                                         <input type="hidden" name="id" value="{% host.Id %}" />
                                                         <div class="form-group">
                                                             <label for="updateHostName">Name</label>
-                                                            <input type="text" name="name" class="form-control" id="updateHostName" value="{% host.Name %}">
+                                                            <input type="text" name="name" class="form-control" id="updateHostName" value="{% host.Name %}" required />
                                                         </div>
                                                         <div class="form-group">
                                                             <label for="updateHostName">Path</label>
-                                                            <input type="text" name="application" class="form-control" id="updateHostPath" value="{% host.Application %}">
+                                                            <input type="text" name="application" class="form-control" id="updateHostPath" value="{% host.Application %}" required />
                                                         </div>
                                                         <div class="form-group">
-                                                            <label for="updateHostValues">Matched hosts</label>
-                                                            <textarea name="hosts" class="form-control" id="updateHostValues">
-                                                                % foreach(var m in host.Hosts)
-                                                                {% m+"\r\n" %}
-                                                                % end foreach
-                                                            </textarea>
+                                                            <label for="updateHostValues">
+                                                                <span>Matched hosts</span>
+                                                                <div class="btn-group btn-group-sm">
+                                                                    <button type="button" class="btn btn-success" onclick="addValue('#updateHostValues{% host.Id %}','hosts','')">
+                                                                        <span class="glyphicon glyphicon-plus"></span>
+                                                                    </button>
+                                                                </div>
+                                                            </label>
+                                                            <div id="updateHostValues{% host.Id %}">
+                                                                <div class="input-group input-group-sm">
+                                                                    <span class="input-group-addon">#</span>
+                                                                    <input class="form-control" name="hosts" type="text" value="{% host.Hosts.First() %}" required />
+                                                                </div>
+                                                                <script>
+                                                                    $(function()
+                                                                    {
+                                                                        % foreach(var m in host.Hosts.Skip(1))
+                                                                            addValue('#updateHostValues{% host.Id %}', 'hosts', '{% m %}');
+                                                                        % end foreach
+                                                                    });
+                                                                </script>
+                                                            </div>
                                                         </div>
                                                         <div class="form-group">
                                                             <label for="updateHostEndPoint">Run on</label>
-                                                            <input type="text" name="endpoint" class="form-control" id="updateHostEndPoint" value="{% host.EndPoint %}">
+                                                            <input type="text" name="endpoint" class="form-control" id="updateHostEndPoint" value="{% host.EndPoint %}" required />
                                                         </div>
                                                         <div class="checkbox">
                                                             <label>
@@ -311,7 +328,7 @@
                             </div>
                         </div>
                     </div>
-                    % if(CDNRepository.CDN.Count()==0)
+                    % if(CDNManager.CDN.Count()==0)
                         <div class="panel panel-default">
                             <div class="panel-body">
                                 No active CDN
@@ -324,7 +341,7 @@
                                 <th>Path</th>
                                 <th>#</th>
                             </tr>
-                            % foreach(var cdn in CDNRepository.CDN)
+                            % foreach(var cdn in CDNManager.CDN)
                             <tr>
                                 <td>{% cdn.Host %}</td>
                                 <td>{% cdn.Path %}</td>
@@ -386,7 +403,6 @@
                     </h2>
                 </div>
             </div>
-            <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
             <script src="http://getbootstrap.com/dist/js/bootstrap.min.js"></script>
             <script>
                 $(window).resize(function () {

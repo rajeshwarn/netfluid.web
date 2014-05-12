@@ -106,6 +106,18 @@ namespace NetFluid
                     }
                 }
             }
+
+            foreach (var field in type.GetProperties())
+            {
+                foreach (var name in values.Keys)
+                {
+                    if (String.Equals(name, field.Name, StringComparison.InvariantCultureIgnoreCase))
+                    {
+                        field.SetValue(obj, values[name].Parse(field.PropertyType));
+                    }
+                }
+            }
+
             return (T)obj;
         }
     }

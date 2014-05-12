@@ -3,10 +3,18 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using NetFluid.DNS.Records;
+using NetFluid.Mongo;
 
 namespace NetFluid.Service
 {
-    class DNSManager:FluidPage
+    class DnsManager:FluidPage
     {
+        static Repository<Record> 
+
+        static DnsManager()
+        {
+            
+        }
     }
 }

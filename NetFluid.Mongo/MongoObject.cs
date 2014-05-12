@@ -4,6 +4,6 @@ namespace NetFluid.Mongo
 {
     public class MongoObject
     {
-        public ObjectId Id { get; set; }
+        public string Id { get; set; }
     }
 }
