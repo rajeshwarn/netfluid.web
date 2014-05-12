@@ -11,12 +11,10 @@ using MongoDB.Driver.Linq;
 
 namespace NetFluid.Mongo
 {
-    public class Repository<T>:IQueryable<T>
+    public class Repository<T> : IQueryable<T> where T : MongoObject
     {
-        private readonly IQueryable<T> queryable; 
         private readonly MongoDatabase database;
-
-        private PropertyInfo property;
+        private readonly PropertyInfo property;
 
         public Repository(string connection,string db)
         {
@@ -27,13 +25,18 @@ namespace NetFluid.Mongo
 
             var client = new MongoClient(connection);
             database = client.GetServer().GetDatabase(db);
-            queryable= Collection.AsQueryable();
         }
 
         private MongoCollection<T> Collection
         {
             get { return database.GetCollection<T>(typeof (T).Name); }
         }
+
+        private IQueryable<T> Queryable
+        {
+            get { return Collection.AsQueryable(); }
+        }
+
 
         public T this[string id]
         {
@@ -60,27 +63,27 @@ namespace NetFluid.Mongo
 
         public IEnumerator<T> GetEnumerator()
         {
-            return queryable.GetEnumerator();
+            return Queryable.GetEnumerator();
         }
 
         IEnumerator IEnumerable.GetEnumerator()
         {
-            return queryable.GetEnumerator();
+            return Queryable.GetEnumerator();
         }
 
         public Expression Expression
         {
-            get { return queryable.Expression; }
+            get { return Queryable.Expression; }
             private set {  }
         }
         public Type ElementType
         {
-            get { return queryable.ElementType; }
+            get { return Queryable.ElementType; }
             private set { }
         }
         public IQueryProvider Provider
         {
-            get { return queryable.Provider; }
+            get { return Queryable.Provider; }
             private set { }
         }
     }

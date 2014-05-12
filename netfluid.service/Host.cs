@@ -1,13 +1,15 @@
 ﻿using System;
 using System.Diagnostics;
+using MongoDB.Bson;
 using NetFluid.Mongo;
 
 namespace NetFluid.Service
 {
     [Serializable]
-    public class Host
+    public class Host : MongoObject
     {
-        public string Id { get; set; }
+        public ObjectId _id { get; set; }
+
         public string Application;
         public bool Enabled;
         public string EndPoint;

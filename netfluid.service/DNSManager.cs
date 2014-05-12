@@ -1,29 +1,57 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using MongoDB.Bson;
 using NetFluid.DNS;
 using NetFluid.DNS.Records;
 using NetFluid.Mongo;
 
 namespace NetFluid.Service
 {
+    public class A: RecordA,MongoObject
+    {
+        public ObjectId _id { get; set; }
+    }
+
+    public class AAAA : RecordAAAA, MongoObject
+    {
+        public ObjectId _id { get; set; }
+    }
+
+    public class CNAME : RecordCNAME, MongoObject
+    {
+        public ObjectId _id { get; set; }
+    }
+
+    public class MX : RecordMX, MongoObject
+    {
+        public ObjectId _id { get; set; }
+    }
+
+    public class TXT : RecordTXT, MongoObject
+    {
+        public ObjectId _id { get; set; }
+    }
+
     [Route("dns")]
     public class DNSManager:FluidPage
     {
-        public static Repository<Record> Records { get; private set; }
+        public static Repository<A> A;
 
-        public static IEnumerable<RecordA> A { get { return Records.OfType<RecordA>(); } }
+        public static Repository<AAAA> AAAA;
 
-        public static IEnumerable<RecordAAAA> AAAA { get { return Records.OfType<RecordAAAA>(); } }
+        public static Repository<CNAME> CNAME;
 
-        public static IEnumerable<RecordCNAME> CNAME { get { return Records.OfType<RecordCNAME>(); } }
+        public static Repository<MX> MX;
 
-        public static IEnumerable<RecordMX> MX { get { return Records.OfType<RecordMX>(); } }
-
-        public static IEnumerable<RecordTXT> TXT { get { return Records.OfType<RecordTXT>(); } }
+        public static Repository<TXT> TXT;
 
         static DNSManager()
         {
-            Records = new Repository<Record>("mongodb://localhost", "NetFluidService");
+            A = new Repository<A>("mongodb://localhost", "NetFluidService");
+            AAAA = new Repository<AAAA>("mongodb://localhost", "NetFluidService");
+            CNAME = new Repository<CNAME>("mongodb://localhost", "NetFluidService");
+            MX = new Repository<MX>("mongodb://localhost", "NetFluidService");
+            TXT = new Repository<TXT>("mongodb://localhost", "NetFluidService");
         }
 
         [Route("update")]
