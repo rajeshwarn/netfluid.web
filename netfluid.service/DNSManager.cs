@@ -10,8 +10,6 @@ namespace NetFluid.Service
 {
     class DnsManager:FluidPage
     {
-        static Repository<Record> 
-
         static DnsManager()
         {
             

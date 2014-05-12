@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Reflection;
 using MongoDB.Bson;
 using MongoDB.Driver;
 using MongoDB.Driver.Builders;
@@ -10,13 +11,20 @@ using MongoDB.Driver.Linq;
 
 namespace NetFluid.Mongo
 {
-    public class Repository<T>:IQueryable<T> where T:MongoObject
+    public class Repository<T>:IQueryable<T>
     {
         private readonly IQueryable<T> queryable; 
         private readonly MongoDatabase database;
 
-        public Repository(string connection,string db) 
+        private PropertyInfo property;
+
+        public Repository(string connection,string db)
         {
+            property = typeof (T).GetProperty("Id");
+
+            if (property == null || property.PropertyType != typeof (string) || property.SetMethod == null)
+                throw new Exception("Type " + typeof (T) + " must implement public string Id {get;set;} property");
+
             var client = new MongoClient(connection);
             database = client.GetServer().GetDatabase(db);
             queryable= Collection.AsQueryable();
@@ -47,7 +55,7 @@ namespace NetFluid.Mongo
 
         public void Remove(T obj)
         {
-            Collection.Remove(Query.EQ("_id",ObjectId.Parse(obj.Id)));
+            Collection.Remove(Query.EQ("_id",ObjectId.Parse(property.GetValue(obj) as string)));
         }
 
         public IEnumerator<T> GetEnumerator()
