@@ -98,35 +98,28 @@ namespace NetFluid
 
             foreach (var field in type.GetFields())
             {
-                foreach (var name in values.Keys)
+                foreach (var name in values.Keys.Where(name => String.Equals(name, field.Name, StringComparison.InvariantCultureIgnoreCase)))
                 {
-                    if (String.Equals(name, field.Name, StringComparison.InvariantCultureIgnoreCase))
+                    try
                     {
-                        try
-                        {
-                            field.SetValue(obj, values[name].Parse(field.FieldType));
-                        }
-                        catch (Exception)
-                        {
-                        }
-
+                        field.SetValue(obj, values[name].Parse(field.FieldType));
+                    }
+                    catch (Exception)
+                    {
                     }
                 }
             }
 
             foreach (var field in type.GetProperties())
             {
-                foreach (var name in values.Keys)
+                foreach (var name in values.Keys.Where(name => String.Equals(name, field.Name, StringComparison.InvariantCultureIgnoreCase)))
                 {
-                    if (String.Equals(name, field.Name, StringComparison.InvariantCultureIgnoreCase))
+                    try
                     {
-                        try
-                        {
-                            field.SetValue(obj, values[name].Parse(field.PropertyType));
-                        }
-                        catch (Exception)
-                        {
-                        }
+                        field.SetValue(obj, values[name].Parse(field.PropertyType));
+                    }
+                    catch (Exception)
+                    {
                     }
                 }
             }
