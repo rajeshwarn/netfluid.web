@@ -8,11 +8,6 @@ namespace NetFluid.DNS
     public abstract class Record
     {
         /// <summary>
-        /// Id used to store records.Not serialized
-        /// </summary>
-        public string Id { get; set; }
-
-        /// <summary>
         ///     Specifies type class of resource record, mostly IN but can be CS, CH or HS
         /// </summary>
         public Class Class;
