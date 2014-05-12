@@ -128,113 +128,122 @@ namespace NetFluid
 
         internal object Parse(Type x)
         {
-            if (x.IsArray)
+            try
             {
-                #region ARRAY
 
-                var elemType = x.GetElementType();
-                if (elemType == typeof (string))
-                    return values;
-                if (elemType == typeof (byte))
-                    return (values.Select(byte.Parse)).ToArray();
-                if (elemType == typeof (char))
-                    return (values.Select(char.Parse)).ToArray();
-                if (elemType == typeof (decimal))
-                    return (values.Select(decimal.Parse)).ToArray();
-                if (elemType == typeof (Int16))
-                    return (values.Select(Int16.Parse)).ToArray();
-                if (elemType == typeof (UInt16))
-                    return (values.Select(UInt16.Parse)).ToArray();
-                if (elemType == typeof (Int32))
-                    return (values.Select(Int32.Parse)).ToArray();
-                if (elemType == typeof (UInt32))
-                    return (values.Select(UInt32.Parse)).ToArray();
-                if (elemType == typeof (Int64))
-                    return (values.Select(Int64.Parse)).ToArray();
-                if (elemType == typeof (UInt64))
-                    return (values.Select(UInt64.Parse)).ToArray();
-                if (elemType == typeof (float))
-                    return (values.Select(float.Parse)).ToArray();
-                if (elemType == typeof (double))
-                    return (values.Select(double.Parse)).ToArray();
-                if (elemType == typeof (DateTime))
-                    return (values.Select(DateTime.Parse)).ToArray();
-
-                if (elemType == typeof (bool))
+                if (x.IsArray)
                 {
-                    return values.Select(y =>
+                    #region ARRAY
+
+                    var elemType = x.GetElementType();
+                    if (elemType == typeof(string))
+                        return values;
+                    if (elemType == typeof(byte))
+                        return (values.Select(byte.Parse)).ToArray();
+                    if (elemType == typeof(char))
+                        return (values.Select(char.Parse)).ToArray();
+                    if (elemType == typeof(decimal))
+                        return (values.Select(decimal.Parse)).ToArray();
+                    if (elemType == typeof(Int16))
+                        return (values.Select(Int16.Parse)).ToArray();
+                    if (elemType == typeof(UInt16))
+                        return (values.Select(UInt16.Parse)).ToArray();
+                    if (elemType == typeof(Int32))
+                        return (values.Select(Int32.Parse)).ToArray();
+                    if (elemType == typeof(UInt32))
+                        return (values.Select(UInt32.Parse)).ToArray();
+                    if (elemType == typeof(Int64))
+                        return (values.Select(Int64.Parse)).ToArray();
+                    if (elemType == typeof(UInt64))
+                        return (values.Select(UInt64.Parse)).ToArray();
+                    if (elemType == typeof(float))
+                        return (values.Select(float.Parse)).ToArray();
+                    if (elemType == typeof(double))
+                        return (values.Select(double.Parse)).ToArray();
+                    if (elemType == typeof(DateTime))
+                        return (values.Select(DateTime.Parse)).ToArray();
+
+                    if (elemType == typeof(bool))
                     {
-                        string t = y.ToLower(CultureInfo.InvariantCulture);
-                        return (t == "true" || t == "on" || t == "yes");
-                    }).ToArray();
-                }
-
-                if (elemType.IsEnum)
-                    return values.Select(y => Enum.Parse(elemType, y)).ToArray();
-
-                var parsemethod = elemType.GetMethod("Parse", BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic);
-                if (parsemethod != null)
-                {
-                    var r = Array.CreateInstance(elemType, values.Length);
-
-                    for (int i = 0; i < r.Length; i++)
-                    {
-                        var o = parsemethod.Invoke(null, new[] {values[i]});
-                        r.SetValue(o, i);
+                        return values.Select(y =>
+                        {
+                            string t = y.ToLower(CultureInfo.InvariantCulture);
+                            return (t == "true" || t == "on" || t == "yes");
+                        }).ToArray();
                     }
 
-                    return r;
+                    if (elemType.IsEnum)
+                        return values.Select(y => Enum.Parse(elemType, y)).ToArray();
+
+                    var parsemethod = elemType.GetMethod("Parse", BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic);
+                    if (parsemethod != null)
+                    {
+                        var r = Array.CreateInstance(elemType, values.Length);
+
+                        for (int i = 0; i < r.Length; i++)
+                        {
+                            var o = parsemethod.Invoke(null, new[] { values[i] });
+                            r.SetValue(o, i);
+                        }
+
+                        return r;
+                    }
+
+                    #endregion
                 }
+
+                #region VALORI
+
+                if (values.Length == 0 || (values.Length == 1 && string.IsNullOrEmpty(values[0])))
+                    return x.IsValueType ? Activator.CreateInstance(x) : null;
+
+                if (x == typeof(string))
+                    return values[0];
+                if (x == typeof(byte))
+                    return byte.Parse(values[0]);
+                if (x == typeof(char))
+                    return char.Parse(values[0]);
+                if (x == typeof(decimal))
+                    return decimal.Parse(values[0]);
+                if (x == typeof(Int16))
+                    return Int16.Parse(values[0]);
+                if (x == typeof(UInt16))
+                    return UInt16.Parse(values[0]);
+                if (x == typeof(Int32))
+                    return Int32.Parse(values[0]);
+                if (x == typeof(UInt32))
+                    return UInt32.Parse(values[0]);
+                if (x == typeof(Int64))
+                    return Int64.Parse(values[0]);
+                if (x == typeof(UInt64))
+                    return UInt64.Parse(values[0]);
+                if (x == typeof(float))
+                    return float.Parse(values[0]);
+                if (x == typeof(double))
+                    return double.Parse(values[0]);
+                if (x == typeof(DateTime))
+                    return DateTime.Parse(values[0]);
+
+                if (x == typeof(bool))
+                {
+                    string t = values[0].ToLower(CultureInfo.InvariantCulture);
+                    return t == "true" || t == "on" || t == "yes";
+                }
+
+                if (x.IsEnum)
+                    return Enum.Parse(x, values[0]);
+
+                var method = x.GetMethod("Parse", BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic);
+                if (method != null)
+                    return method.Invoke(null, new[] { values[0] });
 
                 #endregion
             }
-
-            #region VALORI
-
-            if (values.Length == 0 || (values.Length == 1 && string.IsNullOrEmpty(values[0])))
-                return x.IsValueType ? Activator.CreateInstance(x) : null;
-
-            if (x == typeof (string))
-                return values[0];
-            if (x == typeof (byte))
-                return byte.Parse(values[0]);
-            if (x == typeof (char))
-                return char.Parse(values[0]);
-            if (x == typeof (decimal))
-                return decimal.Parse(values[0]);
-            if (x == typeof (Int16))
-                return Int16.Parse(values[0]);
-            if (x == typeof (UInt16))
-                return UInt16.Parse(values[0]);
-            if (x == typeof (Int32))
-                return Int32.Parse(values[0]);
-            if (x == typeof (UInt32))
-                return UInt32.Parse(values[0]);
-            if (x == typeof (Int64))
-                return Int64.Parse(values[0]);
-            if (x == typeof (UInt64))
-                return UInt64.Parse(values[0]);
-            if (x == typeof (float))
-                return float.Parse(values[0]);
-            if (x == typeof (double))
-                return double.Parse(values[0]);
-            if (x == typeof (DateTime))
-                return DateTime.Parse(values[0]);
-
-            if (x == typeof (bool))
+            catch (Exception)
             {
-                string t = values[0].ToLower(CultureInfo.InvariantCulture);
-                return t == "true" || t == "on" || t == "yes";
+
             }
 
-            if (x.IsEnum)
-                return Enum.Parse(x, values[0]);
-
-            var method = x.GetMethod("Parse",BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic);
-            if (method != null)
-                return method.Invoke(null, new[] {values[0]});
-
-            #endregion
 
             return x.IsValueType ? Activator.CreateInstance(x) : null;
         }

@@ -1,5 +1,4 @@
 using System;
-using System.Net;
 
 namespace NetFluid.DNS.Records
 {
@@ -27,7 +26,7 @@ namespace NetFluid.DNS.Records
 	[RFC-974].
 	*/
 
-        [Serializable]
+    [Serializable]
     public class RecordMX : Record, IComparable
     {
         [DomainName] public string Exchange;
@@ -42,7 +41,7 @@ namespace NetFluid.DNS.Records
                 return 1;
             if (Preference < recordMX.Preference)
                 return -1;
-            return string.Compare(Exchange, recordMX.Exchange, true);
+            return String.Compare(Exchange, recordMX.Exchange, StringComparison.OrdinalIgnoreCase);
         }
 
         public override string ToString()
@@ -52,7 +51,7 @@ namespace NetFluid.DNS.Records
 
         public static RecordMX Parse(string s)
         {
-            return new RecordMX { Exchange = s, Preference = 20};
+            return new RecordMX {Exchange = s, Preference = 20};
         }
 
         public static implicit operator RecordMX(string s)
