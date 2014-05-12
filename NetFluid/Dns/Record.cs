@@ -2,7 +2,7 @@
 
 using System;
 
-namespace NetFluid.DNS.Records
+namespace NetFluid.DNS
 {
     [Serializable]
     public abstract class Record

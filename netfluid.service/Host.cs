@@ -7,6 +7,7 @@ namespace NetFluid.Service
     [Serializable]
     public class Host
     {
+        public string Id { get; set; }
         public string Application;
         public bool Enabled;
         public string EndPoint;

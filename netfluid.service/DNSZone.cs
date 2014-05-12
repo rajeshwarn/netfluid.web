@@ -4,7 +4,7 @@ using NetFluid.Mongo;
 
 namespace NetFluid.Service
 {
-    class DNSZone:MongoObject
+    class DNSZone
     {
         public List<RecordA> A;
         public List<RecordMX> MX;
