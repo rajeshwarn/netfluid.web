@@ -102,7 +102,14 @@ namespace NetFluid
                 {
                     if (String.Equals(name, field.Name, StringComparison.InvariantCultureIgnoreCase))
                     {
-                        field.SetValue(obj,values[name].Parse(field.FieldType));
+                        try
+                        {
+                            field.SetValue(obj, values[name].Parse(field.FieldType));
+                        }
+                        catch (Exception)
+                        {
+                        }
+
                     }
                 }
             }
@@ -113,7 +120,13 @@ namespace NetFluid
                 {
                     if (String.Equals(name, field.Name, StringComparison.InvariantCultureIgnoreCase))
                     {
-                        field.SetValue(obj, values[name].Parse(field.PropertyType));
+                        try
+                        {
+                            field.SetValue(obj, values[name].Parse(field.PropertyType));
+                        }
+                        catch (Exception)
+                        {
+                        }
                     }
                 }
             }
