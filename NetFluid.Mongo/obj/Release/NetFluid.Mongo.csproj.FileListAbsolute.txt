@@ -6,3 +6,4 @@ C:\Users\Matteo\Desktop\NetFluid\REPOSITORY\NetFluid.Mongo\bin\Release\MongoDB.B
 C:\Users\Matteo\Desktop\NetFluid\REPOSITORY\NetFluid.Mongo\bin\Release\MongoDB.Driver.xml
 C:\Users\Matteo\Desktop\NetFluid\REPOSITORY\NetFluid.Mongo\obj\Release\NetFluid.Mongo.dll
 C:\Users\Matteo\Desktop\NetFluid\REPOSITORY\NetFluid.Mongo\obj\Release\NetFluid.Mongo.pdb
+C:\Users\Matteo\Desktop\NetFluid\REPOSITORY\NetFluid.Mongo\obj\Release\NetFluid.Mongo.csprojResolveAssemblyReference.cache

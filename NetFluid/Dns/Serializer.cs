@@ -8,18 +8,13 @@ using NetFluid.DNS.Records;
 
 namespace NetFluid.DNS
 {
-    public class Serializer
+    class Serializer
     {
         #region DESERIALIZE
 
         private static byte ReadByte(Stream stream)
         {
             return (byte) stream.ReadByte();
-        }
-
-        private static char ReadChar(Stream stream)
-        {
-            return (char) stream.ReadByte();
         }
 
         private static ushort ReadUInt16(Stream stream)
@@ -528,11 +523,11 @@ namespace NetFluid.DNS
 
         private static void WriteRecordData(Stream ms, Record record)
         {
-            Type type = record.GetType();
-            foreach (FieldInfo field in type.GetFields().Where(x => x.DeclaringType == type))
+            var type = record.GetType();
+            foreach (var field in type.GetFields().Where(x => x.DeclaringType == type))
             {
-                Type fieldType = field.FieldType;
-                object value = field.GetValue(record);
+                var fieldType = field.FieldType;
+                var value = field.GetValue(record);
 
                 if (fieldType == typeof (byte))
                     ms.WriteByte((byte) value);
