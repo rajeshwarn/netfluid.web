@@ -32,8 +32,10 @@ namespace NetFluid.Service
         {
             try
             {
+                if (host == null) return;
+                var key = host._id.ToString();
                 Process process;
-                if (host != null && Processes.TryGetValue(host.Id, out process))
+                if (Processes.TryGetValue(key, out process))
                 {
                     try
                     {
@@ -42,7 +44,7 @@ namespace NetFluid.Service
                     catch (Exception)
                     {
                     }
-                    Processes.TryRemove(host.Id, out process);
+                    Processes.TryRemove(key, out process);
                 }
             }
             catch (Exception exception)

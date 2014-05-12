@@ -58,29 +58,24 @@ namespace NetFluid.Service
         [Route("add")]
         public IResponse Update(string type)
         {
-            Record record=null;
-
             switch (type)
             {
                 case "A":
-                    record = Request.Values.ToObject<RecordA>();
+                    A.Save(Request.Values.ToObject<A>());
                 break;
                 case "AAAA":
-                    record = Request.Values.ToObject<RecordAAAA>();
+                    AAAA.Save(Request.Values.ToObject<AAAA>());
                 break;
                 case "CNAME":
-                    record = Request.Values.ToObject<RecordCNAME>();
+                    CNAME.Save(Request.Values.ToObject<CNAME>());
                 break;
                 case "MX":
-                    record = Request.Values.ToObject<RecordMX>();
+                    MX.Save(Request.Values.ToObject<MX>());
                 break;
                 case "TXT":
-                    record = Request.Values.ToObject<RecordTXT>();
+                    TXT.Save(Request.Values.ToObject<TXT>());
                 break;
             }
-
-            Records.Save(record);
-
             return new RedirectResponse("/");
         }
 
