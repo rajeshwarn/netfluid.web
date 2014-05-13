@@ -80,8 +80,26 @@ namespace NetFluid.Service
         }
 
         [ParametrizedRoute("delete")]
-        public IResponse Delete(string id)
+        public IResponse Delete(string type, string id)
         {
+            switch (type)
+            {
+                case "A":
+                    A.Remove(id);
+                    break;
+                case "AAAA":
+                    AAAA.Remove(id);
+                    break;
+                case "CNAME":
+                    CNAME.Remove(id);
+                    break;
+                case "MX":
+                    MX.Remove(id);
+                    break;
+                case "TXT":
+                    TXT.Remove(id);
+                break;
+            }
             return new RedirectResponse("/");
         }
     }
