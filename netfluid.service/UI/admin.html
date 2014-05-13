@@ -48,6 +48,13 @@
                             </li>
                             <li>
                                 <a href="#dns">DNS</a>
+                                <ul class="nav">
+                                    <li><a href="#dns-a">A</a></li>
+                                    <li><a href="#dns-cname">CNAME</a></li>
+                                    <li><a href="#dns-aaaa">AAAA</a></li>
+                                    <li><a href="#dns-mx">MX</a></li>
+                                    <li><a href="#dns-txt">TXT</a></li>
+                                </ul>
                             </li>
                             <li>
                                 <a href="#dns">SMTP</a>
@@ -401,7 +408,7 @@
                     <h2 id="dns">
                         <span>DNS</span>
                     </h2>
-                    <h3>
+                    <h3 id="dns-a">
                         Record A
                         <!-- Button trigger modal -->
                         <button class="btn btn-success" data-toggle="modal" data-target="#ModalAddRecordA">
@@ -511,7 +518,7 @@
                     % end if
 
                     <!-- RECORD CNAME -->
-                    <h3>
+                    <h3 id="dns-cname">
                         Record CNAME
                         <!-- Button trigger modal -->
                         <button class="btn btn-success" data-toggle="modal" data-target="#ModalAddRecordCNAME">
@@ -621,7 +628,7 @@
                     % end if
                     
                     <!-- RECORD AAAA -->
-                    <h3>
+                    <h3 id="dns-aaaa">
                         Record AAAA
                         <!-- Button trigger modal -->
                         <button class="btn btn-success" data-toggle="modal" data-target="#ModalAddRecordAAAA">
@@ -731,7 +738,7 @@
                     % end if
 
                     <!-- RECORD MX -->
-                    <h3>
+                    <h3 id="dns-mx">
                         Record MX
                         <!-- Button trigger modal -->
                         <button class="btn btn-success" data-toggle="modal" data-target="#ModalAddRecordMX">
@@ -852,7 +859,7 @@
                     % end if
                     
                     <!-- RECORD TXT -->
-                    <h3>
+                    <h3 id="dns-txt">
                         Record TXT
                         <!-- Button trigger modal -->
                         <button class="btn btn-success" data-toggle="modal" data-target="#ModalAddRecordTXT">

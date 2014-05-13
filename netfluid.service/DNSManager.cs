@@ -86,19 +86,19 @@ namespace NetFluid.Service
             {
                 case "A":
                     A.Remove(id);
-                    break;
+                    return new RedirectResponse("/#dns-a");
                 case "AAAA":
                     AAAA.Remove(id);
-                    break;
+                    return new RedirectResponse("/#dns-aaaa");
                 case "CNAME":
                     CNAME.Remove(id);
-                    break;
+                    return new RedirectResponse("/#dns-cname");
                 case "MX":
                     MX.Remove(id);
-                    break;
+                    return new RedirectResponse("/#dns-mx");
                 case "TXT":
                     TXT.Remove(id);
-                break;
+                    return new RedirectResponse("/#dns-txt");
             }
             return new RedirectResponse("/");
         }
