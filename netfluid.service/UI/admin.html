@@ -458,7 +458,7 @@
                                         {% a.Address %}
                                     </td>
                                     <td>
-                                        <button class="btn btn-success" data-toggle="modal" data-target="#ModalUpdateRecordA{% a._id %}">
+                                        <button class="btn btn-primary" data-toggle="modal" data-target="#ModalUpdateRecordA{% a._id %}">
                                             manage
                                         </button>
                                         <div class="modal fade" id="ModalUpdateRecordA{% a._id %}" tabindex="-1" role="dialog" aria-labelledby="AddRecordALabel" aria-hidden="true">
@@ -479,7 +479,23 @@
                                                                 <label for="AddRecordAIP">IP</label>
                                                                 <input type="text" name="address" class="form-control" id="AddRecordAIP" placeholder="23.12.46.91">
                                                             </div>
-                                                            <input type="submit" class="btn btn-primary" value="Add" />
+                                                            <div class="panel-group" id="accordion">
+                                                                <div class="panel panel-default">
+                                                                    <div class="panel-heading">
+                                                                        <h4 class="panel-title">
+                                                                            <a data-toggle="collapse" data-parent="#accordion" href="#collapseDeleteDNS{% a._id %}">
+                                                                                Delete this record
+                                                                            </a>
+                                                                        </h4>
+                                                                    </div>
+                                                                    <div id="collapseDeleteDNS{% a._id %}" class="panel-collapse collapse">
+                                                                        <div class="panel-body">
+                                                                            Are  you sure ? <a class="btn btn-danger" href="/dns/delete/{% a._id %}">delete</a>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <input type="submit" class="btn btn-primary" value="Save changes" />
                                                         </form>
                                                     </div>
                                                     <div class="modal-footer">
@@ -492,6 +508,226 @@
                                 </tr>
                             % end foreach
                         </table>
+                    % end if
+                    
+                    <!-- RECORD AAAA -->
+                    <h3>
+                        Record AAAA
+                        <!-- Button trigger modal -->
+                        <button class="btn btn-success" data-toggle="modal" data-target="#ModalAddRecordAAAA">
+                            Add new
+                        </button>
+                    </h3>
+                    <div class="modal fade" id="ModalAddRecordAAAA" tabindex="-1" role="dialog" aria-labelledby="AddRecordALabel" aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                                    <h4 class="modal-title" id="AddRecordALabel">Add DNS record AAAA</h4>
+                                </div>
+                                <div class="modal-body">
+                                    <form method="POST" action="/dns/add">
+                                        <input type="hidden" name="type" value="AAAA" />
+                                        <div class="form-group">
+                                            <label for="AddRecordAHost">Domain</label>
+                                            <input type="text" name="name" class="form-control" id="AddRecordAHost" placeholder="netfuid.org">
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="AddRecordAIP">IP</label>
+                                            <input type="text" name="address" class="form-control" id="AddRecordAIP" placeholder="23.12.46.91">
+                                        </div>
+                                        <input type="submit" class="btn btn-primary" value="Add" />
+                                    </form>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    % if(DNSManager.AAAA.Count()==0)
+                    <div class="panel panel-default">
+                        <div class="panel-body">
+                            No active DNS records
+                        </div>
+                    </div>
+                    % else
+                    <table class="table">
+                        <tr>
+                            <th>Domain</th>
+                            <th>Address</th>
+                            <th></th>
+                            <th></th>
+                        </tr>
+                        % foreach(var a in DNSManager.AAAA)
+                        <tr>
+                            <td>
+                                {% a.Name %}
+                            </td>
+                            <td>
+                                {% a.Address %}
+                            </td>
+                            <td>
+                                <button class="btn btn-primary" data-toggle="modal" data-target="#ModalUpdateRecordA{% a._id %}">
+                                    manage
+                                </button>
+                                <div class="modal fade" id="ModalUpdateRecordA{% a._id %}" tabindex="-1" role="dialog" aria-labelledby="AddRecordALabel" aria-hidden="true">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                                                <h4 class="modal-title" id="AddRecordALabel">Add DNS record AAAA</h4>
+                                            </div>
+                                            <div class="modal-body">
+                                                <form method="POST" action="/dns/add">
+                                                    <input type="hidden" name="type" value="AAAA" />
+                                                    <div class="form-group">
+                                                        <label for="AddRecordAHost">Domain</label>
+                                                        <input type="text" name="name" class="form-control" id="AddRecordAHost" placeholder="netfuid.org">
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label for="AddRecordAIP">IP</label>
+                                                        <input type="text" name="address" class="form-control" id="AddRecordAIP" placeholder="23.12.46.91">
+                                                    </div>
+                                                    <div class="panel-group" id="accordion">
+                                                        <div class="panel panel-default">
+                                                            <div class="panel-heading">
+                                                                <h4 class="panel-title">
+                                                                    <a data-toggle="collapse" data-parent="#accordion" href="#collapseDeleteDNS{% a._id %}">
+                                                                        Delete this record
+                                                                    </a>
+                                                                </h4>
+                                                            </div>
+                                                            <div id="collapseDeleteDNS{% a._id %}" class="panel-collapse collapse">
+                                                                <div class="panel-body">
+                                                                    Are  you sure ? <a class="btn btn-danger" href="/dns/delete/{% a._id %}">delete</a>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <input type="submit" class="btn btn-primary" value="Save changes" />
+                                                </form>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                        % end foreach
+                    </table>
+                    % end if
+                    
+                    <!-- RECORD CNAME -->
+                    <h3>
+                        Record CNAME
+                        <!-- Button trigger modal -->
+                        <button class="btn btn-success" data-toggle="modal" data-target="#ModalAddRecordCNAME">
+                            Add new
+                        </button>
+                    </h3>
+                    <div class="modal fade" id="ModalAddRecordCNAME" tabindex="-1" role="dialog" aria-labelledby="AddRecordALabel" aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                                    <h4 class="modal-title" id="AddRecordALabel">Add DNS record CNAME</h4>
+                                </div>
+                                <div class="modal-body">
+                                    <form method="POST" action="/dns/add">
+                                        <input type="hidden" name="type" value="CNAME" />
+                                        <div class="form-group">
+                                            <label for="AddRecordAHost">Domain</label>
+                                            <input type="text" name="name" class="form-control" id="AddRecordAHost" placeholder="netfuid.org">
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="AddRecordAIP">Alias</label>
+                                            <input type="text" name="address" class="form-control" id="AddRecordAIP" placeholder="www.netfluid.org">
+                                        </div>
+                                        <input type="submit" class="btn btn-primary" value="Add" />
+                                    </form>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    % if(DNSManager.CNAME.Count()==0)
+                    <div class="panel panel-default">
+                        <div class="panel-body">
+                            No active DNS records
+                        </div>
+                    </div>
+                    % else
+                    <table class="table">
+                        <tr>
+                            <th>Domain</th>
+                            <th>Address</th>
+                            <th></th>
+                            <th></th>
+                        </tr>
+                        % foreach(var a in DNSManager.CNAME)
+                        <tr>
+                            <td>
+                                {% a.Name %}
+                            </td>
+                            <td>
+                                {% a.Address %}
+                            </td>
+                            <td>
+                                <button class="btn btn-primary" data-toggle="modal" data-target="#ModalUpdateRecordA{% a._id %}">
+                                    manage
+                                </button>
+                                <div class="modal fade" id="ModalUpdateRecordA{% a._id %}" tabindex="-1" role="dialog" aria-labelledby="AddRecordALabel" aria-hidden="true">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                                                <h4 class="modal-title" id="AddRecordALabel">Add DNS record CNAME</h4>
+                                            </div>
+                                            <div class="modal-body">
+                                                <form method="POST" action="/dns/add">
+                                                    <input type="hidden" name="type" value="CNAME" />
+                                                    <div class="form-group">
+                                                        <label for="AddRecordAHost">Domain</label>
+                                                        <input type="text" name="name" class="form-control" id="AddRecordAHost" placeholder="netfuid.org">
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label for="AddRecordAIP">IP</label>
+                                                        <input type="text" name="address" class="form-control" id="AddRecordAIP" placeholder="23.12.46.91">
+                                                    </div>
+                                                    <div class="panel-group" id="accordion">
+                                                        <div class="panel panel-default">
+                                                            <div class="panel-heading">
+                                                                <h4 class="panel-title">
+                                                                    <a data-toggle="collapse" data-parent="#accordion" href="#collapseDeleteDNS{% a._id %}">
+                                                                        Delete this record
+                                                                    </a>
+                                                                </h4>
+                                                            </div>
+                                                            <div id="collapseDeleteDNS{% a._id %}" class="panel-collapse collapse">
+                                                                <div class="panel-body">
+                                                                    Are  you sure ? <a class="btn btn-danger" href="/dns/delete/{% a._id %}">delete</a>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <input type="submit" class="btn btn-primary" value="Save changes" />
+                                                </form>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                        % end foreach
+                    </table>
                     % end if
                 </div>
             </div>

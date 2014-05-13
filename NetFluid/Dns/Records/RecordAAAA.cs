@@ -37,6 +37,10 @@ namespace NetFluid.DNS.Records
                 B = arr[1];
                 C = arr[2];
                 D = arr[3];
+                E = arr[0];
+                F = arr[1];
+                G = arr[2];
+                H = arr[3];
             }
         }
 

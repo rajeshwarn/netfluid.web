@@ -28,19 +28,27 @@ namespace NetFluid.Service
 
         protected override void OnStart(string[] args)
         {
-            Directory.SetCurrentDirectory(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location));
-
-            if (!Engine.LoadAppConfiguration())
+            try
             {
-                Engine.Interfaces.AddAllAddresses();
-                Engine.AddPublicFolder("/", "./Public", true);
-                Engine.Interfaces.AddInterface("127.0.0.1", 80);
-                Engine.Interfaces.AddInterface("127.0.0.1", 8000);
+                Directory.SetCurrentDirectory(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location));
+
+                if (!Engine.LoadAppConfiguration())
+                {
+                    Engine.Interfaces.AddAllAddresses();
+                    Engine.AddPublicFolder("/", "./Public", true);
+                    Engine.Interfaces.AddInterface("127.0.0.1", 80);
+                    Engine.Interfaces.AddInterface("127.0.0.1", 8000);
+                }
+
+                Engine.Start();
+                HostManager.Start();
+                Engine.DevMode = true;
+            }
+            catch (Exception ex)
+            {
+                Engine.Logger.Log(LogLevel.Exception,"Error starting up the service",ex);
             }
 
-            Engine.Start();
-            HostManager.Start();
-            Engine.DevMode = true;
         }
 
 

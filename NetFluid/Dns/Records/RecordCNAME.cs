@@ -26,11 +26,11 @@ namespace NetFluid.DNS.Records
         [Serializable]
     public class RecordCNAME : Record
     {
-        [DomainName] public string CNAME;
+        [DomainName] public string Alias;
 
         public override string ToString()
         {
-            return CNAME;
+            return Alias;
         }
     }
 }

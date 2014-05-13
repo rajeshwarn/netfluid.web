@@ -66,7 +66,7 @@ namespace NetFluid.Service
                 case "AAAA":
                     AAAA.Save(Request.Values.ToObject<AAAA>());
                 break;
-                case "CNAME":
+                case "Alias":
                     CNAME.Save(Request.Values.ToObject<CNAME>());
                 break;
                 case "MX":

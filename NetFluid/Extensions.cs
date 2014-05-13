@@ -305,6 +305,7 @@ namespace NetFluid
 
         #region STRING
 
+
         /// <summary>
         ///     Check if is a valid credit card number
         /// </summary>
@@ -462,10 +463,18 @@ namespace NetFluid
         /// <param name="batchSize">The action</param>
         public static void ForEach<T>(this IEnumerable<T> enu, Action<T> act)
         {
-            foreach (T obj in enu)
+            try
             {
-                act.Invoke(obj);
+                foreach (var obj in enu)
+                {
+                    act.Invoke(obj);
+                }
             }
+            catch (Exception exception)
+            {
+                throw exception.InnerException;
+            }
+
         }
 
         /// <summary>
