@@ -5,8 +5,13 @@ using System;
 namespace NetFluid.DNS
 {
     [Serializable]
-    public abstract class Record
+    public abstract class Record: IDatabaseObject
     {
+        /// <summary>
+        /// Database id to store and handle record
+        /// </summary>
+        public string Id { get; set; }
+   
         /// <summary>
         ///     Specifies type class of resource record, mostly IN but can be CS, CH or HS
         /// </summary>
