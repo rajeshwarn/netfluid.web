@@ -49,18 +49,13 @@ namespace NetFluid.Service
 
         static Response Dns_OnRequest(Request request)
         {
+            var response = new Response();
             foreach (var question in request)
             {
-                switch (question.QType)
+                if (question.QType >= QType.IXFR && question.QType <= QType.ANY)
                 {
-                    case QType.A:
-
-                    break;
-                    case QType.AAAA:
-                    case QType.CNAME:
-                    case QType.MX:
-                    case QType.TXT:
-                    break;
+                    //NOT IMPLEMENTED
+                    continue;
                 }
             }
             return null;
