@@ -476,16 +476,16 @@
                                                         <h4 class="modal-title" id="AddRecordALabel">Add DNS record A</h4>
                                                     </div>
                                                     <div class="modal-body">
-                                                        <form method="POST" action="/dns/add">
+                                                        <form method="POST" action="/dns/update">
                                                             <input type="hidden" name="id" value="{% a.Id %}" />
                                                             <input type="hidden" name="type" value="A" />
                                                             <div class="form-group">
                                                                 <label for="AddRecordAHost">Domain</label>
-                                                                <input type="text" name="name" class="form-control" id="AddRecordAHost" placeholder="netfuid.org">
+                                                                <input type="text" name="name" class="form-control" id="AddRecordAHost" value="{% a.Name %}">
                                                             </div>
                                                             <div class="form-group">
                                                                 <label for="AddRecordAIP">IP</label>
-                                                                <input type="text" name="address" class="form-control" id="AddRecordAIP" placeholder="23.12.46.91">
+                                                                <input type="text" name="address" class="form-control" id="AddRecordAIP" value="{% a.Address %}>
                                                             </div>
                                                             <div class="panel-group" id="accordion">
                                                                 <div class="panel panel-default">
@@ -703,11 +703,11 @@
                                                     <input type="hidden" name="type" value="AAAA" />
                                                     <div class="form-group">
                                                         <label for="AddRecordAHost">Domain</label>
-                                                        <input type="text" name="name" class="form-control" id="AddRecordAHost" placeholder="{% a.Name %}">
+                                                        <input type="text" name="name" class="form-control" id="AddRecordAHost" value="{% a.Name %}">
                                                     </div>
                                                     <div class="form-group">
                                                         <label for="AddRecordAIP">IP</label>
-                                                        <input type="text" name="address" class="form-control" id="AddRecordAIP" placeholder="{% a.Address %}">
+                                                        <input type="text" name="address" class="form-control" id="AddRecordAIP" value="{% a.Address %}">
                                                     </div>
                                                     <div class="panel-group" id="accordion">
                                                         <div class="panel panel-default">
