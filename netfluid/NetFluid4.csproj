@@ -265,6 +265,7 @@
     <Compile Include="MIME\Utils\ParseUtils.cs" />
     <Compile Include="MIME\Utils\Rfc2047.cs" />
     <Compile Include="MIME\Utils\StringBuilderExtensions.cs" />
+    <Compile Include="MongoObject.cs" />
     <Compile Include="QueryValueCollection.cs" />
     <Compile Include="Responses\CSVResponse.cs" />
     <Compile Include="Responses\JSONFileResponse.cs" />
