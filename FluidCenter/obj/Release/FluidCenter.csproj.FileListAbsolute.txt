@@ -22,13 +22,11 @@ C:\Users\Matteo\Desktop\NetFluid\REPOSITORY\FluidCenter\bin\Release\FluidPlayer.
 C:\Users\Matteo\Desktop\NetFluid\REPOSITORY\FluidCenter\bin\Release\NetFluid.dll
 C:\Users\Matteo\Desktop\NetFluid\REPOSITORY\FluidCenter\bin\Release\NetFluid.Service.exe
 C:\Users\Matteo\Desktop\NetFluid\REPOSITORY\FluidCenter\bin\Release\NetFluid.Mongo.dll
-C:\Users\Matteo\Desktop\NetFluid\REPOSITORY\FluidCenter\bin\Release\MongoDB.Bson.dll
 C:\Users\Matteo\Desktop\NetFluid\REPOSITORY\FluidCenter\bin\Release\MongoDB.Driver.dll
 C:\Users\Matteo\Desktop\NetFluid\REPOSITORY\FluidCenter\bin\Release\FluidPlayer.pdb
 C:\Users\Matteo\Desktop\NetFluid\REPOSITORY\FluidCenter\bin\Release\NetFluid.Service.pdb
 C:\Users\Matteo\Desktop\NetFluid\REPOSITORY\FluidCenter\bin\Release\NetFluid.pdb
 C:\Users\Matteo\Desktop\NetFluid\REPOSITORY\FluidCenter\bin\Release\NetFluid.Mongo.pdb
-C:\Users\Matteo\Desktop\NetFluid\REPOSITORY\FluidCenter\bin\Release\MongoDB.Bson.xml
 C:\Users\Matteo\Desktop\NetFluid\REPOSITORY\FluidCenter\bin\Release\MongoDB.Driver.xml
 C:\Users\Matteo\Desktop\NetFluid\REPOSITORY\FluidCenter\obj\Release\FluidCenter.csprojResolveAssemblyReference.cache
 C:\Users\Matteo\Desktop\NetFluid\REPOSITORY\FluidCenter\obj\Release\FluidCenter.frmMain.resources
@@ -36,3 +34,4 @@ C:\Users\Matteo\Desktop\NetFluid\REPOSITORY\FluidCenter\obj\Release\FluidCenter.
 C:\Users\Matteo\Desktop\NetFluid\REPOSITORY\FluidCenter\obj\Release\FluidCenter.csproj.GenerateResource.Cache
 C:\Users\Matteo\Desktop\NetFluid\REPOSITORY\FluidCenter\obj\Release\FluidCenter.exe
 C:\Users\Matteo\Desktop\NetFluid\REPOSITORY\FluidCenter\obj\Release\FluidCenter.pdb
+C:\Users\Matteo\Desktop\NetFluid\REPOSITORY\FluidCenter\bin\Release\MongoDB.Driver.pdb

@@ -39,10 +39,6 @@
       <Private>True</Private>
       <HintPath>..\packages\DocumentFormat.OpenXml.2.5\lib\DocumentFormat.OpenXml.dll</HintPath>
     </Reference>
-    <Reference Include="MongoDB.Bson, Version=1.9.0.200, Culture=neutral, PublicKeyToken=f686731cfb9cc103, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\mongocsharpdriver.1.9.0\lib\net35\MongoDB.Bson.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration.Install" />
     <Reference Include="System.Core" />
@@ -75,6 +71,10 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\..\mongo-csharp-driver-master\src\MongoDB.Driver\MongoDB.Driver.csproj">
+      <Project>{ae5166cd-76b0-4911-bd80-ced9521f37a1}</Project>
+      <Name>MongoDB.Driver</Name>
+    </ProjectReference>
     <ProjectReference Include="..\FluidPlayer\FluidPlayer.csproj">
       <Project>{c17e4967-1758-4707-b35b-accfac426939}</Project>
       <Name>FluidPlayer</Name>

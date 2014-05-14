@@ -5,6 +5,8 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
 using MongoDB.Bson;
+using MongoDB.Bson.Serialization;
+using MongoDB.Bson.Serialization.IdGenerators;
 using MongoDB.Driver;
 using MongoDB.Driver.Builders;
 using MongoDB.Driver.Linq;
@@ -18,6 +20,11 @@ namespace NetFluid.Mongo
 
         public Repository(string connection,string db)
         {
+            BsonClassMap.RegisterClassMap<T>(cm =>
+            {
+                cm.AutoMap();
+                cm.SetIdMember(cm.GetMemberMap(x => x.Id).SetIdGenerator(StringObjectIdGenerator.Instance));
+            });
             var client = new MongoClient(connection);
             database = client.GetServer().GetDatabase(db);
         }
@@ -37,7 +44,7 @@ namespace NetFluid.Mongo
         {
             get
             {
-                return Collection.FindOne(Query.EQ("_id", ObjectId.Parse(id)));
+                return Collection.FindOne(Query.EQ("_id",id));
             }
         }
 
@@ -48,12 +55,12 @@ namespace NetFluid.Mongo
 
         public void Remove(string id)
         {
-            Collection.Remove(Query.EQ("_id", ObjectId.Parse(id)));
+            Collection.Remove(Query.EQ("_id", id));
         }
 
         public void Remove(T obj)
         {
-            Collection.Remove(Query.EQ("_id",obj._id));
+            Collection.Remove(Query.EQ("_id",obj.Id));
         }
 
         public IEnumerator<T> GetEnumerator()

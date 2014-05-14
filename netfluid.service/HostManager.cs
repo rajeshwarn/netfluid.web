@@ -33,7 +33,7 @@ namespace NetFluid.Service
             try
             {
                 if (host == null) return;
-                var key = host._id.ToString();
+                var key = host.Id.ToString();
                 Process process;
                 if (Processes.TryGetValue(key, out process))
                 {
@@ -61,7 +61,7 @@ namespace NetFluid.Service
             }
         }
 
-        public static bool IsUp(ObjectId id)
+        public static bool IsUp(string id)
         {
             Process p;
             return Processes.TryGetValue(id.ToString(), out p) && !p.HasExited;

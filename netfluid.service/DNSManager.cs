@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System.Net;
 using MongoDB.Bson;
 using NetFluid.DNS;
 using NetFluid.DNS.Records;
@@ -9,27 +8,27 @@ namespace NetFluid.Service
 {
     public class A: RecordA,MongoObject
     {
-        public ObjectId _id { get; set; }
+        public string Id { get; set; }
     }
 
     public class AAAA : RecordAAAA, MongoObject
     {
-        public ObjectId _id { get; set; }
+        public string Id { get; set; }
     }
 
     public class CNAME : RecordCNAME, MongoObject
     {
-        public ObjectId _id { get; set; }
+        public string Id { get; set; }
     }
 
     public class MX : RecordMX, MongoObject
     {
-        public ObjectId _id { get; set; }
+        public string Id { get; set; }
     }
 
     public class TXT : RecordTXT, MongoObject
     {
-        public ObjectId _id { get; set; }
+        public string Id { get; set; }
     }
 
     [Route("dns")]
@@ -52,6 +51,30 @@ namespace NetFluid.Service
             CNAME = new Repository<CNAME>("mongodb://localhost", "NetFluidService");
             MX = new Repository<MX>("mongodb://localhost", "NetFluidService");
             TXT = new Repository<TXT>("mongodb://localhost", "NetFluidService");
+
+            Dns.StartAcceptRequest(IPAddress.Any);
+            Dns.StartAcceptRequest(IPAddress.IPv6Any);
+
+            Dns.OnRequest += Dns_OnRequest;
+        }
+
+        static Response Dns_OnRequest(Request request)
+        {
+            foreach (var question in request)
+            {
+                switch (question.QType)
+                {
+                    case QType.A:
+
+                    break;
+                    case QType.AAAA:
+                    case QType.CNAME:
+                    case QType.MX:
+                    case QType.TXT:
+                    break;
+                }
+            }
+            return null;
         }
 
         [Route("update")]
