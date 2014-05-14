@@ -9,7 +9,7 @@ namespace NetFluid.Service
     [Route("/host")]
     public class HostManager:FluidPage
     {
-        private static readonly Repository<Host> Hosts;
+        public static Repository<Host> Hosts { get; private set; }
         private static readonly ConcurrentDictionary<string, Process> Processes;
 
         static HostManager()
@@ -32,7 +32,7 @@ namespace NetFluid.Service
             try
             {
                 if (host == null) return;
-                var key = host.Id.ToString();
+                var key = host.Id;
                 Process process;
                 if (Processes.TryGetValue(key, out process))
                 {
@@ -63,12 +63,7 @@ namespace NetFluid.Service
         public static bool IsUp(string id)
         {
             Process p;
-            return Processes.TryGetValue(id.ToString(), out p) && !p.HasExited;
-        }
-
-        public static IEnumerable<Host> Applications
-        {
-            get { return Hosts; }
+            return Processes.TryGetValue(id, out p) && !p.HasExited;
         }
 
         [ParametrizedRoute("delete")]
