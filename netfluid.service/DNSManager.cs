@@ -70,49 +70,14 @@ namespace NetFluid.Service
         [Route("add")]
         public IResponse Update(string type)
         {
-            Record record;
-            switch (type)
-            {
-                case "A":
-                    A.Save(Request.Values.ToObject<A>());
-                break;
-                case "AAAA":
-                    AAAA.Save(Request.Values.ToObject<AAAA>());
-                break;
-                case "CNAME":
-                    CNAME.Save(Request.Values.ToObject<CNAME>());
-                break;
-                case "MX":
-                    MX.Save(Request.Values.ToObject<MX>());
-                break;
-                case "TXT":
-                    TXT.Save(Request.Values.ToObject<TXT>());
-                break;
-            }
+            store.Save(Request.Values.ToObject(Record.Type(type)) as Record);
             return new RedirectResponse("/");
         }
 
         [ParametrizedRoute("delete")]
         public IResponse Delete(string type, string id)
         {
-            switch (type)
-            {
-                case "A":
-                    A.Remove(id);
-                    return new RedirectResponse("/#dns-a");
-                case "AAAA":
-                    AAAA.Remove(id);
-                    return new RedirectResponse("/#dns-aaaa");
-                case "CNAME":
-                    CNAME.Remove(id);
-                    return new RedirectResponse("/#dns-cname");
-                case "MX":
-                    MX.Remove(id);
-                    return new RedirectResponse("/#dns-mx");
-                case "TXT":
-                    TXT.Remove(id);
-                    return new RedirectResponse("/#dns-txt");
-            }
+            store.Remove(id);
             return new RedirectResponse("/");
         }
     }
