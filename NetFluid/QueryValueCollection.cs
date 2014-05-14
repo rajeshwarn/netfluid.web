@@ -91,6 +91,51 @@ namespace NetFluid
             return ToJSON();
         }
 
+        /// <summary>
+        /// Parse request values into specified object
+        /// </summary>
+        /// <param name="type"></param>
+        /// <returns></returns>
+        public object ToObject(Type type)
+        {
+            var obj = type.CreateIstance();
+
+            foreach (var field in type.GetFields())
+            {
+                foreach (var name in values.Keys.Where(name => String.Equals(name, field.Name, StringComparison.InvariantCultureIgnoreCase)))
+                {
+                    try
+                    {
+                        field.SetValue(obj, values[name].Parse(field.FieldType));
+                    }
+                    catch (Exception)
+                    {
+                    }
+                }
+            }
+
+            foreach (var field in type.GetProperties())
+            {
+                foreach (var name in values.Keys.Where(name => String.Equals(name, field.Name, StringComparison.InvariantCultureIgnoreCase)))
+                {
+                    try
+                    {
+                        field.SetValue(obj, values[name].Parse(field.PropertyType));
+                    }
+                    catch (Exception)
+                    {
+                    }
+                }
+            }
+
+            return obj;
+        }
+
+
+        /// <summary>
+        /// Parse request values into specified object
+        /// </summary>
+        /// <returns></returns>
         public T ToObject<T>()
         {
             var type = typeof (T);
