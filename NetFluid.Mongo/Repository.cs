@@ -13,7 +13,7 @@ using MongoDB.Driver.Linq;
 
 namespace NetFluid.Mongo
 {
-    public class Repository<T> : IQueryable<T> where T : MongoObject
+    public class Repository<T> : IQueryable<T> where T : IDatabaseObject
     {
         private readonly MongoDatabase database;
         private readonly PropertyInfo property;

@@ -1,56 +1,46 @@
-﻿using System.Net;
+﻿using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
+using System.Net;
 using NetFluid.DNS;
 using NetFluid.DNS.Records;
 using NetFluid.Mongo;
 
 namespace NetFluid.Service
 {
-    public class A: RecordA,IDatabaseObject
-    {
-        public string Id { get; set; }
-    }
-
-    public class AAAA : RecordAAAA, IDatabaseObject
-    {
-        public string Id { get; set; }
-    }
-
-    public class CNAME : RecordCNAME, IDatabaseObject
-    {
-        public string Id { get; set; }
-    }
-
-    public class MX : RecordMX, IDatabaseObject
-    {
-        public string Id { get; set; }
-    }
-
-    public class TXT : RecordTXT, IDatabaseObject
-    {
-        public string Id { get; set; }
-    }
-
     [Route("dns")]
     public class DNSManager:FluidPage
     {
-        public static Repository<A> A;
+        public static Repository<Record> store;
 
-        public static Repository<AAAA> AAAA;
+        public static IEnumerable<RecordA> A 
+        {
+            get { return store.OfType<RecordA>(); }
+        }
 
-        public static Repository<CNAME> CNAME;
+        public static IEnumerable<RecordAAAA> AAAA
+        {
+            get { return store.OfType<RecordAAAA>(); }
+        }
 
-        public static Repository<MX> MX;
+        public static IEnumerable<RecordCNAME> CNAME
+        {
+            get { return store.OfType<RecordCNAME>(); }
+        }
 
-        public static Repository<TXT> TXT;
+        public static IEnumerable<RecordMX> MX
+        {
+            get { return store.OfType<RecordMX>(); }
+        }
+
+        public static IEnumerable<RecordTXT> TXT
+        {
+            get { return store.OfType<RecordTXT>(); }
+        }
 
         static DNSManager()
         {
-            A = new Repository<A>("mongodb://localhost", "NetFluidService");
-            AAAA = new Repository<AAAA>("mongodb://localhost", "NetFluidService");
-            CNAME = new Repository<CNAME>("mongodb://localhost", "NetFluidService");
-            MX = new Repository<MX>("mongodb://localhost", "NetFluidService");
-            TXT = new Repository<TXT>("mongodb://localhost", "NetFluidService");
-
+            store = new Repository<Record>("mongodb://localhost", "NetFluidService");
             Dns.StartAcceptRequest(IPAddress.Any);
             Dns.StartAcceptRequest(IPAddress.IPv6Any);
 
@@ -80,6 +70,7 @@ namespace NetFluid.Service
         [Route("add")]
         public IResponse Update(string type)
         {
+            Record record;
             switch (type)
             {
                 case "A":
