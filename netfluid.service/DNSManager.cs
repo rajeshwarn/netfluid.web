@@ -5,27 +5,27 @@ using NetFluid.Mongo;
 
 namespace NetFluid.Service
 {
-    public class A: RecordA,MongoObject
+    public class A: RecordA,IDatabaseObject
     {
         public string Id { get; set; }
     }
 
-    public class AAAA : RecordAAAA, MongoObject
+    public class AAAA : RecordAAAA, IDatabaseObject
     {
         public string Id { get; set; }
     }
 
-    public class CNAME : RecordCNAME, MongoObject
+    public class CNAME : RecordCNAME, IDatabaseObject
     {
         public string Id { get; set; }
     }
 
-    public class MX : RecordMX, MongoObject
+    public class MX : RecordMX, IDatabaseObject
     {
         public string Id { get; set; }
     }
 
-    public class TXT : RecordTXT, MongoObject
+    public class TXT : RecordTXT, IDatabaseObject
     {
         public string Id { get; set; }
     }

@@ -5,7 +5,7 @@ using NetFluid.Mongo;
 namespace NetFluid.Service
 {
     [Serializable]
-    public class Host : MongoObject
+    public class Host : IDatabaseObject
     {
         public string Id { get; set; }
 
