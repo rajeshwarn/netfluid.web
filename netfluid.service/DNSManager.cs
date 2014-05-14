@@ -1,5 +1,4 @@
 ﻿using System.Net;
-using MongoDB.Bson;
 using NetFluid.DNS;
 using NetFluid.DNS.Records;
 using NetFluid.Mongo;

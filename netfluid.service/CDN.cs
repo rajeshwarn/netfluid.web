@@ -1,6 +1,5 @@
 ﻿
 using System;
-using MongoDB.Bson;
 using NetFluid.Mongo;
 
 namespace NetFluid.Service

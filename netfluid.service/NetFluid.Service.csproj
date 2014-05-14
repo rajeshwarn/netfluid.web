@@ -35,21 +35,11 @@
     <StartupObject />
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="DocumentFormat.OpenXml, Version=2.5.5631.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <Private>True</Private>
-      <HintPath>..\packages\DocumentFormat.OpenXml.2.5\lib\DocumentFormat.OpenXml.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration.Install" />
     <Reference Include="System.Core" />
     <Reference Include="System.IO.Compression" />
-    <Reference Include="System.IO.Compression.FileSystem" />
     <Reference Include="System.ServiceProcess" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AccessManager.cs" />
@@ -71,14 +61,6 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\mongo-csharp-driver-master\src\MongoDB.Driver\MongoDB.Driver.csproj">
-      <Project>{ae5166cd-76b0-4911-bd80-ced9521f37a1}</Project>
-      <Name>MongoDB.Driver</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\FluidPlayer\FluidPlayer.csproj">
-      <Project>{c17e4967-1758-4707-b35b-accfac426939}</Project>
-      <Name>FluidPlayer</Name>
-    </ProjectReference>
     <ProjectReference Include="..\NetFluid.Mongo\NetFluid.Mongo.csproj">
       <Project>{e18b5ed4-6375-442d-9e5c-f288fc959fe3}</Project>
       <Name>NetFluid.Mongo</Name>

@@ -2,7 +2,6 @@
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Diagnostics;
-using MongoDB.Bson;
 using NetFluid.Mongo;
 
 namespace NetFluid.Service
