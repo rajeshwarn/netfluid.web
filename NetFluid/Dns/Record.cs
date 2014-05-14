@@ -42,6 +42,17 @@ namespace NetFluid.DNS
         public uint TTL { get; set; }
 
         /// <summary>
+        /// Given record type name (ex: "AAAA") returns its .net type
+        /// </summary>
+        /// <param name="type"></param>
+        /// <returns></returns>
+        public static Type Type(string type)
+        {
+            RecordType t;
+            return Enum.TryParse(type, out t) ? Type(t) : typeof (RecordUnknown);
+        }
+
+        /// <summary>
         /// Return .net type of record from enum RecordType
         /// </summary>
         /// <param name="type"></param>
