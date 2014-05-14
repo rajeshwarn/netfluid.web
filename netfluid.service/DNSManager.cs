@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
+using System.Threading.Tasks;
 using NetFluid.DNS;
 using NetFluid.DNS.Records;
 using NetFluid.Mongo;
@@ -51,7 +52,6 @@ namespace NetFluid.Service
         static Response Dns_OnRequest(Request request)
         {
             var response = new Response();
-            Console.WriteLine(st.ToString());
 
             foreach (var question in request)
             {
@@ -60,7 +60,24 @@ namespace NetFluid.Service
                     //NOT IMPLEMENTED
                     continue;
                 }
-                response.Answers.AddRange(store.Where(x => x.RecordType == ((RecordType)question.QType) && x.Name==question.QName));
+                var name = question.QName;
+                var type = question.QType;
+                var found = store.Where(x => x.Name == name).ToArray().Where(x=>x.RecordType == (RecordType)type);
+
+                if (found.Any())
+                {
+                    response.Answers.AddRange(found);
+                }
+                else
+                {
+                    Task.Factory.StartNew(() =>
+                    {
+                        //We don't have the response, foward to google and add to database
+                        var fow = Dns.Query(question.QName, question.QType, question.QClass, IPAddress.Parse("8.8.8.8"));
+                        store.Save(fow);
+                        response.Answers.AddRange(fow);
+                    });
+                }
             }
             return response;
         }

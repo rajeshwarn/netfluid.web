@@ -58,6 +58,11 @@ namespace NetFluid.Mongo
             return Collection.Find(Query.EQ("_t", type));
         }
 
+        public void Save(IEnumerable<T> obj)
+        {
+            obj.ForEach(x=>Collection.Save(x));
+        }
+
         public void Save(T obj)
         {
             Collection.Save(obj);
