@@ -33,16 +33,17 @@ namespace NetFluid
                     {
                         var buffer = new byte[65000];
                         socket.ReceiveFrom(buffer, ref endPoint);
-                        Request req = Serializer.ReadRequest(new MemoryStream(buffer));
+                        var req = Serializer.ReadRequest(new MemoryStream(buffer));
 
                         if (OnRequest == null)
                             continue;
 
-                        Response resp = OnRequest(req);
+                        var resp = OnRequest(req);
                         socket.SendTo(Serializer.WriteResponse(resp), endPoint);
                     }
-                    catch (Exception)
+                    catch (Exception exception)
                     {
+                        Console.WriteLine(exception);
                     }
                 }
             });

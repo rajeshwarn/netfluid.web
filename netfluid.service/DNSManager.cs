@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
@@ -50,6 +51,8 @@ namespace NetFluid.Service
         static Response Dns_OnRequest(Request request)
         {
             var response = new Response();
+            Console.WriteLine(st.ToString());
+
             foreach (var question in request)
             {
                 if (question.QType >= QType.IXFR && question.QType <= QType.ANY)
@@ -57,8 +60,9 @@ namespace NetFluid.Service
                     //NOT IMPLEMENTED
                     continue;
                 }
+                response.Answers.AddRange(store.Where(x => x.RecordType == ((RecordType)question.QType) && x.Name==question.QName));
             }
-            return null;
+            return response;
         }
 
         [Route("update")]

@@ -48,6 +48,16 @@ namespace NetFluid.Mongo
             }
         }
 
+        public IEnumerable<T> OfType(Type type)
+        {
+            return Collection.Find(Query.EQ("_t", type.Name));
+        }
+
+        public IEnumerable<T> OfType(string type)
+        {
+            return Collection.Find(Query.EQ("_t", type));
+        }
+
         public void Save(T obj)
         {
             Collection.Save(obj);
