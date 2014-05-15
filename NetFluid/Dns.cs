@@ -36,40 +36,40 @@ namespace NetFluid
             {
                 while (true)
                 {
-                    Console.WriteLine("CYCLE");
+                    //Console.WriteLine("CYCLE");
                     try
                     {
                         var buffer = c.Receive(ref endPoint);
 
-                        Console.WriteLine("RECIEVED");
+                        //Console.WriteLine("RECIEVED");
 
                         var req = Serializer.ReadRequest(new MemoryStream(buffer));
 
-                        Console.WriteLine("PARSED");
+                        //Console.WriteLine("PARSED");
 
                         if (OnRequest == null)
                             continue;
 
                         var resp = OnRequest(req);
 
-                        Console.WriteLine("EXECUTED");
+                        //Console.WriteLine("EXECUTED");
 
                         var r = Serializer.WriteResponse(resp);
 
-                        Console.WriteLine("SERIALIZED");
+                        //Console.WriteLine("SERIALIZED");
 
                         c.Send(r, r.Length, endPoint);
 
-                        Console.WriteLine("SENT");
+                        //Console.WriteLine("SENT");
                     }
                     catch (Exception exception)
                     {
                         c.Close();
-                        Console.WriteLine("EXCEPTION");
+                        //Console.WriteLine("EXCEPTION");
 
                         endPoint = new IPEndPoint(ip, 53);
                         c = new UdpClient(endPoint);
-                        Console.WriteLine("REASSIGNED");
+                        //Console.WriteLine("REASSIGNED");
                     }
                 }
             });
@@ -140,17 +140,18 @@ namespace NetFluid
 
                 try
                 {
-                    var c = new UdpClient();
+                    var c = new UdpClient {Client = {ReceiveTimeout = 500, SendTimeout = 500}};
+
                     var r = request.Write;
                     c.Send(r, r.Length, endPoint);
-                    var data = c.Receive(ref endPoint);
-                    var resp = Serializer.ReadResponse(data);
+
+                    var resp = Serializer.ReadResponse(c.Receive(ref endPoint));
                     if (resp.Answers.Count > 0)
                         return resp.Records;
                 }
-                catch (SocketException exception)
+                catch (SocketException)
                 {
-                    Console.WriteLine(exception);
+                    ////Console.WriteLine(exception);
                 }
             }
             return new Record[0];
