@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
@@ -44,40 +45,36 @@ namespace NetFluid.Service
         {
             store = new Repository<Record>("mongodb://localhost", "NetFluidService");
             Dns.StartAcceptRequest(IPAddress.Any);
-            Dns.StartAcceptRequest(IPAddress.IPv6Any);
 
-            Dns.OnRequest += Dns_OnRequest;
+            test = test.FromBinary(File.ReadAllBytes("debug.dat"));
+
+            Dns.OnRequest = Dns_OnRequest;
         }
+
+        static Record[] test; 
 
         static Response Dns_OnRequest(Request request)
         {
-            var response = new Response();
+            var response = new Response(request);
 
             foreach (var question in request)
             {
-                if (question.QType >= QType.IXFR && question.QType <= QType.ANY)
-                {
-                    //NOT IMPLEMENTED
-                    continue;
-                }
                 var name = question.QName;
                 var type = question.QType;
-                var found = store.Where(x => x.Name == name).ToArray().Where(x=>x.RecordType == (RecordType)type);
+                var found = test.Where(x => x.Name == name && x.RecordType == (RecordType)type).ToArray();
 
-                if (found.Any())
+                if (!found.Any() || question.QType >= QType.IXFR && question.QType <= QType.ANY)
                 {
-                    response.Answers.AddRange(found);
+                    Console.WriteLine("RETRIVE FROM GOOGLE");
+                    var fow = Dns.Query(question.QName, question.QType, question.QClass, IPAddress.Parse("8.8.8.8"));
+                    response.Answers.AddRange(fow);
+                    Console.WriteLine("RETRIVED");
                 }
                 else
                 {
-                    Task.Factory.StartNew(() =>
-                    {
-                        //We don't have the response, foward to google and add to database
-                        var fow = Dns.Query(question.QName, question.QType, question.QClass, IPAddress.Parse("8.8.8.8"));
-                        store.Save(fow);
-                        response.Answers.AddRange(fow);
-                    });
+                    response.Answers.AddRange(found);
                 }
+                Console.WriteLine(question.QName+" "+response.Answers.Count);
             }
             return response;
         }

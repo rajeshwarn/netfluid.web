@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Sockets;
+using System.Text;
 using System.Threading.Tasks;
 using NetFluid.DNS;
 using NetFluid.DNS.Records;
@@ -20,7 +21,7 @@ namespace NetFluid
         /// <summary>
         /// Executed when Local DNS Server recieve a request
         /// </summary>
-        public static event Func<Request, Response> OnRequest;
+        public static Func<Request, Response> OnRequest;
 
         /// <summary>
         /// Start local DNS Server
@@ -28,29 +29,47 @@ namespace NetFluid
         /// <param name="ip"></param>
         public static void StartAcceptRequest(IPAddress ip)
         {
-            EndPoint endPoint = new IPEndPoint(ip, 53);
-            var socket = new Socket(endPoint.AddressFamily, SocketType.Dgram, ProtocolType.Udp);
-            socket.Bind(endPoint);
+            var endPoint = new IPEndPoint(ip, 53);
+            var c = new UdpClient(endPoint);
 
             Task.Factory.StartNew(() =>
             {
                 while (true)
                 {
+                    Console.WriteLine("CYCLE");
                     try
                     {
-                        var buffer = new byte[65000];
-                        socket.ReceiveFrom(buffer, ref endPoint);
+                        var buffer = c.Receive(ref endPoint);
+
+                        Console.WriteLine("RECIEVED");
+
                         var req = Serializer.ReadRequest(new MemoryStream(buffer));
+
+                        Console.WriteLine("PARSED");
 
                         if (OnRequest == null)
                             continue;
 
                         var resp = OnRequest(req);
-                        socket.SendTo(Serializer.WriteResponse(resp), endPoint);
+
+                        Console.WriteLine("EXECUTED");
+
+                        var r = Serializer.WriteResponse(resp);
+
+                        Console.WriteLine("SERIALIZED");
+
+                        c.Send(r, r.Length, endPoint);
+
+                        Console.WriteLine("SENT");
                     }
                     catch (Exception exception)
                     {
-                        Console.WriteLine(exception);
+                        c.Close();
+                        Console.WriteLine("EXCEPTION");
+
+                        endPoint = new IPEndPoint(ip, 53);
+                        c = new UdpClient(endPoint);
+                        Console.WriteLine("REASSIGNED");
                     }
                 }
             });
@@ -63,6 +82,17 @@ namespace NetFluid
         public static void StartAcceptRequest(string ip)
         {
             StartAcceptRequest(IPAddress.Parse(ip));
+        }
+
+        /// <summary>
+        /// Ask a DNS question to the specified server
+        /// </summary>
+        /// <param name="question">Question</param>
+        /// <param name="server">Server</param>
+        /// <returns></returns>
+        public static Record[] Query(Question question, string server)
+        {
+            return Query(question.QName, question.QType, question.QClass, new[] { IPAddress.Parse(server) });
         }
 
         /// <summary>
@@ -103,34 +133,24 @@ namespace NetFluid
             var question = new Question(name, qtype, qclass);
             var request = new Request {question};
 
-            // RFC1035 max. size of a UDP datagram is 512 bytes
-            var responseMessage = new byte[512];
 
             foreach (var ip in servers)
             {
-                var socket = new Socket(AddressFamily.InterNetwork, SocketType.Dgram, ProtocolType.Udp);
-                socket.ReceiveTimeout = 200;
-                socket.SendTimeout = 200;
-
-                EndPoint endPoint = new IPEndPoint(ip, 53);
+                var endPoint = new IPEndPoint(ip, 53);
 
                 try
                 {
-                    socket.SendTo(request.Write, endPoint);
-                    int intReceived = socket.Receive(responseMessage);
-                    var data = new byte[intReceived];
-                    Array.Copy(responseMessage, data, intReceived);
-
+                    var c = new UdpClient();
+                    var r = request.Write;
+                    c.Send(r, r.Length, endPoint);
+                    var data = c.Receive(ref endPoint);
                     var resp = Serializer.ReadResponse(data);
                     if (resp.Answers.Count > 0)
                         return resp.Records;
                 }
-                catch (SocketException)
+                catch (SocketException exception)
                 {
-                }
-                finally
-                {
-                    socket.Close();
+                    Console.WriteLine(exception);
                 }
             }
             return new Record[0];

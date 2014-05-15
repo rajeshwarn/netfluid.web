@@ -2,4 +2,3 @@ C:\Users\Matteo\Desktop\NetFluid\REPOSITORY\netfluid\bin\net_4_5_Release\NetFlui
 C:\Users\Matteo\Desktop\NetFluid\REPOSITORY\netfluid\bin\net_4_5_Release\NetFluid.pdb
 C:\Users\Matteo\Desktop\NetFluid\REPOSITORY\netfluid\obj\net_4_5_Release\NetFluid.dll
 C:\Users\Matteo\Desktop\NetFluid\REPOSITORY\netfluid\obj\net_4_5_Release\NetFluid.pdb
-C:\Users\Matteo\Desktop\NetFluid\REPOSITORY\netfluid\obj\net_4_5_Release\NetFluid4.csprojResolveAssemblyReference.cache

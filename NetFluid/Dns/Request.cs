@@ -6,11 +6,11 @@ namespace NetFluid.DNS.Records
         [Serializable]
     public class Request : List<Question>
     {
-        public Header header;
+        public Header Header;
 
         public Request()
         {
-            header = new Header {OPCODE = OPCode.Query, QDCOUNT = 0, ID = (ushort) DateTime.Now.Millisecond};
+            Header = new Header {OPCODE = OPCode.Query, QDCOUNT = 0, ID = (ushort) DateTime.Now.Millisecond};
         }
 
         public byte[] Write
@@ -18,8 +18,8 @@ namespace NetFluid.DNS.Records
             get
             {
                 var data = new List<byte>();
-                header.QDCOUNT = (ushort) Count;
-                data.AddRange(header.Data);
+                Header.QDCOUNT = (ushort) Count;
+                data.AddRange(Header.Data);
 
                 foreach (Question q in this)
                     data.AddRange(q.Data);

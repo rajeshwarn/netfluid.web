@@ -46,6 +46,22 @@ namespace NetFluid.DNS
             Header = new Header();
         }
 
+
+        /// <summary>
+        /// With same header of request
+        /// </summary>
+        /// <param name="request"></param>
+        public Response(Request request)
+        {
+            Header = request.Header;
+            Questions = new List<Question>(request);
+            Answers = new List<Record>();
+            Authorities = new List<Record>();
+            Additionals = new List<Record>();
+
+            MessageSize = 0;
+        }
+
         /// <summary>
         ///     List of RecordMX in Response.Answers
         /// </summary>
@@ -81,7 +97,7 @@ namespace NetFluid.DNS
         /// <summary>
         ///     List of RecordPTR in Response.Answers
         /// </summary>
-        public RecordPTR[] RecordsPTR
+        public RecordPTR[] PTR
         {
             get { return Answers.OfType<RecordPTR>().ToArray(); }
         }
@@ -89,7 +105,7 @@ namespace NetFluid.DNS
         /// <summary>
         ///     List of RecordCNAME in Response.Answers
         /// </summary>
-        public RecordCNAME[] RecordsCNAME
+        public RecordCNAME[] CNAME
         {
             get { return Answers.OfType<RecordCNAME>().ToArray(); }
         }
@@ -97,7 +113,7 @@ namespace NetFluid.DNS
         /// <summary>
         ///     List of RecordAAAA in Response.Answers
         /// </summary>
-        public RecordAAAA[] RecordsAAAA
+        public RecordAAAA[] AAAA
         {
             get { return Answers.OfType<RecordAAAA>().ToArray(); }
         }
@@ -105,7 +121,7 @@ namespace NetFluid.DNS
         /// <summary>
         ///     List of RecordNS in Response.Answers
         /// </summary>
-        public RecordNS[] RecordsNS
+        public RecordNS[] NS
         {
             get { return Answers.OfType<RecordNS>().ToArray(); }
         }
@@ -113,12 +129,12 @@ namespace NetFluid.DNS
         /// <summary>
         ///     List of RecordSOA in Response.Answers
         /// </summary>
-        public RecordSOA[] RecordsSOA
+        public RecordSOA[] SOA
         {
             get { return Answers.OfType<RecordSOA>().ToArray(); }
         }
 
-        public Record[] RecordsRR
+        public Record[] RR
         {
             get { return Answers.Concat(Authorities.Concat(Additionals)).ToArray(); }
         }

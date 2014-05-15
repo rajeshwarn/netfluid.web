@@ -92,11 +92,11 @@ namespace NetFluid.DNS
                     int pointer;
                     if (BitConverter.IsLittleEndian)
                     {
-                        pointer = (ushort) (((currentByte - 192) << 8) | resultData[currentPosition++]);
+                        pointer = (ushort)(((currentByte - 192) << 8) | resultData[currentPosition++]);
                     }
                     else
                     {
-                        pointer = (ushort) ((currentByte - 192) | (resultData[currentPosition++] << 8));
+                        pointer = (ushort)((currentByte - 192) | (resultData[currentPosition++] << 8));
                     }
 
                     ParseDomainName(resultData, ref pointer, sb);
@@ -118,7 +118,7 @@ namespace NetFluid.DNS
                         currentByte = resultData[currentPosition++];
                         if (length < 8)
                         {
-                            currentByte &= (byte) (0xff >> (8 - length));
+                            currentByte &= (byte)(0xff >> (8 - length));
                         }
 
                         sb.Append(currentByte.ToString("x2"));
@@ -146,7 +146,7 @@ namespace NetFluid.DNS
         private static string ReadDomainName(MemoryStream stream)
         {
             var sb = new StringBuilder();
-            var pos = (int) stream.Position;
+            var pos = (int)stream.Position;
 
             ParseDomainName(stream.ToArray(), ref pos, sb);
             stream.Position = pos;
@@ -173,9 +173,9 @@ namespace NetFluid.DNS
 
         public static Request ReadRequest(MemoryStream stream)
         {
-            var req = new Request {header = ReadHeader(stream)};
+            var req = new Request {Header = ReadHeader(stream)};
 
-            for (int i = 0; i < req.header.QDCOUNT; i++)
+            for (int i = 0; i < req.Header.QDCOUNT; i++)
             {
                 req.Add(ReadQuestion(stream));
             }
@@ -339,6 +339,46 @@ namespace NetFluid.DNS
 
         private static void WriteDomainName(Stream ms, string name)
         {
+            /*var arr = name.Split(new[] {'.'}, StringSplitOptions.RemoveEmptyEntries);
+
+            foreach (var e in arr)
+            {
+                var buffer = Encoding.ASCII.GetBytes(e);
+                ms.WriteByte((byte)e.Length);
+                ms.Write(buffer,0,buffer.Length);
+            }
+            ms.WriteByte(0);
+            return;*/
+
+            /*var src = name;
+
+            if (!src.EndsWith("."))
+                src += ".";
+
+            if (src == ".")
+            {
+                ms.WriteByte(0);
+                return;
+            }
+
+            var sb = new StringBuilder();
+            int intI, intJ, intLen = src.Length;
+            sb.Append('\0');
+            for (intI = 0, intJ = 0; intI < intLen; intI++, intJ++)
+            {
+                sb.Append(src[intI]);
+
+                if (src[intI] != '.')
+                    continue;
+
+                sb[intI - intJ] = (char)(intJ & 0xff);
+                intJ = -1;
+            }
+            sb[sb.Length - 1] = '\0';
+
+            var b = Encoding.ASCII.GetBytes(sb.ToString());
+            ms.Write(b,0,b.Length);*/
+
             while (true)
             {
                 if (String.IsNullOrEmpty(name) || (name == "."))
@@ -414,7 +454,7 @@ namespace NetFluid.DNS
                     WriteByteArray(ms, (byte[]) value);
                 else if (fieldType == typeof (string))
                 {
-                    if (fieldType.HasAttribute<DomainNameAttribute>(false))
+                    if (field.HasAttribute<DomainNameAttribute>())
                         WriteDomainName(ms, (string) value);
                     else
                         WriteText(ms, (string) value);
@@ -433,6 +473,7 @@ namespace NetFluid.DNS
 
             WriteHeader(ms, response.Header);
 
+            response.Questions.ForEach(x => WriteQuestion(ms, x));
             response.Answers.ForEach(x => WriteRecord(ms, x));
             response.Authorities.ForEach(x => WriteRecord(ms, x));
             response.Additionals.ForEach(x => WriteRecord(ms, x));

@@ -61,17 +61,8 @@ namespace NetFluid.DNS.Records
             this.QType = QType;
             this.QClass = QClass;
         }
-
-        public string QName
-        {
-            get { return m_QName; }
-            set
-            {
-                m_QName = value;
-                if (!m_QName.EndsWith("."))
-                    m_QName += ".";
-            }
-        }
+        
+        public string QName;
 
         public byte[] Data
         {
