@@ -45,13 +45,8 @@ namespace NetFluid.Service
         {
             store = new Repository<Record>("mongodb://localhost", "NetFluidService");
             Dns.StartAcceptRequest(IPAddress.Any);
-
-            test = test.FromBinary(File.ReadAllBytes("debug.dat"));
-
             Dns.OnRequest = Dns_OnRequest;
         }
-
-        static Record[] test; 
 
         static Response Dns_OnRequest(Request request)
         {
@@ -60,15 +55,13 @@ namespace NetFluid.Service
             foreach (var question in request)
             {
                 var name = question.QName;
-                var type = question.QType;
-                var found = test.Where(x => x.Name == name && x.RecordType == (RecordType)type).ToArray();
+                var found = store.OfType("Record"+question.QType).Where(x => x.Name == name).ToArray();
 
                 if (!found.Any() || question.QType >= QType.IXFR && question.QType <= QType.ANY)
                 {
-                    Console.WriteLine("RETRIVE FROM GOOGLE");
-                    var fow = Dns.Query(question.QName, question.QType, question.QClass, IPAddress.Parse("8.8.8.8"));
+                    var fow = Dns.Query(question,IPAddress.Parse("8.8.8.8"));
                     response.Answers.AddRange(fow);
-                    Console.WriteLine("RETRIVED");
+                    store.Save(fow);
                 }
                 else
                 {

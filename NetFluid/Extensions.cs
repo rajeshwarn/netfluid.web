@@ -215,6 +215,16 @@ namespace NetFluid
         }
 
         /// <summary>
+        /// True if this IP address belong to this machine
+        /// </summary>
+        /// <param name="ipAddress"></param>
+        /// <returns></returns>
+        public static bool IsLocal(this IPAddress ipAddress)
+        {
+            return IPAddress.IsLoopback(ipAddress);
+        }
+
+        /// <summary>
         ///     Returns a value indicating whether a ip address is a multicast address
         /// </summary>
         /// <param name="ipAddress"> Instance of the IPAddress, that should be used </param>

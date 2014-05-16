@@ -87,7 +87,7 @@ namespace NetFluid
         {
             get
             {
-                IEnumerable<NetworkInterface> adapters =
+                var adapters =
                     NetworkInterface.GetAllNetworkInterfaces().Where(x => x.OperationalStatus == OperationalStatus.Up);
                 return adapters.SelectMany(x => x.GetIPProperties().DnsAddresses).ToArray();
             }

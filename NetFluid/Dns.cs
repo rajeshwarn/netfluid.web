@@ -18,6 +18,8 @@ namespace NetFluid
     /// </summary>
     public static class Dns
     {
+        public static bool AcceptingRequest { get; private set; }
+
         /// <summary>
         /// Executed when Local DNS Server recieve a request
         /// </summary>
@@ -34,6 +36,7 @@ namespace NetFluid
 
             Task.Factory.StartNew(() =>
             {
+                AcceptingRequest = true;
                 while (true)
                 {
                     //Console.WriteLine("CYCLE");
@@ -85,6 +88,18 @@ namespace NetFluid
         }
 
         /// <summary>
+        /// Ask a DNS question to system DNS server
+        /// </summary>
+        /// <param name="question">Question</param>
+        /// <param name="server">Server</param>
+        /// <returns></returns>
+        public static Record[] Query(Question question)
+        {
+            return Query(question.QName, question.QType, question.QClass, AcceptingRequest ? Network.Dns.Where(x=>!x.IsLocal()) : Network.Dns);
+        }
+
+
+        /// <summary>
         /// Ask a DNS question to the specified server
         /// </summary>
         /// <param name="question">Question</param>
@@ -125,7 +140,7 @@ namespace NetFluid
         /// <summary>
         /// Ask a DNS question to a specific server
         /// </summary>
-        public static Record[] Query(string name, QType qtype, QClass qclass = QClass.IN, IPAddress[] servers = null)
+        public static Record[] Query(string name, QType qtype, QClass qclass = QClass.IN, IEnumerable<IPAddress> servers = null)
         {
             if (servers == null)
                 servers = Network.Dns;

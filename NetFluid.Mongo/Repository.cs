@@ -24,6 +24,10 @@ namespace NetFluid.Mongo
             {
                 cm.AutoMap();
                 cm.SetIdMember(cm.GetMemberMap(x => x.Id).SetIdGenerator(StringObjectIdGenerator.Instance));
+                typeof(T).Assembly.GetTypes().Where(x=>x.Inherit(typeof(T))).ForEach(derived =>
+                {
+                    cm.AddKnownType(derived);
+                });
             });
             var client = new MongoClient(connection);
             database = client.GetServer().GetDatabase(db);

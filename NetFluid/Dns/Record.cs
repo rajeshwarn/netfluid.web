@@ -44,13 +44,10 @@ namespace NetFluid.DNS
         /// <summary>
         /// Return the type of this record as RecordType enum
         /// </summary>
-        public RecordType RecordType
+        public RecordType GetRecordType()
         {
-            get
-            {
-                var r = (RecordType)Enum.Parse(typeof (RecordType), this.GetType().Name.Substring("Record".Length));
-                return r;
-            }
+            var r = (RecordType)Enum.Parse(typeof(RecordType), this.GetType().Name.Substring("Record".Length));
+            return r;
         }
 
 
