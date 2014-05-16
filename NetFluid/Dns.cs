@@ -39,40 +39,26 @@ namespace NetFluid
                 AcceptingRequest = true;
                 while (true)
                 {
-                    //Console.WriteLine("CYCLE");
                     try
                     {
                         var buffer = c.Receive(ref endPoint);
 
-                        //Console.WriteLine("RECIEVED");
-
                         var req = Serializer.ReadRequest(new MemoryStream(buffer));
-
-                        //Console.WriteLine("PARSED");
 
                         if (OnRequest == null)
                             continue;
 
                         var resp = OnRequest(req);
 
-                        //Console.WriteLine("EXECUTED");
-
                         var r = Serializer.WriteResponse(resp);
-
-                        //Console.WriteLine("SERIALIZED");
-
                         c.Send(r, r.Length, endPoint);
 
-                        //Console.WriteLine("SENT");
                     }
-                    catch (Exception exception)
+                    catch (Exception)
                     {
                         c.Close();
-                        //Console.WriteLine("EXCEPTION");
-
                         endPoint = new IPEndPoint(ip, 53);
                         c = new UdpClient(endPoint);
-                        //Console.WriteLine("REASSIGNED");
                     }
                 }
             });
