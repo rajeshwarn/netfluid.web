@@ -25,7 +25,44 @@ namespace NetFluid
         /// </summary>
         public static event Func<Request, Response> OnRequest;
 
+        /// <summary>
+        /// Start local DNS Server with automatic answers for given domain 
+        /// </summary>
+        /// <param name="domain"></param>
+        public static void WrapDomain(string domain)
+        {
+            OnRequest += (req) =>
+            {
+                var r = new Response(req);
+                req.ForEach(q =>
+                {
+                    if (q.QName.EndsWith(domain))
+                        switch (q.QType)
+                        {
+                            case QType.A:
+                                    foreach (var ip in Engine.Interfaces.Select(x => x.Endpoint.Address).Where(x => x.AddressFamily == AddressFamily.InterNetworkV6))
+                                        r.Answers.Add(new RecordA { Name = q.QName, Address = ip, TimeLived = 0, TTL = 3600 });
+                            break;
+                            case QType.AAAA:
+                                    foreach (var ip in Engine.Interfaces.Select(x => x.Endpoint.Address).Where(x => x.AddressFamily == AddressFamily.InterNetworkV6))
+                                        r.Answers.Add(new RecordA { Name = q.QName, Address = ip, TimeLived = 0, TTL = 3600 });
+                            break;
+                            case QType.CNAME:
+                                r.Answers.Add(new RecordCNAME { Name = domain, Alias = q.QName, TimeLived = 0, TTL = 3600 });
+                            break;
+                            case QType.MX:
+                                r.Answers.Add(new RecordMX{Exchange = domain});
+                            break;
+                        }
+                });
+                return r;
+            };
+            StartAcceptRequest(IPAddress.Any);
+        }
 
+        /// <summary>
+        /// Start local DNS Server giving A and AAAA records for loaded application
+        /// </summary>
         public static void AutoWrap()
         {
             OnRequest += (req) =>
