@@ -29,5 +29,6 @@ namespace NetFluid.Cloud
         void AddFowarding(string host, string remote);
         void RemoveFowarding(string host);
         bool Handle(Context context);
+        void Foward(Context context, string remote);
     }
 }

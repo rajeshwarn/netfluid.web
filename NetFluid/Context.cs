@@ -180,6 +180,15 @@ namespace NetFluid
         }
 
         /// <summary>
+        /// Foward this context to other host and port (<ip/host>:port) default port:80
+        /// </summary>
+        /// <param name="remote"></param>
+        public void FowardTo(string remote)
+        {
+            Engine.Cluster.Foward(this,remote);
+        }
+
+        /// <summary>
         ///     Current session identification Guid
         /// </summary>
         public string SessionId

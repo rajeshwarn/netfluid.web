@@ -105,6 +105,21 @@ namespace NetFluid.Cloud
             return false;
         }
 
+        public void Foward(Context context, string remote)
+        {
+            int port = 80;
+
+            if (remote.Contains(':'))
+            {
+                if (!int.TryParse(remote.Substring(remote.LastIndexOf(':') + 1), out port))
+                    port = 80;
+
+                remote = remote.Substring(0, remote.LastIndexOf(':'));
+            }
+
+            Add(new State(context, new IPEndPoint(IPAddress.Parse(remote),port)));
+        }
+
         private static void Remove(State state)
         {
             States.TryTake(out state);
