@@ -33,23 +33,22 @@ namespace NetFluid
                 var r = new Response(req);
                 req.ForEach(q =>
                 {
-                    if (Engine.Hostnames.Contains(q.QName))
+                    switch (q.QType)
                     {
-                        foreach (var ip in Engine.Interfaces.Select(x=>x.Endpoint.Address))
-                        {
-                            Record record=null;
-                            switch (q.QType)
+                        case QType.A:
+                            if (Engine.Hostnames.Contains(q.QName))
+                                foreach (var ip in Engine.Interfaces.Select(x=>x.Endpoint.Address).Where(x=>x.AddressFamily == AddressFamily.InterNetworkV6))
+                                {
+                                    r.Answers.Add(new RecordA { Name = q.QName, Address = ip, TimeLived = 0, TTL = 3600 });
+                                }
+                        break;
+                        case QType.AAAA:
+                        if (Engine.Hostnames.Contains(q.QName))
+                            foreach (var ip in Engine.Interfaces.Select(x => x.Endpoint.Address).Where(x => x.AddressFamily == AddressFamily.InterNetworkV6))
                             {
-                                case QType.A:
-                                    record = new RecordA {Name = q.QName, Address = ip, TimeLived = 0, TTL = 3600};
-                                break;
-                                case QType.AAAA:
-                                    record = new RecordAAAA { Name = q.QName, Address = ip, TimeLived = 0, TTL = 3600 };
-                                break;
+                                r.Answers.Add(new RecordA { Name = q.QName, Address = ip, TimeLived = 0, TTL = 3600 });
                             }
-                            if(record!=null)
-                                r.Answers.Add(record);
-                        }
+                        break;
                     }
                 });
                 return r;
