@@ -102,12 +102,12 @@ namespace NetFluid
             if (AcceptingRequest)
                 return;
 
+            AcceptingRequest = true;
             var endPoint = new IPEndPoint(ip, 53);
             var c = new UdpClient(endPoint);
 
             Task.Factory.StartNew(() =>
             {
-                AcceptingRequest = true;
                 while (AcceptingRequest)
                 {
                     try

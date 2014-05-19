@@ -23,226 +23,142 @@
 
 
 using System;
-using System.Collections.Concurrent;
+using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Net;
+using System.Net.Security;
 using System.Net.Sockets;
+using System.Threading.Tasks;
 
 namespace NetFluid.Cloud
 {
     internal class ClusterManager : IClusterManager
     {
-        private static readonly ConcurrentBag<State> States;
-        private static readonly ConcurrentDictionary<string, IPEndPoint> Targets;
-
-        static ClusterManager()
+        static IPEndPoint RemoteToEndPoint(string remote)
         {
-            States = new ConcurrentBag<State>();
-            Targets = new ConcurrentDictionary<string, IPEndPoint>();
+            if (!remote.Contains("://"))
+                remote = "http://" + remote;
+
+            Uri uri;
+            if (Uri.TryCreate(remote,UriKind.Absolute,out uri))
+            {
+                if (uri.HostNameType == UriHostNameType.IPv4 || uri.HostNameType == UriHostNameType.IPv6)
+                    return new IPEndPoint(IPAddress.Parse(uri.Host),uri.Port);
+
+                if (uri.HostNameType == UriHostNameType.Dns)
+                {
+                    var addr = System.Net.Dns.GetHostAddresses(uri.Host)
+                               .Where(x => x.AddressFamily == AddressFamily.InterNetwork)
+                               .ToArray();
+
+                    if (addr.Length == 0)
+                    {
+                        Engine.Logger.Log(LogLevel.Error,"Failed to set tcp fowarding to " + remote + ", host not found");
+                        return null;
+                    }
+                    return new IPEndPoint(addr[0],uri.Port);
+                }
+            }
+            Engine.Logger.Log(LogLevel.Error,"Failed to set tcp fowarding to "+remote+", bad remote format");
+            return null;
+        }
+
+        static void Open(Context context,string remote, out Task f, out Task s)
+        {
+            var destination = new TcpClient { ReceiveTimeout = 1000, SendTimeout = 1000 };
+            destination.Connect(RemoteToEndPoint(remote));
+            Stream to = destination.GetStream();
+
+            if (context.Secure)
+            {
+                var ssl = new SslStream(to);
+                ssl.AuthenticateAsClient(remote);
+                to = ssl;
+            }
+
+            to.Write(context.Buffer, 0, context.Buffer.Length);
+
+            #region DESTINATION TO CLIENT
+            f = Task.Factory.StartNew(() =>
+            {
+                try
+                {
+                    while (true)
+                    {
+                        to.CopyTo(context.OutputStream);
+                    }
+                }
+                catch (Exception)
+                {
+                    context.Close();
+                }
+            });
+            #endregion
+
+            #region CLIENT TO DESTINATION
+            s = Task.Factory.StartNew(() =>
+            {
+                try
+                {
+                    while (true)
+                    {
+                        context.InputStream.CopyTo(to);
+                    }
+                }
+                catch (Exception)
+                {
+                    context.Close();
+                }
+            });
+            #endregion
+        }
+
+        private readonly Dictionary<string, string> remotes;
+
+        public ClusterManager()
+        {
+            remotes = new Dictionary<string, string>();
         }
 
         public void AddFowarding(string host, string remote)
         {
-            IPAddress ip;
-            int port = 80;
-
-            if (remote.Contains(':'))
-            {
-                if (!int.TryParse(remote.Substring(remote.LastIndexOf(':') + 1), out port))
-                    port = 80;
-
-                remote = remote.Substring(0, remote.LastIndexOf(':'));
-            }
-
-            if (!IPAddress.TryParse(remote, out ip))
-            {
-                try
-                {
-                    var addr = System.Net.Dns.GetHostAddresses(remote)
-                        .Where(x => x.AddressFamily == AddressFamily.InterNetwork)
-                        .ToArray();
-
-                    if (addr.Length == 0)
-                        throw new Exception("Host " + remote + " not found");
-
-                    ip = addr[0];
-                }
-                catch (Exception)
-                {
-                    Engine.Logger.Log(LogLevel.Error,"Add fowarding, unknow host "+remote);
-                    return;
-                }
-            }
-
-            Targets.TryAdd(host, new IPEndPoint(ip, port));
+            remotes.Add(host,remote);
         }
 
         public void RemoveFowarding(string host)
         {
-            IPEndPoint ip;
-            Targets.TryRemove(host, out ip);
+            remotes.Remove(host);
         }
 
         public bool Handle(Context context)
         {
+            string remote;
+
+            if (!remotes.TryGetValue(context.Request.Host, out remote)) return false;
+
             try
             {
-                IPEndPoint fow;
-                Targets.TryGetValue(context.Request.Host, out fow);
-
-                if (fow == null)
-                {
-                    return false;
-                }
-
-                Add(new State(context, fow));
-                return true;
+                Task f, s;
+                Open(context, remote, out f, out s);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                Engine.Logger.Log(LogLevel.Error, "Failed to foward host " + context.Request.Host, ex);
+                return false;
             }
-            return false;
+            return true;
         }
 
         public void Foward(Context context, string remote)
         {
-            int port = 80;
-
-            if (remote.Contains(':'))
+            try
             {
-                if (!int.TryParse(remote.Substring(remote.LastIndexOf(':') + 1), out port))
-                    port = 80;
-
-                remote = remote.Substring(0, remote.LastIndexOf(':'));
+                Task f, s;
+                Open(context,remote,out f,out s);
+                Task.WaitAll(f, s);
             }
-
-            Add(new State(context, new IPEndPoint(IPAddress.Parse(remote),port)));
-        }
-
-        private static void Remove(State state)
-        {
-            States.TryTake(out state);
-        }
-
-        private static void Add(State state)
-        {
-            States.Add(state);
-        }
-
-        private class State : IDisposable
-        {
-            public State(Context source, IPEndPoint fow)
+            catch (Exception)
             {
-                Source = source;
-
-                Destination = new TcpClient {ReceiveTimeout = 100, SendTimeout = 100};
-                Destination.Connect(fow);
-                DestinationStream = Destination.GetStream();
-
-                InBuffer = new byte[256];
-                OutBuffer = new byte[256];
-
-                DestinationStream.BeginWrite(source.Buffer, 0, source.Buffer.Length, Inbound, null);
-                Outbound(null);
-            }
-
-            private Context Source { get; set; }
-            private TcpClient Destination { get; set; }
-            private NetworkStream DestinationStream { get; set; }
-            private byte[] InBuffer { get; set; }
-            private byte[] OutBuffer { get; set; }
-
-            public void Dispose()
-            {
-                TryClose();
-            }
-
-            private void TryClose()
-            {
-                try
-                {
-                    Source.Close();
-                }
-                catch (Exception)
-                {
-                }
-
-                try
-                {
-                    Destination.Close();
-                }
-                catch (Exception)
-                {
-                }
-
-                Source = null;
-                Destination = null;
-                DestinationStream = null;
-                InBuffer = null;
-                OutBuffer = null;
-
-                Remove(this);
-            }
-
-            private void Inbound(IAsyncResult result)
-            {
-                try
-                {
-                    if (!Source.Socket.Connected || !Destination.Connected)
-                        return;
-
-                    Source.InputStream.BeginRead(InBuffer, 0, InBuffer.Length, x =>
-                    {
-                        try
-                        {
-                            int k = Source.InputStream.EndRead(x);
-
-                            if (k == 0)
-                                return;
-
-                            DestinationStream.BeginWrite(InBuffer, 0, k, Inbound, null);
-                        }
-                        catch (Exception)
-                        {
-                            TryClose();
-                        }
-                    }, null);
-                }
-                catch (Exception)
-                {
-                    TryClose();
-                }
-            }
-
-            private void Outbound(IAsyncResult result)
-            {
-                try
-                {
-                    if (!Destination.Connected || !Source.Socket.Connected)
-                        return;
-
-                    DestinationStream.BeginRead(OutBuffer, 0, OutBuffer.Length, x =>
-                    {
-                        try
-                        {
-                            int k = DestinationStream.EndRead(x);
-
-                            if (k == 0)
-                                return;
-
-                            Source.OutputStream.BeginWrite(OutBuffer, 0, k, Outbound, null);
-                        }
-                        catch (Exception)
-                        {
-                            TryClose();
-                        }
-                    }, null);
-                }
-                catch (Exception)
-                {
-                    TryClose();
-                }
             }
         }
     }

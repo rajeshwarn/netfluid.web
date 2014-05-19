@@ -533,8 +533,7 @@ namespace NetFluid
 
                 try
                 {
-                    fs = new FileStream(Path.GetFullPath(Path.Combine(Path.GetTempPath(), Security.UID())),
-                        FileMode.OpenOrCreate);
+                    fs = new FileStream(Path.GetFullPath(Path.Combine(Path.GetTempPath(), Security.UID())),FileMode.OpenOrCreate);
                     fs.Write(t, position, readBytes - position);
                 }
                 catch (Exception)
