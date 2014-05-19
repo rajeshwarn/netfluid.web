@@ -23,7 +23,39 @@ namespace NetFluid
         /// <summary>
         /// Executed when Local DNS Server recieve a request
         /// </summary>
-        public static Func<Request, Response> OnRequest;
+        public static event Func<Request, Response> OnRequest;
+
+
+        public static void AutoWrap()
+        {
+            OnRequest += (req) =>
+            {
+                var r = new Response(req);
+                req.ForEach(q =>
+                {
+                    if (Engine.Hostnames.Contains(q.QName))
+                    {
+                        foreach (var ip in Engine.Interfaces.Select(x=>x.Endpoint.Address))
+                        {
+                            Record record=null;
+                            switch (q.QType)
+                            {
+                                case QType.A:
+                                    record = new RecordA {Name = q.QName, Address = ip, TimeLived = 0, TTL = 3600};
+                                break;
+                                case QType.AAAA:
+                                    record = new RecordAAAA { Name = q.QName, Address = ip, TimeLived = 0, TTL = 3600 };
+                                break;
+                            }
+                            if(record!=null)
+                                r.Answers.Add(record);
+                        }
+                    }
+                });
+                return r;
+            };
+            StartAcceptRequest(IPAddress.Any);
+        }
 
         /// <summary>
         /// Start local DNS Server
@@ -31,13 +63,16 @@ namespace NetFluid
         /// <param name="ip"></param>
         public static void StartAcceptRequest(IPAddress ip)
         {
+            if (AcceptingRequest)
+                return;
+
             var endPoint = new IPEndPoint(ip, 53);
             var c = new UdpClient(endPoint);
 
             Task.Factory.StartNew(() =>
             {
                 AcceptingRequest = true;
-                while (true)
+                while (AcceptingRequest)
                 {
                     try
                     {
@@ -62,6 +97,14 @@ namespace NetFluid
                     }
                 }
             });
+        }
+
+        /// <summary>
+        /// Start local DNS server
+        /// </summary>
+        public static void StopAcceptiongRequest()
+        {
+            AcceptingRequest = false;
         }
 
         /// <summary>

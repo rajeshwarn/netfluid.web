@@ -87,12 +87,6 @@ namespace NetFluid
             return this;
         }
 
-        public RouteSetter SetRoute(string url, string methodFullname)
-        {
-            Engine.SetRoute(url, methodFullname);
-            return this;
-        }
-
         public RouteSetter SetRoute(string url, Type type, string method)
         {
             Engine.SetRoute(url, type, method);
@@ -150,12 +144,6 @@ namespace NetFluid
         public RouteSetter SetController(string host, Func<Context, bool> condition, Action<Context> act)
         {
             Engine.SetController(condition, act);
-            return this;
-        }
-
-        public RouteSetter SetRoute(string host, string url, string methodFullname)
-        {
-            Engine.SetRoute(url, methodFullname);
             return this;
         }
 

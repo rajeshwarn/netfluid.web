@@ -6,6 +6,7 @@ using NetFluid.Mongo;
 
 namespace NetFluid.Service
 {
+    [VirtualHost("wwww")]
     [Route("/host")]
     public class HostManager:FluidPage
     {

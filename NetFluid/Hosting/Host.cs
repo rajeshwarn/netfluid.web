@@ -701,26 +701,6 @@ namespace NetFluid
             _controllers = _controllers.Push(controller);
         }
 
-        public void SetRoute(string url, string methodFullname, string friendlyname = null)
-        {
-            if (url == null)
-                throw new NullReferenceException("Null url");
-
-            if (methodFullname == null)
-                throw new NullReferenceException("Null method");
-
-            Type t = GetType(methodFullname.Substring(0, methodFullname.LastIndexOf('.')));
-            if (t == null)
-                throw new TypeLoadException(methodFullname.Substring(0, methodFullname.LastIndexOf('.')) + " not found");
-
-            if (!t.Implements(typeof (IMethodExposer)))
-                throw new TypeLoadException("Routed types must implement NetFluid.IMethodExposer interface");
-
-            _instances.Add(t.CreateIstance() as IMethodExposer);
-
-            SetRoute(url, t, methodFullname.Substring(methodFullname.LastIndexOf('.') + 1), friendlyname);
-        }
-
         public void SetRoute(string url, Type type, string method, string friendlyname = null)
         {
             if (url == null)
@@ -737,7 +717,15 @@ namespace NetFluid
 
             var rt = new RouteTarget {Type = type, Method = type.GetMethod(method), Name = friendlyname};
 
-            _instances.Add(type.CreateIstance() as IMethodExposer);
+            try
+            {
+                _instances.Add(type.CreateIstance() as IMethodExposer);
+            }
+            catch (Exception ex)
+            {
+                Engine.Logger.Log(LogLevel.Exception,"Failed to instance "+type,ex);
+            }
+
 
             if (routes.ContainsKey(url))
                 routes[url] = rt;
@@ -762,7 +750,14 @@ namespace NetFluid
 
             var rt = new RouteTarget {Type = type, Method = method, Name = name};
 
-            _instances.Add(type.CreateIstance() as IMethodExposer);
+            try
+            {
+                _instances.Add(type.CreateIstance() as IMethodExposer);
+            }
+            catch (Exception ex)
+            {
+                Engine.Logger.Log(LogLevel.Exception, "Failed to instance " + type, ex);
+            }
 
             if (routes.ContainsKey(url))
                 routes[url] = rt;
@@ -806,7 +801,15 @@ namespace NetFluid
 
             var rt = new ParamRouteTarget {Type = type, Method = type.GetMethod(method), Url = url, Name = friendlyname};
 
-            _instances.Add(type.CreateIstance() as IMethodExposer);
+            try
+            {
+                _instances.Add(type.CreateIstance() as IMethodExposer);
+            }
+            catch (Exception ex)
+            {
+                Engine.Logger.Log(LogLevel.Exception, "Failed to instance " + type, ex);
+            }
+
 
             parametrized = parametrized.Concat(new[] {rt}).OrderByDescending(x => x.Url.Length).ToArray();
         }
@@ -827,7 +830,15 @@ namespace NetFluid
 
             var rt = new ParamRouteTarget {Type = type, Method = method, Url = url, Name = friendlyname};
 
-            _instances.Add(type.CreateIstance() as IMethodExposer);
+            try
+            {
+                _instances.Add(type.CreateIstance() as IMethodExposer);
+            }
+            catch (Exception ex)
+            {
+                Engine.Logger.Log(LogLevel.Exception, "Failed to instance " + type, ex);
+            }
+
 
             parametrized = parametrized.Concat(new[] {rt}).OrderByDescending(x => x.Url.Length).ToArray();
         }
@@ -847,7 +858,15 @@ namespace NetFluid
             if (!t.Inherit(typeof (IMethodExposer)))
                 throw new TypeLoadException("Routed types must inherit NetFluid.IMethodExposer");
 
-            _instances.Add(t.CreateIstance() as IMethodExposer);
+            try
+            {
+                _instances.Add(t.CreateIstance() as IMethodExposer);
+            }
+            catch (Exception ex)
+            {
+                Engine.Logger.Log(LogLevel.Exception, "Failed to instance " + t, ex);
+            }
+
 
             SetRegexRoute(rgx, t, methodFullname.Substring(methodFullname.LastIndexOf('.') + 1), friendlyname);
         }
@@ -866,7 +885,7 @@ namespace NetFluid
             if (!type.Implements(typeof (IMethodExposer)))
                 throw new TypeLoadException("Routed types must inherit NetFluid.IMethodExposer");
 
-            MethodInfo m = type.GetMethod(method);
+            var m = type.GetMethod(method);
             if (m == null)
                 throw new TypeLoadException(type.FullName + "." + method + " not found");
 
@@ -878,7 +897,15 @@ namespace NetFluid
                 Name = friendlyname
             };
 
-            _instances.Add(type.CreateIstance() as IMethodExposer);
+            try
+            {
+                _instances.Add(type.CreateIstance() as IMethodExposer);
+            }
+            catch (Exception ex)
+            {
+                Engine.Logger.Log(LogLevel.Exception, "Failed to instance " + type, ex);
+            }
+
 
             regex = regex.Concat(new[] {rt}).ToArray();
         }
@@ -905,7 +932,15 @@ namespace NetFluid
                 Name = friendlyname
             };
 
-            _instances.Add(type.CreateIstance() as IMethodExposer);
+            try
+            {
+                _instances.Add(type.CreateIstance() as IMethodExposer);
+            }
+            catch (Exception ex)
+            {
+                Engine.Logger.Log(LogLevel.Exception, "Failed to instance " + type, ex);
+            }
+
 
             regex = regex.Concat(new[] {rt}).ToArray();
         }

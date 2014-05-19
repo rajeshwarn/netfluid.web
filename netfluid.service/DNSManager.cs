@@ -41,8 +41,10 @@ namespace NetFluid.Service
         static DNSManager()
         {
             store = new Repository<Record>("mongodb://localhost", "NetFluidService");
+
+            Dns.AutoWrap();
             Dns.StartAcceptRequest(IPAddress.Any);
-            Dns.OnRequest = Dns_OnRequest;
+            Dns.OnRequest += Dns_OnRequest;
         }
 
         static Response Dns_OnRequest(Request request)

@@ -328,7 +328,7 @@ namespace NetFluid
             try
             {
                 var types = assembly.GetTypes();
-                var pages = types.Where(type => type.Implements(typeof (IMethodExposer)));
+                var pages = types.Where(type => type.Implements(typeof (IMethodExposer))).ToArray();
 
                 if (!pages.Any())
                 {
@@ -336,7 +336,7 @@ namespace NetFluid
                     return;
                 }
 
-                foreach (Type p in pages)
+                foreach (var p in pages)
                 {
                     if (p.HasAttribute<VirtualHost>(true))
                     {
@@ -421,12 +421,6 @@ namespace NetFluid
             return new RouteSetter();
         }
 
-        public static RouteSetter SetRoute(string url, string methodFullname)
-        {
-            DefaultHost.SetRoute(url, methodFullname);
-            return new RouteSetter();
-        }
-
         public static RouteSetter SetRoute(string url, Type type, string method)
         {
             DefaultHost.SetRoute(url, type, method);
@@ -500,12 +494,6 @@ namespace NetFluid
         public static RouteSetter SetController(string host, Func<Context, bool> condition, Action<Context> act,string name="")
         {
             ResolveHost(host).SetController(condition, act,name);
-            return new RouteSetter();
-        }
-
-        public static RouteSetter SetRoute(string host, string url, string methodFullname)
-        {
-            ResolveHost(host).SetRoute(url, methodFullname);
             return new RouteSetter();
         }
 
