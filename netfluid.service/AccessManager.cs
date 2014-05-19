@@ -12,7 +12,8 @@ namespace NetFluid.Service
         {
             Engine.SetController(Context =>
             {
-                if (!Context.IsLocal) return new FluidTemplate("./UI/index.html");
+                //if (!Context.IsLocal) return new FluidTemplate("./UI/index.html");
+                Context.FowardTo(Context.Request.Host);
                 return null;
             });
         }

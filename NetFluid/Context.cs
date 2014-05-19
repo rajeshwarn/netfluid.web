@@ -733,7 +733,6 @@ namespace NetFluid
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.ToString());
             }
         }
 
