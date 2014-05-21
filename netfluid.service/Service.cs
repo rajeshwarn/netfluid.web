@@ -17,6 +17,7 @@ namespace NetFluid.Service
         {
             if (args!=null && args.Length>=1 && args[0]=="debug")
             {
+                Engine.DevMode = true;
                (new Service()).OnStart(null);
                Engine.DevMode = true;
                 Console.ReadLine();
@@ -43,8 +44,7 @@ namespace NetFluid.Service
                 Engine.Start();
                 ExternalHostManager.Start();
                 PluggedHostManager.Start();
-
-                Engine.DevMode = true;
+                DNSManager.Start();
             }
             catch (Exception ex)
             {
