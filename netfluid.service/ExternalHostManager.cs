@@ -1,33 +1,32 @@
 ﻿using System;
 using System.Collections.Concurrent;
-using System.Collections.Generic;
 using System.Diagnostics;
 using NetFluid.Mongo;
 
 namespace NetFluid.Service
 {
-    [Route("/host")]
-    public class HostManager:FluidPage
+    [Route("/host-ext")]
+    public class ExternalHostManager:FluidPage
     {
-        public static Repository<Host> Hosts { get; private set; }
+        public static Repository<ExternalHost> ExternalHosts { get; private set; }
         private static readonly ConcurrentDictionary<string, Process> Processes;
 
-        static HostManager()
+        static ExternalHostManager()
         {
-            Hosts = new Repository<Host>("mongodb://localhost", "NetFluidService");
+            ExternalHosts = new Repository<ExternalHost>("mongodb://localhost", "NetFluidService");
             Processes = new ConcurrentDictionary<string, Process>();
         }
 
         public static void Start()
         {
-            Hosts.ForEach(host =>
+            ExternalHosts.ForEach(host =>
             {
                 host.Hosts.ForEach(x => Engine.Cluster.AddFowarding(x, host.EndPoint));
                 host.Start();
             });
         }
 
-        static void Stop(Host host)
+        static void Stop(ExternalHost host)
         {
             try
             {
@@ -54,7 +53,7 @@ namespace NetFluid.Service
 
         public static void Stop()
         {
-            foreach (var p in Hosts)
+            foreach (var p in ExternalHosts)
             {
                 Stop(p);
             }
@@ -69,7 +68,7 @@ namespace NetFluid.Service
         [ParametrizedRoute("delete")]
         public IResponse Delete(string id)
         {
-            Hosts.Remove(Hosts[id]);
+            ExternalHosts.Remove(ExternalHosts[id]);
             return new RedirectResponse("/");
         }
 
@@ -77,15 +76,15 @@ namespace NetFluid.Service
         [Route("add")]
         public IResponse Update()
         {
-            var h = Request.Values.ToObject<Host>();
-            Hosts.Save(h);
+            var h = Request.Values.ToObject<ExternalHost>();
+            ExternalHosts.Save(h);
             return new RedirectResponse("/");
         }
 
         [ParametrizedRoute("/start")]
         public IResponse Start(string id)
         {
-            var host = Hosts[id];
+            var host = ExternalHosts[id];
 
             if (host == null)
                 return null;
@@ -110,7 +109,7 @@ namespace NetFluid.Service
         [ParametrizedRoute("/stop")]
         public IResponse Stop(string id)
         {
-            Stop(Hosts[id]);
+            Stop(ExternalHosts[id]);
 
             return new RedirectResponse("/");
         }
@@ -118,7 +117,7 @@ namespace NetFluid.Service
         [ParametrizedRoute("/restart")]
         public IResponse ReStart(string id)
         {
-            var host = Hosts[id];
+            var host = ExternalHosts[id];
             
             Stop(host);
 

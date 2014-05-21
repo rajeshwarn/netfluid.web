@@ -8,7 +8,7 @@ namespace NetFluid.Service
     public class CDN : IDatabaseObject
     {
         public string Id { get; set; }
-        public string Host;
+        public string ExternalHost;
         public string Path;
     }
 }

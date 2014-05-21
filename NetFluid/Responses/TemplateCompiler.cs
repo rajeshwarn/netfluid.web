@@ -25,6 +25,7 @@ using System;
 using System.CodeDom.Compiler;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -216,7 +217,10 @@ namespace NetFluid.Responses
                     }
                     else if (row.StartsWith("include:"))
                     {
-                        builder.Append(row.Substring("include:".Length)+"_______Include");
+                        var inc = row.Substring("include:".Length);
+                        inc = "(Context," + inc.Substring(1);
+                        inc = "_______Include" + inc;
+                        builder.Append(inc);
                     }
                     else if (row.StartsWith("parameters:"))
                     {
@@ -318,7 +322,12 @@ namespace NetFluid.Responses
             //FORCE SYSTEM.CORE REFERENCE
             if (csc_parameters.ReferencedAssemblies.Cast<string>().All(ass => Path.GetFileName(ass) != "System.Core.dll"))
             {
-                csc_parameters.ReferencedAssemblies.Add(typeof(System.Linq.Enumerable).Assembly.Location);
+                csc_parameters.ReferencedAssemblies.Add(typeof(Enumerable).Assembly.Location);
+            }
+
+            foreach (var refAss in AppDomain.CurrentDomain.GetAssemblies().Where(refAss => !refAss.IsDynamic))
+            {
+                csc_parameters.ReferencedAssemblies.Add(refAss.Location);
             }
 
             csc_parameters.GenerateInMemory = true;
@@ -331,17 +340,19 @@ namespace NetFluid.Responses
 
             var results = csc.CompileAssemblyFromSource(csc_parameters, code);
 
-            if (results.Errors.HasErrors)
-            {
-                if (Engine.DevMode)
-                    return CompilationError(results.Errors, filename);
+            if (!results.Errors.HasErrors)
+                return results.CompiledAssembly.GetTypes()[0].GetMethod("Run", BindingFlags.Static | BindingFlags.Public);
 
-                foreach (CompilerError err in results.Errors)
-                {
-                    Engine.Logger.Log(LogLevel.Error,"Compilation error "+err.ErrorNumber+" "+err.ErrorText+" on line "+err.Line+" of file "+err.FileName);
-                }
-                FluidTemplate.OnError(results.Errors);
+            if (Engine.DevMode)
+                return CompilationError(results.Errors, filename);
+
+            foreach (CompilerError err in results.Errors)
+            {
+                Engine.Logger.Log(LogLevel.Error,"Compilation error "+err.ErrorNumber+" "+err.ErrorText+" on line "+err.Line+" of file "+err.FileName);
             }
+
+
+            FluidTemplate.OnError(results.Errors);
 
             return results.CompiledAssembly.GetTypes()[0].GetMethod("Run", BindingFlags.Static | BindingFlags.Public);
         }

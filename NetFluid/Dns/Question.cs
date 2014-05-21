@@ -53,7 +53,6 @@ namespace NetFluid.DNS.Records
     {
         public QClass QClass;
         public QType QType;
-        private string m_QName;
 
         public Question(string QName, QType QType, QClass QClass)
         {

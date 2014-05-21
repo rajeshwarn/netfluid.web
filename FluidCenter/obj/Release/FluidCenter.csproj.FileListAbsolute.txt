@@ -36,3 +36,6 @@ C:\Users\Matteo\Desktop\NetFluid\REPOSITORY\FluidCenter\obj\Release\FluidCenter.
 C:\Users\Matteo\Desktop\NetFluid\REPOSITORY\FluidCenter\obj\Release\FluidCenter.csproj.GenerateResource.Cache
 C:\Users\Matteo\Desktop\NetFluid\REPOSITORY\FluidCenter\obj\Release\FluidCenter.exe
 C:\Users\Matteo\Desktop\NetFluid\REPOSITORY\FluidCenter\obj\Release\FluidCenter.pdb
+C:\Users\Matteo\Desktop\NetFluid\REPOSITORY\FluidCenter\bin\Release\UI\Box\external-host.html
+C:\Users\Matteo\Desktop\NetFluid\REPOSITORY\FluidCenter\bin\Release\UI\Box\cdn.html
+C:\Users\Matteo\Desktop\NetFluid\REPOSITORY\FluidCenter\bin\Release\UI\Box\dns.html

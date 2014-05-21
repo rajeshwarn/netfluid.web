@@ -1,0 +1,44 @@
+﻿using System.Reflection;
+using NetFluid.Mongo;
+
+namespace NetFluid.Service
+{
+    [Route("/host-int")]
+    public class PluggedHostManager:FluidPage
+    {
+        public static Repository<PluggedHost> Hosts { get; private set; }
+
+        static PluggedHostManager()
+        {
+            Hosts = new Repository<PluggedHost>("mongodb://localhost", "NetFluidService");
+            Hosts.ForEach(host =>
+            {
+                var ass = Assembly.LoadFile(host.Application);
+                host.Hosts.ForEach(x => Engine.LoadHost(x, ass));
+            });
+        }
+
+        [ParametrizedRoute("delete")]
+        public IResponse Delete(string id)
+        {
+            Hosts.Remove(id);
+            return new RedirectResponse("/");
+        }
+
+        [Route("update")]
+        [Route("add")]
+        public IResponse Update()
+        {
+            var h = Request.Values.ToObject<PluggedHost>();
+
+            if (h.Id==null)
+            {
+                var ass = Assembly.LoadFile(h.Application);
+                h.Hosts.ForEach(x=>Engine.LoadHost(x,ass));
+            }
+
+            Hosts.Save(h);
+            return new RedirectResponse("/");
+        }
+    }
+}

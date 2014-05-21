@@ -41,7 +41,7 @@ namespace NetFluid.Service
                 }
 
                 Engine.Start();
-                HostManager.Start();
+                ExternalHostManager.Start();
                 Engine.DevMode = true;
             }
             catch (Exception ex)
@@ -55,7 +55,7 @@ namespace NetFluid.Service
         protected override void OnStop()
         {
             Engine.Logger.Log(LogLevel.Warning,"NetFluid Service is stopping");
-            HostManager.Stop();
+            ExternalHostManager.Stop();
         }
     }
 }

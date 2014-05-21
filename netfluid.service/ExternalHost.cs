@@ -4,7 +4,7 @@ using System.Diagnostics;
 namespace NetFluid.Service
 {
     [Serializable]
-    public class Host : IDatabaseObject
+    public class ExternalHost : IDatabaseObject
     {
         public string Id { get; set; }
 
@@ -42,7 +42,7 @@ namespace NetFluid.Service
                 process.Exited += (x, y) =>
                 {
                     if (!Enabled) return;
-                    Engine.Logger.Log(LogLevel.Error, "Host " + Name + " unexpected termination, restarting");
+                    Engine.Logger.Log(LogLevel.Error, "ExternalHost " + Name + " unexpected termination, restarting");
                     Start();
                 };
                 return process;
