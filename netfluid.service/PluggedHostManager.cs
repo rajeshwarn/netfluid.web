@@ -13,6 +13,10 @@ namespace NetFluid.Service
         public static void Start()
         {
             Hosts = new Repository<PluggedHost>("mongodb://localhost", "NetFluidService");
+
+            if (!Directory.Exists("./Internal-App"))
+                Directory.CreateDirectory("./Internal-App");
+
             Hosts.ForEach(host =>
             {
                 var ass = AppDomain.CurrentDomain.LoadAssembly(host.Application);

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Concurrent;
 using System.Diagnostics;
+using System.IO;
 using NetFluid.Mongo;
 
 namespace NetFluid.Service
@@ -9,16 +10,16 @@ namespace NetFluid.Service
     public class ExternalHostManager:FluidPage
     {
         public static Repository<ExternalHost> ExternalHosts { get; private set; }
-        private static readonly ConcurrentDictionary<string, Process> Processes;
-
-        static ExternalHostManager()
-        {
-            ExternalHosts = new Repository<ExternalHost>("mongodb://localhost", "NetFluidService");
-            Processes = new ConcurrentDictionary<string, Process>();
-        }
+        private static ConcurrentDictionary<string, Process> Processes;
 
         public static void Start()
         {
+            ExternalHosts = new Repository<ExternalHost>("mongodb://localhost", "NetFluidService");
+            Processes = new ConcurrentDictionary<string, Process>();
+
+            if (!Directory.Exists("./External-App"))
+                Directory.CreateDirectory("./External-App");
+
             ExternalHosts.ForEach(host =>
             {
                 host.Hosts.ForEach(x => Engine.Cluster.AddFowarding(x, host.EndPoint));

@@ -73,8 +73,15 @@ namespace NetFluid
 
         public void SendResponse(Context cnt)
         {
-            param[0] = cnt;
-            template.Invoke(null, param);
+            try
+            {
+                param[0] = cnt;
+                template.Invoke(null, param);
+            }
+            catch (Exception)
+            {
+            }
+
         }
 
         #endregion

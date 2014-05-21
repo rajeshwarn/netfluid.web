@@ -20,12 +20,12 @@
             <div class="modal-body">
                 <form method="POST" action="/cdn/add">
                     <div class="form-group">
-                        <label for="addCDNExternalHost">ExternalHost</label>
-                        <input type="text" name="host" class="form-control" id="addCDNExternalHost" placeholder="example.netfuid.org">
+                        <label for="addCDNHost">Host</label>
+                        <input type="text" name="host" class="form-control" id="addCDNHost" placeholder="example.netfuid.org">
                     </div>
                     <div class="form-group">
                         <label for="addCDNPath">Path</label>
-                        <input type="text" name="path" class="form-control" id="addCDNPath" placeholder="/www/cdn">
+                        <input type="text" name="path" class="form-control" id="addCDNPath" value="./CDN/">
                     </div>
                     <input type="submit" class="btn btn-primary" value="Add" />
                 </form>
@@ -45,13 +45,13 @@
 % else
 <table class="table">
     <tr>
-        <th>ExternalHost</th>
+        <th>Host</th>
         <th>Path</th>
         <th>#</th>
     </tr>
     % foreach(var cdn in CDNManager.CDN)
     <tr>
-        <td>{% cdn.ExternalHost %}</td>
+        <td>{% cdn.Host %}</td>
         <td>{% cdn.Path %}</td>
         <td>
             <button class="btn btn-primary" data-toggle="modal" data-target="#ModalUpdateCDN{% cdn.Id %}">
@@ -68,8 +68,8 @@
                             <form method="POST" action="/cdn/add">
                                 <input type="hidden" name="id" value="{% cdn.Id %}" />
                                 <div class="form-group">
-                                    <label for="addCDNExternalHost{% cdn.Id %}">ExternalHost</label>
-                                    <input type="text" class="form-control" name="host" id="addCDNExternalHost{% cdn.Id %}" value="{% cdn.ExternalHost %}">
+                                    <label for="addCDNHost{% cdn.Id %}">Host</label>
+                                    <input type="text" class="form-control" name="host" id="addCDNHost{% cdn.Id %}" value="{% cdn.Host %}">
                                 </div>
                                 <div class="form-group">
                                     <label for="addCDNPath{% cdn.Id %}">Path</label>
@@ -79,12 +79,12 @@
                                     <div class="panel panel-default">
                                         <div class="panel-heading">
                                             <h4 class="panel-title">
-                                                <a data-toggle="collapse" data-parent="#accordion" href="#collapseDeleteExternalHost{% cdn.Id %}">
+                                                <a data-toggle="collapse" data-parent="#accordion" href="#collapseDeleteHost{% cdn.Id %}">
                                                     Delete this CDN
                                                 </a>
                                             </h4>
                                         </div>
-                                        <div id="collapseDeleteExternalHost{% cdn.Id %}" class="panel-collapse collapse">
+                                        <div id="collapseDeleteHost{% cdn.Id %}" class="panel-collapse collapse">
                                             <div class="panel-body">
                                                 Are  you sure ? <a class="btn btn-danger" href="/cdn/delete/{% cdn.Id %}">delete</a>
                                             </div>
