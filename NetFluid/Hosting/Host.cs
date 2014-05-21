@@ -156,6 +156,7 @@ namespace NetFluid
                     return;
 
                 resp.SendResponse(c);
+                c.Close();
                 return;
             }
 
