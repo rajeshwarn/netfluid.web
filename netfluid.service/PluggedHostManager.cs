@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.Reflection;
 using NetFluid.Mongo;
 
@@ -14,7 +15,7 @@ namespace NetFluid.Service
             Hosts = new Repository<PluggedHost>("mongodb://localhost", "NetFluidService");
             Hosts.ForEach(host =>
             {
-                var ass = Assembly.LoadFile(Path.GetFullPath(host.Application));
+                var ass = AppDomain.CurrentDomain.LoadAssembly(host.Application);
                 host.Hosts.ForEach(x => Engine.LoadHost(x, ass));
             });
         }
@@ -34,7 +35,7 @@ namespace NetFluid.Service
 
             if (h.Id==null)
             {
-                var ass = Assembly.LoadFile(Path.GetFullPath(h.Application));
+                var ass = AppDomain.CurrentDomain.LoadAssembly(h.Application);
                 h.Hosts.ForEach(x=>Engine.LoadHost(x,ass));
             }
 

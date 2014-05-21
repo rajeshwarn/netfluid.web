@@ -20,7 +20,7 @@ namespace NetFluid.Service
             var h = Request.Values.ToObject<CDN>();
             CDN.Save(h);
 
-            Engine.AddPublicFolder(h.ExternalHost,"/",h.Path);
+            Engine.AddPublicFolder(h.Host,"/",h.Path);
 
             return new RedirectResponse("/");
         }

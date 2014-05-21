@@ -39,6 +39,33 @@ namespace NetFluid
 {
     public static class Extensions
     {
+        #region APPDOMAIN
+
+        /// <summary>
+        /// Prevent exception if already loaded
+        /// </summary>
+        /// <param name="doamin">domain on wich load</param>
+        /// <param name="file">file to load</param>
+        /// <returns></returns>
+        public static Assembly LoadAssembly(this AppDomain domain, string file)
+        {
+            var assemblies = domain.GetAssemblies();
+            var path = Path.GetFullPath(file);
+            var found = assemblies.Where(x=>!x.IsDynamic).FirstOrDefault(x => x.Location == path);
+
+            if (found == null)
+            {
+                //windows service turn around...
+                File.SetAttributes(path, FileAttributes.Normal);
+
+                found = domain.Load(File.ReadAllBytes(path));
+            }
+
+            return found;
+        }
+
+        #endregion
+
         #region WINDOWS IDENTITY
         public static bool IsAdministrator(this WindowsIdentity user)
         {
