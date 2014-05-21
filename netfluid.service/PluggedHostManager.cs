@@ -9,7 +9,7 @@ namespace NetFluid.Service
     {
         public static Repository<PluggedHost> Hosts { get; private set; }
 
-        static PluggedHostManager()
+        public static void Start()
         {
             Hosts = new Repository<PluggedHost>("mongodb://localhost", "NetFluidService");
             Hosts.ForEach(host =>

@@ -38,7 +38,7 @@ namespace NetFluid.Service
             get { return store.OfType<RecordTXT>(); }
         }
 
-        static DNSManager()
+        public static void Start()
         {
             store = new Repository<Record>("mongodb://localhost", "NetFluidService");
 

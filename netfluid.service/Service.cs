@@ -42,6 +42,8 @@ namespace NetFluid.Service
 
                 Engine.Start();
                 ExternalHostManager.Start();
+                PluggedHostManager.Start();
+
                 Engine.DevMode = true;
             }
             catch (Exception ex)
