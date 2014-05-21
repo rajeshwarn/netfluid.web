@@ -66,7 +66,6 @@ namespace NetFluid.Service
                 {
                     response.Answers.AddRange(found);
                 }
-                Console.WriteLine(question.QName+" "+response.Answers.Count);
             }
             return response;
         }
