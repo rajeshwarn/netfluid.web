@@ -34,6 +34,9 @@ using NetFluid.HTTP;
 
 namespace NetFluid
 {
+    /// <summary>
+    /// Virtual host manager
+    /// </summary>
     public class Host
     {
         class Folder
@@ -88,6 +91,9 @@ namespace NetFluid
             _eTagCache = MemoryCache.Default;
         }
 
+        /// <summary>
+        /// file-downaloadable folders in thsi virtual host
+        /// </summary>
         public PublicFolder[] PublicFolders
         {
             get 
@@ -100,6 +106,9 @@ namespace NetFluid
             }
         }
 
+        /// <summary>
+        /// Routes mapped inside this virtual host
+        /// </summary>
         public string RoutesMap
         {
             get
@@ -214,6 +223,10 @@ namespace NetFluid
                 c.Close();
         }
 
+        /// <summary>
+        /// The current virtual host serve the given context
+        /// </summary>
+        /// <param name="cnt"></param>
         public void Serve(Context cnt)
         {
             try
@@ -555,6 +568,10 @@ namespace NetFluid
             return t;
         }
 
+        /// <summary>
+        /// Load routes from methods attribute of the method exposer ( type must inherit IMethodExposer)
+        /// </summary>
+        /// <param name="page"></param>
         public void Load(Type page)
         {
             if (!Types.ContainsKey(page.Name))
@@ -622,6 +639,10 @@ namespace NetFluid
             }
         }
 
+        /// <summary>
+        /// Add  a file-donwloadable folder
+        /// </summary>
+        /// <param name="folder"></param>
         public void Add(PublicFolder folder)
         {
             if (folder.Immutable)
@@ -630,6 +651,11 @@ namespace NetFluid
                 AddPublicFolder(folder.UriPath, folder.RealPath);
         }
 
+        /// <summary>
+        /// Add a file-downloadable folder
+        /// </summary>
+        /// <param name="uriPath"></param>
+        /// <param name="realPath"></param>
         public void AddPublicFolder(string uriPath, string realPath)
         {
             if (!Directory.Exists(realPath))
@@ -652,6 +678,11 @@ namespace NetFluid
             _folders = (_folders.Concat(p)).ToArray();
         }
 
+        /// <summary>
+        /// Add a memory loaded file-downloadable folder
+        /// </summary>
+        /// <param name="uriPath"></param>
+        /// <param name="realPath"></param>
         public void AddImmutablePublicFolder(string uriPath, string realPath)
         {
             var m = Path.GetFullPath(realPath);
@@ -677,6 +708,11 @@ namespace NetFluid
             _immutableFolders = _immutableFolders.Concat(new Folder {Immutable = true, Path = m, Uri = uriPath}).ToArray();
         }
 
+        /// <summary>
+        /// Given function will be executed on any request, if returned value is not null the context is closed
+        /// </summary>
+        /// <param name="act">Function to execute</param>
+        /// <param name="friendlyname"></param>
         public void SetController(Func<Context, object> act, string friendlyname = null)
         {
             var controller = new Controller(act) { Condition = null, Name = friendlyname };

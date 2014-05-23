@@ -5,7 +5,7 @@ namespace NetFluid.Collections
 {
 
     /// <summary>
-    /// FIXME
+    /// Work in progress
     /// </summary>
     class DeepObject : DynamicObject
     {

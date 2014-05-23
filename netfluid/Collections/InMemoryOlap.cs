@@ -5,7 +5,7 @@ using System.Linq;
 namespace NetFluid.Collections
 {
     /// <summary>
-    /// In memory OLAP ipercube
+    /// Work in progress
     /// </summary>
     public class InMemoryOlap
     {

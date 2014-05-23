@@ -31,6 +31,9 @@ using System.Text;
 
 namespace NetFluid
 {
+    /// <summary>
+    /// POST or GET data sent by the client. It can be an array
+    /// </summary>
     public sealed class QueryValue : IConvertible, IEnumerable<string>
     {
         private string[] values;
@@ -51,13 +54,22 @@ namespace NetFluid
 
         #endregion
 
+        /// <summary>
+        /// Name of the variable
+        /// </summary>
         public string Name { get; private set; }
 
+        /// <summary>
+        /// True if is an array
+        /// </summary>
         public bool IsMultiple
         {
             get { return values.Length >= 2; }
         }
 
+        /// <summary>
+        /// Return the variable value (JSON serialized if is an array)
+        /// </summary>
         public string Value
         {
             get
@@ -69,11 +81,15 @@ namespace NetFluid
                     case 1:
                         return values[0];
                     default:
-                        return "[" + string.Join(",", values) + "]";
+                        return "[" + string.Join(",", values.Select(x=>JSON.Escape(x))) + "]";
                 }
             }
         }
 
+        /// <summary>
+        /// Return array values
+        /// </summary>
+        /// <returns></returns>
         public string[] ToArray()
         {
             return values;
@@ -91,26 +107,7 @@ namespace NetFluid
 
         public override string ToString()
         {
-            var b = new StringBuilder(JSON.Escape(Name) + ":");
-
-            switch (values.Length)
-            {
-                case 0:
-                    b.Append("null");
-                    break;
-                case 1:
-                    b.Append(JSON.Escape(values[0]));
-                    break;
-                default:
-                    b.Append("[" + string.Join(",", values.Select(JSON.Escape)) + "]");
-                    break;
-            }
-
-            return b.ToString();
-            /*if (values.Length > 1)
-                return string.Join(" ", values);
-
-            return values.Length == 0 ? string.Empty : values[0];*/
+            return Value;
         }
 
         public override int GetHashCode()
@@ -126,7 +123,12 @@ namespace NetFluid
             return obj.ToString().Equals(ToString());
         }
 
-        internal object Parse(Type x)
+        /// <summary>
+        /// Parse the value into the given type (see Netfluid parsing rules)
+        /// </summary>
+        /// <param name="x">target type</param>
+        /// <returns>type instanced object</returns>
+        public object Parse(Type x)
         {
             try
             {

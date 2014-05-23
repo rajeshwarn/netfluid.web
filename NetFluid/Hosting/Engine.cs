@@ -34,6 +34,9 @@ using NetFluid.Cloud;
 
 namespace NetFluid
 {
+    /// <summary>
+    /// Main class of Netfluid framework
+    /// </summary>
     public static class Engine
     {
         private static readonly Dictionary<string, Host> _hosts;
@@ -62,22 +65,52 @@ namespace NetFluid
             return Directory.GetFiles("./", "*.exe").Select(exe => Assembly.LoadFile(Path.GetFullPath(exe))).FirstOrDefault(ass => ass != null && ass.FullName == args.Name);
         }
 
+        /// <summary>
+        /// Main of host of the apllication. Any request not handled by virtual hosts will be handled by this one.
+        /// </summary>
         private static readonly Host DefaultHost;
+
+        /// <summary>
+        /// Rewritable log manager
+        /// </summary>
         public static ILogger Logger { get; set; }
+
+        /// <summary>
+        /// Rewritable HTTP/S interface manger
+        /// </summary>
         public static IWebInterfaceManager Interfaces { get; set; }
+
+        /// <summary>
+        /// Rewritable sessions manager
+        /// </summary>
         public static ISessionManager Sessions { get; set; }
+
+        /// <summary>
+        /// Rewritable reverse proxy manager
+        /// </summary>
         public static IClusterManager Cluster { get; set; }
 
+        /// <summary>
+        /// Currently running virtual hosts managers (reversed proxy excluded)
+        /// </summary>
         public static IEnumerable<Host> Hosts
         {
             get { return _hosts.Values; }
         }
 
+        /// <summary>
+        /// Currently running virtual host names (reversed proxy excluded)
+        /// </summary>
         public static string[] Hostnames
         {
             get { return _hosts.Keys.ToArray(); }
         }
 
+        /// <summary>
+        /// Return the host manager from the host name (reversed proxy excluded)
+        /// </summary>
+        /// <param name="name">name of the host (ex: www.netfluid.org)</param>
+        /// <returns>virtual host manager</returns>
         public static Host Host(string name)
         {
             Host h;
@@ -85,18 +118,30 @@ namespace NetFluid
             return h;
         }
 
+        /// <summary>
+        /// The Engine is running under this user
+        /// </summary>
         public static WindowsIdentity CurrentUser
         {
             get { return WindowsIdentity.GetCurrent(); }
         }
 
+        /// <summary>
+        /// True if Netfluid is launched in Mono enivroment
+        /// </summary>
         public static bool RunOnMono
         {
             get { return Type.GetType("Mono.Runtime") != null; }
         }
 
+        /// <summary>
+        /// If true log message and request serving flow are shown on the console
+        /// </summary>
         public static bool DevMode { get; set; }
 
+        /// <summary>
+        /// XML summary of virtual host and relative routes
+        /// </summary>
         public static string RoutesMap
         {
             get
@@ -181,7 +226,6 @@ namespace NetFluid
                 {
                     DevMode = settings.DevMode;
                     Sessions.SessionDuration = settings.SessionDuration;
-                    Logger.LogLevel = settings.LogLevel;
                     Logger.LogPath = settings.LogPath;
 
                     foreach (Interface inter in settings.Interfaces)
@@ -219,7 +263,6 @@ namespace NetFluid
                 {
                     DevMode = settings.DevMode;
                     Sessions.SessionDuration = settings.SessionDuration;
-                    Logger.LogLevel = settings.LogLevel;
                     Logger.LogPath = settings.LogPath;
 
                     foreach (Interface inter in settings.Interfaces)

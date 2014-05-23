@@ -3,6 +3,9 @@ using System.IO;
 
 namespace NetFluid.Globalization
 {
+    /// <summary>
+    /// Read locallization PO file
+    /// </summary>
     public class PoFile : Dictionary<string, PoFile.Entry>
     {
         public class Entry

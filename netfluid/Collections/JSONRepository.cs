@@ -5,6 +5,10 @@ using System.Threading.Tasks;
 
 namespace NetFluid.Collections
 {
+    /// <summary>
+    /// Work in progress
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
     public class JSONRepository<T> : IEnumerable<T>
     {
         private readonly string path;

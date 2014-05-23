@@ -2,11 +2,12 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.InteropServices.ComTypes;
-using System.Security.Permissions;
 
 namespace NetFluid
 {
+    /// <summary>
+    /// GET or POST values recieved from the client
+    /// </summary>
     public class QueryValueCollection : IEnumerable<QueryValue>
     {
         private readonly Dictionary<string, QueryValue> values;
@@ -26,6 +27,11 @@ namespace NetFluid
             }
         }
 
+        /// <summary>
+        /// Retrive a query variable
+        /// </summary>
+        /// <param name="name">variable name</param>
+        /// <returns></returns>
         public QueryValue this[string name]
         {
             get
@@ -40,6 +46,10 @@ namespace NetFluid
             set { values[name] = value; }
         }
 
+        /// <summary>
+        /// List of variables
+        /// </summary>
+        /// <returns></returns>
         public IEnumerator<QueryValue> GetEnumerator()
         {
             return values.Values.GetEnumerator();
@@ -50,11 +60,21 @@ namespace NetFluid
             return values.Values.GetEnumerator();
         }
 
+        /// <summary>
+        /// True if this variable has been recieved
+        /// </summary>
+        /// <param name="name"></param>
+        /// <returns></returns>
         public bool Contains(string name)
         {
             return values.ContainsKey(name);
         }
 
+        /// <summary>
+        /// Add a variable to the collection
+        /// </summary>
+        /// <param name="key"></param>
+        /// <param name="value"></param>
         public void Add(string key, QueryValue value)
         {
             if (values.ContainsKey(key))
@@ -63,6 +83,11 @@ namespace NetFluid
                 values.Add(key, value);
         }
 
+        /// <summary>
+        /// Add avariable to the collection
+        /// </summary>
+        /// <param name="key"></param>
+        /// <param name="value"></param>
         public void Add(string key, string value)
         {
             if (values.ContainsKey(key))
@@ -71,6 +96,10 @@ namespace NetFluid
                 values.Add(key, new QueryValue(key, value));
         }
 
+        /// <summary>
+        /// JSON serialization of the collection
+        /// </summary>
+        /// <returns></returns>
         public string ToJSON()
         {
             return "{" + string.Join(",", values.Values.Select(x => x.ToString())) + "}";
@@ -92,7 +121,7 @@ namespace NetFluid
         }
 
         /// <summary>
-        /// Parse request values into specified object
+        /// Parse request values into specified object type (see Netfluid parsing rules)
         /// </summary>
         /// <param name="type"></param>
         /// <returns></returns>

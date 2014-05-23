@@ -25,6 +25,10 @@ using System;
 
 namespace NetFluid
 {
+    /// <summary>
+    /// Set a fixed URI on wich Netfluid Engine will map the method. If putted on class it became a prefix.
+    /// Method parameters are parsed from Request.Values
+    /// </summary>
     [AttributeUsage(AttributeTargets.Class | AttributeTargets.Struct | AttributeTargets.Method, AllowMultiple = true)]
     public class Route : Attribute
     {
@@ -46,7 +50,11 @@ namespace NetFluid
         public string Uri { get; set; }
     }
 
-    [AttributeUsage(AttributeTargets.Class | AttributeTargets.Struct | AttributeTargets.Method, AllowMultiple = true)]
+    /// <summary>
+    /// Set a fixed URI on wich Netfluid Engine will map the method.Method paramteres are parsed from the following part of the URI
+    /// (ex: www.netfluid.org/myroute/param1/param2)
+    /// </summary>
+    [AttributeUsage( AttributeTargets.Method, AllowMultiple = true)]
     public class ParametrizedRoute : Attribute
     {
         public ParametrizedRoute(string path)
@@ -67,7 +75,10 @@ namespace NetFluid
         public string Uri { get; set; }
     }
 
-    [AttributeUsage(AttributeTargets.Class | AttributeTargets.Struct | AttributeTargets.Method, AllowMultiple = true)]
+    /// <summary>
+    /// Set a variable URI on wich Netfluid Engine wil map the method. Method paramters are parsed from regex groups
+    /// </summary>
+    [AttributeUsage(AttributeTargets.Method, AllowMultiple = true)]
     public class RegexRoute : Attribute
     {
         public RegexRoute(string path)
