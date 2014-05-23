@@ -10,14 +10,13 @@ using System.Linq.Expressions;
 using System.Reflection;
 using System.Text;
 
-
-namespace FileStorage
+namespace NetFluid.Serialization
 {
-    internal class CsvReader<T> : IEnumerable<T>, IEnumerator<T> where T : new()
+    class CsvReader<T> : IEnumerable<T>, IEnumerator<T> where T : new()
     {
         private readonly Dictionary<Type, List<Action<T, String>>> allSetters = new Dictionary<Type, List<Action<T, String>>>();
         private static DateTime DateTimeZero = new DateTime();
-        private string[] columns;
+        private readonly string[] columns;
         private char curChar;
         private int len;
         private string line;
@@ -276,4 +275,3 @@ namespace FileStorage
         }
     }
 }
-// full source end

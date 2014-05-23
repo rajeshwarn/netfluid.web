@@ -2,7 +2,6 @@
 //Based on Simple and fast CSV library in C# by By Pascal Ganaye
 //http://www.codeproject.com/Articles/685310/Simple-and-fast-CSV-library-in-Csharp
 
-using FileStorage;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -11,6 +10,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
 using System.Text;
+using NetFluid.Serialization;
 
 namespace NetFluid
 {

@@ -48,7 +48,10 @@ namespace NetFluid.DNS.Records
 
     #endregion
 
-        [Serializable]
+    /// <summary>
+    /// DNS Question recieved by the client or send by DNS resolver
+    /// </summary>
+    [Serializable]
     public class Question
     {
         public QClass QClass;
