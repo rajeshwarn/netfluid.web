@@ -5,26 +5,12 @@ using System.Linq;
 
 namespace NetFluid.Site
 {
-    public class Class1:FluidPage
+    public class BlogManager:FluidPage
     {
-        string[] Docs { get { return Directory.GetFiles("./docs"); } }
-
         [Route("/")]
         public IResponse Home()
         {
-            return new FluidTemplate("./UI/Home.html",Docs.Select(Path.GetFileNameWithoutExtension));
-        }
-
-        [ParametrizedRoute("/read")]
-        public IResponse Read(string article)
-        {
-            var p = Path.GetFullPath("./docs/" + article + ".html");
-
-            if (File.Exists(p) && p.StartsWith(Path.GetFullPath("./docs")))
-            {
-                return new FluidTemplate("./UI/Read.html",article, File.ReadAllText(p));
-            }
-            return new FluidTemplate("./UI/Home.html");
+            return new FluidTemplate("./UI/index.html");
         }
 
         [Route("robots.txt")]
@@ -40,11 +26,11 @@ namespace NetFluid.Site
             yield return "<urlset xmlns=\"http://www.sitemaps.org/schemas/sitemap/0.9\">";
 
             yield return "<url><loc>http://netfluid.org</loc><lastmod>"+DateTime.Now.ToString("yyyy-MM-dd")+"</lastmod><changefreq>always</changefreq><priority>0.8</priority>";
-            foreach (var doc in Docs)
+            /*foreach (var doc in Docs)
             {
                 yield return "<url><loc>http://netfluid.org/"+Path.GetFileNameWithoutExtension(doc)+"</loc><lastmod>"+DateTime.Now.ToString("yyyy-MM-dd")+"</lastmod><changefreq>always</changefreq><priority>0.8</priority>";
             }
-
+            */
             yield return "</urlset>";
         }
     }

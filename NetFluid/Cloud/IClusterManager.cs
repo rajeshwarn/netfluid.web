@@ -24,6 +24,9 @@
 
 namespace NetFluid.Cloud
 {
+    /// <summary>
+    /// Handle reverse proxy to other machines of the cluster
+    /// </summary>
     public interface IClusterManager
     {
         void AddFowarding(string host, string remote);

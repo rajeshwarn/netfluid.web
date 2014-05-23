@@ -4,6 +4,9 @@ using System.Linq;
 
 namespace NetFluid.Collections
 {
+    /// <summary>
+    /// In memory OLAP ipercube
+    /// </summary>
     public class InMemoryOlap
     {
         private readonly OlapNode root = new OlapNode();

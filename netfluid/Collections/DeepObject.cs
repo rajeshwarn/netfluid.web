@@ -1,9 +1,12 @@
-﻿using System;
-using System.Collections.Concurrent;
+﻿using System.Collections.Concurrent;
 using System.Dynamic;
 
 namespace NetFluid.Collections
 {
+
+    /// <summary>
+    /// FIXME
+    /// </summary>
     class DeepObject : DynamicObject
     {
         private readonly ConcurrentDictionary<object, object> values;
