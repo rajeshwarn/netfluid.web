@@ -33,7 +33,7 @@ namespace NetFluid
     public class Interface : ConfigurationElement
     {
         /// <summary>
-        ///     Ip to use
+        /// Ip to use
         /// </summary>
         [ConfigurationProperty("IP", DefaultValue = "127.0.0.1", IsRequired = true)]
         public String IP
@@ -43,7 +43,7 @@ namespace NetFluid
         }
 
         /// <summary>
-        ///     Port to use
+        /// Port to use
         /// </summary>
         [ConfigurationProperty("Port", DefaultValue = "8080", IsRequired = false)]
         [IntegerValidator(MinValue = 1, MaxValue = 65000)]
@@ -54,7 +54,7 @@ namespace NetFluid
         }
 
         /// <summary>
-        ///     Pfx certificate path if you want to use https on this interface
+        /// Pfx certificate path if you want to use https on this interface
         /// </summary>
         [ConfigurationProperty("Certificate", DefaultValue = "", IsRequired = false)]
         public String Certificate
@@ -64,13 +64,25 @@ namespace NetFluid
         }
     }
 
+    /// <summary>
+    /// One or more HTTP/S interface for the curent Netfluid Engine
+    /// </summary>
     public class Interfaces : ConfigurationElementCollection
     {
+        /// <summary>
+        /// Instancea new Interface withdefault values
+        /// </summary>
+        /// <returns></returns>
         protected override ConfigurationElement CreateNewElement()
         {
             return new Interface();
         }
 
+        /// <summary>
+        /// Return the queryed inteface
+        /// </summary>
+        /// <param name="element"></param>
+        /// <returns></returns>
         protected override object GetElementKey(ConfigurationElement element)
         {
             var i = element as Interface;

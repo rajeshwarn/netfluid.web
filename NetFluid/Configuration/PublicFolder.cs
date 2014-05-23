@@ -26,8 +26,14 @@ using System.Configuration;
 
 namespace NetFluid
 {
+    /// <summary>
+    /// Netfluid public folder. All files and directory inside the physical path are downloadable by the clients
+    /// </summary>
     public class PublicFolder : ConfigurationElement
     {
+        /// <summary>
+        /// Physical path of the folder
+        /// </summary>
         [ConfigurationProperty("RealPath", DefaultValue = "./public", IsRequired = true)]
         public string RealPath
         {
@@ -35,6 +41,9 @@ namespace NetFluid
             set { this["RealPath"] = value; }
         }
 
+        /// <summary>
+        /// Mapped URI of the folder (ex: /var/www/myfiles -> /download)
+        /// </summary>
         [ConfigurationProperty("UriPath", DefaultValue = "/", IsRequired = true)]
         public string UriPath
         {
@@ -42,6 +51,9 @@ namespace NetFluid
             set { this["UriPath"] = value; }
         }
 
+        /// <summary>
+        /// If specified the public folder is mapped under this virtual host
+        /// </summary>
         [ConfigurationProperty("Host", DefaultValue = "", IsRequired = false)]
         public string Host
         {

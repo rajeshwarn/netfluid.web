@@ -29,9 +29,31 @@ namespace NetFluid.Cloud
     /// </summary>
     public interface IClusterManager
     {
+        /// <summary>
+        /// Instance a reverse proxy from the virtual host to a real endpoint.All context with this host will be fowarded. 
+        /// </summary>
+        /// <param name="host">virtual host to foward (ex: users.netfluid.org)</param>
+        /// <param name="remote">real endpoint ("http://" || "https://"){0,1}( <ip>|<hostname>)(:<port>){0,1}</param>
         void AddFowarding(string host, string remote);
+
+        /// <summary>
+        /// Remove reverse proxy for the specified virtual host
+        /// </summary>
+        /// <param name="host">virtual host to be removed</param>
         void RemoveFowarding(string host);
+
+        /// <summary>
+        /// If the context host is a reversed proxy virtual host foward it
+        /// </summary>
+        /// <param name="context">context to check and foward</param>
+        /// <returns></returns>
         bool Handle(Context context);
+
+        /// <summary>
+        /// Foward this context to specified remote, instancing a reverse proxy just for this context
+        /// </summary>
+        /// <param name="context">context to foward</param>
+        /// <param name="remote">real endpoint ("http://" || "https://"){0,1}( <ip>|<hostname>)(:<port>){0,1}</param>
         void Foward(Context context, string remote);
     }
 }
