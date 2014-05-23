@@ -23,6 +23,9 @@ using System;
 
 namespace NetFluid.DNS.Records
 {
+    /// <summary>
+    /// DNS record TSIG
+    /// </summary>
         [Serializable]
     public class RecordTSIG : Record
     {

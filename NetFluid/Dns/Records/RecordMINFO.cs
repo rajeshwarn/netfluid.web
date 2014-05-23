@@ -34,6 +34,9 @@ using System;
 
 namespace NetFluid.DNS.Records
 {
+    /// <summary>
+    /// DNS record MINFO
+    /// </summary>
         [Serializable]
     public class RecordMINFO : Record
     {

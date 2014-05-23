@@ -41,19 +41,22 @@ using System;
 
 namespace NetFluid.DNS.Records
 {
+    /// <summary>
+    /// DNS record GPOS
+    /// </summary>
         [Serializable]
     public class RecordGPOS : Record
     {
-        public string ALTITUDE;
-        public string LATITUDE;
-        public string LONGITUDE;
+        public string Altitude;
+        public string Latitude;
+        public string Longitude;
 
         public override string ToString()
         {
             return string.Format("{0} {1} {2}",
-                LONGITUDE,
-                LATITUDE,
-                ALTITUDE);
+                Longitude,
+                Latitude,
+                Altitude);
         }
     }
 }

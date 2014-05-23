@@ -30,6 +30,9 @@ using System;
 
 namespace NetFluid.DNS.Records
 {
+    /// <summary>
+    /// DNS record AFSDB
+    /// </summary>
         [Serializable]
     public class RecordAFSDB : Record
     {

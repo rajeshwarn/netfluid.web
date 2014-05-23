@@ -22,6 +22,9 @@ using System;
 
 namespace NetFluid.DNS.Records
 {
+    /// <summary>
+    /// DNS record TXT
+    /// </summary>
         [Serializable]
     public class RecordTXT : Record
     {

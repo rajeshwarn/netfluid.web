@@ -28,6 +28,9 @@ namespace NetFluid.DNS.Records
         [Serializable]
     public class RecordHINFO : Record
     {
+        /// <summary>
+        /// DNS record HINFO
+        /// </summary>
         public string CPU;
         public string OS;
 

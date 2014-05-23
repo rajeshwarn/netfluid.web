@@ -34,6 +34,9 @@ using System;
 
 namespace NetFluid.DNS.Records
 {
+    /// <summary>
+    /// DNS record KX
+    /// </summary>
         [Serializable]
     public class RecordKX : Record, IComparable
     {

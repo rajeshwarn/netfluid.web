@@ -24,6 +24,9 @@ using System;
 
 namespace NetFluid.DNS.Records
 {
+    /// <summary>
+    /// DNS record TKEY
+    /// </summary>
         [Serializable]
     public class RecordTKEY : Record
     {

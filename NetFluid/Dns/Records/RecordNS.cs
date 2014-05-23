@@ -27,6 +27,9 @@ using System;
 
 namespace NetFluid.DNS.Records
 {
+    /// <summary>
+    /// DNS record NS
+    /// </summary>
         [Serializable]
     public class RecordNS : Record
     {

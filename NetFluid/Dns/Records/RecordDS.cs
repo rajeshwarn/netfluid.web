@@ -31,6 +31,9 @@ using System.Text;
 
 namespace NetFluid.DNS.Records
 {
+    /// <summary>
+    /// DNS record DS
+    /// </summary>
         [Serializable]
     public class RecordDS : Record
     {

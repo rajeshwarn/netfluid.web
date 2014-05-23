@@ -5,6 +5,9 @@ using NetFluid.DNS.Records;
 
 namespace NetFluid.DNS
 {
+    /// <summary>
+    /// DNS record base class
+    /// </summary>
     [Serializable]
     public abstract class Record: IDatabaseObject
     {
@@ -194,6 +197,11 @@ namespace NetFluid.DNS
             }
         }
 
+        /// <summary>
+        /// Instance a new record from the given type
+        /// </summary>
+        /// <param name="type">Record type enum or QType casted</param>
+        /// <returns>new record of the given type</returns>
         public static Record FromType(RecordType type)
         {
             switch (type)

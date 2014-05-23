@@ -1,11 +1,18 @@
 using System;
 using System.Collections.Generic;
+using NetFluid.DNS.Records;
 
-namespace NetFluid.DNS.Records
+namespace NetFluid.DNS
 {
-        [Serializable]
+    /// <summary>
+    /// List of DNS query used by DNS server and resolver
+    /// </summary>
+    [Serializable]
     public class Request : List<Question>
     {
+        /// <summary>
+        /// Header
+        /// </summary>
         public Header Header;
 
         public Request()
@@ -13,7 +20,10 @@ namespace NetFluid.DNS.Records
             Header = new Header {OPCODE = OPCode.Query, QDCOUNT = 0, ID = (ushort) DateTime.Now.Millisecond};
         }
 
-        public byte[] Write
+        /// <summary>
+        /// TOBEREMOVED
+        /// </summary>
+        internal byte[] Write
         {
             get
             {

@@ -49,13 +49,25 @@ namespace NetFluid.DNS.Records
     #endregion
 
     /// <summary>
-    /// DNS Question recieved by the client or send by DNS resolver
+    /// DNS query used by DNS server and resolver
     /// </summary>
     [Serializable]
     public class Question
     {
+        /// <summary>
+        /// Address class (Internet, CSNET, CHAOS, HESIOD, ANY)
+        /// </summary>
         public QClass QClass;
+
+        /// <summary>
+        /// Requested records type
+        /// </summary>
         public QType QType;
+
+        /// <summary>
+        /// Domain of the query
+        /// </summary>
+        public string QName;
 
         public Question(string QName, QType QType, QClass QClass)
         {
@@ -63,8 +75,6 @@ namespace NetFluid.DNS.Records
             this.QType = QType;
             this.QClass = QClass;
         }
-        
-        public string QName;
 
         public byte[] Data
         {

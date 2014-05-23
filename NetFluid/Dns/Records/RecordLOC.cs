@@ -98,16 +98,19 @@ ALTITUDE     The altitude of the center of the sphere described by the
 
 namespace NetFluid.DNS.Records
 {
+    /// <summary>
+    /// DNS record LOC
+    /// </summary>
         [Serializable]
     public class RecordLOC : Record
     {
-        public UInt32 ALTITUDE;
-        public byte HORIZPRE;
-        public UInt32 LATITUDE;
-        public UInt32 LONGITUDE;
-        public byte SIZE;
-        public byte VERSION;
-        public byte VERTPRE;
+        public UInt32 Altitude;
+        public byte Horizpre;
+        public UInt32 Latitude;
+        public UInt32 Longitude;
+        public byte Size;
+        public byte Version;
+        public byte VertPre;
 
         private static string SizeToString(byte s)
         {
@@ -156,12 +159,12 @@ namespace NetFluid.DNS.Records
         public override string ToString()
         {
             return string.Format("{0} {1} {2} {3} {4} {5}",
-                ToTime(LATITUDE, 'S', 'N'),
-                ToTime(LONGITUDE, 'W', 'E'),
-                ToAlt(ALTITUDE),
-                SizeToString(SIZE),
-                SizeToString(HORIZPRE),
-                SizeToString(VERTPRE));
+                ToTime(Latitude, 'S', 'N'),
+                ToTime(Longitude, 'W', 'E'),
+                ToAlt(Altitude),
+                SizeToString(Size),
+                SizeToString(Horizpre),
+                SizeToString(VertPre));
         }
     }
 }

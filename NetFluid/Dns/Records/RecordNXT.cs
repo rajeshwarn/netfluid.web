@@ -40,6 +40,9 @@ using System.Text;
 
 namespace NetFluid.DNS.Records
 {
+    /// <summary>
+    /// DNS record NXT
+    /// </summary>
         [Serializable]
     public class RecordNXT : Record
     {

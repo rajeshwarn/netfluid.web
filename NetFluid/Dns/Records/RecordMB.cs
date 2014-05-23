@@ -19,14 +19,17 @@ using System;
 
 namespace NetFluid.DNS.Records
 {
+    /// <summary>
+    /// DNS record MB
+    /// </summary>
         [Serializable]
     public class RecordMB : Record
     {
-        [DomainName] public string MADNAME;
+        [DomainName] public string MadName;
 
         public override string ToString()
         {
-            return MADNAME;
+            return MadName;
         }
     }
 }

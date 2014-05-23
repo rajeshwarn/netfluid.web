@@ -42,18 +42,21 @@ namespace NetFluid.DNS.Records
         [Serializable]
     public class RecordKEY : Record
     {
-        public byte ALGORITHM;
-        public UInt16 FLAGS;
-        public byte PROTOCOL;
-        public string PUBLICKEY;
+        /// <summary>
+        /// DNS record KEY
+        /// </summary>
+        public byte Algorithm;
+        public UInt16 Flags;
+        public byte Protocol;
+        public string Publickey;
 
         public override string ToString()
         {
             return string.Format("{0} {1} {2} \"{3}\"",
-                FLAGS,
-                PROTOCOL,
-                ALGORITHM,
-                PUBLICKEY);
+                Flags,
+                Protocol,
+                Algorithm,
+                Publickey);
         }
     }
 }

@@ -66,22 +66,25 @@ using System;
 
 namespace NetFluid.DNS.Records
 {
+    /// <summary>
+    /// DNS record SRV
+    /// </summary>
         [Serializable]
     public class RecordSRV : Record
     {
-        public ushort PORT;
-        public ushort PRIORITY;
+        public ushort Port;
+        public ushort Priority;
 
-        [DomainName] public string TARGET;
-        public ushort WEIGHT;
+        [DomainName] public string Target;
+        public ushort Weight;
 
         public override string ToString()
         {
             return string.Format("{0} {1} {2} {3}",
-                PRIORITY,
-                WEIGHT,
-                PORT,
-                TARGET);
+                Priority,
+                Weight,
+                Port,
+                Target);
         }
     }
 }

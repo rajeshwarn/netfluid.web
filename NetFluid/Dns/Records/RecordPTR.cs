@@ -21,6 +21,9 @@ using System;
 
 namespace NetFluid.DNS.Records
 {
+    /// <summary>
+    /// DNS record PTR
+    /// </summary>
         [Serializable]
     public class RecordPTR : Record
     {

@@ -18,6 +18,9 @@ using System;
 
 namespace NetFluid.DNS.Records
 {
+    /// <summary>
+    /// DNS record NULL
+    /// </summary>
         [Serializable]
     public class RecordNULL : Record
     {

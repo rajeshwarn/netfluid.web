@@ -21,11 +21,14 @@ namespace NetFluid.DNS.Records
         [Serializable]
     public class RecordDNAME : Record
     {
-        [DomainName] public string TARGET;
+        /// <summary>
+        /// DNS record DNAME
+        /// </summary>
+        [DomainName] public string Target;
 
         public override string ToString()
         {
-            return TARGET;
+            return Target;
         }
     }
 }

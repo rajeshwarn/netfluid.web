@@ -34,6 +34,9 @@ using System.Text;
 
 namespace NetFluid.DNS.Records
 {
+    /// <summary>
+    /// DNS record NSAP
+    /// </summary>
         [Serializable]
     public class RecordNSAP : Record
     {

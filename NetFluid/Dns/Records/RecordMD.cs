@@ -25,6 +25,9 @@ using System;
 
 namespace NetFluid.DNS.Records
 {
+    /// <summary>
+    /// DNS record MD
+    /// </summary>
         [Serializable]
     public class RecordMD : Record
     {

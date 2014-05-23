@@ -44,6 +44,9 @@ using System;
 
 namespace NetFluid.DNS.Records
 {
+    /// <summary>
+    /// DNS record NAPTR
+    /// </summary>
         [Serializable]
     public class RecordNAPTR : Record
     {

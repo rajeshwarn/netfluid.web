@@ -33,6 +33,9 @@ using System;
 
 namespace NetFluid.DNS.Records
 {
+    /// <summary>
+    /// DNS record X25
+    /// </summary>
         [Serializable]
     public class RecordX25 : Record
     {

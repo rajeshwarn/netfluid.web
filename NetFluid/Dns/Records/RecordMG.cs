@@ -18,9 +18,13 @@ using System;
 
 namespace NetFluid.DNS.Records
 {
+    /// <summary>
+    /// DNS record MG
+    /// </summary>
         [Serializable]
     public class RecordMG : Record
     {
+
         [DomainName] public string MGMNAME;
 
         public override string ToString()

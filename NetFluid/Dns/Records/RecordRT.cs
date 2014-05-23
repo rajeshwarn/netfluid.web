@@ -55,6 +55,9 @@ using System;
 
 namespace NetFluid.DNS.Records
 {
+    /// <summary>
+    /// DNS record RT
+    /// </summary>
         [Serializable]
     public class RecordRT : Record
     {

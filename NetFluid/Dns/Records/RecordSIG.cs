@@ -36,6 +36,9 @@ using System;
 
 namespace NetFluid.DNS.Records
 {
+    /// <summary>
+    /// DNS record SIG
+    /// </summary>
         [Serializable]
     public class RecordSIG : Record
     {

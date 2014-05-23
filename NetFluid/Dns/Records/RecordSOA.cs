@@ -69,6 +69,9 @@ using System;
 
 namespace NetFluid.DNS.Records
 {
+    /// <summary>
+    /// DNS record SOA
+    /// </summary>
         [Serializable]
     public class RecordSOA : Record
     {

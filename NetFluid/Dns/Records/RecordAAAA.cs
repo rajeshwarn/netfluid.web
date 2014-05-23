@@ -14,6 +14,9 @@ using System.Net;
 
 namespace NetFluid.DNS.Records
 {
+    /// <summary>
+    /// DNS record AAAA
+    /// </summary>
         [Serializable]
     public class RecordAAAA : Record
     {

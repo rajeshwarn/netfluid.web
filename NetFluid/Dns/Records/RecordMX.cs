@@ -26,6 +26,9 @@ namespace NetFluid.DNS.Records
 	[RFC-974].
 	*/
 
+    /// <summary>
+    /// DNS record MX
+    /// </summary>
     [Serializable]
     public class RecordMX : Record, IComparable
     {

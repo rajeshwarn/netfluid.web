@@ -20,6 +20,9 @@ using System;
 
 namespace NetFluid.DNS.Records
 {
+    /// <summary>
+    /// DNS record MR
+    /// </summary>
         [Serializable]
     public class RecordMR : Record
     {

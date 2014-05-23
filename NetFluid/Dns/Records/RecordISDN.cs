@@ -70,6 +70,9 @@ using System;
 
 namespace NetFluid.DNS.Records
 {
+    /// <summary>
+    /// DNS record ISDN
+    /// </summary>
         [Serializable]
     public class RecordISDN : Record
     {

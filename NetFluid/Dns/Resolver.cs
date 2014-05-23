@@ -10,7 +10,7 @@ using System.Net;
  *
  */
 
-namespace NetFluid.DNS.Records
+namespace NetFluid.DNS
 {
     /// <summary>
     ///     Resolver is the main class to do DNS query lookups

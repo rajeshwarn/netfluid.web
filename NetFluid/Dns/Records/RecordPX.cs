@@ -73,6 +73,9 @@ using System;
 
 namespace NetFluid.DNS.Records
 {
+    /// <summary>
+    /// DNS record PX
+    /// </summary>
         [Serializable]
     public class RecordPX : Record
     {

@@ -18,7 +18,11 @@ namespace NetFluid.DNS
 	 *
 	 *		TYPE		value			meaning
 	 */
-        [Serializable]
+    
+    /// <summary>
+    /// DNS protocol record type
+    /// </summary>
+    [Serializable]
     public enum RecordType : ushort
     {
         A = 1, // a IPV4 host address
@@ -119,7 +123,10 @@ namespace NetFluid.DNS
 	 *		QTYPE		value			meaning
 	 */
 
-        [Serializable]
+    /// <summary>
+    /// DNS protocol query type (extension of RecordType)
+    /// </summary>
+    [Serializable]
     public enum QType : ushort
     {
         A = RecordType.A, // a IPV4 host address
@@ -225,7 +232,10 @@ namespace NetFluid.DNS
 	 *		CLASS		value			meaning
 	 */
 
-        [Serializable]
+    /// <summary>
+    /// DNS protocol address class
+    /// </summary>
+    [Serializable]
     public enum Class : ushort
     {
         IN = 1, // the Internet
@@ -244,7 +254,10 @@ namespace NetFluid.DNS
 	 *		QCLASS		value			meaning
 	 */
 
-        [Serializable]
+    /// <summary>
+    /// DNS protocol address class for query (extension of Class)
+    /// </summary>
+    [Serializable]
     public enum QClass : ushort
     {
         IN = Class.IN, // the Internet
@@ -261,7 +274,10 @@ RCODE           Response code - this 4 bit field is set as part of
                 interpretation:
 	 */
 
-        [Serializable]
+    /// <summary>
+    /// DNS protocol response code
+    /// </summary>
+    [Serializable]
     public enum RCode
     {
         NoError = 0, // No Error                           [RFC1035]
@@ -314,7 +330,10 @@ OPCODE          A four bit field that specifies kind of query in this
                 3-15            reserved for future use
 	 */
 
-        [Serializable]
+    /// <summary>
+    /// DNS protocol query code
+    /// </summary>
+     [Serializable]
     public enum OPCode
     {
         Query = 0, // a standard query (QUERY)

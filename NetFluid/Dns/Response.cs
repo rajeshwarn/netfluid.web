@@ -5,7 +5,10 @@ using NetFluid.DNS.Records;
 
 namespace NetFluid.DNS
 {
-        [Serializable]
+    /// <summary>
+    /// List of returned DNS record used by DNS server and resolver
+    /// </summary>
+    [Serializable]
     public class Response
     {
         /// <summary>

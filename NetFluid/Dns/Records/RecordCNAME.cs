@@ -23,6 +23,9 @@ using System;
 
 namespace NetFluid.DNS.Records
 {
+    /// <summary>
+    /// DNS record CNAME
+    /// </summary>
         [Serializable]
     public class RecordCNAME : Record
     {

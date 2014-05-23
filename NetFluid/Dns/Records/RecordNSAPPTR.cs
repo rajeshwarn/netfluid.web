@@ -41,14 +41,17 @@ using System;
 
 namespace NetFluid.DNS.Records
 {
+    /// <summary>
+    /// DNS record SAPPTR
+    /// </summary>
         [Serializable]
     public class RecordNSAPPTR : Record
     {
-        public string OWNER;
+        public string Owner;
 
         public override string ToString()
         {
-            return string.Format("{0}", OWNER);
+            return string.Format("{0}", Owner);
         }
     }
 }

@@ -49,6 +49,9 @@ using System.Net;
 
 namespace NetFluid.DNS.Records
 {
+    /// <summary>
+    /// DNS record WKS
+    /// </summary>
         [Serializable]
     public class RecordWKS : Record
     {
