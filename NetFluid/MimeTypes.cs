@@ -29,6 +29,9 @@ using System.Linq;
 
 namespace NetFluid
 {
+    /// <summary>
+    /// Retrieve mime type of files
+    /// </summary>
     public static class MimeTypes
     {
         private static readonly Dictionary<string, string> mimetypes;
@@ -291,6 +294,11 @@ namespace NetFluid
             };
         }
 
+        /// <summary>
+        /// Return the mime type of the file
+        /// </summary>
+        /// <param name="path">path of the file</param>
+        /// <returns>mime type</returns>
         public static string GetType(string path)
         {
             string t = "application/octet-stream";
@@ -312,6 +320,11 @@ namespace NetFluid
             return "application/octet-stream";
         }
 
+        /// <summary>
+        /// Add a new mime type to the collection
+        /// </summary>
+        /// <param name="ext">file extension</param>
+        /// <param name="type">mime type</param>
         public static void SetType(string ext, string type)
         {
             if (mimetypes.ContainsKey(ext))

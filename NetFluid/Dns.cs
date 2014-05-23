@@ -14,7 +14,7 @@ namespace NetFluid
     //DNS INTEGRATION, QUERY AND RECORDS FROM http://www.codeproject.com/Articles/23673/DNS-NET-Resolver-C
 
     /// <summary>
-    ///     Provide methods for DNS query. Server cooming soon
+    ///     Provide methods for DNS query.
     /// </summary>
     public static class Dns
     {

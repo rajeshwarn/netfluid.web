@@ -29,6 +29,9 @@ using System.Text;
 
 namespace NetFluid
 {
+    /// <summary>
+    /// Utilities for security
+    /// </summary>
     public static class Security
     {
         private static readonly object RandomLocker;
@@ -40,6 +43,9 @@ namespace NetFluid
             RandomGenerator = new Random();
         }
 
+        /// <summary>
+        /// Return an empty temp file (System.IO.Path.GetTempFileName sometimes return the same value on two calling
+        /// </summary>
         public static string TempFile
         {
             get
@@ -51,6 +57,11 @@ namespace NetFluid
             }
         }
 
+        /// <summary>
+        /// Transform a string into a System.Security.SecureString
+        /// </summary>
+        /// <param name="original"></param>
+        /// <returns></returns>
         public static SecureString Secure(string original)
         {
             var secure = new SecureString();
@@ -58,6 +69,11 @@ namespace NetFluid
             return secure;
         }
 
+        /// <summary>
+        /// Web socket security handshake
+        /// </summary>
+        /// <param name="key">web socket key</param>
+        /// <returns>base64 handshake</returns>
         public static string SecWebSocketAccept(string key)
         {
             const String MagicKEY = "258EAFA5-E914-47DA-95CA-C5AB0DC85B11";
@@ -68,6 +84,11 @@ namespace NetFluid
             return Convert.ToBase64String(sha1Hash);
         }
 
+        /// <summary>
+        /// SHA1 checksum of a file
+        /// </summary>
+        /// <param name="file">path to the file</param>
+        /// <returns>bas64 checksum</returns>
         public static string SHA1Checksum(string file)
         {
             using (FileStream stream = File.OpenRead(file))
@@ -78,16 +99,31 @@ namespace NetFluid
             }
         }
 
+        /// <summary>
+        /// From base64 to byte
+        /// </summary>
+        /// <param name="str">base 64</param>
+        /// <returns>decoded bytes</returns>
         public static byte[] Base64Decode(string str)
         {
             return Convert.FromBase64String(str);
         }
 
+        /// <summary>
+        /// From bytes to base64
+        /// </summary>
+        /// <param name="toEncode">bytes to encode</param>
+        /// <returns></returns>
         public static string Base64Encode(byte[] toEncode)
         {
             return Convert.ToBase64String(toEncode);
         }
 
+        /// <summary>
+        /// SHA1 hashing of string
+        /// </summary>
+        /// <param name="text">string to hash</param>
+        /// <returns>base64 hash</returns>
         public static string Sha1(string text)
         {
             byte[] buffer = Encoding.UTF8.GetBytes(text);
@@ -97,7 +133,7 @@ namespace NetFluid
         }
 
         /// <summary>
-        ///     Return a random value
+        ///     Return a random value (avoid System.Random repetition)
         /// </summary>
         /// <returns></returns>
         public static int Random()
@@ -112,7 +148,7 @@ namespace NetFluid
         }
 
         /// <summary>
-        ///     Return a random value from to 0 to max
+        ///     Return a random value from to 0 to max (avoid System.Random repetition)
         /// </summary>
         /// <param name="max">maximum value</param>
         /// <returns></returns>
@@ -128,7 +164,7 @@ namespace NetFluid
         }
 
         /// <summary>
-        ///     Return a random value from to min to max
+        ///     Return a random value from to min to max (avoid System.Random repetition)
         /// </summary>
         /// <param name="min">minimun value</param>
         /// <param name="max">maximum value</param>

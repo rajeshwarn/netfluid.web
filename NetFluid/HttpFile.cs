@@ -25,6 +25,9 @@ using System.IO;
 
 namespace NetFluid
 {
+    /// <summary>
+    /// Multipart form data file uploaded by the client
+    /// </summary>
     public sealed class HttpFile
     {
         /// <summary>

@@ -52,12 +52,19 @@ namespace NetFluid
             values = new[] {str};
         }
 
+        public QueryValue(string name, IEnumerable<string> str)
+        {
+            Name = name;
+            values = str.ToArray();
+        }
+
+
         #endregion
 
         /// <summary>
         /// Name of the variable
         /// </summary>
-        public string Name { get; private set; }
+        public string Name { get; internal set; }
 
         /// <summary>
         /// True if is an array

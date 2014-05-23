@@ -22,27 +22,56 @@
 // ********************************************************************************************************
 
 using System;
-using System.Globalization;
 using System.Net;
 using System.Text;
 using NetFluid.HTTP;
 
 namespace NetFluid
 {
+    /// <summary>
+    /// HTTP response  to sent to the cleint
+    /// </summary>
     [Serializable]
     public class HttpResponse
     {
+        /// <summary>
+        /// Content encoding used by Reader and Writer.By default is instanciated from the client request
+        /// </summary>
         public Encoding ContentEncoding;
+
+        /// <summary>
+        /// Response mime type. Default value: text/html
+        /// </summary>
         public string ContentType;
+
+        /// <summary>
+        /// Cookies to the client
+        /// </summary>
         public CookieCollection Cookies;
+        
+        /// <summary>
+        /// Headers to the client
+        /// </summary>
         public WebHeaderCollection Headers;
+
+        /// <summary>
+        /// True if Keep Alive flag was asked by the client
+        /// </summary>
         public bool KeepAlive;
+
+        /// <summary>
+        /// HTTP protocol version. Default value 1.2
+        /// </summary>
         public Version ProtocolVersion;
+
+        /// <summary>
+        /// Status code text message. Default value: OK
+        /// </summary>
         public string StatusDescription;
 
         private StatusCode status_code;
 
-        public HttpResponse()
+        public HttpResponse() 
         {
             StatusDescription = "OK";
 
@@ -57,6 +86,9 @@ namespace NetFluid
             StatusCode = StatusCode.Ok;
         }
 
+        /// <summary>
+        /// HTTP status code.Default value:200
+        /// </summary>
         public StatusCode StatusCode
         {
             get { return status_code; }
@@ -67,12 +99,20 @@ namespace NetFluid
             }
         }
 
+        /// <summary>
+        /// Redirect the client to a different URI or URL
+        /// </summary>
+        /// <param name="url"></param>
         public void Redirect(string url)
         {
             StatusCode = StatusCode.Found; // Found
             Headers.Append("Location", url);
         }
 
+        /// <summary>
+        /// Redirect permanently the client to a different URI o URL
+        /// </summary>
+        /// <param name="url"></param>
         public void MovedPermanently(string url)
         {
             StatusCode = StatusCode.MovedPermanently;

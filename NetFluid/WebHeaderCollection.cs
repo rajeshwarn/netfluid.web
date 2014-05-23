@@ -27,6 +27,9 @@ using System.Text;
 
 namespace NetFluid
 {
+    /// <summary>
+    /// Contains HTTP request or response headers 
+    /// </summary>
     [Serializable]
     public class WebHeaderCollection
     {
@@ -47,6 +50,11 @@ namespace NetFluid
             }
         }
 
+        /// <summary>
+        /// Return header from name
+        /// </summary>
+        /// <param name="index">header name</param>
+        /// <returns>header</returns>
         public string this[string index]
         {
             get
@@ -66,11 +74,21 @@ namespace NetFluid
             }
         }
 
+        /// <summary>
+        /// True if contain the header
+        /// </summary>
+        /// <param name="index">name of the header</param>
+        /// <returns></returns>
         public bool Contains(string index)
         {
             return values.ContainsKey(index.ToLowerInvariant());
         }
 
+        /// <summary>
+        /// Add a new header to the collection.If header already exist a new one is appended
+        /// </summary>
+        /// <param name="name">name of the header</param>
+        /// <param name="value">value of the header</param>
         public void Append(string name, string value)
         {
             string lower = name.ToLowerInvariant();
@@ -81,6 +99,10 @@ namespace NetFluid
                 values.Add(lower, new WebHeader(name, value));
         }
 
+        /// <summary>
+        ///  Add a new header to the collection.If header already exist this one is appended
+        /// </summary>
+        /// <param name="header">header to append</param>
         public void Append(WebHeader header)
         {
             string lower = header.Name.ToLowerInvariant();
@@ -91,6 +113,11 @@ namespace NetFluid
                 values.Add(lower, header);
         }
 
+        /// <summary>
+        ///  Add a new header to the collection.If header already exist is replaced
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="value"></param>
         public void Set(string name, string value)
         {
             values[name.ToLowerInvariant()] = new WebHeader(name, value);

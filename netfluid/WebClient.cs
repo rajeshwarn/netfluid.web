@@ -5,6 +5,9 @@ using System.Net;
 
 namespace NetFluid
 {
+    /// <summary>
+    /// Retrieve data from the internet faster than System.Net.WebClient
+    /// </summary>
     public class WebClient
     {
         /// <summary>
@@ -15,7 +18,7 @@ namespace NetFluid
         /// <returns></returns>
         public static Stream GetStream(Uri uri, string accept = "text/html, text/plain")
         {
-            var request = (HttpWebRequest) WebRequest.Create(uri);
+            var request = WebRequest.Create(uri) as HttpWebRequest;
             request.AllowAutoRedirect = true;
             request.UserAgent = "NetFluid Scraper Agent";
             request.Accept = accept;
@@ -37,7 +40,7 @@ namespace NetFluid
         /// <returns></returns>
         public static IEnumerable<string> GetLines(Uri uri, string accept = "text/html, text/plain")
         {
-            var request = (HttpWebRequest) WebRequest.Create(uri);
+            var request = WebRequest.Create(uri) as HttpWebRequest;
             request.AllowAutoRedirect = true;
             request.UserAgent = "NetFluid Scraper Agent";
             request.Accept = accept;
@@ -64,7 +67,7 @@ namespace NetFluid
         /// <returns></returns>
         public static string GetString(Uri uri, string accept = "text/html, text/plain")
         {
-            var request = (HttpWebRequest) WebRequest.Create(uri);
+            var request = WebRequest.Create(uri) as HttpWebRequest;
             request.AllowAutoRedirect = true;
             request.UserAgent = "NetFluid Scraper Agent";
             request.Accept = accept;

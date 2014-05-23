@@ -7,6 +7,9 @@ using System.Reflection;
 
 namespace NetFluid
 {
+    /// <summary>
+    /// HTTP Header.It can be an array
+    /// </summary>
     public sealed class WebHeader : IConvertible, IEnumerable<string>
     {
         private string[] values;
@@ -19,12 +22,22 @@ namespace NetFluid
             values = new string[0];
         }
 
+        /// <summary>
+        /// A new header with name and value
+        /// </summary>
+        /// <param name="name">name</param>
+        /// <param name="str">value</param>
         public WebHeader(string name, string str)
         {
             Name = name;
             values = new[] {str};
         }
 
+        /// <summary>
+        /// New header with multiple values (ex: cookies)
+        /// </summary>
+        /// <param name="name">name</param>
+        /// <param name="str">values</param>
         public WebHeader(string name, IEnumerable<string> str)
         {
             Name = name;
@@ -33,13 +46,22 @@ namespace NetFluid
 
         #endregion
 
+        /// <summary>
+        /// Name of the header
+        /// </summary>
         public string Name { get; private set; }
 
+        /// <summary>
+        /// True if is an array
+        /// </summary>
         public bool IsMultiple
         {
             get { return values.Length >= 2; }
         }
 
+        /// <summary>
+        /// The value of the header.JSON serialized if is an array
+        /// </summary>
         public string Value
         {
             get
@@ -51,11 +73,15 @@ namespace NetFluid
                     case 1:
                         return values[0];
                     default:
-                        return "[" + string.Join(",", values) + "]";
+                        return "[" + string.Join(",", values.Select(JSON.Escape)) + "]";
                 }
             }
         }
 
+        /// <summary>
+        /// Return array values
+        /// </summary>
+        /// <returns></returns>
         public string[] ToArray()
         {
             return values;
@@ -71,6 +97,9 @@ namespace NetFluid
             values = values.Concat(new[] {s}).ToArray();
         }
 
+        /// <summary>
+        /// The value of the header.JSON serialized if is an array
+        /// </summary>
         public override string ToString()
         {
             switch (values.Length)
@@ -97,121 +126,10 @@ namespace NetFluid
             return obj.ToString().Equals(ToString());
         }
 
-        internal object Parse(ParameterInfo x)
+        public object Parse(Type type)
         {
-            if (x.ParameterType.IsArray || x.GetCustomAttributes(typeof (ParamArrayAttribute), false).Length > 0)
-            {
-                #region ARRAY
-
-                Type elemType = x.ParameterType.GetElementType();
-                if (elemType == typeof (string))
-                    return values;
-                if (elemType == typeof (byte))
-                    return (values.Select(byte.Parse)).ToArray();
-                if (elemType == typeof (char))
-                    return (values.Select(char.Parse)).ToArray();
-                if (elemType == typeof (decimal))
-                    return (values.Select(decimal.Parse)).ToArray();
-                if (elemType == typeof (Int16))
-                    return (values.Select(Int16.Parse)).ToArray();
-                if (elemType == typeof (UInt16))
-                    return (values.Select(UInt16.Parse)).ToArray();
-                if (elemType == typeof (Int32))
-                    return (values.Select(Int32.Parse)).ToArray();
-                if (elemType == typeof (UInt32))
-                    return (values.Select(UInt32.Parse)).ToArray();
-                if (elemType == typeof (Int64))
-                    return (values.Select(Int64.Parse)).ToArray();
-                if (elemType == typeof (UInt64))
-                    return (values.Select(UInt64.Parse)).ToArray();
-                if (elemType == typeof (float))
-                    return (values.Select(float.Parse)).ToArray();
-                if (elemType == typeof (double))
-                    return (values.Select(double.Parse)).ToArray();
-                if (elemType == typeof (DateTime))
-                    return (values.Select(DateTime.Parse)).ToArray();
-
-                if (elemType == typeof (bool))
-                {
-                    return values.Select(y =>
-                    {
-                        string t = y.ToLower(CultureInfo.InvariantCulture);
-                        return (t == "true" || t == "on" || t == "yes");
-                    }).ToArray();
-                }
-
-                if (elemType.IsEnum)
-                    return values.Select(y => Enum.Parse(elemType, y)).ToArray();
-
-                MethodInfo parsemethod = elemType.GetMethod("Parse",
-                    BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic);
-                if (parsemethod != null)
-                {
-                    Array r = Array.CreateInstance(elemType, values.Length);
-
-                    for (int i = 0; i < r.Length; i++)
-                    {
-                        object o = parsemethod.Invoke(null, new[] {values[i]});
-                        r.SetValue(o, i);
-                    }
-
-                    return r;
-                }
-
-                #endregion
-            }
-
-            #region VALORI
-
-            Type myType = x.ParameterType;
-
-            if (values.Length == 0 || (values.Length == 1 && string.IsNullOrEmpty(values[0])))
-                return myType.IsValueType ? Activator.CreateInstance(myType) : null;
-
-            if (myType == typeof (string))
-                return values[0];
-            if (myType == typeof (byte))
-                return byte.Parse(values[0]);
-            if (myType == typeof (char))
-                return char.Parse(values[0]);
-            if (myType == typeof (decimal))
-                return decimal.Parse(values[0]);
-            if (myType == typeof (Int16))
-                return Int16.Parse(values[0]);
-            if (myType == typeof (UInt16))
-                return UInt16.Parse(values[0]);
-            if (myType == typeof (Int32))
-                return Int32.Parse(values[0]);
-            if (myType == typeof (UInt32))
-                return UInt32.Parse(values[0]);
-            if (myType == typeof (Int64))
-                return Int64.Parse(values[0]);
-            if (myType == typeof (UInt64))
-                return UInt64.Parse(values[0]);
-            if (myType == typeof (float))
-                return float.Parse(values[0]);
-            if (myType == typeof (double))
-                return double.Parse(values[0]);
-            if (myType == typeof (DateTime))
-                return DateTime.Parse(values[0]);
-
-            if (myType == typeof (bool))
-            {
-                string t = values[0].ToLower(CultureInfo.InvariantCulture);
-                return t == "true" || t == "on" || t == "yes";
-            }
-
-            if (myType.IsEnum)
-                return Enum.Parse(myType, values[0]);
-
-            MethodInfo method = myType.GetMethod("Parse",
-                BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic);
-            if (method != null)
-                return method.Invoke(null, new[] {values[0]});
-
-            #endregion
-
-            return myType.IsValueType ? Activator.CreateInstance(myType) : null;
+            var q = new QueryValue(Name,values);
+            return q.Parse(type);
         }
 
         public bool StartsWith(string str)
