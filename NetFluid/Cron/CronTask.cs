@@ -3,7 +3,7 @@ using System.Timers;
 
 namespace NetFluid.Cron
 {
-    internal class CronTask
+    class CronTask
     {
         private readonly Action _action;
         private readonly string _cron;

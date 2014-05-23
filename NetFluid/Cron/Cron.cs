@@ -4,6 +4,9 @@ using System.Linq;
 
 namespace NetFluid.Cron
 {
+    /// <summary>
+    /// Handle cron task
+    /// </summary>
     public static class Cron
     {
         private static readonly List<CronTask> tasks;
@@ -130,11 +133,22 @@ namespace NetFluid.Cron
             return result;
         }
 
+        /// <summary>
+        /// Returns the next datetime from now and cron-formatted string
+        /// </summary>
+        /// <param name="cron">cron formatted string</param>
+        /// <returns>nearest datetime of specified cron string</returns>
         public static DateTime Next(string cron)
         {
             return Next(cron, DateTime.Now);
         }
 
+        /// <summary>
+        /// Returns the next datetime from a datetime and cron-formatted string
+        /// </summary>
+        /// <param name="cron">cron formatted string</param>
+        /// <param name="from">datetime where to start</param>
+        /// <returns>nearest datetime of specified cron string</returns>
         public static DateTime Next(string cron, DateTime from)
         {
             var parts =
@@ -179,8 +193,14 @@ namespace NetFluid.Cron
             return dt;
         }
 
-        public static void AddTask(string cron, Action action, Action onComplete = null,
-            Action<Exception> onError = null)
+        /// <summary>
+        /// Schedule a task with this cron.The schedule starts immediately.
+        /// </summary>
+        /// <param name="cron">cron formatted string</param>
+        /// <param name="action">task to complete</param>
+        /// <param name="onComplete">do it when the task is completed (omittable)</param>
+        /// <param name="onError">do it when the task throws an excpetion (omittable)</param>
+        public static void AddTask(string cron, Action action, Action onComplete = null,  Action<Exception> onError = null)
         {
             lock (tasks)
             {
@@ -188,8 +208,15 @@ namespace NetFluid.Cron
             }
         }
 
-        public static void AddTask(string cron, DateTime from, Action action, Action onComplete = null,
-            Action<Exception> onError = null)
+        /// <summary>
+        /// Schedule a task with this cron.The schedule starts from specified datetime.
+        /// </summary>
+        /// <param name="cron">cron formatted string</param>
+        /// <param name="from">datetime when to start this schedule</param>
+        /// <param name="action">task to complete</param>
+        /// <param name="onComplete">do it when the task is completed (omittable)</param>
+        /// <param name="onError">do it when the task throws an excpetion (omittable)</param>
+        public static void AddTask(string cron, DateTime from, Action action, Action onComplete = null,Action<Exception> onError = null)
         {
             lock (tasks)
             {
