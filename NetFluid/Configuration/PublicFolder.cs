@@ -22,6 +22,7 @@
 // ********************************************************************************************************
 
 
+using System;
 using System.Configuration;
 
 namespace NetFluid
@@ -31,6 +32,21 @@ namespace NetFluid
     /// </summary>
     public class PublicFolder : ConfigurationElement
     {
+        /// <summary>
+        /// Used to store folder data into a db
+        /// </summary>
+        [ConfigurationProperty("Id", IsRequired = true)]
+        public string Id
+        {
+            get { return this["Id"] as String; }
+            set { this["Id"] = value; }
+        }
+
+        public string Manager
+        {
+            get { return this["Manager"] as String; }
+            set { this["Manager"] = value; }
+        }
         /// <summary>
         /// Physical path of the folder
         /// </summary>
@@ -59,13 +75,6 @@ namespace NetFluid
         {
             get { return (string) this["Host"]; }
             set { this["Host"] = value; }
-        }
-
-        [ConfigurationProperty("Immutable", DefaultValue = false, IsRequired = false)]
-        public bool Immutable
-        {
-            get { return (bool) this["Immutable"]; }
-            set { this["Immutable"] = value; }
         }
     }
 

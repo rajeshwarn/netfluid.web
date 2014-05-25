@@ -68,7 +68,7 @@ namespace NetFluid
         /// <summary>
         /// Main of host of the apllication. Any request not handled by virtual hosts will be handled by this one.
         /// </summary>
-        private static readonly Host DefaultHost;
+        public static readonly Host DefaultHost;
 
         /// <summary>
         /// Rewritable log manager
@@ -104,18 +104,6 @@ namespace NetFluid
         public static string[] Hostnames
         {
             get { return _hosts.Keys.ToArray(); }
-        }
-
-        /// <summary>
-        /// Return the host manager from the host name (reversed proxy excluded)
-        /// </summary>
-        /// <param name="name">name of the host (ex: www.netfluid.org)</param>
-        /// <returns>virtual host manager</returns>
-        public static Host Host(string name)
-        {
-            Host h;
-            _hosts.TryGetValue(name, out h);
-            return h;
         }
 
         /// <summary>
@@ -167,8 +155,16 @@ namespace NetFluid
                 Logger.Log(LogLevel.UnHandled, "Unhandled exception occurred.", e.ExceptionObject as Exception);
         }
 
-        private static Host ResolveHost(string host)
+        /// <summary>
+        /// Return the host manager from the host name (reversed proxy excluded)
+        /// </summary>
+        /// <param name="name">name of the host (ex: www.netfluid.org)</param>
+        /// <returns>virtual host manager</returns>
+        public static Host Host(string host)
         {
+            if (string.IsNullOrEmpty(host))
+                return DefaultHost;
+
             Host h;
             if (_hosts.TryGetValue(host, out h))
                 return h;
@@ -234,8 +230,39 @@ namespace NetFluid
                         else
                             Interfaces.AddInterface(inter.IP, inter.Port, inter.Certificate);
 
-                    foreach (PublicFolder inter in settings.PublicFolders)
-                        AddPublicFolder(inter.UriPath, inter.RealPath, inter.Immutable);
+                    foreach (PublicFolder pf in settings.PublicFolders)
+                    {
+                        Type managerType;
+                        IPublicFolderManager manager;
+                        try
+                        {
+                            managerType = string.IsNullOrEmpty(pf.Manager)
+                            ? typeof(PublicFolderManager)
+                            : Type.GetType(pf.Manager);
+
+                            manager = managerType.CreateIstance() as IPublicFolderManager;
+                        }
+                        catch (Exception ex)
+                        {
+                            Logger.Log(LogLevel.Exception,"Failed to instance public folder manager for "+pf.Id,ex);
+                            continue;
+                        }
+
+                        if (manager == null)
+                        {
+                            Logger.Log(LogLevel.Error, managerType + " is not a valid public folder manager it must implement IPublicFolderManager interface");
+                            continue;
+                        }
+                        var host = Host(pf.Host);
+
+                        if (host.PublicFolderManager != null)
+                        {
+                            Logger.Log(LogLevel.Error,"Trying to rewrite "+(string.IsNullOrEmpty(pf.Host)? "default host" : pf.Host)+" public folder manager");
+                            continue;
+                        }
+                        host.PublicFolderManager = manager;
+                        manager.Add(pf.Id,pf.UriPath,pf.RealPath);
+                    }
 
                     return true;
                 }
@@ -271,8 +298,34 @@ namespace NetFluid
                         else
                             Interfaces.AddInterface(inter.IP, inter.Port, inter.Certificate);
 
-                    foreach (PublicFolder inter in settings.PublicFolders)
-                        AddPublicFolder(inter.UriPath, inter.RealPath, inter.Immutable);
+                    foreach (PublicFolder pf in settings.PublicFolders)
+                    {
+                        Type managerType;
+                        IPublicFolderManager manager;
+                        try
+                        {
+                            managerType = string.IsNullOrEmpty(pf.Manager)
+                            ? typeof(PublicFolderManager)
+                            : Type.GetType(pf.Manager);
+
+                            manager = managerType.CreateIstance() as IPublicFolderManager;
+                        }
+                        catch (Exception ex)
+                        {
+                            Logger.Log(LogLevel.Exception, "Failed to instance public folder manager for " + pf.Id, ex);
+                            continue;
+                        }
+
+                        var host = Host(pf.Host);
+
+                        if (host.PublicFolderManager != null)
+                        {
+                            Logger.Log(LogLevel.Error, "Trying to rewrite " + (string.IsNullOrEmpty(pf.Host) ? "default host" : pf.Host) + " public folder manager");
+                            continue;
+                        }
+                        host.PublicFolderManager = manager;
+                        manager.Add(pf.Id, pf.UriPath, pf.RealPath);
+                    }
 
                     return true;
                 }
@@ -286,34 +339,6 @@ namespace NetFluid
             }
         }
 
-        /// <summary>
-        /// Add a file-downloadable folder
-        /// </summary>
-        /// <param name="uri">Sub files and folder will be mapped on this uri</param>
-        /// <param name="path">Physical path of mapped folder</param>
-        /// <param name="immutable">If true files are memory cached</param>
-        public static void AddPublicFolder(string uri, string path, bool immutable=false)
-        {
-        	if (immutable)
-        		DefaultHost.AddImmutablePublicFolder(uri,path);
-        	else
-        		DefaultHost.AddPublicFolder(uri,path);
-        }
-
-        /// <summary>
-        /// Add a file-downloadable folder on specified host
-        /// </summary>
-        /// <param name="host">Virtual host of public folder</param>
-        /// <param name="uri">Sub files and folder will be mapped on this uri</param>
-        /// <param name="path">Physical path of mapped folder</param>
-        /// <param name="immutable">If true files are memory cached</param>
-        public static void AddPublicFolder(string host, string uri, string path, bool immutable=false)
-        {
-        	if (immutable)
-        		ResolveHost(host).AddImmutablePublicFolder(uri,path);
-        	else
-        		ResolveHost(host).AddPublicFolder(uri,path);
-        }
         
         /// <summary>
         /// Open all interfaces and start to serve clients
@@ -345,12 +370,12 @@ namespace NetFluid
                     {
                         foreach (string h in p.CustomAttribute<VirtualHost>(true).Select(x => x.Name))
                         {
-                            ResolveHost(h).Load(p);
+                            Host(h).Load(p);
                         }
                     }
                     else
                     {
-                        ResolveHost(host).Load(p);
+                        Host(host).Load(p);
                     }
                 }
             }
@@ -385,7 +410,7 @@ namespace NetFluid
                     {
                         foreach (string h in p.CustomAttribute<VirtualHost>(true).Select(x => x.Name))
                         {
-                            ResolveHost(h).Load(p);
+                            Host(h).Load(p);
                         }
                     }
                     else
@@ -518,73 +543,73 @@ namespace NetFluid
 
         public static RouteSetter SetController(string host, Func<Context,object> act, string name = "")
         {
-            ResolveHost(host).SetController(act, name);
+            Host(host).SetController(act, name);
             return new RouteSetter();
         }
 
         public static RouteSetter SetController(string host, Func<Context, bool> condition, Func<Context,object> act, string name = "")
         {
-            ResolveHost(host).SetController(condition, act, name);
+            Host(host).SetController(condition, act, name);
             return new RouteSetter();
         }
 
         public static RouteSetter SetController(string host, Action<Context> act, string name="")
         {
-            ResolveHost(host).SetController(act,name);
+            Host(host).SetController(act,name);
             return new RouteSetter();
         }
 
         public static RouteSetter SetController(string host, Func<Context, bool> condition, Action<Context> act,string name="")
         {
-            ResolveHost(host).SetController(condition, act,name);
+            Host(host).SetController(condition, act,name);
             return new RouteSetter();
         }
 
         public static RouteSetter SetRoute(string host, string url, Type type, string method)
         {
-            ResolveHost(host).SetRoute(url, type, method);
+            Host(host).SetRoute(url, type, method);
             return new RouteSetter();
         }
 
         public static RouteSetter SetRoute(string host, string url, Type type, MethodInfo method)
         {
-            ResolveHost(host).SetRoute(url, type, method);
+            Host(host).SetRoute(url, type, method);
             return new RouteSetter();
         }
 
         public static RouteSetter SetParameterizedRoute(string host, string url, string methodFullname)
         {
-            ResolveHost(host).SetParameterizedRoute(url, methodFullname);
+            Host(host).SetParameterizedRoute(url, methodFullname);
             return new RouteSetter();
         }
 
         public static RouteSetter SetParameterizedRoute(string host, string url, Type type, string method)
         {
-            ResolveHost(host).SetParameterizedRoute(url, type, method);
+            Host(host).SetParameterizedRoute(url, type, method);
             return new RouteSetter();
         }
 
         public static RouteSetter SetParameterizedRoute(string host, string url, Type type, MethodInfo method)
         {
-            ResolveHost(host).SetParameterizedRoute(url, type, method);
+            Host(host).SetParameterizedRoute(url, type, method);
             return new RouteSetter();
         }
 
         public static RouteSetter SetRegexRoute(string host, string rgx, string methodFullname)
         {
-            ResolveHost(host).SetRegexRoute(rgx, methodFullname);
+            Host(host).SetRegexRoute(rgx, methodFullname);
             return new RouteSetter();
         }
 
         public static RouteSetter SetRegexRoute(string host, string rgx, Type type, string method)
         {
-            ResolveHost(host).SetRegexRoute(rgx, type, method);
+            Host(host).SetRegexRoute(rgx, type, method);
             return new RouteSetter();
         }
 
         public static RouteSetter SetRegexRoute(string host, string rgx, Type type, MethodInfo method)
         {
-            ResolveHost(host).SetRegexRoute(rgx, type, method);
+            Host(host).SetRegexRoute(rgx, type, method);
             return new RouteSetter();
         }
 

@@ -17,7 +17,10 @@ namespace NetFluid.Service
             if (!Directory.Exists("./CDN"))
                 Directory.CreateDirectory("./CDN");
 
-            CDN.ForEach(h=>Engine.AddPublicFolder(h.Host, "/", h.Path));
+            CDN.ForEach(h =>
+            {
+                Engine.Host(h.Host).PublicFolderManager.Add(h.Id, "/", h.Path);
+            });
         }
 
         [Route("update")]
@@ -30,7 +33,7 @@ namespace NetFluid.Service
             if (!Directory.Exists(h.Path))
                 Directory.CreateDirectory(h.Path);
 
-            Engine.AddPublicFolder(h.Host,"/",h.Path);
+            Engine.Host(h.Host).PublicFolderManager.Add(h.Id,"/",h.Path);
 
             return new RedirectResponse("/");
         }

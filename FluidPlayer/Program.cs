@@ -22,7 +22,7 @@ namespace FluidPlayer
             if (!Engine.LoadAppConfiguration(path))
             {
                 Engine.Logger.Log(LogLevel.Error,"App configuration not loaded, using default values");
-                Engine.AddPublicFolder("/", "./Public", false);
+                Engine.DefaultHost.PublicFolderManager.Add("public","/", "./Public");
                 Engine.Interfaces.AddLoopBack(8080);
                 Engine.Interfaces.AddAllAddresses(8080);
             }

@@ -35,22 +35,34 @@ namespace NetFluid
         {
             Context = cnt;
         }
-
+        
+        /// <summary>
+        /// Syntactic sugar for Context.Response
+        /// </summary>
         public HttpResponse Response
         {
             get { return Context.Response; }
         }
 
+        /// <summary>
+        /// Syntactic sugar for Context.Request
+        /// </summary>
         public HttpRequest Request
         {
             get { return Context.Request; }
         }
 
+        /// <summary>
+        /// Syntactic sugar for Context.Get
+        /// </summary>
         public QueryValueCollection Get
         {
             get { return Context.Request.Get ?? (Context.Request.Get = new QueryValueCollection()); }
         }
 
+        /// <summary>
+        /// Syntactic sugar for Context.Post
+        /// </summary>
         public QueryValueCollection Post
         {
             get
@@ -61,48 +73,79 @@ namespace NetFluid
             }
         }
 
+        /// <summary>
+        /// Syntactic sugar for Context.Request.Files
+        /// </summary>
         public HttpFileCollection Files
         {
             get { return Context.Request.Files ?? (Context.Request.Files = new HttpFileCollection()); }
         }
 
+        /// <summary>
+        /// Used by the Engine to excute exposed methods
+        /// </summary>
         public Context Context { get; set; }
 
-        public virtual object Run()
+        /// <summary>
+        /// Called when this type is loaded by the Engine
+        /// </summary>
+        public void OnLoad()
         {
-            return null;
         }
 
+        /// <summary>
+        /// Syntactic sugar for Context.Session
+        /// </summary>
         public void Session(string name, object obj)
         {
             Context.Session(name, obj);
         }
 
+        /// <summary>
+        /// Syntactic sugar for Context.Session
+        /// </summary>
         public T Session<T>(string name)
         {
             return Context.Session<T>(name);
         }
 
+        /// <summary>
+        /// Syntactic sugar for Context.Session
+        /// </summary>
         public dynamic Session(string name)
         {
             return Context.Session(name);
         }
 
+        /// <summary>
+        /// Send Response  headers to the client and write byte directly to the client (via OutputStream)
+        /// </summary>
         public void SendRaw(byte[] bytes)
         {
             Context.SendHeaders();
             Context.OutputStream.Write(bytes, 0, bytes.Length);
         }
 
+        /// <summary>
+        /// URL encode (http://www.w3schools.com/tags/ref_urlencode.asp)
+        /// </summary>
+        /// <param name="str"></param>
+        /// <returns></returns>
         public string URLEncode(string str)
         {
             return HttpUtility.UrlEncode(str);
         }
 
+        /// <summary>
+        /// URL decode (http://www.w3schools.com/tags/ref_urlencode.asp)
+        /// </summary>
+        /// <param name="str"></param>
+        /// <returns></returns>
         public string URLDecode(string str)
         {
             return HttpUtility.UrlDecode(str);
         }
+
 
         public string HTMLEncode(string str)
         {

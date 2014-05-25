@@ -24,13 +24,10 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Reflection;
-using System.Runtime.Caching;
 using System.Text;
 using System.Text.RegularExpressions;
-using NetFluid.HTTP;
 
 namespace NetFluid
 {
@@ -39,30 +36,20 @@ namespace NetFluid
     /// </summary>
     public class Host
     {
-        class Folder
-        {
-            public bool Immutable;
-            public string Path;
-            public string Uri;
-        }
 
         private static readonly char[] UrlSeparator;
         private static readonly Dictionary<string, Type> Types;
-        private readonly MemoryCache _eTagCache;
-
         private readonly Dictionary<StatusCode, RouteTarget> _callOn;
-        private readonly Dictionary<string, byte[]> _immutableData;
         private readonly List<IMethodExposer> _instances;
         private readonly string _name;
         private readonly Dictionary<string, RouteTarget> routes;
         private RouteTarget _callOnAnyCode;
         private Controller[] _controllers;
 
-        private Folder[] _folders;
-        private Folder[] _immutableFolders;
+        public IPublicFolderManager PublicFolderManager;
 
-        private ParamRouteTarget[] parametrized;
-        private RegexRouteTarget[] regex;
+        private ParamRouteTarget[] _parametrized;
+        private RegexRouteTarget[] _regex;
 
         static Host()
         {
@@ -74,36 +61,16 @@ namespace NetFluid
         {
             _name = name;
 
+            PublicFolderManager = new PublicFolderManager();
+
             _controllers = new Controller[0];
 
-            regex = new RegexRouteTarget[0];
-            parametrized = new ParamRouteTarget[0];
+            _regex = new RegexRouteTarget[0];
+            _parametrized = new ParamRouteTarget[0];
             routes = new Dictionary<string, RouteTarget>();
-
-            _folders = new Folder[0];
-            _immutableData = new Dictionary<string, byte[]>();
-            _immutableFolders = new Folder[0];
-
             _callOn = new Dictionary<StatusCode, RouteTarget>();
 
             _instances = new List<IMethodExposer>();
-
-            _eTagCache = MemoryCache.Default;
-        }
-
-        /// <summary>
-        /// file-downaloadable folders in thsi virtual host
-        /// </summary>
-        public PublicFolder[] PublicFolders
-        {
-            get 
-            {
-                return _folders.Concat(_immutableFolders).Select(x =>
-                {
-                    var r = new PublicFolder {Host = _name, Immutable = x.Immutable, RealPath = x.Path, UriPath = x.Uri};
-                    return r;
-                }).ToArray();
-            }
         }
 
         /// <summary>
@@ -127,11 +94,11 @@ namespace NetFluid
 
                 sb.Append("<routes>");
 
-                foreach (RegexRouteTarget item in regex)
+                foreach (RegexRouteTarget item in _regex)
                     sb.Append(string.Format("<RegexRoute Name=\"{0}\" Regex=\"{1}\" PointTo=\"{2}.{3}\" />", item.Name,
                         item.Regex, item.Type.FullName, item.Method.Name));
 
-                foreach (ParamRouteTarget item in parametrized)
+                foreach (ParamRouteTarget item in _parametrized)
                     sb.Append(string.Format("<ParametrizedRoute Name=\"{0}\" Template=\"{1}\" PointTo=\"{2}.{3}\" />",
                         item.Name, item.Template, item.Type.FullName, item.Method.Name));
 
@@ -251,7 +218,7 @@ namespace NetFluid
 
                 #region REGEX
 
-                foreach (var rr in regex)
+                foreach (var rr in _regex)
                 {
                     var m = rr.Regex.Match(cnt.Request.Url);
 
@@ -306,31 +273,31 @@ namespace NetFluid
                 if (Engine.DevMode)
                     Console.WriteLine(cnt.Request.Host + ":" + cnt.Request.Url + " - " + "Checking parametrized routes");
 
-                for (int i = 0; i < parametrized.Length; i++)
+                for (int i = 0; i < _parametrized.Length; i++)
                 {
-                    if (!cnt.Request.Url.StartsWith(parametrized[i].Url))
+                    if (!cnt.Request.Url.StartsWith(_parametrized[i].Url))
                         continue;
 
                     if (Engine.DevMode)
                     {
                         Console.WriteLine(cnt.Request.Host + ":" + cnt.Request.Url + " - " + "Matched " +
-                                          parametrized[i].Url);
+                                          _parametrized[i].Url);
                         Console.WriteLine(cnt.Request.Host + ":" + cnt.Request.Url + " - " + "Calling " +
-                                          parametrized[i].Type.FullName + "." + parametrized[i].Method.Name);
+                                          _parametrized[i].Type.FullName + "." + _parametrized[i].Method.Name);
                     }
 
-                    var page = parametrized[i].Type.CreateIstance() as IMethodExposer;
+                    var page = _parametrized[i].Type.CreateIstance() as IMethodExposer;
                     page.Context = cnt;
 
-                    var parameters = parametrized[i].Method.GetParameters();
+                    var parameters = _parametrized[i].Method.GetParameters();
 
                     if (parameters.Length == 0)
                     {
-                        Finalize(cnt, parametrized[i].Method, page, null);
+                        Finalize(cnt, _parametrized[i].Method, page, null);
                         return;
                     }
 
-                    var argUri = cnt.Request.Url.Substring(parametrized[i].Url.Length).Split(UrlSeparator,StringSplitOptions.RemoveEmptyEntries);
+                    var argUri = cnt.Request.Url.Substring(_parametrized[i].Url.Length).Split(UrlSeparator,StringSplitOptions.RemoveEmptyEntries);
                     var args = new object[parameters.Length];
                     for (int j = 0; j < parameters.Length; j++)
                     {
@@ -347,7 +314,7 @@ namespace NetFluid
                         }
                     }
 
-                    Finalize(cnt, parametrized[i].Method, page, args);
+                    Finalize(cnt, _parametrized[i].Method, page, args);
                     return;
                 }
 
@@ -400,80 +367,7 @@ namespace NetFluid
                 if (Engine.DevMode)
                     Console.WriteLine(cnt.Request.Host + ":" + cnt.Request.Url + " - " + "Looking for a public folder");
 
-                #region PUBLIC FILES
-
-                #region IMMUTABLE
-
-                byte[] content;
-                if (_immutableData.TryGetValue(cnt.Request.Url, out content))
-                {
-                    if (cnt.Request.Headers.Contains("If-None-Match"))
-                    {
-                        cnt.Response.StatusCode = StatusCode.NotModified;
-                        return;
-                    }
-
-                    cnt.Response.ContentType = MimeTypes.GetType(cnt.Request.Url);
-                    cnt.Response.Headers["Cache-Control"] = "max-age=29030400";
-                    cnt.Response.Headers["Last-Modified"] = DateTime.MinValue.ToString("r");
-                    cnt.Response.Headers["Vary"] = "Accept-Encoding";
-
-                    //Fake ETag for immutable files
-                    cnt.Response.Headers["ETag"] = Security.UID();
-                    cnt.SendHeaders();
-                    cnt.OutputStream.Write(content, 0, content.Length);
-                    cnt.Close();
-                    return;
-                }
-
-                #endregion
-
-                foreach (var item in _folders)
-                {
-                    if (!cnt.Request.Url.StartsWith(item.Uri))
-                        continue;
-
-                    string path =
-                        Path.GetFullPath(item.Path +
-                                         cnt.Request.Url.Substring(item.Uri.Length)
-                                             .Replace('/', Path.DirectorySeparatorChar));
-
-                    if (!path.StartsWith(item.Path))
-                    {
-                        cnt.Response.StatusCode = StatusCode.BadRequest;
-                        cnt.Close();
-                        return;
-                    }
-
-                    if (!File.Exists(path))
-                        continue;
-
-                    var etag = _eTagCache.Get(path) as string;
-                    if (etag != null)
-                    {
-                        cnt.Response.Headers["ETag"] = "\"" + etag + "\"";
-                        if (cnt.Request.Headers.Contains("If-None-Match") &&
-                            cnt.Request.Headers["If-None-Match"].Unquote() == etag)
-                        {
-                            cnt.Response.StatusCode = StatusCode.NotModified;
-                            cnt.Close();
-                            return;
-                        }
-                    }
-                    else
-                    {
-                        _eTagCache.Add(path, Security.SHA1Checksum(path), DateTimeOffset.Now + TimeSpan.FromHours(1));
-                    }
-                    cnt.Response.ContentType = MimeTypes.GetType(cnt.Request.Url);
-                    cnt.SendHeaders();
-                    var fs = new FileStream(path, FileMode.OpenOrCreate, FileAccess.ReadWrite, FileShare.ReadWrite);
-                    fs.CopyTo(cnt.OutputStream);
-                    cnt.Close();
-                    fs.Close();
-                    return;
-                }
-
-                #endregion
+                PublicFolderManager.Serve(cnt);
 
                 if (Engine.DevMode)
                     Console.WriteLine(cnt.Request.Host + ":" + cnt.Request.Url + " - " + "Checking status code handlers");
@@ -640,75 +534,6 @@ namespace NetFluid
         }
 
         /// <summary>
-        /// Add  a file-donwloadable folder
-        /// </summary>
-        /// <param name="folder"></param>
-        public void Add(PublicFolder folder)
-        {
-            if (folder.Immutable)
-                AddImmutablePublicFolder(folder.UriPath, folder.RealPath);
-            else
-                AddPublicFolder(folder.UriPath, folder.RealPath);
-        }
-
-        /// <summary>
-        /// Add a file-downloadable folder
-        /// </summary>
-        /// <param name="uriPath"></param>
-        /// <param name="realPath"></param>
-        public void AddPublicFolder(string uriPath, string realPath)
-        {
-            if (!Directory.Exists(realPath))
-            {
-                Engine.Logger.Log(LogLevel.Error,"Failed to add public folder, directory is missing "+realPath);
-                return;
-            }
-
-            var f = Path.GetFullPath(realPath);
-
-            if (f.Last() != Path.DirectorySeparatorChar)
-                f = f + Path.DirectorySeparatorChar;
-
-            var p = new Folder
-            {
-                Path = f,
-                Uri = uriPath,
-                Immutable = false
-            };
-            _folders = (_folders.Concat(p)).ToArray();
-        }
-
-        /// <summary>
-        /// Add a memory loaded file-downloadable folder
-        /// </summary>
-        /// <param name="uriPath"></param>
-        /// <param name="realPath"></param>
-        public void AddImmutablePublicFolder(string uriPath, string realPath)
-        {
-            var m = Path.GetFullPath(realPath);
-            var start = uriPath.EndsWith('/') ? uriPath : uriPath + "/";
-
-            if (!Directory.Exists(m))
-            {
-                Engine.Logger.Log(LogLevel.Error, "Failed to add public folder, directory is missing " + realPath);
-                return;
-            }
-
-            foreach (var x in Directory.GetFiles(m, "*.*", SearchOption.AllDirectories))
-            {
-                var s = x.Substring(m.Length).Replace(Path.DirectorySeparatorChar, '/');
-
-                if (s[0] == '/')
-                    s = s.Substring(1);
-
-                string fileUri = start + s;
-                if (!_immutableData.ContainsKey(fileUri))
-                    _immutableData.Add(fileUri, File.ReadAllBytes(x));
-            }
-            _immutableFolders = _immutableFolders.Concat(new Folder {Immutable = true, Path = m, Uri = uriPath}).ToArray();
-        }
-
-        /// <summary>
         /// Given function will be executed on any request, if returned value is not null the context is closed
         /// </summary>
         /// <param name="act">Function to execute</param>
@@ -848,7 +673,7 @@ namespace NetFluid
             }
 
 
-            parametrized = parametrized.Concat(new[] {rt}).OrderByDescending(x => x.Url.Length).ToArray();
+            _parametrized = _parametrized.Concat(new[] {rt}).OrderByDescending(x => x.Url.Length).ToArray();
         }
 
         public void SetParameterizedRoute(string url, Type type, MethodInfo method, string friendlyname = null)
@@ -877,7 +702,7 @@ namespace NetFluid
             }
 
 
-            parametrized = parametrized.Concat(new[] {rt}).OrderByDescending(x => x.Url.Length).ToArray();
+            _parametrized = _parametrized.Concat(new[] {rt}).OrderByDescending(x => x.Url.Length).ToArray();
         }
 
         public void SetRegexRoute(string rgx, string methodFullname, string friendlyname = null)
@@ -944,7 +769,7 @@ namespace NetFluid
             }
 
 
-            regex = regex.Concat(new[] {rt}).ToArray();
+            _regex = _regex.Concat(new[] {rt}).ToArray();
         }
 
         public void SetRegexRoute(string rgx, Type type, MethodInfo method, string friendlyname = null)
@@ -979,7 +804,7 @@ namespace NetFluid
             }
 
 
-            regex = regex.Concat(new[] {rt}).ToArray();
+            _regex = _regex.Concat(new[] {rt}).ToArray();
         }
 
         #region Nested type: ParamRouteTarget
