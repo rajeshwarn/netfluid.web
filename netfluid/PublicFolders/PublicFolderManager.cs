@@ -71,6 +71,7 @@ namespace NetFluid
                     _eTagCache.Add(path, Security.SHA1Checksum(path), DateTimeOffset.Now + TimeSpan.FromHours(1));
                 }
                 cnt.Response.ContentType = MimeTypes.GetType(cnt.Request.Url);
+                cnt.Response.Headers["Expires"] = (DateTime.Now + TimeSpan.FromDays(7)).ToGMT();
                 cnt.SendHeaders();
                 var fs = new FileStream(path, FileMode.OpenOrCreate, FileAccess.ReadWrite, FileShare.ReadWrite);
                 fs.CopyTo(cnt.OutputStream);
@@ -112,6 +113,11 @@ namespace NetFluid
             lock (_folders)
             {
                 _folders.Add(folder);
+            }
+
+            foreach (var path in Directory.GetFiles(realPath,"*.*"))
+            {
+                _eTagCache.Add(path, Security.SHA1Checksum(path), DateTimeOffset.Now + TimeSpan.FromHours(1));
             }
         }
 

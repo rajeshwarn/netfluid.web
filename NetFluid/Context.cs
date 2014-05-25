@@ -191,11 +191,7 @@ namespace NetFluid
         /// <summary>
         ///     Current session identification Guid
         /// </summary>
-        public string SessionId
-        {
-            get { return sessionId ?? (sessionId = Security.UID()); }
-            private set { sessionId = value; }
-        }
+        public string SessionId  { get; private set; }
 
         /// <summary>
         ///     True if the context has been created with HTTPS
@@ -781,6 +777,8 @@ namespace NetFluid
         /// <param name="obj">Variable value</param>
         public void Session(string name, object obj)
         {
+            if (SessionId == null) SessionId = Security.UID();
+
             Engine.Sessions.Set(SessionId, name, obj);
         }
 
@@ -790,6 +788,8 @@ namespace NetFluid
         /// <param name="name">Variable name</param>
         public T Session<T>(string name)
         {
+            if (SessionId == null) SessionId = Security.UID();
+
             object k = Engine.Sessions.Get(SessionId, name);
             if (k != null)
             {
@@ -804,6 +804,8 @@ namespace NetFluid
         /// <param name="name">Variable name</param>
         public dynamic Session(string name)
         {
+            if (SessionId == null) SessionId = Security.UID();
+
             return Engine.Sessions.Get(SessionId, name);
         }
     }
