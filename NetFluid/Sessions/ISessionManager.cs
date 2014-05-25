@@ -23,12 +23,30 @@
 
 namespace NetFluid.Sessions
 {
+    /// <summary>
+    /// Hanlde user context session variables. Used to override Engine Session Manager
+    /// </summary>
     public interface ISessionManager
     {
+        /// <summary>
+        /// Variable expiration time in seconds
+        /// </summary>
         int SessionDuration { get; set; }
 
+        /// <summary>
+        /// Set the value of a variable for a specific user session
+        /// </summary>
+        /// <param name="sessionId">session to access</param>
+        /// <param name="name">name of the variable</param>
+        /// <param name="obj">value of the variable</param>
         void Set(string sessionId, string name, object obj);
 
+        /// <summary>
+        /// Retrieve session variable value for the user session
+        /// </summary>
+        /// <param name="sessionId">user session</param>
+        /// <param name="name">name of the variable</param>
+        /// <returns>valueof variable</returns>
         object Get(string sessionId, string name);
     }
 }

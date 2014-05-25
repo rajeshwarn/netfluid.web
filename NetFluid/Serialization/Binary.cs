@@ -27,14 +27,28 @@ using System.Runtime.Serialization.Formatters.Binary;
 
 namespace NetFluid
 {
+    /// <summary>
+    /// .NET binary serializer/deserializer
+    /// </summary>
     public static class Binary
     {
+        /// <summary>
+        /// Serialize the object to the stream
+        /// </summary>
+        /// <param name="obj">object to serialize</param>
+        /// <param name="s">target stream</param>
         public static void Serialize(object obj, Stream s)
         {
             var formatter = new BinaryFormatter();
             formatter.Serialize(s, obj);
         }
 
+        /// <summary>
+        /// Deserialize an object form the stream
+        /// </summary>
+        /// <typeparam name="T">target type</typeparam>
+        /// <param name="s">reading stream</param>
+        /// <returns>deserialized T object</returns>
         public static T Deserialize<T>(Stream s)
         {
             var formatter = new BinaryFormatter();
@@ -42,6 +56,12 @@ namespace NetFluid
             return (T) dbg;
         }
 
+        /// <summary>
+        /// Deserialize an object form the bynary array
+        /// </summary>
+        /// <typeparam name="T">target type</typeparam>
+        /// <param name="b">binary serialized value</param>
+        /// <returns>deserialized T object</returns>
         public static T Deserialize<T>(byte[] b)
         {
             var formatter = new BinaryFormatter();
@@ -52,6 +72,11 @@ namespace NetFluid
             return (T) dbg;
         }
 
+        /// <summary>
+        /// Binary serialize an object
+        /// </summary>
+        /// <param name="obj">object to be serialized</param>
+        /// <returns></returns>
         public static byte[] Serialize(object obj)
         {
             var formatter = new BinaryFormatter();
@@ -61,6 +86,12 @@ namespace NetFluid
         }
 
 
+        /// <summary>
+        /// Deserialize a binary serialized object
+        /// </summary>
+        /// <param name="b">binary serialized value</param>
+        /// <param name="type">object target type</param>
+        /// <returns>deserialized object</returns>
         public static object Deserialize(byte[] b, Type type)
         {
             var formatter = new BinaryFormatter();

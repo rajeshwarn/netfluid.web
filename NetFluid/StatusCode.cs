@@ -25,6 +25,9 @@ using System;
 
 namespace NetFluid
 {
+    /// <summary>
+    /// HTTP protocol status codes
+    /// </summary>
     [Serializable]
     public enum StatusCode
     {

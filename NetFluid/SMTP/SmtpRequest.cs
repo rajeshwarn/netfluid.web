@@ -2,12 +2,14 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Net.Mail;
-using System.Net.Mime;
 using System.Net.Sockets;
 using NetFluid.MIME;
 
 namespace NetFluid.SMTP
 {
+    /// <summary>
+    /// SMTP client request
+    /// </summary>
     public class SmtpRequest
     {
         public string UID;

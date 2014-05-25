@@ -14,10 +14,13 @@ namespace NetFluid
     //DNS INTEGRATION, QUERY AND RECORDS FROM http://www.codeproject.com/Articles/23673/DNS-NET-Resolver-C
 
     /// <summary>
-    ///     Provide methods for DNS query.
+    ///  DNS Server and Client
     /// </summary>
     public static class Dns
     {
+        /// <summary>
+        /// True if DNS Server is running
+        /// </summary>
         public static bool AcceptingRequest { get; private set; }
 
         /// <summary>

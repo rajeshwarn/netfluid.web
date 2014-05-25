@@ -6,6 +6,9 @@ using System.Text;
 
 namespace NetFluid.SMTP
 {
+    /// <summary>
+    /// SMTP client
+    /// </summary>
     public class Outbound
     {
         public static Exception[] Send(MailMessage message)

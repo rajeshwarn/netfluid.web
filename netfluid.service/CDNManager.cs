@@ -9,8 +9,7 @@ namespace NetFluid.Service
     public class CDNManager:FluidPage
     {
         public static Repository<CDN> CDN { get; private set;  }
-
-        public static void Start()
+        public override void OnLoad()
         {
             CDN = new Repository<CDN>("mongodb://localhost", "NetFluidService");
 

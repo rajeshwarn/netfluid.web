@@ -11,6 +11,9 @@ using System.Threading.Tasks;
 
 namespace NetFluid.SMTP
 {
+    /// <summary>
+    /// Simple SMTP server
+    /// </summary>
     public class Inbound
     {
         readonly Dictionary<string, Action<string, SmtpRequest>> verbs;  

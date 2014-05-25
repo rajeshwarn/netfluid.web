@@ -10,7 +10,7 @@ namespace NetFluid.Service
     {
         public static Repository<PluggedHost> Hosts { get; private set; }
 
-        public static void Start()
+        public override void OnLoad()
         {
             Hosts = new Repository<PluggedHost>("mongodb://localhost", "NetFluidService");
 

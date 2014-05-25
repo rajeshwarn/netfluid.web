@@ -42,11 +42,6 @@ namespace NetFluid.Service
                 }
 
                 Engine.Start();
-                ExternalHostManager.Start();
-                PluggedHostManager.Start();
-                CDNManager.Start();
-
-                DNSManager.Start();
             }
             catch (Exception ex)
             {
@@ -54,7 +49,6 @@ namespace NetFluid.Service
             }
 
         }
-
 
         protected override void OnStop()
         {

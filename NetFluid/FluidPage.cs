@@ -89,7 +89,7 @@ namespace NetFluid
         /// <summary>
         /// Called when this type is loaded by the Engine
         /// </summary>
-        public void OnLoad()
+        public virtual void OnLoad()
         {
         }
 

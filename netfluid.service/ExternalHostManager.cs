@@ -12,7 +12,7 @@ namespace NetFluid.Service
         public static Repository<ExternalHost> ExternalHosts { get; private set; }
         private static ConcurrentDictionary<string, Process> Processes;
 
-        public static void Start()
+        public override void OnLoad()
         {
             ExternalHosts = new Repository<ExternalHost>("mongodb://localhost", "NetFluidService");
             Processes = new ConcurrentDictionary<string, Process>();

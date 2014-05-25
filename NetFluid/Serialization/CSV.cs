@@ -14,18 +14,46 @@ using NetFluid.Serialization;
 
 namespace NetFluid
 {
+    /// <summary>
+    /// CSV Serializer and Deserializer
+    /// </summary>
     public static class CSV
     {
+        /// <summary>
+        /// Deserialize a CSV into a collection of objects
+        /// </summary>
+        /// <typeparam name="T">objects target type (it must implement default public constructor)</typeparam>
+        /// <param name="reader">CSV reader</param>
+        /// <param name="fieldSeparator">CSV field separator.Default value: ';'</param>
+        /// <param name="textQualifier">CSV string delimiter.Default value: '"'</param>
+        /// <returns>collections of T objects</returns>
         public static IEnumerable<T> Deserialize<T>(StreamReader reader, char fieldSeparator = ';', char textQualifier = '"') where T : new()
         {
             return new CsvReader<T>(reader, fieldSeparator, textQualifier);
         }
 
+        /// <summary>
+        /// Deserialize a CSV into a collection of objects
+        /// </summary>
+        /// <typeparam name="T">objects target type (it must implement default public constructor)</typeparam>
+        /// <param name="stream">CSV source stream (ex: new FileStream("my file.csv"))</param>
+        /// <param name="fieldSeparator">CSV field separator.Default value: ';'</param>
+        /// <param name="textQualifier">CSV string delimiter.Default value: '"'</param>
+        /// <returns>collections of T objects</returns>
         public static IEnumerable<T> Deserialize<T>(Stream stream, char fieldSeparator = ';', char textQualifier = '"') where T : new()
         { 
             return new CsvReader<T>(new StreamReader(stream),fieldSeparator,textQualifier);
         }
 
+        /// <summary>
+        /// Transform a collection of objects into a CSV
+        /// </summary>
+        /// <typeparam name="T">objects target type (it must implement default public constructor)</typeparam>
+        /// <param name="collection">collection to save</param>
+        /// <param name="writer">target streamwiter</param>
+        /// <param name="fieldSeparator">CSV field separator.Default value: ';'</param>
+        /// <param name="textQualifier">CSV string delimiter.Default value: '"'</param>
+        /// <returns>collections of T objects</returns>
         public static void Serialize<T>(IEnumerable<T> collection, StreamWriter writer, char fieldSeparator = ';', char textQualifier = '"')
         {
             var type = (typeof(T));
@@ -108,26 +136,23 @@ namespace NetFluid
 
         static string ToCsvString<T>(object o, char textQualifier, char[] invalidCharsInFields)
         {
-            if (o != null)
+            if (o == null) return string.Empty;
+            var valueString = o as string ?? Convert.ToString(o, CultureInfo.CurrentUICulture);
+            if (valueString.IndexOfAny(invalidCharsInFields) >= 0)
             {
-                string valueString = o as string ?? Convert.ToString(o, CultureInfo.CurrentUICulture);
-                if (valueString.IndexOfAny(invalidCharsInFields) >= 0)
+                var csvLine = new StringBuilder();
+                csvLine.Append(textQualifier);
+                foreach (char c in valueString)
                 {
-                    var csvLine = new StringBuilder();
-                    csvLine.Append(textQualifier);
-                    foreach (char c in valueString)
-                    {
-                        if (c == textQualifier)
-                            csvLine.Append(c); // double the double quotes
-                        csvLine.Append(c);
-                    }
-                    csvLine.Append(textQualifier);
-                    return csvLine.ToString();
+                    if (c == textQualifier)
+                        csvLine.Append(c); // double the double quotes
+                    csvLine.Append(c);
                 }
-                else
-                    return valueString;
+                csvLine.Append(textQualifier);
+                return csvLine.ToString();
             }
-            return string.Empty;
+            else
+                return valueString;
         }
     }
 }

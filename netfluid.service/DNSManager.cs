@@ -38,7 +38,7 @@ namespace NetFluid.Service
             get { return store.OfType<RecordTXT>(); }
         }
 
-        public static void Start()
+        public override void OnLoad()
         {
             store = new Repository<Record>("mongodb://localhost", "NetFluidService");
 
