@@ -43,10 +43,12 @@ namespace NetFluid
     /// </summary>
     public class Context
     {
+        private static readonly char[] Separators = { ' ' };
+        private static readonly Version Latest = new Version(1,2);
+
         private const int BufferSize = 16384;
-        private static readonly char[] separators = {' '};
-        private static ConcurrentBag<Tuple<long, string>> ProfilingResults;
-        private static bool profiling;
+        private static ConcurrentBag<Tuple<long, string>> _profilingResults;
+        private static bool _profiling;
 
         private readonly MemoryStream _ms;
         private readonly Stopwatch st;
@@ -93,7 +95,7 @@ namespace NetFluid
         /// </summary>
         public bool WebSocket;
 
-        private int position;
+        private int _position;
         private int readBytes;
         private StreamReader reader;
         private string sessionId;
@@ -112,7 +114,7 @@ namespace NetFluid
             Secure = false;
             readBytes = 0;
 
-            if (profiling)
+            if (_profiling)
             {
                 st = new Stopwatch();
                 st.Start();
@@ -129,7 +131,7 @@ namespace NetFluid
 
             Buffer = new byte[BufferSize];
             _ms = new MemoryStream(BufferSize);
-            position = 0;
+            _position = 0;
             InputStream.BeginRead(Buffer, 0, BufferSize, OnRead, this);
         }
 
@@ -140,7 +142,7 @@ namespace NetFluid
         /// <param name="certificate">PFX Certificate</param>
         public Context(Socket sock, X509Certificate2 certificate)
         {
-            if (profiling)
+            if (_profiling)
             {
                 st = new Stopwatch();
                 st.Start();
@@ -151,7 +153,7 @@ namespace NetFluid
             Secure = true;
 
             _ms = new MemoryStream();
-            position = 0;
+            _position = 0;
 
             Request = new HttpRequest();
             Response = new HttpResponse();
@@ -216,11 +218,11 @@ namespace NetFluid
         /// </summary>
         public static bool Profiling
         {
-            get { return profiling; }
+            get { return _profiling; }
             set
             {
-                ProfilingResults = new ConcurrentBag<Tuple<long, string>>();
-                profiling = value;
+                _profilingResults = new ConcurrentBag<Tuple<long, string>>();
+                _profiling = value;
             }
         }
 
@@ -229,7 +231,7 @@ namespace NetFluid
         /// </summary>
         public static IEnumerable<Tuple<long, string>> Profile
         {
-            get { return ProfilingResults; }
+            get { return _profilingResults; }
         }
 
         /// <summary>
@@ -307,7 +309,7 @@ namespace NetFluid
             }
 
             byte[] t = _ms.GetBuffer();
-            string header = ReadHeaders(t, ref position, t.Length - position);
+            string header = ReadHeaders(t, ref _position, t.Length - _position);
 
             if (header == "")
             {
@@ -323,11 +325,11 @@ namespace NetFluid
             }
 
 
-            string[] lines = header.Split(new[] {'\n', '\r'}, StringSplitOptions.RemoveEmptyEntries);
+            var lines = header.Split(new[] {'\n', '\r'}, StringSplitOptions.RemoveEmptyEntries);
 
             #region FIRST LINE
 
-            string[] parts = lines[0].Split(separators, 3);
+            string[] parts = lines[0].Split(Separators, 3);
             if (parts.Length >= 3)
             {
                 Request.HttpMethod = parts[0];
@@ -335,8 +337,21 @@ namespace NetFluid
 
                 try
                 {
-                    Response.ProtocolVersion =
-                        Request.ProtocolVersion = Version.Parse(parts[2].Substring("HTTP/".Length));
+                    switch (parts[2][7])
+                    {
+                        case '0':
+                            Response.ProtocolVersion = HttpVersion.Version10;
+                        break;
+                        case '1':
+                            Response.ProtocolVersion = HttpVersion.Version11;
+                        break;
+                        case '2':
+                            Response.ProtocolVersion = Latest;
+                        break;
+                        default:
+                            Response.ProtocolVersion = Request.ProtocolVersion = Version.Parse(parts[2].Substring("HTTP/".Length));
+                        break;
+                    }
                 }
                 catch (Exception)
                 {
@@ -351,15 +366,15 @@ namespace NetFluid
                     Request.Url = HttpUtility.UrlDecode(parts[1].Substring(0, index));
                     parts[1] = parts[1].Substring(index + 1);
 
-                    foreach (string kv in parts[1].Split('&'))
+                    parts[1].Split(new[] {'&'}, StringSplitOptions.RemoveEmptyEntries).ForEach(kv =>
                     {
                         int pos = kv.IndexOf('=');
 
-                        string val = pos < 0 ? "true" : HttpUtility.UrlDecode(kv.Substring(pos + 1));
-                        string key = pos < 0 ? HttpUtility.UrlDecode(kv) : HttpUtility.UrlDecode(kv.Substring(0, pos));
+                        var val = pos < 0 ? "true" : HttpUtility.UrlDecode(kv.Substring(pos + 1));
+                        var key = pos < 0 ? HttpUtility.UrlDecode(kv) : HttpUtility.UrlDecode(kv.Substring(0, pos));
 
                         Request.Get.Add(key, val);
-                    }
+                    });
                 }
                 else
                 {
@@ -472,7 +487,7 @@ namespace NetFluid
 
                                 #endregion
                             }
-                            catch (Exception)
+                            catch
                             {
                             }
                         }
@@ -522,7 +537,7 @@ namespace NetFluid
             if (Engine.Cluster.Handle(this))
                 return;
 
-            if (Request.HttpMethod != "GET" && Buffer.Length != position)
+            if (Request.HttpMethod != "GET" && Buffer.Length != _position)
             {
                 Stream fs;
                 try_again:
@@ -530,13 +545,13 @@ namespace NetFluid
                 try
                 {
                     fs = new FileStream(Path.GetFullPath(Path.Combine(Path.GetTempPath(), Security.UID())),FileMode.OpenOrCreate);
-                    fs.Write(t, position, readBytes - position);
+                    fs.Write(t, _position, readBytes - _position);
                 }
                 catch (Exception)
                 {
                     goto try_again;
                 }
-                ReadAndSave(readBytes - position, Request.ContentLength, fs);
+                ReadAndSave(readBytes - _position, Request.ContentLength, fs);
                 return;
             }
             Engine.Serve(this);
@@ -611,7 +626,7 @@ namespace NetFluid
                         Engine.Serve(this);
                     }
                 }
-                catch (Exception)
+                catch
                 {
                 }
             }, null);
@@ -742,10 +757,10 @@ namespace NetFluid
             if (Engine.DevMode)
                 Console.WriteLine(Request.Host + ":" + Request.Url + " - Context closed");
 
-            if (profiling)
+            if (_profiling)
             {
                 st.Stop();
-                ProfilingResults.Add(new Tuple<long, string>(Stopwatch.Frequency/st.ElapsedTicks,
+                _profilingResults.Add(new Tuple<long, string>(Stopwatch.Frequency/st.ElapsedTicks,
                     Request.Host + Request.Url));
             }
 
@@ -760,7 +775,7 @@ namespace NetFluid
                 Writer.Flush();
                 OutputStream.Flush();
             }
-            catch (Exception)
+            catch
             {
             }
 

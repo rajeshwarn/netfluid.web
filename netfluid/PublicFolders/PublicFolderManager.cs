@@ -72,6 +72,7 @@ namespace NetFluid
                 }
                 cnt.Response.ContentType = MimeTypes.GetType(cnt.Request.Url);
                 cnt.Response.Headers["Expires"] = (DateTime.Now + TimeSpan.FromDays(7)).ToGMT();
+                cnt.Response.Headers["Vary"] = "Accept-Encoding";
                 cnt.SendHeaders();
                 var fs = new FileStream(path, FileMode.OpenOrCreate, FileAccess.ReadWrite, FileShare.ReadWrite);
                 fs.CopyTo(cnt.OutputStream);
