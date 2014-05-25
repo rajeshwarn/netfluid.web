@@ -1,11 +1,12 @@
-/*
 
- */
 
 using System;
 
 namespace NetFluid.DNS.Records
 {
+    /// <summary>
+    /// DNS record A6 (work in progress)
+    /// </summary>
         [Serializable]
     public class RecordA6 : Record
     {

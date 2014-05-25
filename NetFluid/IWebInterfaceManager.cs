@@ -27,7 +27,7 @@ using System.Net;
 namespace NetFluid
 {
     /// <summary>
-    ///     Implements methods to create and manage system http interfaces
+    /// Implements methods to create and manage system http interfaces
     /// </summary>
     public interface IWebInterfaceManager : IEnumerable<IWebInterface>
     {

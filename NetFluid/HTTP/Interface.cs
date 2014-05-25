@@ -25,6 +25,7 @@ using System;
 using System.Net;
 using System.Net.Sockets;
 using System.Security.Cryptography.X509Certificates;
+using System.Threading.Tasks;
 
 namespace NetFluid.HTTP
 {
@@ -76,13 +77,9 @@ namespace NetFluid.HTTP
 
             var e = new SocketAsyncEventArgs();
             if (Certificate == null)
-            {
                 e.Completed += OnAccept;
-            }
             else
-            {
                 e.Completed += OnAcceptCrypt;
-            }
             Socket.AcceptAsync(e);
         }
 
@@ -92,13 +89,18 @@ namespace NetFluid.HTTP
             var listenSocket = sender as Socket;
             do
             {
-                try
+                var sock = e.AcceptSocket;
+                Task.Factory.StartNew(() =>
                 {
-                    new Context(e.AcceptSocket);
-                }
-                catch (Exception)
-                {
-                }
+                    try
+                    {
+                        new Context(sock);
+                    }
+                    catch (Exception)
+                    {
+                    }
+                });
+
                 e.AcceptSocket = null;
             } while (!listenSocket.AcceptAsync(e));
         }
@@ -108,13 +110,17 @@ namespace NetFluid.HTTP
             var listenSocket = sender as Socket;
             do
             {
-                try
+                var sock = e.AcceptSocket;
+                Task.Factory.StartNew(() =>
                 {
-                    new Context(e.AcceptSocket, Certificate);
-                }
-                catch (Exception)
-                {
-                }
+                    try
+                    {
+                        new Context(sock,Certificate);
+                    }
+                    catch (Exception)
+                    {
+                    }
+                });
                 e.AcceptSocket = null; // to enable reuse
             } while (!listenSocket.AcceptAsync(e));
         }

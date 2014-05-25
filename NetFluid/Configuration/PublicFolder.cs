@@ -78,6 +78,9 @@ namespace NetFluid
         }
     }
 
+    /// <summary>
+    /// App.config values for public folders
+    /// </summary>
     public class PublicFolders : ConfigurationElementCollection
     {
         protected override ConfigurationElement CreateNewElement()

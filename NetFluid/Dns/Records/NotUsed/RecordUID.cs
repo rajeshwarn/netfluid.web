@@ -6,6 +6,9 @@ using System;
 
 namespace NetFluid.DNS.Records
 {
+    /// <summary>
+    /// DNS record UID (work in progress)
+    /// </summary>
     [Serializable]
     public class RecordUID : Record
     {

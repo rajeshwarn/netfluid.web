@@ -35,7 +35,7 @@ namespace NetFluid
         public void Start()
         {
             Engine.Logger.Log(LogLevel.Debug, "Starting web interfaces");
-            foreach (IWebInterface item in this)
+            foreach (var item in this)
             {
                 item.Start();
             }
@@ -49,7 +49,7 @@ namespace NetFluid
         public void AddAllAddresses(int port = 80)
         {
             Engine.Logger.Log(LogLevel.Debug, "Starting web interfaces on every ip on port " + port);
-            foreach (IPAddress item in Network.Addresses)
+            foreach (var item in Network.Addresses)
             {
                 //Console.WriteLine(item + ":" + port);
                 AddInterface(item, port);

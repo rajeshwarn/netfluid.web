@@ -25,6 +25,9 @@ using System;
 
 namespace NetFluid.DNS.Records
 {
+    /// <summary>
+    /// DNS record HINFO
+    /// </summary>
         [Serializable]
     public class RecordHINFO : Record
     {

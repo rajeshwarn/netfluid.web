@@ -109,7 +109,7 @@
     <Compile Include="DNS\Records\NotUsed\RecordSSHFP.cs" />
     <Compile Include="DNS\Records\NotUsed\RecordUID.cs" />
     <Compile Include="DNS\Records\NotUsed\RecordUINFO.cs" />
-    <Compile Include="DNS\Records\NotUsed\RecordUnknown.cs" />
+    <Compile Include="DNS\Records\RecordUnknown.cs" />
     <Compile Include="DNS\Records\NotUsed\RecordUNSPEC.cs" />
     <Compile Include="DNS\Records\RecordA.cs" />
     <Compile Include="DNS\Records\RecordAAAA.cs" />

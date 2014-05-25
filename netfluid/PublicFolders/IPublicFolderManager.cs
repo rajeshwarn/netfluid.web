@@ -2,6 +2,9 @@ using System.Collections.Generic;
 
 namespace NetFluid
 {
+    /// <summary>
+    /// Interface to override Engine public folder managing
+    /// </summary>
     public interface IPublicFolderManager
     {
         /// <summary>

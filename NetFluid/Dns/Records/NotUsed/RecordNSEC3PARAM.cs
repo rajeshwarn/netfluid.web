@@ -7,6 +7,9 @@ using System;
 
 namespace NetFluid.DNS.Records
 {
+    /// <summary>
+    /// DNS record NSEC3PARAM (work in progress)
+    /// </summary>
         [Serializable]
     public class RecordNSEC3PARAM : Record
     {

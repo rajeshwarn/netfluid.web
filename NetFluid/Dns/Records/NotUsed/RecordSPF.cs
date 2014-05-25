@@ -6,7 +6,11 @@ using System;
 
 namespace NetFluid.DNS.Records
 {
-            [Serializable]
+    /// <summary>
+    /// DNS record SPF (work in progress)
+    /// </summary>
+
+    [Serializable]
     public class RecordSPF : Record
     {
         public byte[] RDATA;

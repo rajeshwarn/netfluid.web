@@ -65,7 +65,7 @@ namespace NetFluid
     }
 
     /// <summary>
-    /// One or more HTTP/S interface for the curent Netfluid Engine
+    /// App.config interface values
     /// </summary>
     public class Interfaces : ConfigurationElementCollection
     {

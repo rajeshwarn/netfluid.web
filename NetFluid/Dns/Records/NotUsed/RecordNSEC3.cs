@@ -6,6 +6,9 @@ using System;
 
 namespace NetFluid.DNS.Records
 {
+    /// <summary>
+    /// DNS record NSEC3 (work in progress)
+    /// </summary>
         [Serializable]
     public class RecordNSEC3 : Record
     {
