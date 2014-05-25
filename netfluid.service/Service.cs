@@ -59,7 +59,15 @@ namespace NetFluid.Service
         protected override void OnStop()
         {
             Engine.Logger.Log(LogLevel.Warning,"NetFluid Service is stopping");
-            ExternalHostManager.Stop();
+
+            try
+            {
+                ExternalHostManager.Stop();
+            }
+            catch (Exception)
+            {
+            }
+
         }
     }
 }

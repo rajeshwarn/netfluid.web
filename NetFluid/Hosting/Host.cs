@@ -479,7 +479,19 @@ namespace NetFluid
 
             try
             {
-                _instances.Add(page.CreateIstance() as IMethodExposer);
+                var exposer = page.CreateIstance() as IMethodExposer;
+
+                try
+                {
+                    if (exposer != null) 
+                        exposer.OnLoad();
+                }
+                catch (Exception exception)
+                {
+                    Engine.Logger.Log(LogLevel.Exception,"Error loading "+page+".OnLoad method throw an exception",exception);
+                }
+
+                _instances.Add(exposer);
             }
             catch (Exception ex)
             {
