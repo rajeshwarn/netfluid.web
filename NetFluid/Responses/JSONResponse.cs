@@ -23,6 +23,9 @@
 
 namespace NetFluid
 {
+    /// <summary>
+    /// Serialize an object sending it as a plain JSON response (not a JSON file)
+    /// </summary>
     public class JSONResponse : IResponse
     {
         private readonly object obj;

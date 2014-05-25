@@ -21,19 +21,32 @@
 // 23/10/2013    Matteo Fabbri      Inital coding
 // ********************************************************************************************************
 
-using System.IO;
-
 namespace NetFluid
 {
+    /// <summary>
+    /// JSON serialize an object and send it as a fake file 
+    /// </summary>
     public class JSONFileResponse : IResponse
     {
+        /// <summary>
+        /// JSON serialize an object and send it as a fake file 
+        /// </summary>
+        /// <param name="obj">obejct to serialize</param>
+        /// <param name="filename">fake file name</param>
         public JSONFileResponse(object obj, string filename)
         {   
             FileName = filename;
             Object = obj;
         }
 
+        /// <summary>
+        /// Get or set fake file name
+        /// </summary>
         public string FileName { get; set; }
+
+        /// <summary>
+        /// Get or set JSON serialized object
+        /// </summary>
         public object Object { get; set; }
 
         #region IResponse Members

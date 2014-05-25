@@ -29,12 +29,20 @@ using NetFluid.Responses;
 
 namespace NetFluid
 {
+    /// <summary>
+    /// Netfluid default HTML template response
+    /// </summary>
     public class FluidTemplate : IResponse
     {
         private readonly object[] param;
         private readonly MethodInfo template;
         private Context _context;
 
+        /// <summary>
+        /// HTML template path
+        /// </summary>
+        /// <param name="path">path to the template (ex: ./UI/index.html)</param>
+        /// <param name="parameters">optional parameters</param>
         public FluidTemplate(string path, params object[] parameters)
         {
             var s = new System.Diagnostics.StackFrame(1);
@@ -86,6 +94,9 @@ namespace NetFluid
 
         #endregion
 
+        /// <summary>
+        /// Invoked if a compilation error is present
+        /// </summary>
         public static event Action<object, CompilerErrorCollection> OnCompilationError;
 
         internal static void OnError(CompilerErrorCollection errors)

@@ -26,8 +26,17 @@ using System.IO;
 
 namespace NetFluid
 {
+    /// <summary>
+    /// Send a file to the client (http://stackoverflow.com/questions/1012437/uses-of-content-disposition-in-an-http-response-header)
+    /// </summary>
     public class FileResponse : IResponse
     {
+        /// <summary>
+        /// Send this file to client faking filename and mimetype
+        /// </summary>
+        /// <param name="filepath">original file path</param>
+        /// <param name="filename">overrided file name</param>
+        /// <param name="mimetype">overrided mime type</param>
         public FileResponse(string filepath, string filename, string mimetype)
         {
             Path = System.IO.Path.GetFullPath(filepath);
@@ -35,6 +44,11 @@ namespace NetFluid
             MimeType = mimetype;
         }
 
+        /// <summary>
+        ///  Send this file to client faking filename
+        /// </summary>
+        /// <param name="filepath">original file path</param>
+        /// <param name="filename">overrided file name</param>
         public FileResponse(string filepath, string filename)
         {
             Path = System.IO.Path.GetFullPath(filepath);
@@ -42,6 +56,10 @@ namespace NetFluid
             MimeType = MimeTypes.GetType(Path);
         }
 
+        /// <summary>
+        /// Send this file to client.
+        /// </summary>
+        /// <param name="filepath"></param>
         public FileResponse(string filepath)
         {
             Path = System.IO.Path.GetFullPath(filepath);
@@ -49,20 +67,39 @@ namespace NetFluid
             MimeType = MimeTypes.GetType(Path);
         }
 
+        /// <summary>
+        /// Get or set file name exposed to the client
+        /// </summary>
         public string FileName { get; set; }
+
+        /// <summary>
+        /// File to send physical path
+        /// </summary>
         public string Path { get; set; }
+
+        /// <summary>
+        ///  Get or set file mime type exposed to the client
+        /// </summary>
         public string MimeType { get; set; }
 
         public event Action<string> OnDownloadCompleted; 
 
         #region IResponse Members
 
+        /// <summary>
+        /// Set headers
+        /// </summary>
+        /// <param name="cnt"></param>
         public void SetHeaders(Context cnt)
         {
             cnt.Response.Headers["Content-Disposition"] = "attachment; filename=\"" + FileName + "\"";
             cnt.Response.ContentType = MimeType;
         }
 
+        /// <summary>
+        /// Send the file to client
+        /// </summary>
+        /// <param name="cnt">client context</param>
         public void SendResponse(Context cnt)
         {
             var fs = new FileStream(Path, FileMode.Open, FileAccess.Read, FileShare.Read);

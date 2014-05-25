@@ -21,48 +21,76 @@
 // 23/10/2013    Matteo Fabbri      Inital coding
 // ********************************************************************************************************
 
-using System.Xml.Schema;
 using NetFluid.Serialization;
 using System;
 using System.Collections;
-using System.Globalization;
 using System.IO;
-using System.Linq;
-using System.Reflection;
 using System.Text;
-using System.Text.RegularExpressions;
 
 namespace NetFluid
 {
+    /// <summary>
+    /// JSON Serializer / Deserialize
+    /// </summary>
     public class JSON
     {
 
-        public static void Serialize(object json, Stream stream, bool singlerow = false)
+        /// <summary>
+        /// JSON serialize an object into on the stream
+        /// </summary>
+        /// <param name="obj">object to serialize</param>
+        /// <param name="stream">target stream</param>
+        /// <param name="singlerow">if True the object is serialized without new lines (Raccomended: false on dev, true on production). Default value: false</param>
+        public static void Serialize(object obj, Stream stream, bool singlerow = false)
         {
             var writer=  new StreamWriter(stream);
-            Serialize(json, writer, 0, singlerow);
+            Serialize(obj, writer, 0, singlerow);
             writer.Flush();
         }
 
-        public static void Serialize(object json, TextWriter writer, bool singlerow = false, bool omitNull = false)
+        /// <summary>
+        /// JSON serialize an object into on the stream
+        /// </summary>
+        /// <param name="obj">object to serialize</param>
+        /// <param name="writer">target streamwriter</param>
+        /// <param name="singlerow">if True the object is serialized without new lines (Raccomended: false on dev, true on production). Default value: false</param>
+        /// <param name="omitNull">if True null fields are not serialized (Raccomended: false on dev, true on production). Default value: false</param>
+        public static void Serialize(object obj, TextWriter writer, bool singlerow = false, bool omitNull = false)
         {
-            Serialize(json, writer, 0, singlerow,omitNull);
+            Serialize(obj, writer, 0, singlerow,omitNull);
         }
 
-        public static string Serialize(object json, bool singlerow = false)
+        /// <summary>
+        /// JSON serialize an object into a string
+        /// </summary>
+        /// <param name="obj">object to serialize</param>
+        /// <param name="singlerow">if True the object is serialized without new lines (Raccomended: false on dev, true on production). Default value: false</param>
+        /// <returns>JSON serialized string</returns>
+        public static string Serialize(object obj, bool singlerow = false)
         {
             var builder = new StringWriter();
-            Serialize(json, builder, 0, singlerow);
+            Serialize(obj, builder, 0, singlerow);
             return builder.ToString();
         }
 
+        /// <summary>
+        /// Deserialize a JSON string into target type
+        /// </summary>
+        /// <param name="json">JSON string</param>
+        /// <param name="type">target type</param>
+        /// <returns>object of type "type"</returns>
         public static object Deserialize(string json, Type type)
         {
             var parser = new JsonParser(json);
             return JsonParser.Translate(type, parser.ParseValue());
         }
 
-
+        /// <summary>
+        /// Deserialize a JSON string into target type
+        /// </summary>
+        /// <typeparam name="T">target type</typeparam>
+        /// <param name="json">JSON string</param>
+        /// <returns>object of T type</returns>
         public static T Deserialize<T>(string json)
         {
             var parser = new JsonParser(json);
