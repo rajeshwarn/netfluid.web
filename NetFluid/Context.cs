@@ -355,7 +355,7 @@ namespace NetFluid
                 }
                 catch (Exception)
                 {
-                    Response.ProtocolVersion = Version.Parse("0.0");
+                    Response.ProtocolVersion = new Version(0,0);
                 }
 
                 Request.Get = new QueryValueCollection();
