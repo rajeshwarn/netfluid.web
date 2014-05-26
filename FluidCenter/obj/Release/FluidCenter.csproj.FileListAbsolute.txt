@@ -28,7 +28,6 @@ C:\Users\Matteo\Desktop\NetFluid\REPOSITORY\FluidCenter\bin\Release\NetFluid.Ser
 C:\Users\Matteo\Desktop\NetFluid\REPOSITORY\FluidCenter\bin\Release\NetFluid.Mongo.dll
 C:\Users\Matteo\Desktop\NetFluid\REPOSITORY\FluidCenter\bin\Release\MongoDB.Driver.dll
 C:\Users\Matteo\Desktop\NetFluid\REPOSITORY\FluidCenter\bin\Release\MongoDB.Bson.dll
-C:\Users\Matteo\Desktop\NetFluid\REPOSITORY\FluidCenter\bin\Release\FluidPlayer.pdb
 C:\Users\Matteo\Desktop\NetFluid\REPOSITORY\FluidCenter\bin\Release\NetFluid.Service.pdb
 C:\Users\Matteo\Desktop\NetFluid\REPOSITORY\FluidCenter\bin\Release\NetFluid.pdb
 C:\Users\Matteo\Desktop\NetFluid\REPOSITORY\FluidCenter\bin\Release\NetFluid.Mongo.pdb

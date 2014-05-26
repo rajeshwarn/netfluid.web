@@ -1,10 +1,13 @@
 ﻿using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Configuration.Install;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Security.AccessControl;
+using System.Security.Principal;
 using System.ServiceProcess;
 using NetFluid.Collections;
 
@@ -15,17 +18,60 @@ namespace NetFluid.Service
     {
         static void Main(string[] args)
         {
-            if (args!=null && args.Length>=1 && args[0]=="debug")
+            if (args!=null && args.Length>=1)
             {
-                Engine.DevMode = true;
-               (new Service()).OnStart(null);
-               Engine.DevMode = true;
-                Console.ReadLine();
-                return;
+                switch (args[0])
+                {
+                    case "debug":
+                        (new Service()).OnStart(null);
+                        Engine.DevMode = true;
+                        Console.ReadLine();
+                        break;
+                    case "install":
+                        InstallService();
+                    break;
+                    case "uninstall":
+                        UninstallService();
+                    break;
+                    case "start":
+                        var service = new ServiceController("NetFluidService");
+                        service.Start();
+                    break;
+                }
             }
             Run(new Service());
         }
 
+        public static bool IsServiceInstalled()
+        {
+            return ServiceController.GetServices().Any(s => s.ServiceName == "NetFluidService");
+        }
+
+        public static void InstallService()
+        {
+            var dir = new DirectoryInfo(Path.GetDirectoryName(Assembly.GetCallingAssembly().Location));
+            var sec = dir.GetAccessControl();
+
+            var networkService = new SecurityIdentifier(WellKnownSidType.NetworkServiceSid, null);
+            var localService = new SecurityIdentifier(WellKnownSidType.LocalServiceSid, null);
+
+            sec.AddAccessRule(new FileSystemAccessRule(networkService, FileSystemRights.FullControl, AccessControlType.Allow));
+            sec.AddAccessRule(new FileSystemAccessRule(localService, FileSystemRights.FullControl, AccessControlType.Allow));
+
+            dir.SetAccessControl(sec);
+
+            if (IsServiceInstalled())
+            {
+                UninstallService();
+            }
+
+            ManagedInstallerClass.InstallHelper(new[] { Path.GetFullPath("NetFluid.Service.exe") });
+        }
+
+        public static void UninstallService()
+        {
+            ManagedInstallerClass.InstallHelper(new[] { "/u", Path.GetFullPath("NetFluid.Service.exe") });
+        } 
 
         protected override void OnStart(string[] args)
         {

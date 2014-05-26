@@ -779,10 +779,16 @@ namespace NetFluid
             {
             }
 
+            try
+            {
 
-            OutputStream.Close();
+            }
+            catch (Exception)
+            {
+                OutputStream.Close();
+                Socket.Close();
+            }
 
-            Socket.Close();
         }
 
         /// <summary>

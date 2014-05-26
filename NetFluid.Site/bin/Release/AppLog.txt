@@ -3513,3 +3513,371 @@
 19/02/2014 12.11.10	Debug	Starting  web interface on 192.168.68.1:8080
 19/02/2014 12.11.10	Debug	Starting  web interface on 192.168.1.2:8080
 19/02/2014 12.11.10	Debug	NetFluid web application running
+
+26/05/2014 16.54.27	Error	Failed to load app configuration
+				System.Configuration.ConfigurationErrorsException: Attributo 'Immutable' non riconosciuto. I nomi di attributo rilevano la differenza tra maiuscole e minuscole. (C:\Users\Matteo\Desktop\NetFluid\REPOSITORY\NetFluid.Site\bin\Release\NetFluid.Site.vshost.exe.Config line 19)
+				
+				   in System.Configuration.BaseConfigurationRecord.EvaluateOne(String[] keys, SectionInput input, Boolean isTrusted, FactoryRecord factoryRecord, SectionRecord sectionRecord, Object parentResult)
+				
+				   in System.Configuration.BaseConfigurationRecord.Evaluate(FactoryRecord factoryRecord, SectionRecord sectionRecord, Object parentResult, Boolean getLkg, Boolean getRuntimeObject, Object& result, Object& resultRuntimeObject)
+				
+				   in System.Configuration.BaseConfigurationRecord.GetSectionRecursive(String configKey, Boolean getLkg, Boolean checkPermission, Boolean getRuntimeObject, Boolean requestIsHere, Object& result, Object& resultRuntimeObject)
+				
+				   in System.Configuration.BaseConfigurationRecord.GetSectionRecursive(String configKey, Boolean getLkg, Boolean checkPermission, Boolean getRuntimeObject, Boolean requestIsHere, Object& result, Object& resultRuntimeObject)
+				
+				   in System.Configuration.BaseConfigurationRecord.GetSectionRecursive(String configKey, Boolean getLkg, Boolean checkPermission, Boolean getRuntimeObject, Boolean requestIsHere, Object& result, Object& resultRuntimeObject)
+				
+				   in System.Configuration.BaseConfigurationRecord.GetSection(String configKey)
+				
+				   in System.Configuration.ClientConfigurationSystem.System.Configuration.Internal.IInternalConfigSystem.GetSection(String sectionName)
+				
+				   in System.Configuration.ConfigurationManager.GetSection(String sectionName)
+				
+				   in NetFluid.Engine.LoadAppConfiguration() in c:\Users\Matteo\Desktop\NetFluid\REPOSITORY\netfluid\Hosting\Engine.cs:riga 287
+26/05/2014 16.54.27	Error	App configuration not loaded, using default values
+26/05/2014 16.54.27	Debug	Adding http interface on 127.0.0.1:80
+26/05/2014 16.54.27	Debug	Starting web interfaces on every ip on port 80
+26/05/2014 16.54.27	Debug	Adding http interface on fe80::140c:79e4:c634:f3d0%50:80
+26/05/2014 16.54.27	Debug	Adding http interface on fe80::441c:513:595:2b1c%40:80
+26/05/2014 16.54.27	Debug	Adding http interface on fe80::6872:ccef:6dc6:795b%37:80
+26/05/2014 16.54.27	Debug	Adding http interface on fe80::8882:82a7:dded:fcfe%34:80
+26/05/2014 16.54.27	Debug	Adding http interface on 169.254.80.80:80
+26/05/2014 16.54.27	Debug	Adding http interface on 192.168.68.1:80
+26/05/2014 16.54.27	Debug	Adding http interface on 192.168.171.1:80
+26/05/2014 16.54.27	Debug	Adding http interface on 192.168.56.1:80
+26/05/2014 16.54.27	Debug	Starting NetFluid Engine
+26/05/2014 16.54.27	Debug	Loading calling assembly
+26/05/2014 16.54.27	Debug	Loading NetFluid.Site, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null into default web application
+26/05/2014 16.54.27	Debug	Starting web interfaces
+26/05/2014 16.54.27	Debug	Starting  web interface on 127.0.0.1:80
+26/05/2014 16.54.27	Debug	Starting  web interface on [fe80::140c:79e4:c634:f3d0%50]:80
+26/05/2014 16.54.27	Debug	Starting  web interface on [fe80::441c:513:595:2b1c%40]:80
+26/05/2014 16.54.27	Debug	Starting  web interface on [fe80::6872:ccef:6dc6:795b%37]:80
+26/05/2014 16.54.27	Debug	Starting  web interface on [fe80::8882:82a7:dded:fcfe%34]:80
+26/05/2014 16.54.27	Debug	Starting  web interface on 169.254.80.80:80
+26/05/2014 16.54.27	Debug	Starting  web interface on 192.168.68.1:80
+26/05/2014 16.54.27	Debug	Starting  web interface on 192.168.171.1:80
+26/05/2014 16.54.27	Debug	Starting  web interface on 192.168.56.1:80
+26/05/2014 16.54.27	Debug	NetFluid web application running
+
+26/05/2014 16.54.54	Error	Failed to load app configuration
+				System.Configuration.ConfigurationErrorsException: Attributo 'Immutable' non riconosciuto. I nomi di attributo rilevano la differenza tra maiuscole e minuscole. (C:\Users\Matteo\Desktop\NetFluid\REPOSITORY\NetFluid.Site\bin\Release\NetFluid.Site.vshost.exe.Config line 19)
+				
+				   in System.Configuration.BaseConfigurationRecord.EvaluateOne(String[] keys, SectionInput input, Boolean isTrusted, FactoryRecord factoryRecord, SectionRecord sectionRecord, Object parentResult)
+				
+				   in System.Configuration.BaseConfigurationRecord.Evaluate(FactoryRecord factoryRecord, SectionRecord sectionRecord, Object parentResult, Boolean getLkg, Boolean getRuntimeObject, Object& result, Object& resultRuntimeObject)
+				
+				   in System.Configuration.BaseConfigurationRecord.GetSectionRecursive(String configKey, Boolean getLkg, Boolean checkPermission, Boolean getRuntimeObject, Boolean requestIsHere, Object& result, Object& resultRuntimeObject)
+				
+				   in System.Configuration.BaseConfigurationRecord.GetSectionRecursive(String configKey, Boolean getLkg, Boolean checkPermission, Boolean getRuntimeObject, Boolean requestIsHere, Object& result, Object& resultRuntimeObject)
+				
+				   in System.Configuration.BaseConfigurationRecord.GetSectionRecursive(String configKey, Boolean getLkg, Boolean checkPermission, Boolean getRuntimeObject, Boolean requestIsHere, Object& result, Object& resultRuntimeObject)
+				
+				   in System.Configuration.BaseConfigurationRecord.GetSection(String configKey)
+				
+				   in System.Configuration.ClientConfigurationSystem.System.Configuration.Internal.IInternalConfigSystem.GetSection(String sectionName)
+				
+				   in System.Configuration.ConfigurationManager.GetSection(String sectionName)
+				
+				   in NetFluid.Engine.LoadAppConfiguration() in c:\Users\Matteo\Desktop\NetFluid\REPOSITORY\netfluid\Hosting\Engine.cs:riga 287
+26/05/2014 16.54.54	Error	App configuration not loaded, using default values
+26/05/2014 16.54.54	Debug	Adding http interface on 127.0.0.1:80
+26/05/2014 16.54.54	Debug	Starting web interfaces on every ip on port 80
+26/05/2014 16.54.54	Debug	Adding http interface on fe80::140c:79e4:c634:f3d0%50:80
+26/05/2014 16.54.54	Debug	Adding http interface on fe80::441c:513:595:2b1c%40:80
+26/05/2014 16.54.54	Debug	Adding http interface on fe80::6872:ccef:6dc6:795b%37:80
+26/05/2014 16.54.54	Debug	Adding http interface on fe80::8882:82a7:dded:fcfe%34:80
+26/05/2014 16.54.54	Debug	Adding http interface on 169.254.80.80:80
+26/05/2014 16.54.54	Debug	Adding http interface on 192.168.68.1:80
+26/05/2014 16.54.54	Debug	Adding http interface on 192.168.171.1:80
+26/05/2014 16.54.54	Debug	Adding http interface on 192.168.56.1:80
+26/05/2014 16.54.54	Debug	Starting NetFluid Engine
+26/05/2014 16.54.54	Debug	Loading calling assembly
+26/05/2014 16.54.54	Debug	Loading NetFluid.Site, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null into default web application
+26/05/2014 16.54.55	Debug	Starting web interfaces
+26/05/2014 16.54.55	Debug	Starting  web interface on 127.0.0.1:80
+26/05/2014 16.54.55	Debug	Starting  web interface on [fe80::140c:79e4:c634:f3d0%50]:80
+26/05/2014 16.54.55	Debug	Starting  web interface on [fe80::441c:513:595:2b1c%40]:80
+26/05/2014 16.54.55	Debug	Starting  web interface on [fe80::6872:ccef:6dc6:795b%37]:80
+26/05/2014 16.54.55	Debug	Starting  web interface on [fe80::8882:82a7:dded:fcfe%34]:80
+26/05/2014 16.54.55	Debug	Starting  web interface on 169.254.80.80:80
+26/05/2014 16.54.55	Debug	Starting  web interface on 192.168.68.1:80
+26/05/2014 16.54.55	Debug	Starting  web interface on 192.168.171.1:80
+26/05/2014 16.54.55	Debug	Starting  web interface on 192.168.56.1:80
+26/05/2014 16.54.55	Debug	NetFluid web application running
+
+26/05/2014 16.55.17	Error	Failed to load app configuration
+				System.Configuration.ConfigurationErrorsException: Attributo 'Immutable' non riconosciuto. I nomi di attributo rilevano la differenza tra maiuscole e minuscole. (C:\Users\Matteo\Desktop\NetFluid\REPOSITORY\NetFluid.Site\bin\Release\NetFluid.Site.vshost.exe.Config line 19)
+				
+				   in System.Configuration.BaseConfigurationRecord.EvaluateOne(String[] keys, SectionInput input, Boolean isTrusted, FactoryRecord factoryRecord, SectionRecord sectionRecord, Object parentResult)
+				
+				   in System.Configuration.BaseConfigurationRecord.Evaluate(FactoryRecord factoryRecord, SectionRecord sectionRecord, Object parentResult, Boolean getLkg, Boolean getRuntimeObject, Object& result, Object& resultRuntimeObject)
+				
+				   in System.Configuration.BaseConfigurationRecord.GetSectionRecursive(String configKey, Boolean getLkg, Boolean checkPermission, Boolean getRuntimeObject, Boolean requestIsHere, Object& result, Object& resultRuntimeObject)
+				
+				   in System.Configuration.BaseConfigurationRecord.GetSectionRecursive(String configKey, Boolean getLkg, Boolean checkPermission, Boolean getRuntimeObject, Boolean requestIsHere, Object& result, Object& resultRuntimeObject)
+				
+				   in System.Configuration.BaseConfigurationRecord.GetSectionRecursive(String configKey, Boolean getLkg, Boolean checkPermission, Boolean getRuntimeObject, Boolean requestIsHere, Object& result, Object& resultRuntimeObject)
+				
+				   in System.Configuration.BaseConfigurationRecord.GetSection(String configKey)
+				
+				   in System.Configuration.ClientConfigurationSystem.System.Configuration.Internal.IInternalConfigSystem.GetSection(String sectionName)
+				
+				   in System.Configuration.ConfigurationManager.GetSection(String sectionName)
+				
+				   in NetFluid.Engine.LoadAppConfiguration() in c:\Users\Matteo\Desktop\NetFluid\REPOSITORY\netfluid\Hosting\Engine.cs:riga 287
+26/05/2014 16.55.17	Error	App configuration not loaded, using default values
+26/05/2014 16.55.17	Debug	Adding http interface on 127.0.0.1:80
+26/05/2014 16.55.17	Debug	Starting web interfaces on every ip on port 80
+26/05/2014 16.55.17	Debug	Adding http interface on fe80::140c:79e4:c634:f3d0%50:80
+26/05/2014 16.55.17	Debug	Adding http interface on fe80::441c:513:595:2b1c%40:80
+26/05/2014 16.55.17	Debug	Adding http interface on fe80::6872:ccef:6dc6:795b%37:80
+26/05/2014 16.55.17	Debug	Adding http interface on fe80::8882:82a7:dded:fcfe%34:80
+26/05/2014 16.55.17	Debug	Adding http interface on 169.254.80.80:80
+26/05/2014 16.55.17	Debug	Adding http interface on 192.168.68.1:80
+26/05/2014 16.55.17	Debug	Adding http interface on 192.168.171.1:80
+26/05/2014 16.55.17	Debug	Adding http interface on 192.168.56.1:80
+26/05/2014 16.55.17	Debug	Starting NetFluid Engine
+26/05/2014 16.55.17	Debug	Loading calling assembly
+26/05/2014 16.55.17	Debug	Loading NetFluid.Site, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null into default web application
+26/05/2014 16.55.17	Debug	Starting web interfaces
+26/05/2014 16.55.17	Debug	Starting  web interface on 127.0.0.1:80
+26/05/2014 16.55.17	Debug	Starting  web interface on [fe80::140c:79e4:c634:f3d0%50]:80
+26/05/2014 16.55.17	Debug	Starting  web interface on [fe80::441c:513:595:2b1c%40]:80
+26/05/2014 16.55.17	Debug	Starting  web interface on [fe80::6872:ccef:6dc6:795b%37]:80
+26/05/2014 16.55.17	Debug	Starting  web interface on [fe80::8882:82a7:dded:fcfe%34]:80
+26/05/2014 16.55.17	Debug	Starting  web interface on 169.254.80.80:80
+26/05/2014 16.55.17	Debug	Starting  web interface on 192.168.68.1:80
+26/05/2014 16.55.17	Debug	Starting  web interface on 192.168.171.1:80
+26/05/2014 16.55.17	Debug	Starting  web interface on 192.168.56.1:80
+26/05/2014 16.55.17	Debug	NetFluid web application running
+
+26/05/2014 16.56.18	Error	Failed to load app configuration
+				System.Configuration.ConfigurationErrorsException: Attributo 'Immutable' non riconosciuto. I nomi di attributo rilevano la differenza tra maiuscole e minuscole. (C:\Users\Matteo\Desktop\NetFluid\REPOSITORY\NetFluid.Site\bin\Release\NetFluid.Site.vshost.exe.Config line 19)
+				
+				   in System.Configuration.BaseConfigurationRecord.EvaluateOne(String[] keys, SectionInput input, Boolean isTrusted, FactoryRecord factoryRecord, SectionRecord sectionRecord, Object parentResult)
+				
+				   in System.Configuration.BaseConfigurationRecord.Evaluate(FactoryRecord factoryRecord, SectionRecord sectionRecord, Object parentResult, Boolean getLkg, Boolean getRuntimeObject, Object& result, Object& resultRuntimeObject)
+				
+				   in System.Configuration.BaseConfigurationRecord.GetSectionRecursive(String configKey, Boolean getLkg, Boolean checkPermission, Boolean getRuntimeObject, Boolean requestIsHere, Object& result, Object& resultRuntimeObject)
+				
+				   in System.Configuration.BaseConfigurationRecord.GetSectionRecursive(String configKey, Boolean getLkg, Boolean checkPermission, Boolean getRuntimeObject, Boolean requestIsHere, Object& result, Object& resultRuntimeObject)
+				
+				   in System.Configuration.BaseConfigurationRecord.GetSectionRecursive(String configKey, Boolean getLkg, Boolean checkPermission, Boolean getRuntimeObject, Boolean requestIsHere, Object& result, Object& resultRuntimeObject)
+				
+				   in System.Configuration.BaseConfigurationRecord.GetSection(String configKey)
+				
+				   in System.Configuration.ClientConfigurationSystem.System.Configuration.Internal.IInternalConfigSystem.GetSection(String sectionName)
+				
+				   in System.Configuration.ConfigurationManager.GetSection(String sectionName)
+				
+				   in NetFluid.Engine.LoadAppConfiguration() in c:\Users\Matteo\Desktop\NetFluid\REPOSITORY\netfluid\Hosting\Engine.cs:riga 287
+26/05/2014 16.56.18	Error	App configuration not loaded, using default values
+26/05/2014 16.56.18	Debug	Adding http interface on 127.0.0.1:80
+26/05/2014 16.56.18	Debug	Starting web interfaces on every ip on port 80
+26/05/2014 16.56.18	Debug	Adding http interface on fe80::140c:79e4:c634:f3d0%50:80
+26/05/2014 16.56.18	Debug	Adding http interface on fe80::441c:513:595:2b1c%40:80
+26/05/2014 16.56.18	Debug	Adding http interface on fe80::6872:ccef:6dc6:795b%37:80
+26/05/2014 16.56.18	Debug	Adding http interface on fe80::8882:82a7:dded:fcfe%34:80
+26/05/2014 16.56.18	Debug	Adding http interface on 169.254.80.80:80
+26/05/2014 16.56.18	Debug	Adding http interface on 192.168.68.1:80
+26/05/2014 16.56.18	Debug	Adding http interface on 192.168.171.1:80
+26/05/2014 16.56.18	Debug	Adding http interface on 192.168.56.1:80
+26/05/2014 16.56.18	Debug	Starting NetFluid Engine
+26/05/2014 16.56.18	Debug	Loading calling assembly
+26/05/2014 16.56.18	Debug	Loading NetFluid.Site, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null into default web application
+26/05/2014 16.56.18	Debug	Starting web interfaces
+26/05/2014 16.56.18	Debug	Starting  web interface on 127.0.0.1:80
+26/05/2014 16.56.18	Debug	Starting  web interface on [fe80::140c:79e4:c634:f3d0%50]:80
+26/05/2014 16.56.18	Debug	Starting  web interface on [fe80::441c:513:595:2b1c%40]:80
+26/05/2014 16.56.18	Debug	Starting  web interface on [fe80::6872:ccef:6dc6:795b%37]:80
+26/05/2014 16.56.18	Debug	Starting  web interface on [fe80::8882:82a7:dded:fcfe%34]:80
+26/05/2014 16.56.18	Debug	Starting  web interface on 169.254.80.80:80
+26/05/2014 16.56.18	Debug	Starting  web interface on 192.168.68.1:80
+26/05/2014 16.56.18	Debug	Starting  web interface on 192.168.171.1:80
+26/05/2014 16.56.18	Debug	Starting  web interface on 192.168.56.1:80
+26/05/2014 16.56.18	Debug	NetFluid web application running
+
+26/05/2014 16.59.27	Error	Failed to load app configuration
+				System.Configuration.ConfigurationErrorsException: Attributo 'Immutable' non riconosciuto. I nomi di attributo rilevano la differenza tra maiuscole e minuscole. (C:\Users\Matteo\Desktop\NetFluid\REPOSITORY\NetFluid.Site\bin\Release\NetFluid.Site.vshost.exe.Config line 19)
+				
+				   in System.Configuration.BaseConfigurationRecord.EvaluateOne(String[] keys, SectionInput input, Boolean isTrusted, FactoryRecord factoryRecord, SectionRecord sectionRecord, Object parentResult)
+				
+				   in System.Configuration.BaseConfigurationRecord.Evaluate(FactoryRecord factoryRecord, SectionRecord sectionRecord, Object parentResult, Boolean getLkg, Boolean getRuntimeObject, Object& result, Object& resultRuntimeObject)
+				
+				   in System.Configuration.BaseConfigurationRecord.GetSectionRecursive(String configKey, Boolean getLkg, Boolean checkPermission, Boolean getRuntimeObject, Boolean requestIsHere, Object& result, Object& resultRuntimeObject)
+				
+				   in System.Configuration.BaseConfigurationRecord.GetSectionRecursive(String configKey, Boolean getLkg, Boolean checkPermission, Boolean getRuntimeObject, Boolean requestIsHere, Object& result, Object& resultRuntimeObject)
+				
+				   in System.Configuration.BaseConfigurationRecord.GetSectionRecursive(String configKey, Boolean getLkg, Boolean checkPermission, Boolean getRuntimeObject, Boolean requestIsHere, Object& result, Object& resultRuntimeObject)
+				
+				   in System.Configuration.BaseConfigurationRecord.GetSection(String configKey)
+				
+				   in System.Configuration.ClientConfigurationSystem.System.Configuration.Internal.IInternalConfigSystem.GetSection(String sectionName)
+				
+				   in System.Configuration.ConfigurationManager.GetSection(String sectionName)
+				
+				   in NetFluid.Engine.LoadAppConfiguration() in c:\Users\Matteo\Desktop\NetFluid\REPOSITORY\netfluid\Hosting\Engine.cs:riga 287
+26/05/2014 16.59.27	Error	App configuration not loaded, using default values
+26/05/2014 16.59.27	Debug	Adding http interface on 127.0.0.1:80
+26/05/2014 16.59.27	Debug	Starting web interfaces on every ip on port 80
+26/05/2014 16.59.27	Debug	Adding http interface on fe80::140c:79e4:c634:f3d0%50:80
+26/05/2014 16.59.27	Debug	Adding http interface on fe80::441c:513:595:2b1c%40:80
+26/05/2014 16.59.27	Debug	Adding http interface on fe80::6872:ccef:6dc6:795b%37:80
+26/05/2014 16.59.27	Debug	Adding http interface on fe80::8882:82a7:dded:fcfe%34:80
+26/05/2014 16.59.27	Debug	Adding http interface on 169.254.80.80:80
+26/05/2014 16.59.27	Debug	Adding http interface on 192.168.68.1:80
+26/05/2014 16.59.27	Debug	Adding http interface on 192.168.171.1:80
+26/05/2014 16.59.27	Debug	Adding http interface on 192.168.56.1:80
+26/05/2014 16.59.27	Debug	Starting NetFluid Engine
+26/05/2014 16.59.27	Debug	Loading calling assembly
+26/05/2014 16.59.27	Debug	Loading NetFluid.Site, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null into default web application
+26/05/2014 16.59.27	Debug	Starting web interfaces
+26/05/2014 16.59.27	Debug	Starting  web interface on 127.0.0.1:80
+26/05/2014 16.59.27	Debug	Starting  web interface on [fe80::140c:79e4:c634:f3d0%50]:80
+26/05/2014 16.59.27	Debug	Starting  web interface on [fe80::441c:513:595:2b1c%40]:80
+26/05/2014 16.59.27	Debug	Starting  web interface on [fe80::6872:ccef:6dc6:795b%37]:80
+26/05/2014 16.59.27	Debug	Starting  web interface on [fe80::8882:82a7:dded:fcfe%34]:80
+26/05/2014 16.59.27	Debug	Starting  web interface on 169.254.80.80:80
+26/05/2014 16.59.27	Debug	Starting  web interface on 192.168.68.1:80
+26/05/2014 16.59.27	Debug	Starting  web interface on 192.168.171.1:80
+26/05/2014 16.59.27	Debug	Starting  web interface on 192.168.56.1:80
+26/05/2014 16.59.27	Debug	NetFluid web application running
+
+26/05/2014 17.00.48	Error	Failed to load app configuration
+				System.Configuration.ConfigurationErrorsException: Attributo 'Immutable' non riconosciuto. I nomi di attributo rilevano la differenza tra maiuscole e minuscole. (C:\Users\Matteo\Desktop\NetFluid\REPOSITORY\NetFluid.Site\bin\Release\NetFluid.Site.vshost.exe.Config line 19)
+				
+				   in System.Configuration.BaseConfigurationRecord.EvaluateOne(String[] keys, SectionInput input, Boolean isTrusted, FactoryRecord factoryRecord, SectionRecord sectionRecord, Object parentResult)
+				
+				   in System.Configuration.BaseConfigurationRecord.Evaluate(FactoryRecord factoryRecord, SectionRecord sectionRecord, Object parentResult, Boolean getLkg, Boolean getRuntimeObject, Object& result, Object& resultRuntimeObject)
+				
+				   in System.Configuration.BaseConfigurationRecord.GetSectionRecursive(String configKey, Boolean getLkg, Boolean checkPermission, Boolean getRuntimeObject, Boolean requestIsHere, Object& result, Object& resultRuntimeObject)
+				
+				   in System.Configuration.BaseConfigurationRecord.GetSectionRecursive(String configKey, Boolean getLkg, Boolean checkPermission, Boolean getRuntimeObject, Boolean requestIsHere, Object& result, Object& resultRuntimeObject)
+				
+				   in System.Configuration.BaseConfigurationRecord.GetSectionRecursive(String configKey, Boolean getLkg, Boolean checkPermission, Boolean getRuntimeObject, Boolean requestIsHere, Object& result, Object& resultRuntimeObject)
+				
+				   in System.Configuration.BaseConfigurationRecord.GetSection(String configKey)
+				
+				   in System.Configuration.ClientConfigurationSystem.System.Configuration.Internal.IInternalConfigSystem.GetSection(String sectionName)
+				
+				   in System.Configuration.ConfigurationManager.GetSection(String sectionName)
+				
+				   in NetFluid.Engine.LoadAppConfiguration() in c:\Users\Matteo\Desktop\NetFluid\REPOSITORY\netfluid\Hosting\Engine.cs:riga 287
+26/05/2014 17.00.48	Error	App configuration not loaded, using default values
+26/05/2014 17.00.48	Debug	Adding http interface on 127.0.0.1:80
+26/05/2014 17.00.48	Debug	Starting web interfaces on every ip on port 80
+26/05/2014 17.00.48	Debug	Adding http interface on fe80::140c:79e4:c634:f3d0%50:80
+26/05/2014 17.00.48	Debug	Adding http interface on fe80::441c:513:595:2b1c%40:80
+26/05/2014 17.00.48	Debug	Adding http interface on fe80::6872:ccef:6dc6:795b%37:80
+26/05/2014 17.00.48	Debug	Adding http interface on fe80::8882:82a7:dded:fcfe%34:80
+26/05/2014 17.00.48	Debug	Adding http interface on 169.254.80.80:80
+26/05/2014 17.00.48	Debug	Adding http interface on 192.168.68.1:80
+26/05/2014 17.00.48	Debug	Adding http interface on 192.168.171.1:80
+26/05/2014 17.00.48	Debug	Adding http interface on 192.168.56.1:80
+26/05/2014 17.00.48	Debug	Starting NetFluid Engine
+26/05/2014 17.00.48	Debug	Loading calling assembly
+26/05/2014 17.00.48	Debug	Loading NetFluid.Site, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null into default web application
+26/05/2014 17.00.48	Debug	Starting web interfaces
+26/05/2014 17.00.48	Debug	Starting  web interface on 127.0.0.1:80
+26/05/2014 17.00.48	Debug	Starting  web interface on [fe80::140c:79e4:c634:f3d0%50]:80
+26/05/2014 17.00.48	Debug	Starting  web interface on [fe80::441c:513:595:2b1c%40]:80
+26/05/2014 17.00.48	Debug	Starting  web interface on [fe80::6872:ccef:6dc6:795b%37]:80
+26/05/2014 17.00.48	Debug	Starting  web interface on [fe80::8882:82a7:dded:fcfe%34]:80
+26/05/2014 17.00.48	Debug	Starting  web interface on 169.254.80.80:80
+26/05/2014 17.00.48	Debug	Starting  web interface on 192.168.68.1:80
+26/05/2014 17.00.48	Debug	Starting  web interface on 192.168.171.1:80
+26/05/2014 17.00.48	Debug	Starting  web interface on 192.168.56.1:80
+26/05/2014 17.00.48	Debug	NetFluid web application running
+
+26/05/2014 17.01.44	Error	Failed to load app configuration
+				System.Configuration.ConfigurationErrorsException: Attributo 'Immutable' non riconosciuto. I nomi di attributo rilevano la differenza tra maiuscole e minuscole. (C:\Users\Matteo\Desktop\NetFluid\REPOSITORY\NetFluid.Site\bin\Release\NetFluid.Site.vshost.exe.Config line 19)
+				
+				   in System.Configuration.BaseConfigurationRecord.EvaluateOne(String[] keys, SectionInput input, Boolean isTrusted, FactoryRecord factoryRecord, SectionRecord sectionRecord, Object parentResult)
+				
+				   in System.Configuration.BaseConfigurationRecord.Evaluate(FactoryRecord factoryRecord, SectionRecord sectionRecord, Object parentResult, Boolean getLkg, Boolean getRuntimeObject, Object& result, Object& resultRuntimeObject)
+				
+				   in System.Configuration.BaseConfigurationRecord.GetSectionRecursive(String configKey, Boolean getLkg, Boolean checkPermission, Boolean getRuntimeObject, Boolean requestIsHere, Object& result, Object& resultRuntimeObject)
+				
+				   in System.Configuration.BaseConfigurationRecord.GetSectionRecursive(String configKey, Boolean getLkg, Boolean checkPermission, Boolean getRuntimeObject, Boolean requestIsHere, Object& result, Object& resultRuntimeObject)
+				
+				   in System.Configuration.BaseConfigurationRecord.GetSectionRecursive(String configKey, Boolean getLkg, Boolean checkPermission, Boolean getRuntimeObject, Boolean requestIsHere, Object& result, Object& resultRuntimeObject)
+				
+				   in System.Configuration.BaseConfigurationRecord.GetSection(String configKey)
+				
+				   in System.Configuration.ClientConfigurationSystem.System.Configuration.Internal.IInternalConfigSystem.GetSection(String sectionName)
+				
+				   in System.Configuration.ConfigurationManager.GetSection(String sectionName)
+				
+				   in NetFluid.Engine.LoadAppConfiguration() in c:\Users\Matteo\Desktop\NetFluid\REPOSITORY\netfluid\Hosting\Engine.cs:riga 287
+26/05/2014 17.01.44	Error	App configuration not loaded, using default values
+26/05/2014 17.01.44	Debug	Adding http interface on 127.0.0.1:80
+26/05/2014 17.01.44	Debug	Starting web interfaces on every ip on port 80
+26/05/2014 17.01.44	Debug	Adding http interface on fe80::140c:79e4:c634:f3d0%50:80
+26/05/2014 17.01.44	Debug	Adding http interface on fe80::441c:513:595:2b1c%40:80
+26/05/2014 17.01.44	Debug	Adding http interface on fe80::6872:ccef:6dc6:795b%37:80
+26/05/2014 17.01.44	Debug	Adding http interface on fe80::8882:82a7:dded:fcfe%34:80
+26/05/2014 17.01.44	Debug	Adding http interface on 169.254.80.80:80
+26/05/2014 17.01.44	Debug	Adding http interface on 192.168.68.1:80
+26/05/2014 17.01.44	Debug	Adding http interface on 192.168.171.1:80
+26/05/2014 17.01.44	Debug	Adding http interface on 192.168.56.1:80
+26/05/2014 17.01.44	Debug	Starting NetFluid Engine
+26/05/2014 17.01.44	Debug	Loading calling assembly
+26/05/2014 17.01.44	Debug	Loading NetFluid.Site, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null into default web application
+26/05/2014 17.01.44	Debug	Starting web interfaces
+26/05/2014 17.01.44	Debug	Starting  web interface on 127.0.0.1:80
+26/05/2014 17.01.44	Debug	Starting  web interface on [fe80::140c:79e4:c634:f3d0%50]:80
+26/05/2014 17.01.44	Debug	Starting  web interface on [fe80::441c:513:595:2b1c%40]:80
+26/05/2014 17.01.44	Debug	Starting  web interface on [fe80::6872:ccef:6dc6:795b%37]:80
+26/05/2014 17.01.44	Debug	Starting  web interface on [fe80::8882:82a7:dded:fcfe%34]:80
+26/05/2014 17.01.44	Debug	Starting  web interface on 169.254.80.80:80
+26/05/2014 17.01.44	Debug	Starting  web interface on 192.168.68.1:80
+26/05/2014 17.01.44	Debug	Starting  web interface on 192.168.171.1:80
+26/05/2014 17.01.44	Debug	Starting  web interface on 192.168.56.1:80
+26/05/2014 17.01.44	Debug	NetFluid web application running
+
+26/05/2014 17.04.15	Error	Failed to load app configuration
+				System.Configuration.ConfigurationErrorsException: Attributo 'Immutable' non riconosciuto. I nomi di attributo rilevano la differenza tra maiuscole e minuscole. (C:\Users\Matteo\Desktop\NetFluid\REPOSITORY\NetFluid.Site\bin\Release\NetFluid.Site.vshost.exe.Config line 19)
+				
+				   in System.Configuration.BaseConfigurationRecord.EvaluateOne(String[] keys, SectionInput input, Boolean isTrusted, FactoryRecord factoryRecord, SectionRecord sectionRecord, Object parentResult)
+				
+				   in System.Configuration.BaseConfigurationRecord.Evaluate(FactoryRecord factoryRecord, SectionRecord sectionRecord, Object parentResult, Boolean getLkg, Boolean getRuntimeObject, Object& result, Object& resultRuntimeObject)
+				
+				   in System.Configuration.BaseConfigurationRecord.GetSectionRecursive(String configKey, Boolean getLkg, Boolean checkPermission, Boolean getRuntimeObject, Boolean requestIsHere, Object& result, Object& resultRuntimeObject)
+				
+				   in System.Configuration.BaseConfigurationRecord.GetSectionRecursive(String configKey, Boolean getLkg, Boolean checkPermission, Boolean getRuntimeObject, Boolean requestIsHere, Object& result, Object& resultRuntimeObject)
+				
+				   in System.Configuration.BaseConfigurationRecord.GetSectionRecursive(String configKey, Boolean getLkg, Boolean checkPermission, Boolean getRuntimeObject, Boolean requestIsHere, Object& result, Object& resultRuntimeObject)
+				
+				   in System.Configuration.BaseConfigurationRecord.GetSection(String configKey)
+				
+				   in System.Configuration.ClientConfigurationSystem.System.Configuration.Internal.IInternalConfigSystem.GetSection(String sectionName)
+				
+				   in System.Configuration.ConfigurationManager.GetSection(String sectionName)
+				
+				   in NetFluid.Engine.LoadAppConfiguration() in c:\Users\Matteo\Desktop\NetFluid\REPOSITORY\netfluid\Hosting\Engine.cs:riga 287
+26/05/2014 17.04.15	Error	App configuration not loaded, using default values
+26/05/2014 17.04.15	Debug	Adding http interface on 127.0.0.1:80
+26/05/2014 17.04.15	Debug	Starting web interfaces on every ip on port 80
+26/05/2014 17.04.15	Debug	Adding http interface on fe80::140c:79e4:c634:f3d0%50:80
+26/05/2014 17.04.15	Debug	Adding http interface on fe80::441c:513:595:2b1c%40:80
+26/05/2014 17.04.15	Debug	Adding http interface on fe80::6872:ccef:6dc6:795b%37:80
+26/05/2014 17.04.15	Debug	Adding http interface on fe80::8882:82a7:dded:fcfe%34:80
+26/05/2014 17.04.15	Debug	Adding http interface on 169.254.80.80:80
+26/05/2014 17.04.15	Debug	Adding http interface on 192.168.68.1:80
+26/05/2014 17.04.15	Debug	Adding http interface on 192.168.171.1:80
+26/05/2014 17.04.15	Debug	Adding http interface on 192.168.56.1:80
+26/05/2014 17.04.15	Debug	Starting NetFluid Engine
+26/05/2014 17.04.15	Debug	Loading calling assembly
+26/05/2014 17.04.15	Debug	Loading NetFluid.Site, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null into default web application
+26/05/2014 17.04.15	Debug	Starting web interfaces
+26/05/2014 17.04.15	Debug	Starting  web interface on 127.0.0.1:80
+26/05/2014 17.04.15	Debug	Starting  web interface on [fe80::140c:79e4:c634:f3d0%50]:80
+26/05/2014 17.04.15	Debug	Starting  web interface on [fe80::441c:513:595:2b1c%40]:80
+26/05/2014 17.04.15	Debug	Starting  web interface on [fe80::6872:ccef:6dc6:795b%37]:80
+26/05/2014 17.04.15	Debug	Starting  web interface on [fe80::8882:82a7:dded:fcfe%34]:80
+26/05/2014 17.04.15	Debug	Starting  web interface on 169.254.80.80:80
+26/05/2014 17.04.15	Debug	Starting  web interface on 192.168.68.1:80
+26/05/2014 17.04.15	Debug	Starting  web interface on 192.168.171.1:80
+26/05/2014 17.04.15	Debug	Starting  web interface on 192.168.56.1:80
+26/05/2014 17.04.15	Debug	NetFluid web application running

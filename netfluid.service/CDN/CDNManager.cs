@@ -1,7 +1,5 @@
 ﻿using System.IO;
-using System.Linq;
 using NetFluid.Mongo;
-using NetFluid.Responses;
 
 namespace NetFluid.Service
 {
@@ -16,10 +14,7 @@ namespace NetFluid.Service
             if (!Directory.Exists("./CDN"))
                 Directory.CreateDirectory("./CDN");
 
-            CDN.ForEach(h =>
-            {
-                Engine.Host(h.Host).PublicFolderManager.Add(h.Id, "/", h.Path);
-            });
+            CDN.ForEach(h => Engine.Host(h.Host).PublicFolderManager.Add(h.Id, "/", h.Path));
         }
 
         [Route("update")]

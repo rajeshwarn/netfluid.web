@@ -43,16 +43,16 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AccessManager.cs" />
-    <Compile Include="CDN.cs" />
-    <Compile Include="CDNManager.cs" />
+    <Compile Include="CDN\CDN.cs" />
+    <Compile Include="CDN\CDNManager.cs" />
     <Compile Include="CustomServiceInstaller.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="DNSManager.cs" />
-    <Compile Include="PluggedHost.cs" />
-    <Compile Include="ExternalHost.cs" />
-    <Compile Include="PluggedHostManager.cs" />
-    <Compile Include="ExternalHostManager.cs" />
+    <Compile Include="DNS\DNSManager.cs" />
+    <Compile Include="InternalApp\PluggedHost.cs" />
+    <Compile Include="ExternalApp\ExternalHost.cs" />
+    <Compile Include="InternalApp\PluggedHostManager.cs" />
+    <Compile Include="ExternalApp\ExternalHostManager.cs" />
     <Compile Include="Service.cs">
       <SubType>Component</SubType>
     </Compile>

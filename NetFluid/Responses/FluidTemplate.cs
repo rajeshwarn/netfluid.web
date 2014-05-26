@@ -86,8 +86,9 @@ namespace NetFluid
                 param[0] = cnt;
                 template.Invoke(null, param);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                Engine.Logger.Log(LogLevel.Exception,"",ex);
             }
 
         }
