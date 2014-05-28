@@ -74,6 +74,7 @@
     <Compile Include="Authentication.cs" />
     <Compile Include="Cloud\ClusterManager.cs" />
     <Compile Include="Cloud\IClusterManager.cs" />
+    <Compile Include="Collections\AutoCache.cs" />
     <Compile Include="Collections\DeepObject.cs" />
     <Compile Include="Collections\InMemoryOlap.cs" />
     <Compile Include="Collections\JSONRepository.cs" />

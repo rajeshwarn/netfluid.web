@@ -17,11 +17,7 @@ namespace NetFluid.Service
             if (!Directory.Exists("./Internal-App"))
                 Directory.CreateDirectory("./Internal-App");
 
-            Hosts.ForEach(host =>
-            {
-                var ass = AppDomain.CurrentDomain.LoadAssembly(host.Application);
-                host.Hosts.ForEach(x => Engine.LoadHost(x, ass));
-            });
+            Hosts.ForEach(host => host.Hosts.ForEach(x => Engine.LoadHost(x, host.Application)));
         }
 
         [ParametrizedRoute("delete")]
@@ -39,8 +35,7 @@ namespace NetFluid.Service
 
             if (h.Id==null)
             {
-                var ass = AppDomain.CurrentDomain.LoadAssembly(h.Application);
-                h.Hosts.ForEach(x=>Engine.LoadHost(x,ass));
+                h.Hosts.ForEach(x => Engine.LoadHost(x, h.Application));
             }
 
             Hosts.Save(h);

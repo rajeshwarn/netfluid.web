@@ -34,6 +34,7 @@ namespace NetFluid
     /// </summary>
     public class FluidTemplate : IResponse
     {
+        private string path;
         private readonly object[] param;
         private readonly MethodInfo template;
         private Context _context;
@@ -70,6 +71,8 @@ namespace NetFluid
                 return;
             }
             param = new object[1];
+
+            this.path = path;
         }
 
         #region IResponse Members
@@ -88,7 +91,22 @@ namespace NetFluid
             }
             catch (Exception ex)
             {
-                Engine.Logger.Log(LogLevel.Exception,"",ex);
+                Engine.Logger.Log(LogLevel.Exception,"Exception in "+path+" template",ex.InnerException);
+
+                if (Engine.DevMode)
+                {
+                    try
+                    {
+                        cnt.Writer.Write("<html><body>");
+                        cnt.Writer.Write("<h1>Exception</h1>");
+                        cnt.Writer.Write("<div>To turn off this view set the DevMode value on false in AppConfig on by code with NetFluid.Engine.DevMode</div>");
+                        cnt.Writer.Write("<h2>"+ex.Message+"</h2>");
+                        cnt.Writer.Write("</body></html>");
+                    }
+                    catch (Exception)
+                    {
+                    }
+                }
             }
 
         }

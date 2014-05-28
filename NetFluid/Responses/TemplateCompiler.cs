@@ -330,6 +330,8 @@ namespace NetFluid.Responses
                 csc_parameters.ReferencedAssemblies.Add(refAss.Location);
             }
 
+            Engine.Assemblies.ForEach(x=>csc_parameters.ReferencedAssemblies.Add(x));
+
             csc_parameters.GenerateInMemory = true;
             csc_parameters.GenerateExecutable = false;
             csc_parameters.TreatWarningsAsErrors = false;

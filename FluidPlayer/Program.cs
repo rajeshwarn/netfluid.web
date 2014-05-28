@@ -26,7 +26,7 @@ namespace FluidPlayer
                 Engine.Interfaces.AddLoopBack(8080);
                 Engine.Interfaces.AddAllAddresses(8080);
             }
-            Engine.Load(Assembly.LoadFile(path));
+            Engine.Load(path);
             Engine.Start();
 
             var cmd = "";

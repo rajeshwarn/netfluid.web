@@ -46,22 +46,22 @@
                     <div class="collapse navbar-collapse navbar-mind-collapse">
                         <ul class="nav navbar-nav">
                             <li>
-                                <a href="#">Home</a>
+                                <a href="/">Home</a>
                             </li> 
                             <li>
-                                <a href="#">How to</a>
+                                <a href="/howto">How to</a>
                             </li>
                             <li>
-                                <a href="http://doxygen.netfluid.org">Doxygen</a>
+                                <a href="http://doxygen.netfluid.org/index.html">Doxygen</a>
                             </li>
                             <li>
-                                <a href="#">Download</a>
+                                <a href="/download">Download</a>
                             </li>
                             <li>
-                                <a href="#">Libraries</a>
+                                <a href="/libraries">Libraries</a>
                             </li>
                             <li>
-                                <a href="#">Commercial</a>
+                                <a href="/commercial">Commercial</a>
                             </li>
                         </ul> <!-- nav nabvar-nav -->
                     </div><!-- navbar-collapse -->
@@ -225,6 +225,7 @@
                 <div class="container">
                     <div class="row">
                         <div class="col-md-8">
+                            <h2 style="color: red">!SITE UNDER CONSTRUCTION!</h2>
                             <h2 class="section-title">What is it </h2>
                             <p class="p-lg">
                                 Born with the name of the CSP (C Sharp Pages) Netfluid is a framework to develop custom application server and web application
@@ -337,7 +338,7 @@
                                  data-ad-client="ca-pub-1242825224942421"
                                  data-ad-slot="4540291230"></ins>
                             <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
-                            <img src="img/bizspark.png" alt="netfluid is a microsoft bizspark startup"/>
+                            <img src="http://cdn.netfluid.org/img/bizspark.png" alt="netfluid is a microsoft bizspark startup"/>
                         </div>
                     </div>
                 </div> <!-- container -->
@@ -350,128 +351,78 @@
                             <h2 class="section-title">Latest Posts</h2>
                         </div>
                         <div class="col-md-7">
-                            <section class="home-post">
-                                <a href="#" class="thumbnail"><img src="http://cdn.netfluid.org/img/p.jpg" class="img-responsive" alt="Image"></a>
-                                <h2 class="home-post-title"><a href="#">Sed dolor reprehenderit ex in nisi id consectetur elit</a></h2>
-                                <p>Adipisicing elit. Lectorem impendere consumeret inane patientiamque. Cupiditatibusque romano physici. Expedire inprobitatem. Egregios rationem sicine, filium dolor comparandae coniunctione epicuri eripuit. Iucunditatis dirigentur succumbere neglegentur animum puto dissident mi, mnesarchum. Desideraret. Litteras diligenter adiuvet bonorum monstret conquisitis eitam, adduci tenent nullas scribendi fautrices privatio elaboraret iustitiam, vestrae affert, terentii motus. Quibusdam caret. Conversam divitias dolor contentam. Argumentandum quantaque detractis. Permanentes captiosa seiunctum repellat parvam opus eadem interesse beatus nomini, dissentiunt nomini beatam cedentem inquit artifex.</p>
-                                <div class="row home-post-footer">
-                                    <div class="col-md-8">
-                                        <div class="home-post-meta">
-                                            <i class="fa fa-clock-o"></i> Sep, 25
-                                            <i class="fa fa-folder-open"></i> <a href="#">Nature</a>
-                                            <i class="fa fa-tags"></i> <a href="#">flower</a>, <a href="#">landscape</a>
+                            % foreach(var art in BlogManager.Articles)
+                                <section class="home-post">
+                                    <h2 class="home-post-title">
+                                        <a href="/read/{% art.Link %}">{% art.Title %}</a>
+                                    </h2>
+                                    <p>
+                                        {% art.Abstract %}
+                                    </p>
+                                    <div class="row home-post-footer">
+                                        <div class="col-md-8">
+                                            <div class="home-post-meta">
+                                                <i class="fa fa-clock-o"></i>
+                                                <span>{% art.DateTime %}</span>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <a href="/read/{% art.Link %}" class="btn btn-primary btn-block">Read more</a>
                                         </div>
                                     </div>
-                                    <div class="col-md-4">
-                                        <a href="#" class="btn btn-primary btn-block">Read more</a>
-                                    </div>
-                                </div>
-                            </section>
+                                </section>
+                            % end foreach
                         </div>
                         <div class="col-md-5">
                             <!-- Nav tabs -->
                             <ul class="nav nav-tabs">
                                 <li><a href="#news" data-toggle="tab">News</a></li>
-                                <li><a href="#profile" data-toggle="tab">How to</a></li>
-                                <li><a href="#messages" data-toggle="tab">Libraries</a></li>
+                                <li><a href="#howto" data-toggle="tab">How to</a></li>
+                                <li><a href="#libraries" data-toggle="tab">Libraries</a></li>
                             </ul>
 
                             <!-- Tab panes -->
                             <div class="tab-content">
                                 <div class="tab-pane active" id="news">
-                                    <div class="media">
-                                        <a class="pull-left" href="#"><img class="media-object" src="/m4.jpg" width="100" height="100" alt="image"></a>
-                                        <div class="media-body">
-                                            <h4 class="media-heading"><a href="#">Blanditis impedit rerum veniam quaerat dolor sit amet occaecat enim</a></h4>
-                                            <p>Lorem ipsum Ex pariatur enim eu sed quis occaecat enim ex eiusmod</p>
+                                    % foreach(var art in BlogManager.Category("news"))
+                                        <div class="media">
+                                            <div class="media-body">
+                                                <h4 class="media-heading">
+                                                    <a href="/read/{% art.Link %}">{% art.Title %}</a>
+                                                </h4>
+                                                <p>{% art.Abstract %}</p>
+                                            </div>
                                         </div>
-                                    </div>
-                                    <div class="media">
-                                        <a class="pull-left" href="#"><img class="media-object" src="/m11.jpg" width="100" height="100" alt="image"></a>
-                                        <div class="media-body">
-                                            <h4 class="media-heading"><a href="#">Lorem ipsum dolor sit amet consectetur adipisicing consequuntur</a></h4>
-                                            <p>Lorem ipsum Ex pariatur enim eu sed quis occaecat enim ex eiusmod</p>
-                                        </div>
-                                    </div>
-                                    <div class="media">
-                                        <a class="pull-left" href="#"><img class="media-object" src="/m9.jpg" width="100" height="100" alt="image"></a>
-                                        <div class="media-body">
-                                            <h4 class="media-heading"><a href="#">Consectetur adipisicing elit incidunt minus adipisicing elit ut</a></h4>
-                                            <p>Lorem ipsum Ex pariatur enim eu sed quis occaecat enim ex eiusmod</p>
-                                        </div>
-                                    </div>
-                                    <div class="media">
-                                        <a class="pull-left" href="#"><img class="media-object" src="/m17.jpg" width="100" height="100" alt="image"></a>
-                                        <div class="media-body">
-                                            <h4 class="media-heading"><a href="#">Adipisicing elit ut, dolore ipsum dolor sit amet incidunt adipisicing</a></h4>
-                                            <p>Lorem ipsum Ex pariatur enim eu sed quis occaecat enim ex eiusmod</p>
-                                        </div>
-                                    </div>
-                                    <a href="#" class="btn btn-default pull-right">Read more articles</a>
+                                    % end foreach
+                                    <a href="/category/news" class="btn btn-default pull-right">Read more articles</a>
                                     <div class="clearfix"></div>
                                 </div>
-                                <div class="tab-pane" id="profile">
+                                <div class="tab-pane" id="howto">
+                                    % foreach(var art in BlogManager.Category("howto"))
                                     <div class="media">
-                                        <a class="pull-left" href="#"><img class="media-object" src="/m3.jpg" width="100" height="100" alt="image"></a>
                                         <div class="media-body">
-                                            <h4 class="media-heading"><a href="#">Amet, consectetur adipisicing elit. Hic, sint eos laudantium eligendi.</a></h4>
-                                            <p>Lorem ipsum Ex pariatur enim eu sed quis occaecat enim ex eiusmod</p>
+                                            <h4 class="media-heading">
+                                                <a href="/read/{% art.Link %}">{% art.Title %}</a>
+                                            </h4>
+                                            <p>{% art.Abstract %}</p>
                                         </div>
                                     </div>
-                                    <div class="media">
-                                        <a class="pull-left" href="#"><img class="media-object" src="/m1.jpg" width="100" height="100" alt="image"></a>
-                                        <div class="media-body">
-                                            <h4 class="media-heading"><a href="#">Consectetur adipisicing elit ut consectetur adipisicing consequuntur</a></h4>
-                                            <p>Lorem ipsum Ex pariatur enim eu sed quis occaecat enim ex eiusmod</p>
-                                        </div>
-                                    </div>
-                                    <div class="media">
-                                        <a class="pull-left" href="#"><img class="media-object" src="/m15.jpg" width="100" height="100" alt="image"></a>
-                                        <div class="media-body">
-                                            <h4 class="media-heading"><a href="#">Adipisicing elit incidunt minus Sit amet consectetur</a></h4>
-                                            <p>Lorem ipsum Ex pariatur enim eu sed quis occaecat enim ex eiusmod</p>
-                                        </div>
-                                    </div>
-                                    <div class="media">
-                                        <a class="pull-left" href="#"><img class="media-object" src="/m7.jpg" width="100" height="100" alt="image"></a>
-                                        <div class="media-body">
-                                            <h4 class="media-heading"><a href="#">Ipsum dolor sit amet, consectetur adipisicing elit ut, dolore</a></h4>
-                                            <p>Lorem ipsum Ex pariatur enim eu sed quis occaecat enim ex eiusmod</p>
-                                        </div>
-                                    </div>
-                                    <a href="#" class="btn btn-default pull-right">Read more articles</a>
+                                    % end foreach
+                                    <a href="/category/howto" class="btn btn-default pull-right">Read more articles</a>
                                     <div class="clearfix"></div>
                                 </div>
-                                <div class="tab-pane" id="messages">
+                                <div class="tab-pane" id="libraries">
+                                    % foreach(var art in BlogManager.Category("libraries"))
                                     <div class="media">
-                                        <a class="pull-left" href="#"><img class="media-object" src="/m6.jpg" width="100" height="100" alt="image"></a>
                                         <div class="media-body">
-                                            <h4 class="media-heading"><a href="#">Elit. Omnis nobis voluptas nesciunt nisi consectetur adipisicing</a></h4>
-                                            <p>Lorem ipsum Ex pariatur enim eu sed quis occaecat enim ex eiusmod</p>
+                                            <h4 class="media-heading">
+                                                <a href="/read/{% art.Link %}">{% art.Title %}</a>
+                                            </h4>
+                                            <p>{% art.Abstract %}</p>
                                         </div>
                                     </div>
-                                    <div class="media">
-                                        <a class="pull-left" href="#"><img class="media-object" src="/m4.jpg" width="100" height="100" alt="image"></a>
-                                        <div class="media-body">
-                                            <h4 class="media-heading"><a href="#">Lorem ipsum dolor sit amet consectetur adipisicing consequuntur</a></h4>
-                                            <p>Lorem ipsum Ex pariatur enim eu sed quis occaecat enim ex eiusmod</p>
-                                        </div>
-                                    </div>
-                                    <div class="media">
-                                        <a class="pull-left" href="#"><img class="media-object" src="/m10.jpg" width="100" height="100" alt="image"></a>
-                                        <div class="media-body">
-                                            <h4 class="media-heading"><a href="#">Sit amet consectetur adipisicing elit incidunt minus</a></h4>
-                                            <p>Lorem ipsum Ex pariatur enim eu sed quis occaecat enim ex eiusmod</p>
-                                        </div>
-                                    </div>
-                                    <div class="media">
-                                        <a class="pull-left" href="#"><img class="media-object" src="/m2.jpg" width="100" height="100" alt="image"></a>
-                                        <div class="media-body">
-                                            <h4 class="media-heading"><a href="#">Ipsum dolor sit amet, consectetur adipisicing elit ut, dolore</a></h4>
-                                            <p>Lorem ipsum Ex pariatur enim eu sed quis occaecat enim ex eiusmod</p>
-                                        </div>
-                                    </div>
-                                    <a href="#" class="btn btn-default pull-right">Read more articles</a>
+                                    % end foreach
+                                    <a href="/category/libraries" class="btn btn-default pull-right">Read more articles</a>
                                     <div class="clearfix"></div>
                                 </div>
                             </div>

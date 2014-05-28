@@ -77,18 +77,18 @@ namespace NetFluid
         {
             var m = Path.GetFullPath(realPath);
 
+            if (!Directory.Exists(m))
+            {
+                Engine.Logger.Log(LogLevel.Error, "Failed to add public folder, directory is missing " + realPath);
+                return;
+            }
+
             lock (directories)
             {
                 directories.Add(m);
             }
 
             var start = uriPath.EndsWith('/') ? uriPath : uriPath + "/";
-
-            if (!Directory.Exists(m))
-            {
-                Engine.Logger.Log(LogLevel.Error, "Failed to add public folder, directory is missing " + realPath);
-                return;
-            }
 
             foreach (var x in Directory.GetFiles(m, "*.*", SearchOption.AllDirectories))
             {
@@ -143,6 +143,22 @@ namespace NetFluid
         public IEnumerable<string> Files
         {
             get { return _immutableData.Values.Select(x => x.Path); }
+        }
+
+        public IEnumerable<string> URIs { get; private set; }
+        public string ToPath(string uri)
+        {
+            throw new NotImplementedException();
+        }
+
+        public string ToUri(string path)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Stream OpenFile(string path)
+        {
+            throw new NotImplementedException();
         }
     }
 }

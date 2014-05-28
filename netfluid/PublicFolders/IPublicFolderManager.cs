@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.IO;
 
 namespace NetFluid
 {
@@ -39,8 +40,34 @@ namespace NetFluid
         IEnumerable<string> Directories { get; }
 
         /// <summary>
-        /// Return all managed files
+        /// Return all managed files physical path
         /// </summary>
         IEnumerable<string> Files { get; }
+
+        /// <summary>
+        /// Returns all mapped URI
+        /// </summary>
+        IEnumerable<string> URIs { get; }
+
+        /// <summary>
+        /// Return physical path from URI
+        /// </summary>
+        /// <param name="uri">URI ofthe resource</param>
+        /// <returns>physical or simulated (ex:database id) path to the file</returns>
+        string ToPath(string uri);
+
+        /// <summary>
+        /// Return the URI mapped by the physical or simulated (ex:database id) path
+        /// </summary>
+        /// <param name="path">physical path</param>
+        /// <returns>mapped uri</returns>
+        string ToUri(string path);
+
+        /// <summary>
+        /// Open the public file from the URI
+        /// </summary>
+        /// <param name="uri">uri path to the file (used to copy setting from one manager to another)</param>
+        /// <returns>real o simulated file stream</returns>
+        Stream OpenFile(string uri);
     }
 }

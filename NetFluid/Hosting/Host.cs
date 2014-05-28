@@ -330,10 +330,7 @@ namespace NetFluid
                 {
                     if (Engine.DevMode)
                     {
-                        Console.WriteLine(cnt.Request.Host + ":" + cnt.Request.Url + " - " + "Matched " +
-                                          cnt.Request.Url);
-                        Console.WriteLine(cnt.Request.Host + ":" + cnt.Request.Url + " - " + "Calling " +
-                                          route.Type.FullName + "." + route.Method.Name);
+                        Console.WriteLine(cnt.Request.Host + ":" + cnt.Request.Url + " - " + "Matched " +cnt.Request.Url);
                     }
 
                     var page = route.Type.CreateIstance() as IMethodExposer;

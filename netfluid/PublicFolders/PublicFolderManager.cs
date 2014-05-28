@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Runtime.Caching;
+using NetFluid.Collections;
 using NetFluid.HTTP;
 
 namespace NetFluid
@@ -20,12 +21,24 @@ namespace NetFluid
         }
 
         private readonly List<Folder> _folders;
-        private readonly MemoryCache _eTagCache;
+        private readonly AutoCache<string> uriCache;
+        private readonly AutoCache<string> etagCache; 
 
         public PublicFolderManager()
         {
             _folders = new List<Folder>();
-            _eTagCache = MemoryCache.Default;
+
+            uriCache = new AutoCache<string>
+            {
+                Expiration = TimeSpan.FromHours(2),
+                Get = ToPath
+            };
+
+            etagCache = new AutoCache<string>
+            {
+                Expiration = TimeSpan.FromHours(2),
+                Get = Security.SHA1Checksum
+            };
         }
 
         /// <summary>
@@ -34,51 +47,33 @@ namespace NetFluid
         /// <param name="cnt"></param>
         public void Serve(Context cnt)
         {
-            foreach (var item in _folders)
+            try
             {
-                if (!cnt.Request.Url.StartsWith(item.Uri))
-                    continue;
+                var path = uriCache[cnt.Request.Url];
 
-                string path =
-                    Path.GetFullPath(item.RealPath +
-                                     cnt.Request.Url.Substring(item.Uri.Length)
-                                         .Replace('/', Path.DirectorySeparatorChar));
+                if (path == null) return;
 
-                if (!path.StartsWith(item.RealPath))
+                var etag = etagCache[path];
+                cnt.Response.Headers["ETag"] = "\"" + etag + "\"";
+                if (cnt.Request.Headers.Contains("If-None-Match") && cnt.Request.Headers["If-None-Match"].Unquote() == etag)
                 {
-                    cnt.Response.StatusCode = StatusCode.BadRequest;
+                    cnt.Response.StatusCode = StatusCode.NotModified;
                     cnt.Close();
                     return;
                 }
 
-                if (!File.Exists(path))
-                    continue;
-
-                var etag = _eTagCache.Get(path) as string;
-                if (etag != null)
-                {
-                    cnt.Response.Headers["ETag"] = "\"" + etag + "\"";
-                    if (cnt.Request.Headers.Contains("If-None-Match") &&
-                        cnt.Request.Headers["If-None-Match"].Unquote() == etag)
-                    {
-                        cnt.Response.StatusCode = StatusCode.NotModified;
-                        cnt.Close();
-                        return;
-                    }
-                }
-                else
-                {
-                    _eTagCache.Add(path, Security.SHA1Checksum(path), DateTimeOffset.Now + TimeSpan.FromHours(1));
-                }
                 cnt.Response.ContentType = MimeTypes.GetType(cnt.Request.Url);
                 cnt.Response.Headers["Expires"] = (DateTime.Now + TimeSpan.FromDays(7)).ToGMT();
-                cnt.Response.Headers["Vary"] = "Accept-Encoding";
+
                 cnt.SendHeaders();
                 var fs = new FileStream(path, FileMode.OpenOrCreate, FileAccess.ReadWrite, FileShare.ReadWrite);
                 fs.CopyTo(cnt.OutputStream);
                 cnt.Close();
                 fs.Close();
-                return;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
             }
         }
 
@@ -115,11 +110,6 @@ namespace NetFluid
             {
                 _folders.Add(folder);
             }
-
-            foreach (var path in Directory.GetFiles(realPath,"*.*"))
-            {
-                _eTagCache.Add(path, Security.SHA1Checksum(path), DateTimeOffset.Now + TimeSpan.FromHours(1));
-            }
         }
 
         /// <summary>
@@ -145,6 +135,52 @@ namespace NetFluid
         public IEnumerable<string> Files
         {
             get { return _folders.SelectMany(x => Directory.GetFiles(x.RealPath,"*.*",SearchOption.AllDirectories)); }
+        }
+
+        public IEnumerable<string> URIs
+        {
+            get
+            {
+                return
+                    _folders.SelectMany(x => Directory.GetFiles(x.RealPath, "*.*", SearchOption.AllDirectories))
+                        .Select(ToUri);
+            }
+        }
+
+        public string ToPath(string uri)
+        {
+            foreach (var item in _folders)
+            {
+                if (!uri.StartsWith(item.Uri))
+                    continue;
+
+                var path = Path.GetFullPath(item.RealPath + uri.Substring(item.Uri.Length).Replace('/', Path.DirectorySeparatorChar));
+
+                if (!path.StartsWith(item.RealPath) || !File.Exists(path))
+                    continue;
+
+                return path;
+            }
+            return null;
+        }
+
+        public string ToUri(string path)
+        {
+            var fullPath = Path.GetFullPath(path);
+            var folder = _folders.FirstOrDefault(x => x.RealPath.StartsWith(fullPath));
+
+            if (folder != null)
+            {
+                return folder.Uri + '/' + fullPath.Substring(folder.RealPath.Length).Replace(Path.DirectorySeparatorChar, '/');
+            }
+            return null;
+        }
+
+        public Stream OpenFile(string uri)
+        {
+            var p = ToPath(uri);
+
+            return p != null ? new FileStream(p,FileMode.Open,FileAccess.Read) : null;
         }
     }
 }

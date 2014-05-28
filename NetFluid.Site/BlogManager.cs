@@ -1,16 +1,54 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
+using NetFluid.Mongo;
 
 namespace NetFluid.Site
 {
     public class BlogManager:FluidPage
     {
+        public static Repository<Article> Articles;
+
+        public static IEnumerable<Article> Latest
+        {
+            get { return Articles.OrderByDescending(x => x.DateTime); }
+        }
+
+        public static IEnumerable<Article> Category(string cat)
+        {
+            return Articles.Where(x => x.Category==cat);
+        }
+
+        static BlogManager()
+        {
+            Articles = new Repository<Article>("mongodb://localhost", "NetFluidSite");
+        }
+
         [Route("/")]
         public IResponse Home()
         {
-            return new FluidTemplate("./UI/index.html");
+            return new FluidTemplate("embed:NetFluid.Site.UI.index.html");
+        }
+
+        [ParametrizedRoute("/read")]
+        public IResponse Read(string link)
+        {
+            var art = Articles.FirstOrDefault(x => x.Link == link);
+            return art != null ? new FluidTemplate("embed:NetFluid.Site.UI.read.html", art) : new FluidTemplate("embed:NetFluid.Site.UI.index.html");
+        }
+
+        [Route("/write")]
+        public IResponse Write()
+        {
+            return new FluidTemplate("embed:NetFluid.Site.UI.write.html");
+        }
+
+        [Route("/add")]
+        public IResponse Add()
+        {
+            var article = Request.Values.ToObject<Article>();
+            Articles.Save(article);
+            return new FluidTemplate("embed:NetFluid.Site.UI.write.html");
         }
 
         [Route("robots.txt")]

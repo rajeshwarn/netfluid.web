@@ -55,6 +55,11 @@ namespace NetFluid
 
         static Assembly CurrentDomain_AssemblyResolve(object sender, ResolveEventArgs args)
         {
+            var c = AppDomain.CurrentDomain.GetAssemblies().ToArray();
+            var g = c.FirstOrDefault(x => x.FullName == args.Name);
+
+            return g;
+
             foreach (
                 var ass in
                     Directory.GetFiles("./", "*.dll")
@@ -62,7 +67,9 @@ namespace NetFluid
                         .Where(ass => ass != null && ass.FullName == args.Name))
                 return ass;
 
-            return Directory.GetFiles("./", "*.exe").Select(exe => Assembly.LoadFile(Path.GetFullPath(exe))).FirstOrDefault(ass => ass != null && ass.FullName == args.Name);
+            var k = Directory.GetFiles("./", "*.exe").Select(exe => Assembly.LoadFile(Path.GetFullPath(exe))).FirstOrDefault(ass => ass != null && ass.FullName == args.Name);
+
+            return k;
         }
 
         /// <summary>
@@ -126,6 +133,16 @@ namespace NetFluid
         /// If true log message and request serving flow are shown on the console
         /// </summary>
         public static bool DevMode { get; set; }
+
+        private static List<string> assemblies;
+
+        /// <summary>
+        /// Loaded assemblies location
+        /// </summary>
+        public static IEnumerable<string> Assemblies
+        {
+            get { return assemblies; }
+        }
 
         /// <summary>
         /// XML summary of virtual host and relative routes
@@ -347,9 +364,32 @@ namespace NetFluid
         {
             Logger.Log(LogLevel.Debug, "Starting NetFluid Engine");
             Logger.Log(LogLevel.Debug, "Loading calling assembly");
-            Load(Assembly.GetEntryAssembly());
+
+            var assembly = Assembly.GetEntryAssembly();
+            var location = assembly.Location;
+            
+            if(string.IsNullOrEmpty(location))
+                Load(assembly);
+            else
+                Load(location);
+
             Interfaces.Start();
             Logger.Log(LogLevel.Debug, "NetFluid web application running");
+        }
+
+        /// <summary>
+        /// Load a web application into the virtual host
+        /// </summary>
+        /// <param name="host">virtual host name</param>
+        /// <param name="assemblyPath">physical path to the assembly file</param>
+        public static void LoadHost(string host, string assemblyPath)
+        {
+            if (assemblies == null)
+                assemblies = new List<string>();
+
+            var p = Path.GetFullPath(assemblyPath);
+            assemblies.Add(p);
+            LoadHost(host,Assembly.LoadFile(p));
         }
 
         /// <summary>
@@ -383,6 +423,20 @@ namespace NetFluid
             {
                 Logger.Log(LogLevel.Error, "Error during loading " + assembly + " as " + host + " host", ex);
             }
+        }
+
+        /// <summary>
+        /// Load a web application
+        /// </summary>
+        /// <param name="assemblyPath">physical path to the assembly file</param>
+        public static void Load(string assemblyPath)
+        {
+            if(assemblies==null)
+                assemblies = new List<string>();
+
+            var p = Path.GetFullPath(assemblyPath);
+            assemblies.Add(p);
+            Load(Assembly.LoadFile(p));
         }
 
         /// <summary>

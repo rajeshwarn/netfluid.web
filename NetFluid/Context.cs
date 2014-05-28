@@ -769,24 +769,16 @@ namespace NetFluid
             if (!HeadersSent)
                 SendHeaders();
 
-
             try
             {
                 Writer.Flush();
                 OutputStream.Flush();
-            }
-            catch
-            {
-            }
-
-            try
-            {
-
-            }
-            catch (Exception)
-            {
                 OutputStream.Close();
                 Socket.Close();
+            }
+            catch (Exception wtf)
+            {
+                Console.WriteLine(wtf.Message);
             }
 
         }

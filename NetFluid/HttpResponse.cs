@@ -76,9 +76,11 @@ namespace NetFluid
             StatusDescription = "OK";
 
             Headers = new WebHeaderCollection();
-            Headers.Append("Server", "NetFluid III");
-            Headers.Append("Date", DateTime.Now.ToGMT());
-            Headers.Append("Accept-Ranges:","bytes");
+            Headers.Set("Server", "NetFluid III");
+            Headers.Set("Date", DateTime.Now.ToGMT());
+            Headers.Set("Accept-Ranges:","bytes");
+            Headers.Set("Vary","Accept-Encoding");
+            Headers.Set("Access-Control-Allow-Origin", "*");
 
             ContentType = "text/html; charset=utf-8";
             ProtocolVersion = HttpVersion.Version11;
