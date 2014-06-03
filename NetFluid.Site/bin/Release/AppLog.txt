@@ -5227,3 +5227,1438 @@
 28/05/2014 04.07.49	Debug	Starting  web interface on 192.168.56.1:80
 28/05/2014 04.07.49	Debug	Starting  web interface on 192.168.1.2:80
 28/05/2014 04.07.49	Debug	NetFluid web application running
+
+02/06/2014 20.19.13	Error	Failed to load app configuration
+				System.Configuration.ConfigurationErrorsException: Attributo 'Immutable' non riconosciuto. I nomi di attributo rilevano la differenza tra maiuscole e minuscole. (C:\Users\Matteo\Desktop\NetFluid\REPOSITORY\NetFluid.Site\bin\Release\NetFluid.Site.vshost.exe.Config line 19)
+				
+				   in System.Configuration.BaseConfigurationRecord.EvaluateOne(String[] keys, SectionInput input, Boolean isTrusted, FactoryRecord factoryRecord, SectionRecord sectionRecord, Object parentResult)
+				
+				   in System.Configuration.BaseConfigurationRecord.Evaluate(FactoryRecord factoryRecord, SectionRecord sectionRecord, Object parentResult, Boolean getLkg, Boolean getRuntimeObject, Object& result, Object& resultRuntimeObject)
+				
+				   in System.Configuration.BaseConfigurationRecord.GetSectionRecursive(String configKey, Boolean getLkg, Boolean checkPermission, Boolean getRuntimeObject, Boolean requestIsHere, Object& result, Object& resultRuntimeObject)
+				
+				   in System.Configuration.BaseConfigurationRecord.GetSectionRecursive(String configKey, Boolean getLkg, Boolean checkPermission, Boolean getRuntimeObject, Boolean requestIsHere, Object& result, Object& resultRuntimeObject)
+				
+				   in System.Configuration.BaseConfigurationRecord.GetSectionRecursive(String configKey, Boolean getLkg, Boolean checkPermission, Boolean getRuntimeObject, Boolean requestIsHere, Object& result, Object& resultRuntimeObject)
+				
+				   in System.Configuration.BaseConfigurationRecord.GetSection(String configKey)
+				
+				   in System.Configuration.ClientConfigurationSystem.System.Configuration.Internal.IInternalConfigSystem.GetSection(String sectionName)
+				
+				   in System.Configuration.ConfigurationManager.GetSection(String sectionName)
+				
+				   in NetFluid.Engine.LoadAppConfiguration() in c:\Users\Matteo\Desktop\NetFluid\REPOSITORY\netfluid\Hosting\Engine.cs:riga 304
+02/06/2014 20.19.14	Error	App configuration not loaded, using default values
+02/06/2014 20.19.14	Debug	Adding http interface on 127.0.0.1:80
+02/06/2014 20.19.14	Debug	Starting web interfaces on every ip on port 80
+02/06/2014 20.19.14	Debug	Adding http interface on fe80::140c:79e4:c634:f3d0%50:80
+02/06/2014 20.19.14	Debug	Adding http interface on fe80::441c:513:595:2b1c%40:80
+02/06/2014 20.19.14	Debug	Adding http interface on fe80::6872:ccef:6dc6:795b%37:80
+02/06/2014 20.19.14	Debug	Adding http interface on fe80::8882:82a7:dded:fcfe%34:80
+02/06/2014 20.19.14	Debug	Adding http interface on fe80::cce0:4bc8:b000:64fa%4:80
+02/06/2014 20.19.14	Debug	Adding http interface on 169.254.80.80:80
+02/06/2014 20.19.14	Debug	Adding http interface on 192.168.68.1:80
+02/06/2014 20.19.14	Debug	Adding http interface on 192.168.171.1:80
+02/06/2014 20.19.14	Debug	Adding http interface on 192.168.56.1:80
+02/06/2014 20.19.14	Debug	Adding http interface on 192.168.1.2:80
+02/06/2014 20.19.14	Debug	Starting NetFluid Engine
+02/06/2014 20.19.14	Debug	Loading calling assembly
+02/06/2014 20.19.14	Debug	Loading NetFluid.Site, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null into default web application
+
+02/06/2014 20.19.15	Error	Failed to create instance of NetFluid.Site.UserManager
+				System.TypeInitializationException: L'inizializzatore di tipo di 'NetFluid.Site.UserManager' ha generato un'eccezione. ---> MongoDB.Driver.MongoConnectionException: Unable to connect to server localhost:27017: Impossibile stabilire la connessione. Rifiuto persistente del computer di destinazione 127.0.0.1:27017. ---> System.Net.Sockets.SocketException: Impossibile stabilire la connessione. Rifiuto persistente del computer di destinazione 127.0.0.1:27017
+				
+				   in System.Net.Sockets.Socket.DoConnect(EndPoint endPointSnapshot, SocketAddress socketAddress)
+				
+				   in System.Net.Sockets.Socket.Connect(EndPoint remoteEP)
+				
+				   in System.Net.Sockets.TcpClient.Connect(IPEndPoint remoteEP)
+				
+				   in MongoDB.Driver.Internal.MongoConnection.Open()
+				
+				   in MongoDB.Driver.Internal.MongoConnection.GetNetworkStream()
+				
+				   in MongoDB.Driver.Internal.MongoConnection.SendMessage(BsonBuffer buffer, Int32 requestId)
+				
+				   in MongoDB.Driver.Internal.MongoConnection.SendMessage(MongoRequestMessage message)
+				
+				   in MongoDB.Driver.Operations.CommandOperation`1.Execute(MongoConnection connection)
+				
+				   in MongoDB.Driver.MongoServerInstance.RunCommandAs[TCommandResult](MongoConnection connection, String databaseName, IMongoCommand command)
+				
+				   in MongoDB.Driver.MongoServerInstance.Ping(MongoConnection connection)
+				
+				   in MongoDB.Driver.MongoServerInstance.Connect()
+				
+				   in MongoDB.Driver.Internal.DirectMongoServerProxy.Connect(TimeSpan timeout, ReadPreference readPreference)
+				
+				   --- Fine della traccia dello stack dell'eccezione interna ---
+				
+				   in MongoDB.Driver.Internal.DirectMongoServerProxy.Connect(TimeSpan timeout, ReadPreference readPreference)
+				
+				   in MongoDB.Driver.Internal.DirectMongoServerProxy.ChooseServerInstance(ReadPreference readPreference)
+				
+				   in MongoDB.Driver.MongoServer.AcquireConnection(ReadPreference readPreference)
+				
+				   in MongoDB.Driver.MongoCollection.RunCommandAs[TCommandResult](IMongoCommand command, IBsonSerializer resultSerializer, IBsonSerializationOptions resultSerializationOptions)
+				
+				   in MongoDB.Driver.MongoCollection.RunCommandAs[TCommandResult](IMongoCommand command)
+				
+				   in MongoDB.Driver.MongoCollection.Count(CountArgs args)
+				
+				   in MongoDB.Driver.MongoCursor.Size()
+				
+				   in MongoDB.Driver.Linq.SelectQuery.<TranslateAny>b__0(IEnumerable source)
+				
+				   in MongoDB.Driver.Linq.SelectQuery.Execute()
+				
+				   in MongoDB.Driver.Linq.MongoQueryProvider.Execute(Expression expression)
+				
+				   in MongoDB.Driver.Linq.MongoQueryProvider.Execute[TResult](Expression expression)
+				
+				   in System.Linq.Queryable.Any[TSource](IQueryable`1 source)
+				
+				   in NetFluid.Site.UserManager..cctor() in c:\Users\Matteo\Desktop\NetFluid\REPOSITORY\NetFluid.Site\UserManager.cs:riga 16
+				
+				   --- Fine della traccia dello stack dell'eccezione interna ---
+				
+				   in NetFluid.Site.UserManager..ctor()
+
+02/06/2014 20.19.15	Error	Failed to create instance of NetFluid.Site.UserManager
+				MongoDB.Driver.MongoConnectionException: Unable to connect to server localhost:27017: Impossibile stabilire la connessione. Rifiuto persistente del computer di destinazione 127.0.0.1:27017. ---> System.Net.Sockets.SocketException: Impossibile stabilire la connessione. Rifiuto persistente del computer di destinazione 127.0.0.1:27017
+				
+				   in System.Net.Sockets.Socket.DoConnect(EndPoint endPointSnapshot, SocketAddress socketAddress)
+				
+				   in System.Net.Sockets.Socket.Connect(EndPoint remoteEP)
+				
+				   in System.Net.Sockets.TcpClient.Connect(IPEndPoint remoteEP)
+				
+				   in MongoDB.Driver.Internal.MongoConnection.Open()
+				
+				   in MongoDB.Driver.Internal.MongoConnection.GetNetworkStream()
+				
+				   in MongoDB.Driver.Internal.MongoConnection.SendMessage(BsonBuffer buffer, Int32 requestId)
+				
+				   in MongoDB.Driver.Internal.MongoConnection.SendMessage(MongoRequestMessage message)
+				
+				   in MongoDB.Driver.Operations.CommandOperation`1.Execute(MongoConnection connection)
+				
+				   in MongoDB.Driver.MongoServerInstance.RunCommandAs[TCommandResult](MongoConnection connection, String databaseName, IMongoCommand command)
+				
+				   in MongoDB.Driver.MongoServerInstance.Ping(MongoConnection connection)
+				
+				   in MongoDB.Driver.MongoServerInstance.Connect()
+				
+				   in MongoDB.Driver.Internal.DirectMongoServerProxy.Connect(TimeSpan timeout, ReadPreference readPreference)
+				
+				   --- Fine della traccia dello stack dell'eccezione interna ---
+				
+				   in MongoDB.Driver.Internal.DirectMongoServerProxy.Connect(TimeSpan timeout, ReadPreference readPreference)
+				
+				   in MongoDB.Driver.Internal.DirectMongoServerProxy.ChooseServerInstance(ReadPreference readPreference)
+				
+				   in MongoDB.Driver.MongoServer.AcquireConnection(ReadPreference readPreference)
+				
+				   in MongoDB.Driver.MongoCollection.RunCommandAs[TCommandResult](IMongoCommand command, IBsonSerializer resultSerializer, IBsonSerializationOptions resultSerializationOptions)
+				
+				   in MongoDB.Driver.MongoCollection.RunCommandAs[TCommandResult](IMongoCommand command)
+				
+				   in MongoDB.Driver.MongoCollection.Count(CountArgs args)
+				
+				   in MongoDB.Driver.MongoCursor.Size()
+				
+				   in MongoDB.Driver.Linq.SelectQuery.<TranslateAny>b__0(IEnumerable source)
+				
+				   in MongoDB.Driver.Linq.SelectQuery.Execute()
+				
+				   in MongoDB.Driver.Linq.MongoQueryProvider.Execute(Expression expression)
+				
+				   in MongoDB.Driver.Linq.MongoQueryProvider.Execute[TResult](Expression expression)
+				
+				   in System.Linq.Queryable.Any[TSource](IQueryable`1 source)
+				
+				   in NetFluid.Site.UserManager..cctor() in c:\Users\Matteo\Desktop\NetFluid\REPOSITORY\NetFluid.Site\UserManager.cs:riga 16
+
+02/06/2014 20.19.15	Error	Failed to create instance of NetFluid.Site.UserManager
+				System.Net.Sockets.SocketException (0x80004005): Impossibile stabilire la connessione. Rifiuto persistente del computer di destinazione 127.0.0.1:27017
+				
+				   in System.Net.Sockets.Socket.DoConnect(EndPoint endPointSnapshot, SocketAddress socketAddress)
+				
+				   in System.Net.Sockets.Socket.Connect(EndPoint remoteEP)
+				
+				   in System.Net.Sockets.TcpClient.Connect(IPEndPoint remoteEP)
+				
+				   in MongoDB.Driver.Internal.MongoConnection.Open()
+				
+				   in MongoDB.Driver.Internal.MongoConnection.GetNetworkStream()
+				
+				   in MongoDB.Driver.Internal.MongoConnection.SendMessage(BsonBuffer buffer, Int32 requestId)
+				
+				   in MongoDB.Driver.Internal.MongoConnection.SendMessage(MongoRequestMessage message)
+				
+				   in MongoDB.Driver.Operations.CommandOperation`1.Execute(MongoConnection connection)
+				
+				   in MongoDB.Driver.MongoServerInstance.RunCommandAs[TCommandResult](MongoConnection connection, String databaseName, IMongoCommand command)
+				
+				   in MongoDB.Driver.MongoServerInstance.Ping(MongoConnection connection)
+				
+				   in MongoDB.Driver.MongoServerInstance.Connect()
+				
+				   in MongoDB.Driver.Internal.DirectMongoServerProxy.Connect(TimeSpan timeout, ReadPreference readPreference)
+
+02/06/2014 20.19.15	Exception	Failed to instance NetFluid.Site.UserManager
+				System.TypeInitializationException: L'inizializzatore di tipo di 'NetFluid.Site.UserManager' ha generato un'eccezione. ---> MongoDB.Driver.MongoConnectionException: Unable to connect to server localhost:27017: Impossibile stabilire la connessione. Rifiuto persistente del computer di destinazione 127.0.0.1:27017. ---> System.Net.Sockets.SocketException: Impossibile stabilire la connessione. Rifiuto persistente del computer di destinazione 127.0.0.1:27017
+				
+				   in System.Net.Sockets.Socket.DoConnect(EndPoint endPointSnapshot, SocketAddress socketAddress)
+				
+				   in System.Net.Sockets.Socket.Connect(EndPoint remoteEP)
+				
+				   in System.Net.Sockets.TcpClient.Connect(IPEndPoint remoteEP)
+				
+				   in MongoDB.Driver.Internal.MongoConnection.Open()
+				
+				   in MongoDB.Driver.Internal.MongoConnection.GetNetworkStream()
+				
+				   in MongoDB.Driver.Internal.MongoConnection.SendMessage(BsonBuffer buffer, Int32 requestId)
+				
+				   in MongoDB.Driver.Internal.MongoConnection.SendMessage(MongoRequestMessage message)
+				
+				   in MongoDB.Driver.Operations.CommandOperation`1.Execute(MongoConnection connection)
+				
+				   in MongoDB.Driver.MongoServerInstance.RunCommandAs[TCommandResult](MongoConnection connection, String databaseName, IMongoCommand command)
+				
+				   in MongoDB.Driver.MongoServerInstance.Ping(MongoConnection connection)
+				
+				   in MongoDB.Driver.MongoServerInstance.Connect()
+				
+				   in MongoDB.Driver.Internal.DirectMongoServerProxy.Connect(TimeSpan timeout, ReadPreference readPreference)
+				
+				   --- Fine della traccia dello stack dell'eccezione interna ---
+				
+				   in MongoDB.Driver.Internal.DirectMongoServerProxy.Connect(TimeSpan timeout, ReadPreference readPreference)
+				
+				   in MongoDB.Driver.Internal.DirectMongoServerProxy.ChooseServerInstance(ReadPreference readPreference)
+				
+				   in MongoDB.Driver.MongoServer.AcquireConnection(ReadPreference readPreference)
+				
+				   in MongoDB.Driver.MongoCollection.RunCommandAs[TCommandResult](IMongoCommand command, IBsonSerializer resultSerializer, IBsonSerializationOptions resultSerializationOptions)
+				
+				   in MongoDB.Driver.MongoCollection.RunCommandAs[TCommandResult](IMongoCommand command)
+				
+				   in MongoDB.Driver.MongoCollection.Count(CountArgs args)
+				
+				   in MongoDB.Driver.MongoCursor.Size()
+				
+				   in MongoDB.Driver.Linq.SelectQuery.<TranslateAny>b__0(IEnumerable source)
+				
+				   in MongoDB.Driver.Linq.SelectQuery.Execute()
+				
+				   in MongoDB.Driver.Linq.MongoQueryProvider.Execute(Expression expression)
+				
+				   in MongoDB.Driver.Linq.MongoQueryProvider.Execute[TResult](Expression expression)
+				
+				   in System.Linq.Queryable.Any[TSource](IQueryable`1 source)
+				
+				   in NetFluid.Site.UserManager..cctor() in c:\Users\Matteo\Desktop\NetFluid\REPOSITORY\NetFluid.Site\UserManager.cs:riga 16
+				
+				   --- Fine della traccia dello stack dell'eccezione interna ---
+				
+				   in NetFluid.Site.UserManager..ctor()
+
+02/06/2014 20.19.15	Exception	Failed to instance NetFluid.Site.UserManager
+				MongoDB.Driver.MongoConnectionException: Unable to connect to server localhost:27017: Impossibile stabilire la connessione. Rifiuto persistente del computer di destinazione 127.0.0.1:27017. ---> System.Net.Sockets.SocketException: Impossibile stabilire la connessione. Rifiuto persistente del computer di destinazione 127.0.0.1:27017
+				
+				   in System.Net.Sockets.Socket.DoConnect(EndPoint endPointSnapshot, SocketAddress socketAddress)
+				
+				   in System.Net.Sockets.Socket.Connect(EndPoint remoteEP)
+				
+				   in System.Net.Sockets.TcpClient.Connect(IPEndPoint remoteEP)
+				
+				   in MongoDB.Driver.Internal.MongoConnection.Open()
+				
+				   in MongoDB.Driver.Internal.MongoConnection.GetNetworkStream()
+				
+				   in MongoDB.Driver.Internal.MongoConnection.SendMessage(BsonBuffer buffer, Int32 requestId)
+				
+				   in MongoDB.Driver.Internal.MongoConnection.SendMessage(MongoRequestMessage message)
+				
+				   in MongoDB.Driver.Operations.CommandOperation`1.Execute(MongoConnection connection)
+				
+				   in MongoDB.Driver.MongoServerInstance.RunCommandAs[TCommandResult](MongoConnection connection, String databaseName, IMongoCommand command)
+				
+				   in MongoDB.Driver.MongoServerInstance.Ping(MongoConnection connection)
+				
+				   in MongoDB.Driver.MongoServerInstance.Connect()
+				
+				   in MongoDB.Driver.Internal.DirectMongoServerProxy.Connect(TimeSpan timeout, ReadPreference readPreference)
+				
+				   --- Fine della traccia dello stack dell'eccezione interna ---
+				
+				   in MongoDB.Driver.Internal.DirectMongoServerProxy.Connect(TimeSpan timeout, ReadPreference readPreference)
+				
+				   in MongoDB.Driver.Internal.DirectMongoServerProxy.ChooseServerInstance(ReadPreference readPreference)
+				
+				   in MongoDB.Driver.MongoServer.AcquireConnection(ReadPreference readPreference)
+				
+				   in MongoDB.Driver.MongoCollection.RunCommandAs[TCommandResult](IMongoCommand command, IBsonSerializer resultSerializer, IBsonSerializationOptions resultSerializationOptions)
+				
+				   in MongoDB.Driver.MongoCollection.RunCommandAs[TCommandResult](IMongoCommand command)
+				
+				   in MongoDB.Driver.MongoCollection.Count(CountArgs args)
+				
+				   in MongoDB.Driver.MongoCursor.Size()
+				
+				   in MongoDB.Driver.Linq.SelectQuery.<TranslateAny>b__0(IEnumerable source)
+				
+				   in MongoDB.Driver.Linq.SelectQuery.Execute()
+				
+				   in MongoDB.Driver.Linq.MongoQueryProvider.Execute(Expression expression)
+				
+				   in MongoDB.Driver.Linq.MongoQueryProvider.Execute[TResult](Expression expression)
+				
+				   in System.Linq.Queryable.Any[TSource](IQueryable`1 source)
+				
+				   in NetFluid.Site.UserManager..cctor() in c:\Users\Matteo\Desktop\NetFluid\REPOSITORY\NetFluid.Site\UserManager.cs:riga 16
+
+02/06/2014 20.19.15	Exception	Failed to instance NetFluid.Site.UserManager
+				System.Net.Sockets.SocketException (0x80004005): Impossibile stabilire la connessione. Rifiuto persistente del computer di destinazione 127.0.0.1:27017
+				
+				   in System.Net.Sockets.Socket.DoConnect(EndPoint endPointSnapshot, SocketAddress socketAddress)
+				
+				   in System.Net.Sockets.Socket.Connect(EndPoint remoteEP)
+				
+				   in System.Net.Sockets.TcpClient.Connect(IPEndPoint remoteEP)
+				
+				   in MongoDB.Driver.Internal.MongoConnection.Open()
+				
+				   in MongoDB.Driver.Internal.MongoConnection.GetNetworkStream()
+				
+				   in MongoDB.Driver.Internal.MongoConnection.SendMessage(BsonBuffer buffer, Int32 requestId)
+				
+				   in MongoDB.Driver.Internal.MongoConnection.SendMessage(MongoRequestMessage message)
+				
+				   in MongoDB.Driver.Operations.CommandOperation`1.Execute(MongoConnection connection)
+				
+				   in MongoDB.Driver.MongoServerInstance.RunCommandAs[TCommandResult](MongoConnection connection, String databaseName, IMongoCommand command)
+				
+				   in MongoDB.Driver.MongoServerInstance.Ping(MongoConnection connection)
+				
+				   in MongoDB.Driver.MongoServerInstance.Connect()
+				
+				   in MongoDB.Driver.Internal.DirectMongoServerProxy.Connect(TimeSpan timeout, ReadPreference readPreference)
+
+02/06/2014 20.19.15	Exception	Failed to instance NetFluid.Site.UserManager
+				System.TypeInitializationException: L'inizializzatore di tipo di 'NetFluid.Site.UserManager' ha generato un'eccezione. ---> MongoDB.Driver.MongoConnectionException: Unable to connect to server localhost:27017: Impossibile stabilire la connessione. Rifiuto persistente del computer di destinazione 127.0.0.1:27017. ---> System.Net.Sockets.SocketException: Impossibile stabilire la connessione. Rifiuto persistente del computer di destinazione 127.0.0.1:27017
+				
+				   in System.Net.Sockets.Socket.DoConnect(EndPoint endPointSnapshot, SocketAddress socketAddress)
+				
+				   in System.Net.Sockets.Socket.Connect(EndPoint remoteEP)
+				
+				   in System.Net.Sockets.TcpClient.Connect(IPEndPoint remoteEP)
+				
+				   in MongoDB.Driver.Internal.MongoConnection.Open()
+				
+				   in MongoDB.Driver.Internal.MongoConnection.GetNetworkStream()
+				
+				   in MongoDB.Driver.Internal.MongoConnection.SendMessage(BsonBuffer buffer, Int32 requestId)
+				
+				   in MongoDB.Driver.Internal.MongoConnection.SendMessage(MongoRequestMessage message)
+				
+				   in MongoDB.Driver.Operations.CommandOperation`1.Execute(MongoConnection connection)
+				
+				   in MongoDB.Driver.MongoServerInstance.RunCommandAs[TCommandResult](MongoConnection connection, String databaseName, IMongoCommand command)
+				
+				   in MongoDB.Driver.MongoServerInstance.Ping(MongoConnection connection)
+				
+				   in MongoDB.Driver.MongoServerInstance.Connect()
+				
+				   in MongoDB.Driver.Internal.DirectMongoServerProxy.Connect(TimeSpan timeout, ReadPreference readPreference)
+				
+				   --- Fine della traccia dello stack dell'eccezione interna ---
+				
+				   in MongoDB.Driver.Internal.DirectMongoServerProxy.Connect(TimeSpan timeout, ReadPreference readPreference)
+				
+				   in MongoDB.Driver.Internal.DirectMongoServerProxy.ChooseServerInstance(ReadPreference readPreference)
+				
+				   in MongoDB.Driver.MongoServer.AcquireConnection(ReadPreference readPreference)
+				
+				   in MongoDB.Driver.MongoCollection.RunCommandAs[TCommandResult](IMongoCommand command, IBsonSerializer resultSerializer, IBsonSerializationOptions resultSerializationOptions)
+				
+				   in MongoDB.Driver.MongoCollection.RunCommandAs[TCommandResult](IMongoCommand command)
+				
+				   in MongoDB.Driver.MongoCollection.Count(CountArgs args)
+				
+				   in MongoDB.Driver.MongoCursor.Size()
+				
+				   in MongoDB.Driver.Linq.SelectQuery.<TranslateAny>b__0(IEnumerable source)
+				
+				   in MongoDB.Driver.Linq.SelectQuery.Execute()
+				
+				   in MongoDB.Driver.Linq.MongoQueryProvider.Execute(Expression expression)
+				
+				   in MongoDB.Driver.Linq.MongoQueryProvider.Execute[TResult](Expression expression)
+				
+				   in System.Linq.Queryable.Any[TSource](IQueryable`1 source)
+				
+				   in NetFluid.Site.UserManager..cctor() in c:\Users\Matteo\Desktop\NetFluid\REPOSITORY\NetFluid.Site\UserManager.cs:riga 16
+				
+				   --- Fine della traccia dello stack dell'eccezione interna ---
+				
+				   in NetFluid.Site.UserManager..ctor()
+
+02/06/2014 20.19.15	Exception	Failed to instance NetFluid.Site.UserManager
+				MongoDB.Driver.MongoConnectionException: Unable to connect to server localhost:27017: Impossibile stabilire la connessione. Rifiuto persistente del computer di destinazione 127.0.0.1:27017. ---> System.Net.Sockets.SocketException: Impossibile stabilire la connessione. Rifiuto persistente del computer di destinazione 127.0.0.1:27017
+				
+				   in System.Net.Sockets.Socket.DoConnect(EndPoint endPointSnapshot, SocketAddress socketAddress)
+				
+				   in System.Net.Sockets.Socket.Connect(EndPoint remoteEP)
+				
+				   in System.Net.Sockets.TcpClient.Connect(IPEndPoint remoteEP)
+				
+				   in MongoDB.Driver.Internal.MongoConnection.Open()
+				
+				   in MongoDB.Driver.Internal.MongoConnection.GetNetworkStream()
+				
+				   in MongoDB.Driver.Internal.MongoConnection.SendMessage(BsonBuffer buffer, Int32 requestId)
+				
+				   in MongoDB.Driver.Internal.MongoConnection.SendMessage(MongoRequestMessage message)
+				
+				   in MongoDB.Driver.Operations.CommandOperation`1.Execute(MongoConnection connection)
+				
+				   in MongoDB.Driver.MongoServerInstance.RunCommandAs[TCommandResult](MongoConnection connection, String databaseName, IMongoCommand command)
+				
+				   in MongoDB.Driver.MongoServerInstance.Ping(MongoConnection connection)
+				
+				   in MongoDB.Driver.MongoServerInstance.Connect()
+				
+				   in MongoDB.Driver.Internal.DirectMongoServerProxy.Connect(TimeSpan timeout, ReadPreference readPreference)
+				
+				   --- Fine della traccia dello stack dell'eccezione interna ---
+				
+				   in MongoDB.Driver.Internal.DirectMongoServerProxy.Connect(TimeSpan timeout, ReadPreference readPreference)
+				
+				   in MongoDB.Driver.Internal.DirectMongoServerProxy.ChooseServerInstance(ReadPreference readPreference)
+				
+				   in MongoDB.Driver.MongoServer.AcquireConnection(ReadPreference readPreference)
+				
+				   in MongoDB.Driver.MongoCollection.RunCommandAs[TCommandResult](IMongoCommand command, IBsonSerializer resultSerializer, IBsonSerializationOptions resultSerializationOptions)
+				
+				   in MongoDB.Driver.MongoCollection.RunCommandAs[TCommandResult](IMongoCommand command)
+				
+				   in MongoDB.Driver.MongoCollection.Count(CountArgs args)
+				
+				   in MongoDB.Driver.MongoCursor.Size()
+				
+				   in MongoDB.Driver.Linq.SelectQuery.<TranslateAny>b__0(IEnumerable source)
+				
+				   in MongoDB.Driver.Linq.SelectQuery.Execute()
+				
+				   in MongoDB.Driver.Linq.MongoQueryProvider.Execute(Expression expression)
+				
+				   in MongoDB.Driver.Linq.MongoQueryProvider.Execute[TResult](Expression expression)
+				
+				   in System.Linq.Queryable.Any[TSource](IQueryable`1 source)
+				
+				   in NetFluid.Site.UserManager..cctor() in c:\Users\Matteo\Desktop\NetFluid\REPOSITORY\NetFluid.Site\UserManager.cs:riga 16
+
+02/06/2014 20.19.15	Exception	Failed to instance NetFluid.Site.UserManager
+				System.Net.Sockets.SocketException (0x80004005): Impossibile stabilire la connessione. Rifiuto persistente del computer di destinazione 127.0.0.1:27017
+				
+				   in System.Net.Sockets.Socket.DoConnect(EndPoint endPointSnapshot, SocketAddress socketAddress)
+				
+				   in System.Net.Sockets.Socket.Connect(EndPoint remoteEP)
+				
+				   in System.Net.Sockets.TcpClient.Connect(IPEndPoint remoteEP)
+				
+				   in MongoDB.Driver.Internal.MongoConnection.Open()
+				
+				   in MongoDB.Driver.Internal.MongoConnection.GetNetworkStream()
+				
+				   in MongoDB.Driver.Internal.MongoConnection.SendMessage(BsonBuffer buffer, Int32 requestId)
+				
+				   in MongoDB.Driver.Internal.MongoConnection.SendMessage(MongoRequestMessage message)
+				
+				   in MongoDB.Driver.Operations.CommandOperation`1.Execute(MongoConnection connection)
+				
+				   in MongoDB.Driver.MongoServerInstance.RunCommandAs[TCommandResult](MongoConnection connection, String databaseName, IMongoCommand command)
+				
+				   in MongoDB.Driver.MongoServerInstance.Ping(MongoConnection connection)
+				
+				   in MongoDB.Driver.MongoServerInstance.Connect()
+				
+				   in MongoDB.Driver.Internal.DirectMongoServerProxy.Connect(TimeSpan timeout, ReadPreference readPreference)
+
+02/06/2014 20.19.15	Exception	Failed to instance NetFluid.Site.UserManager
+				System.TypeInitializationException: L'inizializzatore di tipo di 'NetFluid.Site.UserManager' ha generato un'eccezione. ---> MongoDB.Driver.MongoConnectionException: Unable to connect to server localhost:27017: Impossibile stabilire la connessione. Rifiuto persistente del computer di destinazione 127.0.0.1:27017. ---> System.Net.Sockets.SocketException: Impossibile stabilire la connessione. Rifiuto persistente del computer di destinazione 127.0.0.1:27017
+				
+				   in System.Net.Sockets.Socket.DoConnect(EndPoint endPointSnapshot, SocketAddress socketAddress)
+				
+				   in System.Net.Sockets.Socket.Connect(EndPoint remoteEP)
+				
+				   in System.Net.Sockets.TcpClient.Connect(IPEndPoint remoteEP)
+				
+				   in MongoDB.Driver.Internal.MongoConnection.Open()
+				
+				   in MongoDB.Driver.Internal.MongoConnection.GetNetworkStream()
+				
+				   in MongoDB.Driver.Internal.MongoConnection.SendMessage(BsonBuffer buffer, Int32 requestId)
+				
+				   in MongoDB.Driver.Internal.MongoConnection.SendMessage(MongoRequestMessage message)
+				
+				   in MongoDB.Driver.Operations.CommandOperation`1.Execute(MongoConnection connection)
+				
+				   in MongoDB.Driver.MongoServerInstance.RunCommandAs[TCommandResult](MongoConnection connection, String databaseName, IMongoCommand command)
+				
+				   in MongoDB.Driver.MongoServerInstance.Ping(MongoConnection connection)
+				
+				   in MongoDB.Driver.MongoServerInstance.Connect()
+				
+				   in MongoDB.Driver.Internal.DirectMongoServerProxy.Connect(TimeSpan timeout, ReadPreference readPreference)
+				
+				   --- Fine della traccia dello stack dell'eccezione interna ---
+				
+				   in MongoDB.Driver.Internal.DirectMongoServerProxy.Connect(TimeSpan timeout, ReadPreference readPreference)
+				
+				   in MongoDB.Driver.Internal.DirectMongoServerProxy.ChooseServerInstance(ReadPreference readPreference)
+				
+				   in MongoDB.Driver.MongoServer.AcquireConnection(ReadPreference readPreference)
+				
+				   in MongoDB.Driver.MongoCollection.RunCommandAs[TCommandResult](IMongoCommand command, IBsonSerializer resultSerializer, IBsonSerializationOptions resultSerializationOptions)
+				
+				   in MongoDB.Driver.MongoCollection.RunCommandAs[TCommandResult](IMongoCommand command)
+				
+				   in MongoDB.Driver.MongoCollection.Count(CountArgs args)
+				
+				   in MongoDB.Driver.MongoCursor.Size()
+				
+				   in MongoDB.Driver.Linq.SelectQuery.<TranslateAny>b__0(IEnumerable source)
+				
+				   in MongoDB.Driver.Linq.SelectQuery.Execute()
+				
+				   in MongoDB.Driver.Linq.MongoQueryProvider.Execute(Expression expression)
+				
+				   in MongoDB.Driver.Linq.MongoQueryProvider.Execute[TResult](Expression expression)
+				
+				   in System.Linq.Queryable.Any[TSource](IQueryable`1 source)
+				
+				   in NetFluid.Site.UserManager..cctor() in c:\Users\Matteo\Desktop\NetFluid\REPOSITORY\NetFluid.Site\UserManager.cs:riga 16
+				
+				   --- Fine della traccia dello stack dell'eccezione interna ---
+				
+				   in NetFluid.Site.UserManager..ctor()
+
+02/06/2014 20.19.15	Exception	Failed to instance NetFluid.Site.UserManager
+				MongoDB.Driver.MongoConnectionException: Unable to connect to server localhost:27017: Impossibile stabilire la connessione. Rifiuto persistente del computer di destinazione 127.0.0.1:27017. ---> System.Net.Sockets.SocketException: Impossibile stabilire la connessione. Rifiuto persistente del computer di destinazione 127.0.0.1:27017
+				
+				   in System.Net.Sockets.Socket.DoConnect(EndPoint endPointSnapshot, SocketAddress socketAddress)
+				
+				   in System.Net.Sockets.Socket.Connect(EndPoint remoteEP)
+				
+				   in System.Net.Sockets.TcpClient.Connect(IPEndPoint remoteEP)
+				
+				   in MongoDB.Driver.Internal.MongoConnection.Open()
+				
+				   in MongoDB.Driver.Internal.MongoConnection.GetNetworkStream()
+				
+				   in MongoDB.Driver.Internal.MongoConnection.SendMessage(BsonBuffer buffer, Int32 requestId)
+				
+				   in MongoDB.Driver.Internal.MongoConnection.SendMessage(MongoRequestMessage message)
+				
+				   in MongoDB.Driver.Operations.CommandOperation`1.Execute(MongoConnection connection)
+				
+				   in MongoDB.Driver.MongoServerInstance.RunCommandAs[TCommandResult](MongoConnection connection, String databaseName, IMongoCommand command)
+				
+				   in MongoDB.Driver.MongoServerInstance.Ping(MongoConnection connection)
+				
+				   in MongoDB.Driver.MongoServerInstance.Connect()
+				
+				   in MongoDB.Driver.Internal.DirectMongoServerProxy.Connect(TimeSpan timeout, ReadPreference readPreference)
+				
+				   --- Fine della traccia dello stack dell'eccezione interna ---
+				
+				   in MongoDB.Driver.Internal.DirectMongoServerProxy.Connect(TimeSpan timeout, ReadPreference readPreference)
+				
+				   in MongoDB.Driver.Internal.DirectMongoServerProxy.ChooseServerInstance(ReadPreference readPreference)
+				
+				   in MongoDB.Driver.MongoServer.AcquireConnection(ReadPreference readPreference)
+				
+				   in MongoDB.Driver.MongoCollection.RunCommandAs[TCommandResult](IMongoCommand command, IBsonSerializer resultSerializer, IBsonSerializationOptions resultSerializationOptions)
+				
+				   in MongoDB.Driver.MongoCollection.RunCommandAs[TCommandResult](IMongoCommand command)
+				
+				   in MongoDB.Driver.MongoCollection.Count(CountArgs args)
+				
+				   in MongoDB.Driver.MongoCursor.Size()
+				
+				   in MongoDB.Driver.Linq.SelectQuery.<TranslateAny>b__0(IEnumerable source)
+				
+				   in MongoDB.Driver.Linq.SelectQuery.Execute()
+				
+				   in MongoDB.Driver.Linq.MongoQueryProvider.Execute(Expression expression)
+				
+				   in MongoDB.Driver.Linq.MongoQueryProvider.Execute[TResult](Expression expression)
+				
+				   in System.Linq.Queryable.Any[TSource](IQueryable`1 source)
+				
+				   in NetFluid.Site.UserManager..cctor() in c:\Users\Matteo\Desktop\NetFluid\REPOSITORY\NetFluid.Site\UserManager.cs:riga 16
+
+02/06/2014 20.19.15	Exception	Failed to instance NetFluid.Site.UserManager
+				System.Net.Sockets.SocketException (0x80004005): Impossibile stabilire la connessione. Rifiuto persistente del computer di destinazione 127.0.0.1:27017
+				
+				   in System.Net.Sockets.Socket.DoConnect(EndPoint endPointSnapshot, SocketAddress socketAddress)
+				
+				   in System.Net.Sockets.Socket.Connect(EndPoint remoteEP)
+				
+				   in System.Net.Sockets.TcpClient.Connect(IPEndPoint remoteEP)
+				
+				   in MongoDB.Driver.Internal.MongoConnection.Open()
+				
+				   in MongoDB.Driver.Internal.MongoConnection.GetNetworkStream()
+				
+				   in MongoDB.Driver.Internal.MongoConnection.SendMessage(BsonBuffer buffer, Int32 requestId)
+				
+				   in MongoDB.Driver.Internal.MongoConnection.SendMessage(MongoRequestMessage message)
+				
+				   in MongoDB.Driver.Operations.CommandOperation`1.Execute(MongoConnection connection)
+				
+				   in MongoDB.Driver.MongoServerInstance.RunCommandAs[TCommandResult](MongoConnection connection, String databaseName, IMongoCommand command)
+				
+				   in MongoDB.Driver.MongoServerInstance.Ping(MongoConnection connection)
+				
+				   in MongoDB.Driver.MongoServerInstance.Connect()
+				
+				   in MongoDB.Driver.Internal.DirectMongoServerProxy.Connect(TimeSpan timeout, ReadPreference readPreference)
+02/06/2014 20.19.15	Debug	Starting web interfaces
+02/06/2014 20.19.15	Debug	Starting  web interface on 127.0.0.1:80
+02/06/2014 20.19.15	Debug	Starting  web interface on [fe80::140c:79e4:c634:f3d0%50]:80
+02/06/2014 20.19.15	Debug	Starting  web interface on [fe80::441c:513:595:2b1c%40]:80
+02/06/2014 20.19.15	Debug	Starting  web interface on [fe80::6872:ccef:6dc6:795b%37]:80
+02/06/2014 20.19.15	Debug	Starting  web interface on [fe80::8882:82a7:dded:fcfe%34]:80
+02/06/2014 20.19.15	Debug	Starting  web interface on [fe80::cce0:4bc8:b000:64fa%4]:80
+02/06/2014 20.19.15	Debug	Starting  web interface on 169.254.80.80:80
+02/06/2014 20.19.15	Debug	Starting  web interface on 192.168.68.1:80
+02/06/2014 20.19.15	Debug	Starting  web interface on 192.168.171.1:80
+02/06/2014 20.19.15	Debug	Starting  web interface on 192.168.56.1:80
+02/06/2014 20.19.15	Debug	Starting  web interface on 192.168.1.2:80
+02/06/2014 20.19.15	Debug	NetFluid web application running
+
+02/06/2014 20.19.38	Error	Failed to load app configuration
+				System.Configuration.ConfigurationErrorsException: Attributo 'Immutable' non riconosciuto. I nomi di attributo rilevano la differenza tra maiuscole e minuscole. (C:\Users\Matteo\Desktop\NetFluid\REPOSITORY\NetFluid.Site\bin\Release\NetFluid.Site.vshost.exe.Config line 19)
+				
+				   in System.Configuration.BaseConfigurationRecord.EvaluateOne(String[] keys, SectionInput input, Boolean isTrusted, FactoryRecord factoryRecord, SectionRecord sectionRecord, Object parentResult)
+				
+				   in System.Configuration.BaseConfigurationRecord.Evaluate(FactoryRecord factoryRecord, SectionRecord sectionRecord, Object parentResult, Boolean getLkg, Boolean getRuntimeObject, Object& result, Object& resultRuntimeObject)
+				
+				   in System.Configuration.BaseConfigurationRecord.GetSectionRecursive(String configKey, Boolean getLkg, Boolean checkPermission, Boolean getRuntimeObject, Boolean requestIsHere, Object& result, Object& resultRuntimeObject)
+				
+				   in System.Configuration.BaseConfigurationRecord.GetSectionRecursive(String configKey, Boolean getLkg, Boolean checkPermission, Boolean getRuntimeObject, Boolean requestIsHere, Object& result, Object& resultRuntimeObject)
+				
+				   in System.Configuration.BaseConfigurationRecord.GetSectionRecursive(String configKey, Boolean getLkg, Boolean checkPermission, Boolean getRuntimeObject, Boolean requestIsHere, Object& result, Object& resultRuntimeObject)
+				
+				   in System.Configuration.BaseConfigurationRecord.GetSection(String configKey)
+				
+				   in System.Configuration.ClientConfigurationSystem.System.Configuration.Internal.IInternalConfigSystem.GetSection(String sectionName)
+				
+				   in System.Configuration.ConfigurationManager.GetSection(String sectionName)
+				
+				   in NetFluid.Engine.LoadAppConfiguration() in c:\Users\Matteo\Desktop\NetFluid\REPOSITORY\netfluid\Hosting\Engine.cs:riga 304
+02/06/2014 20.19.38	Error	App configuration not loaded, using default values
+02/06/2014 20.19.38	Debug	Adding http interface on 127.0.0.1:80
+02/06/2014 20.19.38	Debug	Starting web interfaces on every ip on port 80
+02/06/2014 20.19.38	Debug	Adding http interface on fe80::140c:79e4:c634:f3d0%50:80
+02/06/2014 20.19.38	Debug	Adding http interface on fe80::441c:513:595:2b1c%40:80
+02/06/2014 20.19.38	Debug	Adding http interface on fe80::6872:ccef:6dc6:795b%37:80
+02/06/2014 20.19.38	Debug	Adding http interface on fe80::8882:82a7:dded:fcfe%34:80
+02/06/2014 20.19.38	Debug	Adding http interface on fe80::cce0:4bc8:b000:64fa%4:80
+02/06/2014 20.19.38	Debug	Adding http interface on 169.254.80.80:80
+02/06/2014 20.19.38	Debug	Adding http interface on 192.168.68.1:80
+02/06/2014 20.19.38	Debug	Adding http interface on 192.168.171.1:80
+02/06/2014 20.19.38	Debug	Adding http interface on 192.168.56.1:80
+02/06/2014 20.19.38	Debug	Adding http interface on 192.168.1.2:80
+02/06/2014 20.19.38	Debug	Starting NetFluid Engine
+02/06/2014 20.19.38	Debug	Loading calling assembly
+02/06/2014 20.19.38	Debug	Loading NetFluid.Site, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null into default web application
+02/06/2014 20.19.38	Debug	Starting web interfaces
+02/06/2014 20.19.38	Debug	Starting  web interface on 127.0.0.1:80
+02/06/2014 20.19.38	Debug	Starting  web interface on [fe80::140c:79e4:c634:f3d0%50]:80
+02/06/2014 20.19.38	Debug	Starting  web interface on [fe80::441c:513:595:2b1c%40]:80
+02/06/2014 20.19.38	Debug	Starting  web interface on [fe80::6872:ccef:6dc6:795b%37]:80
+02/06/2014 20.19.38	Debug	Starting  web interface on [fe80::8882:82a7:dded:fcfe%34]:80
+02/06/2014 20.19.38	Debug	Starting  web interface on [fe80::cce0:4bc8:b000:64fa%4]:80
+02/06/2014 20.19.38	Debug	Starting  web interface on 169.254.80.80:80
+02/06/2014 20.19.38	Debug	Starting  web interface on 192.168.68.1:80
+02/06/2014 20.19.38	Debug	Starting  web interface on 192.168.171.1:80
+02/06/2014 20.19.38	Debug	Starting  web interface on 192.168.56.1:80
+02/06/2014 20.19.38	Debug	Starting  web interface on 192.168.1.2:80
+02/06/2014 20.19.38	Debug	NetFluid web application running
+
+02/06/2014 20.21.21	Error	Failed to load app configuration
+				System.Configuration.ConfigurationErrorsException: Attributo 'Immutable' non riconosciuto. I nomi di attributo rilevano la differenza tra maiuscole e minuscole. (C:\Users\Matteo\Desktop\NetFluid\REPOSITORY\NetFluid.Site\bin\Release\NetFluid.Site.vshost.exe.Config line 19)
+				
+				   in System.Configuration.BaseConfigurationRecord.EvaluateOne(String[] keys, SectionInput input, Boolean isTrusted, FactoryRecord factoryRecord, SectionRecord sectionRecord, Object parentResult)
+				
+				   in System.Configuration.BaseConfigurationRecord.Evaluate(FactoryRecord factoryRecord, SectionRecord sectionRecord, Object parentResult, Boolean getLkg, Boolean getRuntimeObject, Object& result, Object& resultRuntimeObject)
+				
+				   in System.Configuration.BaseConfigurationRecord.GetSectionRecursive(String configKey, Boolean getLkg, Boolean checkPermission, Boolean getRuntimeObject, Boolean requestIsHere, Object& result, Object& resultRuntimeObject)
+				
+				   in System.Configuration.BaseConfigurationRecord.GetSectionRecursive(String configKey, Boolean getLkg, Boolean checkPermission, Boolean getRuntimeObject, Boolean requestIsHere, Object& result, Object& resultRuntimeObject)
+				
+				   in System.Configuration.BaseConfigurationRecord.GetSectionRecursive(String configKey, Boolean getLkg, Boolean checkPermission, Boolean getRuntimeObject, Boolean requestIsHere, Object& result, Object& resultRuntimeObject)
+				
+				   in System.Configuration.BaseConfigurationRecord.GetSection(String configKey)
+				
+				   in System.Configuration.ClientConfigurationSystem.System.Configuration.Internal.IInternalConfigSystem.GetSection(String sectionName)
+				
+				   in System.Configuration.ConfigurationManager.GetSection(String sectionName)
+				
+				   in NetFluid.Engine.LoadAppConfiguration() in c:\Users\Matteo\Desktop\NetFluid\REPOSITORY\netfluid\Hosting\Engine.cs:riga 304
+02/06/2014 20.21.21	Error	App configuration not loaded, using default values
+02/06/2014 20.21.21	Debug	Adding http interface on 127.0.0.1:80
+02/06/2014 20.21.21	Debug	Starting web interfaces on every ip on port 80
+02/06/2014 20.21.21	Debug	Adding http interface on fe80::140c:79e4:c634:f3d0%50:80
+02/06/2014 20.21.21	Debug	Adding http interface on fe80::441c:513:595:2b1c%40:80
+02/06/2014 20.21.21	Debug	Adding http interface on fe80::6872:ccef:6dc6:795b%37:80
+02/06/2014 20.21.21	Debug	Adding http interface on fe80::8882:82a7:dded:fcfe%34:80
+02/06/2014 20.21.21	Debug	Adding http interface on fe80::cce0:4bc8:b000:64fa%4:80
+02/06/2014 20.21.21	Debug	Adding http interface on 169.254.80.80:80
+02/06/2014 20.21.21	Debug	Adding http interface on 192.168.68.1:80
+02/06/2014 20.21.21	Debug	Adding http interface on 192.168.171.1:80
+02/06/2014 20.21.21	Debug	Adding http interface on 192.168.56.1:80
+02/06/2014 20.21.21	Debug	Adding http interface on 192.168.1.2:80
+02/06/2014 20.21.21	Debug	Starting NetFluid Engine
+02/06/2014 20.21.21	Debug	Loading calling assembly
+02/06/2014 20.21.21	Debug	Loading NetFluid.Site, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null into default web application
+02/06/2014 20.21.21	Debug	Starting web interfaces
+02/06/2014 20.21.21	Debug	Starting  web interface on 127.0.0.1:80
+02/06/2014 20.21.21	Debug	Starting  web interface on [fe80::140c:79e4:c634:f3d0%50]:80
+02/06/2014 20.21.21	Debug	Starting  web interface on [fe80::441c:513:595:2b1c%40]:80
+02/06/2014 20.21.21	Debug	Starting  web interface on [fe80::6872:ccef:6dc6:795b%37]:80
+02/06/2014 20.21.21	Debug	Starting  web interface on [fe80::8882:82a7:dded:fcfe%34]:80
+02/06/2014 20.21.21	Debug	Starting  web interface on [fe80::cce0:4bc8:b000:64fa%4]:80
+02/06/2014 20.21.21	Debug	Starting  web interface on 169.254.80.80:80
+02/06/2014 20.21.21	Debug	Starting  web interface on 192.168.68.1:80
+02/06/2014 20.21.21	Debug	Starting  web interface on 192.168.171.1:80
+02/06/2014 20.21.21	Debug	Starting  web interface on 192.168.56.1:80
+02/06/2014 20.21.21	Debug	Starting  web interface on 192.168.1.2:80
+02/06/2014 20.21.21	Debug	NetFluid web application running
+
+02/06/2014 20.22.03	Error	Failed to load app configuration
+				System.Configuration.ConfigurationErrorsException: Attributo 'Immutable' non riconosciuto. I nomi di attributo rilevano la differenza tra maiuscole e minuscole. (C:\Users\Matteo\Desktop\NetFluid\REPOSITORY\NetFluid.Site\bin\Release\NetFluid.Site.vshost.exe.Config line 19)
+				
+				   in System.Configuration.BaseConfigurationRecord.EvaluateOne(String[] keys, SectionInput input, Boolean isTrusted, FactoryRecord factoryRecord, SectionRecord sectionRecord, Object parentResult)
+				
+				   in System.Configuration.BaseConfigurationRecord.Evaluate(FactoryRecord factoryRecord, SectionRecord sectionRecord, Object parentResult, Boolean getLkg, Boolean getRuntimeObject, Object& result, Object& resultRuntimeObject)
+				
+				   in System.Configuration.BaseConfigurationRecord.GetSectionRecursive(String configKey, Boolean getLkg, Boolean checkPermission, Boolean getRuntimeObject, Boolean requestIsHere, Object& result, Object& resultRuntimeObject)
+				
+				   in System.Configuration.BaseConfigurationRecord.GetSectionRecursive(String configKey, Boolean getLkg, Boolean checkPermission, Boolean getRuntimeObject, Boolean requestIsHere, Object& result, Object& resultRuntimeObject)
+				
+				   in System.Configuration.BaseConfigurationRecord.GetSectionRecursive(String configKey, Boolean getLkg, Boolean checkPermission, Boolean getRuntimeObject, Boolean requestIsHere, Object& result, Object& resultRuntimeObject)
+				
+				   in System.Configuration.BaseConfigurationRecord.GetSection(String configKey)
+				
+				   in System.Configuration.ClientConfigurationSystem.System.Configuration.Internal.IInternalConfigSystem.GetSection(String sectionName)
+				
+				   in System.Configuration.ConfigurationManager.GetSection(String sectionName)
+				
+				   in NetFluid.Engine.LoadAppConfiguration() in c:\Users\Matteo\Desktop\NetFluid\REPOSITORY\netfluid\Hosting\Engine.cs:riga 304
+02/06/2014 20.22.03	Error	App configuration not loaded, using default values
+02/06/2014 20.22.03	Debug	Adding http interface on 127.0.0.1:80
+02/06/2014 20.22.03	Debug	Starting web interfaces on every ip on port 80
+02/06/2014 20.22.03	Debug	Adding http interface on fe80::140c:79e4:c634:f3d0%50:80
+02/06/2014 20.22.03	Debug	Adding http interface on fe80::441c:513:595:2b1c%40:80
+02/06/2014 20.22.03	Debug	Adding http interface on fe80::6872:ccef:6dc6:795b%37:80
+02/06/2014 20.22.03	Debug	Adding http interface on fe80::8882:82a7:dded:fcfe%34:80
+02/06/2014 20.22.03	Debug	Adding http interface on fe80::cce0:4bc8:b000:64fa%4:80
+02/06/2014 20.22.03	Debug	Adding http interface on 169.254.80.80:80
+02/06/2014 20.22.03	Debug	Adding http interface on 192.168.68.1:80
+02/06/2014 20.22.03	Debug	Adding http interface on 192.168.171.1:80
+02/06/2014 20.22.03	Debug	Adding http interface on 192.168.56.1:80
+02/06/2014 20.22.03	Debug	Adding http interface on 192.168.1.2:80
+02/06/2014 20.22.03	Debug	Starting NetFluid Engine
+02/06/2014 20.22.03	Debug	Loading calling assembly
+02/06/2014 20.22.03	Debug	Loading NetFluid.Site, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null into default web application
+02/06/2014 20.22.04	Debug	Starting web interfaces
+02/06/2014 20.22.04	Debug	Starting  web interface on 127.0.0.1:80
+02/06/2014 20.22.04	Debug	Starting  web interface on [fe80::140c:79e4:c634:f3d0%50]:80
+02/06/2014 20.22.04	Debug	Starting  web interface on [fe80::441c:513:595:2b1c%40]:80
+02/06/2014 20.22.04	Debug	Starting  web interface on [fe80::6872:ccef:6dc6:795b%37]:80
+02/06/2014 20.22.04	Debug	Starting  web interface on [fe80::8882:82a7:dded:fcfe%34]:80
+02/06/2014 20.22.04	Debug	Starting  web interface on [fe80::cce0:4bc8:b000:64fa%4]:80
+02/06/2014 20.22.04	Debug	Starting  web interface on 169.254.80.80:80
+02/06/2014 20.22.04	Debug	Starting  web interface on 192.168.68.1:80
+02/06/2014 20.22.04	Debug	Starting  web interface on 192.168.171.1:80
+02/06/2014 20.22.04	Debug	Starting  web interface on 192.168.56.1:80
+02/06/2014 20.22.04	Debug	Starting  web interface on 192.168.1.2:80
+02/06/2014 20.22.04	Debug	NetFluid web application running
+
+02/06/2014 21.26.34	Error	Failed to load app configuration
+				System.Configuration.ConfigurationErrorsException: Attributo 'Immutable' non riconosciuto. I nomi di attributo rilevano la differenza tra maiuscole e minuscole. (C:\Users\Matteo\Desktop\NetFluid\REPOSITORY\NetFluid.Site\bin\Release\NetFluid.Site.vshost.exe.Config line 19)
+				
+				   in System.Configuration.BaseConfigurationRecord.EvaluateOne(String[] keys, SectionInput input, Boolean isTrusted, FactoryRecord factoryRecord, SectionRecord sectionRecord, Object parentResult)
+				
+				   in System.Configuration.BaseConfigurationRecord.Evaluate(FactoryRecord factoryRecord, SectionRecord sectionRecord, Object parentResult, Boolean getLkg, Boolean getRuntimeObject, Object& result, Object& resultRuntimeObject)
+				
+				   in System.Configuration.BaseConfigurationRecord.GetSectionRecursive(String configKey, Boolean getLkg, Boolean checkPermission, Boolean getRuntimeObject, Boolean requestIsHere, Object& result, Object& resultRuntimeObject)
+				
+				   in System.Configuration.BaseConfigurationRecord.GetSectionRecursive(String configKey, Boolean getLkg, Boolean checkPermission, Boolean getRuntimeObject, Boolean requestIsHere, Object& result, Object& resultRuntimeObject)
+				
+				   in System.Configuration.BaseConfigurationRecord.GetSectionRecursive(String configKey, Boolean getLkg, Boolean checkPermission, Boolean getRuntimeObject, Boolean requestIsHere, Object& result, Object& resultRuntimeObject)
+				
+				   in System.Configuration.BaseConfigurationRecord.GetSection(String configKey)
+				
+				   in System.Configuration.ClientConfigurationSystem.System.Configuration.Internal.IInternalConfigSystem.GetSection(String sectionName)
+				
+				   in System.Configuration.ConfigurationManager.GetSection(String sectionName)
+				
+				   in NetFluid.Engine.LoadAppConfiguration() in c:\Users\Matteo\Desktop\NetFluid\REPOSITORY\netfluid\Hosting\Engine.cs:riga 304
+02/06/2014 21.26.34	Error	App configuration not loaded, using default values
+02/06/2014 21.26.34	Debug	Adding http interface on 127.0.0.1:80
+02/06/2014 21.26.34	Debug	Starting web interfaces on every ip on port 80
+02/06/2014 21.26.34	Debug	Adding http interface on fe80::140c:79e4:c634:f3d0%50:80
+02/06/2014 21.26.34	Debug	Adding http interface on fe80::441c:513:595:2b1c%40:80
+02/06/2014 21.26.34	Debug	Adding http interface on fe80::6872:ccef:6dc6:795b%37:80
+02/06/2014 21.26.34	Debug	Adding http interface on fe80::8882:82a7:dded:fcfe%34:80
+02/06/2014 21.26.34	Debug	Adding http interface on fe80::cce0:4bc8:b000:64fa%4:80
+02/06/2014 21.26.34	Debug	Adding http interface on 169.254.80.80:80
+02/06/2014 21.26.34	Debug	Adding http interface on 192.168.68.1:80
+02/06/2014 21.26.34	Debug	Adding http interface on 192.168.171.1:80
+02/06/2014 21.26.34	Debug	Adding http interface on 192.168.56.1:80
+02/06/2014 21.26.34	Debug	Adding http interface on 192.168.1.3:80
+02/06/2014 21.26.34	Debug	Starting NetFluid Engine
+02/06/2014 21.26.34	Debug	Loading calling assembly
+02/06/2014 21.26.34	Debug	Loading NetFluid.Site, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null into default web application
+02/06/2014 21.26.35	Debug	Starting web interfaces
+02/06/2014 21.26.35	Debug	Starting  web interface on 127.0.0.1:80
+02/06/2014 21.26.35	Debug	Starting  web interface on [fe80::140c:79e4:c634:f3d0%50]:80
+02/06/2014 21.26.35	Debug	Starting  web interface on [fe80::441c:513:595:2b1c%40]:80
+02/06/2014 21.26.35	Debug	Starting  web interface on [fe80::6872:ccef:6dc6:795b%37]:80
+02/06/2014 21.26.35	Debug	Starting  web interface on [fe80::8882:82a7:dded:fcfe%34]:80
+02/06/2014 21.26.35	Debug	Starting  web interface on [fe80::cce0:4bc8:b000:64fa%4]:80
+02/06/2014 21.26.35	Debug	Starting  web interface on 169.254.80.80:80
+02/06/2014 21.26.35	Debug	Starting  web interface on 192.168.68.1:80
+02/06/2014 21.26.35	Debug	Starting  web interface on 192.168.171.1:80
+02/06/2014 21.26.35	Debug	Starting  web interface on 192.168.56.1:80
+02/06/2014 21.26.35	Debug	Starting  web interface on 192.168.1.3:80
+02/06/2014 21.26.35	Debug	NetFluid web application running
+
+02/06/2014 21.31.46	Error	Failed to load app configuration
+				System.Configuration.ConfigurationErrorsException: Attributo 'Immutable' non riconosciuto. I nomi di attributo rilevano la differenza tra maiuscole e minuscole. (C:\Users\Matteo\Desktop\NetFluid\REPOSITORY\NetFluid.Site\bin\Release\NetFluid.Site.vshost.exe.Config line 19)
+				
+				   in System.Configuration.BaseConfigurationRecord.EvaluateOne(String[] keys, SectionInput input, Boolean isTrusted, FactoryRecord factoryRecord, SectionRecord sectionRecord, Object parentResult)
+				
+				   in System.Configuration.BaseConfigurationRecord.Evaluate(FactoryRecord factoryRecord, SectionRecord sectionRecord, Object parentResult, Boolean getLkg, Boolean getRuntimeObject, Object& result, Object& resultRuntimeObject)
+				
+				   in System.Configuration.BaseConfigurationRecord.GetSectionRecursive(String configKey, Boolean getLkg, Boolean checkPermission, Boolean getRuntimeObject, Boolean requestIsHere, Object& result, Object& resultRuntimeObject)
+				
+				   in System.Configuration.BaseConfigurationRecord.GetSectionRecursive(String configKey, Boolean getLkg, Boolean checkPermission, Boolean getRuntimeObject, Boolean requestIsHere, Object& result, Object& resultRuntimeObject)
+				
+				   in System.Configuration.BaseConfigurationRecord.GetSectionRecursive(String configKey, Boolean getLkg, Boolean checkPermission, Boolean getRuntimeObject, Boolean requestIsHere, Object& result, Object& resultRuntimeObject)
+				
+				   in System.Configuration.BaseConfigurationRecord.GetSection(String configKey)
+				
+				   in System.Configuration.ClientConfigurationSystem.System.Configuration.Internal.IInternalConfigSystem.GetSection(String sectionName)
+				
+				   in System.Configuration.ConfigurationManager.GetSection(String sectionName)
+				
+				   in NetFluid.Engine.LoadAppConfiguration() in c:\Users\Matteo\Desktop\NetFluid\REPOSITORY\netfluid\Hosting\Engine.cs:riga 304
+02/06/2014 21.31.46	Error	App configuration not loaded, using default values
+02/06/2014 21.31.46	Debug	Adding http interface on 127.0.0.1:80
+02/06/2014 21.31.46	Debug	Starting web interfaces on every ip on port 80
+02/06/2014 21.31.46	Debug	Adding http interface on fe80::140c:79e4:c634:f3d0%50:80
+02/06/2014 21.31.46	Debug	Adding http interface on fe80::441c:513:595:2b1c%40:80
+02/06/2014 21.31.46	Debug	Adding http interface on fe80::6872:ccef:6dc6:795b%37:80
+02/06/2014 21.31.46	Debug	Adding http interface on fe80::8882:82a7:dded:fcfe%34:80
+02/06/2014 21.31.46	Debug	Adding http interface on fe80::cce0:4bc8:b000:64fa%4:80
+02/06/2014 21.31.46	Debug	Adding http interface on 169.254.80.80:80
+02/06/2014 21.31.46	Debug	Adding http interface on 192.168.68.1:80
+02/06/2014 21.31.46	Debug	Adding http interface on 192.168.171.1:80
+02/06/2014 21.31.46	Debug	Adding http interface on 192.168.56.1:80
+02/06/2014 21.31.46	Debug	Adding http interface on 192.168.1.3:80
+02/06/2014 21.31.46	Debug	Starting NetFluid Engine
+02/06/2014 21.31.46	Debug	Loading calling assembly
+02/06/2014 21.31.46	Debug	Loading NetFluid.Site, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null into default web application
+02/06/2014 21.31.46	Debug	Starting web interfaces
+02/06/2014 21.31.46	Debug	Starting  web interface on 127.0.0.1:80
+02/06/2014 21.31.46	Debug	Starting  web interface on [fe80::140c:79e4:c634:f3d0%50]:80
+02/06/2014 21.31.46	Debug	Starting  web interface on [fe80::441c:513:595:2b1c%40]:80
+02/06/2014 21.31.46	Debug	Starting  web interface on [fe80::6872:ccef:6dc6:795b%37]:80
+02/06/2014 21.31.46	Debug	Starting  web interface on [fe80::8882:82a7:dded:fcfe%34]:80
+02/06/2014 21.31.46	Debug	Starting  web interface on [fe80::cce0:4bc8:b000:64fa%4]:80
+02/06/2014 21.31.46	Debug	Starting  web interface on 169.254.80.80:80
+02/06/2014 21.31.46	Debug	Starting  web interface on 192.168.68.1:80
+02/06/2014 21.31.46	Debug	Starting  web interface on 192.168.171.1:80
+02/06/2014 21.31.46	Debug	Starting  web interface on 192.168.56.1:80
+02/06/2014 21.31.46	Debug	Starting  web interface on 192.168.1.3:80
+02/06/2014 21.31.46	Debug	NetFluid web application running
+
+02/06/2014 22.03.54	Error	Failed to load app configuration
+				System.Configuration.ConfigurationErrorsException: Attributo 'Immutable' non riconosciuto. I nomi di attributo rilevano la differenza tra maiuscole e minuscole. (C:\Users\Matteo\Desktop\NetFluid\REPOSITORY\NetFluid.Site\bin\Release\NetFluid.Site.vshost.exe.Config line 19)
+				
+				   in System.Configuration.BaseConfigurationRecord.EvaluateOne(String[] keys, SectionInput input, Boolean isTrusted, FactoryRecord factoryRecord, SectionRecord sectionRecord, Object parentResult)
+				
+				   in System.Configuration.BaseConfigurationRecord.Evaluate(FactoryRecord factoryRecord, SectionRecord sectionRecord, Object parentResult, Boolean getLkg, Boolean getRuntimeObject, Object& result, Object& resultRuntimeObject)
+				
+				   in System.Configuration.BaseConfigurationRecord.GetSectionRecursive(String configKey, Boolean getLkg, Boolean checkPermission, Boolean getRuntimeObject, Boolean requestIsHere, Object& result, Object& resultRuntimeObject)
+				
+				   in System.Configuration.BaseConfigurationRecord.GetSectionRecursive(String configKey, Boolean getLkg, Boolean checkPermission, Boolean getRuntimeObject, Boolean requestIsHere, Object& result, Object& resultRuntimeObject)
+				
+				   in System.Configuration.BaseConfigurationRecord.GetSectionRecursive(String configKey, Boolean getLkg, Boolean checkPermission, Boolean getRuntimeObject, Boolean requestIsHere, Object& result, Object& resultRuntimeObject)
+				
+				   in System.Configuration.BaseConfigurationRecord.GetSection(String configKey)
+				
+				   in System.Configuration.ClientConfigurationSystem.System.Configuration.Internal.IInternalConfigSystem.GetSection(String sectionName)
+				
+				   in System.Configuration.ConfigurationManager.GetSection(String sectionName)
+				
+				   in NetFluid.Engine.LoadAppConfiguration() in c:\Users\Matteo\Desktop\NetFluid\REPOSITORY\netfluid\Hosting\Engine.cs:riga 304
+02/06/2014 22.03.54	Error	App configuration not loaded, using default values
+02/06/2014 22.03.54	Debug	Adding http interface on 127.0.0.1:80
+02/06/2014 22.03.54	Debug	Starting web interfaces on every ip on port 80
+02/06/2014 22.03.54	Debug	Adding http interface on fe80::140c:79e4:c634:f3d0%50:80
+02/06/2014 22.03.54	Debug	Adding http interface on fe80::441c:513:595:2b1c%40:80
+02/06/2014 22.03.54	Debug	Adding http interface on fe80::6872:ccef:6dc6:795b%37:80
+02/06/2014 22.03.54	Debug	Adding http interface on fe80::8882:82a7:dded:fcfe%34:80
+02/06/2014 22.03.54	Debug	Adding http interface on fe80::cce0:4bc8:b000:64fa%4:80
+02/06/2014 22.03.54	Debug	Adding http interface on 169.254.80.80:80
+02/06/2014 22.03.54	Debug	Adding http interface on 192.168.68.1:80
+02/06/2014 22.03.54	Debug	Adding http interface on 192.168.171.1:80
+02/06/2014 22.03.54	Debug	Adding http interface on 192.168.56.1:80
+02/06/2014 22.03.54	Debug	Adding http interface on 192.168.1.3:80
+02/06/2014 22.03.54	Debug	Starting NetFluid Engine
+02/06/2014 22.03.54	Debug	Loading calling assembly
+02/06/2014 22.03.54	Debug	Loading NetFluid.Site, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null into default web application
+02/06/2014 22.03.54	Debug	Starting web interfaces
+02/06/2014 22.03.54	Debug	Starting  web interface on 127.0.0.1:80
+02/06/2014 22.03.54	Debug	Starting  web interface on [fe80::140c:79e4:c634:f3d0%50]:80
+02/06/2014 22.03.54	Debug	Starting  web interface on [fe80::441c:513:595:2b1c%40]:80
+02/06/2014 22.03.54	Debug	Starting  web interface on [fe80::6872:ccef:6dc6:795b%37]:80
+02/06/2014 22.03.54	Debug	Starting  web interface on [fe80::8882:82a7:dded:fcfe%34]:80
+02/06/2014 22.03.54	Debug	Starting  web interface on [fe80::cce0:4bc8:b000:64fa%4]:80
+02/06/2014 22.03.54	Debug	Starting  web interface on 169.254.80.80:80
+02/06/2014 22.03.54	Debug	Starting  web interface on 192.168.68.1:80
+02/06/2014 22.03.54	Debug	Starting  web interface on 192.168.171.1:80
+02/06/2014 22.03.54	Debug	Starting  web interface on 192.168.56.1:80
+02/06/2014 22.03.54	Debug	Starting  web interface on 192.168.1.3:80
+02/06/2014 22.03.54	Debug	NetFluid web application running
+
+02/06/2014 22.05.53	Error	Failed to load app configuration
+				System.Configuration.ConfigurationErrorsException: Attributo 'Immutable' non riconosciuto. I nomi di attributo rilevano la differenza tra maiuscole e minuscole. (C:\Users\Matteo\Desktop\NetFluid\REPOSITORY\NetFluid.Site\bin\Release\NetFluid.Site.vshost.exe.Config line 19)
+				
+				   in System.Configuration.BaseConfigurationRecord.EvaluateOne(String[] keys, SectionInput input, Boolean isTrusted, FactoryRecord factoryRecord, SectionRecord sectionRecord, Object parentResult)
+				
+				   in System.Configuration.BaseConfigurationRecord.Evaluate(FactoryRecord factoryRecord, SectionRecord sectionRecord, Object parentResult, Boolean getLkg, Boolean getRuntimeObject, Object& result, Object& resultRuntimeObject)
+				
+				   in System.Configuration.BaseConfigurationRecord.GetSectionRecursive(String configKey, Boolean getLkg, Boolean checkPermission, Boolean getRuntimeObject, Boolean requestIsHere, Object& result, Object& resultRuntimeObject)
+				
+				   in System.Configuration.BaseConfigurationRecord.GetSectionRecursive(String configKey, Boolean getLkg, Boolean checkPermission, Boolean getRuntimeObject, Boolean requestIsHere, Object& result, Object& resultRuntimeObject)
+				
+				   in System.Configuration.BaseConfigurationRecord.GetSectionRecursive(String configKey, Boolean getLkg, Boolean checkPermission, Boolean getRuntimeObject, Boolean requestIsHere, Object& result, Object& resultRuntimeObject)
+				
+				   in System.Configuration.BaseConfigurationRecord.GetSection(String configKey)
+				
+				   in System.Configuration.ClientConfigurationSystem.System.Configuration.Internal.IInternalConfigSystem.GetSection(String sectionName)
+				
+				   in System.Configuration.ConfigurationManager.GetSection(String sectionName)
+				
+				   in NetFluid.Engine.LoadAppConfiguration() in c:\Users\Matteo\Desktop\NetFluid\REPOSITORY\netfluid\Hosting\Engine.cs:riga 304
+02/06/2014 22.05.53	Error	App configuration not loaded, using default values
+02/06/2014 22.05.53	Debug	Adding http interface on 127.0.0.1:80
+02/06/2014 22.05.53	Debug	Starting web interfaces on every ip on port 80
+02/06/2014 22.05.53	Debug	Adding http interface on fe80::140c:79e4:c634:f3d0%50:80
+02/06/2014 22.05.53	Debug	Adding http interface on fe80::441c:513:595:2b1c%40:80
+02/06/2014 22.05.53	Debug	Adding http interface on fe80::6872:ccef:6dc6:795b%37:80
+02/06/2014 22.05.53	Debug	Adding http interface on fe80::8882:82a7:dded:fcfe%34:80
+02/06/2014 22.05.53	Debug	Adding http interface on fe80::cce0:4bc8:b000:64fa%4:80
+02/06/2014 22.05.53	Debug	Adding http interface on 169.254.80.80:80
+02/06/2014 22.05.53	Debug	Adding http interface on 192.168.68.1:80
+02/06/2014 22.05.53	Debug	Adding http interface on 192.168.171.1:80
+02/06/2014 22.05.53	Debug	Adding http interface on 192.168.56.1:80
+02/06/2014 22.05.53	Debug	Adding http interface on 192.168.1.3:80
+02/06/2014 22.05.53	Debug	Starting NetFluid Engine
+02/06/2014 22.05.53	Debug	Loading calling assembly
+02/06/2014 22.05.53	Debug	Loading NetFluid.Site, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null into default web application
+02/06/2014 22.05.53	Debug	Starting web interfaces
+02/06/2014 22.05.53	Debug	Starting  web interface on 127.0.0.1:80
+02/06/2014 22.05.53	Debug	Starting  web interface on [fe80::140c:79e4:c634:f3d0%50]:80
+02/06/2014 22.05.53	Debug	Starting  web interface on [fe80::441c:513:595:2b1c%40]:80
+02/06/2014 22.05.53	Debug	Starting  web interface on [fe80::6872:ccef:6dc6:795b%37]:80
+02/06/2014 22.05.53	Debug	Starting  web interface on [fe80::8882:82a7:dded:fcfe%34]:80
+02/06/2014 22.05.53	Debug	Starting  web interface on [fe80::cce0:4bc8:b000:64fa%4]:80
+02/06/2014 22.05.53	Debug	Starting  web interface on 169.254.80.80:80
+02/06/2014 22.05.53	Debug	Starting  web interface on 192.168.68.1:80
+02/06/2014 22.05.53	Debug	Starting  web interface on 192.168.171.1:80
+02/06/2014 22.05.53	Debug	Starting  web interface on 192.168.56.1:80
+02/06/2014 22.05.53	Debug	Starting  web interface on 192.168.1.3:80
+02/06/2014 22.05.53	Debug	NetFluid web application running
+
+03/06/2014 00.59.37	Error	Failed to load app configuration
+				System.Configuration.ConfigurationErrorsException: Attributo 'Immutable' non riconosciuto. I nomi di attributo rilevano la differenza tra maiuscole e minuscole. (C:\Users\Matteo\Desktop\NetFluid\REPOSITORY\NetFluid.Site\bin\Release\NetFluid.Site.vshost.exe.Config line 19)
+				
+				   in System.Configuration.BaseConfigurationRecord.EvaluateOne(String[] keys, SectionInput input, Boolean isTrusted, FactoryRecord factoryRecord, SectionRecord sectionRecord, Object parentResult)
+				
+				   in System.Configuration.BaseConfigurationRecord.Evaluate(FactoryRecord factoryRecord, SectionRecord sectionRecord, Object parentResult, Boolean getLkg, Boolean getRuntimeObject, Object& result, Object& resultRuntimeObject)
+				
+				   in System.Configuration.BaseConfigurationRecord.GetSectionRecursive(String configKey, Boolean getLkg, Boolean checkPermission, Boolean getRuntimeObject, Boolean requestIsHere, Object& result, Object& resultRuntimeObject)
+				
+				   in System.Configuration.BaseConfigurationRecord.GetSectionRecursive(String configKey, Boolean getLkg, Boolean checkPermission, Boolean getRuntimeObject, Boolean requestIsHere, Object& result, Object& resultRuntimeObject)
+				
+				   in System.Configuration.BaseConfigurationRecord.GetSectionRecursive(String configKey, Boolean getLkg, Boolean checkPermission, Boolean getRuntimeObject, Boolean requestIsHere, Object& result, Object& resultRuntimeObject)
+				
+				   in System.Configuration.BaseConfigurationRecord.GetSection(String configKey)
+				
+				   in System.Configuration.ClientConfigurationSystem.System.Configuration.Internal.IInternalConfigSystem.GetSection(String sectionName)
+				
+				   in System.Configuration.ConfigurationManager.GetSection(String sectionName)
+				
+				   in NetFluid.Engine.LoadAppConfiguration() in c:\Users\Matteo\Desktop\NetFluid\REPOSITORY\netfluid\Hosting\Engine.cs:riga 304
+03/06/2014 00.59.37	Error	App configuration not loaded, using default values
+03/06/2014 00.59.37	Debug	Adding http interface on 127.0.0.1:80
+03/06/2014 00.59.37	Debug	Starting web interfaces on every ip on port 80
+03/06/2014 00.59.37	Debug	Adding http interface on fe80::140c:79e4:c634:f3d0%50:80
+03/06/2014 00.59.37	Debug	Adding http interface on fe80::441c:513:595:2b1c%40:80
+03/06/2014 00.59.37	Debug	Adding http interface on fe80::6872:ccef:6dc6:795b%37:80
+03/06/2014 00.59.37	Debug	Adding http interface on fe80::8882:82a7:dded:fcfe%34:80
+03/06/2014 00.59.37	Debug	Adding http interface on fe80::cce0:4bc8:b000:64fa%4:80
+03/06/2014 00.59.37	Debug	Adding http interface on 169.254.80.80:80
+03/06/2014 00.59.37	Debug	Adding http interface on 192.168.68.1:80
+03/06/2014 00.59.37	Debug	Adding http interface on 192.168.171.1:80
+03/06/2014 00.59.37	Debug	Adding http interface on 192.168.56.1:80
+03/06/2014 00.59.37	Debug	Adding http interface on 192.168.1.3:80
+03/06/2014 00.59.37	Debug	Starting NetFluid Engine
+03/06/2014 00.59.37	Debug	Loading calling assembly
+03/06/2014 00.59.37	Debug	Loading NetFluid.Site, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null into default web application
+03/06/2014 00.59.38	Debug	Starting web interfaces
+03/06/2014 00.59.38	Debug	Starting  web interface on 127.0.0.1:80
+03/06/2014 00.59.38	Debug	Starting  web interface on [fe80::140c:79e4:c634:f3d0%50]:80
+03/06/2014 00.59.38	Debug	Starting  web interface on [fe80::441c:513:595:2b1c%40]:80
+03/06/2014 00.59.38	Debug	Starting  web interface on [fe80::6872:ccef:6dc6:795b%37]:80
+03/06/2014 00.59.38	Debug	Starting  web interface on [fe80::8882:82a7:dded:fcfe%34]:80
+03/06/2014 00.59.38	Debug	Starting  web interface on [fe80::cce0:4bc8:b000:64fa%4]:80
+03/06/2014 00.59.38	Debug	Starting  web interface on 169.254.80.80:80
+03/06/2014 00.59.38	Debug	Starting  web interface on 192.168.68.1:80
+03/06/2014 00.59.38	Debug	Starting  web interface on 192.168.171.1:80
+03/06/2014 00.59.38	Debug	Starting  web interface on 192.168.56.1:80
+03/06/2014 00.59.38	Debug	Starting  web interface on 192.168.1.3:80
+03/06/2014 00.59.38	Debug	NetFluid web application running
+
+03/06/2014 01.01.09	Error	Failed to load app configuration
+				System.Configuration.ConfigurationErrorsException: Attributo 'Immutable' non riconosciuto. I nomi di attributo rilevano la differenza tra maiuscole e minuscole. (C:\Users\Matteo\Desktop\NetFluid\REPOSITORY\NetFluid.Site\bin\Release\NetFluid.Site.vshost.exe.Config line 19)
+				
+				   in System.Configuration.BaseConfigurationRecord.EvaluateOne(String[] keys, SectionInput input, Boolean isTrusted, FactoryRecord factoryRecord, SectionRecord sectionRecord, Object parentResult)
+				
+				   in System.Configuration.BaseConfigurationRecord.Evaluate(FactoryRecord factoryRecord, SectionRecord sectionRecord, Object parentResult, Boolean getLkg, Boolean getRuntimeObject, Object& result, Object& resultRuntimeObject)
+				
+				   in System.Configuration.BaseConfigurationRecord.GetSectionRecursive(String configKey, Boolean getLkg, Boolean checkPermission, Boolean getRuntimeObject, Boolean requestIsHere, Object& result, Object& resultRuntimeObject)
+				
+				   in System.Configuration.BaseConfigurationRecord.GetSectionRecursive(String configKey, Boolean getLkg, Boolean checkPermission, Boolean getRuntimeObject, Boolean requestIsHere, Object& result, Object& resultRuntimeObject)
+				
+				   in System.Configuration.BaseConfigurationRecord.GetSectionRecursive(String configKey, Boolean getLkg, Boolean checkPermission, Boolean getRuntimeObject, Boolean requestIsHere, Object& result, Object& resultRuntimeObject)
+				
+				   in System.Configuration.BaseConfigurationRecord.GetSection(String configKey)
+				
+				   in System.Configuration.ClientConfigurationSystem.System.Configuration.Internal.IInternalConfigSystem.GetSection(String sectionName)
+				
+				   in System.Configuration.ConfigurationManager.GetSection(String sectionName)
+				
+				   in NetFluid.Engine.LoadAppConfiguration() in c:\Users\Matteo\Desktop\NetFluid\REPOSITORY\netfluid\Hosting\Engine.cs:riga 304
+03/06/2014 01.01.09	Error	App configuration not loaded, using default values
+03/06/2014 01.01.09	Debug	Adding http interface on 127.0.0.1:80
+03/06/2014 01.01.09	Debug	Starting web interfaces on every ip on port 80
+03/06/2014 01.01.09	Debug	Adding http interface on fe80::140c:79e4:c634:f3d0%50:80
+03/06/2014 01.01.09	Debug	Adding http interface on fe80::441c:513:595:2b1c%40:80
+03/06/2014 01.01.09	Debug	Adding http interface on fe80::6872:ccef:6dc6:795b%37:80
+03/06/2014 01.01.09	Debug	Adding http interface on fe80::8882:82a7:dded:fcfe%34:80
+03/06/2014 01.01.09	Debug	Adding http interface on fe80::cce0:4bc8:b000:64fa%4:80
+03/06/2014 01.01.09	Debug	Adding http interface on 169.254.80.80:80
+03/06/2014 01.01.09	Debug	Adding http interface on 192.168.68.1:80
+03/06/2014 01.01.09	Debug	Adding http interface on 192.168.171.1:80
+03/06/2014 01.01.09	Debug	Adding http interface on 192.168.56.1:80
+03/06/2014 01.01.09	Debug	Adding http interface on 192.168.1.3:80
+03/06/2014 01.01.09	Debug	Starting NetFluid Engine
+03/06/2014 01.01.09	Debug	Loading calling assembly
+03/06/2014 01.01.09	Debug	Loading NetFluid.Site, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null into default web application
+
+03/06/2014 01.02.10	Error	Failed to load app configuration
+				System.Configuration.ConfigurationErrorsException: Attributo 'Immutable' non riconosciuto. I nomi di attributo rilevano la differenza tra maiuscole e minuscole. (C:\Users\Matteo\Desktop\NetFluid\REPOSITORY\NetFluid.Site\bin\Release\NetFluid.Site.vshost.exe.Config line 19)
+				
+				   in System.Configuration.BaseConfigurationRecord.EvaluateOne(String[] keys, SectionInput input, Boolean isTrusted, FactoryRecord factoryRecord, SectionRecord sectionRecord, Object parentResult)
+				
+				   in System.Configuration.BaseConfigurationRecord.Evaluate(FactoryRecord factoryRecord, SectionRecord sectionRecord, Object parentResult, Boolean getLkg, Boolean getRuntimeObject, Object& result, Object& resultRuntimeObject)
+				
+				   in System.Configuration.BaseConfigurationRecord.GetSectionRecursive(String configKey, Boolean getLkg, Boolean checkPermission, Boolean getRuntimeObject, Boolean requestIsHere, Object& result, Object& resultRuntimeObject)
+				
+				   in System.Configuration.BaseConfigurationRecord.GetSectionRecursive(String configKey, Boolean getLkg, Boolean checkPermission, Boolean getRuntimeObject, Boolean requestIsHere, Object& result, Object& resultRuntimeObject)
+				
+				   in System.Configuration.BaseConfigurationRecord.GetSectionRecursive(String configKey, Boolean getLkg, Boolean checkPermission, Boolean getRuntimeObject, Boolean requestIsHere, Object& result, Object& resultRuntimeObject)
+				
+				   in System.Configuration.BaseConfigurationRecord.GetSection(String configKey)
+				
+				   in System.Configuration.ClientConfigurationSystem.System.Configuration.Internal.IInternalConfigSystem.GetSection(String sectionName)
+				
+				   in System.Configuration.ConfigurationManager.GetSection(String sectionName)
+				
+				   in NetFluid.Engine.LoadAppConfiguration() in c:\Users\Matteo\Desktop\NetFluid\REPOSITORY\netfluid\Hosting\Engine.cs:riga 304
+03/06/2014 01.02.10	Error	App configuration not loaded, using default values
+03/06/2014 01.02.10	Debug	Adding http interface on 127.0.0.1:80
+03/06/2014 01.02.10	Debug	Starting web interfaces on every ip on port 80
+03/06/2014 01.02.10	Debug	Adding http interface on fe80::140c:79e4:c634:f3d0%50:80
+03/06/2014 01.02.10	Debug	Adding http interface on fe80::441c:513:595:2b1c%40:80
+03/06/2014 01.02.10	Debug	Adding http interface on fe80::6872:ccef:6dc6:795b%37:80
+03/06/2014 01.02.10	Debug	Adding http interface on fe80::8882:82a7:dded:fcfe%34:80
+03/06/2014 01.02.10	Debug	Adding http interface on fe80::cce0:4bc8:b000:64fa%4:80
+03/06/2014 01.02.10	Debug	Adding http interface on 169.254.80.80:80
+03/06/2014 01.02.10	Debug	Adding http interface on 192.168.68.1:80
+03/06/2014 01.02.10	Debug	Adding http interface on 192.168.171.1:80
+03/06/2014 01.02.10	Debug	Adding http interface on 192.168.56.1:80
+03/06/2014 01.02.10	Debug	Adding http interface on 192.168.1.3:80
+03/06/2014 01.02.10	Debug	Starting NetFluid Engine
+03/06/2014 01.02.10	Debug	Loading calling assembly
+03/06/2014 01.02.10	Debug	Loading NetFluid.Site, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null into default web application
+03/06/2014 01.02.34	Debug	Starting web interfaces
+03/06/2014 01.02.34	Debug	Starting  web interface on 127.0.0.1:80
+03/06/2014 01.02.34	Debug	Starting  web interface on [fe80::140c:79e4:c634:f3d0%50]:80
+03/06/2014 01.02.34	Debug	Starting  web interface on [fe80::441c:513:595:2b1c%40]:80
+03/06/2014 01.02.34	Debug	Starting  web interface on [fe80::6872:ccef:6dc6:795b%37]:80
+03/06/2014 01.02.34	Debug	Starting  web interface on [fe80::8882:82a7:dded:fcfe%34]:80
+03/06/2014 01.02.34	Debug	Starting  web interface on [fe80::cce0:4bc8:b000:64fa%4]:80
+03/06/2014 01.02.34	Debug	Starting  web interface on 169.254.80.80:80
+03/06/2014 01.02.34	Debug	Starting  web interface on 192.168.68.1:80
+03/06/2014 01.02.34	Debug	Starting  web interface on 192.168.171.1:80
+03/06/2014 01.02.34	Debug	Starting  web interface on 192.168.56.1:80
+03/06/2014 01.02.34	Debug	Starting  web interface on 192.168.1.3:80
+03/06/2014 01.02.34	Debug	NetFluid web application running
+
+03/06/2014 01.09.12	Error	Failed to load app configuration
+				System.Configuration.ConfigurationErrorsException: Attributo 'Immutable' non riconosciuto. I nomi di attributo rilevano la differenza tra maiuscole e minuscole. (C:\Users\Matteo\Desktop\NetFluid\REPOSITORY\NetFluid.Site\bin\Release\NetFluid.Site.vshost.exe.Config line 19)
+				
+				   in System.Configuration.BaseConfigurationRecord.EvaluateOne(String[] keys, SectionInput input, Boolean isTrusted, FactoryRecord factoryRecord, SectionRecord sectionRecord, Object parentResult)
+				
+				   in System.Configuration.BaseConfigurationRecord.Evaluate(FactoryRecord factoryRecord, SectionRecord sectionRecord, Object parentResult, Boolean getLkg, Boolean getRuntimeObject, Object& result, Object& resultRuntimeObject)
+				
+				   in System.Configuration.BaseConfigurationRecord.GetSectionRecursive(String configKey, Boolean getLkg, Boolean checkPermission, Boolean getRuntimeObject, Boolean requestIsHere, Object& result, Object& resultRuntimeObject)
+				
+				   in System.Configuration.BaseConfigurationRecord.GetSectionRecursive(String configKey, Boolean getLkg, Boolean checkPermission, Boolean getRuntimeObject, Boolean requestIsHere, Object& result, Object& resultRuntimeObject)
+				
+				   in System.Configuration.BaseConfigurationRecord.GetSectionRecursive(String configKey, Boolean getLkg, Boolean checkPermission, Boolean getRuntimeObject, Boolean requestIsHere, Object& result, Object& resultRuntimeObject)
+				
+				   in System.Configuration.BaseConfigurationRecord.GetSection(String configKey)
+				
+				   in System.Configuration.ClientConfigurationSystem.System.Configuration.Internal.IInternalConfigSystem.GetSection(String sectionName)
+				
+				   in System.Configuration.ConfigurationManager.GetSection(String sectionName)
+				
+				   in NetFluid.Engine.LoadAppConfiguration() in c:\Users\Matteo\Desktop\NetFluid\REPOSITORY\netfluid\Hosting\Engine.cs:riga 304
+03/06/2014 01.09.12	Error	App configuration not loaded, using default values
+03/06/2014 01.09.12	Debug	Adding http interface on 127.0.0.1:80
+03/06/2014 01.09.12	Debug	Starting web interfaces on every ip on port 80
+03/06/2014 01.09.12	Debug	Adding http interface on fe80::140c:79e4:c634:f3d0%50:80
+03/06/2014 01.09.12	Debug	Adding http interface on fe80::441c:513:595:2b1c%40:80
+03/06/2014 01.09.12	Debug	Adding http interface on fe80::6872:ccef:6dc6:795b%37:80
+03/06/2014 01.09.12	Debug	Adding http interface on fe80::8882:82a7:dded:fcfe%34:80
+03/06/2014 01.09.12	Debug	Adding http interface on fe80::cce0:4bc8:b000:64fa%4:80
+03/06/2014 01.09.12	Debug	Adding http interface on 169.254.80.80:80
+03/06/2014 01.09.12	Debug	Adding http interface on 192.168.68.1:80
+03/06/2014 01.09.12	Debug	Adding http interface on 192.168.171.1:80
+03/06/2014 01.09.12	Debug	Adding http interface on 192.168.56.1:80
+03/06/2014 01.09.12	Debug	Adding http interface on 192.168.1.3:80
+03/06/2014 01.09.12	Debug	Starting NetFluid Engine
+03/06/2014 01.09.12	Debug	Loading calling assembly
+03/06/2014 01.09.12	Debug	Loading NetFluid.Site, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null into default web application
+03/06/2014 01.09.17	Debug	Starting web interfaces
+03/06/2014 01.09.17	Debug	Starting  web interface on 127.0.0.1:80
+03/06/2014 01.09.17	Debug	Starting  web interface on [fe80::140c:79e4:c634:f3d0%50]:80
+03/06/2014 01.09.17	Debug	Starting  web interface on [fe80::441c:513:595:2b1c%40]:80
+03/06/2014 01.09.17	Debug	Starting  web interface on [fe80::6872:ccef:6dc6:795b%37]:80
+03/06/2014 01.09.17	Debug	Starting  web interface on [fe80::8882:82a7:dded:fcfe%34]:80
+03/06/2014 01.09.17	Debug	Starting  web interface on [fe80::cce0:4bc8:b000:64fa%4]:80
+03/06/2014 01.09.17	Debug	Starting  web interface on 169.254.80.80:80
+03/06/2014 01.09.17	Debug	Starting  web interface on 192.168.68.1:80
+03/06/2014 01.09.17	Debug	Starting  web interface on 192.168.171.1:80
+03/06/2014 01.09.17	Debug	Starting  web interface on 192.168.56.1:80
+03/06/2014 01.09.17	Debug	Starting  web interface on 192.168.1.3:80
+03/06/2014 01.09.17	Debug	NetFluid web application running
+
+03/06/2014 01.09.37	Exception	Error on /signin
+				System.Reflection.TargetInvocationException: Eccezione generata dalla destinazione di una chiamata. ---> System.ArgumentNullException: Riferimento a una stringa non impostato su un'istanza di stringa.
+				
+				Nome parametro: s
+				
+				   in System.Text.Encoding.GetBytes(String s)
+				
+				   in NetFluid.Security.Sha1(String text) in c:\Users\Matteo\Desktop\NetFluid\REPOSITORY\netfluid\Security.cs:riga 129
+				
+				   in lambda_method(Closure )
+				
+				   --- Fine della traccia dello stack dell'eccezione interna ---
+				
+				   in System.RuntimeMethodHandle.InvokeMethod(Object target, Object[] arguments, Signature sig, Boolean constructor)
+				
+				   in System.Reflection.RuntimeMethodInfo.UnsafeInvokeInternal(Object obj, Object[] parameters, Object[] arguments)
+				
+				   in System.Reflection.RuntimeMethodInfo.UnsafeInvoke(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+				
+				   in System.Delegate.DynamicInvokeImpl(Object[] args)
+				
+				   in System.Delegate.DynamicInvoke(Object[] args)
+				
+				   in MongoDB.Driver.Linq.PartialEvaluator.SubtreeEvaluator.EvaluateSubtree(Expression e)
+				
+				   in MongoDB.Driver.Linq.PartialEvaluator.SubtreeEvaluator.Visit(Expression exp)
+				
+				   in MongoDB.Driver.Linq.ExpressionVisitor.VisitBinary(BinaryExpression node)
+				
+				   in MongoDB.Driver.Linq.ExpressionVisitor.Visit(Expression node)
+				
+				   in MongoDB.Driver.Linq.PartialEvaluator.SubtreeEvaluator.Visit(Expression exp)
+				
+				   in MongoDB.Driver.Linq.ExpressionVisitor.VisitBinary(BinaryExpression node)
+				
+				   in MongoDB.Driver.Linq.ExpressionVisitor.Visit(Expression node)
+				
+				   in MongoDB.Driver.Linq.PartialEvaluator.SubtreeEvaluator.Visit(Expression exp)
+				
+				   in MongoDB.Driver.Linq.ExpressionVisitor.VisitLambda(LambdaExpression node)
+				
+				   in MongoDB.Driver.Linq.ExpressionVisitor.Visit(Expression node)
+				
+				   in MongoDB.Driver.Linq.PartialEvaluator.SubtreeEvaluator.Visit(Expression exp)
+				
+				   in MongoDB.Driver.Linq.ExpressionVisitor.VisitUnary(UnaryExpression node)
+				
+				   in MongoDB.Driver.Linq.ExpressionVisitor.Visit(Expression node)
+				
+				   in MongoDB.Driver.Linq.PartialEvaluator.SubtreeEvaluator.Visit(Expression exp)
+				
+				   in MongoDB.Driver.Linq.ExpressionVisitor.Visit(ReadOnlyCollection`1 nodes)
+				
+				   in MongoDB.Driver.Linq.ExpressionVisitor.VisitMethodCall(MethodCallExpression node)
+				
+				   in MongoDB.Driver.Linq.ExpressionVisitor.Visit(Expression node)
+				
+				   in MongoDB.Driver.Linq.PartialEvaluator.SubtreeEvaluator.Visit(Expression exp)
+				
+				   in MongoDB.Driver.Linq.PartialEvaluator.SubtreeEvaluator.Evaluate(Expression exp)
+				
+				   in MongoDB.Driver.Linq.PartialEvaluator.Evaluate(Expression expression, IQueryProvider queryProvider)
+				
+				   in MongoDB.Driver.Linq.MongoQueryTranslator.Translate(MongoQueryProvider provider, Expression expression)
+				
+				   in MongoDB.Driver.Linq.MongoQueryProvider.Execute(Expression expression)
+				
+				   in MongoDB.Driver.Linq.MongoQueryProvider.Execute[TResult](Expression expression)
+				
+				   in System.Linq.Queryable.FirstOrDefault[TSource](IQueryable`1 source, Expression`1 predicate)
+				
+				   in NetFluid.Site.UserManager.SignIn(String username, String password) in c:\Users\Matteo\Desktop\NetFluid\REPOSITORY\NetFluid.Site\UserManager.cs:riga 54
+
+03/06/2014 01.09.37	Exception	Error on /signin
+				System.ArgumentNullException: Riferimento a una stringa non impostato su un'istanza di stringa.
+				
+				Nome parametro: s
+				
+				   in System.Text.Encoding.GetBytes(String s)
+				
+				   in NetFluid.Security.Sha1(String text) in c:\Users\Matteo\Desktop\NetFluid\REPOSITORY\netfluid\Security.cs:riga 129
+				
+				   in lambda_method(Closure )
+
+03/06/2014 01.16.26	Error	Failed to load app configuration
+				System.Configuration.ConfigurationErrorsException: Attributo 'Immutable' non riconosciuto. I nomi di attributo rilevano la differenza tra maiuscole e minuscole. (C:\Users\Matteo\Desktop\NetFluid\REPOSITORY\NetFluid.Site\bin\Release\NetFluid.Site.vshost.exe.Config line 19)
+				
+				   in System.Configuration.BaseConfigurationRecord.EvaluateOne(String[] keys, SectionInput input, Boolean isTrusted, FactoryRecord factoryRecord, SectionRecord sectionRecord, Object parentResult)
+				
+				   in System.Configuration.BaseConfigurationRecord.Evaluate(FactoryRecord factoryRecord, SectionRecord sectionRecord, Object parentResult, Boolean getLkg, Boolean getRuntimeObject, Object& result, Object& resultRuntimeObject)
+				
+				   in System.Configuration.BaseConfigurationRecord.GetSectionRecursive(String configKey, Boolean getLkg, Boolean checkPermission, Boolean getRuntimeObject, Boolean requestIsHere, Object& result, Object& resultRuntimeObject)
+				
+				   in System.Configuration.BaseConfigurationRecord.GetSectionRecursive(String configKey, Boolean getLkg, Boolean checkPermission, Boolean getRuntimeObject, Boolean requestIsHere, Object& result, Object& resultRuntimeObject)
+				
+				   in System.Configuration.BaseConfigurationRecord.GetSectionRecursive(String configKey, Boolean getLkg, Boolean checkPermission, Boolean getRuntimeObject, Boolean requestIsHere, Object& result, Object& resultRuntimeObject)
+				
+				   in System.Configuration.BaseConfigurationRecord.GetSection(String configKey)
+				
+				   in System.Configuration.ClientConfigurationSystem.System.Configuration.Internal.IInternalConfigSystem.GetSection(String sectionName)
+				
+				   in System.Configuration.ConfigurationManager.GetSection(String sectionName)
+				
+				   in NetFluid.Engine.LoadAppConfiguration() in c:\Users\Matteo\Desktop\NetFluid\REPOSITORY\netfluid\Hosting\Engine.cs:riga 304
+03/06/2014 01.16.26	Error	App configuration not loaded, using default values
+03/06/2014 01.16.26	Debug	Adding http interface on 127.0.0.1:80
+03/06/2014 01.16.26	Debug	Starting web interfaces on every ip on port 80
+03/06/2014 01.16.26	Debug	Adding http interface on fe80::140c:79e4:c634:f3d0%50:80
+03/06/2014 01.16.26	Debug	Adding http interface on fe80::441c:513:595:2b1c%40:80
+03/06/2014 01.16.26	Debug	Adding http interface on fe80::6872:ccef:6dc6:795b%37:80
+03/06/2014 01.16.26	Debug	Adding http interface on fe80::8882:82a7:dded:fcfe%34:80
+03/06/2014 01.16.26	Debug	Adding http interface on fe80::cce0:4bc8:b000:64fa%4:80
+03/06/2014 01.16.26	Debug	Adding http interface on 169.254.80.80:80
+03/06/2014 01.16.26	Debug	Adding http interface on 192.168.68.1:80
+03/06/2014 01.16.26	Debug	Adding http interface on 192.168.171.1:80
+03/06/2014 01.16.26	Debug	Adding http interface on 192.168.56.1:80
+03/06/2014 01.16.26	Debug	Adding http interface on 192.168.1.3:80
+03/06/2014 01.16.26	Debug	Starting NetFluid Engine
+03/06/2014 01.16.26	Debug	Loading calling assembly
+03/06/2014 01.16.26	Debug	Loading NetFluid.Site, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null into default web application
+03/06/2014 01.16.26	Debug	Starting web interfaces
+03/06/2014 01.16.26	Debug	Starting  web interface on 127.0.0.1:80
+03/06/2014 01.16.26	Debug	Starting  web interface on [fe80::140c:79e4:c634:f3d0%50]:80
+03/06/2014 01.16.26	Debug	Starting  web interface on [fe80::441c:513:595:2b1c%40]:80
+03/06/2014 01.16.26	Debug	Starting  web interface on [fe80::6872:ccef:6dc6:795b%37]:80
+03/06/2014 01.16.26	Debug	Starting  web interface on [fe80::8882:82a7:dded:fcfe%34]:80
+03/06/2014 01.16.26	Debug	Starting  web interface on [fe80::cce0:4bc8:b000:64fa%4]:80
+03/06/2014 01.16.26	Debug	Starting  web interface on 169.254.80.80:80
+03/06/2014 01.16.26	Debug	Starting  web interface on 192.168.68.1:80
+03/06/2014 01.16.26	Debug	Starting  web interface on 192.168.171.1:80
+03/06/2014 01.16.26	Debug	Starting  web interface on 192.168.56.1:80
+03/06/2014 01.16.26	Debug	Starting  web interface on 192.168.1.3:80
+03/06/2014 01.16.26	Debug	NetFluid web application running
+
+03/06/2014 01.18.03	Error	Failed to load app configuration
+				System.Configuration.ConfigurationErrorsException: Attributo 'Immutable' non riconosciuto. I nomi di attributo rilevano la differenza tra maiuscole e minuscole. (C:\Users\Matteo\Desktop\NetFluid\REPOSITORY\NetFluid.Site\bin\Release\NetFluid.Site.vshost.exe.Config line 19)
+				
+				   in System.Configuration.BaseConfigurationRecord.EvaluateOne(String[] keys, SectionInput input, Boolean isTrusted, FactoryRecord factoryRecord, SectionRecord sectionRecord, Object parentResult)
+				
+				   in System.Configuration.BaseConfigurationRecord.Evaluate(FactoryRecord factoryRecord, SectionRecord sectionRecord, Object parentResult, Boolean getLkg, Boolean getRuntimeObject, Object& result, Object& resultRuntimeObject)
+				
+				   in System.Configuration.BaseConfigurationRecord.GetSectionRecursive(String configKey, Boolean getLkg, Boolean checkPermission, Boolean getRuntimeObject, Boolean requestIsHere, Object& result, Object& resultRuntimeObject)
+				
+				   in System.Configuration.BaseConfigurationRecord.GetSectionRecursive(String configKey, Boolean getLkg, Boolean checkPermission, Boolean getRuntimeObject, Boolean requestIsHere, Object& result, Object& resultRuntimeObject)
+				
+				   in System.Configuration.BaseConfigurationRecord.GetSectionRecursive(String configKey, Boolean getLkg, Boolean checkPermission, Boolean getRuntimeObject, Boolean requestIsHere, Object& result, Object& resultRuntimeObject)
+				
+				   in System.Configuration.BaseConfigurationRecord.GetSection(String configKey)
+				
+				   in System.Configuration.ClientConfigurationSystem.System.Configuration.Internal.IInternalConfigSystem.GetSection(String sectionName)
+				
+				   in System.Configuration.ConfigurationManager.GetSection(String sectionName)
+				
+				   in NetFluid.Engine.LoadAppConfiguration() in c:\Users\Matteo\Desktop\NetFluid\REPOSITORY\netfluid\Hosting\Engine.cs:riga 304
+03/06/2014 01.18.03	Error	App configuration not loaded, using default values
+03/06/2014 01.18.03	Debug	Adding http interface on 127.0.0.1:80
+03/06/2014 01.18.03	Debug	Starting web interfaces on every ip on port 80
+03/06/2014 01.18.03	Debug	Adding http interface on fe80::140c:79e4:c634:f3d0%50:80
+03/06/2014 01.18.03	Debug	Adding http interface on fe80::441c:513:595:2b1c%40:80
+03/06/2014 01.18.03	Debug	Adding http interface on fe80::6872:ccef:6dc6:795b%37:80
+03/06/2014 01.18.03	Debug	Adding http interface on fe80::8882:82a7:dded:fcfe%34:80
+03/06/2014 01.18.03	Debug	Adding http interface on fe80::cce0:4bc8:b000:64fa%4:80
+03/06/2014 01.18.03	Debug	Adding http interface on 169.254.80.80:80
+03/06/2014 01.18.03	Debug	Adding http interface on 192.168.68.1:80
+03/06/2014 01.18.03	Debug	Adding http interface on 192.168.171.1:80
+03/06/2014 01.18.03	Debug	Adding http interface on 192.168.56.1:80
+03/06/2014 01.18.03	Debug	Adding http interface on 192.168.1.3:80
+03/06/2014 01.18.03	Debug	Starting NetFluid Engine
+03/06/2014 01.18.03	Debug	Loading calling assembly
+03/06/2014 01.18.03	Debug	Loading NetFluid.Site, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null into default web application
+03/06/2014 01.18.04	Debug	Starting web interfaces
+03/06/2014 01.18.04	Debug	Starting  web interface on 127.0.0.1:80
+03/06/2014 01.18.04	Debug	Starting  web interface on [fe80::140c:79e4:c634:f3d0%50]:80
+03/06/2014 01.18.04	Debug	Starting  web interface on [fe80::441c:513:595:2b1c%40]:80
+03/06/2014 01.18.04	Debug	Starting  web interface on [fe80::6872:ccef:6dc6:795b%37]:80
+03/06/2014 01.18.04	Debug	Starting  web interface on [fe80::8882:82a7:dded:fcfe%34]:80
+03/06/2014 01.18.04	Debug	Starting  web interface on [fe80::cce0:4bc8:b000:64fa%4]:80
+03/06/2014 01.18.04	Debug	Starting  web interface on 169.254.80.80:80
+03/06/2014 01.18.04	Debug	Starting  web interface on 192.168.68.1:80
+03/06/2014 01.18.04	Debug	Starting  web interface on 192.168.171.1:80
+03/06/2014 01.18.04	Debug	Starting  web interface on 192.168.56.1:80
+03/06/2014 01.18.04	Debug	Starting  web interface on 192.168.1.3:80
+03/06/2014 01.18.04	Debug	NetFluid web application running
+
+03/06/2014 12.12.12	Error	Failed to load app configuration
+				System.Configuration.ConfigurationErrorsException: Attributo 'Immutable' non riconosciuto. I nomi di attributo rilevano la differenza tra maiuscole e minuscole. (C:\Users\Matteo\Desktop\NetFluid\REPOSITORY\NetFluid.Site\bin\Release\NetFluid.Site.vshost.exe.Config line 19)
+				
+				   in System.Configuration.BaseConfigurationRecord.EvaluateOne(String[] keys, SectionInput input, Boolean isTrusted, FactoryRecord factoryRecord, SectionRecord sectionRecord, Object parentResult)
+				
+				   in System.Configuration.BaseConfigurationRecord.Evaluate(FactoryRecord factoryRecord, SectionRecord sectionRecord, Object parentResult, Boolean getLkg, Boolean getRuntimeObject, Object& result, Object& resultRuntimeObject)
+				
+				   in System.Configuration.BaseConfigurationRecord.GetSectionRecursive(String configKey, Boolean getLkg, Boolean checkPermission, Boolean getRuntimeObject, Boolean requestIsHere, Object& result, Object& resultRuntimeObject)
+				
+				   in System.Configuration.BaseConfigurationRecord.GetSectionRecursive(String configKey, Boolean getLkg, Boolean checkPermission, Boolean getRuntimeObject, Boolean requestIsHere, Object& result, Object& resultRuntimeObject)
+				
+				   in System.Configuration.BaseConfigurationRecord.GetSectionRecursive(String configKey, Boolean getLkg, Boolean checkPermission, Boolean getRuntimeObject, Boolean requestIsHere, Object& result, Object& resultRuntimeObject)
+				
+				   in System.Configuration.BaseConfigurationRecord.GetSection(String configKey)
+				
+				   in System.Configuration.ClientConfigurationSystem.System.Configuration.Internal.IInternalConfigSystem.GetSection(String sectionName)
+				
+				   in System.Configuration.ConfigurationManager.GetSection(String sectionName)
+				
+				   in NetFluid.Engine.LoadAppConfiguration() in c:\Users\Matteo\Desktop\NetFluid\REPOSITORY\netfluid\Hosting\Engine.cs:riga 304
+03/06/2014 12.12.12	Error	App configuration not loaded, using default values
+03/06/2014 12.12.12	Debug	Adding http interface on 127.0.0.1:80
+03/06/2014 12.12.12	Debug	Starting web interfaces on every ip on port 80
+03/06/2014 12.12.12	Debug	Adding http interface on fe80::140c:79e4:c634:f3d0%50:80
+03/06/2014 12.12.12	Debug	Adding http interface on fe80::441c:513:595:2b1c%40:80
+03/06/2014 12.12.12	Debug	Adding http interface on fe80::6872:ccef:6dc6:795b%37:80
+03/06/2014 12.12.12	Debug	Adding http interface on fe80::8882:82a7:dded:fcfe%34:80
+03/06/2014 12.12.12	Debug	Adding http interface on fe80::cce0:4bc8:b000:64fa%4:80
+03/06/2014 12.12.12	Debug	Adding http interface on 169.254.80.80:80
+03/06/2014 12.12.12	Debug	Adding http interface on 192.168.68.1:80
+03/06/2014 12.12.12	Debug	Adding http interface on 192.168.171.1:80
+03/06/2014 12.12.12	Debug	Adding http interface on 192.168.56.1:80
+03/06/2014 12.12.12	Debug	Adding http interface on 192.168.1.3:80
+03/06/2014 12.12.12	Debug	Starting NetFluid Engine
+03/06/2014 12.12.12	Debug	Loading calling assembly
+03/06/2014 12.12.12	Debug	Loading NetFluid.Site, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null into default web application
+03/06/2014 12.12.13	Debug	Starting web interfaces
+03/06/2014 12.12.13	Debug	Starting  web interface on 127.0.0.1:80
+03/06/2014 12.12.13	Debug	Starting  web interface on [fe80::140c:79e4:c634:f3d0%50]:80
+03/06/2014 12.12.13	Debug	Starting  web interface on [fe80::441c:513:595:2b1c%40]:80
+03/06/2014 12.12.13	Debug	Starting  web interface on [fe80::6872:ccef:6dc6:795b%37]:80
+03/06/2014 12.12.13	Debug	Starting  web interface on [fe80::8882:82a7:dded:fcfe%34]:80
+03/06/2014 12.12.13	Debug	Starting  web interface on [fe80::cce0:4bc8:b000:64fa%4]:80
+03/06/2014 12.12.13	Debug	Starting  web interface on 169.254.80.80:80
+03/06/2014 12.12.13	Debug	Starting  web interface on 192.168.68.1:80
+03/06/2014 12.12.13	Debug	Starting  web interface on 192.168.171.1:80
+03/06/2014 12.12.13	Debug	Starting  web interface on 192.168.56.1:80
+03/06/2014 12.12.13	Debug	Starting  web interface on 192.168.1.3:80
+03/06/2014 12.12.13	Debug	NetFluid web application running
+
+03/06/2014 15.34.52	Error	Failed to load app configuration
+				System.Configuration.ConfigurationErrorsException: Attributo 'Immutable' non riconosciuto. I nomi di attributo rilevano la differenza tra maiuscole e minuscole. (C:\Users\Matteo\Desktop\NetFluid\REPOSITORY\NetFluid.Site\bin\Release\NetFluid.Site.vshost.exe.Config line 19)
+				
+				   in System.Configuration.BaseConfigurationRecord.EvaluateOne(String[] keys, SectionInput input, Boolean isTrusted, FactoryRecord factoryRecord, SectionRecord sectionRecord, Object parentResult)
+				
+				   in System.Configuration.BaseConfigurationRecord.Evaluate(FactoryRecord factoryRecord, SectionRecord sectionRecord, Object parentResult, Boolean getLkg, Boolean getRuntimeObject, Object& result, Object& resultRuntimeObject)
+				
+				   in System.Configuration.BaseConfigurationRecord.GetSectionRecursive(String configKey, Boolean getLkg, Boolean checkPermission, Boolean getRuntimeObject, Boolean requestIsHere, Object& result, Object& resultRuntimeObject)
+				
+				   in System.Configuration.BaseConfigurationRecord.GetSectionRecursive(String configKey, Boolean getLkg, Boolean checkPermission, Boolean getRuntimeObject, Boolean requestIsHere, Object& result, Object& resultRuntimeObject)
+				
+				   in System.Configuration.BaseConfigurationRecord.GetSectionRecursive(String configKey, Boolean getLkg, Boolean checkPermission, Boolean getRuntimeObject, Boolean requestIsHere, Object& result, Object& resultRuntimeObject)
+				
+				   in System.Configuration.BaseConfigurationRecord.GetSection(String configKey)
+				
+				   in System.Configuration.ClientConfigurationSystem.System.Configuration.Internal.IInternalConfigSystem.GetSection(String sectionName)
+				
+				   in System.Configuration.ConfigurationManager.GetSection(String sectionName)
+				
+				   in NetFluid.Engine.LoadAppConfiguration() in c:\Users\Matteo\Desktop\NetFluid\REPOSITORY\netfluid\Hosting\Engine.cs:riga 304
+03/06/2014 15.34.52	Error	App configuration not loaded, using default values
+03/06/2014 15.34.52	Debug	Adding http interface on 127.0.0.1:80
+03/06/2014 15.34.52	Debug	Starting web interfaces on every ip on port 80
+03/06/2014 15.34.52	Debug	Adding http interface on fe80::140c:79e4:c634:f3d0%50:80
+03/06/2014 15.34.52	Debug	Adding http interface on fe80::441c:513:595:2b1c%40:80
+03/06/2014 15.34.52	Debug	Adding http interface on fe80::6872:ccef:6dc6:795b%37:80
+03/06/2014 15.34.52	Debug	Adding http interface on fe80::8882:82a7:dded:fcfe%34:80
+03/06/2014 15.34.52	Debug	Adding http interface on fe80::cce0:4bc8:b000:64fa%4:80
+03/06/2014 15.34.52	Debug	Adding http interface on 169.254.80.80:80
+03/06/2014 15.34.52	Debug	Adding http interface on 192.168.68.1:80
+03/06/2014 15.34.52	Debug	Adding http interface on 192.168.171.1:80
+03/06/2014 15.34.52	Debug	Adding http interface on 192.168.56.1:80
+03/06/2014 15.34.52	Debug	Adding http interface on 10.188.11.60:80
+03/06/2014 15.34.52	Debug	Starting NetFluid Engine
+03/06/2014 15.34.52	Debug	Loading calling assembly
+03/06/2014 15.34.52	Debug	Loading NetFluid.Site, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null into default web application
+03/06/2014 15.34.54	Debug	Starting web interfaces
+03/06/2014 15.34.54	Debug	Starting  web interface on 127.0.0.1:80
+03/06/2014 15.34.54	Debug	Starting  web interface on [fe80::140c:79e4:c634:f3d0%50]:80
+03/06/2014 15.34.54	Debug	Starting  web interface on [fe80::441c:513:595:2b1c%40]:80
+03/06/2014 15.34.54	Debug	Starting  web interface on [fe80::6872:ccef:6dc6:795b%37]:80
+03/06/2014 15.34.54	Debug	Starting  web interface on [fe80::8882:82a7:dded:fcfe%34]:80
+03/06/2014 15.34.54	Debug	Starting  web interface on [fe80::cce0:4bc8:b000:64fa%4]:80
+03/06/2014 15.34.54	Debug	Starting  web interface on 169.254.80.80:80
+03/06/2014 15.34.54	Debug	Starting  web interface on 192.168.68.1:80
+03/06/2014 15.34.54	Debug	Starting  web interface on 192.168.171.1:80
+03/06/2014 15.34.54	Debug	Starting  web interface on 192.168.56.1:80
+03/06/2014 15.34.54	Debug	Starting  web interface on 10.188.11.60:80
+03/06/2014 15.34.54	Debug	NetFluid web application running

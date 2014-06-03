@@ -32,6 +32,7 @@ using System.Reflection;
 using System.Text;
 using System.Text.RegularExpressions;
 using Microsoft.CSharp;
+using Microsoft.CSharp.RuntimeBinder;
 
 namespace NetFluid.Responses
 {
@@ -323,6 +324,12 @@ namespace NetFluid.Responses
             if (csc_parameters.ReferencedAssemblies.Cast<string>().All(ass => Path.GetFileName(ass) != "System.Core.dll"))
             {
                 csc_parameters.ReferencedAssemblies.Add(typeof(Enumerable).Assembly.Location);
+            }
+
+            //FORCE DYNAMIC REFERENCE 
+            if (csc_parameters.ReferencedAssemblies.Cast<string>().All(ass => Path.GetFileName(ass) != "Microsoft.CSharp.dll"))
+            {
+                csc_parameters.ReferencedAssemblies.Add(typeof(RuntimeBinderException).Assembly.Location);
             }
 
             foreach (var refAss in AppDomain.CurrentDomain.GetAssemblies().Where(refAss => !refAss.IsDynamic))

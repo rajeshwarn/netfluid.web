@@ -691,7 +691,18 @@ namespace NetFluid
                 {
                     if (Response.Cookies == null)
                         Response.Cookies = new CookieCollection();
-                    Response.Cookies.Add(new Cookie("SESSION-ID", SessionId));
+
+                    var domainParts = Request.Host.Split(new[] {'.'}, StringSplitOptions.RemoveEmptyEntries);
+
+                    if (domainParts.Length >= 2)
+                    {
+                        var domain = domainParts[domainParts.Length - 2] + "." + domainParts[domainParts.Length - 1];
+                        Response.Cookies.Add(new Cookie("SESSION-ID", SessionId, "/", domain));
+                    }
+                    else
+                    {
+                        Response.Cookies.Add(new Cookie("SESSION-ID", SessionId));
+                    }
                 }
 
                 if (Response.Cookies != null)

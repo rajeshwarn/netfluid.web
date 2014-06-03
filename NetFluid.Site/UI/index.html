@@ -39,9 +39,6 @@
 
             <nav class="navbar navbar-static-top navbar-mind" role="navigation">
                 <div class="container">
-                    <div class="navbar-header">
-                        <a class="navbar-brand visible-xs" href="index.html">Open <span>Mind</span></a>
-                    </div>
                     <!-- Collect the nav links, forms, and other content for toggling -->
                     <div class="collapse navbar-collapse navbar-mind-collapse">
                         <ul class="nav navbar-nav">
@@ -94,11 +91,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="col-md-6 col-sm-5 hidden-xs carousel-img-wrap">
-                                        <div class="carousel-img">
-                                            <img src="http://cdn.netfluid.org/img/pre.png" class="img-responsive animated bounceInUp" alt="Image">
-                                        </div>
-                                    </div>
+                                    <div class="col-md-6 col-sm-5 hidden-xs carousel-img-wrap"></div>
                                 </div>
                             </div>
                         </div>
@@ -117,11 +110,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="col-md-6 col-sm-4 hidden-xs carousel-img-wrap">
-                                        <div class="carousel-img">
-                                            <img src="http://cdn.netfluid.org/img/pre2.png" class="img-responsive animated bounceInUp" alt="Image">
-                                        </div>
-                                    </div>
+                                    <div class="col-md-6 col-sm-4 hidden-xs carousel-img-wrap"></div>
                                 </div>
                             </div>
                         </div>
@@ -140,11 +129,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="col-lg-6 col-md-5 col-sm-3 hidden-xs carousel-img-wrap">
-                                        <div class="carousel-img">
-                                            <img src="http://cdn.netfluid.org/img/pre3.png" class="img-responsive animated bounceInUp" alt="Image">
-                                        </div>
-                                    </div>
+                                    <div class="col-lg-6 col-md-5 col-sm-3 hidden-xs carousel-img-wrap"></div>
                                 </div>
                             </div>
                         </div>
@@ -286,6 +271,49 @@
                             </p>
                         </div>
                         <div class="col-md-4 text-center">
+                            <div class="text-right">
+                                <div class="btn-group">
+                                    <button class="btn btn-success" data-toggle="modal" data-target="#modalSignIn">
+                                        sign in
+                                    </button>
+                                    % User user = Context.Session("user");
+                                    % if(user==null)
+                                        <button type="button" class="btn btn-default">anon</button>
+                                    % else
+                                        <a href="#">{% user %}</a>
+                                    % end if
+                                </div>
+                                <!-- Modal -->
+                                <div class="modal fade" id="modalSignIn" tabindex="-1" role="dialog" aria-labelledby="modalSignInLabel" aria-hidden="true">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                                                <h4 class="modal-title" id="modalSignInLabel">sign in</h4>
+                                            </div>
+                                            <div class="modal-body">
+                                                <form method="POST" action="http://user.netfluid.org/signin">
+                                                    <div class="form-group">
+                                                        <label for="title">username</label>
+                                                        <input class="form-control" id="title" type="text" name="username" />
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label for="title">password</label>
+                                                        <input class="form-control" id="title" type="password" name="password" />
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <input type="submit" value="sign in" class="btn btn-success" />
+                                                    </div>
+                                                </form>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <hr />
                             <h2 class="section-title">Related products</h2>
                             <div class="panel-group" id="accordion">
                                 <div class="panel panel-default">
@@ -446,5 +474,17 @@
         <script src="http://cdn.netfluid.org/js/bootstrap.min.js"></script>
         <script src="http://cdn.netfluid.org/js/jquery.mixitup.min.js"></script>
         <script src="http://cdn.netfluid.org/js/app.js"></script>
+        <script>
+            (function (i, s, o, g, r, a, m) {
+                i['GoogleAnalyticsObject'] = r; i[r] = i[r] || function () {
+                    (i[r].q = i[r].q || []).push(arguments)
+                }, i[r].l = 1 * new Date(); a = s.createElement(o),
+                m = s.getElementsByTagName(o)[0]; a.async = 1; a.src = g; m.parentNode.insertBefore(a, m)
+            })(window, document, 'script', '//www.google-analytics.com/analytics.js', 'ga');
+
+            ga('create', 'UA-32315832-1', 'netfluid.org');
+            ga('send', 'pageview');
+
+        </script>
     </body>
 </html>
