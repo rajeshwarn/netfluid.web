@@ -1,0 +1,94 @@
+31/05/2014 16.49.45	Warning	App configuration doesn't contains a valid NetFluid section
+31/05/2014 16.49.45	Error	App configuration not loaded, using default values
+31/05/2014 16.49.45	Error	Failed to add public folder, directory is missing ./Public
+31/05/2014 16.49.45	Debug	Adding http interface on 127.0.0.1:80
+31/05/2014 16.49.45	Debug	Starting web interfaces on every ip on port 80
+31/05/2014 16.49.45	Debug	Adding http interface on fe80::140c:79e4:c634:f3d0%50:80
+31/05/2014 16.49.45	Debug	Adding http interface on fe80::441c:513:595:2b1c%40:80
+31/05/2014 16.49.45	Debug	Adding http interface on fe80::6872:ccef:6dc6:795b%37:80
+31/05/2014 16.49.45	Debug	Adding http interface on fe80::8882:82a7:dded:fcfe%34:80
+31/05/2014 16.49.45	Debug	Adding http interface on fe80::cce0:4bc8:b000:64fa%4:80
+31/05/2014 16.49.45	Debug	Adding http interface on 169.254.80.80:80
+31/05/2014 16.49.45	Debug	Adding http interface on 192.168.68.1:80
+31/05/2014 16.49.45	Debug	Adding http interface on 192.168.171.1:80
+31/05/2014 16.49.45	Debug	Adding http interface on 192.168.56.1:80
+31/05/2014 16.49.45	Debug	Adding http interface on 192.168.0.106:80
+31/05/2014 16.49.45	Debug	Starting NetFluid Engine
+31/05/2014 16.49.45	Debug	Loading calling assembly
+31/05/2014 16.49.45	Debug	Loading RaspSite, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null into default web application
+31/05/2014 16.49.45	Debug	Starting web interfaces
+31/05/2014 16.49.45	Debug	Starting  web interface on 127.0.0.1:80
+31/05/2014 16.49.45	Debug	Starting  web interface on [fe80::140c:79e4:c634:f3d0%50]:80
+31/05/2014 16.49.45	Debug	Starting  web interface on [fe80::441c:513:595:2b1c%40]:80
+31/05/2014 16.49.45	Debug	Starting  web interface on [fe80::6872:ccef:6dc6:795b%37]:80
+31/05/2014 16.49.45	Debug	Starting  web interface on [fe80::8882:82a7:dded:fcfe%34]:80
+31/05/2014 16.49.45	Debug	Starting  web interface on [fe80::cce0:4bc8:b000:64fa%4]:80
+31/05/2014 16.49.45	Debug	Starting  web interface on 169.254.80.80:80
+31/05/2014 16.49.45	Debug	Starting  web interface on 192.168.68.1:80
+31/05/2014 16.49.45	Debug	Starting  web interface on 192.168.171.1:80
+31/05/2014 16.49.45	Debug	Starting  web interface on 192.168.56.1:80
+31/05/2014 16.49.45	Debug	Starting  web interface on 192.168.0.106:80
+31/05/2014 16.49.45	Debug	NetFluid web application running
+31/05/2014 16.53.34	Warning	App configuration doesn't contains a valid NetFluid section
+31/05/2014 16.53.34	Error	App configuration not loaded, using default values
+31/05/2014 16.53.34	Error	Failed to add public folder, directory is missing ./Public
+31/05/2014 16.53.34	Debug	Adding http interface on 127.0.0.1:80
+31/05/2014 16.53.34	Debug	Starting web interfaces on every ip on port 80
+31/05/2014 16.53.34	Debug	Adding http interface on fe80::140c:79e4:c634:f3d0%50:80
+31/05/2014 16.53.34	Debug	Adding http interface on fe80::441c:513:595:2b1c%40:80
+31/05/2014 16.53.34	Debug	Adding http interface on fe80::6872:ccef:6dc6:795b%37:80
+31/05/2014 16.53.34	Debug	Adding http interface on fe80::8882:82a7:dded:fcfe%34:80
+31/05/2014 16.53.34	Debug	Adding http interface on fe80::cce0:4bc8:b000:64fa%4:80
+31/05/2014 16.53.34	Debug	Adding http interface on 169.254.80.80:80
+31/05/2014 16.53.34	Debug	Adding http interface on 192.168.68.1:80
+31/05/2014 16.53.34	Debug	Adding http interface on 192.168.171.1:80
+31/05/2014 16.53.34	Debug	Adding http interface on 192.168.56.1:80
+31/05/2014 16.53.34	Debug	Adding http interface on 192.168.0.106:80
+31/05/2014 16.53.34	Debug	Starting NetFluid Engine
+31/05/2014 16.53.34	Debug	Loading calling assembly
+31/05/2014 16.53.34	Debug	Loading RaspSite, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null into default web application
+31/05/2014 16.53.34	Debug	Starting web interfaces
+31/05/2014 16.53.34	Debug	Starting  web interface on 127.0.0.1:80
+31/05/2014 16.53.34	Debug	Starting  web interface on [fe80::140c:79e4:c634:f3d0%50]:80
+31/05/2014 16.53.34	Debug	Starting  web interface on [fe80::441c:513:595:2b1c%40]:80
+31/05/2014 16.53.34	Debug	Starting  web interface on [fe80::6872:ccef:6dc6:795b%37]:80
+31/05/2014 16.53.34	Debug	Starting  web interface on [fe80::8882:82a7:dded:fcfe%34]:80
+31/05/2014 16.53.34	Debug	Starting  web interface on [fe80::cce0:4bc8:b000:64fa%4]:80
+31/05/2014 16.53.34	Debug	Starting  web interface on 169.254.80.80:80
+31/05/2014 16.53.34	Debug	Starting  web interface on 192.168.68.1:80
+31/05/2014 16.53.34	Debug	Starting  web interface on 192.168.171.1:80
+31/05/2014 16.53.34	Debug	Starting  web interface on 192.168.56.1:80
+31/05/2014 16.53.34	Debug	Starting  web interface on 192.168.0.106:80
+31/05/2014 16.53.34	Debug	NetFluid web application running
+31/05/2014 16.53.50	Error	Template embed:RaspSite.UI.index.html not found
+31/05/2014 16.55.04	Warning	App configuration doesn't contains a valid NetFluid section
+31/05/2014 16.55.04	Error	App configuration not loaded, using default values
+31/05/2014 16.55.04	Error	Failed to add public folder, directory is missing ./Public
+31/05/2014 16.55.04	Debug	Adding http interface on 127.0.0.1:80
+31/05/2014 16.55.04	Debug	Starting web interfaces on every ip on port 80
+31/05/2014 16.55.04	Debug	Adding http interface on fe80::140c:79e4:c634:f3d0%50:80
+31/05/2014 16.55.04	Debug	Adding http interface on fe80::441c:513:595:2b1c%40:80
+31/05/2014 16.55.04	Debug	Adding http interface on fe80::6872:ccef:6dc6:795b%37:80
+31/05/2014 16.55.04	Debug	Adding http interface on fe80::8882:82a7:dded:fcfe%34:80
+31/05/2014 16.55.04	Debug	Adding http interface on fe80::cce0:4bc8:b000:64fa%4:80
+31/05/2014 16.55.04	Debug	Adding http interface on 169.254.80.80:80
+31/05/2014 16.55.04	Debug	Adding http interface on 192.168.68.1:80
+31/05/2014 16.55.04	Debug	Adding http interface on 192.168.171.1:80
+31/05/2014 16.55.04	Debug	Adding http interface on 192.168.56.1:80
+31/05/2014 16.55.04	Debug	Adding http interface on 192.168.0.106:80
+31/05/2014 16.55.04	Debug	Starting NetFluid Engine
+31/05/2014 16.55.04	Debug	Loading calling assembly
+31/05/2014 16.55.04	Debug	Loading RaspSite, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null into default web application
+31/05/2014 16.55.04	Debug	Starting web interfaces
+31/05/2014 16.55.05	Debug	Starting  web interface on 127.0.0.1:80
+31/05/2014 16.55.05	Debug	Starting  web interface on [fe80::140c:79e4:c634:f3d0%50]:80
+31/05/2014 16.55.05	Debug	Starting  web interface on [fe80::441c:513:595:2b1c%40]:80
+31/05/2014 16.55.05	Debug	Starting  web interface on [fe80::6872:ccef:6dc6:795b%37]:80
+31/05/2014 16.55.05	Debug	Starting  web interface on [fe80::8882:82a7:dded:fcfe%34]:80
+31/05/2014 16.55.05	Debug	Starting  web interface on [fe80::cce0:4bc8:b000:64fa%4]:80
+31/05/2014 16.55.05	Debug	Starting  web interface on 169.254.80.80:80
+31/05/2014 16.55.05	Debug	Starting  web interface on 192.168.68.1:80
+31/05/2014 16.55.05	Debug	Starting  web interface on 192.168.171.1:80
+31/05/2014 16.55.05	Debug	Starting  web interface on 192.168.56.1:80
+31/05/2014 16.55.05	Debug	Starting  web interface on 192.168.0.106:80
+31/05/2014 16.55.05	Debug	NetFluid web application running

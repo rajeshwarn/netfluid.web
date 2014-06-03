@@ -305,3 +305,6 @@
 /NetFluid.Site/obj/Release
 /netfluid/obj
 /NetFluid.Site/App.config
+/NetFluid.Mongo/bin/Release
+/netfluid/bin/net_4_5_Release
+/NetFluid.Site/UI
