@@ -10,16 +10,16 @@ namespace NetFluid
     /// </summary>
     public class QueryValueCollection : IEnumerable<QueryValue>
     {
-        private readonly Dictionary<string, QueryValue> values;
+        private readonly Dictionary<string, QueryValue> _values;
 
         public QueryValueCollection()
         {
-            values = new Dictionary<string, QueryValue>();
+            _values = new Dictionary<string, QueryValue>();
         }
 
         public QueryValueCollection(IEnumerable<QueryValue> collection)
         {
-            values = new Dictionary<string, QueryValue>();
+            _values = new Dictionary<string, QueryValue>();
 
             foreach (var item in collection)
             {
@@ -37,13 +37,13 @@ namespace NetFluid
             get
             {
                 QueryValue q;
-                if (values.TryGetValue(name, out q))
+                if (_values.TryGetValue(name, out q))
                 {
                     return q;
                 }
                 return null;
             }
-            set { values[name] = value; }
+            set { _values[name] = value; }
         }
 
         /// <summary>
@@ -52,12 +52,12 @@ namespace NetFluid
         /// <returns></returns>
         public IEnumerator<QueryValue> GetEnumerator()
         {
-            return values.Values.GetEnumerator();
+            return _values.Values.GetEnumerator();
         }
 
         IEnumerator IEnumerable.GetEnumerator()
         {
-            return values.Values.GetEnumerator();
+            return _values.Values.GetEnumerator();
         }
 
         /// <summary>
@@ -67,7 +67,7 @@ namespace NetFluid
         /// <returns></returns>
         public bool Contains(string name)
         {
-            return values.ContainsKey(name);
+            return _values.ContainsKey(name);
         }
 
         /// <summary>
@@ -77,10 +77,10 @@ namespace NetFluid
         /// <param name="value"></param>
         public void Add(string key, QueryValue value)
         {
-            if (values.ContainsKey(key))
-                values[key].Add(value);
+            if (_values.ContainsKey(key))
+                _values[key].Add(value);
             else
-                values.Add(key, value);
+                _values.Add(key, value);
         }
 
         /// <summary>
@@ -90,10 +90,10 @@ namespace NetFluid
         /// <param name="value"></param>
         public void Add(string key, string value)
         {
-            if (values.ContainsKey(key))
-                values[key].Add(value);
+            if (_values.ContainsKey(key))
+                _values[key].Add(value);
             else
-                values.Add(key, new QueryValue(key, value));
+                _values.Add(key, new QueryValue(key, value));
         }
 
         /// <summary>
@@ -102,7 +102,7 @@ namespace NetFluid
         /// <returns></returns>
         public string ToJSON()
         {
-            return "{" + string.Join(",", values.Values.Select(x => x.ToString())) + "}";
+            return "{" + string.Join(",", _values.Values.Select(x => x.ToString())) + "}";
         }
 
         IEnumerator<QueryValue> IEnumerable<QueryValue>.GetEnumerator()
@@ -112,7 +112,7 @@ namespace NetFluid
 
         public override int GetHashCode()
         {
-            return values.GetHashCode();
+            return _values.GetHashCode();
         }
 
         public override string ToString()
@@ -131,11 +131,11 @@ namespace NetFluid
 
             foreach (var field in type.GetFields())
             {
-                foreach (var name in values.Keys.Where(name => String.Equals(name, field.Name, StringComparison.InvariantCultureIgnoreCase)))
+                foreach (var name in _values.Keys.Where(name => String.Equals(name, field.Name, StringComparison.InvariantCultureIgnoreCase)))
                 {
                     try
                     {
-                        field.SetValue(obj, values[name].Parse(field.FieldType));
+                        field.SetValue(obj, _values[name].Parse(field.FieldType));
                     }
                     catch (Exception)
                     {
@@ -145,11 +145,11 @@ namespace NetFluid
 
             foreach (var field in type.GetProperties())
             {
-                foreach (var name in values.Keys.Where(name => String.Equals(name, field.Name, StringComparison.InvariantCultureIgnoreCase)))
+                foreach (var name in _values.Keys.Where(name => String.Equals(name, field.Name, StringComparison.InvariantCultureIgnoreCase)))
                 {
                     try
                     {
-                        field.SetValue(obj, values[name].Parse(field.PropertyType));
+                        field.SetValue(obj, _values[name].Parse(field.PropertyType));
                     }
                     catch (Exception)
                     {
@@ -172,11 +172,11 @@ namespace NetFluid
 
             foreach (var field in type.GetFields())
             {
-                foreach (var name in values.Keys.Where(name => String.Equals(name, field.Name, StringComparison.InvariantCultureIgnoreCase)))
+                foreach (var name in _values.Keys.Where(name => String.Equals(name, field.Name, StringComparison.InvariantCultureIgnoreCase)))
                 {
                     try
                     {
-                        field.SetValue(obj, values[name].Parse(field.FieldType));
+                        field.SetValue(obj, _values[name].Parse(field.FieldType));
                     }
                     catch (Exception)
                     {
@@ -186,11 +186,11 @@ namespace NetFluid
 
             foreach (var field in type.GetProperties())
             {
-                foreach (var name in values.Keys.Where(name => String.Equals(name, field.Name, StringComparison.InvariantCultureIgnoreCase)))
+                foreach (var name in _values.Keys.Where(name => String.Equals(name, field.Name, StringComparison.InvariantCultureIgnoreCase)))
                 {
                     try
                     {
-                        field.SetValue(obj, values[name].Parse(field.PropertyType));
+                        field.SetValue(obj, _values[name].Parse(field.PropertyType));
                     }
                     catch (Exception)
                     {

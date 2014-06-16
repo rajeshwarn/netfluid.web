@@ -10,6 +10,7 @@ namespace NetFluid.Site
     {
         public static void Main()
         {
+            Console.WriteLine((DateTime.Now - (new DateTime(2014,3,27))).Days);
             if (!Engine.LoadAppConfiguration())
             {
                 Engine.Logger.Log(LogLevel.Error, "App configuration not loaded, using default values");
@@ -17,7 +18,7 @@ namespace NetFluid.Site
                 Engine.Interfaces.AddLoopBack(80);
                 Engine.Interfaces.AddAllAddresses(80);
             }
-            Engine.DevMode = true;
+            Engine.DevMode = false;
             Engine.Start();
             Console.ReadLine();
         }

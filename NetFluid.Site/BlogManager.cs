@@ -7,7 +7,7 @@ namespace NetFluid.Site
 {
     public class BlogManager:FluidPage
     {
-        public static Repository<Article> Articles;
+        public static MemoryRepository<Article> Articles;
 
         public static IEnumerable<Article> Latest
         {
@@ -21,7 +21,13 @@ namespace NetFluid.Site
 
         static BlogManager()
         {
-            Articles = new Repository<Article>("mongodb://localhost", "NetFluidSite");
+            Articles = new MemoryRepository<Article>("mongodb://localhost", "NetFluidSite");
+        }
+
+        [CallOn(StatusCode.Any)]
+        public IResponse NotFound()
+        {
+            return new RedirectResponse("http://www.netfluid.org");
         }
 
         [Route("/")]
@@ -29,6 +35,25 @@ namespace NetFluid.Site
         {
             return new FluidTemplate("embed:NetFluid.Site.UI.index.html");
         }
+
+        [Route("/news")]
+        public IResponse News()
+        {
+            return new FluidTemplate("embed:NetFluid.Site.UI.category.html", "news");
+        }
+
+        [Route("/howto")]
+        public IResponse HowTo()
+        {
+            return new FluidTemplate("embed:NetFluid.Site.UI.category.html", "how to");
+        }
+
+        [Route("/libraries")]
+        public IResponse Libraries()
+        {
+            return new FluidTemplate("embed:NetFluid.Site.UI.category.html", "libraries");
+        }
+
 
         [ParametrizedRoute("/read")]
         public IResponse Read(string link)
@@ -40,12 +65,22 @@ namespace NetFluid.Site
         [Route("/write")]
         public IResponse Write()
         {
+            var user = Session<User>("user");
+
+            if(user==null || user.Groups.Contains("admin"))
+                return new FluidTemplate("embed:NetFluid.Site.UI.index.html");
+
             return new FluidTemplate("embed:NetFluid.Site.UI.write.html");
         }
 
         [Route("/add")]
         public IResponse Add()
         {
+            var user = Session<User>("user");
+
+            if (user == null || user.Groups.Contains("admin"))
+                return new FluidTemplate("embed:NetFluid.Site.UI.index.html");
+
             var article = Request.Values.ToObject<Article>();
             Articles.Save(article);
             return new FluidTemplate("embed:NetFluid.Site.UI.write.html");

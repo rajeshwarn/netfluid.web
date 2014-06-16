@@ -10,9 +10,9 @@ namespace RaspSite
     class Program : FluidPage
     {
         [Route("/")]
-        public IResponse Index()
+        public string Index()
         {
-            return new FluidTemplate("embed:RaspSite.UI.index.html");
+            return Performance.Avg.ToString();
         }
 
         static void Main(string[] args)
@@ -24,7 +24,10 @@ namespace RaspSite
                 Engine.Interfaces.AddLoopBack(80);
                 Engine.Interfaces.AddAllAddresses(80);
             }
-            Engine.DevMode = true;
+            Engine.DevMode = false;
+
+            Performance.LoadPerformance();
+
             Engine.Start();
             Console.ReadLine();
         }

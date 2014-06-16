@@ -3,7 +3,6 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
-using System.Reflection;
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization;
 using MongoDB.Bson.Serialization.IdGenerators;
@@ -16,7 +15,6 @@ namespace NetFluid.Mongo
     public class Repository<T> : IQueryable<T> where T : IDatabaseObject
     {
         private readonly MongoDatabase database;
-        private readonly PropertyInfo property;
 
         public Repository(string connection,string db)
         {
@@ -24,27 +22,22 @@ namespace NetFluid.Mongo
             {
                 cm.AutoMap();
                 cm.SetIdMember(cm.GetMemberMap(x => x.Id).SetIdGenerator(StringObjectIdGenerator.Instance));
-                typeof(T).Assembly.GetTypes().Where(x=>x.Inherit(typeof(T))).ForEach(derived =>
-                {
-                    cm.AddKnownType(derived);
-                });
+                typeof(T).Assembly.GetTypes().Where(x=>x.Inherit(typeof(T))).ForEach(cm.AddKnownType);
             });
             var client = new MongoClient(connection);
             database = client.GetServer().GetDatabase(db);
+
+            Collection = database.GetCollection<T>(typeof(T).Name);
         }
 
-        private MongoCollection<T> Collection
-        {
-            get { return database.GetCollection<T>(typeof (T).Name); }
-        }
+        protected readonly MongoCollection<T> Collection;
 
-        private IQueryable<T> Queryable
+        protected virtual IQueryable<T> Queryable
         {
             get { return Collection.AsQueryable(); }
         }
 
-
-        public T this[string id]
+        public virtual T this[string id]
         {
             get
             {
@@ -52,37 +45,37 @@ namespace NetFluid.Mongo
             }
         }
 
-        public IEnumerable<T> OfType(Type type)
+        public virtual IEnumerable<T> OfType(Type type)
         {
             return Collection.Find(Query.EQ("_t", type.Name));
         }
 
-        public IEnumerable<T> OfType(string type)
+        public virtual IEnumerable<T> OfType(string type)
         {
             return Collection.Find(Query.EQ("_t", type));
         }
 
-        public void Save(IEnumerable<T> obj)
+        public virtual void Save(IEnumerable<T> obj)
         {
             obj.ForEach(x=>Collection.Save(x));
         }
 
-        public void Save(T obj)
+        public virtual void Save(T obj)
         {
             Collection.Save(obj);
         }
 
-        public void Remove(string id)
+        public virtual void Remove(string id)
         {
             Collection.Remove(Query.EQ("_id", id));
         }
 
-        public void Remove(T obj)
+        public virtual void Remove(T obj)
         {
             Collection.Remove(Query.EQ("_id",obj.Id));
         }
 
-        public IEnumerator<T> GetEnumerator()
+        public virtual IEnumerator<T> GetEnumerator()
         {
             return Queryable.GetEnumerator();
         }
@@ -92,17 +85,17 @@ namespace NetFluid.Mongo
             return Queryable.GetEnumerator();
         }
 
-        public Expression Expression
+        public virtual Expression Expression
         {
             get { return Queryable.Expression; }
             private set {  }
         }
-        public Type ElementType
+        public virtual Type ElementType
         {
             get { return Queryable.ElementType; }
             private set { }
         }
-        public IQueryProvider Provider
+        public virtual IQueryProvider Provider
         {
             get { return Queryable.Provider; }
             private set { }

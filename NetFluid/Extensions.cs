@@ -27,6 +27,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Net;
 using System.Net.NetworkInformation;
 using System.Net.Sockets;
@@ -77,11 +78,11 @@ namespace NetFluid
                 var principal = new WindowsPrincipal(user);
                 isAdmin = principal.IsInRole(WindowsBuiltInRole.Administrator);
             }
-            catch (UnauthorizedAccessException ex)
+            catch (UnauthorizedAccessException)
             {
                 isAdmin = false;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 isAdmin = false;
             }
@@ -614,6 +615,37 @@ namespace NetFluid
         #endregion
 
         #region METHODINFO
+
+        /// <summary>
+        /// Builds a Delegate instance from the supplied MethodInfo object and a target to invoke against.
+        /// </summary>
+        public static Delegate ToDelegate(this MethodInfo mi, object target)
+        {
+            Type delegateType;
+
+            var typeArgs = mi.GetParameters()
+                .Select(p => p.ParameterType)
+                .ToList();
+
+            // builds a delegate type
+            if (mi.ReturnType == typeof(void))
+            {
+                delegateType = Expression.GetActionType(typeArgs.ToArray());
+
+            }
+            else
+            {
+                typeArgs.Add(mi.ReturnType);
+                delegateType = Expression.GetFuncType(typeArgs.ToArray());
+            }
+
+            // creates a binded delegate if target is supplied
+            var result = (target == null)
+                ? Delegate.CreateDelegate(delegateType, mi)
+                : Delegate.CreateDelegate(delegateType, target, mi);
+
+            return result;
+        }
 
         /// <summary>
         ///     Return True if this method has an attribute of type T

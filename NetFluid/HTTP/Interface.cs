@@ -94,7 +94,8 @@ namespace NetFluid.HTTP
                 {
                     try
                     {
-                        new Context(sock);
+                        var c = new Context(sock);
+                        Engine.Serve(c);
                     }
                     catch (Exception)
                     {
@@ -115,7 +116,8 @@ namespace NetFluid.HTTP
                 {
                     try
                     {
-                        new Context(sock,Certificate);
+                        var c = new Context(sock,Certificate);
+                        Engine.Serve(c);
                     }
                     catch (Exception)
                     {

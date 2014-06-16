@@ -20,9 +20,8 @@
 // Date           Changed By      Notes
 // 23/10/2013    Matteo Fabbri      Inital coding
 // ********************************************************************************************************
-/*
+
 using System;
-using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
@@ -47,8 +46,6 @@ namespace NetFluid
         private static readonly char[] Separators = { ' ' };
         private static readonly Version Latest = new Version(1,2);
 
-        private const int BufferSize = 16384;
-
         private readonly Stopwatch st;
 
         /// <summary>
@@ -58,13 +55,6 @@ namespace NetFluid
 
 
         private readonly MemoryStream _ms;
-
-
-        /// <summary>
-        ///     Temporary buffer for incoming headers data.
-        ///     Internally used for connection fowarding
-        /// </summary>
-        internal byte[] Buffer;
 
         /// <summary>
         ///     True if Response.Headers are already sent to the client
@@ -102,10 +92,7 @@ namespace NetFluid
         /// </summary>
         public bool WebSocket;
 
-        private int _position;
-        private int readBytes;
         private StreamReader reader;
-        private string sessionId;
         private StreamWriter writer;
 
         /// <summary>
@@ -119,7 +106,6 @@ namespace NetFluid
 
             IsOpen = true;
             Secure = false;
-            readBytes = 0;
 
             if (Profiling!=null)
             {
@@ -136,10 +122,7 @@ namespace NetFluid
             OutputStream = stream;
             InputStream = stream;
 
-            Buffer = new byte[BufferSize];
-            _ms = new MemoryStream(BufferSize);
-            _position = 0;
-            InputStream.BeginRead(Buffer, 0, BufferSize, OnRead, this);
+            ReadHeaders();
         }
 
         /// <summary>
@@ -160,7 +143,6 @@ namespace NetFluid
             Secure = true;
 
             _ms = new MemoryStream();
-            _position = 0;
 
             Request = new HttpRequest();
             Response = new HttpResponse();
@@ -177,15 +159,13 @@ namespace NetFluid
                     InputStream = stream;
 
                     Response.StatusCode = StatusCode.BadRequest;
-
-                    Buffer = new byte[BufferSize];
-                    InputStream.BeginRead(Buffer, 0, BufferSize, OnRead, this);
                 }
                 catch
                 {
                     Close();
                 }
             }, null);
+
         }
 
         /// <summary>
@@ -264,117 +244,78 @@ namespace NetFluid
         /// <summary>
         ///     Read request headers
         /// </summary>
-        private void OnRead(IAsyncResult ares)
+        public void ReadHeaders()
         {
-            int nread;
+            var lines = new List<string>(15);
+            string line;
 
-            try
+            do
             {
-                nread = InputStream.EndRead(ares);
-            }
-            catch (Exception)
-            {
-                return;
-            }
-
-            _ms.Write(Buffer, 0, nread);
-
-            readBytes += nread;
-
-            if (_ms.Length > 32768)
-            {
-                Response.StatusCode = StatusCode.BadRequest;
-                Close();
-                return;
-            }
-
-            if (nread == 0)
-            {
-                Socket.Close();
-                return;
-            }
-
-            byte[] t = _ms.GetBuffer();
-            string header = ReadHeaders(t, ref _position, t.Length - _position);
-
-            if (header == "")
-            {
-                try
-                {
-                    InputStream.BeginRead(Buffer, 0, Buffer.Length, OnRead, this);
-                }
-                catch
-                {
-                }
-
-                return;
-            }
-
-
-            var lines = header.Split(new[] {'\n', '\r'}, StringSplitOptions.RemoveEmptyEntries);
+                line = Reader.ReadLine();
+                if(line!="")
+                    lines.Add(line);
+            } while (line!="");
 
             #region FIRST LINE
 
-            string[] parts = lines[0].Split(Separators, 3);
-            if (parts.Length >= 3)
-            {
-                Request.HttpMethod = parts[0];
-                Request.RawUrl = parts[1];
+            var parts = lines[0].Split(Separators, 3);
 
-                try
-                {
-                    switch (parts[2][7])
-                    {
-                        case '0':
-                            Response.ProtocolVersion = HttpVersion.Version10;
-                        break;
-                        case '1':
-                            Response.ProtocolVersion = HttpVersion.Version11;
-                        break;
-                        case '2':
-                            Response.ProtocolVersion = Latest;
-                        break;
-                        default:
-                            Response.ProtocolVersion = Request.ProtocolVersion = Version.Parse(parts[2].Substring("HTTP/".Length));
-                        break;
-                    }
-                }
-                catch (Exception)
-                {
-                    Response.ProtocolVersion = new Version(0,0);
-                }
-
-                Request.Get = new QueryValueCollection();
-                int index = parts[1].IndexOf('?');
-
-                if (index >= 0)
-                {
-                    Request.Url = HttpUtility.UrlDecode(parts[1].Substring(0, index));
-                    parts[1] = parts[1].Substring(index + 1);
-
-                    parts[1].Split(new[] {'&'}, StringSplitOptions.RemoveEmptyEntries).ForEach(kv =>
-                    {
-                        int pos = kv.IndexOf('=');
-
-                        var val = pos < 0 ? "true" : HttpUtility.UrlDecode(kv.Substring(pos + 1));
-                        var key = pos < 0 ? HttpUtility.UrlDecode(kv) : HttpUtility.UrlDecode(kv.Substring(0, pos));
-
-                        Request.Get.Add(key, val);
-                    });
-                }
-                else
-                {
-                    Request.Url = HttpUtility.UrlDecode(Request.RawUrl);
-                }
-            }
-            else
+            if (parts.Length < 3)
             {
                 Response.StatusCode = StatusCode.BadRequest;
+                return;
             }
+            Request.HttpMethod = parts[0];
+            Request.RawUrl = parts[1];
+
+            try
+            {
+                switch (parts[2][7])
+                {
+                    case '0':
+                        Response.ProtocolVersion = HttpVersion.Version10;
+                        break;
+                    case '1':
+                        Response.ProtocolVersion = HttpVersion.Version11;
+                        break;
+                    case '2':
+                        Response.ProtocolVersion = Latest;
+                        break;
+                    default:
+                        Response.ProtocolVersion =
+                            Request.ProtocolVersion = Version.Parse(parts[2].Substring("HTTP/".Length));
+                        break;
+                }
+            }
+            catch (Exception)
+            {
+                Response.ProtocolVersion = new Version(0, 0);
+            }
+
+            Request.Get = new QueryValueCollection();
+            int index = parts[1].IndexOf('?');
+
+            if (index < 0)
+            {
+                Request.Url = HttpUtility.UrlDecode(Request.RawUrl);
+                return;
+            }
+            Request.Url = HttpUtility.UrlDecode(parts[1].Substring(0, index));
+            parts[1] = parts[1].Substring(index + 1);
+
+            parts[1].Split(new[] {'&'}, StringSplitOptions.RemoveEmptyEntries).ForEach(kv =>
+            {
+                int pos = kv.IndexOf('=');
+
+                var val = pos < 0 ? "true" : HttpUtility.UrlDecode(kv.Substring(pos + 1));
+                var key = pos < 0 ? HttpUtility.UrlDecode(kv) : HttpUtility.UrlDecode(kv.Substring(0, pos));
+
+                Request.Get.Add(key, val);
+            });
 
             #endregion
 
-            for (int i = 1; i < lines.Length; i++)
+            for (int i = 1; i < lines.Count; i++)
             {
                 #region GENERIC HEADER
 
@@ -523,24 +464,8 @@ namespace NetFluid
             if (Engine.Cluster.Handle(this))
                 return;
 
-            if (Request.HttpMethod != "GET" && Buffer.Length != _position)
-            {
-                Stream fs;
-                try_again:
-
-                try
-                {
-                    fs = new FileStream(Path.GetFullPath(Path.Combine(Path.GetTempPath(), Security.UID())),FileMode.OpenOrCreate);
-                    fs.Write(t, _position, readBytes - _position);
-                }
-                catch (Exception)
-                {
-                    goto try_again;
-                }
-                ReadAndSave(readBytes - _position, Request.ContentLength, fs);
-                return;
-            }
-            Engine.Serve(this);
+            if (Request.HttpMethod != "GET")
+                ReadAndSave(0, Request.ContentLength,InputStream);
         }
 
         /// <summary>
@@ -619,28 +544,6 @@ namespace NetFluid
         }
 
         /// <summary>
-        ///     Dectect if OnRead has finished
-        /// </summary>
-        private string ReadHeaders(IList<byte> b, ref int offset, int len)
-        {
-            try
-            {
-                int last = offset + len;
-                for (int i = offset; i < last; i++)
-                    if (i > 4 && b[i] == 10 && b[i - 1] == 13 && b[i - 2] == 10 && b[i - 3] == 13)
-                    {
-                        offset = i + 1;
-                        return Request.ContentEncoding.GetString(Buffer, 0, i + 1);
-                    }
-                return string.Empty;
-            }
-            catch
-            {
-            }
-            return string.Empty;
-        }
-
-        /// <summary>
         ///     Send Response headers to the client
         /// </summary>
         public void SendHeaders()
@@ -705,10 +608,6 @@ namespace NetFluid
                 Response.Headers["Content-Encoding"] = "deflate";
 
             #endregion
-
-            string h = string.Format("HTTP/{0} {1} {2}\r\n{3}\r\n", Response.ProtocolVersion,
-                    (int) Response.StatusCode,
-                   Response.StatusDescription, Response.Headers);
 
             var h = "HTTP/" + Response.ProtocolVersion + " " + (int)Response.StatusCode + " " +
                 Response.StatusDescription + "\r\n" + Response.Headers+"\r\n";
@@ -819,4 +718,3 @@ namespace NetFluid
         }
     }
 }
-*/

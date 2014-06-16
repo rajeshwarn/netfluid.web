@@ -25,6 +25,7 @@ using System;
 using System.CodeDom.Compiler;
 using System.Linq;
 using System.Reflection;
+using System.Reflection.Emit;
 using NetFluid.Responses;
 
 namespace NetFluid
@@ -34,11 +35,11 @@ namespace NetFluid
     /// </summary>
     public class FluidTemplate : IResponse
     {
-        private string path;
-        private readonly object[] param;
-        private readonly MethodInfo template;
-        private Context _context;
+        private readonly string path;
+        private readonly object[] _param;
+        private readonly MethodInfo _template;
 
+        private Delegate template;
         /// <summary>
         /// HTML template path
         /// </summary>
@@ -47,30 +48,32 @@ namespace NetFluid
         public FluidTemplate(string path, params object[] parameters)
         {
             var s = new System.Diagnostics.StackFrame(1);
-            template = TemplateCompiler.Get(path, s.GetMethod().DeclaringType);
+            _template = TemplateCompiler.Get(path, s.GetMethod().DeclaringType);
+
+            template = _template.ToDelegate(null); 
 
             if (parameters == null)
             {
-                param = new object[2];
-                param[1] = null;
+                _param = new object[2];
+                _param[1] = null;
                 return;
             }
 
-            var defaultValues = template.GetParameters().Select(x => x.ParameterType.DefaultValue()).ToArray();
+            var defaultValues = _template.GetParameters().Select(x => x.ParameterType.DefaultValue()).ToArray();
 
             if (defaultValues.Length > 1)
             {
                 if (parameters.Length == 0 && defaultValues.Length != 0)
                 {
-                    param = defaultValues;
+                    _param = defaultValues;
                     return;
                 }
 
-                param = new object[parameters.Length + 1];
-                Array.Copy(parameters, 0, param, 1, parameters.Length);
+                _param = new object[parameters.Length + 1];
+                Array.Copy(parameters, 0, _param, 1, parameters.Length);
                 return;
             }
-            param = new object[1];
+            _param = new object[1];
 
             this.path = path;
         }
@@ -79,15 +82,15 @@ namespace NetFluid
 
         public void SetHeaders(Context cnt)
         {
-            
         }
 
         public void SendResponse(Context cnt)
         {
             try
             {
-                param[0] = cnt;
-                template.Invoke(null, param);
+                _param[0] = cnt;
+                //_template.Invoke(null, _param);
+                template.DynamicInvoke(_param);
             }
             catch (Exception ex)
             {

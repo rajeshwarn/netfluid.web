@@ -28,6 +28,7 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 
 namespace NetFluid
 {
@@ -116,12 +117,6 @@ namespace NetFluid
 
         private static void SendValue(Context c, object res)
         {
-            /*if (res == null)
-            {
-                c.SendHeaders();
-                return;
-            }*/
-
             if (res is IResponse)
             {
                 var resp = res as IResponse;
@@ -136,7 +131,7 @@ namespace NetFluid
                 return;
             }
 
-            if (c.Request.HttpMethod.ToLowerInvariant()=="head")
+            if (c.Request.HttpMethod.ToLowerInvariant() == "head")
             {
                 c.SendHeaders();
                 return;
@@ -162,9 +157,10 @@ namespace NetFluid
         {
             object res = null;
 
+            
             try
             {
-                res = method.Invoke(target, args);
+               res = method.Invoke(target, args);
             }
             catch (Exception ex)
             {
@@ -186,8 +182,8 @@ namespace NetFluid
             }
 
             SendValue(c, res);
-            if (!c.WebSocket)
-                c.Close();
+            //if (!c.WebSocket)
+            //    c.Close();
         }
 
         /// <summary>
@@ -268,36 +264,37 @@ namespace NetFluid
 
                 #endregion
 
+                
                 #region PARAMETRIZED
 
                 if (Engine.DevMode)
                     Console.WriteLine(cnt.Request.Host + ":" + cnt.Request.Url + " - " + "Checking parametrized routes");
 
-                for (int i = 0; i < _parametrized.Length; i++)
+                foreach (var t in _parametrized)
                 {
-                    if (!cnt.Request.Url.StartsWith(_parametrized[i].Url))
+                    if (!cnt.Request.Url.StartsWith(t.Url))
                         continue;
 
                     if (Engine.DevMode)
                     {
                         Console.WriteLine(cnt.Request.Host + ":" + cnt.Request.Url + " - " + "Matched " +
-                                          _parametrized[i].Url);
+                                          t.Url);
                         Console.WriteLine(cnt.Request.Host + ":" + cnt.Request.Url + " - " + "Calling " +
-                                          _parametrized[i].Type.FullName + "." + _parametrized[i].Method.Name);
+                                          t.Type.FullName + "." + t.Method.Name);
                     }
 
-                    var page = _parametrized[i].Type.CreateIstance() as IMethodExposer;
+                    var page = t.Type.CreateIstance() as IMethodExposer;
                     page.Context = cnt;
 
-                    var parameters = _parametrized[i].Method.GetParameters();
+                    var parameters = t.Method.GetParameters();
 
                     if (parameters.Length == 0)
                     {
-                        Finalize(cnt, _parametrized[i].Method, page, null);
+                        Finalize(cnt, t.Method, page, null);
                         return;
                     }
 
-                    var argUri = cnt.Request.Url.Substring(_parametrized[i].Url.Length).Split(UrlSeparator,StringSplitOptions.RemoveEmptyEntries);
+                    var argUri = cnt.Request.Url.Substring(t.Url.Length).Split(UrlSeparator,StringSplitOptions.RemoveEmptyEntries);
                     var args = new object[parameters.Length];
                     for (int j = 0; j < parameters.Length; j++)
                     {
@@ -314,7 +311,7 @@ namespace NetFluid
                         }
                     }
 
-                    Finalize(cnt, _parametrized[i].Method, page, args);
+                    Finalize(cnt, t.Method, page, args);
                     return;
                 }
 

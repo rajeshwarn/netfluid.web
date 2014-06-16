@@ -44,7 +44,7 @@ namespace NetFluid
         {
             values = new Dictionary<string, WebHeader>();
 
-            foreach (WebHeader item in collection)
+            foreach (var item in collection)
             {
                 values.Add(item.Name.ToLowerInvariant(), item);
             }
@@ -128,13 +128,8 @@ namespace NetFluid
             var b = new StringBuilder();
 
             foreach (var item in values)
-            {
-                foreach (string sub in item.Value)
-                {
-                    b.Append(item.Key + ": ");
-                    b.Append(sub + "\r\n");
-                }
-            }
+                foreach (var sub in item.Value)
+                    b.Append(item.Key + ": " + sub + "\r\n");
             return b.ToString();
         }
     }

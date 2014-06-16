@@ -59,18 +59,8 @@ namespace NetFluid
             var g = c.FirstOrDefault(x => x.FullName == args.Name);
 
             return g;
-
-            foreach (
-                var ass in
-                    Directory.GetFiles("./", "*.dll")
-                        .Select(dll => Assembly.LoadFile(Path.GetFullPath(dll)))
-                        .Where(ass => ass != null && ass.FullName == args.Name))
-                return ass;
-
-            var k = Directory.GetFiles("./", "*.exe").Select(exe => Assembly.LoadFile(Path.GetFullPath(exe))).FirstOrDefault(ass => ass != null && ass.FullName == args.Name);
-
-            return k;
         }
+
 
         /// <summary>
         /// Main of host of the apllication. Any request not handled by virtual hosts will be handled by this one.

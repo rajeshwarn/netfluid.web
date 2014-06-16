@@ -29,6 +29,7 @@ using System.Linq;
 using System.Net;
 using System.Net.Security;
 using System.Net.Sockets;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace NetFluid.Cloud
@@ -77,7 +78,8 @@ namespace NetFluid.Cloud
                 to = ssl;
             }
 
-            to.Write(context.Buffer, 0, context.Buffer.Length);
+            var bheader = Encoding.UTF8.GetBytes(context.Request.Headers+"\r\n");
+            to.Write(bheader,0,bheader.Length);
 
             #region DESTINATION TO CLIENT
             f = Task.Factory.StartNew(() =>

@@ -79,6 +79,7 @@
     <Compile Include="Configuration\Interface.cs" />
     <Compile Include="Configuration\PublicFolder.cs" />
     <Compile Include="Configuration\Settings.cs" />
+    <Compile Include="Context2.cs" />
     <Compile Include="Cron\Cron.cs" />
     <Compile Include="Cron\CronTask.cs" />
     <Compile Include="Dns.cs" />
@@ -162,6 +163,7 @@
     <Compile Include="Hosting\VirtualHost.cs" />
     <Compile Include="HttpFile.cs" />
     <Compile Include="HttpFileCollection.cs" />
+    <Compile Include="HTTP\Interface2.cs" />
     <Compile Include="IWebInterface.cs" />
     <Compile Include="ILogger.cs" />
     <Compile Include="IMethodExposer.cs" />

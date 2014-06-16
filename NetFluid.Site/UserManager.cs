@@ -7,18 +7,18 @@ namespace NetFluid.Site
     [VirtualHost("user.netfluid.org")]
     public class UserManager:FluidPage
     {
-        public static Repository<User> Users;
+        public static MemoryRepository<User> Users;
 
         static UserManager()
         {
-            Users = new Repository<User>("mongodb://localhost", "NetFluidSite");
+            Users = new MemoryRepository<User>("mongodb://localhost", "NetFluidSite");
 
             if (Users.Any()) return;
 
             var user = new User
             {
-                Name = "theqult",
-                Password = Security.Sha1("Labello1"),
+                Name = "admin",
+                Password = Security.Sha1("admin"),
                 Domain = "netfluid.org"
             };
             user.Groups.Add("admin");
