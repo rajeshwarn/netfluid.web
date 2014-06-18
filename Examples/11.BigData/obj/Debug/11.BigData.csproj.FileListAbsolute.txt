@@ -1,7 +1,0 @@
-C:\Users\Matteo\Desktop\NetFluid\netfluid\Examples\11.BigData\bin\Debug\11.BigData.exe.config
-C:\Users\Matteo\Desktop\NetFluid\netfluid\Examples\11.BigData\bin\Debug\11.BigData.exe
-C:\Users\Matteo\Desktop\NetFluid\netfluid\Examples\11.BigData\bin\Debug\11.BigData.pdb
-C:\Users\Matteo\Desktop\NetFluid\netfluid\Examples\11.BigData\bin\Debug\NetFluid.dll
-C:\Users\Matteo\Desktop\NetFluid\netfluid\Examples\11.BigData\bin\Debug\NetFluid.pdb
-C:\Users\Matteo\Desktop\NetFluid\netfluid\Examples\11.BigData\obj\Debug\11.BigData.exe
-C:\Users\Matteo\Desktop\NetFluid\netfluid\Examples\11.BigData\obj\Debug\11.BigData.pdb

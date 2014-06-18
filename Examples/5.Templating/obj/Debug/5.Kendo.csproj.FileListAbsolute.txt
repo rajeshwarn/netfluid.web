@@ -1,5 +1,0 @@
-C:\Users\Matteo\Desktop\NetFluid\netfluid\Examples\5.Kendo\bin\Debug\5.Kendo.exe.config
-C:\Users\Matteo\Desktop\NetFluid\netfluid\Examples\5.Kendo\bin\Debug\5.Kendo.exe
-C:\Users\Matteo\Desktop\NetFluid\netfluid\Examples\5.Kendo\bin\Debug\5.Kendo.pdb
-C:\Users\Matteo\Desktop\NetFluid\netfluid\Examples\5.Kendo\obj\Debug\5.Kendo.exe
-C:\Users\Matteo\Desktop\NetFluid\netfluid\Examples\5.Kendo\obj\Debug\5.Kendo.pdb

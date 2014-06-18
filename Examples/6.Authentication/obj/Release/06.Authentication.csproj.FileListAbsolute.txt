@@ -1,8 +1,0 @@
-C:\Users\Matteo\Desktop\NetFluid\netfluid\Examples\6.Authentication\bin\Release\6.Authentication.exe.config
-C:\Users\Matteo\Desktop\NetFluid\netfluid\Examples\6.Authentication\bin\Release\6.Authentication.exe
-C:\Users\Matteo\Desktop\NetFluid\netfluid\Examples\6.Authentication\bin\Release\6.Authentication.pdb
-C:\Users\Matteo\Desktop\NetFluid\netfluid\Examples\6.Authentication\bin\Release\NetFluid.dll
-C:\Users\Matteo\Desktop\NetFluid\netfluid\Examples\6.Authentication\bin\Release\NetFluid.pdb
-C:\Users\Matteo\Desktop\NetFluid\netfluid\Examples\6.Authentication\obj\Release\6.Authentication.exe
-C:\Users\Matteo\Desktop\NetFluid\netfluid\Examples\6.Authentication\obj\Release\6.Authentication.pdb
-C:\Users\Matteo\Desktop\NetFluid\netfluid\Examples\6.Authentication\obj\Release\06.Authentication.csprojResolveAssemblyReference.cache

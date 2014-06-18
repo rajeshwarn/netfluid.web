@@ -1,8 +1,0 @@
-C:\Users\Matteo\Desktop\NetFluid\netfluid\Examples\7.CSV\bin\Release\7.CSV.exe.config
-C:\Users\Matteo\Desktop\NetFluid\netfluid\Examples\7.CSV\bin\Release\7.CSV.exe
-C:\Users\Matteo\Desktop\NetFluid\netfluid\Examples\7.CSV\bin\Release\7.CSV.pdb
-C:\Users\Matteo\Desktop\NetFluid\netfluid\Examples\7.CSV\bin\Release\NetFluid.dll
-C:\Users\Matteo\Desktop\NetFluid\netfluid\Examples\7.CSV\bin\Release\NetFluid.pdb
-C:\Users\Matteo\Desktop\NetFluid\netfluid\Examples\7.CSV\obj\Release\7.CSV.exe
-C:\Users\Matteo\Desktop\NetFluid\netfluid\Examples\7.CSV\obj\Release\7.CSV.pdb
-C:\Users\Matteo\Desktop\NetFluid\netfluid\Examples\7.CSV\obj\Release\07.Serialization.csprojResolveAssemblyReference.cache

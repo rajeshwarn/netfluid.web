@@ -122,7 +122,13 @@ namespace NetFluid
             OutputStream = stream;
             InputStream = stream;
 
-            ReadHeaders();
+            try
+            {
+                ReadHeaders();
+            }
+            catch (Exception)
+            {
+            }
         }
 
         /// <summary>

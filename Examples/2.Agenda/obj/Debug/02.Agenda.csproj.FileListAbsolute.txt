@@ -1,8 +1,0 @@
-C:\Users\Matteo\Desktop\NetFluid\netfluid\Examples\2.Agenda\bin\Debug\Agenda.exe
-C:\Users\Matteo\Desktop\NetFluid\netfluid\Examples\2.Agenda\bin\Debug\Agenda.pdb
-C:\Users\Matteo\Desktop\NetFluid\netfluid\Examples\2.Agenda\bin\Debug\NetFluid.dll
-C:\Users\Matteo\Desktop\NetFluid\netfluid\Examples\2.Agenda\bin\Debug\NetFluid.pdb
-C:\Users\Matteo\Desktop\NetFluid\netfluid\Examples\2.Agenda\obj\Debug\02.Agenda.csprojResolveAssemblyReference.cache
-C:\Users\Matteo\Desktop\NetFluid\netfluid\Examples\2.Agenda\obj\Debug\Agenda.exe
-C:\Users\Matteo\Desktop\NetFluid\netfluid\Examples\2.Agenda\obj\Debug\Agenda.pdb
-C:\Users\Matteo\Desktop\NetFluid\netfluid\Examples\2.Agenda\bin\Debug\index.html

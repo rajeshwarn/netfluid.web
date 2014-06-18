@@ -1,7 +1,0 @@
-C:\Users\Matteo\Desktop\NetFluid\netfluid\Examples\14.SMTP\bin\Debug\14.SMTP.exe.config
-C:\Users\Matteo\Desktop\NetFluid\netfluid\Examples\14.SMTP\bin\Debug\14.SMTP.exe
-C:\Users\Matteo\Desktop\NetFluid\netfluid\Examples\14.SMTP\bin\Debug\14.SMTP.pdb
-C:\Users\Matteo\Desktop\NetFluid\netfluid\Examples\14.SMTP\bin\Debug\NetFluid.dll
-C:\Users\Matteo\Desktop\NetFluid\netfluid\Examples\14.SMTP\bin\Debug\NetFluid.pdb
-C:\Users\Matteo\Desktop\NetFluid\netfluid\Examples\14.SMTP\obj\Debug\14.SMTP.exe
-C:\Users\Matteo\Desktop\NetFluid\netfluid\Examples\14.SMTP\obj\Debug\14.SMTP.pdb

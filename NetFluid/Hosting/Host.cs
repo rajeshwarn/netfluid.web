@@ -199,12 +199,15 @@ namespace NetFluid
 
                 #region CONTROLLERS
 
-                foreach (var item in _controllers)
+                foreach (var value in _controllers.Select(item => item.Invoke(cnt)))
                 {
-                    SendValue(cnt, item.Invoke(cnt));
+                    SendValue(cnt, value);
 
-                    if (!cnt.IsOpen)
+                    if (value != null)
+                    {
+                        cnt.Close();
                         return;
+                    }
                 }
 
                 #endregion

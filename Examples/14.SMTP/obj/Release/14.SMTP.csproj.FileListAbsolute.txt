@@ -1,8 +1,0 @@
-C:\Users\Matteo\Desktop\NetFluid\netfluid\Examples\14.SMTP\bin\Release\14.SMTP.exe.config
-C:\Users\Matteo\Desktop\NetFluid\netfluid\Examples\14.SMTP\bin\Release\14.SMTP.exe
-C:\Users\Matteo\Desktop\NetFluid\netfluid\Examples\14.SMTP\bin\Release\14.SMTP.pdb
-C:\Users\Matteo\Desktop\NetFluid\netfluid\Examples\14.SMTP\bin\Release\NetFluid.dll
-C:\Users\Matteo\Desktop\NetFluid\netfluid\Examples\14.SMTP\bin\Release\NetFluid.pdb
-C:\Users\Matteo\Desktop\NetFluid\netfluid\Examples\14.SMTP\obj\Release\14.SMTP.exe
-C:\Users\Matteo\Desktop\NetFluid\netfluid\Examples\14.SMTP\obj\Release\14.SMTP.pdb
-C:\Users\Matteo\Desktop\NetFluid\netfluid\Examples\14.SMTP\obj\Release\14.SMTP.csprojResolveAssemblyReference.cache

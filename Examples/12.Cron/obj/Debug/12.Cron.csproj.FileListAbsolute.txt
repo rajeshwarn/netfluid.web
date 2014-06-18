@@ -1,7 +1,0 @@
-C:\Users\Matteo\Desktop\NetFluid\netfluid\Examples\12.Cron\bin\Debug\12.Cron.exe.config
-C:\Users\Matteo\Desktop\NetFluid\netfluid\Examples\12.Cron\bin\Debug\12.Cron.exe
-C:\Users\Matteo\Desktop\NetFluid\netfluid\Examples\12.Cron\bin\Debug\12.Cron.pdb
-C:\Users\Matteo\Desktop\NetFluid\netfluid\Examples\12.Cron\bin\Debug\NetFluid.dll
-C:\Users\Matteo\Desktop\NetFluid\netfluid\Examples\12.Cron\bin\Debug\NetFluid.pdb
-C:\Users\Matteo\Desktop\NetFluid\netfluid\Examples\12.Cron\obj\Debug\12.Cron.exe
-C:\Users\Matteo\Desktop\NetFluid\netfluid\Examples\12.Cron\obj\Debug\12.Cron.pdb
