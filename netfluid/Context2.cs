@@ -619,7 +619,6 @@ namespace NetFluid
                 OutputStream.Flush();
                 OutputStream.Close();
                 Socket.Close();
-                GC.ReRegisterForFinalize(Socket);
             }
             catch (Exception)
             {

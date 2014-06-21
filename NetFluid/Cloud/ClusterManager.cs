@@ -65,7 +65,7 @@ namespace NetFluid.Cloud
             return null;
         }
 
-        static void Connect(Context cnt,Stream sIn, Stream sOut)
+        static int Connect(Context cnt,Stream sIn, Stream sOut)
         {
             var buf = new byte[512*1024];
             try
@@ -78,9 +78,15 @@ namespace NetFluid.Cloud
             }
             catch (Exception)
             {
-                sOut.Flush();
-                cnt.Close();
+                try
+                {
+                    sOut.Flush();
+                }
+                catch (Exception)
+                {
+                }
             }
+            return 6;
         }
 
         static void Open(Context context,string remote, out Task f, out Task s)
@@ -103,7 +109,6 @@ namespace NetFluid.Cloud
             to.Flush();
 
             //DESTINATION TO CLIENT
-
             f = Task.Factory.StartNew(() => Connect(context,to, context.OutputStream));
 
             // CLIENT TO DESTINATION
@@ -138,9 +143,7 @@ namespace NetFluid.Cloud
                 if(Engine.DevMode)
                     Console.WriteLine("Forwarding to "+remote);
 
-                Task f, s;
-                Open(context, remote, out f, out s);
-                Task.WaitAll(f, s);
+                Foward(context,remote);
 
             }
             catch (Exception exception)
@@ -157,7 +160,7 @@ namespace NetFluid.Cloud
             {
                 Task f, s;
                 Open(context,remote,out f,out s);
-                Task.WaitAll(f, s);
+                Task.WaitAny(f, s);
             }
             catch (Exception)
             {
