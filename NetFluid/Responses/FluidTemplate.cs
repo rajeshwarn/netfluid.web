@@ -103,7 +103,7 @@ namespace NetFluid
                         cnt.Writer.Write("<html><body>");
                         cnt.Writer.Write("<h1>Exception</h1>");
                         cnt.Writer.Write("<div>To turn off this view set the DevMode value on false in AppConfig on by code with NetFluid.Engine.DevMode</div>");
-                        cnt.Writer.Write("<h2>"+ex.Message+"</h2>");
+                        cnt.Writer.Write("<h2>"+ex.InnerException.Message+"</h2>");
                         cnt.Writer.Write("</body></html>");
                     }
                     catch (Exception)

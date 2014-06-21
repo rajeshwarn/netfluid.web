@@ -547,28 +547,15 @@ namespace NetFluid
         /// </summary>
         /// <param name="act">Function to execute</param>
         /// <param name="friendlyname"></param>
-        public void SetController(Func<Context, object> act, string friendlyname = null)
+        public void SetController(Func<Context, IResponse> act, string friendlyname = null)
         {
-            var controller = new Controller(act) { Condition = null, Name = friendlyname };
+            var controller = new Controller { Body = act, Condition = null, Name = friendlyname };
             _controllers = _controllers.Push(controller);
         }
 
-        public void SetController(Func<Context, bool> condition, Func<Context, object> act, string friendlyname = null)
+        public void SetController(Func<Context, bool> condition, Func<Context, IResponse> act, string friendlyname = null)
         {
-            var controller = new Controller(act) {Condition = condition, Name = friendlyname};
-            _controllers = _controllers.Push(controller);
-        }
-
-
-        public void SetController(Action<Context> act, string friendlyname = null)
-        {
-            var controller = new Controller(act) { Condition = null, Name = friendlyname };
-            _controllers = _controllers.Push(controller);
-        }
-
-        public void SetController(Func<Context, bool> condition, Action<Context> act, string friendlyname = null)
-        {
-            var controller = new Controller(act) { Condition = condition, Name = friendlyname };
+            var controller = new Controller {Body = act, Condition = condition, Name = friendlyname};
             _controllers = _controllers.Push(controller);
         }
 
@@ -860,34 +847,31 @@ namespace NetFluid
 
         private class Controller
         {
-            private readonly MethodInfo _methodInfo;
-            private readonly object _target;
-
+            public Func<Context, IResponse> Body;
             public Func<Context, bool> Condition;
             public string Name;
 
-            public Controller(Action<Context> action)
-            {
-                _target = action.Target;
-                _methodInfo = action.Method;
-            }
-
-            public Controller(Func<Context, object> function)
-            {
-                _target = function.Target;
-                _methodInfo = function.Method;
-            }
-
             public object Invoke(Context c)
             {
-                if (Condition != null && !Condition(c))
-                    return null;
+                try
+                {
+                    if (Condition != null && !Condition(c))
+                        return null;
 
-                if (Engine.DevMode)
-                    Console.WriteLine(c.Request.Host + ":" + c.Request.Url + " - " + "Calling controller");
+                    if (Engine.DevMode)
+                        Console.WriteLine(c.Request.Host + ":" + c.Request.Url + " - " + "calling controller "+Name);
 
 
-                return _methodInfo.Invoke(_target, new[] {c});
+                    return Body(c);
+                }
+                catch (Exception ex)
+                {
+                    if (Engine.DevMode)
+                        Console.WriteLine(c.Request.Host + ":" + c.Request.Url + " - " +  Name + " controller exception:"+ex.Message);
+
+                    Engine.Logger.Log(LogLevel.Exception, c.Request.Host + ":" + c.Request.Url + " - " + Name + " controller exception",ex);
+                }
+                return null;
             }
         }
 

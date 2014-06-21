@@ -3090,3 +3090,30 @@
 09/06/2014 09.09.40	Debug	Starting  web interface on 192.168.56.1:80
 09/06/2014 09.09.40	Debug	Starting  web interface on 192.168.1.2:80
 09/06/2014 09.09.40	Debug	NetFluid web application running
+16/06/2014 16.52.29	Warning	App configuration doesn't contains a valid NetFluid section
+16/06/2014 16.52.29	Error	App configuration not loaded, using default values
+16/06/2014 16.52.29	Error	Failed to add public folder, directory is missing ./Public
+16/06/2014 16.52.29	Debug	Adding http interface on 127.0.0.1:80
+16/06/2014 16.52.29	Debug	Starting web interfaces on every ip on port 80
+16/06/2014 16.52.29	Debug	Adding http interface on fe80::1146:6f4b:887e:cd2%27:80
+16/06/2014 16.52.29	Debug	Adding http interface on fe80::1185:9bda:7e13:a20a%23:80
+16/06/2014 16.52.29	Debug	Adding http interface on fe80::d0e8:2332:4adf:cfab%22:80
+16/06/2014 16.52.29	Debug	Adding http interface on fe80::cce0:4bc8:b000:64fa%4:80
+16/06/2014 16.52.29	Debug	Adding http interface on 192.168.56.1:80
+16/06/2014 16.52.29	Debug	Adding http interface on 192.168.171.1:80
+16/06/2014 16.52.29	Debug	Adding http interface on 192.168.68.1:80
+16/06/2014 16.52.29	Debug	Adding http interface on 192.168.1.2:80
+16/06/2014 16.52.29	Debug	Starting NetFluid Engine
+16/06/2014 16.52.29	Debug	Loading calling assembly
+16/06/2014 16.52.29	Debug	Loading RaspSite, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null into default web application
+16/06/2014 16.52.30	Debug	Starting web interfaces
+16/06/2014 16.52.30	Debug	Starting  web interface on 127.0.0.1:80
+16/06/2014 16.52.30	Debug	Starting  web interface on [fe80::1146:6f4b:887e:cd2%27]:80
+16/06/2014 16.52.30	Debug	Starting  web interface on [fe80::1185:9bda:7e13:a20a%23]:80
+16/06/2014 16.52.30	Debug	Starting  web interface on [fe80::d0e8:2332:4adf:cfab%22]:80
+16/06/2014 16.52.30	Debug	Starting  web interface on [fe80::cce0:4bc8:b000:64fa%4]:80
+16/06/2014 16.52.30	Debug	Starting  web interface on 192.168.56.1:80
+16/06/2014 16.52.30	Debug	Starting  web interface on 192.168.171.1:80
+16/06/2014 16.52.30	Debug	Starting  web interface on 192.168.68.1:80
+16/06/2014 16.52.30	Debug	Starting  web interface on 192.168.1.2:80
+16/06/2014 16.52.30	Debug	NetFluid web application running

@@ -45,7 +45,7 @@ namespace NetFluid
         /// </summary>
         /// <param name="act">funtion to be executed</param>
         /// <returns>if not null terminates execution of the context</returns>
-        public RouteSetter SetController(Func<Context,object> act)
+        public RouteSetter SetController(Func<Context,IResponse> act)
         {
             Engine.SetController(act);
             return this;
@@ -58,30 +58,7 @@ namespace NetFluid
         /// <param name="condition">if true act will be executed</param>
         /// <param name="act">funtion to be executed</param>
         /// <returns>if not null terminates execution of the context</returns>
-        public RouteSetter SetController(Func<Context, bool> condition, Func<Context, object> act)
-        {
-            Engine.SetController(condition, act);
-            return this;
-        }
-
-        /// <summary>
-        /// Add a void controller to the default webapp.
-        /// The controller will be executed for each request received from the client
-        /// </summary>
-        /// <param name="act">funtion to be executed</param>
-        public RouteSetter SetController(Action<Context> act)
-        {
-            Engine.SetController(act);
-            return this;
-        }
-
-        /// <summary>
-        /// Add a void controller to the default webapp.
-        /// The controller will be executed for each request received from the client if condition is true
-        /// </summary>
-        /// <param name="condition">if true act will be executed</param>
-        /// <param name="act">funtion to be executed</param>
-        public RouteSetter SetController(Func<Context, bool> condition, Action<Context> act)
+        public RouteSetter SetController(Func<Context, bool> condition, Func<Context, IResponse> act)
         {
             Engine.SetController(condition, act);
             return this;
@@ -132,18 +109,6 @@ namespace NetFluid
         public RouteSetter SetRegexRoute(string rgx, Type type, MethodInfo method)
         {
             Engine.SetRegexRoute(rgx, type, method);
-            return this;
-        }
-
-        public RouteSetter SetController(string host, Action<Context> act)
-        {
-            Engine.SetController(act);
-            return this;
-        }
-
-        public RouteSetter SetController(string host, Func<Context, bool> condition, Action<Context> act)
-        {
-            Engine.SetController(condition, act);
             return this;
         }
 

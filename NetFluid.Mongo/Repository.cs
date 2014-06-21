@@ -3,16 +3,16 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
-using MongoDB.Bson;
 using MongoDB.Bson.Serialization;
 using MongoDB.Bson.Serialization.IdGenerators;
 using MongoDB.Driver;
 using MongoDB.Driver.Builders;
 using MongoDB.Driver.Linq;
+using NetFluid.Collections;
 
 namespace NetFluid.Mongo
 {
-    public class Repository<T> : IQueryable<T> where T : IDatabaseObject
+    public class Repository<T> : IRepository<T> where T : IDatabaseObject
     {
         private readonly MongoDatabase database;
 
@@ -32,7 +32,7 @@ namespace NetFluid.Mongo
 
         protected readonly MongoCollection<T> Collection;
 
-        protected virtual IQueryable<T> Queryable
+        public virtual IQueryable<T> Queryable
         {
             get { return Collection.AsQueryable(); }
         }
@@ -88,17 +88,14 @@ namespace NetFluid.Mongo
         public virtual Expression Expression
         {
             get { return Queryable.Expression; }
-            private set {  }
         }
         public virtual Type ElementType
         {
             get { return Queryable.ElementType; }
-            private set { }
         }
         public virtual IQueryProvider Provider
         {
             get { return Queryable.Provider; }
-            private set { }
         }
     }
 }

@@ -2,8 +2,7 @@
 using System.Configuration.Install;
 using System.ServiceProcess;
 
-
-namespace NetFluidService
+namespace NetFluid.Service
 {
     [RunInstaller(true)]
     public class CustomServiceInstaller : Installer

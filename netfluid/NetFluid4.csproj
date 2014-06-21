@@ -74,7 +74,7 @@
     <Compile Include="Collections\AutoCache.cs" />
     <Compile Include="Collections\DeepObject.cs" />
     <Compile Include="Collections\InMemoryOlap.cs" />
-    <Compile Include="Collections\JSONRepository.cs" />
+    <Compile Include="Collections\IRepository.cs" />
     <Compile Include="Collections\XMLRepository.cs" />
     <Compile Include="Configuration\Interface.cs" />
     <Compile Include="Configuration\PublicFolder.cs" />

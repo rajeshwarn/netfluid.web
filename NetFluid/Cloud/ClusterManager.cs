@@ -65,10 +65,29 @@ namespace NetFluid.Cloud
             return null;
         }
 
+        static void Connect(Context cnt,Stream sIn, Stream sOut)
+        {
+            var buf = new byte[512*1024];
+            try
+            {
+                while (true)
+                {
+                    int len = sIn.Read(buf, 0, buf.Length);
+                    sOut.Write(buf, 0, len);
+                }
+            }
+            catch (Exception)
+            {
+                sOut.Flush();
+                cnt.Close();
+            }
+        }
+
         static void Open(Context context,string remote, out Task f, out Task s)
         {
-            var destination = new TcpClient { ReceiveTimeout = 1000, SendTimeout = 1000 };
-            destination.Connect(RemoteToEndPoint(remote));
+            var destination = new TcpClient { ReceiveTimeout = 200, SendTimeout = 200 };
+            var ep = RemoteToEndPoint(remote);
+            destination.Connect(ep);
             Stream to = destination.GetStream();
 
             if (context.Secure)
@@ -78,42 +97,17 @@ namespace NetFluid.Cloud
                 to = ssl;
             }
 
-            var bheader = Encoding.UTF8.GetBytes(context.Request.Headers+"\r\n");
+            var dbg = context.Request.HttpMethod + " "+ context.Request.RawUrl+ " HTTP/"+context.Request.ProtocolVersion+"\r\n"+ context.Request.Headers+"\r\n";
+            var bheader = Encoding.UTF8.GetBytes(dbg);
             to.Write(bheader,0,bheader.Length);
+            to.Flush();
 
-            #region DESTINATION TO CLIENT
-            f = Task.Factory.StartNew(() =>
-            {
-                try
-                {
-                    while (true)
-                    {
-                        to.CopyTo(context.OutputStream);
-                    }
-                }
-                catch (Exception)
-                {
-                    context.Close();
-                }
-            });
-            #endregion
+            //DESTINATION TO CLIENT
 
-            #region CLIENT TO DESTINATION
-            s = Task.Factory.StartNew(() =>
-            {
-                try
-                {
-                    while (true)
-                    {
-                        context.InputStream.CopyTo(to);
-                    }
-                }
-                catch (Exception)
-                {
-                    context.Close();
-                }
-            });
-            #endregion
+            f = Task.Factory.StartNew(() => Connect(context,to, context.OutputStream));
+
+            // CLIENT TO DESTINATION
+            s = Task.Factory.StartNew(() =>Connect(context,context.InputStream,to));
         }
 
         private readonly Dictionary<string, string> remotes;
@@ -141,11 +135,17 @@ namespace NetFluid.Cloud
 
             try
             {
+                if(Engine.DevMode)
+                    Console.WriteLine("Forwarding to "+remote);
+
                 Task f, s;
                 Open(context, remote, out f, out s);
+                Task.WaitAll(f, s);
+
             }
-            catch (Exception)
+            catch (Exception exception)
             {
+                Console.WriteLine(exception);
                 return false;
             }
             return true;

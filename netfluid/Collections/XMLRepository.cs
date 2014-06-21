@@ -2,7 +2,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
-using System.Threading.Tasks;
+using System.Linq;
+using System.Linq.Expressions;
 
 namespace NetFluid.Collections
 {
@@ -10,80 +11,90 @@ namespace NetFluid.Collections
     /// Work in progress
     /// </summary>
     /// <typeparam name="T"></typeparam>
-    public class XMLRepository<T>:IEnumerable<T>
+    public class XMLRepository<T>:IRepository<T> where T : IDatabaseObject
     {
         private readonly string path;
-        private readonly List<T> list; 
+        private readonly List<T> list;
 
-        public XMLRepository(string filepath)
+        public XMLRepository(string path)
         {
-            path = Path.GetFullPath(filepath);
+            this.path = Path.GetFullPath(path);
             list = new List<T>();
 
             if (File.Exists(path))
-                list = XML.Deserialize<List<T>>(File.ReadAllText(path));
-        }
-
-
-        public int Count
-        {
-            get { return list.Count; }
-        }
-
-        public void Save()
-        {
-            Task.Factory.StartNew(() =>
             {
-                lock (path)
-                {
-                    File.WriteAllText(path,list.ToXML());
-                }
-            });
-        }
-
-        public void Save(T elem)
-        {
-            list.Add(elem);
-            Save();
-        }
-
-        public void Save(IEnumerable<T> elem)
-        {
-            list.AddRange(elem);
-            Save();
-        }
-
-        public void Remove(Predicate<T> elem)
-        {
-            list.RemoveAll(elem);
-            Save();
-        }
-
-        public void Remove(T elem)
-        {
-            list.Remove(elem);
-            Save();
-        }
-
-        public T this[int index]
-        {
-            get { return list[index]; }
-            set
-            {
-                list[index]=value;
-                Save();
+                list = list.FromXML(File.ReadAllText(path));
             }
         }
 
+        public void Remove(T obj)
+        {
+            lock (this)
+            {
+                list.Remove(obj);
+                File.WriteAllText(path, list.ToXML());
+            }
+        }
 
-        public IEnumerator<T> GetEnumerator()
+        IEnumerator<T> IEnumerable<T>.GetEnumerator()
         {
             return list.GetEnumerator();
         }
 
         IEnumerator IEnumerable.GetEnumerator()
         {
-            return GetEnumerator();
+            return list.GetEnumerator();
+        }
+
+        public IQueryable<T> Queryable
+        {
+            get { return list.AsQueryable(); }
+        }
+
+        public Expression Expression { get { return list.AsQueryable().Expression; } }
+        public Type ElementType { get { return list.AsQueryable().ElementType; } }
+        public IQueryProvider Provider { get { return list.AsQueryable().Provider; } }
+
+        public T this[string id]
+        {
+            get { return list.FirstOrDefault(x => x.Id == id); }
+        }
+
+        public IEnumerable<T> OfType(Type type)
+        {
+            return list.Where(x => x.GetType() == type);
+        }
+
+        public IEnumerable<T> OfType(string type)
+        {
+            return OfType(Type.GetType(type));
+        }
+
+        public void Save(IEnumerable<T> obj)
+        {
+            lock (this)
+            {
+                list.AddRange(obj);
+                File.WriteAllText(path, list.ToXML());
+            }
+        }
+
+        public void Save(T obj)
+        {
+            lock (this)
+            {
+                list.Add(obj);
+                File.WriteAllText(path, list.ToXML());
+            }
+        }
+
+        public void Remove(string id)
+        {
+            lock (this)
+            {
+                list.RemoveAll(x=>x.Id==id);
+                File.WriteAllText(path, list.ToXML());
+            }
         }
     }
 }

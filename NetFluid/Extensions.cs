@@ -723,9 +723,6 @@ namespace NetFluid
             if (info.IsOptional)
                 return Type.Missing;
 
-           if(info.HasDefaultValue)
-               return info.DefaultValue;
-
             return   info.ParameterType.IsValueType ? Activator.CreateInstance(info.ParameterType): null;
         }
 
@@ -835,7 +832,7 @@ namespace NetFluid
         /// <param name="input"></param>
         /// <param name="output"></param>
         /// <param name="size"></param>
-        public static void CopyTo(this Stream input, Stream output, int size)
+        public static void CopyTo(this Stream input, Stream output, long size)
         {
             var rest = size % 32768;
             var chunks = (size - rest)/32768;

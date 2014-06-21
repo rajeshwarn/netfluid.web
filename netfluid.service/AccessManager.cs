@@ -6,11 +6,7 @@
         {
             Engine.SetController(Context =>
             {
-                if (!Context.IsLocal)
-                {
-                    return new FluidTemplate("./UI/index.html");
-                }
-                return null;
+                return !Context.IsLocal ? new FluidTemplate("./UI/index.html") : null;
             });
         }
 

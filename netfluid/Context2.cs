@@ -121,14 +121,6 @@ namespace NetFluid
             var stream = new NetworkStream(sock);
             OutputStream = stream;
             InputStream = stream;
-
-            try
-            {
-                ReadHeaders();
-            }
-            catch (Exception)
-            {
-            }
         }
 
         /// <summary>
@@ -189,12 +181,12 @@ namespace NetFluid
         public string SessionId  { get; private set; }
 
         /// <summary>
-        ///     True if the context has been created with HTTPS
+        /// True if the context has been created with HTTPS
         /// </summary>
         public bool Secure { get; private set; }
 
         /// <summary>
-        ///     True if the context is not even served
+        /// True if the context is not even served
         /// </summary>
         public bool IsOpen { get; private set; }
 
@@ -247,17 +239,30 @@ namespace NetFluid
             get { return IPAddress.IsLoopback(RemoteEndPoint.Address); }
         }
 
+        string ReadHeader()
+        {
+            var l = new List<byte>(64);
+            reader:
+            var b = (byte)InputStream.ReadByte();
+
+            if (b == 10)
+                return Encoding.UTF8.GetString(l.ToArray());
+            if(b!=13)
+                l.Add(b);
+            goto reader;
+        }
+
         /// <summary>
         ///     Read request headers
         /// </summary>
         public void ReadHeaders()
         {
             var lines = new List<string>(15);
+            
             string line;
-
             do
             {
-                line = Reader.ReadLine();
+                line = ReadHeader();
                 if(line!="")
                     lines.Add(line);
             } while (line!="");
@@ -304,20 +309,23 @@ namespace NetFluid
             if (index < 0)
             {
                 Request.Url = HttpUtility.UrlDecode(Request.RawUrl);
-                return;
             }
-            Request.Url = HttpUtility.UrlDecode(parts[1].Substring(0, index));
-            parts[1] = parts[1].Substring(index + 1);
-
-            parts[1].Split(new[] {'&'}, StringSplitOptions.RemoveEmptyEntries).ForEach(kv =>
+            else
             {
-                int pos = kv.IndexOf('=');
+                Request.Url = HttpUtility.UrlDecode(parts[1].Substring(0, index));
+                parts[1] = parts[1].Substring(index + 1);
 
-                var val = pos < 0 ? "true" : HttpUtility.UrlDecode(kv.Substring(pos + 1));
-                var key = pos < 0 ? HttpUtility.UrlDecode(kv) : HttpUtility.UrlDecode(kv.Substring(0, pos));
+                parts[1].Split(new[] { '&' }, StringSplitOptions.RemoveEmptyEntries).ForEach(kv =>
+                {
+                    int pos = kv.IndexOf('=');
 
-                Request.Get.Add(key, val);
-            });
+                    var val = pos < 0 ? "true" : HttpUtility.UrlDecode(kv.Substring(pos + 1));
+                    var key = pos < 0 ? HttpUtility.UrlDecode(kv) : HttpUtility.UrlDecode(kv.Substring(0, pos));
+
+                    Request.Get.Add(key, val);
+                });
+            }
+
 
             #endregion
 
@@ -464,89 +472,27 @@ namespace NetFluid
 
             #endregion
 
+
             if (Request.Cookies["SESSION-ID"] != null)
                 SessionId = Request.Cookies["SESSION-ID"].Value;
 
-            if (Engine.Cluster.Handle(this))
-                return;
-
-            if (Request.HttpMethod != "GET")
-                ReadAndSave(0, Request.ContentLength,InputStream);
         }
 
-        /// <summary>
-        ///     OnRead has been completed but some recieved bytes belongs to request body (post data)
-        /// </summary>
-        private void ReadAndSave(long read, long total, Stream s)
+        public void ReadRequest()
         {
-            if (read == total)
-            {
-                s.Flush();
-                s.Seek(0, SeekOrigin.Begin);
+            if (Request.HttpMethod == "GET" || Request.ContentLength <= 0) return;
 
-                if (Request.Headers["Content-Type"].StartsWith("application/x-www-form-urlencoded"))
-                    PostManager.DecodeUrl(this, s);
-                else if (Request.Headers["Content-Type"].StartsWith("multipart/form-data; boundary="))
-                    PostManager.DecodeMultiPart(this, s);
-                else
-                    InputStream = s;
-                Engine.Serve(this);
-                return;
-            }
+            var s = new FileStream(Security.TempFile, FileMode.OpenOrCreate);
+            InputStream.CopyTo(s, Request.ContentLength);
+            s.Flush();
+            s.Seek(0, SeekOrigin.Begin);
 
-            var b = new byte[4096];
-            var n = (int) (total - read);
-
-            if (n > b.Length)
-                n = b.Length;
-
-            if (n < 0)
-            {
-                s.Flush();
-                s.Seek(0, SeekOrigin.Begin);
-
-                if (Request.Headers["Content-Type"].StartsWith("application/x-www-form-urlencoded"))
-                    PostManager.DecodeUrl(this, s);
-                else if (Request.Headers["Content-Type"].StartsWith("multipart/form-data; boundary="))
-                    PostManager.DecodeMultiPart(this, s);
-                else
-                    InputStream = s;
-                Engine.Serve(this);
-                return;
-            }
-
-            InputStream.BeginRead(b, 0, n, x =>
-            {
-                try
-                {
-                    int r = InputStream.EndRead(x);
-                    read += r;
-                    s.Write(b, 0, r);
-
-                    if (read < total)
-                    {
-                        ReadAndSave(read, total, s);
-                    }
-                    else
-                    {
-                        s.Flush();
-                        s.Seek(0, SeekOrigin.Begin);
-
-                        if (
-                            Request.Headers["Content-Type"].StartsWith("application/x-www-form-urlencoded"))
-                            PostManager.DecodeUrl(this, s);
-                        else if (
-                            Request.Headers["Content-Type"].StartsWith("multipart/form-data; boundary="))
-                            PostManager.DecodeMultiPart(this, s);
-                        else
-                            InputStream = s;
-                        Engine.Serve(this);
-                    }
-                }
-                catch
-                {
-                }
-            }, null);
+            if (Request.Headers["Content-Type"].StartsWith("application/x-www-form-urlencoded"))
+                PostManager.DecodeUrl(this, s);
+            else if (Request.Headers["Content-Type"].StartsWith("multipart/form-data; boundary="))
+                PostManager.DecodeMultiPart(this, s);
+            else
+                InputStream = s;
         }
 
         /// <summary>
@@ -663,25 +609,21 @@ namespace NetFluid
                 Profiling(Stopwatch.Frequency/st.ElapsedTicks,Request.Host, Request.Url);
             }
 
-            Task.Factory.StartNew(() =>
+            try
             {
-                try
-                {
-                    IsOpen = false;
-                    if (!HeadersSent)
-                        SendHeaders();
+                IsOpen = false;
+                if (!HeadersSent)
+                    SendHeaders();
 
-                    Writer.Flush();
-                    OutputStream.Flush();
-                    OutputStream.Close();
-                    Socket.Close();
-                }
-                catch (Exception)
-                {
-                }
-
-            });
-        
+                Writer.Flush();
+                OutputStream.Flush();
+                OutputStream.Close();
+                Socket.Close();
+                GC.ReRegisterForFinalize(Socket);
+            }
+            catch (Exception)
+            {
+            }
         }
 
         /// <summary>

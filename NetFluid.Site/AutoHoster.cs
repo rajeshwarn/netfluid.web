@@ -18,7 +18,7 @@ namespace NetFluid.Site
                 Engine.Interfaces.AddLoopBack(80);
                 Engine.Interfaces.AddAllAddresses(80);
             }
-            Engine.DevMode = false;
+            Engine.DevMode = true;
             Engine.Start();
             Console.ReadLine();
         }

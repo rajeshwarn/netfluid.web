@@ -486,11 +486,12 @@ namespace NetFluid
             foreach (string f in fromhost)
             {
                 SetController(f, (x) =>
-                                          {
-                                              x.Response.StatusCode = StatusCode.MovedPermanently;
-                                              x.Response.Headers["Location"] = destination;
-                                              x.Close();
-                                          });
+                {
+                    x.Response.StatusCode = StatusCode.MovedPermanently;
+                    x.Response.Headers["Location"] = destination;
+                    x.Close();
+                    return null;
+                });
             }
         }
 
@@ -502,7 +503,7 @@ namespace NetFluid
         /// <param name="act">Action to invoke</param>
         /// <param name="name">Friendly name for action in hosting map</param>
         /// <returns></returns>
-        public static RouteSetter SetController(Func<Context,object> act,string name="")
+        public static RouteSetter SetController(Func<Context,IResponse> act,string name="")
         {
             DefaultHost.SetController(act,name);
             return new RouteSetter();
@@ -515,19 +516,7 @@ namespace NetFluid
         /// <param name="act">The function to invoke</param>
         /// <param name="name">Friendly name for function in hosting map</param>
         /// <returns></returns>
-        public static RouteSetter SetController(Func<Context, bool> condition, Func<Context, object> act, string name = "")
-        {
-            DefaultHost.SetController(condition, act, name);
-            return new RouteSetter();
-        }
-
-        public static RouteSetter SetController(Action<Context> act, string name = "")
-        {
-            DefaultHost.SetController(act, name);
-            return new RouteSetter();
-        }
-
-        public static RouteSetter SetController(Func<Context, bool> condition, Action<Context> act, string name = "")
+        public static RouteSetter SetController(Func<Context, bool> condition, Func<Context, IResponse> act, string name = "")
         {
             DefaultHost.SetController(condition, act, name);
             return new RouteSetter();
@@ -585,27 +574,15 @@ namespace NetFluid
 
         #region IN-APP HOST
 
-        public static RouteSetter SetController(string host, Func<Context,object> act, string name = "")
+        public static RouteSetter SetController(string host, Func<Context,IResponse> act, string name = "")
         {
             Host(host).SetController(act, name);
             return new RouteSetter();
         }
 
-        public static RouteSetter SetController(string host, Func<Context, bool> condition, Func<Context,object> act, string name = "")
+        public static RouteSetter SetController(string host, Func<Context, bool> condition, Func<Context,IResponse> act, string name = "")
         {
             Host(host).SetController(condition, act, name);
-            return new RouteSetter();
-        }
-
-        public static RouteSetter SetController(string host, Action<Context> act, string name="")
-        {
-            Host(host).SetController(act,name);
-            return new RouteSetter();
-        }
-
-        public static RouteSetter SetController(string host, Func<Context, bool> condition, Action<Context> act,string name="")
-        {
-            Host(host).SetController(condition, act,name);
             return new RouteSetter();
         }
 

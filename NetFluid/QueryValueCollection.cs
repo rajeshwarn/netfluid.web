@@ -149,7 +149,7 @@ namespace NetFluid
                 {
                     try
                     {
-                        field.SetValue(obj, _values[name].Parse(field.PropertyType));
+                        field.SetValue(obj, _values[name].Parse(field.PropertyType),null);
                     }
                     catch (Exception)
                     {
@@ -190,7 +190,7 @@ namespace NetFluid
                 {
                     try
                     {
-                        field.SetValue(obj, _values[name].Parse(field.PropertyType));
+                        field.SetValue(obj, _values[name].Parse(field.PropertyType),null);
                     }
                     catch (Exception)
                     {

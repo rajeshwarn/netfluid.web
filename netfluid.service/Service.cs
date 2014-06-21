@@ -1,15 +1,11 @@
 ﻿using System;
-using System.Collections.Concurrent;
-using System.Collections.Generic;
 using System.Configuration.Install;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Security.AccessControl;
 using System.Security.Principal;
 using System.ServiceProcess;
-using NetFluid.Collections;
 
 
 namespace NetFluid.Service
@@ -99,15 +95,6 @@ namespace NetFluid.Service
         protected override void OnStop()
         {
             Engine.Logger.Log(LogLevel.Warning,"NetFluid Service is stopping");
-
-            try
-            {
-                ExternalHostManager.Stop();
-            }
-            catch (Exception)
-            {
-            }
-
         }
     }
 }

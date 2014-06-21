@@ -49,10 +49,10 @@
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="DNS\DNSManager.cs" />
+    <Compile Include="Forwarding\Fowarding.cs" />
+    <Compile Include="Forwarding\ForwardingManager.cs" />
     <Compile Include="InternalApp\PluggedHost.cs" />
-    <Compile Include="ExternalApp\ExternalHost.cs" />
     <Compile Include="InternalApp\PluggedHostManager.cs" />
-    <Compile Include="ExternalApp\ExternalHostManager.cs" />
     <Compile Include="Service.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -85,7 +85,7 @@
     <Content Include="UI\Box\internal-host.html">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="UI\Box\external-host.html">
+    <Content Include="UI\Box\forwarding.html">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="UI\index.html">
