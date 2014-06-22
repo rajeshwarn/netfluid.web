@@ -63,10 +63,6 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\NetFluid.Mongo\NetFluid.Mongo.csproj">
-      <Project>{e18b5ed4-6375-442d-9e5c-f288fc959fe3}</Project>
-      <Name>NetFluid.Mongo</Name>
-    </ProjectReference>
     <ProjectReference Include="..\netfluid\NetFluid4.csproj">
       <Project>{b215459f-37ff-411c-8e6b-9cdedb946f93}</Project>
       <Name>NetFluid4</Name>
