@@ -3,7 +3,7 @@
 namespace NetFluid.Service
 {
     [Serializable]
-    public class PluggedHost : IDatabaseObject
+    public class Plugin : IDatabaseObject
     {
         public string Id { get; set; }
 

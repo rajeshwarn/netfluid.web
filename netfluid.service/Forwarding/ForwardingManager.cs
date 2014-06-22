@@ -29,6 +29,12 @@ namespace NetFluid.Service.Forwarding
         public IResponse Update()
         {
             var h = Request.Values.ToObject<Forwarding>();
+
+            if (h.Enabled)
+                h.Hosts.ForEach(vhost => Engine.Cluster.AddFowarding(vhost, h.EndPoint));
+            else
+                h.Hosts.ForEach(vhost => Engine.Cluster.RemoveFowarding(vhost));
+
             Forwarded.Save(h);
             return new RedirectResponse("/");
         }

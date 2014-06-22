@@ -1,19 +1,16 @@
 ﻿using System.IO;
-using NetFluid.Mongo;
+using NetFluid.Collections;
 
 namespace NetFluid.Service
 {
     [Route("cdn")]
     public class CDNManager:FluidPage
     {
-        public static Repository<CDN> CDN { get; private set;  }
+        public static XMLRepository<CDN> CDN { get; private set;  }
+
         public override void OnLoad()
         {
-            CDN = new Repository<CDN>("mongodb://localhost", "NetFluidService");
-
-            if (!Directory.Exists("./CDN"))
-                Directory.CreateDirectory("./CDN");
-
+            CDN = new XMLRepository<CDN>("cdn.xml");
             CDN.ForEach(h => Engine.Host(h.Host).PublicFolderManager.Add(h.Id, "/", h.Path));
         }
 

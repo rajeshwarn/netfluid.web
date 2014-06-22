@@ -1,51 +1,40 @@
-﻿using System;
+﻿using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
+using NetFluid.Collections;
 using NetFluid.DNS;
 using NetFluid.DNS.Records;
-using NetFluid.Mongo;
 
 namespace NetFluid.Service
 {
     [Route("dns")]
     public class DNSManager:FluidPage
     {
-        public static Repository<Record> store;
-
-        public static IEnumerable<RecordA> A 
-        {
-            get { return store.OfType<RecordA>(); }
-        }
-
-        public static IEnumerable<RecordAAAA> AAAA
-        {
-            get { return store.OfType<RecordAAAA>(); }
-        }
-
-        public static IEnumerable<RecordCNAME> CNAME
-        {
-            get { return store.OfType<RecordCNAME>(); }
-        }
-
-        public static IEnumerable<RecordMX> MX
-        {
-            get { return store.OfType<RecordMX>(); }
-        }
-
-        public static IEnumerable<RecordTXT> TXT
-        {
-            get { return store.OfType<RecordTXT>(); }
-        }
-
         public override void OnLoad()
         {
-            store = new Repository<Record>("mongodb://localhost", "NetFluidService");
+            A = new XMLRepository<RecordA>("dns.a.xml");
+            AAAA = new XMLRepository<RecordAAAA>("dns.aaaa.xml");
+            CNAME = new XMLRepository<RecordCNAME>("dns.cname.xml");
+            MX = new XMLRepository<RecordMX>("dns.mx.xml");
+            TXT = new XMLRepository<RecordTXT>("dns.txt.xml");
 
             Dns.AutoWrap();
             Dns.StartAcceptRequest(IPAddress.Any);
             Dns.OnRequest += Dns_OnRequest;
         }
+
+
+        public static XMLRepository<RecordA> A;
+
+        public static XMLRepository<RecordAAAA> AAAA;
+
+        public static XMLRepository<RecordCNAME> CNAME;
+
+        public static XMLRepository<RecordMX> MX;
+
+        public static XMLRepository<RecordTXT> TXT;
+
 
         static Response Dns_OnRequest(Request request)
         {
@@ -54,13 +43,26 @@ namespace NetFluid.Service
             foreach (var question in request)
             {
                 var name = question.QName;
-                var found = store.OfType("Record"+question.QType).Where(x => x.Name == name).ToArray();
+                IEnumerable<Record> found=null;
 
-                if (!found.Any() || question.QType >= QType.IXFR && question.QType <= QType.ANY)
+                switch (question.QType)
+                {
+                    case QType.A:
+                        found = A.Where(x => x.Name == name); break;
+                    case QType.AAAA:
+                        found = AAAA.Where(x => x.Name == name); break;
+                    case QType.CNAME:
+                        found = CNAME.Where(x => x.Name == name); break;
+                    case QType.MX:
+                        found = MX.Where(x => x.Name == name); break;
+                    case QType.TXT:
+                        found = TXT.Where(x => x.Name == name); break;
+                }
+
+                if (found==null || !found.Any() || question.QType >= QType.IXFR && question.QType <= QType.ANY)
                 {
                     var fow = Dns.Query(question,IPAddress.Parse("8.8.8.8"));
                     response.Answers.AddRange(fow);
-                    store.Save(fow);
                 }
                 else
                 {
@@ -74,14 +76,39 @@ namespace NetFluid.Service
         [Route("add")]
         public IResponse Update(string type)
         {
-            store.Save(Request.Values.ToObject(Record.Type(type)) as Record);
+            switch (type)
+            {
+                case "A":
+                    A.Save(Request.Values.ToObject(Record.Type(type)) as RecordA); break;
+                case "AAAA":
+                    AAAA.Save(Request.Values.ToObject(Record.Type(type)) as RecordAAAA); break;
+                case "CNAME":
+                    CNAME.Save(Request.Values.ToObject(Record.Type(type)) as RecordCNAME); break;
+                case "MX":
+                    MX.Save(Request.Values.ToObject(Record.Type(type)) as RecordMX); break;
+                case "TXT":
+                    TXT.Save(Request.Values.ToObject(Record.Type(type)) as RecordTXT); break;
+            }
+            
             return new RedirectResponse("/");
         }
 
         [ParametrizedRoute("delete")]
         public IResponse Delete(string type, string id)
         {
-            store.Remove(id);
+            switch (type)
+            {
+                case "A":
+                    A.Remove(id); break;
+                case "AAAA":
+                    AAAA.Remove(id); break;
+                case "CNAME":
+                    CNAME.Remove(id); break;
+                case "MX":
+                    MX.Remove(id); break;
+                case "TXT":
+                    TXT.Remove(id); break;
+            }
             return new RedirectResponse("/");
         }
     }
