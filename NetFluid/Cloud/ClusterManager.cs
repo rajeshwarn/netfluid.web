@@ -65,28 +65,20 @@ namespace NetFluid.Cloud
             return null;
         }
 
-        static int Connect(Context cnt,Stream sIn, Stream sOut)
+        static void Connect(Stream sIn, Stream sOut)
         {
             var buf = new byte[512*1024];
-            try
+
+            while (true)
             {
-                while (true)
-                {
-                    int len = sIn.Read(buf, 0, buf.Length);
-                    sOut.Write(buf, 0, len);
-                }
+                int len = sIn.Read(buf, 0, buf.Length);
+                sOut.Write(buf, 0, len);
             }
-            catch (Exception)
-            {
-                try
-                {
-                    sOut.Flush();
-                }
-                catch (Exception)
-                {
-                }
-            }
-            return 6;
+        }
+
+        static bool SocketConnected(Socket s)
+        {
+            return !(s.Poll(1000, SelectMode.SelectRead) & (s.Available == 0));
         }
 
         static void Open(Context context,string remote, out Task f, out Task s)
@@ -108,11 +100,37 @@ namespace NetFluid.Cloud
             to.Write(bheader,0,bheader.Length);
             to.Flush();
 
+            f = Task.Factory.StartNew(() =>
+            {
+                var buf = new byte[512 * 1024];
+                while (SocketConnected(destination.Client) && SocketConnected(context.Socket))
+                {
+                    if (destination.Available > 0)
+                    {
+                        int len = to.Read(buf, 0, buf.Length > destination.Available ? buf.Length:destination.Available);
+                        context.OutputStream.Write(buf, 0, len);
+                    }
+                }
+            });
+
+            s = Task.Factory.StartNew(() =>
+            {
+                var buf = new byte[512 * 1024];
+                while (SocketConnected(destination.Client) && SocketConnected(context.Socket))
+                {
+                    if (context.Socket.Available > 0)
+                    {
+                        int len = context.InputStream.Read(buf, 0, buf.Length > context.Socket.Available ? buf.Length : context.Socket.Available);
+                        to.Write(buf, 0, len);
+                    }
+                }
+            });
+
             //DESTINATION TO CLIENT
-            f = Task.Factory.StartNew(() => Connect(context,to, context.OutputStream));
+            //f = Task.Factory.StartNew(() => Connect(to, context.OutputStream));
 
             // CLIENT TO DESTINATION
-            s = Task.Factory.StartNew(() =>Connect(context,context.InputStream,to));
+            //s = Task.Factory.StartNew(() =>Connect(context.InputStream,to));
         }
 
         private readonly Dictionary<string, string> remotes;

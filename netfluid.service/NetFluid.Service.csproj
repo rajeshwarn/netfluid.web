@@ -53,6 +53,8 @@
     <Compile Include="Forwarding\ForwardingManager.cs" />
     <Compile Include="Plugin\Plugin.cs" />
     <Compile Include="Plugin\PluginManager.cs" />
+    <Compile Include="Run\RunApp.cs" />
+    <Compile Include="Run\RunManager.cs" />
     <Compile Include="Service.cs">
       <SubType>Component</SubType>
     </Compile>
