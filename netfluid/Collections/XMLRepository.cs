@@ -74,7 +74,20 @@ namespace NetFluid.Collections
         {
             lock (this)
             {
-                list.AddRange(obj);
+                foreach (var o in obj)
+                {
+                    if (o.Id == null)
+                    {
+                        T k = o;
+                        k.Id = Security.UID();
+                        list.Add(k);
+                    }
+                    else
+                    {
+                        list.RemoveAll(x => x.Id == o.Id);
+                        list.Add(o);
+                    }
+                }
                 File.WriteAllText(path, list.ToXML());
             }
         }
@@ -83,6 +96,11 @@ namespace NetFluid.Collections
         {
             lock (this)
             {
+                if (obj.Id == null)
+                    obj.Id = Security.UID();
+                else
+                    list.RemoveAll(x => x.Id == obj.Id);
+
                 list.Add(obj);
                 File.WriteAllText(path, list.ToXML());
             }

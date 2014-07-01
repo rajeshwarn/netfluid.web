@@ -222,6 +222,9 @@ namespace NetFluid.Cloud
 
         public void AddFowarding(string host, string remote)
         {
+            if (remotes.ContainsKey(host))
+                RemoveFowarding(host);
+            
             remotes.Add(host,remote);
         }
 
