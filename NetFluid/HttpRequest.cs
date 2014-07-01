@@ -73,40 +73,43 @@ namespace NetFluid
         /// </summary>
         public string HttpMethod;
 
+        /// <summary>
+        /// True if connection is kept alive
+        /// </summary>
         public bool KeepAlive;
 
         /// <summary>
-        ///     Post query values
+        /// Post query values
         /// </summary>
         public QueryValueCollection Post;
 
         /// <summary>
-        ///     From HTTP1.0 to HTTP1.2
+        /// From HTTP1.0 to HTTP1.2
         /// </summary>
         public Version ProtocolVersion;
 
         /// <summary>
-        ///     Requested url undecoded
+        /// Requested url undecoded
         /// </summary>
         public string RawUrl;
 
         /// <summary>
-        ///     Requested url decoded
+        /// Requested url decoded
         /// </summary>
         public string Url;
 
         /// <summary>
-        ///     Sintatic sugar for Headers["Referrer"]
+        /// Sintatic sugar for Headers["Referrer"]
         /// </summary>
         public string UrlReferrer;
 
         /// <summary>
-        ///     Languages accepted by the client
+        /// Languages accepted by the client
         /// </summary>
         public string[] UserLanguages;
 
         /// <summary>
-        ///     Merge of Get and post variables
+        /// Merge of Get and post variables
         /// </summary>
         private QueryValueCollection values;
 

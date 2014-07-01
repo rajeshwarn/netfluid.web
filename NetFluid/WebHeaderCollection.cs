@@ -22,6 +22,7 @@
 // ********************************************************************************************************
 
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Text;
 
@@ -31,7 +32,7 @@ namespace NetFluid
     /// Contains HTTP request or response headers 
     /// </summary>
     [Serializable]
-    public class WebHeaderCollection
+    public class WebHeaderCollection:IEnumerable<WebHeader>
     {
         private readonly Dictionary<string, WebHeader> values;
 
@@ -123,6 +124,11 @@ namespace NetFluid
             values[name.ToLowerInvariant()] = new WebHeader(name, value);
         }
 
+        public IEnumerator<WebHeader> GetEnumerator()
+        {
+            return values.Values.GetEnumerator();
+        }
+
         public override string ToString()
         {
             var b = new StringBuilder();
@@ -131,6 +137,19 @@ namespace NetFluid
                 foreach (var sub in item.Value)
                     b.Append(item.Key + ": " + sub + "\r\n");
             return b.ToString();
+        }
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return GetEnumerator();
+        }
+
+        /// <summary>
+        /// Delete all headers
+        /// </summary>
+        public void Clear()
+        {
+            values.Clear();
         }
     }
 }
