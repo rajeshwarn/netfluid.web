@@ -131,6 +131,11 @@ namespace NetFluid
                 return;
             }
 
+            if (c.Request.HttpMethod == null)
+            {
+                Console.WriteLine("CICCAMELO");
+            }
+
             if (c.Request.HttpMethod.ToLowerInvariant() == "head")
             {
                 c.SendHeaders();

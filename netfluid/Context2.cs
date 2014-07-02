@@ -242,22 +242,14 @@ namespace NetFluid
         string ReadHeader()
         {
             var l = new List<byte>(64);
+        reader:
+            var b = (byte)InputStream.ReadByte();
 
-            try
-            {
-                reader:
-                var b = (byte)InputStream.ReadByte();
-
-                if (b == 10)
-                    return Encoding.UTF8.GetString(l.ToArray());
-                if (b != 13)
-                    l.Add(b);
-                goto reader;
-            }
-            catch (Exception)
-            {
+            if (b == 10)
                 return Encoding.UTF8.GetString(l.ToArray());
-            }
+            if (b != 13)
+                l.Add(b);
+            goto reader;
         }
 
         /// <summary>
@@ -275,7 +267,8 @@ namespace NetFluid
                     lines.Add(line);
             } while (line!="");
 
-            if (lines.Count == 0) return;
+            if (lines.Count == 0) 
+                return;
 
             #region FIRST LINE
 

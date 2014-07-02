@@ -29,6 +29,7 @@ using System.Linq;
 using System.Reflection;
 using System.Security.Principal;
 using System.Text;
+using System.Threading;
 using NetFluid.Sessions;
 using NetFluid.Cloud;
 
@@ -51,6 +52,11 @@ namespace NetFluid
             Sessions = new MemorySessionManager();
             Cluster = new ClusterManager();
             Logger = new Logger();
+
+            var max = (int)Math.Pow(Environment.ProcessorCount, 5);
+            var min = (int)Math.Pow(Environment.ProcessorCount, 4);
+            ThreadPool.SetMinThreads(min,max);
+
         }
 
         static Assembly CurrentDomain_AssemblyResolve(object sender, ResolveEventArgs args)
