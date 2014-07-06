@@ -135,7 +135,7 @@ namespace NetFluid
 
             foreach (var item in values)
                 foreach (var sub in item.Value)
-                    b.Append(item.Key + ": " + sub + "\r\n");
+                    b.Append(item.Value.Name + ": " + sub + "\r\n");
             return b.ToString();
         }
 
