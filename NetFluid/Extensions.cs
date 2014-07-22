@@ -525,6 +525,26 @@ namespace NetFluid
 
         #endregion
 
+        public static void Map<Y,T>(this  Y obj, T input)
+        {
+            var propsT = typeof(T).GetProperties();
+            var propsY = typeof(Y).GetProperties();
+
+            var similarsT = propsT.Where(x =>
+                          propsY.Any(y => y.Name == x.Name
+                   && y.PropertyType == x.PropertyType)).OrderBy(x => x.Name).ToList();
+
+            var similarsY = propsY.Where(x =>
+                            propsT.Any(y => y.Name == x.Name
+                    && y.PropertyType == x.PropertyType)).OrderBy(x => x.Name).ToList();
+
+            for (int i = 0; i < similarsY.Count; i++)
+            {
+                similarsY[i]
+                .SetValue(obj, similarsT[i].GetValue(input, null), null);
+            }
+        }
+
         #region ARRAY
 
         /// <summary>
@@ -727,6 +747,8 @@ namespace NetFluid
         }
 
         #endregion
+
+
 
         #region TYPE
 

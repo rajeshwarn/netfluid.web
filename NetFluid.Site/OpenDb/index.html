@@ -1,0 +1,70 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Netfluid framework</title>
+    <!-- CSS -->
+    <link href="http://cdn.netfluid.org/css/bootstrap.min.css" rel="stylesheet" media="screen">
+    <link href="http://cdn.netfluid.org/css/font-awesome.min.css" rel="stylesheet" media="screen">
+    <link href="http://cdn.netfluid.org/css/style.css" rel="stylesheet" media="screen" title="default">
+    <link href="http://cdn.netfluid.org/css/width-full.css" rel="stylesheet" media="screen" title="default">
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+    <script src="http://cdn.netfluid.org/js/html5shiv.js"></script>
+    <script src="http://cdn.netfluid.org/js/respond.min.js"></script>
+    <![endif]-->
+</head>
+<body>
+    <div>
+        <header id="header">
+            <h1>Open Db</h1>
+        </header>
+        <div>
+            <form method="POST" action="/loadUrl">
+                <div class="form-group">
+                    <label for="loadUrlURL">Load JSON data from this URL</label>
+                    <input type="url" name="url" class="form-control" id="loadUrlURL" placeholder="">
+                </div>
+                <div class="form-group">
+                    <label for="loadUrlCollection">In to collection</label>
+                    <input type="text" name="collection" class="form-control" id="loadUrlCollection" placeholder="">
+                </div>
+                <div class="form-group">
+                    <label for="loadUrlId">With this id</label>
+                    <input type="text" name="id" class="form-control" id="loadUrlId" placeholder="">
+                </div>
+                <div class="form-group">
+                    <label for="loadUrlToken">An a security token for afterwards changes</label>
+                    <input type="text" name="token" class="form-control" id="loadUrlToken" placeholder="">
+                </div>
+                <div class="form-group">
+                    <input type="submit" value="load it">
+                </div>
+            </form>
+        </div>
+        <footer id="footer">
+            <p>© 2014 <a href="#">Matteo Fabbri</a>, inc. All rights reserved.</p>
+        </footer>
+    </div> <!-- boxed -->
+    <div id="back-top" style="display: none;">
+        <a href="#header"><i class="fa fa-chevron-up"></i></a>
+    </div>
+    <!-- Scripts -->
+    <script src="http://cdn.netfluid.org/js/jquery-1.10.2.min.js"></script>
+    <script src="http://cdn.netfluid.org/js/bootstrap.min.js"></script>
+    <script src="http://cdn.netfluid.org/js/jquery.mixitup.min.js"></script>
+    <script src="http://cdn.netfluid.org/js/app.js"></script>
+    <script>
+        (function (i, s, o, g, r, a, m) {
+            i['GoogleAnalyticsObject'] = r; i[r] = i[r] || function () {
+                (i[r].q = i[r].q || []).push(arguments)
+            }, i[r].l = 1 * new Date(); a = s.createElement(o),
+            m = s.getElementsByTagName(o)[0]; a.async = 1; a.src = g; m.parentNode.insertBefore(a, m)
+        })(window, document, 'script', '//www.google-analytics.com/analytics.js', 'ga');
+        ga('create', 'UA-32315832-1', 'netfluid.org');
+        ga('send', 'pageview');
+    </script>
+</body>
+</html>

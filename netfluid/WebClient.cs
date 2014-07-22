@@ -8,7 +8,7 @@ namespace NetFluid
     /// <summary>
     /// Retrieve data from the internet faster than System.Net.WebClient
     /// </summary>
-    public class WebClient
+    public static class WebClient
     {
         /// <summary>
         ///     Download specified as a stream

@@ -42,6 +42,7 @@ namespace NetFluid
             set { this["Id"] = value; }
         }
 
+        [ConfigurationProperty("Manager", DefaultValue = "", IsRequired = false)]
         public string Manager
         {
             get { return this["Manager"] as String; }

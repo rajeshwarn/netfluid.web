@@ -1,0 +1,211 @@
+﻿%parameters:(string id)
+<!doctype html>
+<html>
+<head>
+    <title>
+        Fluid Voip
+    </title>
+    <link href="http://cdn.netfluid.org/css/bootstrap.min.css" rel="stylesheet" media="screen" />
+    <link href="http://cdn.netfluid.org/css/font-awesome.min.css" rel="stylesheet" media="screen">
+    <script src="http://cdn.netfluid.org/js/jquery-1.10.2.min.js"></script>
+    <script type="text/javascript" src="http://cdn.netfluid.org/voip/peer.js"></script>
+    <script>
+
+        function panel(id) {
+            $(".box").hide();
+            $(id).show();
+        }
+
+        // Click handlers setup
+        $(function ()
+        {
+            var ua = navigator.userAgent.toLowerCase();
+
+            if (ua.indexOf('safari') != -1 && ua.indexOf('chrome') < 0)
+            {
+                $('#safari-error').show();
+            }
+            else
+            {
+                // Compatibility shim
+                navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia;
+                // PeerJS object
+                var peer = new Peer('{% id %}',
+                {
+                    host: 'netfluid.org', port: 9000, 'iceServers': [{ url: 'stun:stun.l.google.com:19302' }]
+                });
+
+                peer.on('open', function () {
+                    $('#my-id').text(peer.id);
+                });
+
+                // Receiving a call
+                peer.on('call', function (call) {
+                    // Answer the call automatically (instead of prompting user) for demo purposes
+                    call.answer(window.localStream);
+                    makecall(call);
+                });
+
+                peer.on('error', function (err) { panel('#cameraPanel-error'); });
+                peer.on('close', function () { });
+
+                $('#make-call').click(function ()
+                {
+                    // Initiate a call!
+                    var call = peer.call($('#callto-id').val(), window.localStream);
+                    makecall(call);
+                    $("#step2").hide();
+                }
+                                      );
+                $('#end-call').click(function ()
+                {
+                    window.existingCall.close();
+                    panel('#video-panel');
+                    $("#step2").show();
+                    $("#end-call").hide();
+                });
+
+                panel('#cameraPanel');
+                // Get things started
+                navigator.getUserMedia({ audio: true, video: true }, function (stream)
+                {
+                    $('#my-video').prop('src', URL.createObjectURL(stream));
+                    window.localStream = stream;
+                    panel('#video-panel');
+                    $("#step2").show();
+                }, function () { panel('#cameraPanel-error'); });
+
+                $('#addUserBtn').click(function ()
+                {
+                    $("#addUser").toggle();
+                });
+            }
+        });
+
+        function makecall(call)
+        {
+            // Hang up on an existing call if present
+            if (window.existingCall)
+            {
+                window.existingCall.close();
+            }
+            // Wait for stream on the call, then set peer video display
+            call.on('stream', function (stream)
+            {
+                $('#video-panel').prop('src', URL.createObjectURL(stream));
+            });
+            // UI stuff
+            window.existingCall = call;
+
+            call.on('close', function ()
+            {
+                
+            });
+            $('#end-call').show();
+        }
+    </script>
+    <style>
+         .box
+         {
+             position: absolute;
+             left: 0;
+             top: 0;
+             width: 684px;
+             height: 372px;
+             z-index: 100;
+             display: none;
+             color: #fff;
+             padding: 6px 12px;
+             margin-bottom: 0;
+             font-size: 14px;
+             font-weight: 400;
+             line-height: 1.42857143;
+             text-align: center;
+             vertical-align: middle;
+             -webkit-user-select: none;
+             -moz-user-select: none;
+             -ms-user-select: none;
+             user-select: none;
+             background-image: none;
+             border: 1px solid transparent;
+             text-transform: none;
+             color: #fff;
+         }
+
+        .bar {
+            left: 0px;
+            padding: 10px;
+        }
+
+        #cameraPanel {
+            background-color: #31b0d5;
+            border-color: #269abc;
+        }
+
+        #cameraPanel-error {
+            background-color: #d9534f;
+            border-color: #d43f3a;
+        }
+
+        #safari-error {
+            background-color: #5bc0de;
+            border-color: #46b8da;
+        }
+    </style>
+</head>
+<body>
+    <div id="cameraPanel" class="box">
+        <p>
+            <h2><span class="glyphicon glyphicon-facetime-video"></span>Authorization needed</h2>
+            <span>Please click <strong>allow</strong> on the top of the screen so we can access your webcam and microphone for calls.</span>
+        </p>
+    </div>
+    <div id="cameraPanel-error" class="box">
+        <h2><span class="glyphicon glyphicon-remove"></span> Failed to access the webcam and microphone.</h2>
+        Make sure to run this application on an http server and click allow when asked for permission by the browser.
+        <br />
+        <a href="#" onclick="document.location.reload(false)">
+            Try again
+        </a>
+    </div>
+    <div id="safari-error" class="box">
+        <h2><span class="glyphicon glyphicon-remove"></span>Sorry, Safari doesn't support our technology :(</h2>
+        Open it with Firefox, Chrome or even Internet Explorer
+    </div>
+    <div id="step2" class="bar btn btn-primary" style="z-index: 300; position: absolute; top: 20px;display: none">
+        <form class="form-inline" role="form">
+            <div class="form-group">
+                <button type="submit" id="addUserBtn" class="btn btn-primary">
+                    <span class="glyphicon glyphicon-user"></span>
+                    call
+                </button>
+            </div>
+            <div id="addUser" class="form-group" style="display: none">
+                <input type="text" class="form-control" placeholder="Call user id..." id="callto-id" />
+                <button type="submit" id="make-call" class="btn btn-success">call</button>
+            </div>
+        </form>
+    </div>
+    <video id="video-panel" class="box" style="border: 2px solid black;" autoplay></video>
+    <video id="my-video" style="width: 100%; height: 100%; display: none" muted="true" autoplay></video>
+    <a class="btn btn-danger" href="#" style="z-index: 300; position: absolute; top: 20px; left: 600px; display: none" id="end-call">
+        End call
+    </a>
+    <div id="userbar" class="bar bg-primary" style="z-index: 300; position: absolute; top: 330px; width: 684px">
+        Logged in as:
+        <span id="my-id">
+            ...
+        </span>
+        % if(Context.Session("voipUser")==null)
+        <span>
+            sign in with
+            <a href="#" class="btn btn-sm btn-primary"><i class="fa fa-twitter"></i></a>
+            <a href="#" class="btn btn-sm btn-primary"><i class="fa fa-google-plus"></i></a>
+            <a href="#" class="btn btn-sm btn-primary"><i class="fa fa-facebook"></i></a>
+            <a href="#" class="btn btn-sm btn-primary"><i class="fa fa-linkedin"></i></a>
+            <a href="#" class="btn btn-sm btn-primary"><i class="fa fa-github"></i></a>
+        </span>
+        % end if
+    </div>
+</body>
+</html>

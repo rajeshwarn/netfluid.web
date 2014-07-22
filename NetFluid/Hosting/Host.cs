@@ -28,7 +28,6 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 
 namespace NetFluid
 {
@@ -131,11 +130,6 @@ namespace NetFluid
                 return;
             }
 
-            if (c.Request.HttpMethod == null)
-            {
-                Console.WriteLine("CICCAMELO");
-            }
-
             if (c.Request.HttpMethod.ToLowerInvariant() == "head")
             {
                 c.SendHeaders();
@@ -158,7 +152,7 @@ namespace NetFluid
             c.Close();
         }
 
-        private static void Finalize(Context c, MethodInfo method, object target, params object[] args)
+        private void Finalize(Context c, MethodInfo method, object target, params object[] args)
         {
             object res = null;
 
@@ -170,12 +164,12 @@ namespace NetFluid
             catch (Exception ex)
             {
                 c.Response.StatusCode = StatusCode.InternalServerError;
+                c.SendHeaders();
 
                 if (Engine.DevMode)
                 {
                     try
                     {
-                        c.SendHeaders();
                         c.Writer.Write(ex.ToHTML());
                     }
                     catch (Exception)
@@ -183,12 +177,26 @@ namespace NetFluid
                     }
                 }
 
+                RouteTarget rt;
+                if (_callOn.TryGetValue(StatusCode.InternalServerError, out rt))
+                {
+                    if (Engine.DevMode)
+                        Console.WriteLine(c.Request.Host + ":" + c.Request.Url + " - " + "Calling " +
+                                          rt.Type.FullName + "." + rt.Method.Name);
+
+                    var p = rt.Type.CreateIstance() as IMethodExposer;
+                    p.Context = c;
+
+                    Finalize(c, rt.Method, p, null);
+                    return;
+                }
+
                 Engine.Logger.Log(LogLevel.Exception, "Error on " + c.Request.Url, ex);
+                c.Close();
+                return;
             }
 
             SendValue(c, res);
-            //if (!c.WebSocket)
-            //    c.Close();
         }
 
         /// <summary>
