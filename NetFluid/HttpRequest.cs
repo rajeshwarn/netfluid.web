@@ -128,21 +128,19 @@ namespace NetFluid
         {
             get
             {
-                if (values == null)
+                if (values != null) return values;
+                if (Get == null)
                 {
-                    if (Get != null)
-                    {
-                        values = new QueryValueCollection(Get);
+                    values = new QueryValueCollection(Post);
+                }
+                else
+                {
+                    values = new QueryValueCollection(Get);
 
-                        if (Post != null)
-                            foreach (QueryValue item in Post)
-                            {
-                                values.Add(item.Name, item);
-                            }
-                    }
-                    else
+                    if (Post == null) return values;
+                    foreach (var item in Post)
                     {
-                        values = new QueryValueCollection(Post);
+                        values.Add(item.Name, item);
                     }
                 }
                 return values;

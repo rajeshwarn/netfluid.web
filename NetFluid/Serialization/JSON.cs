@@ -138,6 +138,11 @@ namespace NetFluid
                 builder.Write("\"" + obj + "\"");
                 return;
             }
+            if (obj is bool)
+            {
+                builder.Write( (bool)obj? "true":"false");
+                return;
+            }
             if (obj is IConvertible)
             {
                 builder.Write(Escape(obj.ToString()));

@@ -77,9 +77,16 @@ namespace NetFluid
             request.AutomaticDecompression = DecompressionMethods.None;
             request.Timeout = 10000;
 
-            WebResponse response = request.GetResponse();
-            var liner = new StreamReader(response.GetResponseStream());
-            return liner.ReadToEnd();
+            try
+            {
+                WebResponse response = request.GetResponse();
+                var liner = new StreamReader(response.GetResponseStream());
+                return liner.ReadToEnd();
+            }
+            catch (Exception)
+            {
+                return "";
+            }
         }
     }
 }

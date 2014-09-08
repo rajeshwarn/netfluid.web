@@ -81,7 +81,6 @@ namespace NetFluid
             Headers.Set("Accept-Ranges:","bytes");
             Headers.Set("Vary","Accept-Encoding");
             Headers.Set("Access-Control-Allow-Origin", "*");
-
             ContentType = "text/html; charset=utf-8";
             ProtocolVersion = HttpVersion.Version11;
             ContentEncoding = Encoding.UTF8;

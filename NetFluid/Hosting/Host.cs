@@ -205,6 +205,20 @@ namespace NetFluid
         /// <param name="cnt"></param>
         public void Serve(Context cnt)
         {
+            if (cnt.Request.HttpMethod.ToLowerInvariant() == "options")
+            {
+                var origin = cnt.Request.Headers["Origin"] ?? "*";
+                cnt.Response.Headers.Set("Access-Control-Allow-Origin", origin);
+
+                var headers = cnt.Request.Headers["Access-Control-Request-Headers"] ?? "*";
+                cnt.Response.Headers.Set("Access-Control-Allow-Headers", headers);
+                cnt.Response.Headers.Set("Access-Control-Max-Age", "360000");
+                cnt.Response.Headers.Set("Access-Control-Allow-Methods", "GET, HEAD, POST, TRACE, OPTIONS, PUT, DELETE");
+                cnt.SendHeaders();
+                cnt.Close();
+                return;
+            }
+
             try
             {
                 if (Engine.DevMode)

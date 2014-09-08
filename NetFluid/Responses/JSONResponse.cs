@@ -39,7 +39,7 @@ namespace NetFluid
 
         public void SetHeaders(Context cnt)
         {
-            cnt.Response.Headers["Content-Type"] = "application/json";
+            cnt.Response.Headers.Set("Content-Type","application/json");
         }
 
         public void SendResponse(Context cnt)

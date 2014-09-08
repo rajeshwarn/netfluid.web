@@ -37,11 +37,7 @@ namespace NetFluid
             get
             {
                 QueryValue q;
-                if (_values.TryGetValue(name, out q))
-                {
-                    return q;
-                }
-                return null;
+                return _values.TryGetValue(name, out q) ? q : null;
             }
             set { _values[name] = value; }
         }
