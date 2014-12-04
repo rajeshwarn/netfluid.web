@@ -36,167 +36,124 @@ namespace NetFluid
     /// </summary>
     public class Host
     {
+        private class RouteTarget
+        {
+            public string Url;
+            public string Method;
+            public Regex Regex;
+            public MethodInfo MethodInfo;
+            public Type Type;
+            public ParameterInfo[] Parameters;
+            public string[] GroupNames;
+            public int Index;
 
-        private static readonly char[] UrlSeparator;
-        private static readonly Dictionary<string, Type> Types;
-        private readonly Dictionary<StatusCode, RouteTarget> _callOn;
+            public void Handle(Context cnt)
+            {
+                var exposer = Type.CreateIstance() as IMethodExposer;
+                exposer.Context = cnt;
+                object[] args = null;
+
+                if (Parameters.Length > 0)
+                {
+                    args = new object[Parameters.Length];
+                    for (int i = 0; i < Parameters.Length; i++)
+                    {
+                        args[i] = cnt.Request.Values[Parameters[i].Name].Parse(Parameters[i].ParameterType);
+                    }
+                }
+
+                var resp = MethodInfo.Invoke(exposer, args) as IResponse;
+
+                if (resp != null)
+                    resp.SetHeaders(cnt);
+
+                cnt.SendHeaders();
+
+                try
+                {
+                    if (resp != null && cnt.Request.HttpMethod.ToLowerInvariant() != "head")
+                        resp.SendResponse(cnt);
+                }
+                catch (Exception)
+                {
+                }
+
+
+                cnt.Close();
+            }
+        }
+
         private readonly List<IMethodExposer> _instances;
         private readonly string _name;
-        private readonly Dictionary<string, RouteTarget> routes;
-        private RouteTarget _callOnAnyCode;
-        private Controller[] _controllers;
-
-        public IPublicFolderManager PublicFolderManager;
-
-        private ParamRouteTarget[] _parametrized;
-        private RegexRouteTarget[] _regex;
-
-        static Host()
-        {
-            UrlSeparator = new[] {'/'};
-            Types = new Dictionary<string, Type>();
-        }
+        private List<RouteTarget> _routes;
+        private readonly Dictionary<StatusCode,RouteTarget> _callOn;
+        public IPublicFolderManager PublicFolders;
 
         internal Host(string name)
         {
             _name = name;
-
-            PublicFolderManager = new PublicFolderManager();
-
-            _controllers = new Controller[0];
-
-            _regex = new RegexRouteTarget[0];
-            _parametrized = new ParamRouteTarget[0];
-            routes = new Dictionary<string, RouteTarget>();
-            _callOn = new Dictionary<StatusCode, RouteTarget>();
-
             _instances = new List<IMethodExposer>();
+            _routes = new List<RouteTarget>();
+            _callOn = new Dictionary<StatusCode,RouteTarget>();
+            PublicFolders = new PublicFolderManager();
         }
 
-        /// <summary>
-        /// Routes mapped inside this virtual host
-        /// </summary>
-        public string RoutesMap
+        static Regex getRegex(string url)
         {
-            get
+            var urlRegex = url;
+            var find = new Regex(":[^//]+");
+            foreach (Match item in find.Matches(url))
             {
-                var sb = new StringBuilder(string.Format("<Host Name=\"{0}\">", _name));
-
-                if (_controllers.Length > 0)
-                {
-                    sb.Append("<Controllers>");
-                    foreach (Controller item in _controllers)
-                        sb.Append(string.Format("<Controller Name=\"{0}\" Conditional=\"{1}\" />", item.Name,
-                            item.Condition != null));
-
-                    sb.Append("</Controllers>");
-                }
-
-                sb.Append("<routes>");
-
-                foreach (RegexRouteTarget item in _regex)
-                    sb.Append(string.Format("<RegexRoute Name=\"{0}\" Regex=\"{1}\" PointTo=\"{2}.{3}\" />", item.Name,
-                        item.Regex, item.Type.FullName, item.Method.Name));
-
-                foreach (ParamRouteTarget item in _parametrized)
-                    sb.Append(string.Format("<ParametrizedRoute Name=\"{0}\" Template=\"{1}\" PointTo=\"{2}.{3}\" />",
-                        item.Name, item.Template, item.Type.FullName, item.Method.Name));
-
-                foreach (var item in routes)
-                    sb.Append(string.Format("<Route Name=\"{0}\" Template=\"{1}\" PointTo=\"{2}.{3}\" />",
-                        item.Value.Name, item.Key, item.Value.Type.FullName, item.Value.Method.Name));
-
-
-                sb.Append("</routes>");
-                sb.Append("</host>");
-
-                return sb.ToString();
+                urlRegex = urlRegex.Replace(item.Value, "(?<" + item.Value.Substring(1) + ">[^//]+?)");
             }
+            return new Regex("^"+urlRegex+"$");
         }
 
-        private static void SendValue(Context c, object res)
+        public void AddStatusCodeHandler(StatusCode code, MethodInfo exposedMethod)
         {
-            if (res is IResponse)
+            if (code==StatusCode.AnyError)
+                foreach (StatusCode c in Enum.GetValues(typeof(StatusCode)))
+                {
+                    if (c >= StatusCode.BadRequest && c <= StatusCode.UserAccessDenied)
+                        AddStatusCodeHandler(c, exposedMethod);
+                }
+
+            if (code == StatusCode.AnyClientError)
+                foreach (StatusCode c in Enum.GetValues(typeof(StatusCode)))
+                {
+                    if (c >= StatusCode.BadRequest && c <= StatusCode.BlockedbyWindowsParentalControls)
+                        AddStatusCodeHandler(c, exposedMethod);
+                }
+
+            if (code == StatusCode.AnyServerError)
+                foreach (StatusCode c in Enum.GetValues(typeof(StatusCode)))
+                {
+                    if (c >= StatusCode.InternalServerError && c <= StatusCode.UserAccessDenied)
+                        AddStatusCodeHandler(c, exposedMethod);
+                }
+
+
+            _callOn.Add(code, new RouteTarget
             {
-                var resp = res as IResponse;
-                resp.SetHeaders(c);
-                c.SendHeaders();
-
-                if (c.Request.HttpMethod.ToLowerInvariant() == "head")
-                    return;
-
-                resp.SendResponse(c);
-                c.Close();
-                return;
-            }
-
-            if (c.Request.HttpMethod.ToLowerInvariant() == "head")
-            {
-                c.SendHeaders();
-                return;
-            }
-
-            if (res is IConvertible)
-            {
-                c.SendHeaders();
-                c.Writer.Write(res.ToString());
-                c.Close();
-                return;
-            }
-
-            if (!(res is IEnumerable)) return;
-
-            c.SendHeaders();
-            foreach (object item in res as IEnumerable)
-                c.Writer.Write(item.ToString());
-            c.Close();
+                Type = exposedMethod.DeclaringType,
+                MethodInfo = exposedMethod
+            });
         }
 
-        private void Finalize(Context c, MethodInfo method, object target, params object[] args)
+        public void AddRoute(string url, MethodInfo exposedMethod, string httpMethod = null, int index=99999)
         {
-            object res = null;
+            var type = exposedMethod.DeclaringType;
 
-            
-            try
-            {
-               res = method.Invoke(target, args);
-            }
-            catch (Exception ex)
-            {
-                c.Response.StatusCode = StatusCode.InternalServerError;
-                c.SendHeaders();
+            if (!type.Inherit(typeof(FluidPage)))
+                throw new TypeLoadException("Exposing type must inherit NetFluid.MethodExposer");
 
-                if (Engine.DevMode)
-                {
-                    try
-                    {
-                        c.Writer.Write(ex.ToHTML());
-                    }
-                    catch (Exception)
-                    {
-                    }
-                }
+            if(!exposedMethod.ReturnType.Implements(typeof(IResponse)))
+                throw new TypeLoadException("Exposed methods must returns an IResponse object");
 
-                RouteTarget rt;
-                if (_callOn.TryGetValue(StatusCode.InternalServerError, out rt))
-                {
-                    if (Engine.DevMode)
-                        Console.WriteLine(c.Request.Host + ":" + c.Request.Url + " - " + "Calling " +
-                                          rt.Type.FullName + "." + rt.Method.Name);
+            var regex = getRegex(url);
 
-                    var p = rt.Type.CreateIstance() as IMethodExposer;
-                    p.Context = c;
-
-                    Finalize(c, rt.Method, p, null);
-                    return;
-                }
-
-                Engine.Logger.Log(LogLevel.Exception, "Error on " + c.Request.Url, ex);
-                c.Close();
-                return;
-            }
-
-            SendValue(c, res);
+            _routes.Add(new RouteTarget { Url=url, Method=httpMethod, MethodInfo=exposedMethod,Regex=regex, Type=type, GroupNames=regex.GetGroupNames(), Parameters=exposedMethod.GetParameters(), Index=index });
+            _routes = _routes.OrderByDescending(x => x.Index).ToList();
         }
 
         /// <summary>
@@ -205,236 +162,78 @@ namespace NetFluid
         /// <param name="cnt"></param>
         public void Serve(Context cnt)
         {
-            if (cnt.Request.HttpMethod.ToLowerInvariant() == "options")
-            {
-                var origin = cnt.Request.Headers["Origin"] ?? "*";
-                cnt.Response.Headers.Set("Access-Control-Allow-Origin", origin);
-
-                var headers = cnt.Request.Headers["Access-Control-Request-Headers"] ?? "*";
-                cnt.Response.Headers.Set("Access-Control-Allow-Headers", headers);
-                cnt.Response.Headers.Set("Access-Control-Max-Age", "360000");
-                cnt.Response.Headers.Set("Access-Control-Allow-Methods", "GET, HEAD, POST, TRACE, OPTIONS, PUT, DELETE");
-                cnt.SendHeaders();
-                cnt.Close();
-                return;
-            }
-
             try
             {
-                if (Engine.DevMode)
-                    Console.WriteLine(cnt.Request.Host + ":" + cnt.Request.Url + " - " + "Checking controllers");
+                if (cnt.Request == null)
+                    Console.WriteLine("porco dio");
 
-                #region CONTROLLERS
+                if (cnt.Request.HttpMethod == null)
+                    Console.WriteLine("porca madonna");
 
-                foreach (var value in _controllers.Select(item => item.Invoke(cnt)))
+                if (cnt.Request.HttpMethod.ToLowerInvariant() == "options")
                 {
-                    SendValue(cnt, value);
+                    #region options
+                    var origin = cnt.Request.Headers["Origin"] ?? "*";
+                    cnt.Response.Headers.Set("Access-Control-Allow-Origin", origin);
 
-                    if (value != null)
-                    {
-                        cnt.Close();
-                        return;
-                    }
-                }
-
-                #endregion
-
-                if (Engine.DevMode)
-                    Console.WriteLine(cnt.Request.Host + ":" + cnt.Request.Url + " - " + "Checking regex routes");
-
-                #region REGEX
-
-                foreach (var rr in _regex)
-                {
-                    var m = rr.Regex.Match(cnt.Request.Url);
-
-                    if (!m.Success)
-                        continue;
-
-                    if (Engine.DevMode)
-                    {
-                        Console.WriteLine(cnt.Request.Host + ":" + cnt.Request.Url + " - " + "Matched " + rr.Regex);
-                        Console.WriteLine(cnt.Request.Host + ":" + cnt.Request.Url + " - " + "Calling " +
-                                          rr.Type.FullName + "." + rr.Method.Name);
-                    }
-
-                    var page = rr.Type.CreateIstance() as IMethodExposer;
-                    page.Context = cnt;
-
-                    var parameters = rr.Method.GetParameters();
-
-                    if (parameters.Length == 0)
-                    {
-                        Finalize(cnt, rr.Method, page, null);
-                        return;
-                    }
-
-                    if (Engine.DevMode)
-                        Console.WriteLine(cnt.Request.Host + ":" + cnt.Request.Url + " - " + "Parsing arguments");
-
-                    var groups = rr.Regex.GetGroupNames();
-                    var args = new object[parameters.Length];
-                    for (int i = 0; i < parameters.Length; i++)
-                    {
-                        if (groups.Contains(parameters[i].Name))
-                        {
-                            var q = new QueryValue(parameters[i].Name, m.Groups[parameters[i].Name].Value);
-                            args[i] = q.Parse(parameters[i].ParameterType);
-                        }
-                        else
-                        {
-                            args[i] = parameters[i].ParameterType.IsValueType
-                                ? Activator.CreateInstance(parameters[i].ParameterType)
-                                : null;
-                        }
-                    }
-                    Finalize(cnt, rr.Method, page, args);
+                    var headers = cnt.Request.Headers["Access-Control-Request-Headers"] ?? "*";
+                    cnt.Response.Headers.Set("Access-Control-Allow-Headers", headers);
+                    cnt.Response.Headers.Set("Access-Control-Max-Age", "360000");
+                    cnt.Response.Headers.Set("Access-Control-Allow-Methods", "GET, HEAD, POST, TRACE, OPTIONS, PUT, DELETE");
+                    cnt.SendHeaders();
+                    cnt.Close();
                     return;
+                    #endregion
                 }
 
-                #endregion
-
-                
-                #region PARAMETRIZED
-
-                if (Engine.DevMode)
-                    Console.WriteLine(cnt.Request.Host + ":" + cnt.Request.Url + " - " + "Checking parametrized routes");
-
-                foreach (var t in _parametrized)
+                foreach (var route in _routes.Where(x => x.Method == cnt.Request.HttpMethod || x.Method == null))
                 {
-                    if (!cnt.Request.Url.StartsWith(t.Url))
-                        continue;
+                    var m = route.Regex.Match(cnt.Request.Url);
 
-                    if (Engine.DevMode)
+                    if (m.Success)
                     {
-                        Console.WriteLine(cnt.Request.Host + ":" + cnt.Request.Url + " - " + "Matched " +
-                                          t.Url);
-                        Console.WriteLine(cnt.Request.Host + ":" + cnt.Request.Url + " - " + "Calling " +
-                                          t.Type.FullName + "." + t.Method.Name);
-                    }
+                        for (int i = 0; i < route.GroupNames.Length; i++)
+                        {
+                            var q = new QueryValue(route.GroupNames[i], m.Groups[route.GroupNames[i]].Value);
+                            cnt.Request.Values.Add(q.Name, q);
+                        }
 
-                    var page = t.Type.CreateIstance() as IMethodExposer;
-                    page.Context = cnt;
+                        if (Engine.DevMode)
+                            Console.WriteLine(cnt.Request.Host + ":" + cnt.Request.Url + " - " + "matched " + route.Url);
 
-                    var parameters = t.Method.GetParameters();
-
-                    if (parameters.Length == 0)
-                    {
-                        Finalize(cnt, t.Method, page, null);
+                        route.Handle(cnt);
                         return;
                     }
-
-                    var argUri = cnt.Request.Url.Substring(t.Url.Length).Split(UrlSeparator,StringSplitOptions.RemoveEmptyEntries);
-                    var args = new object[parameters.Length];
-                    for (int j = 0; j < parameters.Length; j++)
-                    {
-                        if (j < argUri.Length)
-                        {
-                            var qv = new QueryValue("", argUri[j]);
-                            args[j] = qv.Parse(parameters[j].ParameterType);
-                        }
-                        else
-                        {
-                            args[j] = parameters[j].ParameterType.IsValueType
-                                ? Activator.CreateInstance(parameters[j].ParameterType)
-                                : null;
-                        }
-                    }
-
-                    Finalize(cnt, t.Method, page, args);
-                    return;
                 }
-
-                #endregion
-
-                #region FIXED ROUTES
-
-                if (Engine.DevMode)
-                    Console.WriteLine(cnt.Request.Host + ":" + cnt.Request.Url + " - " + "Checking routes ");
-
-                RouteTarget route;
-                if (routes.TryGetValue(cnt.Request.Url, out route))
-                {
-                    if (Engine.DevMode)
-                    {
-                        Console.WriteLine(cnt.Request.Host + ":" + cnt.Request.Url + " - " + "Matched " +cnt.Request.Url);
-                    }
-
-                    var page = route.Type.CreateIstance() as IMethodExposer;
-                    page.Context = cnt;
-
-                    var parameters = route.Method.GetParameters();
-
-                    if (parameters.Length == 0)
-                    {
-                        Finalize(cnt, route.Method, page, null);
-                        return;
-                    }
-
-                    var args = new object[parameters.Length];
-                    for (int i = 0; i < parameters.Length; i++)
-                    {
-                        var q = cnt.Request.Values[parameters[i].Name];
-                        if (q != null)
-                            args[i] = q.Parse(parameters[i].ParameterType);
-                        else
-                            args[i] = parameters[i].MissingValue();
-                    }
-
-                    Finalize(cnt, route.Method, page, args);
-                    return;
-                }
-
-                #endregion
-
 
                 if (Engine.DevMode)
                     Console.WriteLine(cnt.Request.Host + ":" + cnt.Request.Url + " - " + "Looking for a public folder");
 
-                PublicFolderManager.Serve(cnt);
-
-                if (Engine.DevMode)
-                    Console.WriteLine(cnt.Request.Host + ":" + cnt.Request.Url + " - " + "Checking status code handlers");
-
-                cnt.Response.StatusCode = StatusCode.NotFound;
+                /*PublicFolders.Serve(cnt);
 
                 RouteTarget rt;
                 if (_callOn.TryGetValue(cnt.Response.StatusCode, out rt))
                 {
                     if (Engine.DevMode)
-                        Console.WriteLine(cnt.Request.Host + ":" + cnt.Request.Url + " - " + "Calling " +
-                                          rt.Type.FullName + "." + rt.Method.Name);
+                        Console.WriteLine(cnt.Request.Host + ":" + cnt.Request.Url + " - " + "Goes to status " + cnt.Response.StatusCode + " handler");
 
-                    var p = rt.Type.CreateIstance() as IMethodExposer;
-                    p.Context = cnt;
-
-                    Finalize(cnt, rt.Method, p, null);
+                    rt.Handle(cnt);
                     return;
-                }
-                if (_callOnAnyCode != null)
-                {
-                    if (Engine.DevMode)
-                        Console.WriteLine(cnt.Request.Host + ":" + cnt.Request.Url + " - " + "Calling " +
-                                          _callOnAnyCode.Type.FullName + "." + _callOnAnyCode.Method.Name);
+                }*/
 
-                    var p = _callOnAnyCode.Type.CreateIstance() as IMethodExposer;
-                    p.Context = cnt;
-
-                    Finalize(cnt, _callOnAnyCode.Method, p, null);
-                    return;
-                }
+                cnt.Response.StatusCode = StatusCode.NotFound;
+                cnt.Close();
             }
             catch (Exception ex)
             {
-                if (Engine.DevMode)
-                    Console.WriteLine(cnt.Request.Host + ":" + cnt.Request.Url + " - " + "Exception occurred");
-
                 if (ex is TargetInvocationException)
                     ex = ex.InnerException;
 
                 Engine.Logger.Log(LogLevel.Exception, "Exception during page execution", ex);
 
+                #region SHOW ERROR PAGE IF IN DEV MODE
                 if (Engine.DevMode)
+                {
                     while (ex != null)
                     {
                         cnt.Response.StatusCode = StatusCode.InternalServerError;
@@ -475,433 +274,21 @@ namespace NetFluid
                             break;
                         }
                     }
+                }
+                #endregion
             }
             cnt.Close();
         }
 
-        private static Type GetType(string type)
+        public void Load(Type p)
         {
-            Type t;
-            Types.TryGetValue(type, out t);
-            return t;
-        }
-
-        /// <summary>
-        /// Load routes from methods attribute of the method exposer ( type must inherit IMethodExposer)
-        /// </summary>
-        /// <param name="page"></param>
-        public void Load(Type page)
-        {
-            if (!Types.ContainsKey(page.Name))
-                Types.Add(page.Name, page);
-
-            if (!Types.ContainsKey(page.FullName))
-                Types.Add(page.FullName, page);
-
-            if (!page.Implements(typeof (IMethodExposer)))
-                throw new TypeLoadException("Loaded type " + page + " must implement NetFluid.IMethodExposer interface");
-
-            try
+            foreach (var m in p.GetMethods(BindingFlags.NonPublic|BindingFlags.Public|BindingFlags.Instance))
             {
-                var exposer = page.CreateIstance() as IMethodExposer;
-
-                try
+                foreach (var att in m.GetCustomAttributes<Route>())
                 {
-                    if (exposer != null) 
-                        exposer.OnLoad();
-                }
-                catch (Exception exception)
-                {
-                    Engine.Logger.Log(LogLevel.Exception,"Error loading "+page+".OnLoad method throw an exception",exception);
-                }
-
-                _instances.Add(exposer);
-            }
-            catch (Exception ex)
-            {
-                Engine.Logger.Log(LogLevel.Error, "Failed to create instance of " + page.FullName, ex);
-            }
-
-            foreach (var m in page.GetMethods())
-            {
-                foreach (var ma in m.CustomAttribute<Route>())
-                    SetRoute(ma.Uri, page, m);
-
-                foreach (var ma in m.CustomAttribute<ParametrizedRoute>())
-                    SetParameterizedRoute(ma.Uri, page, m);
-
-                foreach (var ma in m.CustomAttribute<RegexRoute>())
-                    SetRegexRoute(ma.Uri, page, m);
-
-                foreach (var ma in m.CustomAttribute<CallOn>())
-                {
-                    if (!_callOn.ContainsKey(ma.StatusCode))
-                        _callOn.Add(ma.StatusCode, new RouteTarget {Type = page, Method = m});
-
-                    if (ma.StatusCode == StatusCode.Any)
-                        _callOnAnyCode = new RouteTarget {Type = page, Method = m};
+                    AddRoute(att.Url, m, att.Method, att.Index);
                 }
             }
-
-            foreach (var r in page.CustomAttribute<Route>(true))
-            {
-                foreach (var m in page.GetMethods())
-                {
-                    foreach (var ma in m.CustomAttribute<Route>())
-                        SetRoute(r.Uri + ma.Uri, page, m);
-
-                    foreach (var ma in m.CustomAttribute<ParametrizedRoute>())
-                        SetParameterizedRoute(r.Uri + ma.Uri, page, m);
-
-                    foreach (var ma in m.CustomAttribute<RegexRoute>())
-                        SetRegexRoute(Regex.Escape(r.Uri) + ma.Uri, page, m);
-                }
-            }
-
-            foreach (var r in page.CustomAttribute<CallOn>(true))
-            {
-                if (!_callOn.ContainsKey(r.StatusCode))
-                {
-                    _callOn.Add(r.StatusCode, new RouteTarget {Type = page, Method = page.GetMethod("Run")});
-                }
-                if (r.StatusCode == StatusCode.Any)
-                    _callOnAnyCode = new RouteTarget {Type = page, Method = page.GetMethod("Run")};
-            }
         }
-
-        /// <summary>
-        /// Given function will be executed on any request, if returned value is not null the context is closed
-        /// </summary>
-        /// <param name="act">Function to execute</param>
-        /// <param name="friendlyname"></param>
-        public void SetController(Func<Context, IResponse> act, string friendlyname = null)
-        {
-            var controller = new Controller { Body = act, Condition = null, Name = friendlyname };
-            _controllers = _controllers.Push(controller);
-        }
-
-        public void SetController(Func<Context, bool> condition, Func<Context, IResponse> act, string friendlyname = null)
-        {
-            var controller = new Controller {Body = act, Condition = condition, Name = friendlyname};
-            _controllers = _controllers.Push(controller);
-        }
-
-        public void SetRoute(string url, Type type, string method, string friendlyname = null)
-        {
-            if (url == null)
-                throw new NullReferenceException("Null url");
-
-            if (method == null)
-                throw new NullReferenceException("Null method");
-
-            if (type == null)
-                throw new NullReferenceException("Null type");
-
-            if (!type.Inherit(typeof (IMethodExposer)))
-                throw new TypeLoadException("Routed types must implement NetFluid.IMethodExposer");
-
-            var rt = new RouteTarget {Type = type, Method = type.GetMethod(method), Name = friendlyname};
-
-            try
-            {
-                _instances.Add(type.CreateIstance() as IMethodExposer);
-            }
-            catch (Exception ex)
-            {
-                Engine.Logger.Log(LogLevel.Exception,"Failed to instance "+type,ex);
-            }
-
-
-            if (routes.ContainsKey(url))
-                routes[url] = rt;
-            else
-                routes.Add(url, rt);
-        }
-
-        public void SetRoute(string url, Type type, MethodInfo method, string name = null)
-        {
-            if (url == null)
-                throw new NullReferenceException("Null url");
-
-            if (method == null)
-                throw new NullReferenceException("Null method");
-
-            if (type == null)
-                throw new NullReferenceException("Null type");
-
-            if (!type.Implements(typeof (IMethodExposer)))
-                throw new TypeLoadException("Routed types must implement NetFluid.IMethodExposer");
-
-
-            var rt = new RouteTarget {Type = type, Method = method, Name = name};
-
-            try
-            {
-                _instances.Add(type.CreateIstance() as IMethodExposer);
-            }
-            catch (Exception ex)
-            {
-                Engine.Logger.Log(LogLevel.Exception, "Failed to instance " + type, ex);
-            }
-
-            if (routes.ContainsKey(url))
-                routes[url] = rt;
-            else
-                routes.Add(url, rt);
-        }
-
-        public void SetParameterizedRoute(string url, string methodFullname, string friendlyname = null)
-        {
-            if (url == null)
-                throw new NullReferenceException("Null url");
-
-            if (methodFullname == null)
-                throw new NullReferenceException("Null method");
-
-            Type t = GetType(methodFullname.Substring(0, methodFullname.LastIndexOf('.')));
-            if (t == null)
-                throw new TypeLoadException(methodFullname.Substring(0, methodFullname.LastIndexOf('.')) + " not found");
-
-            if (!t.Inherit(typeof (IMethodExposer)))
-                throw new TypeLoadException("Routed types must inherit NetFluid.IMethodExposer");
-
-            _instances.Add(t.CreateIstance() as IMethodExposer);
-
-            SetParameterizedRoute(url, t, methodFullname.Substring(methodFullname.LastIndexOf('.') + 1), friendlyname);
-        }
-
-        public void SetParameterizedRoute(string url, Type type, string method, string friendlyname = null)
-        {
-            if (url == null)
-                throw new NullReferenceException("Null url");
-
-            if (method == null)
-                throw new NullReferenceException("Null method");
-
-            if (type == null)
-                throw new NullReferenceException("Null type");
-
-            if (!type.Implements(typeof (IMethodExposer)))
-                throw new TypeLoadException("Routed types must inherit NetFluid.IMethodExposer");
-
-            var rt = new ParamRouteTarget {Type = type, Method = type.GetMethod(method), Url = url, Name = friendlyname};
-
-            try
-            {
-                _instances.Add(type.CreateIstance() as IMethodExposer);
-            }
-            catch (Exception ex)
-            {
-                Engine.Logger.Log(LogLevel.Exception, "Failed to instance " + type, ex);
-            }
-
-
-            _parametrized = _parametrized.Concat(new[] {rt}).OrderByDescending(x => x.Url.Length).ToArray();
-        }
-
-        public void SetParameterizedRoute(string url, Type type, MethodInfo method, string friendlyname = null)
-        {
-            if (url == null)
-                throw new NullReferenceException("Null url");
-
-            if (method == null)
-                throw new NullReferenceException("Null method");
-
-            if (type == null)
-                throw new NullReferenceException("Null type");
-
-            if (!type.Implements(typeof (IMethodExposer)))
-                throw new TypeLoadException("Routed types must inherit NetFluid.IMethodExposer");
-
-            var rt = new ParamRouteTarget {Type = type, Method = method, Url = url, Name = friendlyname};
-
-            try
-            {
-                _instances.Add(type.CreateIstance() as IMethodExposer);
-            }
-            catch (Exception ex)
-            {
-                Engine.Logger.Log(LogLevel.Exception, "Failed to instance " + type, ex);
-            }
-
-
-            _parametrized = _parametrized.Concat(new[] {rt}).OrderByDescending(x => x.Url.Length).ToArray();
-        }
-
-        public void SetRegexRoute(string rgx, string methodFullname, string friendlyname = null)
-        {
-            if (rgx == null)
-                throw new NullReferenceException("Null regex");
-
-            if (methodFullname == null)
-                throw new NullReferenceException("Null method");
-
-            Type t = GetType(methodFullname.Substring(0, methodFullname.LastIndexOf('.')));
-            if (t == null)
-                throw new TypeLoadException(methodFullname.Substring(0, methodFullname.LastIndexOf('.')) + " not found");
-
-            if (!t.Inherit(typeof (IMethodExposer)))
-                throw new TypeLoadException("Routed types must inherit NetFluid.IMethodExposer");
-
-            try
-            {
-                _instances.Add(t.CreateIstance() as IMethodExposer);
-            }
-            catch (Exception ex)
-            {
-                Engine.Logger.Log(LogLevel.Exception, "Failed to instance " + t, ex);
-            }
-
-
-            SetRegexRoute(rgx, t, methodFullname.Substring(methodFullname.LastIndexOf('.') + 1), friendlyname);
-        }
-
-        public void SetRegexRoute(string rgx, Type type, string method, string friendlyname = null)
-        {
-            if (rgx == null)
-                throw new NullReferenceException("Null regex");
-
-            if (method == null)
-                throw new NullReferenceException("Null method");
-
-            if (type == null)
-                throw new NullReferenceException("Null type");
-
-            if (!type.Implements(typeof (IMethodExposer)))
-                throw new TypeLoadException("Routed types must inherit NetFluid.IMethodExposer");
-
-            var m = type.GetMethod(method);
-            if (m == null)
-                throw new TypeLoadException(type.FullName + "." + method + " not found");
-
-            var rt = new RegexRouteTarget
-            {
-                Type = type,
-                Method = m,
-                Regex = new Regex(rgx, RegexOptions.Compiled),
-                Name = friendlyname
-            };
-
-            try
-            {
-                _instances.Add(type.CreateIstance() as IMethodExposer);
-            }
-            catch (Exception ex)
-            {
-                Engine.Logger.Log(LogLevel.Exception, "Failed to instance " + type, ex);
-            }
-
-
-            _regex = _regex.Concat(new[] {rt}).ToArray();
-        }
-
-        public void SetRegexRoute(string rgx, Type type, MethodInfo method, string friendlyname = null)
-        {
-            if (rgx == null)
-                throw new NullReferenceException("Null regex");
-
-            if (method == null)
-                throw new NullReferenceException("Null method");
-
-            if (type == null)
-                throw new NullReferenceException("Null type");
-
-            if (!type.Implements(typeof (IMethodExposer)))
-                throw new TypeLoadException("Routed types must inherit NetFluid.IMethodExposer");
-
-            var rt = new RegexRouteTarget
-            {
-                Type = type,
-                Method = method,
-                Regex = new Regex(rgx, RegexOptions.Compiled),
-                Name = friendlyname
-            };
-
-            try
-            {
-                _instances.Add(type.CreateIstance() as IMethodExposer);
-            }
-            catch (Exception ex)
-            {
-                Engine.Logger.Log(LogLevel.Exception, "Failed to instance " + type, ex);
-            }
-
-
-            _regex = _regex.Concat(new[] {rt}).ToArray();
-        }
-
-        #region Nested type: ParamRouteTarget
-
-        private class ParamRouteTarget
-        {
-            public MethodInfo Method;
-            public string Name;
-            public Type Type;
-            public string Url;
-
-            public string Template
-            {
-                get { return Url + string.Join("/", Method.GetParameters().Select(x => "{" + x.Name + "}")); }
-            }
-        }
-
-        #endregion
-
-        #region Nested type: RegexRouteTarget
-
-        private class RegexRouteTarget
-        {
-            public MethodInfo Method;
-            public string Name;
-            public Regex Regex;
-            public Type Type;
-        }
-
-        #endregion
-
-        #region Nested type: RouteTarget
-
-        private class RouteTarget
-        {
-            public MethodInfo Method;
-            public string Name;
-            public Type Type;
-        }
-
-        #endregion
-
-        #region Nested type: SmallControllerChecked
-
-        private class Controller
-        {
-            public Func<Context, IResponse> Body;
-            public Func<Context, bool> Condition;
-            public string Name;
-
-            public object Invoke(Context c)
-            {
-                try
-                {
-                    if (Condition != null && !Condition(c))
-                        return null;
-
-                    if (Engine.DevMode)
-                        Console.WriteLine(c.Request.Host + ":" + c.Request.Url + " - " + "calling controller "+Name);
-
-
-                    return Body(c);
-                }
-                catch (Exception ex)
-                {
-                    if (Engine.DevMode)
-                        Console.WriteLine(c.Request.Host + ":" + c.Request.Url + " - " +  Name + " controller exception:"+ex.Message);
-
-                    Engine.Logger.Log(LogLevel.Exception, c.Request.Host + ":" + c.Request.Url + " - " + Name + " controller exception",ex);
-                }
-                return null;
-            }
-        }
-
-        #endregion
     }
 }

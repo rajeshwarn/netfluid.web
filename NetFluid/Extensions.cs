@@ -830,6 +830,9 @@ namespace NetFluid
         /// </summary>
         public static bool Implements(this Type type, Type @interface)
         {
+            if (type == @interface)
+                return true;
+
             Type[] ints = type.GetInterfaces();
             return ints.Any(x => x == @interface || (x.IsGenericType && x.GetGenericTypeDefinition() == @interface));
         }
@@ -856,17 +859,18 @@ namespace NetFluid
         /// <param name="size"></param>
         public static void CopyTo(this Stream input, Stream output, long size)
         {
-            var rest = size % 32768;
-            var chunks = (size - rest)/32768;
-            var buffer = new byte[32768];
+            var cs = 128 * 1024;
+
+            var rest = size % cs;
+            var chunks = (size - rest)/cs;
+            var buffer = new byte[cs];
             int read;
 
             for (var i = 0; i < chunks; i++)
             {
                 read = input.Read(buffer, 0, buffer.Length);
-                
-                if(read < 0)
-                    throw new IOException("failed to read");
+                if (read <= 0)
+                    return;
 
                 if (read < buffer.Length)
                     rest += buffer.Length - read;

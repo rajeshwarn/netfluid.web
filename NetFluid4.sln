@@ -1,21 +1,13 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
-VisualStudioVersion = 12.0.21005.1
+VisualStudioVersion = 12.0.30723.0
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FluidPlayer", "FluidPlayer\FluidPlayer.csproj", "{C17E4967-1758-4707-B35B-ACCFAC426939}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NetFluid4", "netfluid\NetFluid4.csproj", "{B215459F-37FF-411C-8E6B-9CDEDB946F93}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NetFluid.Service", "netfluid.service\NetFluid.Service.csproj", "{8C9DA5C3-DC3A-48A5-9C0D-B08C1302B1E0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NetFluid.Mongo", "NetFluid.Mongo\NetFluid.Mongo.csproj", "{E18B5ED4-6375-442D-9E5C-F288FC959FE3}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NetFluid.Site", "NetFluid.Site\NetFluid.Site.csproj", "{44EBE8A7-BFB7-43A9-B3AC-C5265DC67602}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SolidGoldParser", "..\..\..\Documents\Visual Studio 2013\Projects\SolidGoldParser\SolidGoldParser\SolidGoldParser.csproj", "{ACD031BD-A34B-42CD-B3C0-89B3052FEF76}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestProject", "..\..\..\Documents\Visual Studio 2013\Projects\SolidGoldParser\TestProject\TestProject.csproj", "{12589318-5ECA-40B0-B54A-168963982427}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestProject", "TestProject\TestProject.csproj", "{4C7E6140-12AA-4EDA-8D8D-B06FA8302DA2}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -27,18 +19,6 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{C17E4967-1758-4707-B35B-ACCFAC426939}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{C17E4967-1758-4707-B35B-ACCFAC426939}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{C17E4967-1758-4707-B35B-ACCFAC426939}.net_4_0_Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{C17E4967-1758-4707-B35B-ACCFAC426939}.net_4_0_Debug|Any CPU.Build.0 = Debug|Any CPU
-		{C17E4967-1758-4707-B35B-ACCFAC426939}.net_4_0_Release|Any CPU.ActiveCfg = Release|Any CPU
-		{C17E4967-1758-4707-B35B-ACCFAC426939}.net_4_0_Release|Any CPU.Build.0 = Release|Any CPU
-		{C17E4967-1758-4707-B35B-ACCFAC426939}.net_4_5_Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{C17E4967-1758-4707-B35B-ACCFAC426939}.net_4_5_Debug|Any CPU.Build.0 = Debug|Any CPU
-		{C17E4967-1758-4707-B35B-ACCFAC426939}.net_4_5_Release|Any CPU.ActiveCfg = Release|Any CPU
-		{C17E4967-1758-4707-B35B-ACCFAC426939}.net_4_5_Release|Any CPU.Build.0 = Release|Any CPU
-		{C17E4967-1758-4707-B35B-ACCFAC426939}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{C17E4967-1758-4707-B35B-ACCFAC426939}.Release|Any CPU.Build.0 = Release|Any CPU
 		{B215459F-37FF-411C-8E6B-9CDEDB946F93}.Debug|Any CPU.ActiveCfg = net_4_5_Debug|Any CPU
 		{B215459F-37FF-411C-8E6B-9CDEDB946F93}.Debug|Any CPU.Build.0 = net_4_5_Debug|Any CPU
 		{B215459F-37FF-411C-8E6B-9CDEDB946F93}.net_4_0_Debug|Any CPU.ActiveCfg = net_4_0_Debug|Any CPU
@@ -63,56 +43,23 @@ Global
 		{8C9DA5C3-DC3A-48A5-9C0D-B08C1302B1E0}.net_4_5_Release|Any CPU.Build.0 = Release|Any CPU
 		{8C9DA5C3-DC3A-48A5-9C0D-B08C1302B1E0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8C9DA5C3-DC3A-48A5-9C0D-B08C1302B1E0}.Release|Any CPU.Build.0 = Release|Any CPU
-		{E18B5ED4-6375-442D-9E5C-F288FC959FE3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{E18B5ED4-6375-442D-9E5C-F288FC959FE3}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{E18B5ED4-6375-442D-9E5C-F288FC959FE3}.net_4_0_Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{E18B5ED4-6375-442D-9E5C-F288FC959FE3}.net_4_0_Debug|Any CPU.Build.0 = Debug|Any CPU
-		{E18B5ED4-6375-442D-9E5C-F288FC959FE3}.net_4_0_Release|Any CPU.ActiveCfg = Release|Any CPU
-		{E18B5ED4-6375-442D-9E5C-F288FC959FE3}.net_4_0_Release|Any CPU.Build.0 = Release|Any CPU
-		{E18B5ED4-6375-442D-9E5C-F288FC959FE3}.net_4_5_Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{E18B5ED4-6375-442D-9E5C-F288FC959FE3}.net_4_5_Debug|Any CPU.Build.0 = Debug|Any CPU
-		{E18B5ED4-6375-442D-9E5C-F288FC959FE3}.net_4_5_Release|Any CPU.ActiveCfg = Release|Any CPU
-		{E18B5ED4-6375-442D-9E5C-F288FC959FE3}.net_4_5_Release|Any CPU.Build.0 = Release|Any CPU
-		{E18B5ED4-6375-442D-9E5C-F288FC959FE3}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{E18B5ED4-6375-442D-9E5C-F288FC959FE3}.Release|Any CPU.Build.0 = Release|Any CPU
-		{44EBE8A7-BFB7-43A9-B3AC-C5265DC67602}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{44EBE8A7-BFB7-43A9-B3AC-C5265DC67602}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{44EBE8A7-BFB7-43A9-B3AC-C5265DC67602}.net_4_0_Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{44EBE8A7-BFB7-43A9-B3AC-C5265DC67602}.net_4_0_Debug|Any CPU.Build.0 = Debug|Any CPU
-		{44EBE8A7-BFB7-43A9-B3AC-C5265DC67602}.net_4_0_Release|Any CPU.ActiveCfg = Release|Any CPU
-		{44EBE8A7-BFB7-43A9-B3AC-C5265DC67602}.net_4_0_Release|Any CPU.Build.0 = Release|Any CPU
-		{44EBE8A7-BFB7-43A9-B3AC-C5265DC67602}.net_4_5_Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{44EBE8A7-BFB7-43A9-B3AC-C5265DC67602}.net_4_5_Debug|Any CPU.Build.0 = Debug|Any CPU
-		{44EBE8A7-BFB7-43A9-B3AC-C5265DC67602}.net_4_5_Release|Any CPU.ActiveCfg = Release|Any CPU
-		{44EBE8A7-BFB7-43A9-B3AC-C5265DC67602}.net_4_5_Release|Any CPU.Build.0 = Release|Any CPU
-		{44EBE8A7-BFB7-43A9-B3AC-C5265DC67602}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{44EBE8A7-BFB7-43A9-B3AC-C5265DC67602}.Release|Any CPU.Build.0 = Release|Any CPU
-		{ACD031BD-A34B-42CD-B3C0-89B3052FEF76}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{ACD031BD-A34B-42CD-B3C0-89B3052FEF76}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{ACD031BD-A34B-42CD-B3C0-89B3052FEF76}.net_4_0_Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{ACD031BD-A34B-42CD-B3C0-89B3052FEF76}.net_4_0_Debug|Any CPU.Build.0 = Debug|Any CPU
-		{ACD031BD-A34B-42CD-B3C0-89B3052FEF76}.net_4_0_Release|Any CPU.ActiveCfg = Release|Any CPU
-		{ACD031BD-A34B-42CD-B3C0-89B3052FEF76}.net_4_0_Release|Any CPU.Build.0 = Release|Any CPU
-		{ACD031BD-A34B-42CD-B3C0-89B3052FEF76}.net_4_5_Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{ACD031BD-A34B-42CD-B3C0-89B3052FEF76}.net_4_5_Debug|Any CPU.Build.0 = Debug|Any CPU
-		{ACD031BD-A34B-42CD-B3C0-89B3052FEF76}.net_4_5_Release|Any CPU.ActiveCfg = Release|Any CPU
-		{ACD031BD-A34B-42CD-B3C0-89B3052FEF76}.net_4_5_Release|Any CPU.Build.0 = Release|Any CPU
-		{ACD031BD-A34B-42CD-B3C0-89B3052FEF76}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{ACD031BD-A34B-42CD-B3C0-89B3052FEF76}.Release|Any CPU.Build.0 = Release|Any CPU
-		{12589318-5ECA-40B0-B54A-168963982427}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{12589318-5ECA-40B0-B54A-168963982427}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{12589318-5ECA-40B0-B54A-168963982427}.net_4_0_Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{12589318-5ECA-40B0-B54A-168963982427}.net_4_0_Debug|Any CPU.Build.0 = Debug|Any CPU
-		{12589318-5ECA-40B0-B54A-168963982427}.net_4_0_Release|Any CPU.ActiveCfg = Release|Any CPU
-		{12589318-5ECA-40B0-B54A-168963982427}.net_4_0_Release|Any CPU.Build.0 = Release|Any CPU
-		{12589318-5ECA-40B0-B54A-168963982427}.net_4_5_Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{12589318-5ECA-40B0-B54A-168963982427}.net_4_5_Debug|Any CPU.Build.0 = Debug|Any CPU
-		{12589318-5ECA-40B0-B54A-168963982427}.net_4_5_Release|Any CPU.ActiveCfg = Release|Any CPU
-		{12589318-5ECA-40B0-B54A-168963982427}.net_4_5_Release|Any CPU.Build.0 = Release|Any CPU
-		{12589318-5ECA-40B0-B54A-168963982427}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{12589318-5ECA-40B0-B54A-168963982427}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4C7E6140-12AA-4EDA-8D8D-B06FA8302DA2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4C7E6140-12AA-4EDA-8D8D-B06FA8302DA2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4C7E6140-12AA-4EDA-8D8D-B06FA8302DA2}.net_4_0_Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4C7E6140-12AA-4EDA-8D8D-B06FA8302DA2}.net_4_0_Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4C7E6140-12AA-4EDA-8D8D-B06FA8302DA2}.net_4_0_Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4C7E6140-12AA-4EDA-8D8D-B06FA8302DA2}.net_4_0_Release|Any CPU.Build.0 = Release|Any CPU
+		{4C7E6140-12AA-4EDA-8D8D-B06FA8302DA2}.net_4_5_Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4C7E6140-12AA-4EDA-8D8D-B06FA8302DA2}.net_4_5_Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4C7E6140-12AA-4EDA-8D8D-B06FA8302DA2}.net_4_5_Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4C7E6140-12AA-4EDA-8D8D-B06FA8302DA2}.net_4_5_Release|Any CPU.Build.0 = Release|Any CPU
+		{4C7E6140-12AA-4EDA-8D8D-B06FA8302DA2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4C7E6140-12AA-4EDA-8D8D-B06FA8302DA2}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(Performance) = preSolution
+		HasPerformanceSessions = true
 	EndGlobalSection
 EndGlobal

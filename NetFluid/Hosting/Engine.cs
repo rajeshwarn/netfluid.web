@@ -31,7 +31,6 @@ using System.Security.Principal;
 using System.Text;
 using System.Threading;
 using NetFluid.Sessions;
-using NetFluid.Cloud;
 
 namespace NetFluid
 {
@@ -46,11 +45,17 @@ namespace NetFluid
         {
             DefaultHost = new Host("default");
             _hosts = new Dictionary<string, Host>();
-            AppDomain.CurrentDomain.AssemblyResolve += CurrentDomain_AssemblyResolve;
-            AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;
+
+            AppDomain.CurrentDomain.UnhandledException += (s, e) => 
+            {
+                if (e.IsTerminating)
+                    Logger.Log(LogLevel.UnHandled, "Unhandled fatal exception occurred.", e.ExceptionObject as Exception);
+                else
+                    Logger.Log(LogLevel.UnHandled, "Unhandled exception occurred.", e.ExceptionObject as Exception);
+            };
+            
             Interfaces = new InterfaceManager();
             Sessions = new MemorySessionManager();
-            Cluster = new ClusterManager();
             Logger = new Logger();
 
             var max = (int)Math.Pow(Environment.ProcessorCount, 5);
@@ -58,15 +63,6 @@ namespace NetFluid
             ThreadPool.SetMinThreads(min,max);
 
         }
-
-        static Assembly CurrentDomain_AssemblyResolve(object sender, ResolveEventArgs args)
-        {
-            var c = AppDomain.CurrentDomain.GetAssemblies().ToArray();
-            var g = c.FirstOrDefault(x => x.FullName == args.Name);
-
-            return g;
-        }
-
 
         /// <summary>
         /// Main of host of the apllication. Any request not handled by virtual hosts will be handled by this one.
@@ -89,11 +85,6 @@ namespace NetFluid
         public static ISessionManager Sessions { get; set; }
 
         /// <summary>
-        /// Rewritable reverse proxy manager
-        /// </summary>
-        public static IClusterManager Cluster { get; set; }
-
-        /// <summary>
         /// Currently running virtual hosts managers (reversed proxy excluded)
         /// </summary>
         public static IEnumerable<Host> Hosts
@@ -110,35 +101,9 @@ namespace NetFluid
         }
 
         /// <summary>
-        /// The Engine is running under this user
-        /// </summary>
-        public static WindowsIdentity CurrentUser
-        {
-            get { return WindowsIdentity.GetCurrent(); }
-        }
-
-        /// <summary>
-        /// True if Netfluid is launched in Mono enivroment
-        /// </summary>
-        public static bool RunOnMono
-        {
-            get { return Type.GetType("Mono.Runtime") != null; }
-        }
-
-        /// <summary>
         /// If true log message and request serving flow are shown on the console
         /// </summary>
         public static bool DevMode { get; set; }
-
-        private static List<string> assemblies;
-
-        /// <summary>
-        /// Loaded assemblies location
-        /// </summary>
-        public static IEnumerable<string> Assemblies
-        {
-            get { return assemblies; }
-        }
 
         /// <summary>
         /// XML summary of virtual host and relative routes
@@ -147,7 +112,7 @@ namespace NetFluid
         {
             get
             {
-                var sb = new StringBuilder("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
+               /* var sb = new StringBuilder("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
                 sb.AppendLine("<application>");
                 sb.AppendLine("<hosts>");
                 foreach (var item in _hosts)
@@ -156,16 +121,9 @@ namespace NetFluid
                 }
                 sb.AppendLine("/<hosts>");
                 sb.AppendLine("</application>");
-                return sb.ToString();
+                return sb.ToString();*/
+                return null;
             }
-        }
-
-        private static void CurrentDomain_UnhandledException(object sender, UnhandledExceptionEventArgs e)
-        {
-            if (e.IsTerminating)
-                Logger.Log(LogLevel.UnHandled, "Unhandled fatal exception occurred.", e.ExceptionObject as Exception);
-            else
-                Logger.Log(LogLevel.UnHandled, "Unhandled exception occurred.", e.ExceptionObject as Exception);
         }
 
         /// <summary>
@@ -193,29 +151,20 @@ namespace NetFluid
             if (DevMode)
                 Console.WriteLine("Serving " + cnt.Request.Host + cnt.Request.Url);
 
-            try
+            Host host;
+            if (_hosts.TryGetValue(cnt.Request.Host, out host))
             {
-                Host host;
-                if (_hosts.TryGetValue(cnt.Request.Host, out host))
-                {
-                    if (DevMode)
-                        Console.WriteLine(cnt.Request.Host + cnt.Request.Url + " - Using host " + cnt.Request.Host);
+                if (DevMode)
+                    Console.WriteLine(cnt.Request.Host + cnt.Request.Url + " - Using host " + cnt.Request.Host);
 
-                    host.Serve(cnt);
-                }
-                else
-                {
-                    if (DevMode)
-                        Console.WriteLine(cnt.Request.Host + cnt.Request.Url + " - Using default web application");
-
-                    DefaultHost.Serve(cnt);
-                }
+                host.Serve(cnt);
             }
-            catch (Exception ex)
+            else
             {
-                Logger.Log(LogLevel.Exception, "Exception serving " + cnt.Request.Host + cnt.Request.Url, ex);
-                cnt.Response.StatusCode = StatusCode.BadRequest;
-                cnt.Close();
+                if (DevMode)
+                    Console.WriteLine(cnt.Request.Host + cnt.Request.Url + " - Using default web application");
+
+                DefaultHost.Serve(cnt);
             }
         }
 
@@ -268,13 +217,13 @@ namespace NetFluid
                         }
                         var host = Host(pf.Host);
 
-                        if (host.PublicFolderManager != null)
+                        /*if (host.PublicFolderManager != null)
                         {
                             Logger.Log(LogLevel.Error,"Trying to rewrite "+(string.IsNullOrEmpty(pf.Host)? "default host" : pf.Host)+" public folder manager");
                             continue;
                         }
                         host.PublicFolderManager = manager;
-                        manager.Add(pf.Id,pf.UriPath,pf.RealPath);
+                        manager.Add(pf.Id,pf.UriPath,pf.RealPath);*/
                     }
 
                     return true;
@@ -331,13 +280,13 @@ namespace NetFluid
 
                         var host = Host(pf.Host);
 
-                        if (host.PublicFolderManager != null)
+                        /*if (host.PublicFolderManager != null)
                         {
                             Logger.Log(LogLevel.Error, "Trying to rewrite " + (string.IsNullOrEmpty(pf.Host) ? "default host" : pf.Host) + " public folder manager");
                             continue;
                         }
-                        host.PublicFolderManager = manager;
-                        manager.Add(pf.Id, pf.UriPath, pf.RealPath);
+                        host.PublicFolderManager = manager;*/
+                        //manager.Add(pf.Id, pf.UriPath, pf.RealPath);
                     }
 
                     return true;
@@ -380,12 +329,7 @@ namespace NetFluid
         /// <param name="assemblyPath">physical path to the assembly file</param>
         public static void LoadHost(string host, string assemblyPath)
         {
-            if (assemblies == null)
-                assemblies = new List<string>();
-
-            var p = Path.GetFullPath(assemblyPath);
-            assemblies.Add(p);
-            LoadHost(host,Assembly.LoadFile(p));
+            LoadHost(host, Assembly.LoadFile(Path.GetFullPath(assemblyPath)));
         }
 
         /// <summary>
@@ -406,12 +350,12 @@ namespace NetFluid
                     {
                         foreach (string h in p.CustomAttribute<VirtualHost>(true).Select(x => x.Name))
                         {
-                            Host(h).Load(p);
+                            //Host(h).Load(p);
                         }
                     }
                     else
                     {
-                        Host(host).Load(p);
+                        //Host(host).Load(p);
                     }
                 }
             }
@@ -427,12 +371,7 @@ namespace NetFluid
         /// <param name="assemblyPath">physical path to the assembly file</param>
         public static void Load(string assemblyPath)
         {
-            if(assemblies==null)
-                assemblies = new List<string>();
-
-            var p = Path.GetFullPath(assemblyPath);
-            assemblies.Add(p);
-            Load(Assembly.LoadFile(p));
+            Load(Assembly.LoadFile(Path.GetFullPath(assemblyPath)));
         }
 
         /// <summary>
@@ -481,165 +420,5 @@ namespace NetFluid
                 Logger.Log(LogLevel.Error, "Error during loading " + assembly + " as default host", ex);
             }
         }
-
-        /// <summary>
-        /// For SEO purpose. All client requesting a virtual host in fromhost list recieve a "Moved Permanently" response to destination 
-        /// </summary>
-        /// <param name="destination">The uri where you want to redirect client</param>
-        /// <param name="fromhost">Wich host you want to redirect</param>
-        public static void SetRedirect(string destination, params string[] fromhost)
-        {
-            foreach (string f in fromhost)
-            {
-                SetController(f, (x) =>
-                {
-                    x.Response.StatusCode = StatusCode.MovedPermanently;
-                    x.Response.Headers["Location"] = destination;
-                    x.Close();
-                    return null;
-                });
-            }
-        }
-
-        #region DEFAULT HOST
-        
-        /// <summary>
-        /// Every time the default web application recieve a request an function is invoked. If the function return a value different from null the context execution ends.
-        /// </summary>
-        /// <param name="act">Action to invoke</param>
-        /// <param name="name">Friendly name for action in hosting map</param>
-        /// <returns></returns>
-        public static RouteSetter SetController(Func<Context,IResponse> act,string name="")
-        {
-            DefaultHost.SetController(act,name);
-            return new RouteSetter();
-        }
-
-        /// <summary>
-        /// Every time the default web application recieve a request an function is invoked. If the function return a value different from null the context execution ends.
-        /// </summary>
-        /// <param name="condition">If true the function is invoked</param>
-        /// <param name="act">The function to invoke</param>
-        /// <param name="name">Friendly name for function in hosting map</param>
-        /// <returns></returns>
-        public static RouteSetter SetController(Func<Context, bool> condition, Func<Context, IResponse> act, string name = "")
-        {
-            DefaultHost.SetController(condition, act, name);
-            return new RouteSetter();
-        }
-
-        public static RouteSetter SetRoute(string url, Type type, string method)
-        {
-            DefaultHost.SetRoute(url, type, method);
-            return new RouteSetter();
-        }
-
-        public static RouteSetter SetRoute(string url, Type type, MethodInfo method)
-        {
-            DefaultHost.SetRoute(url, type, method);
-            return new RouteSetter();
-        }
-
-        public static RouteSetter SetParameterizedRoute(string url, string methodFullname)
-        {
-            DefaultHost.SetParameterizedRoute(url, methodFullname);
-            return new RouteSetter();
-        }
-
-        public static RouteSetter SetParameterizedRoute(string url, Type type, string method)
-        {
-            DefaultHost.SetParameterizedRoute(url, type, method);
-            return new RouteSetter();
-        }
-
-        public static RouteSetter SetParameterizedRoute(string url, Type type, MethodInfo method)
-        {
-            DefaultHost.SetParameterizedRoute(url, type, method);
-            return new RouteSetter();
-        }
-
-        public static RouteSetter SetRegexRoute(string rgx, string methodFullname)
-        {
-            DefaultHost.SetRegexRoute(rgx, methodFullname);
-            return new RouteSetter();
-        }
-
-        public static RouteSetter SetRegexRoute(string rgx, Type type, string method)
-        {
-            DefaultHost.SetRegexRoute(rgx, type, method);
-            return new RouteSetter();
-        }
-
-        public static RouteSetter SetRegexRoute(string rgx, Type type, MethodInfo method)
-        {
-            DefaultHost.SetRegexRoute(rgx, type, method);
-            return new RouteSetter();
-        }
-
-        #endregion
-
-        #region IN-APP HOST
-
-        public static RouteSetter SetController(string host, Func<Context,IResponse> act, string name = "")
-        {
-            Host(host).SetController(act, name);
-            return new RouteSetter();
-        }
-
-        public static RouteSetter SetController(string host, Func<Context, bool> condition, Func<Context,IResponse> act, string name = "")
-        {
-            Host(host).SetController(condition, act, name);
-            return new RouteSetter();
-        }
-
-        public static RouteSetter SetRoute(string host, string url, Type type, string method)
-        {
-            Host(host).SetRoute(url, type, method);
-            return new RouteSetter();
-        }
-
-        public static RouteSetter SetRoute(string host, string url, Type type, MethodInfo method)
-        {
-            Host(host).SetRoute(url, type, method);
-            return new RouteSetter();
-        }
-
-        public static RouteSetter SetParameterizedRoute(string host, string url, string methodFullname)
-        {
-            Host(host).SetParameterizedRoute(url, methodFullname);
-            return new RouteSetter();
-        }
-
-        public static RouteSetter SetParameterizedRoute(string host, string url, Type type, string method)
-        {
-            Host(host).SetParameterizedRoute(url, type, method);
-            return new RouteSetter();
-        }
-
-        public static RouteSetter SetParameterizedRoute(string host, string url, Type type, MethodInfo method)
-        {
-            Host(host).SetParameterizedRoute(url, type, method);
-            return new RouteSetter();
-        }
-
-        public static RouteSetter SetRegexRoute(string host, string rgx, string methodFullname)
-        {
-            Host(host).SetRegexRoute(rgx, methodFullname);
-            return new RouteSetter();
-        }
-
-        public static RouteSetter SetRegexRoute(string host, string rgx, Type type, string method)
-        {
-            Host(host).SetRegexRoute(rgx, type, method);
-            return new RouteSetter();
-        }
-
-        public static RouteSetter SetRegexRoute(string host, string rgx, Type type, MethodInfo method)
-        {
-            Host(host).SetRegexRoute(rgx, type, method);
-            return new RouteSetter();
-        }
-
-        #endregion
     }
 }

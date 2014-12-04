@@ -26,48 +26,9 @@ namespace NetFluid
         /// <param name="id">Friendly name for the folder</param>
         /// <param name="uriPath">URI to map</param>
         /// <param name="realPath">Physical path</param>
-        void Add(string id, string uriPath, string realPath);
+        void Add(string uriPath, string realPath);
 
-        /// <summary>
-        /// Remove the public folder
-        /// </summary>
-        /// <param name="id"></param>
-        void Remove(string id);
+        bool TryGetFile(Context cnt);
 
-        /// <summary>
-        /// Return all managed directories
-        /// </summary>
-        IEnumerable<string> Directories { get; }
-
-        /// <summary>
-        /// Return all managed files physical path
-        /// </summary>
-        IEnumerable<string> Files { get; }
-
-        /// <summary>
-        /// Returns all mapped URI
-        /// </summary>
-        IEnumerable<string> URIs { get; }
-
-        /// <summary>
-        /// Return physical path from URI
-        /// </summary>
-        /// <param name="uri">URI ofthe resource</param>
-        /// <returns>physical or simulated (ex:database id) path to the file</returns>
-        string ToPath(string uri);
-
-        /// <summary>
-        /// Return the URI mapped by the physical or simulated (ex:database id) path
-        /// </summary>
-        /// <param name="path">physical path</param>
-        /// <returns>mapped uri</returns>
-        string ToUri(string path);
-
-        /// <summary>
-        /// Open the public file from the URI
-        /// </summary>
-        /// <param name="uri">uri path to the file (used to copy setting from one manager to another)</param>
-        /// <returns>real o simulated file stream</returns>
-        Stream OpenFile(string uri);
     }
 }

@@ -78,7 +78,7 @@ namespace NetFluid.Service
                 if (!Engine.LoadAppConfiguration())
                 {
                     Engine.Interfaces.AddAllAddresses();
-                    Engine.DefaultHost.PublicFolderManager.Add("public","/", "./Public");
+                   // Engine.DefaultHost.PublicFolders.Add("public","/", "./Public");
                     Engine.Interfaces.AddInterface("127.0.0.1", 80);
                     Engine.Interfaces.AddInterface("127.0.0.1", 8000);
                 }

@@ -135,6 +135,16 @@ namespace NetFluid
         /// </summary>
         /// <param name="x">target type</param>
         /// <returns>type instanced object</returns>
+        public T Parse<T>()
+        {
+            return (T)Parse(typeof(T));
+        }
+
+        /// <summary>
+        /// Parse the value into the given type (see Netfluid parsing rules)
+        /// </summary>
+        /// <param name="x">target type</param>
+        /// <returns>type instanced object</returns>
         public object Parse(Type x)
         {
             try
@@ -252,8 +262,6 @@ namespace NetFluid
             {
 
             }
-
-
             return x.IsValueType ? Activator.CreateInstance(x) : null;
         }
 

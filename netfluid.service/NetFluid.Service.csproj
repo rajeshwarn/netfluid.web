@@ -54,19 +54,9 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AccessManager.cs" />
-    <Compile Include="CDN\CDN.cs" />
-    <Compile Include="CDN\CDNManager.cs" />
     <Compile Include="CustomServiceInstaller.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="DNS\DNSManager.cs" />
-    <Compile Include="Forwarding\Fowarding.cs" />
-    <Compile Include="Forwarding\ForwardingManager.cs" />
-    <Compile Include="Plugin\Plugin.cs" />
-    <Compile Include="Plugin\PluginManager.cs" />
-    <Compile Include="Run\RunApp.cs" />
-    <Compile Include="Run\RunManager.cs" />
     <Compile Include="Service.cs">
       <SubType>Component</SubType>
     </Compile>

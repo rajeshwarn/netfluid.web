@@ -54,16 +54,6 @@ namespace NetFluid
         public CookieCollection Cookies;
 
         /// <summary>
-        ///     Files recieved from the client
-        /// </summary>
-        public HttpFileCollection Files;
-
-        /// <summary>
-        ///     Get query values
-        /// </summary>
-        public QueryValueCollection Get;
-
-        /// <summary>
         ///     Headers of the client request
         /// </summary>
         public WebHeaderCollection Headers;
@@ -77,11 +67,6 @@ namespace NetFluid
         /// True if connection is kept alive
         /// </summary>
         public bool KeepAlive;
-
-        /// <summary>
-        /// Post query values
-        /// </summary>
-        public QueryValueCollection Post;
 
         /// <summary>
         /// From HTTP1.0 to HTTP1.2
@@ -108,10 +93,8 @@ namespace NetFluid
         /// </summary>
         public string[] UserLanguages;
 
-        /// <summary>
-        /// Merge of Get and post variables
-        /// </summary>
         private QueryValueCollection values;
+        private HttpFileCollection files;
 
         public HttpRequest()
         {
@@ -122,27 +105,25 @@ namespace NetFluid
         }
 
         /// <summary>
+        ///     Files recieved from the client
+        /// </summary>
+        public HttpFileCollection Files
+        {
+            get
+            {
+                if (files == null) files=new HttpFileCollection();
+                return files;
+            }
+        }
+
+        /// <summary>
         ///     Merge of get and post values
         /// </summary>
         public QueryValueCollection Values
         {
             get
             {
-                if (values != null) return values;
-                if (Get == null)
-                {
-                    values = new QueryValueCollection(Post);
-                }
-                else
-                {
-                    values = new QueryValueCollection(Get);
-
-                    if (Post == null) return values;
-                    foreach (var item in Post)
-                    {
-                        values.Add(item.Name, item);
-                    }
-                }
+                if (values == null) values=new QueryValueCollection();
                 return values;
             }
         }

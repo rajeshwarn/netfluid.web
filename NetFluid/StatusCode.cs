@@ -87,7 +87,9 @@ namespace NetFluid
         InsufficientStorage = 507,
         BandwidthLimitExceeded = 509,
         NotExtended = 510,
-        Useraccessdenied = 530,
-        Any = 999
+        UserAccessDenied = 530,
+        AnyError = 999,
+        AnyClientError=1000,
+        AnyServerError=2000
     }
 }

@@ -4,20 +4,14 @@ namespace NetFluid
 {
     public class StringResponse : IResponse
     {
-        private readonly bool flusheveryline;
-        private readonly IEnumerable<string> strings;
+        private byte[] bytes;
 
-        public StringResponse(string str, bool flusheveryline = false)
+        public StringResponse(string p)
         {
-            strings = new List<string> {str};
-            this.flusheveryline = flusheveryline;
+            String = p;
         }
 
-        public StringResponse(IEnumerable<string> strings, bool flusheveryline = false)
-        {
-            this.strings = strings;
-            this.flusheveryline = flusheveryline;
-        }
+        public string String { get; set; }
 
         public void SetHeaders(Context cnt)
         {
@@ -25,12 +19,9 @@ namespace NetFluid
 
         public void SendResponse(Context cnt)
         {
-            foreach (var s in strings)
-            {
-                cnt.Writer.Write(s);
-                if (flusheveryline)
-                    cnt.Writer.Flush();
-            }
+            var k = cnt.Request.ContentEncoding.GetBytes(String);
+            cnt.OutputStream.Write(k,0,k.Length);
+            cnt.OutputStream.Flush();
         }
     }
 }

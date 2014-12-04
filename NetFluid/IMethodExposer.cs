@@ -9,10 +9,5 @@
         /// Used by the Engine to pass the context to instances
         /// </summary>
         Context Context { get; set; }
-
-        /// <summary>
-        /// Called when this type is loaded by NetFluid Engine
-        /// </summary>
-        void OnLoad();
     }
 }

@@ -69,17 +69,13 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Authentication.cs" />
-    <Compile Include="Cloud\ClusterManager.cs" />
-    <Compile Include="Cloud\IClusterManager.cs" />
     <Compile Include="Collections\AutoCache.cs" />
-    <Compile Include="Collections\DeepObject.cs" />
-    <Compile Include="Collections\InMemoryOlap.cs" />
     <Compile Include="Collections\IRepository.cs" />
     <Compile Include="Collections\XMLRepository.cs" />
     <Compile Include="Configuration\Interface.cs" />
     <Compile Include="Configuration\PublicFolder.cs" />
     <Compile Include="Configuration\Settings.cs" />
-    <Compile Include="Context2.cs" />
+    <Compile Include="Context.cs" />
     <Compile Include="Cron\Cron.cs" />
     <Compile Include="Cron\CronTask.cs" />
     <Compile Include="Dns.cs" />
@@ -159,18 +155,21 @@
     <Compile Include="Extensions.cs" />
     <Compile Include="FluidPage.cs" />
     <Compile Include="Hosting\Route.cs" />
-    <Compile Include="Hosting\RouteSetter.cs" />
     <Compile Include="Hosting\VirtualHost.cs" />
     <Compile Include="HttpFile.cs" />
     <Compile Include="HttpFileCollection.cs" />
-    <Compile Include="HTTP\Interface2.cs" />
+    <Compile Include="HTTP\MultipartFormDataParser.cs" />
+    <Compile Include="HTTP\MultipartInternals\BinaryStreamStack.cs" />
+    <Compile Include="HTTP\MultipartInternals\MultipartParseException.cs" />
+    <Compile Include="HTTP\MultipartInternals\ParameterPart.cs" />
+    <Compile Include="HTTP\MultipartInternals\RebufferableBinaryReader.cs" />
+    <Compile Include="HTTP\MultipartInternals\SubsequenceFinder.cs" />
+    <Compile Include="HTTP\WebInterface.cs" />
     <Compile Include="IWebInterface.cs" />
     <Compile Include="ILogger.cs" />
     <Compile Include="IMethodExposer.cs" />
     <Compile Include="IO\ChunkedStream.cs" />
-    <Compile Include="HTTP\Interface.cs" />
     <Compile Include="HTTP\Extensions.cs" />
-    <Compile Include="Context.cs" />
     <Compile Include="InterfaceManager.cs" />
     <Compile Include="HttpRequest.cs" />
     <Compile Include="HttpResponse.cs" />
@@ -266,19 +265,56 @@
     <Compile Include="MIME\Utils\Rfc2047.cs" />
     <Compile Include="MIME\Utils\StringBuilderExtensions.cs" />
     <Compile Include="IDatabaseObject.cs" />
-    <Compile Include="PublicFolders\InMemoryPublicFolders.cs" />
     <Compile Include="PublicFolders\IPublicFolderManager.cs" />
     <Compile Include="PublicFolders\PublicFolderManager.cs" />
     <Compile Include="QueryValueCollection.cs" />
     <Compile Include="Responses\CSVResponse.cs" />
     <Compile Include="Responses\JSONFileResponse.cs" />
     <Compile Include="Responses\FileResponse.cs" />
-    <Compile Include="Responses\FluidTemplate.cs" />
     <Compile Include="Responses\JSONResponse.cs" />
     <Compile Include="Responses\MovedPermanentlyResponse.cs" />
     <Compile Include="Responses\RedirectResponse.cs" />
     <Compile Include="Responses\StringResponse.cs" />
-    <Compile Include="Responses\TemplateCompiler.cs" />
+    <Compile Include="Responses\Templates\MustacheInternals\ArgumentCollection.cs" />
+    <Compile Include="Responses\Templates\MustacheInternals\CompoundGenerator.cs" />
+    <Compile Include="Responses\Templates\MustacheInternals\ConditionTagDefinition.cs" />
+    <Compile Include="Responses\Templates\MustacheInternals\ContentTagDefinition.cs" />
+    <Compile Include="Responses\Templates\MustacheInternals\Context.cs" />
+    <Compile Include="Responses\Templates\MustacheInternals\ContextParameter.cs" />
+    <Compile Include="Responses\Templates\MustacheInternals\EachTagDefinition.cs" />
+    <Compile Include="Responses\Templates\MustacheInternals\ElifTagDefinition.cs" />
+    <Compile Include="Responses\Templates\MustacheInternals\ElseTagDefinition.cs" />
+    <Compile Include="Responses\Templates\MustacheInternals\FormatCompiler.cs" />
+    <Compile Include="Responses\Templates\MustacheInternals\Generator.cs" />
+    <Compile Include="Responses\Templates\MustacheInternals\IArgument.cs" />
+    <Compile Include="Responses\Templates\MustacheInternals\IfTagDefinition.cs" />
+    <Compile Include="Responses\Templates\MustacheInternals\IGenerator.cs" />
+    <Compile Include="Responses\Templates\MustacheInternals\IndexTagDefinition.cs" />
+    <Compile Include="Responses\Templates\MustacheInternals\InlineGenerator.cs" />
+    <Compile Include="Responses\Templates\MustacheInternals\InlineTagDefinition.cs" />
+    <Compile Include="Responses\Templates\MustacheInternals\KeyFoundEventArgs.cs" />
+    <Compile Include="Responses\Templates\MustacheInternals\KeyGenerator.cs" />
+    <Compile Include="Responses\Templates\MustacheInternals\KeyNotFoundEventArgs.cs" />
+    <Compile Include="Responses\Templates\MustacheInternals\MasterTagDefinition.cs" />
+    <Compile Include="Responses\Templates\MustacheInternals\NestedContext.cs" />
+    <Compile Include="Responses\Templates\MustacheInternals\NewlineTagDefinition.cs" />
+    <Compile Include="Responses\Templates\MustacheInternals\NumberArgument.cs" />
+    <Compile Include="Responses\Templates\MustacheInternals\PlaceholderArgument.cs" />
+    <Compile Include="Responses\Templates\MustacheInternals\PlaceholderFoundEventArgs.cs" />
+    <Compile Include="Responses\Templates\MustacheInternals\PropertyDictionary.cs" />
+    <Compile Include="Responses\Templates\MustacheInternals\RegexHelper.cs" />
+    <Compile Include="Responses\Templates\MustacheInternals\Scope.cs" />
+    <Compile Include="Responses\Templates\MustacheInternals\SetTagDefinition.cs" />
+    <Compile Include="Responses\Templates\MustacheInternals\StaticGenerator.cs" />
+    <Compile Include="Responses\Templates\MustacheInternals\StringArgument.cs" />
+    <Compile Include="Responses\Templates\MustacheInternals\TagDefinition.cs" />
+    <Compile Include="Responses\Templates\MustacheInternals\TagParameter.cs" />
+    <Compile Include="Responses\Templates\MustacheInternals\UpcastDictionary.cs" />
+    <Compile Include="Responses\Templates\MustacheInternals\ValueRequestEventArgs.cs" />
+    <Compile Include="Responses\Templates\MustacheInternals\VariableArgument.cs" />
+    <Compile Include="Responses\Templates\MustacheInternals\VariableFoundEventArgs.cs" />
+    <Compile Include="Responses\Templates\MustacheInternals\WithTagDefinition.cs" />
+    <Compile Include="Responses\Templates\MustacheResponse.cs" />
     <Compile Include="Responses\XMLResponse.cs" />
     <Compile Include="Security.cs" />
     <Compile Include="Serialization\Binary.cs" />
@@ -297,15 +333,12 @@
     <Compile Include="WebClient.cs" />
     <Compile Include="WebHeader.cs" />
     <Compile Include="WebHeaderCollection.cs" />
-    <Compile Include="HTTP\PostManager.cs" />
     <Compile Include="Network.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="QueryValue.cs" />
     <Compile Include="StatusCode.cs" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="JS\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

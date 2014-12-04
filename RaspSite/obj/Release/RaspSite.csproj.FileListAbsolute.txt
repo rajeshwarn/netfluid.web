@@ -1,8 +1,0 @@
-C:\Users\Matteo\Desktop\NetFluid\REPOSITORY\RaspSite\bin\Release\RaspSite.exe.config
-C:\Users\Matteo\Desktop\NetFluid\REPOSITORY\RaspSite\bin\Release\RaspSite.exe
-C:\Users\Matteo\Desktop\NetFluid\REPOSITORY\RaspSite\bin\Release\RaspSite.pdb
-C:\Users\Matteo\Desktop\NetFluid\REPOSITORY\RaspSite\bin\Release\NetFluid.dll
-C:\Users\Matteo\Desktop\NetFluid\REPOSITORY\RaspSite\bin\Release\NetFluid.pdb
-C:\Users\Matteo\Desktop\NetFluid\REPOSITORY\RaspSite\obj\Release\RaspSite.csprojResolveAssemblyReference.cache
-C:\Users\Matteo\Desktop\NetFluid\REPOSITORY\RaspSite\obj\Release\RaspSite.exe
-C:\Users\Matteo\Desktop\NetFluid\REPOSITORY\RaspSite\obj\Release\RaspSite.pdb

@@ -53,7 +53,7 @@ namespace NetFluid
                 //Path.GetTempFileName() SOMETIMES RETURN THE SAME FILENAME ON TWO CALLINGS
                 string p;
                 do p = Path.Combine(Path.GetTempPath(), UID()); while (File.Exists(p));
-                return p;
+                return Path.GetFullPath(p);
             }
         }
 

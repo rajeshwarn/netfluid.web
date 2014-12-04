@@ -61,7 +61,7 @@ namespace NetFluid
             try
             {
                 Engine.Logger.Log(LogLevel.Debug, "Adding http interface on " + ip + ":" + port);
-                Add(new WebInterface2(ip, port));
+                Add(new WebInterface(ip, port));
             }
             catch (Exception ex)
             {
@@ -74,7 +74,7 @@ namespace NetFluid
             try
             {
                 Engine.Logger.Log(LogLevel.Debug, "Adding https interface on " + ip + ":" + port);
-                Add(new WebInterface2(ip, port, certificate));
+                Add(new WebInterface(ip, port, certificate));
             }
             catch (Exception ex)
             {
@@ -87,7 +87,7 @@ namespace NetFluid
             try
             {
                 Engine.Logger.Log(LogLevel.Debug, "Adding http interface on " + ip + ":" + port);
-                Add(new WebInterface2(IPAddress.Parse(ip), port));
+                Add(new WebInterface(IPAddress.Parse(ip), port));
             }
             catch (Exception ex)
             {
@@ -100,7 +100,7 @@ namespace NetFluid
             try
             {
                 Engine.Logger.Log(LogLevel.Debug, "Adding https interface on " + ip + ":" + port);
-                Add(new WebInterface2(IPAddress.Parse(ip), port, certificate));
+                Add(new WebInterface(IPAddress.Parse(ip), port, certificate));
             }
             catch (Exception ex)
             {

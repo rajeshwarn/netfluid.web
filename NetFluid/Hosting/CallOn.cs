@@ -22,6 +22,8 @@
 // ********************************************************************************************************
 
 using System;
+using System.Linq;
+using System.Collections.Generic;
 
 namespace NetFluid
 {
@@ -31,16 +33,16 @@ namespace NetFluid
     [AttributeUsage(AttributeTargets.Method, AllowMultiple = true)]
     public class CallOn : Attribute
     {
-        public StatusCode StatusCode;
+        public IEnumerable<StatusCode> StatusCode;
 
-        public CallOn(StatusCode code)
+        public CallOn(params StatusCode[] codes)
         {
-            StatusCode = code;
+            StatusCode = codes;
         }
 
-        public CallOn(int code)
+        public CallOn(params int[] codes)
         {
-            StatusCode = (StatusCode) code;
+            StatusCode = codes.Cast<StatusCode>();
         }
     }
 }

@@ -22,6 +22,7 @@
 // ********************************************************************************************************
 
 using System;
+using System.Text.RegularExpressions;
 
 namespace NetFluid
 {
@@ -29,73 +30,34 @@ namespace NetFluid
     /// Set a fixed URI on wich Netfluid Engine will map the method. If putted on class it became a prefix.
     /// Method parameters are parsed from Request.Values
     /// </summary>
-    [AttributeUsage(AttributeTargets.Class | AttributeTargets.Struct | AttributeTargets.Method, AllowMultiple = true)]
+    [AttributeUsage(AttributeTargets.Method, AllowMultiple = true)]
     public class Route : Attribute
     {
-        public Route(string path)
+        public string Url { get; set; }
+
+        public string Method { get; set; }
+
+        public int Index { get; set; }
+
+        public Route(string url,string method=null, int index=99999)
         {
-            Uri = path;
-
-            if (!Uri.StartsWith("/"))
-            {
-                Uri = "/" + Uri;
-            }
-
-            if (Uri != "/" && Uri.EndsWith("/"))
-            {
-                Uri = Uri.Substring(0, Uri.Length - 1);
-            }
+            this.Url = url;
+            Method = method;
+            Index = index;
         }
 
-        public string Uri { get; set; }
-    }
-
-    /// <summary>
-    /// Set a fixed URI on wich Netfluid Engine will map the method.Method paramteres are parsed from the following part of the URI
-    /// (ex: www.netfluid.org/myroute/param1/param2)
-    /// </summary>
-    [AttributeUsage( AttributeTargets.Method, AllowMultiple = true)]
-    public class ParametrizedRoute : Attribute
-    {
-        public ParametrizedRoute(string path)
+        public Regex Regex
         {
-            Uri = path;
-
-            if (!Uri.StartsWith("/"))
+            get
             {
-                Uri = "/" + Uri;
-            }
-
-            if (Uri != "/" && Uri.EndsWith("/"))
-            {
-                Uri = Uri.Substring(0, Uri.Length - 1);
+                var urlRegex = Url;
+                var find = new Regex(":[^//]+");
+                foreach (Match item in find.Matches(Url))
+                {
+                    urlRegex = urlRegex.Replace(item.Value, "(?<" + item.Value.Substring(1) + ">[^//]+?)");
+                }
+                return new Regex(urlRegex);
             }
         }
-
-        public string Uri { get; set; }
-    }
-
-    /// <summary>
-    /// Set a variable URI on wich Netfluid Engine wil map the method. Method paramters are parsed from regex groups
-    /// </summary>
-    [AttributeUsage(AttributeTargets.Method, AllowMultiple = true)]
-    public class RegexRoute : Attribute
-    {
-        public RegexRoute(string path)
-        {
-            Uri = path;
-
-            if (!Uri.StartsWith("/"))
-            {
-                Uri = "/" + Uri;
-            }
-
-            if (Uri != "/" && Uri.EndsWith("/"))
-            {
-                Uri = Uri.Substring(0, Uri.Length - 1);
-            }
-        }
-
-        public string Uri { get; set; }
     }
 }

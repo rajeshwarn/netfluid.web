@@ -53,45 +53,17 @@ namespace NetFluid
         }
 
         /// <summary>
-        /// Syntactic sugar for Context.Get
-        /// </summary>
-        public QueryValueCollection Get
-        {
-            get { return Context.Request.Get ?? (Context.Request.Get = new QueryValueCollection()); }
-        }
-
-        /// <summary>
-        /// Syntactic sugar for Context.Post
-        /// </summary>
-        public QueryValueCollection Post
-        {
-            get
-            {
-                if (Context.Request.Post == null)
-                    Context.Request.Post = new QueryValueCollection();
-                return Context.Request.Post;
-            }
-        }
-
-        /// <summary>
         /// Syntactic sugar for Context.Request.Files
         /// </summary>
         public HttpFileCollection Files
         {
-            get { return Context.Request.Files ?? (Context.Request.Files = new HttpFileCollection()); }
+            get { return Context.Request.Files; }
         }
 
         /// <summary>
         /// Used by the Engine to excute exposed methods
         /// </summary>
         public Context Context { get; set; }
-
-        /// <summary>
-        /// Called when this type is loaded by the Engine
-        /// </summary>
-        public virtual void OnLoad()
-        {
-        }
 
         /// <summary>
         /// Syntactic sugar for Context.Session

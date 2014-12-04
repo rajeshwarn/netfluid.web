@@ -32,40 +32,9 @@ namespace NetFluid
     public class FileResponse : IResponse
     {
         /// <summary>
-        /// Send this file to client faking filename and mimetype
+        /// Get or set file size exposed to the client
         /// </summary>
-        /// <param name="filepath">original file path</param>
-        /// <param name="filename">overrided file name</param>
-        /// <param name="mimetype">overrided mime type</param>
-        public FileResponse(string filepath, string filename, string mimetype)
-        {
-            Path = System.IO.Path.GetFullPath(filepath);
-            FileName = filename;
-            MimeType = mimetype;
-        }
-
-        /// <summary>
-        ///  Send this file to client faking filename
-        /// </summary>
-        /// <param name="filepath">original file path</param>
-        /// <param name="filename">overrided file name</param>
-        public FileResponse(string filepath, string filename)
-        {
-            Path = System.IO.Path.GetFullPath(filepath);
-            FileName = filename;
-            MimeType = MimeTypes.GetType(Path);
-        }
-
-        /// <summary>
-        /// Send this file to client.
-        /// </summary>
-        /// <param name="filepath"></param>
-        public FileResponse(string filepath)
-        {
-            Path = System.IO.Path.GetFullPath(filepath);
-            FileName = System.IO.Path.GetFileName(Path);
-            MimeType = MimeTypes.GetType(Path);
-        }
+        public long FileSize { get; set; }
 
         /// <summary>
         /// Get or set file name exposed to the client
@@ -75,23 +44,70 @@ namespace NetFluid
         /// <summary>
         /// File to send physical path
         /// </summary>
-        public string Path { get; set; }
+        public Stream Stream { get; set; }
 
         /// <summary>
         ///  Get or set file mime type exposed to the client
         /// </summary>
         public string MimeType { get; set; }
 
-        public event Action<string> OnDownloadCompleted; 
+        /// <summary>
+        /// Send this file to client faking filename and mimetype
+        /// </summary>
+        /// <param name="filepath">original file path</param>
+        /// <param name="filename">overrided file name</param>
+        /// <param name="mimetype">overrided mime type</param>
+        public FileResponse(Stream stream, string filename, string mimetype)
+        {
+            Stream = stream;
+            FileName = filename;
+            MimeType = mimetype;
+            FileSize = stream.Length;
+        }
 
-        #region IResponse Members
 
         /// <summary>
-        /// Set headers
+        /// Send this file to client faking filename and mimetype
         /// </summary>
-        /// <param name="cnt"></param>
+        /// <param name="filepath">original file path</param>
+        /// <param name="filename">overrided file name</param>
+        /// <param name="mimetype">overrided mime type</param>
+        public FileResponse(string filepath, string filename, string mimetype)
+        {
+            Stream = new FileStream(filepath, FileMode.Open);
+            FileName = filename;
+            MimeType = mimetype;
+            FileSize = Stream.Length;
+        }
+
+        /// <summary>
+        ///  Send this file to client faking filename
+        /// </summary>
+        /// <param name="filepath">original file path</param>
+        /// <param name="filename">overrided file name</param>
+        public FileResponse(string filepath, string filename)
+        {
+            Stream = new FileStream(filepath, FileMode.Open);
+            FileName = filename;
+            MimeType = MimeTypes.GetType(filepath);
+            FileSize = Stream.Length;
+        }
+
+        /// <summary>
+        /// Send this file to client.
+        /// </summary>
+        /// <param name="filepath"></param>
+        public FileResponse(string filepath)
+        {
+            Stream = new FileStream(filepath, FileMode.Open);
+            FileName = System.IO.Path.GetFileName(filepath);
+            MimeType = MimeTypes.GetType(filepath);
+            FileSize = Stream.Length;
+        }
+
         public void SetHeaders(Context cnt)
         {
+            cnt.Response.Headers["Content-Length"] = FileSize.ToString();
             cnt.Response.Headers["Content-Disposition"] = "attachment; filename=\"" + FileName + "\"";
             cnt.Response.ContentType = MimeType;
         }
@@ -102,10 +118,10 @@ namespace NetFluid
         /// <param name="cnt">client context</param>
         public void SendResponse(Context cnt)
         {
-            var fs = new FileStream(Path, FileMode.Open, FileAccess.Read, FileShare.Read);
+            var fs = Stream;
 
             #region TO BE IMPLEMENTED
-            /*if (cnt.Request.Headers.Contains("Range") && cnt.Request.Headers["Range"].StartsWith("bytes="))
+            if (cnt.Request.Headers.Contains("Range") && cnt.Request.Headers["Range"].StartsWith("bytes="))
             {
                 var r = cnt.Request.Headers["Range"].Substring("bytes=".Length);
                 var index = r.IndexOf('/');
@@ -121,18 +137,14 @@ namespace NetFluid
 
                 if (to!=0)
                 {
-                    fs.CopyTo(cnt.);
+                    fs.CopyTo(cnt.OutputStream,(long)from-to);
                 }
-            }*/
+                cnt.Response.Headers.Set("Content-Range", "bytes " + from + "-" + to + "/" + (long)(from - to));
+            }
             #endregion
 
             fs.CopyTo(cnt.OutputStream);
             fs.Close();
-
-            if (OnDownloadCompleted != null)
-                OnDownloadCompleted(Path);
         }
-
-        #endregion
     }
 }
