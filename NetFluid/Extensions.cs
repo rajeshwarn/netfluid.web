@@ -592,11 +592,6 @@ namespace NetFluid
 
         #region SERIALIZATION
 
-        public static T FromBinary<T>(this T obj, byte[] bytes)
-        {
-            return Binary.Deserialize<T>(bytes);
-        }
-
         public static void ToBinary(this object obj, Stream stream)
         {
             Binary.Serialize(obj, stream);
@@ -605,6 +600,11 @@ namespace NetFluid
         public static byte[] ToBinary(this object obj)
         {
             return Binary.Serialize(obj);
+        }
+
+        public static string ToJSON(this object obj)
+        {
+            return Serialization.JSON.Serialize(obj);
         }
 
         #endregion
