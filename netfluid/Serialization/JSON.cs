@@ -9,7 +9,7 @@ namespace NetFluid.Serialization
     {
         public static string Serialize(object obj)
         { 
-            return Newtonsoft.Json.JsonConvert.SerializeObject(object);
+            return Newtonsoft.Json.JsonConvert.SerializeObject(obj);
         }
 
         public static dynamic Deserialize(string json)
