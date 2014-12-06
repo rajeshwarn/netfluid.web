@@ -44,11 +44,11 @@ namespace NetFluid
 
         public void SendResponse(Context cnt)
         {
-           /* if (obj is string)
+            if (obj is string)
                 cnt.Writer.Write(obj as string);
             else
-                obj.ToJSON(cnt.Writer);
-            */
+                cnt.Writer.Write(obj.ToJSON());
+            
             cnt.Close();
         }
 
