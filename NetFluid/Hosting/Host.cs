@@ -95,7 +95,7 @@ namespace NetFluid
             _instances = new List<MethodExposer>();
             _routes = new List<RouteTarget>();
             _callOn = new Dictionary<StatusCode,RouteTarget>();
-            PublicFolders = new PublicFolderManager();
+            PublicFolders = new DefaultPublicFolderManager();
         }
 
         static Regex getRegex(string url)

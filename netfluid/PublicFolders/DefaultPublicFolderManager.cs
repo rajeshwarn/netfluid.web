@@ -11,16 +11,16 @@ namespace NetFluid
     /// <summary>
     /// Default Netfluid public folder manager. Expose file-downloadable folder to the client and close the context.
     /// </summary>
-    public class PublicFolderManager: IPublicFolderManager
+    public class DefaultPublicFolderManager: IPublicFolderManager
     {
         IEnumerable<string> folders;
 
-        public PublicFolderManager(string folder)
+        public DefaultPublicFolderManager(string folder)
         {
             folders = new[] {  Path.GetFullPath(folder) };
         }
 
-        public PublicFolderManager(params string[] folders)
+        public DefaultPublicFolderManager(params string[] folders)
         {
             this.folders = folders.Select(Path.GetFullPath);
         }

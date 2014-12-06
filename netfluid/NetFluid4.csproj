@@ -178,7 +178,7 @@
     <Compile Include="IResponse.cs" />
     <Compile Include="IDatabaseObject.cs" />
     <Compile Include="PublicFolders\IPublicFolderManager.cs" />
-    <Compile Include="PublicFolders\PublicFolderManager.cs" />
+    <Compile Include="PublicFolders\DefaultPublicFolderManager.cs" />
     <Compile Include="QueryValueCollection.cs" />
     <Compile Include="Responses\CSVResponse.cs" />
     <Compile Include="Responses\JSONFileResponse.cs" />
