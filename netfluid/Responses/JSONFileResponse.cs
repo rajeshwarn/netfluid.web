@@ -59,11 +59,11 @@ namespace NetFluid
 
         public void SendResponse(Context cnt)
         {
-            if (Object is string)
+            /*if (Object is string)
                 cnt.Writer.Write(Object as string);
             else
                 JSON.Serialize(Object, cnt.Writer,true,true);
-
+            */
             cnt.Close();
         }
 

@@ -75,14 +75,10 @@ namespace NetFluid.Service
             {
                 Directory.SetCurrentDirectory(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location));
 
-                if (!Engine.LoadAppConfiguration())
-                {
-                    Engine.Interfaces.AddAllAddresses();
-                   // Engine.DefaultHost.PublicFolders.Add("public","/", "./Public");
-                    Engine.Interfaces.AddInterface("127.0.0.1", 80);
-                    Engine.Interfaces.AddInterface("127.0.0.1", 8000);
-                }
-
+                Engine.Interfaces.AddAllAddresses();
+                // Engine.DefaultHost.PublicFolders.Add("public","/", "./Public");
+                Engine.Interfaces.AddInterface("127.0.0.1", 80);
+                Engine.Interfaces.AddInterface("127.0.0.1", 8000);
                 Engine.Start();
             }
             catch (Exception ex)

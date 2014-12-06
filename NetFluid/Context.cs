@@ -34,7 +34,6 @@ using System.Text;
 using System.Threading.Tasks;
 using NetFluid.HTTP;
 using NetFluid.IO;
-using NetFluid.MIME;
 using System.Linq;
 using HttpMultipartParser;
 

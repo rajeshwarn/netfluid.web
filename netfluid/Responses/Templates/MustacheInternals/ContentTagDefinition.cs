@@ -5,7 +5,7 @@ namespace Mustache
     /// <summary>
     /// Defines a tag that can contain inner text.
     /// </summary>
-    public abstract class ContentTagDefinition : TagDefinition
+    internal abstract class ContentTagDefinition : TagDefinition
     {
         /// <summary>
         /// Initializes a new instance of a ContentTagDefinition.

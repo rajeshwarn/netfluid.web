@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Net.Mail;
 using System.Net.Sockets;
-using NetFluid.MIME;
 
 namespace NetFluid.SMTP
 {
@@ -36,7 +35,7 @@ namespace NetFluid.SMTP
 
         public MailMessage Parse()
         {
-            var mime = MimeMessage.Load(_blobFile);
+            /*var mime = MimeMessage.Load(_blobFile);
             var message = new MailMessage();
 
             mime.Bcc.ForEach(x=>message.Bcc.Add(new MailAddress(x.Name)));
@@ -47,54 +46,8 @@ namespace NetFluid.SMTP
             mime.To.ForEach(x => message.To.Add(new MailAddress(x.Name)));
 
             RenderMimeEntity(mime.Body,message);
-            return message;
-        }
-
-        private static void RenderMimeEntity(MimeEntity entity, MailMessage message)
-        {
-            while (true)
-            {
-                var messagePart = entity as MessagePart;
-                if (messagePart != null)
-                {
-                    // If you'd like to render this inline instead of treating
-                    // it as an attachment, you would just continue to recurse:
-                    entity = messagePart.Message.Body;
-                    continue;
-                }
-                var multipart  = entity as Multipart;
-                if (multipart != null)
-                {
-                    // This entity is a multipart container.
-
-                    foreach (var subpart in multipart)
-                        RenderMimeEntity(subpart, message);
-                }
-                else
-                {
-                    // Everything that isn't either a MessagePart or a Multipart is a MimePart
-                    var part = (MimePart) entity;
-
-                    // Don't render anything that is explicitly marked as an attachment.
-                    if (part.IsAttachment || entity.ContentType.Matches("image", "*"))
-                    {
-                        var fs = new FileStream(Security.TempFile, FileMode.OpenOrCreate);
-                        part.ContentObject.DecodeTo(fs);
-                        fs.Flush(true);
-                        fs.Seek(0, SeekOrigin.Begin);
-                        var att = new Attachment(fs, part.FileName);
-                        message.Attachments.Add(att);
-                    }
-
-                    var text = part as TextPart;
-                    if (text != null)
-                    {
-                        message.Body = text.Text;
-                        message.IsBodyHtml = text.ContentType.Matches("text", "html");
-                    }
-                }
-                break;
-            }
+            return message;*/
+            return null;
         }
 
         public Stream Blob

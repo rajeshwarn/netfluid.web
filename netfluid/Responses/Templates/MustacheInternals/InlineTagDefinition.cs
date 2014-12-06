@@ -7,7 +7,7 @@ namespace Mustache
     /// <summary>
     /// Defines a tag that cannot contain inner text.
     /// </summary>
-    public abstract class InlineTagDefinition : TagDefinition
+    internal abstract class InlineTagDefinition : TagDefinition
     {
         /// <summary>
         /// Initializes a new instance of an InlineTagDefinition.

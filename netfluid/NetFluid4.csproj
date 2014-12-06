@@ -62,19 +62,13 @@
   <ItemGroup>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System" />
-    <Reference Include="System.configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Runtime.Caching" />
-    <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Authentication.cs" />
     <Compile Include="Collections\AutoCache.cs" />
     <Compile Include="Collections\IRepository.cs" />
-    <Compile Include="Collections\XMLRepository.cs" />
-    <Compile Include="Configuration\Interface.cs" />
-    <Compile Include="Configuration\PublicFolder.cs" />
-    <Compile Include="Configuration\Settings.cs" />
     <Compile Include="Context.cs" />
     <Compile Include="Cron\Cron.cs" />
     <Compile Include="Cron\CronTask.cs" />
@@ -153,7 +147,7 @@
     <Compile Include="Hosting\Engine.cs" />
     <Compile Include="Hosting\Host.cs" />
     <Compile Include="Extensions.cs" />
-    <Compile Include="FluidPage.cs" />
+    <Compile Include="MethodExposer.cs" />
     <Compile Include="Hosting\Route.cs" />
     <Compile Include="Hosting\VirtualHost.cs" />
     <Compile Include="HttpFile.cs" />
@@ -167,7 +161,6 @@
     <Compile Include="HTTP\WebInterface.cs" />
     <Compile Include="IWebInterface.cs" />
     <Compile Include="ILogger.cs" />
-    <Compile Include="IMethodExposer.cs" />
     <Compile Include="IO\ChunkedStream.cs" />
     <Compile Include="HTTP\Extensions.cs" />
     <Compile Include="InterfaceManager.cs" />
@@ -180,90 +173,6 @@
     <Compile Include="LogLevel.cs" />
     <Compile Include="MimeTypes.cs" />
     <Compile Include="IResponse.cs" />
-    <Compile Include="MIME\AttachmentCollection.cs" />
-    <Compile Include="MIME\BodyBuilder.cs" />
-    <Compile Include="MIME\ContentDisposition.cs" />
-    <Compile Include="MIME\ContentEncoding.cs" />
-    <Compile Include="MIME\ContentObject.cs" />
-    <Compile Include="MIME\ContentType.cs" />
-    <Compile Include="MIME\DomainList.cs" />
-    <Compile Include="MIME\EncodingConstraint.cs" />
-    <Compile Include="MIME\Encodings\Base64Decoder.cs" />
-    <Compile Include="MIME\Encodings\Base64Encoder.cs" />
-    <Compile Include="MIME\Encodings\HexDecoder.cs" />
-    <Compile Include="MIME\Encodings\HexEncoder.cs" />
-    <Compile Include="MIME\Encodings\IMimeDecoder.cs" />
-    <Compile Include="MIME\Encodings\IMimeEncoder.cs" />
-    <Compile Include="MIME\Encodings\PassThroughDecoder.cs" />
-    <Compile Include="MIME\Encodings\PassThroughEncoder.cs" />
-    <Compile Include="MIME\Encodings\QEncoder.cs" />
-    <Compile Include="MIME\Encodings\QuotedPrintableDecoder.cs" />
-    <Compile Include="MIME\Encodings\QuotedPrintableEncoder.cs" />
-    <Compile Include="MIME\Encodings\UUDecoder.cs" />
-    <Compile Include="MIME\Encodings\UUEncoder.cs" />
-    <Compile Include="MIME\FormatOptions.cs" />
-    <Compile Include="MIME\GroupAddress.cs" />
-    <Compile Include="MIME\Header.cs" />
-    <Compile Include="MIME\HeaderId.cs" />
-    <Compile Include="MIME\HeaderList.cs" />
-    <Compile Include="MIME\HeaderListChangedEventArgs.cs" />
-    <Compile Include="MIME\IContentObject.cs" />
-    <Compile Include="MIME\InternetAddress.cs" />
-    <Compile Include="MIME\InternetAddressList.cs" />
-    <Compile Include="MIME\IO\BoundStream.cs" />
-    <Compile Include="MIME\IO\ChainedStream.cs" />
-    <Compile Include="MIME\IO\FilteredStream.cs" />
-    <Compile Include="MIME\IO\Filters\ArmoredFromFilter.cs" />
-    <Compile Include="MIME\IO\Filters\BestEncodingFilter.cs" />
-    <Compile Include="MIME\IO\Filters\CharsetFilter.cs" />
-    <Compile Include="MIME\IO\Filters\DecoderFilter.cs" />
-    <Compile Include="MIME\IO\Filters\Dos2UnixFilter.cs" />
-    <Compile Include="MIME\IO\Filters\EncoderFilter.cs" />
-    <Compile Include="MIME\IO\Filters\IMimeFilter.cs" />
-    <Compile Include="MIME\IO\Filters\MimeFilterBase.cs" />
-    <Compile Include="MIME\IO\Filters\PassThroughFilter.cs" />
-    <Compile Include="MIME\IO\Filters\TrailingWhitespaceFilter.cs" />
-    <Compile Include="MIME\IO\Filters\Unix2DosFilter.cs" />
-    <Compile Include="MIME\IO\MeasuringStream.cs" />
-    <Compile Include="MIME\IO\MemoryBlockStream.cs" />
-    <Compile Include="MIME\MailboxAddress.cs" />
-    <Compile Include="MIME\MessageIdList.cs" />
-    <Compile Include="MIME\MessagePart.cs" />
-    <Compile Include="MIME\MessagePartial.cs" />
-    <Compile Include="MIME\MimeEntity.cs" />
-    <Compile Include="MIME\MimeEntityConstructorInfo.cs" />
-    <Compile Include="MIME\MimeFormat.cs" />
-    <Compile Include="MIME\MimeMessage.cs" />
-    <Compile Include="MIME\MimeParser.cs" />
-    <Compile Include="MIME\MimePart.cs" />
-    <Compile Include="MIME\Multipart.cs" />
-    <Compile Include="MIME\Parameter.cs" />
-    <Compile Include="MIME\ParameterList.cs" />
-    <Compile Include="MIME\ParseException.cs" />
-    <Compile Include="MIME\ParserOptions.cs" />
-    <Compile Include="MIME\TextPart.cs" />
-    <Compile Include="MIME\Tnef\TnefAttributeLevel.cs" />
-    <Compile Include="MIME\Tnef\TnefAttributeTag.cs" />
-    <Compile Include="MIME\Tnef\TnefComplianceMode.cs" />
-    <Compile Include="MIME\Tnef\TnefComplianceStatus.cs" />
-    <Compile Include="MIME\Tnef\TnefException.cs" />
-    <Compile Include="MIME\Tnef\TnefNameId.cs" />
-    <Compile Include="MIME\Tnef\TnefNameIdKind.cs" />
-    <Compile Include="MIME\Tnef\TnefPart.cs" />
-    <Compile Include="MIME\Tnef\TnefPropertyId.cs" />
-    <Compile Include="MIME\Tnef\TnefPropertyReader.cs" />
-    <Compile Include="MIME\Tnef\TnefPropertyTag.cs" />
-    <Compile Include="MIME\Tnef\TnefPropertyType.cs" />
-    <Compile Include="MIME\Tnef\TnefReader.cs" />
-    <Compile Include="MIME\Tnef\TnefReaderStream.cs" />
-    <Compile Include="MIME\Utils\ByteExtensions.cs" />
-    <Compile Include="MIME\Utils\CharsetUtils.cs" />
-    <Compile Include="MIME\Utils\DateUtils.cs" />
-    <Compile Include="MIME\Utils\MimeUtils.cs" />
-    <Compile Include="MIME\Utils\PackedByteArray.cs" />
-    <Compile Include="MIME\Utils\ParseUtils.cs" />
-    <Compile Include="MIME\Utils\Rfc2047.cs" />
-    <Compile Include="MIME\Utils\StringBuilderExtensions.cs" />
     <Compile Include="IDatabaseObject.cs" />
     <Compile Include="PublicFolders\IPublicFolderManager.cs" />
     <Compile Include="PublicFolders\PublicFolderManager.cs" />
@@ -320,9 +229,6 @@
     <Compile Include="Serialization\Binary.cs" />
     <Compile Include="Serialization\CSV.cs" />
     <Compile Include="Serialization\CsvFile.cs" />
-    <Compile Include="Serialization\JSON.cs" />
-    <Compile Include="Serialization\JSONParser.cs" />
-    <Compile Include="Serialization\XML.cs" />
     <Compile Include="Sessions\ISessionManager.cs" />
     <Compile Include="Sessions\MemorySessionManager.cs" />
     <Compile Include="SMTP\Outbound.cs" />
@@ -338,7 +244,9 @@
     <Compile Include="QueryValue.cs" />
     <Compile Include="StatusCode.cs" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="MIME\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

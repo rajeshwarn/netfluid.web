@@ -25,13 +25,13 @@ using NetFluid.HTTP;
 
 namespace NetFluid
 {
-    public class FluidPage : IMethodExposer
+    public class MethodExposer
     {
-        public FluidPage()
+        public MethodExposer()
         {
         }
 
-        public FluidPage(Context cnt)
+        public MethodExposer(Context cnt)
         {
             Context = cnt;
         }

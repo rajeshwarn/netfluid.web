@@ -73,7 +73,7 @@ namespace NetFluid
                     case 1:
                         return values[0];
                     default:
-                        return "[" + string.Join(",", values.Select(JSON.Escape)) + "]";
+                        return "[" + string.Join(",", values) + "]";
                 }
             }
         }
@@ -109,7 +109,7 @@ namespace NetFluid
                 case 1:
                     return values[0];
                 default:
-                    return ("[" + string.Join(",", values.Select(JSON.Escape)) + "]");
+                    return ("[" + string.Join(",", values) + "]");
             }
         }
 

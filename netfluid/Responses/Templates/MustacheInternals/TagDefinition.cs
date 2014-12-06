@@ -7,7 +7,7 @@ namespace Mustache
     /// <summary>
     /// Defines the attributes of a custom tag.
     /// </summary>
-    public abstract class TagDefinition
+    internal abstract class TagDefinition
     {
         private readonly string _tagName;
 

@@ -465,6 +465,16 @@ namespace NetFluid
 
         #region ENUMERABLE
 
+        public static IEnumerable<T> SelectWhere<F,T>(this IEnumerable<F> source,Func<F,T> select, Func<F,T,bool> where)
+        {
+            foreach (F item in source)
+            {
+                var s = select(item);
+                if (where(item, s))
+                    yield return s;
+            }
+        }
+
         /// <summary>
         ///     Return a random element from the collection
         /// </summary>
@@ -595,41 +605,6 @@ namespace NetFluid
         public static byte[] ToBinary(this object obj)
         {
             return Binary.Serialize(obj);
-        }
-
-        public static T FromXML<T>(this T obj, string xml)
-        {
-            return XML.Deserialize<T>(xml);
-        }
-
-        public static void ToXML(this object obj, Stream stream)
-        {
-            XML.Serialize(obj, stream);
-        }
-
-        public static string ToXML(this object obj)
-        {
-            return XML.Serialize(obj);
-        }
-
-        public static T FromJSON<T>(this T obj, string json)
-        {
-            return JSON.Deserialize<T>(json);
-        }
-
-        public static void ToJSON(this object obj, Stream stream, bool singlerow = false)
-        {
-            JSON.Serialize(obj, stream, singlerow);
-        }
-
-        public static void ToJSON(this object obj, TextWriter writer, bool singlerow = false)
-        {
-            JSON.Serialize(obj, writer, singlerow);
-        }
-
-        public static string ToJSON(this object obj, bool singlerow = false)
-        {
-            return JSON.Serialize(obj, singlerow);
         }
 
         #endregion

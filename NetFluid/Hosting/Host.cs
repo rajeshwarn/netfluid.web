@@ -49,7 +49,7 @@ namespace NetFluid
 
             public void Handle(Context cnt)
             {
-                var exposer = Type.CreateIstance() as IMethodExposer;
+                var exposer = Type.CreateIstance() as MethodExposer;
                 exposer.Context = cnt;
                 object[] args = null;
 
@@ -83,7 +83,7 @@ namespace NetFluid
             }
         }
 
-        private readonly List<IMethodExposer> _instances;
+        private readonly List<MethodExposer> _instances;
         private readonly string _name;
         private List<RouteTarget> _routes;
         private readonly Dictionary<StatusCode,RouteTarget> _callOn;
@@ -92,7 +92,7 @@ namespace NetFluid
         internal Host(string name)
         {
             _name = name;
-            _instances = new List<IMethodExposer>();
+            _instances = new List<MethodExposer>();
             _routes = new List<RouteTarget>();
             _callOn = new Dictionary<StatusCode,RouteTarget>();
             PublicFolders = new PublicFolderManager();
@@ -144,7 +144,7 @@ namespace NetFluid
         {
             var type = exposedMethod.DeclaringType;
 
-            if (!type.Inherit(typeof(FluidPage)))
+            if (!type.Inherit(typeof(MethodExposer)))
                 throw new TypeLoadException("Exposing type must inherit NetFluid.MethodExposer");
 
             if(!exposedMethod.ReturnType.Implements(typeof(IResponse)))

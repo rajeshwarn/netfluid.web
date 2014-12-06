@@ -88,7 +88,7 @@ namespace NetFluid
                     case 1:
                         return values[0];
                     default:
-                        return "[" + string.Join(",", values.Select(x=>JSON.Escape(x))) + "]";
+                        return "[" + string.Join(",", values) + "]";
                 }
             }
         }

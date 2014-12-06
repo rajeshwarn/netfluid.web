@@ -168,140 +168,7 @@ namespace NetFluid
             }
         }
 
-        /// <summary>
-        /// Load NetFluid configuration from a custom app.config path
-        /// </summary>
-        /// <param name="path"></param>
-        /// <returns></returns>
-        public static bool LoadAppConfiguration(string path)
-        {
-            try
-            {
-                var s = ConfigurationManager.OpenExeConfiguration(path).GetSection("NetFluidSettings");
-                var settings = s as Settings;
 
-                if (settings != null)
-                {
-                    DevMode = settings.DevMode;
-                    Sessions.SessionDuration = settings.SessionDuration;
-                    Logger.LogPath = settings.LogPath;
-
-                    foreach (Interface inter in settings.Interfaces)
-                        if (string.IsNullOrEmpty(inter.Certificate))
-                            Interfaces.AddInterface(inter.IP, inter.Port);
-                        else
-                            Interfaces.AddInterface(inter.IP, inter.Port, inter.Certificate);
-
-                    foreach (PublicFolder pf in settings.PublicFolders)
-                    {
-                        Type managerType;
-                        IPublicFolderManager manager;
-                        try
-                        {
-                            managerType = string.IsNullOrEmpty(pf.Manager)
-                            ? typeof(PublicFolderManager)
-                            : Type.GetType(pf.Manager);
-
-                            manager = managerType.CreateIstance() as IPublicFolderManager;
-                        }
-                        catch (Exception ex)
-                        {
-                            Logger.Log(LogLevel.Exception,"Failed to instance public folder manager for "+pf.Id,ex);
-                            continue;
-                        }
-
-                        if (manager == null)
-                        {
-                            Logger.Log(LogLevel.Error, managerType + " is not a valid public folder manager it must implement IPublicFolderManager interface");
-                            continue;
-                        }
-                        var host = Host(pf.Host);
-
-                        /*if (host.PublicFolderManager != null)
-                        {
-                            Logger.Log(LogLevel.Error,"Trying to rewrite "+(string.IsNullOrEmpty(pf.Host)? "default host" : pf.Host)+" public folder manager");
-                            continue;
-                        }
-                        host.PublicFolderManager = manager;
-                        manager.Add(pf.Id,pf.UriPath,pf.RealPath);*/
-                    }
-
-                    return true;
-                }
-                Logger.Log(LogLevel.Warning, "App configuration doesn't contains a valid NetFluid section");
-                return false;
-            }
-            catch (Exception ex)
-            {
-                Logger.Log(LogLevel.Error, "Failed to load app configuration", ex);
-                return false;
-            }
-        }
-
-        /// <summary>
-        /// Load NetFluid configuration from app.config
-        /// </summary>
-        /// <returns></returns>
-        public static bool LoadAppConfiguration()
-        {
-            try
-            {
-                var settings = ConfigurationManager.GetSection("NetFluidSettings") as Settings;
-
-                if (settings != null)
-                {
-                    DevMode = settings.DevMode;
-                    Sessions.SessionDuration = settings.SessionDuration;
-                    Logger.LogPath = settings.LogPath;
-
-                    foreach (Interface inter in settings.Interfaces)
-                        if (string.IsNullOrEmpty(inter.Certificate))
-                            Interfaces.AddInterface(inter.IP, inter.Port);
-                        else
-                            Interfaces.AddInterface(inter.IP, inter.Port, inter.Certificate);
-
-                    foreach (PublicFolder pf in settings.PublicFolders)
-                    {
-                        Type managerType;
-                        IPublicFolderManager manager;
-                        try
-                        {
-                            managerType = string.IsNullOrEmpty(pf.Manager)
-                            ? typeof(PublicFolderManager)
-                            : Type.GetType(pf.Manager);
-
-                            manager = managerType.CreateIstance() as IPublicFolderManager;
-                        }
-                        catch (Exception ex)
-                        {
-                            Logger.Log(LogLevel.Exception, "Failed to instance public folder manager for " + pf.Id, ex);
-                            continue;
-                        }
-
-                        var host = Host(pf.Host);
-
-                        /*if (host.PublicFolderManager != null)
-                        {
-                            Logger.Log(LogLevel.Error, "Trying to rewrite " + (string.IsNullOrEmpty(pf.Host) ? "default host" : pf.Host) + " public folder manager");
-                            continue;
-                        }
-                        host.PublicFolderManager = manager;*/
-                        //manager.Add(pf.Id, pf.UriPath, pf.RealPath);
-                    }
-
-                    return true;
-                }
-                Logger.Log(LogLevel.Warning, "App configuration doesn't contains a valid NetFluid section");
-                return false;
-            }
-            catch (Exception ex)
-            {
-                Logger.Log(LogLevel.Error, "Failed to load app configuration", ex);
-                return false;
-            }
-        }
-
-        
         /// <summary>
         /// Open all interfaces and start to serve clients
         /// </summary>
@@ -342,7 +209,7 @@ namespace NetFluid
             try
             {
                 var types = assembly.GetTypes();
-                var pages = types.Where(type => type.Implements(typeof (IMethodExposer)));
+                var pages = types.Where(type => type.Inherit(typeof (MethodExposer)));
 
                 foreach (Type p in pages)
                 {
@@ -350,12 +217,12 @@ namespace NetFluid
                     {
                         foreach (string h in p.CustomAttribute<VirtualHost>(true).Select(x => x.Name))
                         {
-                            //Host(h).Load(p);
+                            Host(h).Load(p);
                         }
                     }
                     else
                     {
-                        //Host(host).Load(p);
+                        Host(host).Load(p);
                     }
                 }
             }
@@ -385,7 +252,7 @@ namespace NetFluid
             try
             {
                 var types = assembly.GetTypes();
-                var pages = types.Where(type => type.Implements(typeof (IMethodExposer))).ToArray();
+                var pages = types.Where(type => type.Inherit(typeof (MethodExposer))).ToArray();
 
                 if (!pages.Any())
                 {

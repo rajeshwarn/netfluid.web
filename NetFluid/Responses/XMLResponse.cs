@@ -16,7 +16,7 @@
 
         public void SendResponse(Context cnt)
         {
-            obj.ToXML(cnt.OutputStream);
+           // obj.ToXML(cnt.OutputStream);
         }
     }
 }
