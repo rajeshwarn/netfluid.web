@@ -53,7 +53,7 @@
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\net_4_5_Release\</OutputPath>
-    <DefineConstants>TRACE;NET_4_0;NET_4_5</DefineConstants>
+    <DefineConstants>TRACE;PORTABLE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <Prefer32Bit>false</Prefer32Bit>
@@ -61,6 +61,9 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Microsoft.CSharp" />
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>.\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Runtime.Caching" />
@@ -229,6 +232,7 @@
     <Compile Include="Serialization\Binary.cs" />
     <Compile Include="Serialization\CSV.cs" />
     <Compile Include="Serialization\CsvFile.cs" />
+    <Compile Include="Serialization\JSON.cs" />
     <Compile Include="Sessions\ISessionManager.cs" />
     <Compile Include="Sessions\MemorySessionManager.cs" />
     <Compile Include="SMTP\Outbound.cs" />
