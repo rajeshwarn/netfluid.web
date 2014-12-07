@@ -11,28 +11,21 @@ namespace NetFluid
     /// <summary>
     /// Default Netfluid public folder manager. Expose file-downloadable folder to the client and close the context.
     /// </summary>
-    public class DefaultPublicFolderManager: IPublicFolderManager
+    public class DefaultPublicFolderManager: List<PublicFolder>, IPublicFolderManager
     {
-        IEnumerable<string> folders;
-
-        public DefaultPublicFolderManager(string folder)
-        {
-            folders = new[] {  Path.GetFullPath(folder) };
-        }
-
-        public DefaultPublicFolderManager(params string[] folders)
-        {
-            this.folders = folders.Select(Path.GetFullPath);
-        }
-
-
         public bool TryGetFile(Context cnt)
         {
-            var founds = folders.SelectWhere(x =>Path.GetFullPath(Path.Combine(x,cnt.Request.Url)),(d,f)=>File.Exists(f) && f.StartsWith(d));
+            var found = this.Where(x=>cnt.Request.Url.StartsWith(x.VirtualPath)).FirstOrDefault();
 
-            if(founds.Any())
+            if(found != null)
             {
-                var path = founds.First();
+                var subUrl = cnt.Request.Url.Substring(found.VirtualPath.Length);
+                var path = Path.GetFullPath(Path.Combine(found.RealPath,subUrl));
+
+                //security check
+                if (!path.StartsWith(Path.GetFullPath(found.RealPath)))
+                    return false;
+
                 cnt.Response.ContentType = MimeTypes.GetType(path);
                 cnt.Response.Headers["Expires"] = (DateTime.Now + TimeSpan.FromDays(7)).ToGMT();
                 cnt.SendHeaders();

@@ -76,9 +76,8 @@ namespace NetFluid.Service
                 Directory.SetCurrentDirectory(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location));
 
                 Engine.Interfaces.AddAllAddresses();
-                // Engine.DefaultHost.PublicFolders.Add("public","/", "./Public");
+                Engine.DefaultHost.PublicFolders = new DefaultPublicFolderManager("./public");
                 Engine.Interfaces.AddInterface("127.0.0.1", 80);
-                Engine.Interfaces.AddInterface("127.0.0.1", 8000);
                 Engine.Start();
             }
             catch (Exception ex)

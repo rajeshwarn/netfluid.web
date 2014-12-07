@@ -145,7 +145,6 @@
     <Compile Include="DNS\Response.cs" />
     <Compile Include="DNS\Serializer.cs" />
     <Compile Include="DNS\Structs.cs" />
-    <Compile Include="Globalization\POFile.cs" />
     <Compile Include="Hosting\CallOn.cs" />
     <Compile Include="Hosting\Engine.cs" />
     <Compile Include="Hosting\Host.cs" />
@@ -179,6 +178,7 @@
     <Compile Include="IDatabaseObject.cs" />
     <Compile Include="PublicFolders\IPublicFolderManager.cs" />
     <Compile Include="PublicFolders\DefaultPublicFolderManager.cs" />
+    <Compile Include="PublicFolders\PublicFolder.cs" />
     <Compile Include="QueryValueCollection.cs" />
     <Compile Include="Responses\CSVResponse.cs" />
     <Compile Include="Responses\JSONFileResponse.cs" />
