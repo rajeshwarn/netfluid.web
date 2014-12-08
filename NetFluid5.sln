@@ -1,0 +1,65 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2013
+VisualStudioVersion = 12.0.30723.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NetFluid4", "netfluid\NetFluid4.csproj", "{B215459F-37FF-411C-8E6B-9CDEDB946F93}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NetFluid.Service", "netfluid.service\NetFluid.Service.csproj", "{8C9DA5C3-DC3A-48A5-9C0D-B08C1302B1E0}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestProject", "TestProject\TestProject.csproj", "{4C7E6140-12AA-4EDA-8D8D-B06FA8302DA2}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		net_4_0_Debug|Any CPU = net_4_0_Debug|Any CPU
+		net_4_0_Release|Any CPU = net_4_0_Release|Any CPU
+		net_4_5_Debug|Any CPU = net_4_5_Debug|Any CPU
+		net_4_5_Release|Any CPU = net_4_5_Release|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{B215459F-37FF-411C-8E6B-9CDEDB946F93}.Debug|Any CPU.ActiveCfg = net_4_5_Debug|Any CPU
+		{B215459F-37FF-411C-8E6B-9CDEDB946F93}.Debug|Any CPU.Build.0 = net_4_5_Debug|Any CPU
+		{B215459F-37FF-411C-8E6B-9CDEDB946F93}.net_4_0_Debug|Any CPU.ActiveCfg = net_4_0_Debug|Any CPU
+		{B215459F-37FF-411C-8E6B-9CDEDB946F93}.net_4_0_Debug|Any CPU.Build.0 = net_4_0_Debug|Any CPU
+		{B215459F-37FF-411C-8E6B-9CDEDB946F93}.net_4_0_Release|Any CPU.ActiveCfg = net_4_0_Release|Any CPU
+		{B215459F-37FF-411C-8E6B-9CDEDB946F93}.net_4_0_Release|Any CPU.Build.0 = net_4_0_Release|Any CPU
+		{B215459F-37FF-411C-8E6B-9CDEDB946F93}.net_4_5_Debug|Any CPU.ActiveCfg = net_4_5_Debug|Any CPU
+		{B215459F-37FF-411C-8E6B-9CDEDB946F93}.net_4_5_Debug|Any CPU.Build.0 = net_4_5_Debug|Any CPU
+		{B215459F-37FF-411C-8E6B-9CDEDB946F93}.net_4_5_Release|Any CPU.ActiveCfg = net_4_5_Release|Any CPU
+		{B215459F-37FF-411C-8E6B-9CDEDB946F93}.net_4_5_Release|Any CPU.Build.0 = net_4_5_Release|Any CPU
+		{B215459F-37FF-411C-8E6B-9CDEDB946F93}.Release|Any CPU.ActiveCfg = net_4_5_Release|Any CPU
+		{B215459F-37FF-411C-8E6B-9CDEDB946F93}.Release|Any CPU.Build.0 = net_4_5_Release|Any CPU
+		{8C9DA5C3-DC3A-48A5-9C0D-B08C1302B1E0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8C9DA5C3-DC3A-48A5-9C0D-B08C1302B1E0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8C9DA5C3-DC3A-48A5-9C0D-B08C1302B1E0}.net_4_0_Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8C9DA5C3-DC3A-48A5-9C0D-B08C1302B1E0}.net_4_0_Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8C9DA5C3-DC3A-48A5-9C0D-B08C1302B1E0}.net_4_0_Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8C9DA5C3-DC3A-48A5-9C0D-B08C1302B1E0}.net_4_0_Release|Any CPU.Build.0 = Release|Any CPU
+		{8C9DA5C3-DC3A-48A5-9C0D-B08C1302B1E0}.net_4_5_Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8C9DA5C3-DC3A-48A5-9C0D-B08C1302B1E0}.net_4_5_Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8C9DA5C3-DC3A-48A5-9C0D-B08C1302B1E0}.net_4_5_Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8C9DA5C3-DC3A-48A5-9C0D-B08C1302B1E0}.net_4_5_Release|Any CPU.Build.0 = Release|Any CPU
+		{8C9DA5C3-DC3A-48A5-9C0D-B08C1302B1E0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8C9DA5C3-DC3A-48A5-9C0D-B08C1302B1E0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4C7E6140-12AA-4EDA-8D8D-B06FA8302DA2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4C7E6140-12AA-4EDA-8D8D-B06FA8302DA2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4C7E6140-12AA-4EDA-8D8D-B06FA8302DA2}.net_4_0_Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4C7E6140-12AA-4EDA-8D8D-B06FA8302DA2}.net_4_0_Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4C7E6140-12AA-4EDA-8D8D-B06FA8302DA2}.net_4_0_Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4C7E6140-12AA-4EDA-8D8D-B06FA8302DA2}.net_4_0_Release|Any CPU.Build.0 = Release|Any CPU
+		{4C7E6140-12AA-4EDA-8D8D-B06FA8302DA2}.net_4_5_Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4C7E6140-12AA-4EDA-8D8D-B06FA8302DA2}.net_4_5_Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4C7E6140-12AA-4EDA-8D8D-B06FA8302DA2}.net_4_5_Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4C7E6140-12AA-4EDA-8D8D-B06FA8302DA2}.net_4_5_Release|Any CPU.Build.0 = Release|Any CPU
+		{4C7E6140-12AA-4EDA-8D8D-B06FA8302DA2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4C7E6140-12AA-4EDA-8D8D-B06FA8302DA2}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(Performance) = preSolution
+		HasPerformanceSessions = true
+	EndGlobalSection
+EndGlobal
