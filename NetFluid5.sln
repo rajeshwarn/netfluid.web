@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
 VisualStudioVersion = 12.0.30723.0
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NetFluid4", "netfluid\NetFluid4.csproj", "{B215459F-37FF-411C-8E6B-9CDEDB946F93}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NetFluid5", "netfluid\NetFluid5.csproj", "{B215459F-37FF-411C-8E6B-9CDEDB946F93}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NetFluid.Service", "netfluid.service\NetFluid.Service.csproj", "{8C9DA5C3-DC3A-48A5-9C0D-B08C1302B1E0}"
 EndProject
