@@ -58,8 +58,8 @@ namespace NetFluid
             Sessions = new MemorySessionManager();
             Logger = new Logger();
 
-            var max = (int)Math.Pow(Environment.ProcessorCount, 5);
-            var min = (int)Math.Pow(Environment.ProcessorCount, 4);
+            var max = (int)Math.Pow(Environment.ProcessorCount, 10);
+            var min = (int)Math.Pow(Environment.ProcessorCount, 5);
             ThreadPool.SetMinThreads(min,max);
 
         }

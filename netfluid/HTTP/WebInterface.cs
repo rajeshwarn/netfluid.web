@@ -84,28 +84,20 @@ namespace NetFluid.HTTP
             {
                 while (true)
                 {
-                    var client = Socket.Accept();
-                    queue.Enqueue(client);
-
+                    var sock = Socket.Accept();
                     Task.Factory.StartNew(() =>
                     {
-                        Socket sock;
-
-                        while (queue.TryDequeue(out sock))
+                        Context c;
+                        try
                         {
-                            Context c;
-                            try
-                            {
-                                c = Certificate == null ? new Context(sock) : new Context(sock, Certificate);
-                                c.ReadHeaders();
-                                c.ReadRequest();
-                                Engine.Serve(c);
-                            }
-                            catch (Exception ex)
-                            {
-                                Console.WriteLine(ex.ToString());
-                                sock.Close();
-                            }
+                            c = Certificate == null ? new Context(sock) : new Context(sock, Certificate);
+                            c.ReadHeaders();
+                            c.ReadRequest();
+                            Engine.Serve(c);
+                        }
+                        catch (Exception)
+                        {
+                            sock.Close();
                         }
                     });
                 }

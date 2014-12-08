@@ -22,6 +22,7 @@
 // ********************************************************************************************************
 
 using NetFluid.HTTP;
+using System;
 
 namespace NetFluid
 {
@@ -64,6 +65,20 @@ namespace NetFluid
         /// Used by the Engine to excute exposed methods
         /// </summary>
         public Context Context { get; set; }
+
+        /// <summary>
+        /// Return the path based of this assembly location
+        /// </summary>
+        /// <returns></returns>
+        public string RelativePath(string path)
+        {
+            var location = this.GetType().Assembly.Location;
+
+            if (location == null)
+                throw new Exception("Virtual assembly");
+
+            return System.IO.Path.GetFullPath(System.IO.Path.Combine(path,System.IO.Path.GetDirectoryName(location)));
+        }
 
         /// <summary>
         /// Syntactic sugar for Context.Session

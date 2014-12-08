@@ -21,18 +21,19 @@ namespace NetFluid.Service
                     case "debug":
                         (new Service()).OnStart(null);
                         Engine.DevMode = true;
+                        StartNetFluid();
                         Console.ReadLine();
-                        break;
+                        return;
                     case "install":
                         InstallService();
-                    break;
+                        return;
                     case "uninstall":
                         UninstallService();
-                    break;
+                        return;
                     case "start":
                         var service = new ServiceController("NetFluidService");
                         service.Start();
-                    break;
+                        return;
                 }
             }
             Run(new Service());
@@ -67,18 +68,39 @@ namespace NetFluid.Service
         public static void UninstallService()
         {
             ManagedInstallerClass.InstallHelper(new[] { "/u", Path.GetFullPath("NetFluid.Service.exe") });
-        } 
+        }
+
+        static void StartNetFluid()
+        {
+            Directory.SetCurrentDirectory(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location));
+
+            foreach (var dir in Directory.GetDirectories("./applications"))
+            {
+                var name = dir.Split(Path.DirectorySeparatorChar).Last();
+                var path = Path.Combine(dir, name + ".dll");
+                path = File.Exists(path) ? path : Path.Combine(dir, name + ".exe");
+
+                if(File.Exists(path))
+                {
+                    Engine.Load(Assembly.LoadFile(Path.GetFullPath(path)));
+                }
+            }
+
+            Engine.Load(typeof(DefaultExposer).Assembly);
+            Engine.Interfaces.AddAllAddresses();
+            Engine.DefaultHost.PublicFolders = new DefaultPublicFolderManager()
+            {
+                new PublicFolder{ RealPath= "./public", VirtualPath="/public"}
+            };
+            Engine.Interfaces.AddInterface("127.0.0.1", 80);
+            Engine.Start();
+        }
 
         protected override void OnStart(string[] args)
         {
             try
             {
-                Directory.SetCurrentDirectory(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location));
-
-                Engine.Interfaces.AddAllAddresses();
-                Engine.DefaultHost.PublicFolders = new DefaultPublicFolderManager("./public");
-                Engine.Interfaces.AddInterface("127.0.0.1", 80);
-                Engine.Start();
+                StartNetFluid();
             }
             catch (Exception ex)
             {

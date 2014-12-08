@@ -53,7 +53,7 @@ namespace NetFluid
                 exposer.Context = cnt;
                 object[] args = null;
 
-                if (Parameters.Length > 0)
+                if (Parameters !=null && Parameters.Length > 0)
                 {
                     args = new object[Parameters.Length];
                     for (int i = 0; i < Parameters.Length; i++)
@@ -132,12 +132,12 @@ namespace NetFluid
                         AddStatusCodeHandler(c, exposedMethod);
                 }
 
-
-            _callOn.Add(code, new RouteTarget
-            {
-                Type = exposedMethod.DeclaringType,
-                MethodInfo = exposedMethod
-            });
+            if(!_callOn.ContainsKey(code))
+                _callOn.Add(code, new RouteTarget
+                {
+                    Type = exposedMethod.DeclaringType,
+                    MethodInfo = exposedMethod
+                });
         }
 
         public void AddRoute(string url, MethodInfo exposedMethod, string httpMethod = null, int index=99999)
@@ -209,7 +209,12 @@ namespace NetFluid
                 if (Engine.DevMode)
                     Console.WriteLine(cnt.Request.Host + ":" + cnt.Request.Url + " - " + "Looking for a public folder");
 
-                /*PublicFolders.Serve(cnt);
+                if (PublicFolders.TryGetFile(cnt))
+                {
+                    cnt.Close();
+                    return;
+                }
+                cnt.Response.StatusCode = StatusCode.NotFound;
 
                 RouteTarget rt;
                 if (_callOn.TryGetValue(cnt.Response.StatusCode, out rt))
@@ -219,7 +224,7 @@ namespace NetFluid
 
                     rt.Handle(cnt);
                     return;
-                }*/
+                }
 
                 cnt.Response.StatusCode = StatusCode.NotFound;
                 cnt.Close();
@@ -287,6 +292,14 @@ namespace NetFluid
                 foreach (var att in m.GetCustomAttributes<Route>())
                 {
                     AddRoute(att.Url, m, att.Method, att.Index);
+                }
+
+                foreach (var att in m.GetCustomAttributes<CallOn>())
+                {
+                    foreach (var code in att.StatusCode)
+	                {
+                        AddStatusCodeHandler(code, m);
+	                }
                 }
             }
         }
