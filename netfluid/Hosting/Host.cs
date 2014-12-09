@@ -58,7 +58,9 @@ namespace NetFluid
                     args = new object[Parameters.Length];
                     for (int i = 0; i < Parameters.Length; i++)
                     {
-                        args[i] = cnt.Request.Values[Parameters[i].Name].Parse(Parameters[i].ParameterType);
+                        var q = cnt.Request.Values[Parameters[i].Name];
+                        if(q != null)
+                            args[i] = q.Parse(Parameters[i].ParameterType);
                     }
                 }
 

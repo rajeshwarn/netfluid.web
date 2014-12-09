@@ -72,7 +72,8 @@ namespace NetFluid.Service
 
         static void StartNetFluid()
         {
-            Directory.SetCurrentDirectory(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location));
+            var location = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+            Directory.SetCurrentDirectory(location);
 
             foreach (var dir in Directory.GetDirectories("./applications"))
             {
