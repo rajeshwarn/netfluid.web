@@ -168,12 +168,6 @@ namespace NetFluid
         {
             try
             {
-                if (cnt.Request == null)
-                    Console.WriteLine("porco dio");
-
-                if (cnt.Request.HttpMethod == null)
-                    Console.WriteLine("porca madonna");
-
                 if (cnt.Request.HttpMethod.ToLowerInvariant() == "options")
                 {
                     #region options
@@ -303,12 +297,18 @@ namespace NetFluid
                 Engine.Logger.Log(LogLevel.Exception, "Failure in "+p+" instancing",ex);
             }
 
+            var prefixes = p.CustomAttribute<Route>(true).Select(x=>x.Url);
+            if (prefixes.Count() == 0)
+                prefixes = new[] { string.Empty };
 
             foreach (var m in p.GetMethods(BindingFlags.NonPublic|BindingFlags.Public|BindingFlags.Instance))
             {
-                foreach (var att in m.CustomAttribute<Route>())
+                foreach (var prefix in prefixes)
                 {
-                    AddRoute(att.Url, m, att.Method, att.Index);
+                    foreach (var att in m.CustomAttribute<Route>())
+                    {
+                        AddRoute(prefix+att.Url, m, att.Method, att.Index);
+                    }
                 }
 
                 foreach (var att in m.CustomAttribute<CallOn>())
