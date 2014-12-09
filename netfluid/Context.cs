@@ -180,7 +180,7 @@ namespace NetFluid
         /// </summary>
         public StreamWriter Writer
         {
-            get { return writer = writer ?? new StreamWriter(OutputStream, Response.ContentEncoding, 4096, true) {AutoFlush=true }; }
+            get { return writer = writer ?? new StreamWriter(OutputStream, Response.ContentEncoding) {AutoFlush=true }; }
             internal set { writer = value; }
         }
 

@@ -77,7 +77,7 @@ namespace NetFluid
             if (location == null)
                 throw new Exception("Virtual assembly");
 
-            return System.IO.Path.GetFullPath(System.IO.Path.Combine(path,System.IO.Path.GetDirectoryName(location)));
+            return System.IO.Path.GetFullPath(System.IO.Path.Combine(System.IO.Path.GetDirectoryName(location),path));
         }
 
         /// <summary>

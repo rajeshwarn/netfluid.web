@@ -89,6 +89,8 @@ namespace NetFluid
         private readonly Dictionary<StatusCode,RouteTarget> _callOn;
         public IPublicFolderManager PublicFolders;
 
+        List<MethodExposer> instances;
+
         internal Host(string name)
         {
             _name = name;
@@ -96,6 +98,8 @@ namespace NetFluid
             _routes = new List<RouteTarget>();
             _callOn = new Dictionary<StatusCode,RouteTarget>();
             PublicFolders = new DefaultPublicFolderManager();
+
+            instances = new List<MethodExposer>();
         }
 
         static Regex getRegex(string url)
@@ -287,14 +291,27 @@ namespace NetFluid
 
         public void Load(Type p)
         {
+            if (!p.Inherit(typeof(MethodExposer)))
+                throw new TypeLoadException("Loaded types must inherit NetFluid.MethodExposer");
+
+            try
+            {
+                instances.Add(p.CreateIstance() as MethodExposer);
+            }
+            catch (Exception ex)
+            {
+                Engine.Logger.Log(LogLevel.Exception, "Failure in "+p+" instancing",ex);
+            }
+
+
             foreach (var m in p.GetMethods(BindingFlags.NonPublic|BindingFlags.Public|BindingFlags.Instance))
             {
-                foreach (var att in m.GetCustomAttributes<Route>())
+                foreach (var att in m.CustomAttribute<Route>())
                 {
                     AddRoute(att.Url, m, att.Method, att.Index);
                 }
 
-                foreach (var att in m.GetCustomAttributes<CallOn>())
+                foreach (var att in m.CustomAttribute<CallOn>())
                 {
                     foreach (var code in att.StatusCode)
 	                {
