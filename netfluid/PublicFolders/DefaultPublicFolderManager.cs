@@ -20,10 +20,11 @@ namespace NetFluid
             if(found != null)
             {
                 var subUrl = cnt.Request.Url.Substring(found.VirtualPath.Length);
-                var path = Path.GetFullPath(Path.Combine(found.RealPath,subUrl));
+                var fpath =  Path.GetFullPath(found.RealPath);
+                var path = Path.GetFullPath(fpath + subUrl.Replace('/',Path.DirectorySeparatorChar));
 
                 //security check
-                if (!path.StartsWith(Path.GetFullPath(found.RealPath)))
+                if (!path.StartsWith(fpath))
                     return false;
 
                 cnt.Response.ContentType = MimeTypes.GetType(path);
