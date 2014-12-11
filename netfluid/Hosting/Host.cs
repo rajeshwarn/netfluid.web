@@ -69,19 +69,18 @@ namespace NetFluid
                 if (resp != null)
                     resp.SetHeaders(cnt);
 
-                cnt.SendHeaders();
-
                 try
                 {
+                    cnt.SendHeaders();
+
                     if (resp != null && cnt.Request.HttpMethod.ToLowerInvariant() != "head")
                         resp.SendResponse(cnt);
+
+                    cnt.Close();
                 }
                 catch (Exception)
                 {
                 }
-
-
-                cnt.Close();
             }
         }
 
@@ -115,10 +114,35 @@ namespace NetFluid
             }
         }
 
+        private class Trigger:RouteTarget
+        {
+            public override void Handle(Context cnt)
+            {
+                var exposer = Type.CreateIstance() as MethodExposer;
+                exposer.Context = cnt;
+                object[] args = null;
+
+                if (Parameters != null && Parameters.Length > 0)
+                {
+                    args = new object[Parameters.Length];
+                    for (int i = 0; i < Parameters.Length; i++)
+                    {
+                        var q = cnt.Request.Values[Parameters[i].Name];
+                        if (q != null)
+                            args[i] = q.Parse(Parameters[i].ParameterType);
+                    }
+                }
+
+                MethodInfo.Invoke(exposer, args);
+            }
+        }
+
+
         private readonly List<MethodExposer> _instances;
         private readonly string _name;
         private List<RouteTarget> _routes;
         private List<Filter> _filters;
+        private List<Trigger> _triggers;
         private readonly Dictionary<StatusCode,RouteTarget> _callOn;
         public IPublicFolderManager PublicFolders;
 
@@ -129,6 +153,7 @@ namespace NetFluid
             _name = name;
             _instances = new List<MethodExposer>();
             _filters = new List<Filter>();
+            _triggers = new List<Trigger>();
             _routes = new List<RouteTarget>();
             _callOn = new Dictionary<StatusCode,RouteTarget>();
             PublicFolders = new DefaultPublicFolderManager();
@@ -147,7 +172,23 @@ namespace NetFluid
             return new Regex("^"+urlRegex+"$");
         }
 
-        public void AddFilter(string url, MethodInfo exposedMethod, string httpMethod = null, int index = 99999)
+        public void AddTrigger(MethodInfo exposedMethod, string url=null, string httpMethod = null, int index = 99999)
+        {
+            var type = exposedMethod.DeclaringType;
+
+            if (!type.Inherit(typeof(MethodExposer)))
+                throw new TypeLoadException("Exposing type must inherit NetFluid.MethodExposer");
+
+            if (!exposedMethod.ReturnType.Implements(typeof(IResponse)))
+                throw new TypeLoadException("Exposed method must returns an IResponse object");
+
+            var regex = url != null ? getRegex(url) : null;
+
+            _triggers.Add(new Trigger { Url = url, Method = httpMethod, MethodInfo = exposedMethod, Regex = regex, Type = type, Index = index });
+            _triggers = _triggers.OrderByDescending(x => x.Index).ToList();
+        }
+
+        public void AddFilter(MethodInfo exposedMethod, string url=null, string httpMethod = null, int index = 99999)
         {
             var type = exposedMethod.DeclaringType;
 
@@ -157,11 +198,14 @@ namespace NetFluid
             if (!exposedMethod.ReturnType.Implements(typeof(bool)))
                 throw new TypeLoadException("Filter methods must returns a bool");
 
+            var args = exposedMethod.GetParameters();
+            if (args.Length != 1 || args[0].ParameterType != typeof(IResponse) || !args[0].IsOut)
+                throw new TypeLoadException("Filters must have one parameter (out IResponse)");
 
             var regex = url != null ? getRegex(url) : null;
 
-            _routes.Add(new Filter { Url = url, Method = httpMethod, MethodInfo = exposedMethod, Regex = regex, Type = type, GroupNames = regex.GetGroupNames(), Parameters = exposedMethod.GetParameters(), Index = index });
-            _routes = _routes.OrderByDescending(x => x.Index).ToList();
+            _filters.Add(new Filter { Url = url, Method = httpMethod, MethodInfo = exposedMethod, Regex = regex, Type = type, Index = index });
+            _filters = _filters.OrderByDescending(x => x.Index).ToList();
         }
 
         public void AddStatusCodeHandler(StatusCode code, MethodInfo exposedMethod)
@@ -255,7 +299,31 @@ namespace NetFluid
                                 Console.WriteLine(cnt.Request.Host + ":" + cnt.Request.Url + " - " + "matched " + filter.Url);
 
                             filter.Handle(cnt);
-                            return;
+                        }
+                    }
+                }
+                #endregion
+
+                #region triggers
+                foreach (var trigger in _triggers.Where(x => x.Method == cnt.Request.HttpMethod || x.Method == null))
+                {
+                    if (trigger.Regex == null)
+                    {
+                        if (Engine.DevMode)
+                            Console.WriteLine(cnt.Request.Host + ":" + cnt.Request.Url + " - " + "matched " + trigger.Url);
+
+                        trigger.Handle(cnt);
+                    }
+                    else
+                    {
+                        var m = trigger.Regex.Match(cnt.Request.Url);
+
+                        if (m.Success)
+                        {
+                            if (Engine.DevMode)
+                                Console.WriteLine(cnt.Request.Host + ":" + cnt.Request.Url + " - " + "matched " + trigger.Url);
+
+                            trigger.Handle(cnt);
                         }
                     }
                 }
