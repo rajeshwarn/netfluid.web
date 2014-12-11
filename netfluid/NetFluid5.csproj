@@ -228,10 +228,8 @@
     <Compile Include="Responses\Templates\MustacheInternals\WithTagDefinition.cs" />
     <Compile Include="Responses\Templates\MustacheResponse.cs" />
     <Compile Include="Security.cs" />
-    <Compile Include="Serialization\Binary.cs" />
     <Compile Include="Serialization\CSV.cs" />
     <Compile Include="Serialization\CsvFile.cs" />
-    <Compile Include="Serialization\JSON.cs" />
     <Compile Include="Sessions\ISessionManager.cs" />
     <Compile Include="Sessions\MemorySessionManager.cs" />
     <Compile Include="SMTP\Outbound.cs" />

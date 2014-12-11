@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NetFluid5", "netfluid\NetFl
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NetFluid.Service", "netfluid.service\NetFluid.Service.csproj", "{8C9DA5C3-DC3A-48A5-9C0D-B08C1302B1E0}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GeoJson", "GeoJson\GeoJson.csproj", "{1B35699F-3FF6-46B2-B01C-ABC5F19B9903}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -41,6 +43,18 @@ Global
 		{8C9DA5C3-DC3A-48A5-9C0D-B08C1302B1E0}.net_4_5_Release|Any CPU.Build.0 = Release|Any CPU
 		{8C9DA5C3-DC3A-48A5-9C0D-B08C1302B1E0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8C9DA5C3-DC3A-48A5-9C0D-B08C1302B1E0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1B35699F-3FF6-46B2-B01C-ABC5F19B9903}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1B35699F-3FF6-46B2-B01C-ABC5F19B9903}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1B35699F-3FF6-46B2-B01C-ABC5F19B9903}.net_4_0_Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1B35699F-3FF6-46B2-B01C-ABC5F19B9903}.net_4_0_Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1B35699F-3FF6-46B2-B01C-ABC5F19B9903}.net_4_0_Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1B35699F-3FF6-46B2-B01C-ABC5F19B9903}.net_4_0_Release|Any CPU.Build.0 = Release|Any CPU
+		{1B35699F-3FF6-46B2-B01C-ABC5F19B9903}.net_4_5_Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1B35699F-3FF6-46B2-B01C-ABC5F19B9903}.net_4_5_Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1B35699F-3FF6-46B2-B01C-ABC5F19B9903}.net_4_5_Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1B35699F-3FF6-46B2-B01C-ABC5F19B9903}.net_4_5_Release|Any CPU.Build.0 = Release|Any CPU
+		{1B35699F-3FF6-46B2-B01C-ABC5F19B9903}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1B35699F-3FF6-46B2-B01C-ABC5F19B9903}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

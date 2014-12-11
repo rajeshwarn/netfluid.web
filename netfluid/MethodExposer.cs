@@ -23,6 +23,8 @@
 
 using NetFluid.HTTP;
 using System;
+using System.IO;
+using System.Runtime.Serialization.Formatters.Binary;
 
 namespace NetFluid
 {
@@ -113,6 +115,7 @@ namespace NetFluid
             Context.OutputStream.Write(bytes, 0, bytes.Length);
         }
 
+        #region encoding
         /// <summary>
         /// URL encode (http://www.w3schools.com/tags/ref_urlencode.asp)
         /// </summary>
@@ -133,7 +136,6 @@ namespace NetFluid
             return HttpUtility.UrlDecode(str);
         }
 
-
         public string HTMLEncode(string str)
         {
             return HttpUtility.HtmlEncode(str);
@@ -143,5 +145,95 @@ namespace NetFluid
         {
             return HttpUtility.HtmlDecode(str);
         }
+
+        #endregion
+
+        #region Binary
+        /// <summary>
+        /// Serialize the object to the stream
+        /// </summary>
+        /// <param name="obj">object to serialize</param>
+        /// <param name="s">target stream</param>
+        public static void ToBinary(object obj, Stream s)
+        {
+            var formatter = new BinaryFormatter();
+            formatter.Serialize(s, obj);
+        }
+
+        /// <summary>
+        /// Binary serialize an object
+        /// </summary>
+        /// <param name="obj">object to be serialized</param>
+        /// <returns></returns>
+        public static byte[] ToBinary(object obj)
+        {
+            var formatter = new BinaryFormatter();
+            var s = new MemoryStream();
+            formatter.Serialize(s, obj);
+            return s.ToArray();
+        }
+
+        /// <summary>
+        /// Deserialize an object form the stream
+        /// </summary>
+        /// <typeparam name="T">target type</typeparam>
+        /// <param name="s">reading stream</param>
+        /// <returns>deserialized T object</returns>
+        public static T FromBinary<T>(Stream s)
+        {
+            var formatter = new BinaryFormatter();
+            object dbg = formatter.Deserialize(s);
+            return (T)dbg;
+        }
+
+        /// <summary>
+        /// Deserialize an object form the bynary array
+        /// </summary>
+        /// <typeparam name="T">target type</typeparam>
+        /// <param name="b">binary serialized value</param>
+        /// <returns>deserialized T object</returns>
+        public static T FromBinary<T>(byte[] b)
+        {
+            var formatter = new BinaryFormatter();
+            var s = new MemoryStream();
+            s.Write(b, 0, b.Length);
+            s.Seek(0, SeekOrigin.Begin);
+            object dbg = formatter.Deserialize(s);
+            return (T)dbg;
+        }
+
+        /// <summary>
+        /// Deserialize a binary serialized object
+        /// </summary>
+        /// <param name="b">binary serialized value</param>
+        /// <param name="type">object target type</param>
+        /// <returns>deserialized object</returns>
+        public static object FromBinary(byte[] b, Type type)
+        {
+            var formatter = new BinaryFormatter();
+            var s = new MemoryStream();
+            s.Write(b, 0, b.Length);
+            s.Seek(0, SeekOrigin.Begin);
+            object dbg = formatter.Deserialize(s);
+            return dbg;
+        }
+        #endregion
+
+        #region JSON
+        public static string ToJSON(object obj)
+        {
+            return Newtonsoft.Json.JsonConvert.SerializeObject(obj);
+        }
+
+        public static dynamic FromJSON(string json)
+        {
+            return Newtonsoft.Json.JsonConvert.DeserializeObject(json);
+        }
+
+        public static dynamic FromJSON<T>(string json)
+        {
+            return Newtonsoft.Json.JsonConvert.DeserializeObject<T>(json);
+        }
+        #endregion
     }
 }

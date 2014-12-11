@@ -35,6 +35,7 @@ using System.Reflection;
 using System.Security.Principal;
 using System.Text;
 using NetFluid.HTTP;
+using System.Runtime.Serialization.Formatters.Binary;
 
 namespace NetFluid
 {
@@ -594,17 +595,21 @@ namespace NetFluid
 
         public static void ToBinary(this object obj, Stream stream)
         {
-            Binary.Serialize(obj, stream);
+            var formatter = new BinaryFormatter();
+            formatter.Serialize(stream, obj);
         }
 
         public static byte[] ToBinary(this object obj)
         {
-            return Binary.Serialize(obj);
+            var formatter = new BinaryFormatter();
+            var s = new MemoryStream();
+            formatter.Serialize(s, obj);
+            return s.ToArray();
         }
 
         public static string ToJSON(this object obj)
         {
-            return Serialization.JSON.Serialize(obj);
+            return Newtonsoft.Json.JsonConvert.SerializeObject(obj);
         }
 
         #endregion

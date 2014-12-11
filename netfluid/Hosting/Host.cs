@@ -47,7 +47,7 @@ namespace NetFluid
             public string[] GroupNames;
             public int Index;
 
-            public void Handle(Context cnt)
+            public virtual void Handle(Context cnt)
             {
                 var exposer = Type.CreateIstance() as MethodExposer;
                 exposer.Context = cnt;
@@ -85,9 +85,40 @@ namespace NetFluid
             }
         }
 
+        private class Filter:RouteTarget
+        {
+            public override void Handle(Context cnt)
+            {
+                var exposer = Type.CreateIstance() as MethodExposer;
+                exposer.Context = cnt;
+                var args = new object[] { null };
+
+                if((bool)MethodInfo.Invoke(exposer, args) && args[0]!=null)
+                {
+                    var resp = args[0] as IResponse;
+
+                    if (resp != null)
+                        resp.SetHeaders(cnt);
+
+                    cnt.SendHeaders();
+
+                    try
+                    {
+                        if (resp != null && cnt.Request.HttpMethod.ToLowerInvariant() != "head")
+                            resp.SendResponse(cnt);
+                    }
+                    catch (Exception)
+                    {
+                    }
+                    cnt.Close();
+                }
+            }
+        }
+
         private readonly List<MethodExposer> _instances;
         private readonly string _name;
         private List<RouteTarget> _routes;
+        private List<Filter> _filters;
         private readonly Dictionary<StatusCode,RouteTarget> _callOn;
         public IPublicFolderManager PublicFolders;
 
@@ -97,6 +128,7 @@ namespace NetFluid
         {
             _name = name;
             _instances = new List<MethodExposer>();
+            _filters = new List<Filter>();
             _routes = new List<RouteTarget>();
             _callOn = new Dictionary<StatusCode,RouteTarget>();
             PublicFolders = new DefaultPublicFolderManager();
@@ -113,6 +145,23 @@ namespace NetFluid
                 urlRegex = urlRegex.Replace(item.Value, "(?<" + item.Value.Substring(1) + ">[^//]+?)");
             }
             return new Regex("^"+urlRegex+"$");
+        }
+
+        public void AddFilter(string url, MethodInfo exposedMethod, string httpMethod = null, int index = 99999)
+        {
+            var type = exposedMethod.DeclaringType;
+
+            if (!type.Inherit(typeof(MethodExposer)))
+                throw new TypeLoadException("Exposing type must inherit NetFluid.MethodExposer");
+
+            if (!exposedMethod.ReturnType.Implements(typeof(bool)))
+                throw new TypeLoadException("Filter methods must returns a bool");
+
+
+            var regex = url != null ? getRegex(url) : null;
+
+            _routes.Add(new Filter { Url = url, Method = httpMethod, MethodInfo = exposedMethod, Regex = regex, Type = type, GroupNames = regex.GetGroupNames(), Parameters = exposedMethod.GetParameters(), Index = index });
+            _routes = _routes.OrderByDescending(x => x.Index).ToList();
         }
 
         public void AddStatusCodeHandler(StatusCode code, MethodInfo exposedMethod)
@@ -185,6 +234,32 @@ namespace NetFluid
                     return;
                     #endregion
                 }
+
+                #region Filters
+                foreach (var filter in _filters.Where(x=>x.Method==cnt.Request.HttpMethod || x.Method==null))
+                {
+                    if(filter.Regex == null)
+                    {
+                        if (Engine.DevMode)
+                            Console.WriteLine(cnt.Request.Host + ":" + cnt.Request.Url + " - " + "matched " + filter.Url);
+
+                        filter.Handle(cnt);
+                    }
+                    else
+                    {
+                        var m = filter.Regex.Match(cnt.Request.Url);
+
+                        if (m.Success)
+                        {
+                            if (Engine.DevMode)
+                                Console.WriteLine(cnt.Request.Host + ":" + cnt.Request.Url + " - " + "matched " + filter.Url);
+
+                            filter.Handle(cnt);
+                            return;
+                        }
+                    }
+                }
+                #endregion
 
                 foreach (var route in _routes.Where(x => x.Method == cnt.Request.HttpMethod || x.Method == null))
                 {
