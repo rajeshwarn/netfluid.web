@@ -139,7 +139,7 @@ namespace NetFluid
 
 
         private readonly List<MethodExposer> _instances;
-        private readonly string _name;
+
         private List<RouteTarget> _routes;
         private List<Filter> _filters;
         private List<Trigger> _triggers;
@@ -148,9 +148,11 @@ namespace NetFluid
 
         List<MethodExposer> instances;
 
+        public readonly string Name;
+
         internal Host(string name)
         {
-            _name = name;
+            Name = name;
             _instances = new List<MethodExposer>();
             _filters = new List<Filter>();
             _triggers = new List<Trigger>();

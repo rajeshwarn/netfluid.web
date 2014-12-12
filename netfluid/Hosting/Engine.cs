@@ -217,7 +217,17 @@ namespace NetFluid
                     {
                         foreach (string h in p.CustomAttribute<VirtualHost>(true).Select(x => x.Name))
                         {
-                            Host(h).Load(p);
+                            if(h.EndsWith(".*"))
+                            {
+                                foreach (var app in Engine.Hosts)
+                                {
+                                    Host(h.Substring(0,h.Length-2)+app.Name).Load(p);
+                                }
+                            }
+                            else
+                            {
+                                Host(h).Load(p);
+                            }
                         }
                     }
                     else
@@ -266,7 +276,17 @@ namespace NetFluid
                     {
                         foreach (string h in p.CustomAttribute<VirtualHost>(true).Select(x => x.Name))
                         {
-                            Host(h).Load(p);
+                            if (h.EndsWith(".*"))
+                            {
+                                foreach (var app in Engine.Hosts)
+                                {
+                                    Host(h.Substring(0, h.Length - 2) + app.Name).Load(p);
+                                }
+                            }
+                            else
+                            {
+                                Host(h).Load(p);
+                            }
                         }
                     }
                     else
