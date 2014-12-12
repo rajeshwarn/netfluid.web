@@ -464,6 +464,13 @@ namespace NetFluid
 
         #endregion
 
+        #region STRING ENUMERABLE
+        public static string Join(this IEnumerable<string> enu,string separator)
+        {
+            return string.Join(separator, enu);
+        }
+        #endregion
+
         #region ENUMERABLE
 
         public static IEnumerable<T> SelectWhere<F,T>(this IEnumerable<F> source,Func<F,T> select, Func<F,T,bool> where)

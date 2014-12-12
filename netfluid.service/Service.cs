@@ -75,6 +75,8 @@ namespace NetFluid.Service
             var location = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
             Directory.SetCurrentDirectory(location);
 
+            AppDomain.CurrentDomain.AssemblyResolve += CurrentDomain_AssemblyResolve;
+
             foreach (var dir in Directory.GetDirectories("./applications"))
             {
                 var name = dir.Split(Path.DirectorySeparatorChar).Last();
@@ -95,6 +97,27 @@ namespace NetFluid.Service
             };
             Engine.Interfaces.AddInterface("127.0.0.1", 80);
             Engine.Start();
+        }
+
+        static Assembly CurrentDomain_AssemblyResolve(object sender, ResolveEventArgs args)
+        {
+            var dir = Path.GetDirectoryName(args.RequestingAssembly.Location);
+            Engine.Logger.Log(LogLevel.Debug,"Loading "+args.Name);
+            foreach(var dll in Directory.GetFiles(dir, "*.dll"))
+            {
+                try
+                {
+                   var loaded= Assembly.LoadFile(dll);
+                   if (loaded.FullName == args.Name)
+                       return loaded;
+                }
+                catch (Exception)
+                {
+                }
+            }
+
+            Engine.Logger.Log(LogLevel.Error, "Failed to found " + args.Name);
+            return null;
         }
 
         protected override void OnStart(string[] args)

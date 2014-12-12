@@ -34,12 +34,10 @@ namespace NetFluid
     /// </summary>
     public static class Security
     {
-        private static readonly object RandomLocker;
         private static Random RandomGenerator;
 
         static Security()
         {
-            RandomLocker = new object();
             RandomGenerator = new Random();
         }
 
@@ -84,19 +82,25 @@ namespace NetFluid
             return Convert.ToBase64String(sha1Hash);
         }
 
-        /// <summary>
-        /// SHA1 checksum of a file
-        /// </summary>
-        /// <param name="file">path to the file</param>
-        /// <returns>bas64 checksum</returns>
-        public static string SHA1Checksum(string file)
+        public static void GenerateRSAKeys(out string publicKey, out string privateKey, int bytes=2048)
         {
-            using (FileStream stream = File.OpenRead(file))
-            {
-                var sha = new SHA256Managed();
-                byte[] checksum = sha.ComputeHash(stream);
-                return BitConverter.ToString(checksum).Replace("-", String.Empty);
-            }
+            var csp = new RSACryptoServiceProvider(bytes);
+            publicKey = csp.ToXmlString(false);
+            privateKey = csp.ToXmlString(true);
+        }
+
+        public static string RSACrypt(string publicKey,string source)
+        {
+            var csp = new RSACryptoServiceProvider();
+            csp.FromXmlString(publicKey);
+            return Base64Encode(csp.Encrypt(Encoding.UTF8.GetBytes(source),false));
+        }
+
+        public static string RSADecrypt(string privateKey, string source)
+        {
+            var csp = new RSACryptoServiceProvider();
+            csp.FromXmlString(privateKey);
+            return Encoding.UTF8.GetString(csp.Decrypt(Base64Decode(source),false));
         }
 
         /// <summary>
@@ -119,18 +123,82 @@ namespace NetFluid
             return Convert.ToBase64String(toEncode);
         }
 
+        public static string SystemFingerPrint
+        {
+            get
+            {
+               var k = Environment.GetLogicalDrives().Join("") +
+                       Environment.Is64BitOperatingSystem +
+                       Environment.MachineName +
+                       Environment.OSVersion.ToString() +
+                       Environment.ProcessorCount +
+                       Environment.SystemDirectory +
+                       Environment.SystemPageSize +
+                       Environment.UserDomainName +
+                       Environment.UserName;
+
+               return SHA512(k);
+            }
+        }
+
+
+
+        /// <summary>
+        /// SHA512 hashing of string
+        /// </summary>
+        /// <param name="text">string to hash</param>
+        /// <returns>base64 hash</returns>
+        public static string SHA512(string str)
+        {
+            var s = new SHA512Managed();
+            return Base64Encode(s.ComputeHash(Encoding.UTF8.GetBytes(str)));
+        }
+
+        /// <summary>
+        /// SHA512 hashing of stream
+        /// </summary>
+        /// <param name="stream">stream to hash</param>
+        /// <returns>base64 hash</returns>
+        public static string SHA512(Stream stream)
+        {
+            var s = new SHA512Managed();
+            return Base64Encode(s.ComputeHash(stream));
+        }
+
+
         /// <summary>
         /// SHA1 hashing of string
         /// </summary>
         /// <param name="text">string to hash</param>
         /// <returns>base64 hash</returns>
-        public static string Sha1(string text)
+        public static string SHA1(string str)
         {
-            byte[] buffer = Encoding.UTF8.GetBytes(text);
-            var cryptoTransformSha1 = new SHA1CryptoServiceProvider();
-            string hash = BitConverter.ToString(cryptoTransformSha1.ComputeHash(buffer)).Replace("-", "");
-            return hash;
+            var s = new SHA1Managed();
+            return Base64Encode(s.ComputeHash(Encoding.UTF8.GetBytes(str)));
         }
+
+        /// <summary>
+        /// SHA384 hashing of string
+        /// </summary>
+        /// <param name="text">string to hash</param>
+        /// <returns>base64 hash</returns>
+        public static string SHA384(string str)
+        {
+            var s = new SHA384Managed();
+            return Base64Encode(s.ComputeHash(Encoding.UTF8.GetBytes(str)));
+        }
+
+        /// <summary>
+        /// SHA256 hashing of string
+        /// </summary>
+        /// <param name="text">string to hash</param>
+        /// <returns>base64 hash</returns>
+        public static string SHA256(string str)
+        {
+            var s = new SHA256Managed();
+            return Base64Encode(s.ComputeHash(Encoding.UTF8.GetBytes(str)));
+        }
+
 
         /// <summary>
         ///     Return a random value (avoid System.Random repetition)
@@ -138,13 +206,7 @@ namespace NetFluid
         /// <returns></returns>
         public static int Random()
         {
-            int k;
-            lock (RandomLocker)
-            {
-                k = RandomGenerator.Next();
-                RandomGenerator = new Random(k);
-            }
-            return k;
+            return RandomGenerator.Next();
         }
 
         /// <summary>
@@ -154,13 +216,7 @@ namespace NetFluid
         /// <returns></returns>
         public static int Random(int max)
         {
-            int k;
-            lock (RandomLocker)
-            {
-                k = RandomGenerator.Next(max);
-                RandomGenerator = new Random(k);
-            }
-            return k;
+            return RandomGenerator.Next(max);
         }
 
         /// <summary>
@@ -171,13 +227,7 @@ namespace NetFluid
         /// <returns></returns>
         public static int Random(int min, int max)
         {
-            int k;
-            lock (RandomLocker)
-            {
-                k = RandomGenerator.Next(min, max);
-                RandomGenerator = new Random(k);
-            }
-            return k;
+            return RandomGenerator.Next(min, max);
         }
 
         public static string UID()
