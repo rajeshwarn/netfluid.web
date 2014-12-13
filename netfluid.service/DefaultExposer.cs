@@ -8,6 +8,16 @@ namespace NetFluid.Service
 {
     class DefaultExposer:MethodExposer
     {
+        static DefaultExposer()
+        {
+            AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;
+        }
+
+        static void CurrentDomain_UnhandledException(object sender, UnhandledExceptionEventArgs e)
+        {
+            Engine.Logger.Log(LogLevel.SystemException, "unhandled exception", e.ExceptionObject as Exception);
+        }
+
         [CallOn(StatusCode.AnyError)]
         public IResponse NotFound()
         {

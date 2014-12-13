@@ -113,17 +113,7 @@ namespace NetFluid
         {
             get
             {
-               /* var sb = new StringBuilder("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
-                sb.AppendLine("<application>");
-                sb.AppendLine("<hosts>");
-                foreach (var item in _hosts)
-                {
-                    sb.AppendLine(item.Value.RoutesMap);
-                }
-                sb.AppendLine("/<hosts>");
-                sb.AppendLine("</application>");
-                return sb.ToString();*/
-                return null;
+                return DefaultHost.Routes;
             }
         }
 

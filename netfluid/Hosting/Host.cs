@@ -163,6 +163,11 @@ namespace NetFluid
             instances = new List<MethodExposer>();
         }
 
+        public string Routes
+        {
+            get { return _routes.Select(x=>x.Regex.ToString()).Join("  "); }
+        }
+
         static Regex getRegex(string url)
         {
             var urlRegex = url;
