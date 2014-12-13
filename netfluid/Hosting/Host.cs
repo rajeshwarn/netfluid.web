@@ -382,7 +382,7 @@ namespace NetFluid
                 Engine.Logger.Log(LogLevel.Exception, "Exception during page execution", ex);
 
                 #region SHOW ERROR PAGE IF IN DEV MODE
-                if (Engine.DevMode)
+                if (Engine.ShowException)
                 {
                     while (ex != null)
                     {

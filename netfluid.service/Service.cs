@@ -89,6 +89,8 @@ namespace NetFluid.Service
                 }
             }
 
+            Engine.ShowException = true;
+
             Engine.Load(typeof(DefaultExposer).Assembly);
             Engine.Interfaces.AddAllAddresses();
             Engine.DefaultHost.PublicFolders = new DefaultPublicFolderManager()

@@ -68,6 +68,7 @@ namespace NetFluid
         /// Main of host of the apllication. Any request not handled by virtual hosts will be handled by this one.
         /// </summary>
         public static readonly Host DefaultHost;
+        public static bool ShowException;
 
         /// <summary>
         /// Rewritable log manager
