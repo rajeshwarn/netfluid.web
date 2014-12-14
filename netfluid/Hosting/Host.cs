@@ -308,10 +308,16 @@ namespace NetFluid
                             filter.Handle(cnt);
                         }
                     }
+
+                    if (!cnt.IsOpen)
+                        return;
                 }
                 #endregion
 
                 #region triggers
+                if (!cnt.IsOpen)
+                    return;
+
                 foreach (var trigger in _triggers.Where(x => x.Method == cnt.Request.HttpMethod || x.Method == null))
                 {
                     if (trigger.Regex == null)
@@ -333,8 +339,13 @@ namespace NetFluid
                             trigger.Handle(cnt);
                         }
                     }
+                    if (!cnt.IsOpen)
+                        return;
                 }
                 #endregion
+
+                if (!cnt.IsOpen)
+                    return;
 
                 foreach (var route in _routes.Where(x => x.Method == cnt.Request.HttpMethod || x.Method == null))
                 {
@@ -356,6 +367,9 @@ namespace NetFluid
                     }
                 }
 
+                if (!cnt.IsOpen)
+                    return;
+
                 if (Engine.DevMode)
                     Console.WriteLine(cnt.Request.Host + ":" + cnt.Request.Url + " - " + "Looking for a public folder");
 
@@ -364,6 +378,7 @@ namespace NetFluid
                     cnt.Close();
                     return;
                 }
+
                 cnt.Response.StatusCode = StatusCode.NotFound;
 
                 RouteTarget rt;

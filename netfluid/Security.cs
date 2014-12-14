@@ -110,6 +110,7 @@ namespace NetFluid
         /// <returns>decoded bytes</returns>
         public static byte[] Base64Decode(string str)
         {
+            str = str == null ? "" : str;
             return Convert.FromBase64String(str);
         }
 
@@ -120,6 +121,7 @@ namespace NetFluid
         /// <returns></returns>
         public static string Base64Encode(byte[] toEncode)
         {
+            toEncode = toEncode == null ? new byte[0] : toEncode;
             return Convert.ToBase64String(toEncode);
         }
 
@@ -150,6 +152,8 @@ namespace NetFluid
         /// <returns>base64 hash</returns>
         public static string SHA512(string str)
         {
+            str = str == null ? "" : str;
+
             var s = new SHA512Managed();
             return Base64Encode(s.ComputeHash(Encoding.UTF8.GetBytes(str)));
         }
@@ -173,6 +177,8 @@ namespace NetFluid
         /// <returns>base64 hash</returns>
         public static string SHA1(string str)
         {
+            str = str == null ? "" : str;
+
             var s = new SHA1Managed();
             return Base64Encode(s.ComputeHash(Encoding.UTF8.GetBytes(str)));
         }
@@ -184,6 +190,8 @@ namespace NetFluid
         /// <returns>base64 hash</returns>
         public static string SHA384(string str)
         {
+            str = str == null ? "" : str;
+
             var s = new SHA384Managed();
             return Base64Encode(s.ComputeHash(Encoding.UTF8.GetBytes(str)));
         }
@@ -195,6 +203,8 @@ namespace NetFluid
         /// <returns>base64 hash</returns>
         public static string SHA256(string str)
         {
+            str = str == null ? "" : str;
+
             var s = new SHA256Managed();
             return Base64Encode(s.ComputeHash(Encoding.UTF8.GetBytes(str)));
         }

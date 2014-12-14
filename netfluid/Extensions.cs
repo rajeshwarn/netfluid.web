@@ -614,9 +614,9 @@ namespace NetFluid
             return s.ToArray();
         }
 
-        public static string ToJSON(this object obj)
+        public static string ToJSON(this object obj,bool formatted=false)
         {
-            return Newtonsoft.Json.JsonConvert.SerializeObject(obj);
+            return Newtonsoft.Json.JsonConvert.SerializeObject(obj,formatted?Newtonsoft.Json.Formatting.Indented:Newtonsoft.Json.Formatting.None);
         }
 
         #endregion

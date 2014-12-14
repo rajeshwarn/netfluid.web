@@ -79,29 +79,32 @@ namespace NetFluid.HTTP
 
             var queue = new ConcurrentQueue<Socket>();
 
-
             Task.Factory.StartNew(() =>
             {
                 while (true)
                 {
-                    var sock = Socket.Accept();
-                    Task.Factory.StartNew(() =>
+                    queue.Enqueue(Socket.Accept());
+
+                    Task.Factory.StartNew(() => 
                     {
-                        Context c;
-                        try
+                        Socket s;
+                        while (queue.TryDequeue(out s))
                         {
-                            c = Certificate == null ? new Context(sock) : new Context(sock, Certificate);
-                            c.ReadHeaders();
-                            c.ReadRequest();
-                            Engine.Serve(c);
+                            try
+                            {
+                                var c = Certificate == null ? new Context(s) : new Context(s, Certificate);
+                                c.ReadHeaders();
+                                c.ReadRequest();
+                                Engine.Serve(c);
+                            }
+                            catch (Exception)
+                            {
+                                s.Close();
+                            }
                         }
-                        catch (Exception)
-                        {
-                            sock.Close();
-                        }
-                    });
+                    },TaskCreationOptions.LongRunning);
                 }
-            });
+            }, TaskCreationOptions.LongRunning);
         }
     }
 }

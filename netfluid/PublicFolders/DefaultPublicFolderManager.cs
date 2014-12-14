@@ -30,11 +30,18 @@ namespace NetFluid
                 cnt.Response.ContentType = MimeTypes.GetType(path);
                 cnt.Response.Headers["Expires"] = (DateTime.Now + TimeSpan.FromDays(7)).ToGMT();
                 cnt.SendHeaders();
-                var fs = new FileStream(path, FileMode.OpenOrCreate, FileAccess.ReadWrite, FileShare.ReadWrite);
-                fs.CopyTo(cnt.OutputStream);
-                cnt.Close();
-                fs.Close();
 
+                try
+                {
+                    var fs = new FileStream(path, FileMode.OpenOrCreate, FileAccess.ReadWrite, FileShare.ReadWrite);
+                    fs.CopyTo(cnt.OutputStream);
+                    cnt.Close();
+                    fs.Close();
+                }
+                catch (Exception)
+                {
+                    cnt.Close();
+                }
                 return true;
             }
             return false;
