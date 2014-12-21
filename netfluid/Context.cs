@@ -36,6 +36,7 @@ using NetFluid.HTTP;
 using NetFluid.IO;
 using System.Linq;
 using HttpMultipartParser;
+using System.Reflection;
 
 namespace NetFluid
 {
@@ -43,7 +44,7 @@ namespace NetFluid
     ///     HTTP Context.
     ///     Contains client request, server response and current variables
     /// </summary>
-    public class Context
+    public class Context : IDisposable
     {
         private static readonly char[] Separators = { ' ' };
         private static readonly Version Latest = new Version(1,2);
@@ -142,7 +143,6 @@ namespace NetFluid
             }, null);
 
         }
-
 
         /// <summary>
         ///     Current session identification Guid
@@ -607,10 +607,17 @@ namespace NetFluid
                 if (!HeadersSent)
                     SendHeaders();
 
-                Writer.Flush();
+                writer.Flush();
                 OutputStream.Flush();
                 OutputStream.Close();
                 Socket.Close(10000);
+
+                if (reader != null) reader.Dispose();
+                if (writer != null) writer.Dispose();
+
+                InputStream.Dispose();
+                OutputStream.Dispose();
+                Socket.Dispose();
             }
             catch (Exception)
             {
@@ -654,6 +661,10 @@ namespace NetFluid
             if (SessionId == null) SessionId = Security.UID();
 
             return Engine.Sessions.Get(SessionId, name);
+        }
+
+        public void Dispose()
+        {
         }
     }
 }

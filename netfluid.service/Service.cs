@@ -97,6 +97,7 @@ namespace NetFluid.Service
             {
                 new PublicFolder{ RealPath= "./public", VirtualPath="/public"}
             };
+
             Engine.Interfaces.AddInterface("127.0.0.1", 80);
             Engine.Start();
         }

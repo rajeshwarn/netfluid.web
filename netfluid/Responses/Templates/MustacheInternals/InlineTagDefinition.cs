@@ -1,13 +1,14 @@
-﻿using System;
+﻿using Mustache;
+using System;
 using System.Collections.Generic;
 using System.IO;
 
-namespace Mustache
+namespace NetFluid.Templates.Mustache
 {
     /// <summary>
     /// Defines a tag that cannot contain inner text.
     /// </summary>
-    internal abstract class InlineTagDefinition : TagDefinition
+    public abstract class InlineTagDefinition : TagDefinition
     {
         /// <summary>
         /// Initializes a new instance of an InlineTagDefinition.

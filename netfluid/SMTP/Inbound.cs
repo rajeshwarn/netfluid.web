@@ -19,7 +19,7 @@ namespace NetFluid.SMTP
         readonly Dictionary<string, Action<string, SmtpRequest>> verbs;  
         private readonly TcpListener _listener;
 
-        public event Action<MailAddress,SmtpRequest> OnMailRecieve;
+        public event Action<SmtpRequest> OnRequestCompleted;
 
         public Inbound():this(IPAddress.Any,25)
         {
@@ -90,20 +90,9 @@ namespace NetFluid.SMTP
                 b.Flush();
                 b.Close();
 
-                if (OnMailRecieve!=null)
+                if (OnRequestCompleted!=null)
 	            {
-                    foreach (var recipient in request.To)
-                    {
-                        try
-                        {
-                            OnMailRecieve(recipient, request);
-                        }
-                        catch (Exception ex)
-                        {
-
-                            throw ex;
-                        }
-                    }
+                    OnRequestCompleted(request);
 	            }
 
                 request.Write("250 OK");

@@ -25,6 +25,7 @@ using System;
 using System.Collections.Concurrent;
 using System.Net;
 using System.Net.Sockets;
+using System.Reflection;
 using System.Security.Cryptography.X509Certificates;
 using System.Threading;
 using System.Threading.Tasks;
@@ -77,34 +78,30 @@ namespace NetFluid.HTTP
             Engine.Logger.Log(LogLevel.Debug,
                 "Starting " + (Certificate != null ? "secure " : " ") + "web interface on " + Endpoint);
 
-            var queue = new ConcurrentQueue<Socket>();
-
-            Task.Factory.StartNew(() =>
+            Task.Factory.StartNew(() => 
             {
                 while (true)
                 {
-                    queue.Enqueue(Socket.Accept());
-
-                    Task.Factory.StartNew(() => 
+                    var s = Socket.Accept();
+                    Task.Factory.StartNew(() =>
                     {
-                        Socket s;
-                        while (queue.TryDequeue(out s))
+                        var cnt = Certificate == null ? new Context(s) : new Context(s, Certificate);
+                        try
                         {
-                            try
-                            {
-                                var c = Certificate == null ? new Context(s) : new Context(s, Certificate);
-                                c.ReadHeaders();
-                                c.ReadRequest();
-                                Engine.Serve(c);
-                            }
-                            catch (Exception)
-                            {
-                                s.Close();
-                            }
+                            cnt.ReadHeaders();
+                            cnt.ReadRequest();
                         }
-                    },TaskCreationOptions.LongRunning);
+                        catch (Exception)
+                        {
+                            return;
+                        }
+
+                        Engine.Serve(cnt);
+
+                        cnt.Dispose();
+                    });
                 }
-            }, TaskCreationOptions.LongRunning);
+            });
         }
     }
 }

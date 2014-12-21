@@ -49,28 +49,28 @@ namespace NetFluid
 
             public virtual void Handle(Context cnt)
             {
-                var exposer = Type.CreateIstance() as MethodExposer;
-                exposer.Context = cnt;
-                object[] args = null;
-
-                if (Parameters !=null && Parameters.Length > 0)
-                {
-                    args = new object[Parameters.Length];
-                    for (int i = 0; i < Parameters.Length; i++)
-                    {
-                        var q = cnt.Request.Values[Parameters[i].Name];
-                        if(q != null)
-                            args[i] = q.Parse(Parameters[i].ParameterType);
-                    }
-                }
-
-                var resp = MethodInfo.Invoke(exposer, args) as IResponse;
-
-                if (resp != null)
-                    resp.SetHeaders(cnt);
-
                 try
                 {
+                    var exposer = Type.CreateIstance() as MethodExposer;
+                    exposer.Context = cnt;
+                    object[] args = null;
+
+                    if (Parameters != null && Parameters.Length > 0)
+                    {
+                        args = new object[Parameters.Length];
+                        for (int i = 0; i < Parameters.Length; i++)
+                        {
+                            var q = cnt.Request.Values[Parameters[i].Name];
+                            if (q != null)
+                                args[i] = q.Parse(Parameters[i].ParameterType);
+                        }
+                    }
+
+                    var resp = MethodInfo.Invoke(exposer, args) as IResponse;
+
+                    if (resp != null)
+                        resp.SetHeaders(cnt);
+
                     cnt.SendHeaders();
 
                     if (resp != null && cnt.Request.HttpMethod.ToLowerInvariant() != "head")
@@ -78,38 +78,108 @@ namespace NetFluid
 
                     cnt.Close();
                 }
-                catch (Exception)
+                catch (Exception ex)
                 {
+                    ShowError(cnt, ex);
                 }
+            }
+
+            public void ShowError(Context cnt, Exception ex)
+            {
+                #region show error
+                try
+                {
+                    if (ex is TargetInvocationException)
+                        ex = ex.InnerException;
+
+                    #region SHOW ERROR PAGE IF SETTED
+                    if (Engine.ShowException)
+                    {
+                        while (ex != null)
+                        {
+                            cnt.Response.StatusCode = StatusCode.InternalServerError;
+                            cnt.SendHeaders();
+                            cnt.Writer.WriteLine("<h1>" + ex.GetType().FullName + "</h1>");
+                            if (ex.Data.Count > 0)
+                            {
+                                cnt.Writer.WriteLine("<h2>Write</h2>");
+                                cnt.Writer.WriteLine("<table>");
+                                foreach (object data in ex.Data.Keys)
+                                {
+                                    cnt.Writer.WriteLine("<tr><td>" + data + "</td><td>" + ex.Data[data] + "</td></tr>");
+                                }
+                                cnt.Writer.WriteLine("</table>");
+                            }
+                            cnt.Writer.WriteLine("<h2>HelpLink</h2>");
+                            cnt.Writer.WriteLine(ex.HelpLink);
+
+                            cnt.Writer.WriteLine("<h2>Message</h2>");
+                            cnt.Writer.WriteLine(ex.Message);
+
+                            cnt.Writer.WriteLine("<h2>Source</h2>");
+                            cnt.Writer.WriteLine(ex.Source);
+
+                            cnt.Writer.WriteLine("<h2>StackTrace</h2>");
+                            cnt.Writer.WriteLine(ex.StackTrace);
+
+                            cnt.Writer.WriteLine("<h2>TargetSite</h2>");
+                            cnt.Writer.WriteLine(ex.TargetSite);
+
+                            if (ex.InnerException != null)
+                            {
+                                cnt.Writer.WriteLine("<h2>Inner Exception</h2>");
+                                ex = ex.InnerException;
+                            }
+                            else
+                            {
+                                break;
+                            }
+                        }
+                    }
+                    #endregion
+                    cnt.Socket.Close();
+                }
+                catch
+                {
+
+                }
+                #endregion
             }
         }
 
-        private class Filter:RouteTarget
+        private class Filter : RouteTarget
         {
             public override void Handle(Context cnt)
             {
-                var exposer = Type.CreateIstance() as MethodExposer;
-                exposer.Context = cnt;
-                var args = new object[] { null };
-
-                if((bool)MethodInfo.Invoke(exposer, args) && args[0]!=null)
+                try
                 {
-                    var resp = args[0] as IResponse;
+                    var exposer = Type.CreateIstance() as MethodExposer;
+                    exposer.Context = cnt;
+                    var args = new object[] { null };
 
-                    if (resp != null)
-                        resp.SetHeaders(cnt);
-
-                    cnt.SendHeaders();
-
-                    try
+                    if ((bool)MethodInfo.Invoke(exposer, args) && args[0] != null)
                     {
-                        if (resp != null && cnt.Request.HttpMethod.ToLowerInvariant() != "head")
-                            resp.SendResponse(cnt);
+                        var resp = args[0] as IResponse;
+
+                        if (resp != null)
+                            resp.SetHeaders(cnt);
+
+                        cnt.SendHeaders();
+
+                        try
+                        {
+                            if (resp != null && cnt.Request.HttpMethod.ToLowerInvariant() != "head")
+                                resp.SendResponse(cnt);
+                        }
+                        catch (Exception)
+                        {
+                        }
+                        cnt.Close();
                     }
-                    catch (Exception)
-                    {
-                    }
-                    cnt.Close();
+                }
+                catch (Exception ex)
+                {
+                    ShowError(cnt, ex);
                 }
             }
         }
@@ -268,185 +338,128 @@ namespace NetFluid
         /// <param name="cnt"></param>
         public void Serve(Context cnt)
         {
-            try
+            if (cnt.Request.HttpMethod.ToLowerInvariant() == "options")
             {
-                if (cnt.Request.HttpMethod.ToLowerInvariant() == "options")
-                {
-                    #region options
-                    var origin = cnt.Request.Headers["Origin"] ?? "*";
-                    cnt.Response.Headers.Set("Access-Control-Allow-Origin", origin);
+                #region options
+                var origin = cnt.Request.Headers["Origin"] ?? "*";
+                cnt.Response.Headers.Set("Access-Control-Allow-Origin", origin);
 
-                    var headers = cnt.Request.Headers["Access-Control-Request-Headers"] ?? "*";
-                    cnt.Response.Headers.Set("Access-Control-Allow-Headers", headers);
-                    cnt.Response.Headers.Set("Access-Control-Max-Age", "360000");
-                    cnt.Response.Headers.Set("Access-Control-Allow-Methods", "GET, HEAD, POST, TRACE, OPTIONS, PUT, DELETE");
-                    cnt.SendHeaders();
-                    cnt.Close();
-                    return;
-                    #endregion
+                var headers = cnt.Request.Headers["Access-Control-Request-Headers"] ?? "*";
+                cnt.Response.Headers.Set("Access-Control-Allow-Headers", headers);
+                cnt.Response.Headers.Set("Access-Control-Max-Age", "360000");
+                cnt.Response.Headers.Set("Access-Control-Allow-Methods", "GET, HEAD, POST, TRACE, OPTIONS, PUT, DELETE");
+                cnt.SendHeaders();
+                cnt.Close();
+                return;
+                #endregion
+            }
+
+            #region Filters
+            foreach (var filter in _filters.Where(x => x.Method == cnt.Request.HttpMethod || x.Method == null))
+            {
+                if (filter.Regex == null)
+                {
+                    if (Engine.DevMode)
+                        Console.WriteLine(cnt.Request.Host + ":" + cnt.Request.Url + " - " + "matched " + filter.Url);
+
+                    filter.Handle(cnt);
                 }
-
-                #region Filters
-                foreach (var filter in _filters.Where(x=>x.Method==cnt.Request.HttpMethod || x.Method==null))
+                else
                 {
-                    if(filter.Regex == null)
+                    var m = filter.Regex.Match(cnt.Request.Url);
+
+                    if (m.Success)
                     {
                         if (Engine.DevMode)
                             Console.WriteLine(cnt.Request.Host + ":" + cnt.Request.Url + " - " + "matched " + filter.Url);
 
                         filter.Handle(cnt);
                     }
-                    else
-                    {
-                        var m = filter.Regex.Match(cnt.Request.Url);
-
-                        if (m.Success)
-                        {
-                            if (Engine.DevMode)
-                                Console.WriteLine(cnt.Request.Host + ":" + cnt.Request.Url + " - " + "matched " + filter.Url);
-
-                            filter.Handle(cnt);
-                        }
-                    }
-
-                    if (!cnt.IsOpen)
-                        return;
                 }
-                #endregion
 
-                #region triggers
                 if (!cnt.IsOpen)
                     return;
+            }
+            #endregion
 
-                foreach (var trigger in _triggers.Where(x => x.Method == cnt.Request.HttpMethod || x.Method == null))
+            #region triggers
+            if (!cnt.IsOpen)
+                return;
+
+            foreach (var trigger in _triggers.Where(x => x.Method == cnt.Request.HttpMethod || x.Method == null))
+            {
+                if (trigger.Regex == null)
                 {
-                    if (trigger.Regex == null)
+                    if (Engine.DevMode)
+                        Console.WriteLine(cnt.Request.Host + ":" + cnt.Request.Url + " - " + "matched " + trigger.Url);
+
+                    trigger.Handle(cnt);
+                }
+                else
+                {
+                    var m = trigger.Regex.Match(cnt.Request.Url);
+
+                    if (m.Success)
                     {
                         if (Engine.DevMode)
                             Console.WriteLine(cnt.Request.Host + ":" + cnt.Request.Url + " - " + "matched " + trigger.Url);
 
                         trigger.Handle(cnt);
                     }
-                    else
-                    {
-                        var m = trigger.Regex.Match(cnt.Request.Url);
-
-                        if (m.Success)
-                        {
-                            if (Engine.DevMode)
-                                Console.WriteLine(cnt.Request.Host + ":" + cnt.Request.Url + " - " + "matched " + trigger.Url);
-
-                            trigger.Handle(cnt);
-                        }
-                    }
-                    if (!cnt.IsOpen)
-                        return;
                 }
-                #endregion
-
                 if (!cnt.IsOpen)
                     return;
-
-                foreach (var route in _routes.Where(x => x.Method == cnt.Request.HttpMethod || x.Method == null))
-                {
-                    var m = route.Regex.Match(cnt.Request.Url);
-
-                    if (m.Success)
-                    {
-                        for (int i = 0; i < route.GroupNames.Length; i++)
-                        {
-                            var q = new QueryValue(route.GroupNames[i], m.Groups[route.GroupNames[i]].Value);
-                            cnt.Request.Values.Add(q.Name, q);
-                        }
-
-                        if (Engine.DevMode)
-                            Console.WriteLine(cnt.Request.Host + ":" + cnt.Request.Url + " - " + "matched " + route.Url);
-
-                        route.Handle(cnt);
-                        return;
-                    }
-                }
-
-                if (!cnt.IsOpen)
-                    return;
-
-                if (Engine.DevMode)
-                    Console.WriteLine(cnt.Request.Host + ":" + cnt.Request.Url + " - " + "Looking for a public folder");
-
-                if (PublicFolders.TryGetFile(cnt))
-                {
-                    cnt.Close();
-                    return;
-                }
-
-                cnt.Response.StatusCode = StatusCode.NotFound;
-
-                RouteTarget rt;
-                if (_callOn.TryGetValue(cnt.Response.StatusCode, out rt))
-                {
-                    if (Engine.DevMode)
-                        Console.WriteLine(cnt.Request.Host + ":" + cnt.Request.Url + " - " + "Goes to status " + cnt.Response.StatusCode + " handler");
-
-                    rt.Handle(cnt);
-                    return;
-                }
-
-                cnt.Response.StatusCode = StatusCode.NotFound;
-                cnt.Close();
             }
-            catch (Exception ex)
+            #endregion
+
+            if (!cnt.IsOpen)
+                return;
+
+            foreach (var route in _routes.Where(x => x.Method == cnt.Request.HttpMethod || x.Method == null))
             {
-                if (ex is TargetInvocationException)
-                    ex = ex.InnerException;
+                var m = route.Regex.Match(cnt.Request.Url);
 
-                Engine.Logger.Log(LogLevel.Exception, "Exception during page execution", ex);
-
-                #region SHOW ERROR PAGE IF IN DEV MODE
-                if (Engine.ShowException)
+                if (m.Success)
                 {
-                    while (ex != null)
+                    for (int i = 0; i < route.GroupNames.Length; i++)
                     {
-                        cnt.Response.StatusCode = StatusCode.InternalServerError;
-                        cnt.SendHeaders();
-                        cnt.Writer.WriteLine("<h1>" + ex.GetType().FullName + "</h1>");
-                        if (ex.Data.Count > 0)
-                        {
-                            cnt.Writer.WriteLine("<h2>Write</h2>");
-                            cnt.Writer.WriteLine("<table>");
-                            foreach (object data in ex.Data.Keys)
-                            {
-                                cnt.Writer.WriteLine("<tr><td>" + data + "</td><td>" + ex.Data[data] + "</td></tr>");
-                            }
-                            cnt.Writer.WriteLine("</table>");
-                        }
-                        cnt.Writer.WriteLine("<h2>HelpLink</h2>");
-                        cnt.Writer.WriteLine(ex.HelpLink);
-
-                        cnt.Writer.WriteLine("<h2>Message</h2>");
-                        cnt.Writer.WriteLine(ex.Message);
-
-                        cnt.Writer.WriteLine("<h2>Source</h2>");
-                        cnt.Writer.WriteLine(ex.Source);
-
-                        cnt.Writer.WriteLine("<h2>StackTrace</h2>");
-                        cnt.Writer.WriteLine(ex.StackTrace);
-
-                        cnt.Writer.WriteLine("<h2>TargetSite</h2>");
-                        cnt.Writer.WriteLine(ex.TargetSite);
-
-                        if (ex.InnerException != null)
-                        {
-                            cnt.Writer.WriteLine("<h2>Inner Exception</h2>");
-                            ex = ex.InnerException;
-                        }
-                        else
-                        {
-                            break;
-                        }
+                        var q = new QueryValue(route.GroupNames[i], m.Groups[route.GroupNames[i]].Value);
+                        cnt.Request.Values.Add(q.Name, q);
                     }
+
+                    if (Engine.DevMode)
+                        Console.WriteLine(cnt.Request.Host + ":" + cnt.Request.Url + " - " + "matched " + route.Url);
+
+                    route.Handle(cnt);
+                    return;
                 }
-                #endregion
             }
+
+            if (!cnt.IsOpen)
+                return;
+
+            if (Engine.DevMode)
+                Console.WriteLine(cnt.Request.Host + ":" + cnt.Request.Url + " - " + "Looking for a public folder");
+
+            if (PublicFolders.TryGetFile(cnt))
+            {
+                cnt.Close();
+                return;
+            }
+
+            cnt.Response.StatusCode = StatusCode.NotFound;
+
+            RouteTarget rt;
+            if (_callOn.TryGetValue(cnt.Response.StatusCode, out rt))
+            {
+                if (Engine.DevMode)
+                    Console.WriteLine(cnt.Request.Host + ":" + cnt.Request.Url + " - " + "Goes to status " + cnt.Response.StatusCode + " handler");
+
+                rt.Handle(cnt);
+                return;
+            }
+
+            cnt.Response.StatusCode = StatusCode.NotFound;
             cnt.Close();
         }
 

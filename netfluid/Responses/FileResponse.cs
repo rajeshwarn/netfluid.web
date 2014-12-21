@@ -31,6 +31,8 @@ namespace NetFluid
     /// </summary>
     public class FileResponse : IResponse
     {
+        private string p;
+
         /// <summary>
         /// Get or set file size exposed to the client
         /// </summary>
@@ -102,6 +104,15 @@ namespace NetFluid
             Stream = new FileStream(filepath, FileMode.Open);
             FileName = System.IO.Path.GetFileName(filepath);
             MimeType = MimeTypes.GetType(filepath);
+            FileSize = Stream.Length;
+        }
+
+        public FileResponse(System.IO.Stream stream, string filename)
+        {
+            // TODO: Complete member initialization
+            this.Stream = stream;
+            FileName = filename;
+            MimeType = MimeTypes.GetType(filename);
             FileSize = Stream.Length;
         }
 

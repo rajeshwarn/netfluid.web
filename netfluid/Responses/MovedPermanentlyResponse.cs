@@ -1,4 +1,4 @@
-﻿namespace NetFluid.Responses
+﻿namespace NetFluid
 {
     /// <summary>
     /// Permanent redirect for clients

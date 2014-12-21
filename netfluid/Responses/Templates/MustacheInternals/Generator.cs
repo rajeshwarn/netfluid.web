@@ -54,32 +54,7 @@ namespace Mustache
             remove { _valueRequestedHandlers.Remove(value); }
         }
 
-        /// <summary>
-        /// Gets the text that is generated for the given object.
-        /// </summary>
-        /// <param name="source">The object to generate the text with.</param>
-        /// <returns>The text generated for the given object.</returns>
-        public string Render(object source)
-        {
-            return render(CultureInfo.CurrentCulture, source);
-        }
-
-        /// <summary>
-        /// Gets the text that is generated for the given object.
-        /// </summary>
-        /// <param name="provider">The format provider to use.</param>
-        /// <param name="source">The object to generate the text with.</param>
-        /// <returns>The text generated for the given object.</returns>
-        public string Render(IFormatProvider provider, object source)
-        {
-            if (provider == null)
-            {
-                provider = CultureInfo.CurrentCulture;
-            }
-            return render(provider, source);
-        }
-
-        private string render(IFormatProvider provider, object source)
+        public void Render(object source,TextWriter writer)
         {
             Scope keyScope = new Scope(source);
             Scope contextScope = new Scope(new Dictionary<string, object>());
@@ -97,9 +72,7 @@ namespace Mustache
             {
                 contextScope.ValueRequested += handler;
             }
-            StringWriter writer = new StringWriter(provider);
             _generator.GetText(keyScope, writer, contextScope);
-            return writer.ToString();
         }
     }
 }

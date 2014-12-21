@@ -1,6 +1,8 @@
-﻿using System;
+﻿
+using System;
 using System.Collections.Generic;
 using System.IO;
+using NetFluid.Templates.Mustache;
 
 namespace Mustache
 {
@@ -12,8 +14,7 @@ namespace Mustache
         /// <summary>
         /// Initializes a new instance of an NewlineTagDefinition.
         /// </summary>
-        public NewlineTagDefinition()
-            : base("newline")
+        public NewlineTagDefinition(): base("newline")
         {
         }
 

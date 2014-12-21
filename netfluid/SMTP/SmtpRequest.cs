@@ -33,23 +33,6 @@ namespace NetFluid.SMTP
             UID = Security.UID();
         }
 
-        public MailMessage Parse()
-        {
-            /*var mime = MimeMessage.Load(_blobFile);
-            var message = new MailMessage();
-
-            mime.Bcc.ForEach(x=>message.Bcc.Add(new MailAddress(x.Name)));
-            mime.Cc.ForEach(x => message.CC.Add(new MailAddress(x.Name)));
-            message.From = new MailAddress(mime.From[0].Name);
-            mime.ReplyTo.ForEach(x=>message.ReplyToList.Add(new MailAddress(x.Name)));
-            message.Subject = mime.Subject;
-            mime.To.ForEach(x => message.To.Add(new MailAddress(x.Name)));
-
-            RenderMimeEntity(mime.Body,message);
-            return message;*/
-            return null;
-        }
-
         public Stream Blob
         {
             get { return new FileStream(_blobFile, FileMode.OpenOrCreate,FileAccess.ReadWrite,FileShare.ReadWrite); }

@@ -21,7 +21,7 @@ namespace NetFluid.Service
         [CallOn(StatusCode.AnyError)]
         public IResponse NotFound()
         {
-            return new NetFluid.Templates.MustacheResponse("./ui/404.html");
+            return new NetFluid.Templates.MustacheResponse("./ui/404.html", new { url=Request.Url,host=Request.Host });
         }
     }
 }

@@ -13,6 +13,18 @@ namespace NetFluid.Templates
         Generator generator;
         object args;
 
+        static List<TagDefinition> customTags;
+
+        static MustacheResponse()
+        {
+            customTags = new List<TagDefinition>();
+        }
+
+        public static void AddCustomTag(TagDefinition tag)
+        {
+            customTags.Add(tag);
+        }
+
         public MustacheResponse(string templateFile): this(templateFile,null)
         { 
         }
@@ -22,6 +34,8 @@ namespace NetFluid.Templates
             compiler = new FormatCompiler();
             compiler.RemoveNewLines = false;
             this.args = args;
+
+            customTags.ForEach(x=>compiler.RegisterTag(x,true));
 
             generator = compiler.Compile(File.ReadAllText(templateFile));
         }
@@ -33,8 +47,7 @@ namespace NetFluid.Templates
 
         public void SendResponse(Context cnt)
         {
-            string result = generator.Render(args);
-            cnt.Writer.Write(result);
+            generator.Render(args,cnt.Writer);
         }
     }
 }
