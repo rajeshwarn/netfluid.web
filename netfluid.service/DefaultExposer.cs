@@ -15,7 +15,7 @@ namespace NetFluid.Service
 
         static void CurrentDomain_UnhandledException(object sender, UnhandledExceptionEventArgs e)
         {
-            Engine.Logger.Log(LogLevel.SystemException, "unhandled exception", e.ExceptionObject as Exception);
+            Engine.Logger.Log("unhandled exception", e.ExceptionObject as Exception);
         }
 
         [CallOn(StatusCode.AnyError)]

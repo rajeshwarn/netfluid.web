@@ -71,6 +71,20 @@ namespace NetFluid
         public Context Context { get; set; }
 
         /// <summary>
+        /// The host where the exposer is in
+        /// </summary>
+        public Host Host { get; set; }
+
+
+        /// <summary>
+        /// Invoked when any host has been loaded and the server start to listen for clients
+        /// </summary>
+        public virtual void OnServerStart()
+        {
+
+        }
+
+        /// <summary>
         /// Return the path based of this assembly location
         /// </summary>
         /// <returns></returns>

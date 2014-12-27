@@ -22,74 +22,68 @@
 // ********************************************************************************************************
 
 using System;
+using System.Collections.Concurrent;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Threading.Tasks;
 
 namespace NetFluid
 {
     internal class Logger : ILogger
     {
+        FileStream fs;
+        StreamWriter writer;
+        BlockingCollection<string> outQueue;
+
         public Logger()
         {
             LogPath = "./AppLog.txt";
-            LogLevel = LogLevel.All;
+            outQueue = new BlockingCollection<string>();
+            fs = new FileStream(LogPath, FileMode.OpenOrCreate);
+            writer = new StreamWriter(fs);
+
+            Task.Factory.StartNew(() =>
+            {
+                while (true) 
+                {
+                    writer.WriteLine(outQueue.Take());
+                    writer.Flush();
+                }
+            });
         }
 
         #region ILogger Members
 
-        public LogLevel LogLevel { get; set; }
-
         public string LogPath { get; set; }
 
-        public void Log(LogLevel lvl, string msg, Exception ex)
+        public void Log(string msg, Exception ex)
         {
-            if (LogLevel >= lvl)
+            if (ex is TargetInvocationException)
+                ex = ex.InnerException;
+
+            string s = ("\r\n" + DateTime.Now + "\t" + msg + "\r\n");
+            do
             {
-                try
-                {
-                    if (ex is TargetInvocationException)
-                        ex = ex.InnerException;
+                if (Engine.DevMode)
+                    Console.WriteLine(s);
 
-                    do
-                    {
-                        string s = ("\r\n" + DateTime.Now + "\t" + lvl + "\t" + msg + "\r\n");
-                        if (Engine.DevMode)
-                            Console.WriteLine(s);
+                s += string.Join("\r\n",ex.ToString().Split('\r', '\n').Select(item=>"\t\t\t" + item.Trim()));
 
-                        s = ex.ToString().Split('\r', '\n').Aggregate(s,
-                            (current, item) =>
-                                current + ("\t\t\t\t" + item + "\r\n"));
+                ex = ex.InnerException;
+            } while (ex != null);
 
-                        File.AppendAllText(LogPath, s);
-                        ex = ex.InnerException;
-                    } while (ex != null);
-                }
-                catch (Exception)
-                {
-                }
-            }
+            outQueue.Add(s);
         }
 
 
-        public void Log(LogLevel lvl, string msg)
+        public void Log(string msg)
         {
-            if (LogLevel >= lvl)
-            {
-                try
-                {
-                    string s = DateTime.Now + "\t" + lvl + "\t" + msg + "\r\n";
-                    if (Engine.DevMode)
-                    {
-                        Console.Write(s);
-                    }
+            string s = DateTime.Now + "\t" + msg;
+            if (Engine.DevMode)
+                Console.WriteLine(s);
 
-                    File.AppendAllText(LogPath, s);
-                }
-                catch (Exception)
-                {
-                }
-            }
+            outQueue.Add(s);
         }
 
         #endregion
