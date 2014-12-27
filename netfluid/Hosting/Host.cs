@@ -87,6 +87,9 @@ namespace NetFluid
             public void ShowError(Context cnt, Exception ex)
             {
                 #region show error
+
+                Engine.Logger.Log("exception in page execution", ex);
+
                 try
                 {
                     if (ex is TargetInvocationException)
@@ -188,22 +191,29 @@ namespace NetFluid
         {
             public override void Handle(Context cnt)
             {
-                var exposer = Type.CreateIstance() as MethodExposer;
-                exposer.Context = cnt;
-                object[] args = null;
-
-                if (Parameters != null && Parameters.Length > 0)
+                try
                 {
-                    args = new object[Parameters.Length];
-                    for (int i = 0; i < Parameters.Length; i++)
-                    {
-                        var q = cnt.Request.Values[Parameters[i].Name];
-                        if (q != null)
-                            args[i] = q.Parse(Parameters[i].ParameterType);
-                    }
-                }
+                    var exposer = Type.CreateIstance() as MethodExposer;
+                    exposer.Context = cnt;
+                    object[] args = null;
 
-                MethodInfo.Invoke(exposer, args);
+                    if (Parameters != null && Parameters.Length > 0)
+                    {
+                        args = new object[Parameters.Length];
+                        for (int i = 0; i < Parameters.Length; i++)
+                        {
+                            var q = cnt.Request.Values[Parameters[i].Name];
+                            if (q != null)
+                                args[i] = q.Parse(Parameters[i].ParameterType);
+                        }
+                    }
+
+                    MethodInfo.Invoke(exposer, args);
+                }
+                catch (Exception ex)
+                {
+                    ShowError(cnt, ex);
+                }
             }
         }
 
