@@ -5,7 +5,7 @@ namespace Mustache
     /// <summary>
     /// Holds the information descibing a variable that is found in a template.
     /// </summary>
-    public class VariableFoundEventArgs : EventArgs
+    internal class VariableFoundEventArgs : EventArgs
     {
         /// <summary>
         /// Initializes a new instance of a VariableFoundEventArgs.

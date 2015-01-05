@@ -846,7 +846,7 @@ namespace NetFluid
         /// <param name="size"></param>
         public static void CopyTo(this Stream input, Stream output, long size)
         {
-            var cs = 128 * 1024;
+            var cs = 2 * 1024 * 1024;
 
             var rest = size % cs;
             var chunks = (size - rest)/cs;

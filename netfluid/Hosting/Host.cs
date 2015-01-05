@@ -49,11 +49,16 @@ namespace NetFluid
 
             public virtual void Handle(Context cnt)
             {
+                MethodExposer exposer = null;
+                object[] args;
+                IResponse resp;
+
+                #region ARGS
                 try
                 {
-                    var exposer = Type.CreateIstance() as MethodExposer;
+                    exposer = Type.CreateIstance() as MethodExposer;
                     exposer.Context = cnt;
-                    object[] args = null;
+                    args = null;
 
                     if (Parameters != null && Parameters.Length > 0)
                     {
@@ -65,12 +70,31 @@ namespace NetFluid
                                 args[i] = q.Parse(Parameters[i].ParameterType);
                         }
                     }
+                }
+                catch (Exception ex)
+                {
+                    ShowError(cnt, ex);
+                    return;
+                }
+                #endregion
 
-                    var resp = MethodInfo.Invoke(exposer, args) as IResponse;
+                #region RESPONSE
+                try
+                {
+                    resp = MethodInfo.Invoke(exposer, args) as IResponse;
 
                     if (resp != null)
                         resp.SetHeaders(cnt);
+                }
+                catch (Exception ex)
+                {
+                    ShowError(cnt, ex);
+                    return;
+                }
+                #endregion
 
+                try
+                {
                     cnt.SendHeaders();
 
                     if (resp != null && cnt.Request.HttpMethod.ToLowerInvariant() != "head")
@@ -78,9 +102,8 @@ namespace NetFluid
 
                     cnt.Close();
                 }
-                catch (Exception ex)
+                catch (Exception)
                 {
-                    ShowError(cnt, ex);
                 }
             }
 
@@ -89,6 +112,8 @@ namespace NetFluid
                 #region show error
                 try
                 {
+                    Engine.Logger.Log(LogLevel.Exception, "exception", ex);
+
                     if (ex is TargetInvocationException)
                         ex = ex.InnerException;
 

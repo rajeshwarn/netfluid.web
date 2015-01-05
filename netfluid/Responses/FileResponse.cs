@@ -76,7 +76,7 @@ namespace NetFluid
         /// <param name="mimetype">overrided mime type</param>
         public FileResponse(string filepath, string filename, string mimetype)
         {
-            Stream = new FileStream(filepath, FileMode.Open);
+            Stream = new FileStream(filepath, FileMode.Open,FileAccess.Read,FileShare.Read);
             FileName = filename;
             MimeType = mimetype;
             FileSize = Stream.Length;
@@ -101,7 +101,7 @@ namespace NetFluid
         /// <param name="filepath"></param>
         public FileResponse(string filepath)
         {
-            Stream = new FileStream(filepath, FileMode.Open);
+            Stream = new FileStream(filepath, FileMode.Open, FileAccess.Read, FileShare.Read);
             FileName = System.IO.Path.GetFileName(filepath);
             MimeType = MimeTypes.GetType(filepath);
             FileSize = Stream.Length;
