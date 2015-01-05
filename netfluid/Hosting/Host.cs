@@ -241,7 +241,7 @@ namespace NetFluid
         private readonly Dictionary<StatusCode,RouteTarget> _callOn;
         public IPublicFolderManager PublicFolders;
 
-        List<MethodExposer> instances;
+        internal List<MethodExposer> instances;
 
         public readonly string Name;
 
@@ -274,12 +274,41 @@ namespace NetFluid
             return new Regex("^"+urlRegex+"$");
         }
 
+        void loadInstance(Type type)
+        {
+            if (!instances.Any(x => x.GetType().Equals(type)))
+                instances.Add(type.CreateIstance() as MethodExposer);
+        }
+
+        internal void OnServerStart()
+        {
+            foreach (var type in instances.Select(x=>x.GetType()))
+            {
+                var m = type.GetMethod("OnServerStart",BindingFlags.FlattenHierarchy);
+
+                if(m.IsOverride())
+                {
+                    try
+                    {
+                        var instance = type.CreateIstance() as MethodExposer;
+                    }
+                    catch (Exception ex)
+                    {
+                        Engine.Logger.Log("Exception during " + type.Name + ".OnServerStart", ex);
+                    }
+                }
+            }
+        }
+
         public void AddTrigger(MethodInfo exposedMethod, string url=null, string httpMethod = null, int index = 99999)
         {
             var type = exposedMethod.DeclaringType;
 
             if (!type.Inherit(typeof(MethodExposer)))
                 throw new TypeLoadException("Exposing type must inherit NetFluid.MethodExposer");
+
+            if (!type.HasDefaultConstructor())
+                throw new TypeLoadException(type.Name+" does not have a parameterless constructor");
 
             if (!exposedMethod.ReturnType.Implements(typeof(IResponse)))
                 throw new TypeLoadException("Exposed method must returns an IResponse object");
@@ -288,6 +317,8 @@ namespace NetFluid
 
             _triggers.Add(new Trigger { Url = url, Method = httpMethod, MethodInfo = exposedMethod, Regex = regex, Type = type, Index = index });
             _triggers = _triggers.OrderByDescending(x => x.Index).ToList();
+
+            loadInstance(type);
         }
 
         public void AddFilter(MethodInfo exposedMethod, string url=null, string httpMethod = null, int index = 99999)
@@ -296,6 +327,9 @@ namespace NetFluid
 
             if (!type.Inherit(typeof(MethodExposer)))
                 throw new TypeLoadException("Exposing type must inherit NetFluid.MethodExposer");
+
+            if (!type.HasDefaultConstructor())
+                throw new TypeLoadException(type.Name + " does not have a parameterless constructor");
 
             if (!exposedMethod.ReturnType.Implements(typeof(bool)))
                 throw new TypeLoadException("Filter methods must returns a bool");
@@ -308,10 +342,23 @@ namespace NetFluid
 
             _filters.Add(new Filter { Url = url, Method = httpMethod, MethodInfo = exposedMethod, Regex = regex, Type = type, Index = index });
             _filters = _filters.OrderByDescending(x => x.Index).ToList();
+
+            loadInstance(type);
         }
 
         public void AddStatusCodeHandler(StatusCode code, MethodInfo exposedMethod)
         {
+            var type = exposedMethod.DeclaringType;
+
+            if (!type.Inherit(typeof(MethodExposer)))
+                throw new TypeLoadException("Exposing type must inherit NetFluid.MethodExposer");
+
+            if (!type.HasDefaultConstructor())
+                throw new TypeLoadException(type.Name + " does not have a parameterless constructor");
+
+            if (!exposedMethod.ReturnType.Implements(typeof(IResponse)))
+                throw new TypeLoadException("Exposed methods must returns an IResponse object");
+
             if (code==StatusCode.AnyError)
                 foreach (StatusCode c in Enum.GetValues(typeof(StatusCode)))
                 {
@@ -333,12 +380,15 @@ namespace NetFluid
                         AddStatusCodeHandler(c, exposedMethod);
                 }
 
+
             if(!_callOn.ContainsKey(code))
                 _callOn.Add(code, new RouteTarget
                 {
-                    Type = exposedMethod.DeclaringType,
+                    Type = type,
                     MethodInfo = exposedMethod
                 });
+
+            loadInstance(type);
         }
 
         public void AddRoute(string url, MethodInfo exposedMethod, string httpMethod = null, int index=99999)
@@ -348,6 +398,9 @@ namespace NetFluid
             if (!type.Inherit(typeof(MethodExposer)))
                 throw new TypeLoadException("Exposing type must inherit NetFluid.MethodExposer");
 
+            if (!type.HasDefaultConstructor())
+                throw new TypeLoadException(type.Name + " does not have a parameterless constructor");
+
             if(!exposedMethod.ReturnType.Implements(typeof(IResponse)))
                 throw new TypeLoadException("Exposed methods must returns an IResponse object");
 
@@ -355,6 +408,8 @@ namespace NetFluid
 
             _routes.Add(new RouteTarget { Url=url, Method=httpMethod, MethodInfo=exposedMethod,Regex=regex, Type=type, GroupNames=regex.GetGroupNames(), Parameters=exposedMethod.GetParameters(), Index=index });
             _routes = _routes.OrderByDescending(x => x.Index).ToList();
+
+            loadInstance(type);
         }
 
         /// <summary>
@@ -499,7 +554,7 @@ namespace NetFluid
             }
             catch (Exception ex)
             {
-                Engine.Logger.Log(LogLevel.Exception, "Failure in "+p+" instancing",ex);
+                Engine.Logger.Log("Failure in "+p+" instancing",ex);
             }
 
             var prefixes = p.CustomAttribute<Route>(true).Select(x=>x.Url);

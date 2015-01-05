@@ -75,8 +75,7 @@ namespace NetFluid.HTTP
 
         public void Start()
         {
-            Engine.Logger.Log(LogLevel.Debug,
-                "Starting " + (Certificate != null ? "secure " : " ") + "web interface on " + Endpoint);
+            Engine.Logger.Log("Starting " + (Certificate != null ? "https " : "http ") + "web interface on " + Endpoint);
 
             Task.Factory.StartNew(() => 
             {

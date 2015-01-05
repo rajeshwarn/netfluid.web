@@ -624,6 +624,16 @@ namespace NetFluid
         #region METHODINFO
 
         /// <summary>
+        /// True if the method is overriden
+        /// </summary>
+        /// <param name="methodInfo"></param>
+        /// <returns></returns>
+        public static bool IsOverride(this MethodInfo methodInfo)
+        {
+            return (methodInfo.GetBaseDefinition() != methodInfo);
+        }
+
+        /// <summary>
         /// Builds a Delegate instance from the supplied MethodInfo object and a target to invoke against.
         /// </summary>
         public static Delegate ToDelegate(this MethodInfo mi, object target)
@@ -735,9 +745,12 @@ namespace NetFluid
 
         #endregion
 
-
-
         #region TYPE
+
+        public static bool HasDefaultConstructor(this Type type)
+        {
+            return type.GetConstructor(Type.EmptyTypes) != null;
+        }
 
         /// <summary>
         ///     Return all fields

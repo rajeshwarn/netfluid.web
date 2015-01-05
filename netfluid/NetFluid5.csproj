@@ -172,7 +172,6 @@
     <Compile Include="IO\WebSocketStream.cs" />
     <Compile Include="IWebInterfaceManager.cs" />
     <Compile Include="Logger.cs" />
-    <Compile Include="LogLevel.cs" />
     <Compile Include="MimeTypes.cs" />
     <Compile Include="IResponse.cs" />
     <Compile Include="IDatabaseObject.cs" />

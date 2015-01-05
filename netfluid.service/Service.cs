@@ -105,7 +105,7 @@ namespace NetFluid.Service
         static Assembly CurrentDomain_AssemblyResolve(object sender, ResolveEventArgs args)
         {
             var dir = Path.GetDirectoryName(args.RequestingAssembly.Location);
-            Engine.Logger.Log(LogLevel.Debug,"Loading "+args.Name);
+            Engine.Logger.Log("Loading "+args.Name);
             foreach(var dll in Directory.GetFiles(dir, "*.dll"))
             {
                 try
@@ -119,7 +119,7 @@ namespace NetFluid.Service
                 }
             }
 
-            Engine.Logger.Log(LogLevel.Error, "Failed to found " + args.Name);
+            Engine.Logger.Log("Failed to found " + args.Name);
             return null;
         }
 
@@ -131,14 +131,14 @@ namespace NetFluid.Service
             }
             catch (Exception ex)
             {
-                Engine.Logger.Log(LogLevel.Exception,"Error starting up the service",ex);
+                Engine.Logger.Log("Error starting up the service",ex);
             }
 
         }
 
         protected override void OnStop()
         {
-            Engine.Logger.Log(LogLevel.Warning,"NetFluid Service is stopping");
+            Engine.Logger.Log("NetFluid Service is stopping");
         }
     }
 }

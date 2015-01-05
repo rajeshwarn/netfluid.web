@@ -49,19 +49,22 @@ namespace NetFluid
             AppDomain.CurrentDomain.UnhandledException += (s, e) => 
             {
                 if (e.IsTerminating)
-                    Logger.Log(LogLevel.UnHandled, "Unhandled fatal exception occurred.", e.ExceptionObject as Exception);
+                    Logger.Log("Unhandled fatal exception occurred.", e.ExceptionObject as Exception);
                 else
-                    Logger.Log(LogLevel.UnHandled, "Unhandled exception occurred.", e.ExceptionObject as Exception);
+                    Logger.Log("Unhandled exception occurred.", e.ExceptionObject as Exception);
             };
             
             Interfaces = new InterfaceManager();
             Sessions = new MemorySessionManager();
             Logger = new Logger();
 
-            var max = (int)Math.Pow(Environment.ProcessorCount, 10);
-            var min = (int)Math.Pow(Environment.ProcessorCount, 5);
+            var max = Environment.ProcessorCount * 250;
+            var min = Environment.ProcessorCount * 10;
             ThreadPool.SetMinThreads(min,max);
+            ThreadPool.SetMaxThreads(max, max);
 
+            ThreadPool.GetMinThreads(out min,out max);
+            Logger.Log("threadpool size " + min + " " + max);
         }
 
         /// <summary>
@@ -165,8 +168,8 @@ namespace NetFluid
         /// </summary>
         public static void Start()
         {
-            Logger.Log(LogLevel.Debug, "Starting NetFluid Engine");
-            Logger.Log(LogLevel.Debug, "Loading calling assembly");
+            Logger.Log("Starting NetFluid Engine");
+            Logger.Log("Loading calling assembly");
 
             var assembly = Assembly.GetEntryAssembly();
             var location = assembly.Location;
@@ -176,8 +179,10 @@ namespace NetFluid
             else
                 Load(location);
 
+            _hosts.ForEach(x => x.Value.OnServerStart());
+
             Interfaces.Start();
-            Logger.Log(LogLevel.Debug, "NetFluid web application running");
+            Logger.Log("NetFluid web application running");
         }
 
         /// <summary>
@@ -229,7 +234,7 @@ namespace NetFluid
             }
             catch (Exception ex)
             {
-                Logger.Log(LogLevel.Error, "Error during loading " + assembly + " as " + host + " host", ex);
+                Logger.Log("Error during loading " + assembly + " as " + host + " host", ex);
             }
         }
 
@@ -248,7 +253,7 @@ namespace NetFluid
         /// <param name="assembly">assembly to be loaded</param>
         public static void Load(Assembly assembly)
         {
-            Logger.Log(LogLevel.Debug,"Loading "+assembly+" into default web application");
+            Logger.Log("Loading "+assembly+" into default web application");
 
             try
             {
@@ -257,7 +262,7 @@ namespace NetFluid
 
                 if (!pages.Any())
                 {
-                    Logger.Log(LogLevel.Error, "No method exposer found in " + assembly);
+                    Logger.Log("No method exposer found in " + assembly);
                     return;
                 }
 
@@ -290,12 +295,12 @@ namespace NetFluid
             {
                 foreach (var loader in lex.LoaderExceptions)
                 {
-                    Logger.Log(LogLevel.Error, "Error during loading type " + loader.Message + " as default host",loader);
+                    Logger.Log("Error during loading type " + loader.Message + " as default host",loader);
                 }
             }
             catch (Exception ex)
             {
-                Logger.Log(LogLevel.Error, "Error during loading " + assembly + " as default host", ex);
+                Logger.Log("Error during loading " + assembly + " as default host", ex);
             }
         }
     }

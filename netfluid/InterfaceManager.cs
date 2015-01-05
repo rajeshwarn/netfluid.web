@@ -34,7 +34,7 @@ namespace NetFluid
 
         public void Start()
         {
-            Engine.Logger.Log(LogLevel.Debug, "Starting web interfaces");
+            Engine.Logger.Log("Starting web interfaces");
             foreach (var item in this)
             {
                 item.Start();
@@ -48,7 +48,7 @@ namespace NetFluid
 
         public void AddAllAddresses(int port = 80)
         {
-            Engine.Logger.Log(LogLevel.Debug, "Starting web interfaces on every ip on port " + port);
+            Engine.Logger.Log("Starting web interfaces on every ip on port " + port);
             foreach (var item in Network.Addresses)
             {
                 //Console.WriteLine(item + ":" + port);
@@ -60,12 +60,12 @@ namespace NetFluid
         {
             try
             {
-                Engine.Logger.Log(LogLevel.Debug, "Adding http interface on " + ip + ":" + port);
+                Engine.Logger.Log("Adding http interface on " + ip + ":" + port);
                 Add(new WebInterface(ip, port));
             }
             catch (Exception ex)
             {
-                Engine.Logger.Log(LogLevel.Warning, "Failed to add http interface on " + ip + ":" + port, ex);
+                Engine.Logger.Log("Failed to add http interface on " + ip + ":" + port, ex);
             }
         }
 
@@ -73,12 +73,12 @@ namespace NetFluid
         {
             try
             {
-                Engine.Logger.Log(LogLevel.Debug, "Adding https interface on " + ip + ":" + port);
+                Engine.Logger.Log("Adding https interface on " + ip + ":" + port);
                 Add(new WebInterface(ip, port, certificate));
             }
             catch (Exception ex)
             {
-                Engine.Logger.Log(LogLevel.Warning, "Failed to add https interface on " + ip + ":" + port, ex);
+                Engine.Logger.Log("Failed to add https interface on " + ip + ":" + port, ex);
             }
         }
 
@@ -86,12 +86,12 @@ namespace NetFluid
         {
             try
             {
-                Engine.Logger.Log(LogLevel.Debug, "Adding http interface on " + ip + ":" + port);
+                Engine.Logger.Log("Adding http interface on " + ip + ":" + port);
                 Add(new WebInterface(IPAddress.Parse(ip), port));
             }
             catch (Exception ex)
             {
-                Engine.Logger.Log(LogLevel.Warning, "Failed to add http interface on " + ip + ":" + port, ex);
+                Engine.Logger.Log("Failed to add http interface on " + ip + ":" + port, ex);
             }
         }
 
@@ -99,12 +99,12 @@ namespace NetFluid
         {
             try
             {
-                Engine.Logger.Log(LogLevel.Debug, "Adding https interface on " + ip + ":" + port);
+                Engine.Logger.Log("Adding https interface on " + ip + ":" + port);
                 Add(new WebInterface(IPAddress.Parse(ip), port, certificate));
             }
             catch (Exception ex)
             {
-                Engine.Logger.Log(LogLevel.Warning, "Failed to add https interface on " + ip + ":" + port, ex);
+                Engine.Logger.Log("Failed to add https interface on " + ip + ":" + port, ex);
             }
         }
 
