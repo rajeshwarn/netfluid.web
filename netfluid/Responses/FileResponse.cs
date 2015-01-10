@@ -76,7 +76,7 @@ namespace NetFluid
         /// <param name="mimetype">overrided mime type</param>
         public FileResponse(string filepath, string filename, string mimetype)
         {
-            Stream = new FileStream(filepath, FileMode.Open, FileAccess.Read, FileShare.Read);
+            Stream = new FileStream(filepath, FileMode.Open,FileAccess.Read,FileShare.Read);
             FileName = filename;
             MimeType = mimetype;
             FileSize = Stream.Length;
@@ -89,7 +89,7 @@ namespace NetFluid
         /// <param name="filename">overrided file name</param>
         public FileResponse(string filepath, string filename)
         {
-            Stream = new FileStream(filepath, FileMode.Open, FileAccess.Read, FileShare.Read);
+            Stream = new FileStream(filepath, FileMode.Open);
             FileName = filename;
             MimeType = MimeTypes.GetType(filepath);
             FileSize = Stream.Length;
@@ -131,7 +131,7 @@ namespace NetFluid
         {
             var fs = Stream;
 
-            #region ranges
+            #region TO BE IMPLEMENTED
             if (cnt.Request.Headers.Contains("Range") && cnt.Request.Headers["Range"].StartsWith("bytes="))
             {
                 var r = cnt.Request.Headers["Range"].Substring("bytes=".Length);
@@ -156,11 +156,6 @@ namespace NetFluid
 
             fs.CopyTo(cnt.OutputStream);
             fs.Close();
-        }
-
-        public void Dispose()
-        {
-            Stream.Dispose();
         }
     }
 }

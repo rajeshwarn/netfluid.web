@@ -49,51 +49,71 @@ namespace NetFluid
 
             public virtual void Handle(Context cnt)
             {
+                MethodExposer exposer = null;
+                object[] args;
+                IResponse resp;
+
+                #region ARGS
                 try
                 {
-                    using(var exposer = Type.CreateIstance() as MethodExposer)
+                    exposer = Type.CreateIstance() as MethodExposer;
+                    exposer.Context = cnt;
+                    args = null;
+
+                    if (Parameters != null && Parameters.Length > 0)
                     {
-                        exposer.Context = cnt;
-                        object[] args = null;
-
-                        if (Parameters != null && Parameters.Length > 0)
+                        args = new object[Parameters.Length];
+                        for (int i = 0; i < Parameters.Length; i++)
                         {
-                            args = new object[Parameters.Length];
-                            for (int i = 0; i < Parameters.Length; i++)
-                            {
-                                var q = cnt.Request.Values[Parameters[i].Name];
-                                if (q != null)
-                                    args[i] = q.Parse(Parameters[i].ParameterType);
-                            }
+                            var q = cnt.Request.Values[Parameters[i].Name];
+                            if (q != null)
+                                args[i] = q.Parse(Parameters[i].ParameterType);
                         }
-
-                        var resp = MethodInfo.Invoke(exposer, args) as IResponse;
-
-                        if (resp != null)
-                            resp.SetHeaders(cnt);
-
-                        cnt.SendHeaders();
-
-                        if (resp != null && cnt.Request.HttpMethod.ToLowerInvariant() != "head")
-                            resp.SendResponse(cnt);
-
-                        cnt.Close();
                     }
                 }
                 catch (Exception ex)
                 {
                     ShowError(cnt, ex);
+                    return;
+                }
+                #endregion
+
+                #region RESPONSE
+                try
+                {
+                    resp = MethodInfo.Invoke(exposer, args) as IResponse;
+
+                    if (resp != null)
+                        resp.SetHeaders(cnt);
+                }
+                catch (Exception ex)
+                {
+                    ShowError(cnt, ex);
+                    return;
+                }
+                #endregion
+
+                try
+                {
+                    cnt.SendHeaders();
+
+                    if (resp != null && cnt.Request.HttpMethod.ToLowerInvariant() != "head")
+                        resp.SendResponse(cnt);
+
+                    cnt.Close();
+                }
+                catch (Exception)
+                {
                 }
             }
 
             public void ShowError(Context cnt, Exception ex)
             {
                 #region show error
-
-                Engine.Logger.Log("exception in page execution", ex);
-
                 try
                 {
+                    Engine.Logger.Log(LogLevel.Exception, "exception", ex);
+
                     if (ex is TargetInvocationException)
                         ex = ex.InnerException;
 
@@ -193,29 +213,22 @@ namespace NetFluid
         {
             public override void Handle(Context cnt)
             {
-                try
-                {
-                    var exposer = Type.CreateIstance() as MethodExposer;
-                    exposer.Context = cnt;
-                    object[] args = null;
+                var exposer = Type.CreateIstance() as MethodExposer;
+                exposer.Context = cnt;
+                object[] args = null;
 
-                    if (Parameters != null && Parameters.Length > 0)
+                if (Parameters != null && Parameters.Length > 0)
+                {
+                    args = new object[Parameters.Length];
+                    for (int i = 0; i < Parameters.Length; i++)
                     {
-                        args = new object[Parameters.Length];
-                        for (int i = 0; i < Parameters.Length; i++)
-                        {
-                            var q = cnt.Request.Values[Parameters[i].Name];
-                            if (q != null)
-                                args[i] = q.Parse(Parameters[i].ParameterType);
-                        }
+                        var q = cnt.Request.Values[Parameters[i].Name];
+                        if (q != null)
+                            args[i] = q.Parse(Parameters[i].ParameterType);
                     }
+                }
 
-                    MethodInfo.Invoke(exposer, args);
-                }
-                catch (Exception ex)
-                {
-                    ShowError(cnt, ex);
-                }
+                MethodInfo.Invoke(exposer, args);
             }
         }
 
