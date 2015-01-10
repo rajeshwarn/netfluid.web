@@ -32,7 +32,7 @@ namespace NetFluid
     /// HTTP response  to sent to the cleint
     /// </summary>
     [Serializable]
-    public class HttpResponse
+    public class HttpResponse: IDisposable
     {
         /// <summary>
         /// Content encoding used by Reader and Writer.By default is instanciated from the client request
@@ -118,6 +118,12 @@ namespace NetFluid
         {
             StatusCode = StatusCode.MovedPermanently;
             Headers.Append("Location", url);
+        }
+
+        public void Dispose()
+        {
+            Headers.Clear();
+            Headers = null;
         }
     }
 }

@@ -68,5 +68,10 @@ namespace NetFluid
         }
 
         #endregion
+
+        public void Dispose()
+        {
+            Object = null;
+        }
     }
 }

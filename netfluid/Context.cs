@@ -665,6 +665,9 @@ namespace NetFluid
 
         public void Dispose()
         {
+            Request.Dispose();
+            Response.Dispose();
+            reader.Dispose();
         }
     }
 }

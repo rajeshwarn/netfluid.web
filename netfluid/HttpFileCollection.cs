@@ -32,15 +32,8 @@ namespace NetFluid
     /// Multipart forma data files uploaded by the client
     /// </summary>
     [Serializable]
-    public class HttpFileCollection : IEnumerable<HttpFile>
+    public class HttpFileCollection : List<HttpFile>, IDisposable
     {
-        private readonly List<HttpFile> _attached;
-
-        public HttpFileCollection()
-        {
-            _attached = new List<HttpFile>();
-        }
-
         /// <summary>
         /// Get or set file from the POST variable name (it can an array)
         /// </summary>
@@ -48,35 +41,13 @@ namespace NetFluid
         /// <returns></returns>
         public IEnumerable<HttpFile> this[string name]
         {
-            get { return _attached.Where(x => x.Name == name); }
+            get { return this.Where(x => x.Name == name); }
             set
             {
-                _attached.RemoveAll(x => x.Name == name);
-                _attached.AddRange(value);
+                this.RemoveAll(x => x.Name == name);
+                this.AddRange(value);
             }
         }
-
-        #region IEnumerable<HttpFile> Members
-
-        /// <summary>
-        /// Visit the uploaded file collection
-        /// </summary>
-        /// <returns></returns>
-        public IEnumerator<HttpFile> GetEnumerator()
-        {
-            return _attached.GetEnumerator();
-        }
-
-        /// <summary>
-        /// Visit the uploaded file collection
-        /// </summary>
-        /// <returns></returns>
-        IEnumerator IEnumerable.GetEnumerator()
-        {
-            return _attached.GetEnumerator();
-        }
-
-        #endregion
 
         /// <summary>
         /// True if contains a file with that POST variable name
@@ -85,7 +56,7 @@ namespace NetFluid
         /// <returns></returns>
         public bool Contains(string name)
         {
-            return _attached.Any(x => x.Name == name);
+            return this.Any(x => x.Name == name);
         }
 
         /// <summary>
@@ -95,16 +66,12 @@ namespace NetFluid
         /// <returns></returns>
         public HttpFile Take(string name)
         {
-            return _attached.FirstOrDefault(x => x.Name == name);
+            return this.FirstOrDefault(x => x.Name == name);
         }
 
-        /// <summary>
-        /// Add a file to the collection
-        /// </summary>
-        /// <param name="file"></param>
-        internal void Add(HttpFile file)
+        public void Dispose()
         {
-            _attached.Add(file);
+            base.Clear();
         }
     }
 }

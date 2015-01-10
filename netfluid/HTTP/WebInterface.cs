@@ -84,20 +84,20 @@ namespace NetFluid.HTTP
                     var s = Socket.Accept();
                     Task.Factory.StartNew(() =>
                     {
-                        var cnt = Certificate == null ? new Context(s) : new Context(s, Certificate);
-                        try
+                        using (var cnt = Certificate == null ? new Context(s) : new Context(s, Certificate))
                         {
-                            cnt.ReadHeaders();
-                            cnt.ReadRequest();
-                        }
-                        catch (Exception)
-                        {
-                            return;
-                        }
+                            try
+                            {
+                                cnt.ReadHeaders();
+                                cnt.ReadRequest();
+                            }
+                            catch (Exception)
+                            {
+                                return;
+                            }
 
-                        Engine.Serve(cnt);
-
-                        cnt.Dispose();
+                            Engine.Serve(cnt);
+                        }
                     });
                 }
             });

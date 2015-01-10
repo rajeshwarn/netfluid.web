@@ -18,5 +18,10 @@
         public void SendResponse(Context cnt)
         {
         }
+
+        public void Dispose()
+        {
+            Destination = null;
+        }
     }
 }

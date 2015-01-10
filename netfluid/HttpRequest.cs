@@ -31,7 +31,7 @@ namespace NetFluid
     ///     Contains all the data recieved from the client
     /// </summary>
     [Serializable]
-    public class HttpRequest
+    public class HttpRequest: IDisposable
     {
         /// <summary>
         ///     Sintactic sugar for Headers["Accept-Types"]
@@ -93,40 +93,25 @@ namespace NetFluid
         /// </summary>
         public string[] UserLanguages;
 
-        private QueryValueCollection values;
-        private HttpFileCollection files;
-
         public HttpRequest()
         {
             Headers = new WebHeaderCollection();
             ProtocolVersion = HttpVersion.Version10;
             ContentEncoding = Encoding.UTF8;
             Cookies = new CookieCollection();
+            Values = new QueryValueCollection();
+            Files = new HttpFileCollection();
         }
 
         /// <summary>
         ///     Files recieved from the client
         /// </summary>
-        public HttpFileCollection Files
-        {
-            get
-            {
-                if (files == null) files=new HttpFileCollection();
-                return files;
-            }
-        }
+        public HttpFileCollection Files { get; private set; }
 
         /// <summary>
         ///     Merge of get and post values
         /// </summary>
-        public QueryValueCollection Values
-        {
-            get
-            {
-                if (values == null) values=new QueryValueCollection();
-                return values;
-            }
-        }
+        public QueryValueCollection Values { get; private set; }
 
         /// <summary>
         ///     Sintactic sugar for Headers["Content-Type"]
@@ -150,6 +135,13 @@ namespace NetFluid
         public string Host
         {
             get { return Headers["Host"]; }
+        }
+
+        public void Dispose()
+        {
+            Headers.Dispose();
+            Values.Dispose();
+            Files.Dispose();
         }
     }
 }

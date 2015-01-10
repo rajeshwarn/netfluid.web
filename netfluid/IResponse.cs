@@ -21,12 +21,14 @@
 // 23/10/2013    Matteo Fabbri      Inital coding
 // ********************************************************************************************************
 
+using System;
+
 namespace NetFluid
 {
     /// <summary>
     ///     Implement methods for complex type response
     /// </summary>
-    public interface IResponse
+    public interface IResponse: IDisposable
     {
         /// <summary>
         /// Set response headers

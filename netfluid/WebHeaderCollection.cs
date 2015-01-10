@@ -32,7 +32,7 @@ namespace NetFluid
     /// Contains HTTP request or response headers 
     /// </summary>
     [Serializable]
-    public class WebHeaderCollection:IEnumerable<WebHeader>
+    public class WebHeaderCollection:IEnumerable<WebHeader>,IDisposable
     {
         private readonly Dictionary<string, WebHeader> values;
 
@@ -148,6 +148,11 @@ namespace NetFluid
         /// Delete all headers
         /// </summary>
         public void Clear()
+        {
+            values.Clear();
+        }
+
+        public void Dispose()
         {
             values.Clear();
         }

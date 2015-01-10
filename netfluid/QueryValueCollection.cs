@@ -8,7 +8,7 @@ namespace NetFluid
     /// <summary>
     /// GET or POST values recieved from the client
     /// </summary>
-    public class QueryValueCollection : IEnumerable<QueryValue>
+    public class QueryValueCollection : IEnumerable<QueryValue>, IDisposable
     {
         private readonly Dictionary<string, QueryValue> _values;
 
@@ -195,6 +195,11 @@ namespace NetFluid
             }
 
             return (T)obj;
+        }
+
+        public void Dispose()
+        {
+            _values.Clear();
         }
     }
 }

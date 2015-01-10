@@ -49,6 +49,12 @@ namespace NetFluid.Templates
         {
             generator.Render(args,cnt.Writer);
         }
+
+        public void Dispose()
+        {
+            compiler = null;
+            generator = null;
+        }
     }
 }
  

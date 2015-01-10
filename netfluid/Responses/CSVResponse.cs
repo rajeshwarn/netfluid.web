@@ -53,5 +53,10 @@ namespace NetFluid
             cnt.Writer.Flush();
             cnt.Close();
         }
+
+        public void Dispose()
+        {
+            
+        }
     }
 }

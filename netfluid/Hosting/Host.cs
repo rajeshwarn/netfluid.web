@@ -51,32 +51,34 @@ namespace NetFluid
             {
                 try
                 {
-                    var exposer = Type.CreateIstance() as MethodExposer;
-                    exposer.Context = cnt;
-                    object[] args = null;
-
-                    if (Parameters != null && Parameters.Length > 0)
+                    using(var exposer = Type.CreateIstance() as MethodExposer)
                     {
-                        args = new object[Parameters.Length];
-                        for (int i = 0; i < Parameters.Length; i++)
+                        exposer.Context = cnt;
+                        object[] args = null;
+
+                        if (Parameters != null && Parameters.Length > 0)
                         {
-                            var q = cnt.Request.Values[Parameters[i].Name];
-                            if (q != null)
-                                args[i] = q.Parse(Parameters[i].ParameterType);
+                            args = new object[Parameters.Length];
+                            for (int i = 0; i < Parameters.Length; i++)
+                            {
+                                var q = cnt.Request.Values[Parameters[i].Name];
+                                if (q != null)
+                                    args[i] = q.Parse(Parameters[i].ParameterType);
+                            }
                         }
+
+                        var resp = MethodInfo.Invoke(exposer, args) as IResponse;
+
+                        if (resp != null)
+                            resp.SetHeaders(cnt);
+
+                        cnt.SendHeaders();
+
+                        if (resp != null && cnt.Request.HttpMethod.ToLowerInvariant() != "head")
+                            resp.SendResponse(cnt);
+
+                        cnt.Close();
                     }
-
-                    var resp = MethodInfo.Invoke(exposer, args) as IResponse;
-
-                    if (resp != null)
-                        resp.SetHeaders(cnt);
-
-                    cnt.SendHeaders();
-
-                    if (resp != null && cnt.Request.HttpMethod.ToLowerInvariant() != "head")
-                        resp.SendResponse(cnt);
-
-                    cnt.Close();
                 }
                 catch (Exception ex)
                 {

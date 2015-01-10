@@ -4,8 +4,6 @@ namespace NetFluid
 {
     public class StringResponse : IResponse
     {
-        private byte[] bytes;
-
         public StringResponse(string p)
         {
             String = p;
@@ -22,6 +20,11 @@ namespace NetFluid
             var k = cnt.Request.ContentEncoding.GetBytes(String);
             cnt.OutputStream.Write(k,0,k.Length);
             cnt.OutputStream.Flush();
+        }
+
+        public void Dispose()
+        {
+           
         }
     }
 }

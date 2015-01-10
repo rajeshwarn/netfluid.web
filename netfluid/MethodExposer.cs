@@ -30,7 +30,7 @@ using System.Runtime.Serialization.Formatters.Binary;
 
 namespace NetFluid
 {
-    public class MethodExposer
+    public class MethodExposer:IDisposable
     {
         public MethodExposer()
         {
@@ -332,5 +332,9 @@ namespace NetFluid
             return Newtonsoft.Json.JsonConvert.DeserializeObject<T>(json);
         }
         #endregion
+
+        public void Dispose()
+        {
+        }
     }
 }
