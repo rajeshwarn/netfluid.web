@@ -112,7 +112,7 @@ namespace NetFluid
                 #region show error
                 try
                 {
-                    Engine.Logger.Log(LogLevel.Exception, "exception", ex);
+                    Engine.Logger.Log("exception", ex);
 
                     if (ex is TargetInvocationException)
                         ex = ex.InnerException;
