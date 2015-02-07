@@ -1,0 +1,9 @@
+C:\Users\Matteo\Source\Repos\netfluid\netfluid\bin\net_4_5_Release\NetFluid.dll
+C:\Users\Matteo\Source\Repos\netfluid\netfluid\bin\net_4_5_Release\NetFluid.pdb
+C:\Users\Matteo\Source\Repos\netfluid\netfluid\bin\net_4_5_Release\Dynamitey.dll
+C:\Users\Matteo\Source\Repos\netfluid\netfluid\bin\net_4_5_Release\Newtonsoft.Json.dll
+C:\Users\Matteo\Source\Repos\netfluid\netfluid\bin\net_4_5_Release\Dynamitey.pdb
+C:\Users\Matteo\Source\Repos\netfluid\netfluid\bin\net_4_5_Release\Dynamitey.xml
+C:\Users\Matteo\Source\Repos\netfluid\netfluid\obj\net_4_5_Release\NetFluid.dll
+C:\Users\Matteo\Source\Repos\netfluid\netfluid\obj\net_4_5_Release\NetFluid.pdb
+C:\Users\Matteo\Source\Repos\netfluid\netfluid\obj\net_4_5_Release\NetFluid5.csprojResolveAssemblyReference.cache
