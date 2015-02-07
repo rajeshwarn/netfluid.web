@@ -60,9 +60,6 @@
     <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Dynamitey">
-      <HintPath>..\..\..\..\Documents\Visual Studio 2015\Projects\Blog\packages\Dynamitey.1.0.2.0\lib\net40\Dynamitey.dll</HintPath>
-    </Reference>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="Newtonsoft.Json">
       <HintPath>.\Newtonsoft.Json.dll</HintPath>

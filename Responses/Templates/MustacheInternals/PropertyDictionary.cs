@@ -101,27 +101,31 @@ namespace Mustache
 
         private static dynamic invokeGetMember(object instance, string memberName)
         {
-            //fixme
-            //Broken code/failure with certain implementations of DynamicObject/requires investigation:
-            //Type t = instance.GetType();
-            //BindingFlags flags = BindingFlags.Instance | BindingFlags.Public | BindingFlags.FlattenHierarchy;
-            //MemberInfo[] query = t.GetMember(memberName);
-            //Binder binder = null;
-            //if (query.Length > 0)
-            //{
-            //    MemberInfo info = query[0];
-            //    switch (info.MemberType)
-            //    {
-            //        case MemberTypes.Field:
-            //            return t.InvokeMember(memberName, BindingFlags.GetField | flags, binder, instance, null);
-            //        case MemberTypes.Property:
-            //            return t.InvokeMember(memberName, BindingFlags.GetProperty | flags, binder, instance, null);
-            //        default:
-            //            return t.InvokeMember(memberName, BindingFlags.Default | flags, binder, instance, null);
-            //    }
-            //}
-            //return null;
-            return Dynamitey.Dynamic.InvokeGet(instance, memberName);
+            if (instance is ExpandoObject)
+            {
+                var byName = (IDictionary<string, object>)instance;
+                return byName[memberName];
+            }
+
+            var t = instance.GetType();
+            var flags = BindingFlags.Instance | BindingFlags.Public | BindingFlags.FlattenHierarchy;
+            var query = t.GetMember(memberName);
+            Binder binder = null;
+
+            if (query.Length > 0)
+            {
+                MemberInfo info = query[0];
+                switch (info.MemberType)
+                {
+                    case MemberTypes.Field:
+                        return t.InvokeMember(memberName, BindingFlags.GetField | flags, binder, instance, null);
+                    case MemberTypes.Property:
+                        return t.InvokeMember(memberName, BindingFlags.GetProperty | flags, binder, instance, null);
+                    default:
+                        return t.InvokeMember(memberName, BindingFlags.Default | flags, binder, instance, null);
+                }
+            }
+            return null;
         }
 
         private static Func<object, object> getDynamicMemberValueGetter(object instance, string memberName)
