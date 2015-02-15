@@ -11,9 +11,16 @@ namespace NetFluid.SMTP
     /// </summary>
     public class SmtpRequest
     {
+        public string Username { get; set; }
+
+        public string Password { get; set; }
+
         public string UID { get; set; }
+
         public string IP { get; set; }
+
         public MailAddress From { get; set; }
+
         public List<MailAddress> To { get; set; }
 
         public Stream Stream { get; set; }

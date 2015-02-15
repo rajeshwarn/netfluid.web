@@ -278,7 +278,7 @@ namespace NetFluid
             {
                 var m = type.GetMethod("OnServerStart",BindingFlags.FlattenHierarchy);
 
-                if(m.IsOverride())
+                if(m!= null && m.IsOverride())
                 {
                     try
                     {

@@ -40,8 +40,20 @@ namespace NetFluid
             customTags.Add(tag);
         }
 
-        public MustacheTemplate(string templateFile): this(templateFile,null)
-        { 
+        public MustacheTemplate(string templateFile)
+        {
+            this.templateFile = templateFile;
+
+            if (File.Exists(templateFile))
+            {
+                compiler = new FormatCompiler();
+                compiler.RemoveNewLines = false;
+                args = null;
+
+                customTags.ForEach(x => compiler.RegisterTag(x, true));
+
+                generator = compiler.Compile(cache[Path.GetFullPath(templateFile)]);
+            }
         }
 
         public MustacheTemplate(string templateFile, object args)
@@ -74,6 +86,20 @@ namespace NetFluid
             }
 
             generator.Render(args,cnt.Writer);
+        }
+
+
+        public static string FromFile(string path, object args)
+        {
+            var compiler = new FormatCompiler();
+            compiler.RemoveNewLines = false;
+            customTags.ForEach(x => compiler.RegisterTag(x, true));
+
+            var writer = new StringWriter();
+            var generator = compiler.Compile(cache[Path.GetFullPath(path)]);
+            generator.Render(args, writer);
+
+            return writer.ToString();
         }
 
         public static string Parse(string mustache, object args)

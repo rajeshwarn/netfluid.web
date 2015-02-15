@@ -24,6 +24,7 @@ namespace NetFluid.SMTP
 
         public event Action<SmtpRequest> OnRequestCompleted;
         public Func<MailAddress,bool> MailFrom;
+        public Func<SmtpRequest, bool> Authenticate;
 
         public string WelcomeMessage;
 
@@ -70,13 +71,35 @@ namespace NetFluid.SMTP
 
             verbs.Add("AUTH LOGIN", (cmd, request) =>
             {
-                var b64 = cmd.Substring("AUTH LOGIN ".Length);
-                var dec = b64.FromBase64();
-                Console.WriteLine(dec);
-                request.Write("334");
-                b64 = request.Read();
-                dec = b64.FromBase64();
-                Console.WriteLine(dec);
+                if (cmd=="AUTH LOGIN")
+                {
+                    //ask username
+                    request.Write("334 VXNlcm5hbWU6");
+                    var b64 = request.Read();
+                    request.Username = b64.FromBase64();
+
+                    //ask password
+                    request.Write("334 UGFzc3dvcmQ6");
+                    b64 = request.Read();
+                    request.Password = b64.FromBase64();
+                }
+                else
+                {
+                    //username already provided, ask password
+                    var b64 = cmd.Substring("AUTH LOGIN ".Length);
+                    request.Username = b64.FromBase64();
+
+                    request.Write("334 UGFzc3dvcmQ6");
+                    b64 = request.Read();
+                    request.Password = b64.FromBase64();
+                }
+
+                if (Authenticate!=null && !Authenticate(request))
+                {
+                    request.Write("535 authentication failed");
+                    return;
+                }
+                request.Write("235 Authentication successful");
             });
 
             verbs.Add("AUTH PLAIN",(cmd,request)=>

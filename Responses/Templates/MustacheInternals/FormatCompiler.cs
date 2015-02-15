@@ -81,8 +81,9 @@ namespace Mustache
             {
                 throw new ArgumentNullException("format");
             }
-            CompoundGenerator generator = new CompoundGenerator(_masterDefinition, new ArgumentCollection());
-            List<Context> context = new List<Context>() { new Context(_masterDefinition.Name, new ContextParameter[0]) };
+
+            var generator = new CompoundGenerator(_masterDefinition, new ArgumentCollection());
+            var context = new List<Context>() { new Context(_masterDefinition.Name, new ContextParameter[0]) };
             int formatIndex = buildCompoundGenerator(_masterDefinition, context, generator, format, 0);
             string trailing = format.Substring(formatIndex);
             generator.AddGenerator(new StaticGenerator(trailing, RemoveNewLines));

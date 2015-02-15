@@ -32,23 +32,18 @@ namespace NetFluid
 {
     internal class Logger : ILogger
     {
-        FileStream fs;
-        StreamWriter writer;
         BlockingCollection<string> outQueue;
 
         public Logger()
         {
             LogPath = "./AppLog.txt";
             outQueue = new BlockingCollection<string>();
-            fs = new FileStream(LogPath, FileMode.OpenOrCreate);
-            writer = new StreamWriter(fs);
 
             Task.Factory.StartNew(() =>
             {
                 while (true) 
                 {
-                    writer.WriteLine(outQueue.Take());
-                    writer.Flush();
+                    File.AppendAllText(LogPath,outQueue.Take());
                 }
             });
         }
@@ -68,7 +63,7 @@ namespace NetFluid
                 if (Engine.DevMode)
                     Console.WriteLine(s);
 
-                var stack = string.Join("\r", ex.ToString().Split('\r', '\n').Select(item => "\t\t\t" + item.Trim()));
+                var stack = string.Join("\r", ex.ToString().Split(new[] { '\r', '\n' },StringSplitOptions.RemoveEmptyEntries).Select(item => "\t\t\t" + item.Trim()));
 
                 if (Engine.DevMode)
                 {

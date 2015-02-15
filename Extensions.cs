@@ -345,6 +345,16 @@ namespace NetFluid
         #region STRING
 
         /// <summary>
+        /// Trasnform a string into a stream
+        /// </summary>
+        /// <param name="str">string to convert</param>
+        /// <returns>utf-8 encoded memory stream</returns>
+        public static Stream ToStream(this string str)
+        {
+            return new MemoryStream(Encoding.UTF8.GetBytes(str));
+        }
+
+        /// <summary>
         /// Decode Base64 strings
         /// </summary>
         /// <param name="array"></param>
@@ -884,6 +894,16 @@ namespace NetFluid
         #endregion
 
         #region STREAM
+
+        /// <summary>
+        ///     Read all bytes into the stream
+        /// </summary>
+        public static string ToBase64(this Stream s)
+        {
+            var ms = new MemoryStream();
+            s.CopyTo(ms);
+            return ms.ToArray().ToBase64();
+        }
 
         /// <summary>
         ///     Read all bytes into the stream

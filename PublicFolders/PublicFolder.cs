@@ -19,7 +19,7 @@ namespace NetFluid
                 var subUrl = cnt.Request.Url.LocalPath.Substring(VirtualPath.Length).Replace('/', Path.DirectorySeparatorChar);
                 var fpath = Path.GetFullPath(RealPath);
 
-                if (subUrl[0] != Path.DirectorySeparatorChar)
+                if (string.IsNullOrEmpty(subUrl) || subUrl[0] != Path.DirectorySeparatorChar)
                     subUrl = Path.DirectorySeparatorChar + subUrl;
 
                 if (fpath.EndsWith(Path.DirectorySeparatorChar))

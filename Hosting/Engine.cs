@@ -70,13 +70,12 @@ namespace NetFluid
             listener = new HttpListener();
         }
 
-        public static void AddPrefix(string prefix)
+        public static HttpListenerPrefixCollection Prefixes
         {
-            if (!prefix.EndsWith("/"))
+            get
             {
-                prefix = prefix + "/";
+                return listener.Prefixes;
             }
-            listener.Prefixes.Add(prefix);
         }
 
         /// <summary>
@@ -101,14 +100,6 @@ namespace NetFluid
         public static IEnumerable<Host> Hosts
         {
             get { return _hosts.Values; }
-        }
-
-        /// <summary>
-        /// Currently running virtual host names (reversed proxy excluded)
-        /// </summary>
-        public static string[] Hostnames
-        {
-            get { return _hosts.Keys.ToArray(); }
         }
 
         /// <summary>
@@ -186,7 +177,22 @@ namespace NetFluid
             else
                 Load(location);
 
-            _hosts.ForEach(x => x.Value.OnServerStart());
+            _hosts.ForEach(x =>
+            {
+                Logger.Log("Starting host:"+x.Key);
+
+                if (x.Key.StartsWith("http://") || x.Key.StartsWith("https://"))
+                    listener.Prefixes.Add(x.Key);
+                else
+                    Prefixes.Add("http://" + x.Key +"/");
+
+                x.Value.OnServerStart();
+            });
+
+            Logger.Log("Starting default host");
+            listener.Prefixes.Add("http://*/");
+            DefaultHost.OnServerStart();
+
             Logger.Log("NetFluid web application running");
 
             listener.Start();
@@ -220,13 +226,24 @@ namespace NetFluid
         /// <param name="assembly">assembly to load</param>
         public static void LoadHost(string host, Assembly assembly)
         {
+            Logger.Log("Loading " + assembly + " into "+host+" host");
+
             try
             {
                 var types = assembly.GetTypes();
                 var pages = types.Where(type => type.Inherit(typeof (MethodExposer)));
 
+                if (!pages.Any())
+                {
+                    Logger.Log("No method exposer found in " + assembly);
+                    return;
+                }
+
+                Logger.Log("Loading " + pages.Count() + " method exposer");
+
                 foreach (Type p in pages)
                 {
+                    Logger.Log("Loading " + p.Name);
                     if (p.HasAttribute<VirtualHost>(true))
                     {
                         foreach (string h in p.CustomAttribute<VirtualHost>(true).Select(x => x.Name))
@@ -284,18 +301,18 @@ namespace NetFluid
                     return;
                 }
 
-                Engine.Logger.Log("Loading " + pages.Count() + " method exposer");
+                Logger.Log("Loading " + pages.Count() + " method exposer");
 
                 foreach (var p in pages)
                 {
-                    Engine.Logger.Log("Loading "+ p.Name);
+                    Logger.Log("Loading "+ p.Name);
                     if (p.HasAttribute<VirtualHost>(true))
                     {
                         foreach (string h in p.CustomAttribute<VirtualHost>(true).Select(x => x.Name))
                         {
                             if (h.EndsWith(".*"))
                             {
-                                foreach (var app in Engine.Hosts)
+                                foreach (var app in Hosts)
                                 {
                                     Host(h.Substring(0, h.Length - 2) + app.Name).Load(p);
                                 }
