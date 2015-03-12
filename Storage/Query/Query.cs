@@ -113,6 +113,11 @@ namespace FluidDB
             return new QueryAnd(left, right);
         }
 
+        public static Query AND(params Query[] queries)
+        {
+            return queries.Aggregate(AND);
+        }
+
         /// <summary>
         /// Returns objects that exists in ANY queries results.
         /// </summary>
