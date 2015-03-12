@@ -189,7 +189,7 @@ namespace NetFluid
                 x.Value.OnServerStart();
             });
 
-            Network.Addresses.ForEach(x =>
+            Network.Addresses.Where(x=>x.GetAddressBytes().Length == 4).ForEach(x =>
             {
                 var p = "http://" + x + ":80/";
                 Logger.Log("Adding default prefix "+p);

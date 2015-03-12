@@ -62,9 +62,6 @@ namespace NetFluid.DNS
                 var r = (RecordType)Enum.Parse(typeof(RecordType), this.GetType().Name.Substring("Record".Length));
                 return r;
             }
-            set 
-            {
-            }
         }
 
         /// <summary>

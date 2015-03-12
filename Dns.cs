@@ -145,9 +145,8 @@ namespace NetFluid
             if (servers == null)
                 servers = Network.Dns;
 
-            var question = new Question(name, qtype, qclass);
-            var request = new Request {question};
-
+            var request = new Request { new Question(name, qtype, qclass)};
+            var requestByte = request.Write;
 
             foreach (var ip in servers)
             {
@@ -156,9 +155,7 @@ namespace NetFluid
                 try
                 {
                     var c = new UdpClient {Client = {ReceiveTimeout = 500, SendTimeout = 500}};
-
-                    var r = request.Write;
-                    c.Send(r, r.Length, endPoint);
+                    c.Send(requestByte, requestByte.Length, endPoint);
 
                     var resp = Serializer.ReadResponse(c.Receive(ref endPoint));
                     if (resp.Answers.Count > 0)
