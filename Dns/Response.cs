@@ -47,6 +47,7 @@ namespace NetFluid.DNS
 
             MessageSize = 0;
             Header = new Header();
+            Header.QR = true;
         }
 
 

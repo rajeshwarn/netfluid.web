@@ -12,4 +12,3 @@ D:\PROGETTI\netfluid\bin\net_4_5_Release\NetFluid.pdb
 D:\PROGETTI\netfluid\bin\net_4_5_Release\Newtonsoft.Json.dll
 D:\PROGETTI\netfluid\obj\net_4_5_Release\NetFluid.dll
 D:\PROGETTI\netfluid\obj\net_4_5_Release\NetFluid.pdb
-D:\PROGETTI\netfluid\obj\net_4_5_Release\NetFluid5.csprojResolveAssemblyReference.cache

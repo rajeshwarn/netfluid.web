@@ -63,6 +63,7 @@ namespace NetFluid
             AcceptingRequest = true;
             var endPoint = new IPEndPoint(ip, 53);
             var c = new UdpClient(endPoint);
+            c.AllowNatTraversal(true);
 
             Task.Factory.StartNew(() =>
             {
@@ -81,7 +82,6 @@ namespace NetFluid
 
                         var r = Serializer.WriteResponse(resp);
                         c.Send(r, r.Length, endPoint);
-
                     }
                     catch (Exception ex)
                     {

@@ -62,6 +62,10 @@ namespace NetFluid.DNS
                 var r = (RecordType)Enum.Parse(typeof(RecordType), this.GetType().Name.Substring("Record".Length));
                 return r;
             }
+            set
+            {
+
+            }
         }
 
         /// <summary>
@@ -81,7 +85,7 @@ namespace NetFluid.DNS
         /// <returns>new record of the given type</returns>
         public static Record FromType(RecordType type)
         {
-            return Type(type).CreateIstance() as Record;
+            return types.FirstOrDefault(x => x.Name == "Record" + type.ToString()).CreateIstance() as Record ?? new RecordUnknown();
         }
     }
 }
