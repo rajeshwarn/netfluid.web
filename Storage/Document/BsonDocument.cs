@@ -1,4 +1,5 @@
-﻿using System;
+﻿using NetFluid;
+using System;
 using System.Collections.Generic;
 
 namespace FluidDB

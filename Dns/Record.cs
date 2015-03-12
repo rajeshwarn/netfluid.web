@@ -39,7 +39,7 @@ namespace NetFluid.DNS
         /// </summary>
         public int TimeLived;
 
-        protected Record()
+        public Record()
         {
             TimeLived = 0;
             Name = "netfluid.org";
@@ -55,22 +55,16 @@ namespace NetFluid.DNS
         /// <summary>
         /// Return the type of this record as RecordType enum
         /// </summary>
-        public RecordType GetRecordType()
+        public RecordType RecordType
         {
-            var r = (RecordType)Enum.Parse(typeof(RecordType), this.GetType().Name.Substring("Record".Length));
-            return r;
-        }
-
-
-        /// <summary>
-        /// Given record type name (ex: "AAAA") returns its .net type
-        /// </summary>
-        /// <param name="type"></param>
-        /// <returns></returns>
-        public static Type Type(string type)
-        {
-            RecordType t;
-            return Enum.TryParse(type, out t) ? Type(t) : typeof (RecordUnknown);
+            get
+            {
+                var r = (RecordType)Enum.Parse(typeof(RecordType), this.GetType().Name.Substring("Record".Length));
+                return r;
+            }
+            set 
+            {
+            }
         }
 
         /// <summary>

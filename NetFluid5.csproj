@@ -235,7 +235,6 @@
     <Compile Include="SMTP\SmtpRequest.cs" />
     <Compile Include="SMTP\SmtpWarning.cs" />
     <Compile Include="StatusCode.cs" />
-    <Compile Include="Storage\DBObject.cs" />
     <Compile Include="Storage\Document\BsonArray.cs" />
     <Compile Include="Storage\Document\BsonDocument.cs" />
     <Compile Include="Storage\Document\BsonObject.cs" />
