@@ -28,6 +28,29 @@ namespace NetFluid
         /// </summary>
         public static event Func<Request, Response> OnRequest;
 
+        public static IPAddress[] Roots
+        {
+            get 
+            {
+                return new[]
+                {
+                    IPAddress.Parse("198.41.0.4"),
+                    IPAddress.Parse("192.228.79.201"),
+                    IPAddress.Parse("192.33.4.12"),
+                    IPAddress.Parse("199.7.91.13"),
+                    IPAddress.Parse("192.203.230.10"),
+                    IPAddress.Parse("192.5.5.241"),
+                    IPAddress.Parse("192.112.36.4"),
+                    IPAddress.Parse("128.63.2.53"),
+                    IPAddress.Parse("192.36.148.17"),
+                    IPAddress.Parse("192.58.128.30"),
+                    IPAddress.Parse("193.0.14.129"),
+                    IPAddress.Parse("198.32.64.12"),
+                    IPAddress.Parse("202.12.27.33")
+                };
+            }
+        }
+
         /// <summary>
         /// Start local DNS Server
         /// </summary>
@@ -60,8 +83,10 @@ namespace NetFluid
                         c.Send(r, r.Length, endPoint);
 
                     }
-                    catch (Exception)
+                    catch (Exception ex)
                     {
+                        Console.WriteLine(ex.ToString());
+
                         c.Close();
                         endPoint = new IPEndPoint(ip, 53);
                         c = new UdpClient(endPoint);
@@ -93,7 +118,7 @@ namespace NetFluid
         /// <param name="question">Question</param>
         /// <param name="server">Server</param>
         /// <returns></returns>
-        public static Record[] Query(Question question)
+        public static Response Query(Question question)
         {
             return Query(question.QName, question.QType, question.QClass, AcceptingRequest ? Network.Dns.Where(x=>!x.IsLocal()) : Network.Dns);
         }
@@ -105,7 +130,7 @@ namespace NetFluid
         /// <param name="question">Question</param>
         /// <param name="server">Server</param>
         /// <returns></returns>
-        public static Record[] Query(Question question, string server)
+        public static Response Query(Question question, string server)
         {
             return Query(question.QName, question.QType, question.QClass, new[] { IPAddress.Parse(server) });
         }
@@ -116,7 +141,7 @@ namespace NetFluid
         /// <param name="question">Question</param>
         /// <param name="server">Server</param>
         /// <returns></returns>
-        public static Record[] Query(Question question, IPAddress server)
+        public static Response Query(Question question, IPAddress server)
         {
             return Query(question.QName,question.QType,question.QClass, new[] { server });
         }
@@ -124,7 +149,7 @@ namespace NetFluid
         /// <summary>
         /// Ask a DNS question  to a specific server
         /// </summary>
-        public static Record[] Query(string name, QType qtype, QClass qclass, string server)
+        public static Response Query(string name, QType qtype, QClass qclass, string server)
         {
             return Query(name, qtype, qclass, IPAddress.Parse(server));
         }
@@ -132,7 +157,7 @@ namespace NetFluid
         /// <summary>
         /// Ask a DNS question  to a specific server
         /// </summary>
-        public static Record[] Query(string name, QType qtype, QClass qclass, IPAddress server)
+        public static Response Query(string name, QType qtype, QClass qclass, IPAddress server)
         {
             return Query(name, qtype, qclass, new[] {server});
         }
@@ -140,12 +165,18 @@ namespace NetFluid
         /// <summary>
         /// Ask a DNS question to a specific server
         /// </summary>
-        public static Record[] Query(string name, QType qtype, QClass qclass = QClass.IN, IEnumerable<IPAddress> servers = null)
+        public static Response Query(string name, QType qtype, QClass qclass = QClass.IN, IEnumerable<IPAddress> servers = null)
         {
             if (servers == null)
                 servers = Network.Dns;
 
             var request = new Request { new Question(name, qtype, qclass)};
+
+            return Query(request, servers);
+        }
+
+        public static Response Query(Request request, IEnumerable<IPAddress> servers)
+        {
             var requestByte = request.Write;
 
             foreach (var ip in servers)
@@ -154,19 +185,21 @@ namespace NetFluid
 
                 try
                 {
-                    var c = new UdpClient {Client = {ReceiveTimeout = 500, SendTimeout = 500}};
+                    var c = new UdpClient { Client = { ReceiveTimeout = 500, SendTimeout = 500 } };
                     c.Send(requestByte, requestByte.Length, endPoint);
 
                     var resp = Serializer.ReadResponse(c.Receive(ref endPoint));
-                    if (resp.Answers.Count > 0)
-                        return resp.Records;
+                    if (resp.AllRecords.Length > 0)
+                    {
+                        return resp;
+                    }
                 }
                 catch (SocketException)
                 {
                     ////Console.WriteLine(exception);
                 }
             }
-            return new Record[0];
+            return new Response();
         }
 
         /// <summary>
@@ -176,7 +209,7 @@ namespace NetFluid
         /// <returns></returns>
         public static IEnumerable<string> A(string name)
         {
-            return Query(name, QType.A).Select(x => x.ToString());
+            return Query(name, QType.A).Answers.Select(x => x.ToString());
         }
 
         /// <summary>
@@ -186,7 +219,7 @@ namespace NetFluid
         /// <returns></returns>
         public static IEnumerable<string> AAAA(string name)
         {
-            return Query(name, QType.AAAA).Select(x => x.ToString());
+            return Query(name, QType.AAAA).Answers.Select(x => x.ToString());
         }
 
         /// <summary>
@@ -196,7 +229,7 @@ namespace NetFluid
         /// <returns></returns>
         public static IEnumerable<string> CNAME(string name)
         {
-            return Query(name, QType.CNAME).Select(x => x.ToString());
+            return Query(name, QType.CNAME).Answers.Select(x => x.ToString());
         }
 
         /// <summary>
@@ -206,7 +239,7 @@ namespace NetFluid
         /// <returns></returns>
         public static IEnumerable<string> MX(string name)
         {
-            return Query(name, QType.MX).Select(x => x.ToString());
+            return Query(name, QType.MX).Answers.Select(x => x.ToString());
         }
 
         /// <summary>
@@ -216,7 +249,7 @@ namespace NetFluid
         /// <returns></returns>
         public static IEnumerable<string> NS(string name)
         {
-            return Query(name, QType.NS).Select(x => x.ToString());
+            return Query(name, QType.NS).Answers.Select(x => x.ToString());
         }
 
         /// <summary>
@@ -226,7 +259,7 @@ namespace NetFluid
         /// <returns></returns>
         public static IEnumerable<string> PTR(string name)
         {
-            return Query(name, QType.PTR).Select(x => x.ToString());
+            return Query(name, QType.PTR).Answers.Select(x => x.ToString());
         }
 
         /// <summary>
@@ -236,7 +269,7 @@ namespace NetFluid
         /// <returns></returns>
         public static IEnumerable<string> SOA(string name)
         {
-            return Query(name, QType.SOA).Select(x => x.ToString());
+            return Query(name, QType.SOA).Answers.Select(x => x.ToString());
         }
 
         /// <summary>
@@ -246,7 +279,7 @@ namespace NetFluid
         /// <returns></returns>
         public static IEnumerable<string> TXT(string name)
         {
-            return Query(name, QType.TXT).Select(x => x.ToString());
+            return Query(name, QType.TXT).Answers.Select(x => x.ToString());
         }
     }
 }

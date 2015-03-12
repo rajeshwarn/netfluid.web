@@ -158,6 +158,10 @@ namespace NetFluid.DNS.Records
         /// </summary>
         public ushort QDCOUNT;
 
+        public Header()
+        {
+            RD = true;
+        }
 
         /// <summary>
         ///     Represents the header as a byte array

@@ -71,7 +71,7 @@ namespace NetFluid.DNS
         /// <returns></returns>
         public static Type Type(RecordType type)
         {
-            return types.FirstOrDefault(x => x.Name == type.ToString()) ?? typeof(RecordUnknown);
+            return types.FirstOrDefault(x => x.Name == "Record"+type.ToString()) ?? typeof(RecordUnknown);
         }
 
         /// <summary>

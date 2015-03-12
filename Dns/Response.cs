@@ -137,7 +137,7 @@ namespace NetFluid.DNS
             get { return Answers.OfType<RecordSOA>().ToArray(); }
         }
 
-        public Record[] RR
+        public Record[] AllRecords
         {
             get { return Answers.Concat(Authorities.Concat(Additionals)).ToArray(); }
         }
