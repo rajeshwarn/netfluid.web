@@ -80,7 +80,7 @@ namespace NetFluid
 
         public void Log(string msg)
         {
-            string s = DateTime.Now + "\t" + msg;
+            string s = DateTime.Now + "\t" + msg+"\r\n";
             if (Engine.DevMode)
                 Console.WriteLine(s);
 

@@ -189,8 +189,16 @@ namespace NetFluid
                 x.Value.OnServerStart();
             });
 
-            Logger.Log("Starting default host");
+            Network.Addresses.ForEach(x =>
+            {
+                var p = "http://" + x + ":80/";
+                Logger.Log("Adding default prefix "+p);
+                listener.Prefixes.Add(p);
+            });
+
             listener.Prefixes.Add("http://*/");
+
+            Logger.Log("Starting default host");
             DefaultHost.OnServerStart();
 
             Logger.Log("NetFluid web application running");
@@ -207,6 +215,7 @@ namespace NetFluid
                     //cnt.Close();
                 });
             }
+            Logger.Log("Exited from listening cycle");
         }
 
         /// <summary>
@@ -341,6 +350,11 @@ namespace NetFluid
             {
                 Logger.Log("Error during loading " + assembly + " as default host", ex);
             }
+        }
+
+        public static void Stop()
+        {
+            listener.Stop();
         }
     }
 }

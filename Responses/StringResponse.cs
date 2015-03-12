@@ -9,6 +9,11 @@ namespace NetFluid
             String = p;
         }
 
+        public StringResponse(object p)
+        {
+            this.String = p.ToString();
+        }
+
         public string String { get; set; }
 
         public void SetHeaders(Context cnt)
