@@ -131,7 +131,11 @@ namespace NetFluid.DNS
                 else if (currentByte >= 64)
                 {
                     // extended dns label RFC 2671
-                    throw new NotSupportedException("Unsupported extended dns label");
+                    //var kk = resultData.Skip(currentPosition + 1).ToArray();
+                    //sb.Append(Encoding.UTF8.GetString(kk));
+                    return;
+                    //Console.WriteLine();
+                    //throw new NotSupportedException("Unsupported extended dns label");
                 }
                 else
                 {

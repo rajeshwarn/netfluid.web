@@ -46,8 +46,7 @@ namespace NetFluid.DNS
             Additionals = new List<Record>();
 
             MessageSize = 0;
-            Header = new Header();
-            Header.QR = true;
+            Header = new Header() { Flags = 33152 };
         }
 
 
@@ -58,6 +57,7 @@ namespace NetFluid.DNS
         public Response(Request request)
         {
             Header = request.Header;
+            Header.QR = true;
             Questions = new List<Question>(request);
             Answers = new List<Record>();
             Authorities = new List<Record>();

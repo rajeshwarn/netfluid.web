@@ -129,7 +129,7 @@ namespace NetFluid.DNS.Records
     /// DNS Request and Response header
     /// </summary>
     [Serializable]
-    public class Header
+    public struct Header
     {
         /// <summary>
         ///     the number of resource records in the answer section
@@ -157,11 +157,6 @@ namespace NetFluid.DNS.Records
         ///     the number of entries in the question section
         /// </summary>
         public ushort QDCOUNT;
-
-        public Header()
-        {
-            RD = true;
-        }
 
         /// <summary>
         ///     Represents the header as a byte array

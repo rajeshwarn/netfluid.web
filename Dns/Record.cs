@@ -3,6 +3,7 @@
 using System;
 using System.Linq;
 using NetFluid.DNS.Records;
+using System.Collections.Generic;
 
 namespace NetFluid.DNS
 {
@@ -10,20 +11,15 @@ namespace NetFluid.DNS
     /// DNS record base class
     /// </summary>
     [Serializable]
-    public class Record: IDatabaseObject
+    public class Record
     {
-        static Type[] types;
+        public static Type[] Types { get; private set; }
 
         static Record()
         {
-            types = typeof(Record).Assembly.GetTypes().Where(x=>x.Inherit(typeof(Record))).ToArray();
+            Types = typeof(Record).Assembly.GetTypes().Where(x=>x.Inherit(typeof(Record))).ToArray();
         }
 
-        /// <summary>
-        /// Database id to store and handle record
-        /// </summary>
-        public string Id { get; set; }
-   
         /// <summary>
         ///     Specifies type class of resource record, mostly IN but can be CS, CH or HS
         /// </summary>
@@ -68,6 +64,22 @@ namespace NetFluid.DNS
             }
         }
 
+        public string[] Zones
+        {
+            get
+            {
+                var list = new List<string>();
+                var parts = Name.Split(new[] { '.' }, StringSplitOptions.RemoveEmptyEntries).Reverse().ToArray();
+
+                for (int i = 0; i < parts.Length; i++)
+                {
+                    var zone = string.Join(".", parts.Take(i + 1).Reverse());
+                    list.Add(zone);
+                }
+                return list.ToArray();
+            }
+        }
+
         /// <summary>
         /// Return .net type of record from enum RecordType
         /// </summary>
@@ -75,7 +87,7 @@ namespace NetFluid.DNS
         /// <returns></returns>
         public static Type Type(RecordType type)
         {
-            return types.FirstOrDefault(x => x.Name == "Record"+type.ToString()) ?? typeof(RecordUnknown);
+            return Types.FirstOrDefault(x => x.Name == "Record"+type.ToString()) ?? typeof(RecordUnknown);
         }
 
         /// <summary>
@@ -85,7 +97,7 @@ namespace NetFluid.DNS
         /// <returns>new record of the given type</returns>
         public static Record FromType(RecordType type)
         {
-            return types.FirstOrDefault(x => x.Name == "Record" + type.ToString()).CreateIstance() as Record ?? new RecordUnknown();
+            return Types.FirstOrDefault(x => x.Name == "Record" + type.ToString()).CreateIstance() as Record ?? new RecordUnknown();
         }
     }
 }

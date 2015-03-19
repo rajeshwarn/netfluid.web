@@ -30,27 +30,32 @@ namespace NetFluid.DNS.Records
         public byte C;
         public byte D;
 
-        public IPAddress Address
+        public IPAddress Address()
         {
-            get { return IPAddress.Parse(ToString()); }
-            set
-            {
-                byte[] arr = value.GetAddressBytes();
-                A = arr[0];
-                B = arr[1];
-                C = arr[2];
-                D = arr[3];
-            }
+             return IPAddress.Parse(ToString());
+        }
+
+        public void Address(IPAddress value)
+        {
+            byte[] arr = value.GetAddressBytes();
+            A = arr[0];
+            B = arr[1];
+            C = arr[2];
+            D = arr[3];
         }
 
         public static RecordA Parse(string s)
         {
-            return new RecordA { Address = IPAddress.Parse(s) };
+            var a = new RecordA();
+            a.Address(IPAddress.Parse(s));
+            return a;
         }
 
         public static implicit operator RecordA(string s)
         {
-            return new RecordA {Address = IPAddress.Parse(s)};
+            var a = new RecordA();
+            a.Address(IPAddress.Parse(s));
+            return a;
         }
 
         public override string ToString()

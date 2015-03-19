@@ -29,34 +29,37 @@ namespace NetFluid.DNS.Records
         public ushort G;
         public ushort H;
 
-
-        public IPAddress Address
+        public IPAddress Address()
         {
-            get { return IPAddress.Parse(ToString()); }
-            set
-            {
-                byte[] arr = value.GetAddressBytes();
-                A = arr[0];
-                B = arr[1];
-                C = arr[2];
-                D = arr[3];
-                E = arr[0];
-                F = arr[1];
-                G = arr[2];
-                H = arr[3];
-            }
+            return IPAddress.Parse(ToString());
+        }
+
+        public void Address(IPAddress value)
+        {
+            byte[] arr = value.GetAddressBytes();
+            A = arr[0];
+            B = arr[1];
+            C = arr[2];
+            D = arr[3];
+            E = arr[4];
+            F = arr[5];
+            G = arr[6];
+            H = arr[7];
         }
 
         public static RecordAAAA Parse(string s)
         {
-            return new RecordAAAA(){ Address = IPAddress.Parse(s) };
+            var a = new RecordAAAA();
+            a.Address(IPAddress.Parse(s));
+            return a;
         }
 
         public static implicit operator RecordAAAA(string s)
         {
-            return new RecordAAAA {Address = IPAddress.Parse(s)};
+            var a = new RecordAAAA();
+            a.Address(IPAddress.Parse(s));
+            return a;
         }
-
         public override string ToString()
         {
             return string.Format("{0:x}:{1:x}:{2:x}:{3:x}:{4:x}:{5:x}:{6:x}:{7:x}", A, B, C, D, E, F, G, H);
