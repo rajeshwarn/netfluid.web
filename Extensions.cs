@@ -527,6 +527,18 @@ namespace NetFluid
         }
 
         /// <summary>
+        /// Return a random collection of elements
+        /// </summary>
+        /// <param name="source">The collection</param>
+        public static IEnumerable<T> Random<T>(this IEnumerable<T> source, int len)
+        {
+            for (int i = 0; i < len; i++)
+            {
+                yield return Random(source);
+            }
+        }
+
+        /// <summary>
         ///     Return a random element from the collection
         /// </summary>
         /// <param name="source">The collection</param>
