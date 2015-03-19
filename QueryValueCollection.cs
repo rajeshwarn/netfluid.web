@@ -45,8 +45,12 @@ namespace NetFluid
 
         public T Parse<T>() where T :class
         {
-            var type = typeof(T);
-            var t = type.CreateIstance() as T;
+            return Parse(typeof(T)) as T;
+        }
+
+        public object Parse(Type type)
+        {
+            var t = type.CreateIstance();
 
             foreach (var key in _values.Keys)
             {
