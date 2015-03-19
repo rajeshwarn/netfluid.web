@@ -5,7 +5,7 @@ using System.Linq.Expressions;
 
 namespace NetFluid.Collections
 {
-    public interface IRepository<T> : IQueryable<T> where T : IDatabaseObject
+    public interface IRepository<T> : IQueryable<T>
     {
         IQueryable<T> Queryable { get; }
         T this[string id] { get; }
