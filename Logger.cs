@@ -54,7 +54,7 @@ namespace NetFluid
 
         public void Log(string msg, Exception ex)
         {
-            if (ex is TargetInvocationException)
+            if (ex != null && ex is TargetInvocationException)
                 ex = ex.InnerException;
 
             string s = ("\r\n" + DateTime.Now + "\t" + msg + "\r\n");
@@ -63,15 +63,19 @@ namespace NetFluid
                 if (Engine.DevMode)
                     Console.WriteLine(s);
 
-                var stack = string.Join("\r", ex.ToString().Split(new[] { '\r', '\n' },StringSplitOptions.RemoveEmptyEntries).Select(item => "\t\t\t" + item.Trim()));
-
-                if (Engine.DevMode)
+                if(ex!=null)
                 {
-                    Console.WriteLine(stack);
-                }
-                s += stack;
+                    var stack = string.Join("\r", ex.ToString().Split(new[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries).Select(item => "\t\t\t" + item.Trim()));
 
-                ex = ex.InnerException;
+                    if (Engine.DevMode)
+                    {
+                        Console.WriteLine(stack);
+                    }
+                    s += stack;
+
+                    ex = ex.InnerException;
+                }
+
             } while (ex != null);
 
             outQueue.Add(s);
