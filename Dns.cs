@@ -26,7 +26,7 @@ namespace NetFluid
         /// <summary>
         /// Executed when Local DNS Server recieve a request
         /// </summary>
-        public static event Func<Request, Response> OnRequest;
+        public static Func<Request, Response> OnRequest;
 
         public static IPAddress[] Roots
         {
@@ -63,7 +63,6 @@ namespace NetFluid
             AcceptingRequest = true;
             var endPoint = new IPEndPoint(ip, 53);
             var c = new UdpClient(endPoint);
-            c.AllowNatTraversal(true);
 
             Task.Factory.StartNew(() =>
             {
@@ -83,13 +82,12 @@ namespace NetFluid
                         var r = Serializer.WriteResponse(resp);
                         c.Send(r, r.Length, endPoint);
                     }
+                    catch(SocketException)
+                    {
+                    }
                     catch (Exception ex)
                     {
-                        Console.WriteLine(ex.ToString());
-
-                        c.Close();
-                        endPoint = new IPEndPoint(ip, 53);
-                        c = new UdpClient(endPoint);
+                        Engine.Logger.Log("DNS Server exception", ex);
                     }
                 }
             });
@@ -178,6 +176,36 @@ namespace NetFluid
         public static Response Query(Request request, IEnumerable<IPAddress> servers)
         {
             var requestByte = request.Write;
+            var buffer = new byte[32*1024];
+
+            for (int intAttempts = 0; intAttempts < 3; intAttempts++)
+            {
+                foreach(var server in servers)
+                {
+                    Socket socket = new Socket(AddressFamily.InterNetwork, SocketType.Dgram, ProtocolType.Udp);
+                    socket.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.ReceiveTimeout, 1000);
+
+                    try
+                    {
+                        socket.SendTo(requestByte,new IPEndPoint(server,53));
+                        int size = socket.Receive(buffer);
+                        var rbyte = new byte[size];
+                        Array.Copy(buffer, rbyte, size);
+
+                        var resp = Serializer.ReadResponse(rbyte);
+                        return resp;
+                    }
+                    catch (SocketException)
+                    {
+                        continue; // next try
+                    }
+                    finally
+                    {
+                        socket.Close();
+                    }
+                }
+            }
+
 
             foreach (var ip in servers)
             {
@@ -185,7 +213,7 @@ namespace NetFluid
 
                 try
                 {
-                    var c = new UdpClient { Client = { ReceiveTimeout = 500, SendTimeout = 500 } };
+                    var c = new UdpClient { Client = { ReceiveTimeout = 1000, SendTimeout = 1000 } };
                     c.Send(requestByte, requestByte.Length, endPoint);
 
                     var resp = Serializer.ReadResponse(c.Receive(ref endPoint));
@@ -194,9 +222,8 @@ namespace NetFluid
                         return resp;
                     }
                 }
-                catch (SocketException)
+                catch (SocketException exception)
                 {
-                    ////Console.WriteLine(exception);
                 }
             }
             return new Response();
