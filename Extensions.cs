@@ -36,6 +36,10 @@ using System.Security.Principal;
 using System.Text;
 using NetFluid.HTTP;
 using System.Runtime.Serialization.Formatters.Binary;
+using System.Text.RegularExpressions;
+using System.Drawing;
+using System.Drawing.Drawing2D;
+using System.Drawing.Imaging;
 
 namespace NetFluid
 {
@@ -113,6 +117,12 @@ namespace NetFluid
 
         private static readonly IPAddress _ipv4MulticastNetworkAddress = IPAddress.Parse("224.0.0.0");
         private static readonly IPAddress _ipv6MulticastNetworkAddress = IPAddress.Parse("FF00::");
+
+        public static int ToInt32(this IPAddress ip)
+        {
+            var array = BitConverter.IsLittleEndian ? ip.GetAddressBytes().Reverse().ToArray() : ip.GetAddressBytes();
+            return BitConverter.ToInt32(array,0);
+        }
 
         /// <summary>
         ///     Reverses the order of the bytes of an IPAddress
@@ -362,6 +372,65 @@ namespace NetFluid
         public static string FromBase64(this string str)
         {
             return Encoding.UTF8.GetString(Convert.FromBase64String(str));
+        }
+
+        public static string NormalizeSpace(this string str)
+        {
+            return System.Text.RegularExpressions.Regex.Replace(str.Trim(), @"\s+", " ");
+        }
+
+        public static string Urlify(this string str)
+        {
+            if (str == null) return null;
+
+            if (str == "") return "";
+
+            var k = Extensions.StripHTML(str.Trim()).RemoveDiacritics();
+            k = new string(k.Select(x =>
+            {
+                if (char.IsControl(x) || (char.IsPunctuation(x) && x!='.' ) || char.IsSeparator(x) || char.IsSymbol(x) || char.IsWhiteSpace(x))
+                    return '-';
+                return x;
+            }).ToArray());
+
+            while (k.Contains("--"))
+            {
+                k = k.Replace("--", "-");
+            }
+
+            if (k.Length > 64)
+                k = k.Substring(0, 64);
+
+            var date = DateTime.Now;
+            return date.Year + "-"
+                   + date.Month.ToString("00") + "-"
+                   + date.Day.ToString("00") + "-"
+                   + date.Hour.ToString("00") + "-"
+                   + date.Minute.ToString("00") + "-"
+                   + date.Second.ToString("00") + "-"
+                   + date.Millisecond.ToString("000")+"-"
+                   + Security.Random(9999) + "-" + k;
+        }
+
+        /// <summary>
+        /// Replace inside a string using a regex
+        /// </summary>
+        /// <param name="str"></param>
+        /// <param name="regex"></param>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        public static string Replace(this string str, Regex regex, string value)
+        {
+            Match m;
+            
+            do
+	        {
+	            m = regex.Match(str);
+                if (m.Success)
+                    str = str.Replace(m.Value, value);
+	        } while (m.Success);
+
+            return str;
         }
 
         /// <summary>
@@ -616,6 +685,49 @@ namespace NetFluid
                 similarsY[i]
                 .SetValue(obj, similarsT[i].GetValue(input, null), null);
             }
+        }
+
+        public static Size ResizeImage(this Image img, double maxWidth, double maxHeight)
+        {
+            double resizeWidth = img.Size.Width;
+            double resizeHeight = img.Size.Height;
+
+            double aspect = resizeWidth / resizeHeight;
+
+            if (resizeWidth > maxWidth)
+            {
+                resizeWidth = maxWidth;
+                resizeHeight = resizeWidth / aspect;
+            }
+            if (resizeHeight > maxHeight)
+            {
+                aspect = resizeWidth / resizeHeight;
+                resizeHeight = maxHeight;
+                resizeWidth = resizeHeight * aspect;
+            }
+
+            return new Size((int)resizeWidth,(int)resizeHeight);
+        }
+
+        public static Stream Thumbnail(this Image srcBmp, int width, int height)
+        {
+            var newSize = ResizeImage(srcBmp, width, height);
+            var target = new Bitmap(newSize.Width, newSize.Height);
+
+            MemoryStream memoryStream;
+
+            using (var graphics = Graphics.FromImage(target))
+            {
+                graphics.CompositingQuality = CompositingQuality.HighSpeed;
+                graphics.InterpolationMode = InterpolationMode.HighQualityBicubic;
+                graphics.CompositingMode = CompositingMode.SourceCopy;
+                graphics.DrawImage(srcBmp, 0, 0, newSize.Width, newSize.Height);
+
+                memoryStream = new MemoryStream();
+                target.Save(memoryStream, ImageFormat.Jpeg);
+            }
+            memoryStream.Seek(0, SeekOrigin.Begin);
+            return memoryStream;
         }
 
         #region ARRAY
