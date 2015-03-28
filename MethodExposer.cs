@@ -158,6 +158,52 @@ namespace NetFluid
         }
 
         #region remotes
+
+        public static T GetRemoteObject<T>(string uri, T toBeFilled)
+        {
+            return GetRemoteObject(new Uri(uri), toBeFilled);
+        }
+
+        public static T GetRemoteObject<T>(Uri uri, T toBeFilled)
+        {
+            var request = WebRequest.Create(uri) as HttpWebRequest;
+            request.AllowAutoRedirect = true;
+            request.UserAgent = "NetFluid Web Application";
+            request.KeepAlive = true;
+            request.Proxy = null;
+            request.MaximumAutomaticRedirections = 10;
+            request.AutomaticDecompression = DecompressionMethods.None;
+            request.Timeout = 10000;
+            try
+            {
+                WebResponse response = request.GetResponse();
+                var liner = new StreamReader(response.GetResponseStream());
+
+                return Newtonsoft.Json.JsonConvert.DeserializeAnonymousType<T>(liner.ReadToEnd(), toBeFilled);
+            }
+            catch (Exception)
+            {
+                return default(T);
+            }
+        }
+
+        public static T GetRemoteObject<T>(Uri uri)
+        {
+            var request = WebRequest.Create(uri) as HttpWebRequest;
+            request.AllowAutoRedirect = true;
+            request.UserAgent = "NetFluid Web Application";
+            request.KeepAlive = false;
+            request.Proxy = null;
+            request.MaximumAutomaticRedirections = 10;
+            request.AutomaticDecompression = DecompressionMethods.GZip;
+            request.Timeout = 1000;
+
+            WebResponse response = request.GetResponse();
+            var liner = new StreamReader(response.GetResponseStream());
+            var json = liner.ReadToEnd();
+            return Newtonsoft.Json.JsonConvert.DeserializeObject<T>(json);
+        }
+
         /// <summary>
         ///     Download specified uri as a stream
         /// </summary>
