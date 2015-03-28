@@ -131,7 +131,6 @@ namespace NetFluid
         {
             var fs = Stream;
 
-            #region TO BE IMPLEMENTED
             if (cnt.Request.Headers["Range"]!=null && cnt.Request.Headers["Range"].StartsWith("bytes="))
             {
                 var r = cnt.Request.Headers["Range"].Substring("bytes=".Length);
@@ -152,7 +151,6 @@ namespace NetFluid
                 }
                 cnt.Response.Headers.Set("Content-Range", "bytes " + from + "-" + to + "/" + (long)(from - to));
             }
-            #endregion
 
             fs.CopyTo(cnt.Response.OutputStream);
             fs.Close();
