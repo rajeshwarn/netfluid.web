@@ -268,7 +268,7 @@ namespace NetFluid
                 }
                 catch (Exception ex)
                 {
-                    Engine.Logger.Log("Failure in " + type + " instancing", ex);
+                    Engine.Logger.Log("Failure in " + type + " instancing", ex.InnerException);
                 }
         }
 
