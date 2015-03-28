@@ -572,7 +572,7 @@ namespace HttpMultipartParser
             {
                 Name = parameters["name"],
                 FileName = parameters["filename"],
-                Extension = parameters["filename"].Contains('.') ? parameters["filename"].Substring(parameters["filename"].IndexOf('.')) : "",
+                Extension = parameters["filename"].Contains('.') ? parameters["filename"].Substring(parameters["filename"].LastIndexOf('.')) : "",
                 TempFile = temp,
                 ContentType = contentType,
                 ContentDisposition = contentDisposition
