@@ -222,7 +222,7 @@ namespace NetFluid
                         return resp;
                     }
                 }
-                catch (SocketException exception)
+                catch (SocketException)
                 {
                 }
             }

@@ -38,8 +38,6 @@ using NetFluid.HTTP;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Text.RegularExpressions;
 using System.Drawing;
-using System.Drawing.Drawing2D;
-using System.Drawing.Imaging;
 
 namespace NetFluid
 {
@@ -365,6 +363,16 @@ namespace NetFluid
         }
 
         /// <summary>
+        /// Encode to Base64 strings
+        /// </summary>
+        /// <param name="array"></param>
+        /// <returns></returns>
+        public static string ToBase64(this string str)
+        {
+            return Convert.ToBase64String(Encoding.UTF8.GetBytes(str));
+        }
+
+        /// <summary>
         /// Decode Base64 strings
         /// </summary>
         /// <param name="array"></param>
@@ -379,7 +387,7 @@ namespace NetFluid
             return System.Text.RegularExpressions.Regex.Replace(str.Trim(), @"\s+", " ");
         }
 
-        public static string Urlify(this string str)
+        public static string Urlify(this string str, bool timed=true)
         {
             if (str == null) return null;
 
@@ -401,15 +409,19 @@ namespace NetFluid
             if (k.Length > 64)
                 k = k.Substring(0, 64);
 
-            var date = DateTime.Now;
-            return date.Year + "-"
+            if (timed)
+            {
+                var date = DateTime.Now;
+                return date.Year + "-"
                    + date.Month.ToString("00") + "-"
                    + date.Day.ToString("00") + "-"
                    + date.Hour.ToString("00") + "-"
                    + date.Minute.ToString("00") + "-"
                    + date.Second.ToString("00") + "-"
-                   + date.Millisecond.ToString("000")+"-"
+                   + date.Millisecond.ToString("000") + "-"
                    + Security.Random(9999) + "-" + k;
+            }
+            return k;
         }
 
         /// <summary>
@@ -687,49 +699,6 @@ namespace NetFluid
             }
         }
 
-        public static Size ResizeImage(this Image img, double maxWidth, double maxHeight)
-        {
-            double resizeWidth = img.Size.Width;
-            double resizeHeight = img.Size.Height;
-
-            double aspect = resizeWidth / resizeHeight;
-
-            if (resizeWidth > maxWidth)
-            {
-                resizeWidth = maxWidth;
-                resizeHeight = resizeWidth / aspect;
-            }
-            if (resizeHeight > maxHeight)
-            {
-                aspect = resizeWidth / resizeHeight;
-                resizeHeight = maxHeight;
-                resizeWidth = resizeHeight * aspect;
-            }
-
-            return new Size((int)resizeWidth,(int)resizeHeight);
-        }
-
-        public static Stream Thumbnail(this Image srcBmp, int width, int height)
-        {
-            var newSize = ResizeImage(srcBmp, width, height);
-            var target = new Bitmap(newSize.Width, newSize.Height);
-
-            MemoryStream memoryStream;
-
-            using (var graphics = Graphics.FromImage(target))
-            {
-                graphics.CompositingQuality = CompositingQuality.HighSpeed;
-                graphics.InterpolationMode = InterpolationMode.HighQualityBicubic;
-                graphics.CompositingMode = CompositingMode.SourceCopy;
-                graphics.DrawImage(srcBmp, 0, 0, newSize.Width, newSize.Height);
-
-                memoryStream = new MemoryStream();
-                target.Save(memoryStream, ImageFormat.Jpeg);
-            }
-            memoryStream.Seek(0, SeekOrigin.Begin);
-            return memoryStream;
-        }
-
         #region ARRAY
 
         /// <summary>
@@ -781,9 +750,9 @@ namespace NetFluid
             return s.ToArray();
         }
 
-        public static string ToJSON(this object obj,bool formatted=false)
+        public static string ToJSON(this object obj)
         {
-            return Newtonsoft.Json.JsonConvert.SerializeObject(obj,formatted?Newtonsoft.Json.Formatting.Indented:Newtonsoft.Json.Formatting.None);
+            return Netfluid.Json.JsonParser.Serialize(obj);
         }
 
         #endregion

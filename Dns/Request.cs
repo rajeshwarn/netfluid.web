@@ -15,13 +15,16 @@ namespace NetFluid.DNS
         /// </summary>
         public Header Header;
 
+        /// <summary>
+        /// Instance a new DNS request
+        /// </summary>
         public Request()
         {
             Header = new Header {OPCODE = OPCode.Query, QDCOUNT = 0, RD = true, ID = (ushort) DateTime.Now.Millisecond};
         }
 
         /// <summary>
-        /// TOBEREMOVED
+        /// Binary seriliazed
         /// </summary>
         internal byte[] Write
         {

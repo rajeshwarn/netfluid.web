@@ -69,6 +69,12 @@ namespace NetFluid.DNS.Records
         /// </summary>
         public string QName;
 
+        /// <summary>
+        /// Create a new DNS question
+        /// </summary>
+        /// <param name="QName"></param>
+        /// <param name="QType"></param>
+        /// <param name="QClass"></param>
         public Question(string QName, QType QType, QClass QClass)
         {
             this.QName = QName;
@@ -76,6 +82,9 @@ namespace NetFluid.DNS.Records
             this.QClass = QClass;
         }
 
+        /// <summary>
+        /// DNS question serialized
+        /// </summary>
         public byte[] Data
         {
             get

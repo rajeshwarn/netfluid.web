@@ -19,9 +19,9 @@
 // </copyright>
 // <author>Jake Woods</author>
 // --------------------------------------------------------------------------------------------------------------------
-namespace HttpMultipartParser
+namespace NetFluid
 {
-    using NetFluid;
+    using HttpMultipartParser;
     using System;
     using System.Collections.Generic;
     using System.Diagnostics;
@@ -82,7 +82,7 @@ namespace HttpMultipartParser
     ///     }
     ///   </code>
     /// </example>
-    public class MultipartFormDataParser
+    internal class MultipartFormDataParser
     {
         #region Constants
 

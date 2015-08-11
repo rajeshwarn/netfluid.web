@@ -39,6 +39,13 @@ namespace NetFluid
 
         public int Index { get; set; }
 
+        public Route()
+        {
+            this.Url = "";
+            Method = null;
+            Index = 99999;
+        }
+
         public Route(string url,string method=null, int index=99999)
         {
             this.Url = url;

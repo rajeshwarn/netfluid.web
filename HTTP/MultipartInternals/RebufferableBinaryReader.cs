@@ -24,7 +24,7 @@
 //   data onto the front of the stream.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
-namespace HttpMultipartParser
+namespace NetFluid
 {
     using System;
     using System.IO;

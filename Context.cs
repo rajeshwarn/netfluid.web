@@ -26,6 +26,7 @@ using System.IO;
 using System.Net;
 using NetFluid.HTTP;
 using HttpMultipartParser;
+using System.Globalization;
 
 namespace NetFluid
 {
@@ -83,6 +84,9 @@ namespace NetFluid
                 SessionId = sess.Value;
             else
                 SessionId = Security.UID()+Security.UID()+Security.UID();
+
+            Response.ContentType = "text/html";
+            Response.Headers["Access-Control-Allow-Origin"] = "*";
 
             //FIXME: valutare qualcosa di ancora piu sicuro
             sess = new Cookie("session", SessionId, "/");

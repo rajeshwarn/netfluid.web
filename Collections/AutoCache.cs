@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Linq;
+using System.Collections.Generic;
 using System.Runtime.Caching;
 
 namespace NetFluid
@@ -31,9 +33,28 @@ namespace NetFluid
         /// </summary>
         public bool AutoRenew { get; set; }
 
+        public IEnumerable<KeyValuePair<string, T>> Values
+        {
+            get
+            {
+                var c = cache.GetValues(null).ToArray();
+                return c.Select(x=>new KeyValuePair<string,T>(x.Key,(T)x.Value));
+            }
+        }
+
         public AutoCache()
         {
             cache = MemoryCache.Default;
+        }
+
+        public void Remove(string id)
+        {
+            cache.Remove(id);
+        }
+
+        public void Clear()
+        {
+            Values.ToArray().ForEach(x => Remove(x.Key));
         }
 
         public T this [string index]

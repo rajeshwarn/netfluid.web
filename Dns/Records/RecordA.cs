@@ -25,9 +25,24 @@ namespace NetFluid.DNS.Records
     [Serializable]
     public class RecordA : Record
     {
+        /// <summary>
+        /// First IPV4 byte
+        /// </summary>
         public byte A;
+
+        /// <summary>
+        /// Second IPV4 byte
+        /// </summary>
         public byte B;
+
+        /// <summary>
+        /// Third IPV4 byte
+        /// </summary>
         public byte C;
+
+        /// <summary>
+        /// Fourth IPV4 byte
+        /// </summary>
         public byte D;
 
         public IPAddress Address()

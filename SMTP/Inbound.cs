@@ -15,26 +15,51 @@ using System.Threading.Tasks;
 namespace NetFluid.SMTP
 {
     /// <summary>
-    /// Simple SMTP server
+    /// SMTP server for just in-bound comunication, relay is not directly allowed
     /// </summary>
     public class Inbound
     {
         readonly Dictionary<string, Action<string, SmtpRequest>> verbs;  
         private readonly TcpListener _listener;
 
+        /// <summary>
+        /// Called when the client complete is request. To relay the message of foward it to the recipient you must fill this function
+        /// </summary>
         public event Action<SmtpRequest> OnRequestCompleted;
+
+        /// <summary>
+        /// Called when the client invoke a MAILTO command. If return false the client cannot send the email to the specified recipient
+        /// </summary>
         public Func<MailAddress,bool> MailFrom;
+
+        /// <summary>
+        /// Called when the client send an AUTH command. To implement authetication in your SMTP server you must fill this function.
+        /// </summary>
         public Func<SmtpRequest, bool> Authenticate;
 
+        /// <summary>
+        /// Get and set the welcome messagge of the server (default value:Environment.MachineName + " NetFluid SMTP inbound connection system")
+        /// </summary>
         public string WelcomeMessage;
 
+        /// <summary>
+        /// SSH certificate. To enable SMTPS you must fill this field
+        /// </summary>
         public X509Certificate Certificate;
 
+        /// <summary>
+        /// Instance a new SMTP inbound connector on every IP address of current system
+        /// </summary>
         public Inbound():this(IPAddress.Any,25)
         {
-            WelcomeMessage = Environment.MachineName + " NetFluid mail system";
+            WelcomeMessage = Environment.MachineName + " NetFluid SMTP inbound connection system";
         }
 
+        /// <summary>
+        /// Instance a new SMTP inbound connector on a specific IP address of current system
+        /// </summary>
+        /// <param name="ip"></param>
+        /// <param name="port"></param>
         public Inbound(IPAddress ip, int port)
         {
             _listener = new TcpListener(ip, port);
@@ -188,6 +213,9 @@ namespace NetFluid.SMTP
             verbs.Add("NOOP", (x, request) => request.Write("250 2.0.0 OK"));
         }
 
+        /// <summary>
+        /// The SMTP inbound connector starts to accept clients and serve responses
+        /// </summary>
         public void Start()
         {
             Task.Factory.StartNew(() =>

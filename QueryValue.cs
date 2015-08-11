@@ -36,6 +36,13 @@ namespace NetFluid
     /// </summary>
     public sealed class QueryValue : IConvertible, IEnumerable<string>
     {
+        public enum QueryValueOrigin
+        {
+            GET,
+            POST,
+            URL
+        }
+
         private string[] values;
 
         #region CTOR
@@ -60,6 +67,11 @@ namespace NetFluid
 
 
         #endregion
+
+        /// <summary>
+        /// Name of the variable
+        /// </summary>
+        public QueryValueOrigin Origin { get; internal set; }
 
         /// <summary>
         /// Name of the variable
@@ -149,7 +161,6 @@ namespace NetFluid
         {
             try
             {
-
                 if (x.IsArray)
                 {
                     #region ARRAY

@@ -29,7 +29,7 @@ namespace NetFluid
     /// HTTP protocol status codes
     /// </summary>
     [Serializable]
-    public enum StatusCode
+    public enum StatusCode : int
     {
         Continue = 100,
         SwitchingProtocols = 101,

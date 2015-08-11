@@ -45,7 +45,6 @@ namespace NetFluid
             public ParameterInfo[] Parameters;
             public string[] GroupNames;
             public int Index;
-
             public readonly Host Host;
 
             public RouteTarget(Host host)
@@ -73,9 +72,10 @@ namespace NetFluid
                         args = new object[Parameters.Length];
                         for (int i = 0; i < Parameters.Length; i++)
                         {
-                            var q = cnt.Values[Parameters[i].Name];
-                            if (q != null)
-                                args[i] = q.Parse(Parameters[i].ParameterType);
+                            if (cnt.Values.Contains(Parameters[i].Name))
+                            {
+                                args[i] = cnt.Values[Parameters[i].Name].Parse(Parameters[i].ParameterType);
+                            }
                         }
                     }
                 }
@@ -563,6 +563,7 @@ namespace NetFluid
                     for (int i = 0; i < route.GroupNames.Length; i++)
                     {
                         var q = new QueryValue(route.GroupNames[i], m.Groups[route.GroupNames[i]].Value);
+                        q.Origin = QueryValue.QueryValueOrigin.URL;
                         cnt.Values.Add(q.Name, q);
                     }
 

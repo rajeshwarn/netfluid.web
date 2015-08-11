@@ -23,7 +23,7 @@
 //   stream.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
-namespace HttpMultipartParser
+namespace NetFluid
 {
     /// <summary>
     ///     Represents a single parameter extracted from a multipart/form-data
@@ -33,7 +33,7 @@ namespace HttpMultipartParser
     ///     For our purposes a "parameter" is defined as any non-file data
     ///     in the multipart/form-data stream.
     /// </remarks>
-    public class ParameterPart
+    internal class ParameterPart
     {
         #region Constructors and Destructors
 

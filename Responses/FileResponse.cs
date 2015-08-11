@@ -31,8 +31,6 @@ namespace NetFluid
     /// </summary>
     public class FileResponse : IResponse
     {
-        private string p;
-
         /// <summary>
         /// Get or set file size exposed to the client
         /// </summary>

@@ -26,6 +26,9 @@ namespace NetFluid.DNS
         /// </summary>
         public List<Record> Authorities;
 
+        /// <summary>
+        /// DNS response header
+        /// </summary>
         public Header Header;
 
         /// <summary>

@@ -1,0 +1,49 @@
+07/08/2015 12.02.17	threadpool size 40 1000
+07/08/2015 12.02.18	Starting NetFluid Engine
+07/08/2015 12.02.18	Loading calling assembly
+07/08/2015 12.02.18	Loading Netfluid6, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null into default host
+07/08/2015 12.02.18	Loading 1 method exposer
+07/08/2015 12.02.18	Loading MethodExposer
+07/08/2015 12.02.18	MethodExposer loaded
+07/08/2015 12.02.18	Starting host:__default
+07/08/2015 12.02.20	Starting default host
+07/08/2015 12.02.20	NetFluid web application running
+
+07/08/2015 12.02.20	Unhandled fatal exception occurred.
+			System.Net.HttpListenerException (0x80004005): Accesso negato			in System.Net.HttpListener.AddAllPrefixes()			in System.Net.HttpListener.Start()			in NetFluid.Engine.Start() in d:\PROGETTI\Netfluid6\Hosting\Engine.cs:riga 212			in Example.Program.Main(String[] args) in d:\PROGETTI\Netfluid6\Program.cs:riga 16			in System.AppDomain._nExecuteAssembly(RuntimeAssembly assembly, String[] args)			in System.AppDomain.ExecuteAssembly(String assemblyFile, Evidence assemblySecurity, String[] args)			in Microsoft.VisualStudio.HostingProcess.HostProc.RunUsersAssembly()			in System.Threading.ThreadHelper.ThreadStart_Context(Object state)			in System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state, Boolean preserveSyncCtx)			in System.Threading.ExecutionContext.Run(ExecutionContext executionContext, ContextCallback callback, Object state, Boolean preserveSyncCtx)			in System.Threading.ExecutionContext.Run(ExecutionContext executionContext, ContextCallback callback, Object state)			in System.Threading.ThreadHelper.ThreadStart()07/08/2015 12.12.05	threadpool size 40 1000
+07/08/2015 12.12.05	Starting NetFluid Engine
+07/08/2015 12.12.05	Loading calling assembly
+07/08/2015 12.12.05	Loading Netfluid6, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null into default host
+07/08/2015 12.12.05	Loading 1 method exposer
+07/08/2015 12.12.05	Loading MethodExposer
+07/08/2015 12.12.05	MethodExposer loaded
+07/08/2015 12.12.05	Starting host:__default
+07/08/2015 12.12.08	Starting default host
+07/08/2015 12.12.08	NetFluid web application running
+
+07/08/2015 12.12.08	Unhandled fatal exception occurred.
+			System.Net.HttpListenerException (0x80004005): Accesso negato			in System.Net.HttpListener.AddAllPrefixes()			in System.Net.HttpListener.Start()			in NetFluid.Engine.Start() in d:\PROGETTI\Netfluid6\Hosting\Engine.cs:riga 212			in Example.Program.Main(String[] args) in d:\PROGETTI\Netfluid6\Program.cs:riga 16			in System.AppDomain._nExecuteAssembly(RuntimeAssembly assembly, String[] args)			in System.AppDomain.ExecuteAssembly(String assemblyFile, Evidence assemblySecurity, String[] args)			in Microsoft.VisualStudio.HostingProcess.HostProc.RunUsersAssembly()			in System.Threading.ThreadHelper.ThreadStart_Context(Object state)			in System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state, Boolean preserveSyncCtx)			in System.Threading.ExecutionContext.Run(ExecutionContext executionContext, ContextCallback callback, Object state, Boolean preserveSyncCtx)			in System.Threading.ExecutionContext.Run(ExecutionContext executionContext, ContextCallback callback, Object state)			in System.Threading.ThreadHelper.ThreadStart()07/08/2015 12.38.52	threadpool size 40 1000
+07/08/2015 12.38.52	Starting NetFluid Engine
+07/08/2015 12.38.52	Loading calling assembly
+07/08/2015 12.38.52	Loading Netfluid6, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null into default host
+07/08/2015 12.38.52	Loading 1 method exposer
+07/08/2015 12.38.52	Loading MethodExposer
+07/08/2015 12.38.52	MethodExposer loaded
+07/08/2015 12.38.52	Starting host:__default
+07/08/2015 12.38.55	Starting default host
+07/08/2015 12.38.55	NetFluid web application running
+
+07/08/2015 12.38.55	Unhandled fatal exception occurred.
+			System.Net.HttpListenerException (0x80004005): Accesso negato			in System.Net.HttpListener.AddAllPrefixes()			in System.Net.HttpListener.Start()			in NetFluid.Engine.Start() in d:\PROGETTI\Netfluid6\Hosting\Engine.cs:riga 212			in Example.Program.Main(String[] args) in d:\PROGETTI\Netfluid6\Program.cs:riga 16			in System.AppDomain._nExecuteAssembly(RuntimeAssembly assembly, String[] args)			in System.AppDomain.ExecuteAssembly(String assemblyFile, Evidence assemblySecurity, String[] args)			in Microsoft.VisualStudio.HostingProcess.HostProc.RunUsersAssembly()			in System.Threading.ThreadHelper.ThreadStart_Context(Object state)			in System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state, Boolean preserveSyncCtx)			in System.Threading.ExecutionContext.Run(ExecutionContext executionContext, ContextCallback callback, Object state, Boolean preserveSyncCtx)			in System.Threading.ExecutionContext.Run(ExecutionContext executionContext, ContextCallback callback, Object state)			in System.Threading.ThreadHelper.ThreadStart()07/08/2015 12.50.33	threadpool size 40 1000
+07/08/2015 12.50.33	Starting NetFluid Engine
+07/08/2015 12.50.33	Loading calling assembly
+07/08/2015 12.50.33	Loading Netfluid6, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null into default host
+07/08/2015 12.50.33	Loading 1 method exposer
+07/08/2015 12.50.33	Loading MethodExposer
+07/08/2015 12.50.33	MethodExposer loaded
+07/08/2015 12.50.33	Starting host:__default
+07/08/2015 12.50.35	Starting default host
+07/08/2015 12.50.35	NetFluid web application running
+
+07/08/2015 12.50.35	Unhandled fatal exception occurred.
+			System.Net.HttpListenerException (0x80004005): Accesso negato			in System.Net.HttpListener.AddAllPrefixes()			in System.Net.HttpListener.Start()			in NetFluid.Engine.Start() in d:\PROGETTI\Netfluid6\Hosting\Engine.cs:riga 212			in Example.Program.Main(String[] args) in d:\PROGETTI\Netfluid6\Program.cs:riga 16			in System.AppDomain._nExecuteAssembly(RuntimeAssembly assembly, String[] args)			in System.AppDomain.ExecuteAssembly(String assemblyFile, Evidence assemblySecurity, String[] args)			in Microsoft.VisualStudio.HostingProcess.HostProc.RunUsersAssembly()			in System.Threading.ThreadHelper.ThreadStart_Context(Object state)			in System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state, Boolean preserveSyncCtx)			in System.Threading.ExecutionContext.Run(ExecutionContext executionContext, ContextCallback callback, Object state, Boolean preserveSyncCtx)			in System.Threading.ExecutionContext.Run(ExecutionContext executionContext, ContextCallback callback, Object state)			in System.Threading.ThreadHelper.ThreadStart()

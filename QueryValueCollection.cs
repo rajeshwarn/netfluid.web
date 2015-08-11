@@ -70,6 +70,14 @@ namespace NetFluid
             return t;
         }
 
+        /// <summary>
+        /// Like a Select but return values into a new QueryValueCollection
+        /// </summary>
+        /// <returns></returns>
+        public QueryValueCollection SubView(Func<QueryValue,bool> selector)
+        {
+            return new QueryValueCollection(_values.Values.Where(selector));
+        }
 
         /// <summary>
         /// List of variables
@@ -127,7 +135,7 @@ namespace NetFluid
         /// <returns></returns>
         public string ToJSON()
         {
-            return "{" + string.Join(",", _values.Values.Select(x => x.ToString())) + "}";
+            return _values.ToJSON();
         }
 
         IEnumerator<QueryValue> IEnumerable<QueryValue>.GetEnumerator()

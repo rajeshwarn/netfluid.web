@@ -35,6 +35,9 @@ namespace NetFluid.DNS
         /// </summary>
         public int TimeLived;
 
+        /// <summary>
+        /// Create a new generic DNS record
+        /// </summary>
         public Record()
         {
             TimeLived = 0;
@@ -64,6 +67,9 @@ namespace NetFluid.DNS
             }
         }
 
+        /// <summary>
+        /// Zone parts of the domain (www.example.com, .example.com, .com)
+        /// </summary>
         public string[] Zones
         {
             get

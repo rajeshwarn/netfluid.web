@@ -1,8 +1,0 @@
-C:\Users\Matteo\Source\Repos\PENEANO\obj\net_4_0_Debug\NetFluid5.csprojResolveAssemblyReference.cache
-C:\Users\Matteo\Documents\GitHub\netfluid\obj\net_4_0_Debug\NetFluid5.csprojResolveAssemblyReference.cache
-D:\PROGETTI\NetFluid\bin\net_4_0_Debug\NetFluid.dll
-D:\PROGETTI\NetFluid\bin\net_4_0_Debug\NetFluid.pdb
-D:\PROGETTI\NetFluid\bin\net_4_0_Debug\Newtonsoft.Json.dll
-D:\PROGETTI\NetFluid\obj\net_4_0_Debug\NetFluid5.csprojResolveAssemblyReference.cache
-D:\PROGETTI\NetFluid\obj\net_4_0_Debug\NetFluid.dll
-D:\PROGETTI\NetFluid\obj\net_4_0_Debug\NetFluid.pdb

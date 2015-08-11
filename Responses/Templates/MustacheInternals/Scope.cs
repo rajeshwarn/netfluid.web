@@ -89,7 +89,7 @@ namespace Mustache
                 return value;
             }
 
-            throw new KeyNotFoundException("key not found:"+results.Member);
+            return null;
         }
 
         private object onKeyFound(string name, object value)

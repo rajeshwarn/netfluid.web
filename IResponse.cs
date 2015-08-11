@@ -26,7 +26,7 @@ using System;
 namespace NetFluid
 {
     /// <summary>
-    ///     Implement methods for complex type response
+    /// Implement methods for complex type response
     /// </summary>
     public interface IResponse: IDisposable
     {

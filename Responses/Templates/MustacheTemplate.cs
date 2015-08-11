@@ -8,6 +8,9 @@ using System;
 
 namespace NetFluid
 {
+    /// <summary>
+    /// Parse and return a Mustace template as HTTP response
+    /// </summary>
     public class MustacheTemplate : IResponse
     {
         FormatCompiler compiler;
@@ -26,6 +29,7 @@ namespace NetFluid
             customTags.Add(new First());
             customTags.Add(new Include());
             customTags.Add(new Value());
+            customTags.Add(new Count());
 
             cache = new AutoCache<string>
             {
@@ -35,11 +39,19 @@ namespace NetFluid
             };
         }
 
+        /// <summary>
+        /// Add ad user defined tag to the Mustache syntax
+        /// </summary>
+        /// <param name="tag"></param>
         public static void AddCustomTag(TagDefinition tag)
         {
             customTags.Add(tag);
         }
 
+        /// <summary>
+        /// Instance a new Mustache response without parameters
+        /// </summary>
+        /// <param name="templateFile">Path to the template</param>
         public MustacheTemplate(string templateFile)
         {
             this.templateFile = templateFile;
@@ -56,6 +68,11 @@ namespace NetFluid
             }
         }
 
+        /// <summary>
+        /// Instance a new Mustache response with object, dynamic or anonymous parameter
+        /// </summary>
+        /// <param name="templateFile">Path to the template</param>
+        /// <param name="args">Class, struct, dynamic or anonymous object</param>
         public MustacheTemplate(string templateFile, object args)
         {
             this.templateFile = templateFile;
@@ -72,11 +89,19 @@ namespace NetFluid
             }
         }
 
+        /// <summary>
+        /// Used by Engine to set HTTP headers for the response
+        /// </summary>
+        /// <param name="cnt">Current HTTP/S context</param>
         public void SetHeaders(Context cnt)
         {
             
         }
 
+        /// <summary>
+        /// Used by the Engine to serialize the response and send it to the client
+        /// </summary>
+        /// <param name="cnt"></param>
         public void SendResponse(Context cnt)
         {
             if(generator == null)
@@ -88,7 +113,12 @@ namespace NetFluid
             generator.Render(args,cnt.Writer);
         }
 
-
+        /// <summary>
+        /// Parse a Mustache template with arguments and return the results as a string
+        /// </summary>
+        /// <param name="path">Path to the tempalte</param>
+        /// <param name="args">Class, struct, dynamic or anonymous object</param>
+        /// <returns></returns>
         public static string FromFile(string path, object args)
         {
             var compiler = new FormatCompiler();
@@ -102,6 +132,12 @@ namespace NetFluid
             return writer.ToString();
         }
 
+        /// <summary>
+        /// Parse a Mustache template with arguments and return the results as a string
+        /// </summary>
+        /// <param name="mustache"Mustache template source</param>
+        /// <param name="args">Class, struct, dynamic or anonymous object</param>
+        /// <returns></returns>
         public static string Parse(string mustache, object args)
         {
             var compiler = new FormatCompiler();
@@ -115,6 +151,9 @@ namespace NetFluid
             return writer.ToString();
         }
 
+        /// <summary>
+        /// Clean the memory
+        /// </summary>
         public void Dispose()
         {
             compiler = null;

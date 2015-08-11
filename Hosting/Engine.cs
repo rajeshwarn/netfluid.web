@@ -31,6 +31,7 @@ using NetFluid.Sessions;
 using System.Net;
 using System.Threading.Tasks;
 using System.Security.Permissions;
+using System.Security.Principal;
 
 namespace NetFluid
 {
@@ -47,6 +48,8 @@ namespace NetFluid
         {
             DefaultHost = new Host("default");
             _hosts = new Dictionary<string, Host>();
+            _hosts.Add("__default", DefaultHost);
+
 
             AppDomain.CurrentDomain.UnhandledException += (s, e) => 
             {
@@ -116,6 +119,17 @@ namespace NetFluid
             {
                 return DefaultHost.Routes;
             }
+        }
+
+        /// <summary>
+        /// Check if the program is running as administrator
+        /// </summary>
+        /// <returns></returns>
+        public static bool IsAdministrator()
+        {
+            var identity = WindowsIdentity.GetCurrent();
+            var principal = new WindowsPrincipal(identity);
+            return principal.IsInRole(WindowsBuiltInRole.Administrator);
         }
 
         /// <summary>
@@ -189,14 +203,6 @@ namespace NetFluid
                 x.Value.OnServerStart();
             });
 
-            Network.Addresses.Where(x=>x.GetAddressBytes().Length == 4).ForEach(x =>
-            {
-                var p = "http://" + x + ":80/";
-                Logger.Log("Adding default prefix "+p);
-                listener.Prefixes.Add(p);
-            });
-
-            listener.Prefixes.Add("http://*/");
 
             Logger.Log("Starting default host");
             DefaultHost.OnServerStart();
@@ -215,7 +221,6 @@ namespace NetFluid
                     //cnt.Close();
                 });
             }
-            Logger.Log("Exited from listening cycle");
         }
 
         /// <summary>
@@ -239,16 +244,7 @@ namespace NetFluid
 
             try
             {
-                var types = assembly.GetTypes();
-                var pages = types.Where(type => type.Inherit(typeof (MethodExposer)));
-
-                if (!pages.Any())
-                {
-                    Logger.Log("No method exposer found in " + assembly);
-                    return;
-                }
-
-                Logger.Log("Loading " + pages.Count() + " method exposer");
+                var pages = assembly.GetTypes();
 
                 foreach (Type p in pages)
                 {
@@ -301,16 +297,7 @@ namespace NetFluid
 
             try
             {
-                var types = assembly.GetTypes();
-                var pages = types.Where(type => type.Inherit(typeof (MethodExposer))).ToArray();
-
-                if (!pages.Any())
-                {
-                    Logger.Log("No method exposer found in " + assembly);
-                    return;
-                }
-
-                Logger.Log("Loading " + pages.Count() + " method exposer");
+                var pages = assembly.GetTypes().ToArray();
 
                 foreach (var p in pages)
                 {

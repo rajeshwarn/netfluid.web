@@ -24,6 +24,7 @@
 using NetFluid.HTTP;
 using System;
 using System.Collections.Generic;
+using System.Dynamic;
 using System.IO;
 using System.Net;
 using System.Runtime.Serialization.Formatters.Binary;
@@ -166,6 +167,8 @@ namespace NetFluid
 
         public static T GetRemoteObject<T>(Uri uri, T toBeFilled)
         {
+            //FIXME
+            /*
             var request = WebRequest.Create(uri) as HttpWebRequest;
             request.AllowAutoRedirect = true;
             request.UserAgent = "NetFluid Web Application";
@@ -173,22 +176,68 @@ namespace NetFluid
             request.Proxy = null;
             request.MaximumAutomaticRedirections = 10;
             request.AutomaticDecompression = DecompressionMethods.None;
-            request.Timeout = 10000;
-            try
-            {
-                WebResponse response = request.GetResponse();
-                var liner = new StreamReader(response.GetResponseStream());
+            request.Timeout = 1000;
 
-                return Newtonsoft.Json.JsonConvert.DeserializeAnonymousType<T>(liner.ReadToEnd(), toBeFilled);
-            }
-            catch (Exception)
+            WebResponse response = request.GetResponse();
+            var liner = new StreamReader(response.GetResponseStream());
+
+            return Newtonsoft.Json.JsonConvert.DeserializeAnonymousType<T>(liner.ReadToEnd(), toBeFilled);*/
+            return default(T);
+        }
+
+        public static dynamic GetRemoteObject(Uri uri)
+        {
+            /*
+            var request = WebRequest.Create(uri) as HttpWebRequest;
+            request.AllowAutoRedirect = true;
+            request.UserAgent = "NetFluid Web Application";
+            request.KeepAlive = false;
+            request.Proxy = null;
+            request.MaximumAutomaticRedirections = 10;
+            request.AutomaticDecompression = DecompressionMethods.GZip;
+            request.Timeout = 1000;
+
+            WebResponse response = request.GetResponse();
+            var liner = new StreamReader(response.GetResponseStream());
+            var json = liner.ReadToEnd();
+            
+            return Parse(Newtonsoft.Json.JsonConvert.DeserializeObject(json));*/
+            return null;
+        }
+
+        static dynamic Parse(object obj)
+        {
+            //FIXME
+            /*
+            if (obj is Newtonsoft.Json.Linq.JArray)
             {
-                return default(T);
+                var list = new List<object>();
+                var a = obj as Newtonsoft.Json.Linq.JArray;
+                a.ForEach(x => list.Add(Parse(x)));
+                return list;
             }
+            if(obj is Newtonsoft.Json.Linq.JObject)
+            {
+                var o = obj as Newtonsoft.Json.Linq.JObject;
+                var ex = new ExpandoObject();
+
+                foreach (var item in o.Properties())
+                {
+                    o[item.Name] = Parse(item.Value);
+                }
+                return o;
+            }
+            if(obj is Newtonsoft.Json.Linq.JValue)
+            {
+                obj.ToString();
+            }*/
+            return null;
         }
 
         public static T GetRemoteObject<T>(Uri uri)
         {
+            //FIXME
+            /*
             var request = WebRequest.Create(uri) as HttpWebRequest;
             request.AllowAutoRedirect = true;
             request.UserAgent = "NetFluid Web Application";
@@ -202,6 +251,8 @@ namespace NetFluid
             var liner = new StreamReader(response.GetResponseStream());
             var json = liner.ReadToEnd();
             return Newtonsoft.Json.JsonConvert.DeserializeObject<T>(json);
+             */
+            return default(T);
         }
 
         /// <summary>
@@ -271,16 +322,9 @@ namespace NetFluid
             request.AutomaticDecompression = DecompressionMethods.None;
             request.Timeout = 10000;
 
-            try
-            {
-                WebResponse response = request.GetResponse();
-                var liner = new StreamReader(response.GetResponseStream());
-                return liner.ReadToEnd();
-            }
-            catch (Exception)
-            {
-                return "";
-            }
+            WebResponse response = request.GetResponse();
+            var liner = new StreamReader(response.GetResponseStream());
+            return liner.ReadToEnd();
         }
         #endregion
 
@@ -391,17 +435,15 @@ namespace NetFluid
         #region JSON
         public static string ToJSON(object obj)
         {
-            return Newtonsoft.Json.JsonConvert.SerializeObject(obj);
+            //FIXME
+           // return Newtonsoft.Json.JsonConvert.SerializeObject(obj);
+            return "";
         }
 
         public static dynamic FromJSON(string json)
         {
-            return Newtonsoft.Json.JsonConvert.DeserializeObject(json);
-        }
-
-        public static dynamic FromJSON<T>(string json)
-        {
-            return Newtonsoft.Json.JsonConvert.DeserializeObject<T>(json);
+           // return Newtonsoft.Json.JsonConvert.DeserializeObject(json);
+            return null;
         }
         #endregion
 

@@ -17,6 +17,9 @@ namespace NetFluid.DNS
     /// </summary>
     internal class Resolver
     {
+        /// <summary>
+        /// DNS Client
+        /// </summary>
         public Resolver()
         {
             //DnsServers = Network.Dns.Select(x => new IPEndPoint(x, 53)).ToArray();
