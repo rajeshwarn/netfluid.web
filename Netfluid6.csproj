@@ -9,7 +9,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Netfluid</RootNamespace>
     <AssemblyName>Netfluid</AssemblyName>
-    <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <NuGetPackageImportStamp>403f830c</NuGetPackageImportStamp>
     <TargetFrameworkProfile />
@@ -160,6 +160,11 @@
     <Compile Include="DB\Query\Impl\QueryStartsWith.cs" />
     <Compile Include="DB\Query\Linq\QueryVisitor.cs" />
     <Compile Include="DB\Query\Query.cs" />
+    <Compile Include="Hosting\Filter.cs" />
+    <Compile Include="Hosting\FilterAttribute.cs" />
+    <Compile Include="Hosting\Route.cs" />
+    <Compile Include="Hosting\Trigger.cs" />
+    <Compile Include="Hosting\TriggerAttribute.cs" />
     <Compile Include="Responses\EmptyResponse.cs" />
     <Compile Include="Serialization\Bson\BsonReader.cs" />
     <Compile Include="Serialization\Bson\BsonSerializer.cs" />
@@ -207,8 +212,8 @@
     <Compile Include="Hosting\CallOn.cs" />
     <Compile Include="Hosting\Engine.cs" />
     <Compile Include="Hosting\Host.cs" />
-    <Compile Include="Hosting\Route.cs" />
-    <Compile Include="Hosting\VirtualHost.cs" />
+    <Compile Include="Hosting\RouteAttribute.cs" />
+    <Compile Include="Hosting\VirtualHostAttribute.cs" />
     <Compile Include="HttpFile.cs" />
     <Compile Include="HttpFileCollection.cs" />
     <Compile Include="HTTP\Extensions.cs" />
@@ -297,6 +302,10 @@
     <Compile Include="SMTP\SmtpRequest.cs" />
     <Compile Include="SMTP\SmtpWarning.cs" />
     <Compile Include="StatusCode.cs" />
+    <Compile Include="User\User.cs" />
+    <Compile Include="User\UserExposer.cs" />
+    <Compile Include="User\UserManager.cs" />
+    <Compile Include="User\WalledGarden.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

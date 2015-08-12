@@ -31,16 +31,16 @@ namespace Netfluid
     /// Tell to the engine to call this method on specified http status code
     /// </summary>
     [AttributeUsage(AttributeTargets.Method, AllowMultiple = true)]
-    public class CallOn : Attribute
+    public class CallOnAttribute : Attribute
     {
         public IEnumerable<StatusCode> StatusCode;
 
-        public CallOn(params StatusCode[] codes)
+        public CallOnAttribute(params StatusCode[] codes)
         {
             StatusCode = codes;
         }
 
-        public CallOn(params int[] codes)
+        public CallOnAttribute(params int[] codes)
         {
             StatusCode = codes.Cast<StatusCode>();
         }

@@ -1,116 +1,106 @@
-﻿// ********************************************************************************************************
-// <copyright company="NetFluid">
-//     Copyright (c) 2013 Matteo Fabbri. All rights reserved.
-// </copyright>
-// ********************************************************************************************************
-// The contents of this file are subject to the GNU AGPL v3.0 (the "License"); 
-// you may not use this file except in compliance with the License. You may obtain a copy of the License at 
-// http://www.fsf.org/licensing/licenses/agpl-3.0.html 
-// 
-// Commercial licenses are also available from http://netfluid.org/, including free evaluation licenses.
-//
-// Software distributed under the License is distributed on an "AS IS" basis, WITHOUT WARRANTY OF 
-// ANY KIND, either express or implied. See the License for the specific language governing rights and 
-// limitations under the License. 
-// 
-// The Initial Developer of this file is Matteo Fabbri.
-// 
-// Contributor(s): (Open source contributors should list themselves and their modifications here). 
-// Change Log: 
-// Date           Changed By      Notes
-// 23/10/2013    Matteo Fabbri      Inital coding
-// ********************************************************************************************************
-
-using System;
+﻿using System;
+using System.Reflection;
 using System.Text.RegularExpressions;
 
 namespace Netfluid
 {
-    /// <summary>
-    /// Set a fixed URI on wich Netfluid Engine will map the method. If putted on class it became a prefix.
-    /// Method parameters are parsed from Request.Values
-    /// </summary>
-    [AttributeUsage(AttributeTargets.Method | AttributeTargets.Class, AllowMultiple = true)]
-    public class Route : Attribute
+    public class Route
     {
         public string Url { get; set; }
-
         public string Method { get; set; }
-
+        public Regex Regex { get; set; }
+        public MethodInfo MethodInfo { get; set; }
         public int Index { get; set; }
+        public Type Type { get; private set; }
+        public ParameterInfo[] Parameters { get; private set; }
+        public string[] GroupNames { get; private set; }
 
-        public Route()
+        public Host Host { get; private set; }
+
+        public Route(Host host)
         {
-            this.Url = "";
-            Method = null;
-            Index = 99999;
+            Host = host;
         }
 
-        public Route(string url,string method=null, int index=99999)
+        public virtual void Handle(Context cnt)
         {
-            this.Url = url;
-            Method = method;
-            Index = index;
-        }
+            MethodExposer exposer = null;
+            object[] args;
+            IResponse resp;
 
-        public Regex Regex
-        {
-            get
+            #region ARGS
+            try
             {
-                var urlRegex = Url;
-                var find = new Regex(":[^//]+");
-                foreach (Match item in find.Matches(Url))
+                exposer = Type.CreateIstance() as MethodExposer;
+                exposer.Context = cnt;
+                exposer.Host = Host;
+
+                args = null;
+
+                if (Parameters != null && Parameters.Length > 0)
                 {
-                    urlRegex = urlRegex.Replace(item.Value, "(?<" + item.Value.Substring(1) + ">[^//]+?)");
+                    args = new object[Parameters.Length];
+                    for (int i = 0; i < Parameters.Length; i++)
+                    {
+                        if (cnt.Values.Contains(Parameters[i].Name))
+                        {
+                            args[i] = cnt.Values[Parameters[i].Name].Parse(Parameters[i].ParameterType);
+                        }
+                    }
                 }
-                return new Regex(urlRegex);
+            }
+            catch (Exception ex)
+            {
+                ShowError(cnt, ex);
+                return;
+            }
+            #endregion
+
+            #region RESPONSE
+            try
+            {
+                resp = MethodInfo.Invoke(exposer, args) as IResponse;
+
+                if (resp != null)
+                    resp.SetHeaders(cnt);
+            }
+            catch (Exception ex)
+            {
+                ShowError(cnt, ex.InnerException);
+                return;
+            }
+            #endregion
+
+            try
+            {
+                if (resp != null && cnt.Request.HttpMethod.ToLowerInvariant() != "head")
+                    resp.SendResponse(cnt);
+
+                cnt.Close();
+            }
+            catch (Exception ex)
+            {
+                ShowError(cnt, ex);
             }
         }
-    }
 
-    [AttributeUsage(AttributeTargets.Method, AllowMultiple = true)]
-    public class Filter :Attribute
-    {
-        public string Url { get; set; }
-
-        public string Method { get; set; }
-
-        public int Index { get; set; }
-
-        public Regex Regex { get; set; }
-
-        public Filter()
+        public void ShowError(Context cnt, Exception ex)
         {
-        }
+            try
+            {
+                Engine.Logger.Log("exception serving " + cnt.Request.Url, ex);
 
-        public Filter(string url, string method = null, int index = 99999)
-        {
-            Url = url;
-            Method = method;
-            Index = index;
-        }
-    }
+                if (ex is TargetInvocationException)
+                    ex = ex.InnerException;
 
-    [AttributeUsage(AttributeTargets.Method, AllowMultiple = true)]
-    public class Trigger :Attribute
-    {
-        public string Url { get; set; }
+                if (Engine.ShowException)
+                    cnt.Writer.Write(ex);
+            }
+            catch
+            {
 
-        public string Method { get; set; }
-
-        public int Index { get; set; }
-
-        public Regex Regex { get; set; }
-
-        public Trigger()
-        {
-        }
-
-        public Trigger(string url, string method = null, int index = 99999)
-        {
-            this.Url = url;
-            Method = method;
-            Index = index;
+            }
+            cnt.Close();
         }
     }
 }

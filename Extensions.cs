@@ -37,12 +37,24 @@ using System.Text;
 using Netfluid.HTTP;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Text.RegularExpressions;
-using System.Drawing;
 
 namespace Netfluid
 {
     public static class Extensions
     {
+        public static string[] GetKeywords(object obj)
+        {
+            return obj.GetType().GetProperties()
+                .Where(x => x.PropertyType.Equals(typeof(string)))
+                .Select(x => x.GetValue(obj) as string)
+                .Where(x => x != null)
+                .Select(x => x.ToLowerInvariant())
+                .SelectMany(x => x.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries))
+                .Distinct()
+                .ToArray();
+        }
+
+
         #region APPDOMAIN
 
         /// <summary>

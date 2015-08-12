@@ -35,190 +35,10 @@ namespace Netfluid
     /// </summary>
     public class Host
     {
-        private class RouteTarget
-        {
-            public string Url;
-            public string Method;
-            public Regex Regex;
-            public MethodInfo MethodInfo;
-            public Type Type;
-            public ParameterInfo[] Parameters;
-            public string[] GroupNames;
-            public int Index;
-            public readonly Host Host;
-
-            public RouteTarget(Host host)
-            {
-                Host = host;
-            }
-
-            public virtual void Handle(Context cnt)
-            {
-                MethodExposer exposer = null;
-                object[] args;
-                IResponse resp;
-
-                #region ARGS
-                try
-                {
-                    exposer = Type.CreateIstance() as MethodExposer;
-                    exposer.Context = cnt;
-                    exposer.Host = Host;
-
-                    args = null;
-
-                    if (Parameters != null && Parameters.Length > 0)
-                    {
-                        args = new object[Parameters.Length];
-                        for (int i = 0; i < Parameters.Length; i++)
-                        {
-                            if (cnt.Values.Contains(Parameters[i].Name))
-                            {
-                                args[i] = cnt.Values[Parameters[i].Name].Parse(Parameters[i].ParameterType);
-                            }
-                        }
-                    }
-                }
-                catch (Exception ex)
-                {
-                    ShowError(cnt, ex);
-                    return;
-                }
-                #endregion
-
-                #region RESPONSE
-                try
-                {
-                    resp = MethodInfo.Invoke(exposer, args) as IResponse;
-
-                    if (resp != null)
-                        resp.SetHeaders(cnt);
-                }
-                catch (Exception ex)
-                {
-                    ShowError(cnt, ex.InnerException);
-                    return;
-                }
-                #endregion
-
-                try
-                {
-                    if (resp != null && cnt.Request.HttpMethod.ToLowerInvariant() != "head")
-                        resp.SendResponse(cnt);
-
-                    cnt.Close();
-                }
-                catch (Exception ex)
-                {
-                    ShowError(cnt,ex);
-                }
-            }
-
-            public void ShowError(Context cnt, Exception ex)
-            {
-                try
-                {
-                    Engine.Logger.Log("exception serving " + cnt.Request.Url, ex);
-
-                    if (ex is TargetInvocationException)
-                        ex = ex.InnerException;
-                    
-                    if (Engine.ShowException)
-                        cnt.Writer.Write(ex);
-                }
-                catch
-                {
-
-                }
-                cnt.Close();
-            }
-        }
-
-        private class Filter : RouteTarget
-        {
-            public Filter(Host host) :base(host)
-            {
-            }
-
-            public override void Handle(Context cnt)
-            {
-                try
-                {
-                    var exposer = Type.CreateIstance() as MethodExposer;
-                    exposer.Context = cnt;
-                    exposer.Host = Host;
-
-                    var args = new object[] { null };
-
-                    if ((bool)MethodInfo.Invoke(exposer, args) && args[0] != null)
-                    {
-                        var resp = args[0] as IResponse;
-
-                        if (resp != null)
-                            resp.SetHeaders(cnt);
-
-                        try
-                        {
-                            if (resp != null && cnt.Request.HttpMethod.ToLowerInvariant() != "head")
-                                resp.SendResponse(cnt);
-                        }
-                        catch (Exception ex)
-                        {
-                            if (Engine.ShowException)
-                            {
-                                cnt.Writer.Write(ex.ToString());
-                            }
-                        }
-                        cnt.Close();
-                    }
-                }
-                catch (Exception ex)
-                {
-                    ShowError(cnt, ex.InnerException);
-                }
-            }
-        }
-
-        private class Trigger:RouteTarget
-        {
-            public Trigger(Host host) :base(host)
-            {
-            }
-
-            public override void Handle(Context cnt)
-            {
-                var exposer = Type.CreateIstance() as MethodExposer;
-                exposer.Context = cnt;
-                exposer.Host = Host;
-
-                object[] args = null;
-
-                if (Parameters != null && Parameters.Length > 0)
-                {
-                    args = new object[Parameters.Length];
-                    for (int i = 0; i < Parameters.Length; i++)
-                    {
-                        var q = cnt.Values[Parameters[i].Name];
-                        if (q != null)
-                            args[i] = q.Parse(Parameters[i].ParameterType);
-                    }
-                }
-
-                try
-                {
-                    MethodInfo.Invoke(exposer, args);
-                }
-                catch (Exception ex)
-                {
-                    Engine.Logger.Log("exception serving "+cnt.Request.Url, ex.InnerException);
-                }
-            }
-        }
-
-        List<RouteTarget> _routes;
+        List<Route> _routes;
         List<Filter> _filters;
         List<Trigger> _triggers;
-        Dictionary<StatusCode,RouteTarget> _callOn;
+        Dictionary<StatusCode,Route> _callOn;
 
         private readonly List<MethodExposer> _instances;
 
@@ -232,8 +52,8 @@ namespace Netfluid
             Name = name;
             _filters = new List<Filter>();
             _triggers = new List<Trigger>();
-            _routes = new List<RouteTarget>();
-            _callOn = new Dictionary<StatusCode,RouteTarget>();
+            _routes = new List<Route>();
+            _callOn = new Dictionary<StatusCode,Route>();
             _instances = new List<MethodExposer>();
 
             PublicFolders = new List<IPublicFolder>();
@@ -295,9 +115,6 @@ namespace Netfluid
             if (!type.HasDefaultConstructor())
                 throw new TypeLoadException(type.Name + " does not have a parameterless constructor");
 
-            if (!exposedMethod.ReturnType.Implements(typeof(void)))
-                throw new TypeLoadException("Exposed method must returns void");
-
             _triggers.Add(new Trigger(this) { Url = null, Method = httpMethod, MethodInfo = exposedMethod, Regex = regex, Type = type, Index = index });
             _triggers = _triggers.OrderByDescending(x => x.Index).ToList();
 
@@ -315,9 +132,6 @@ namespace Netfluid
 
             if (!type.HasDefaultConstructor())
                 throw new TypeLoadException(type.Name+" does not have a parameterless constructor");
-
-            if (!exposedMethod.ReturnType.Implements(typeof(void)))
-                throw new TypeLoadException("Exposed method must returns void");
 
             var regex = string.IsNullOrEmpty(url) ? null : getRegex(url);
 
@@ -414,7 +228,7 @@ namespace Netfluid
 
 
             if(!_callOn.ContainsKey(code))
-                _callOn.Add(code, new RouteTarget(this)
+                _callOn.Add(code, new Route(this)
                 {
                     Type = type,
                     MethodInfo = exposedMethod
@@ -437,7 +251,7 @@ namespace Netfluid
             if (!exposedMethod.ReturnType.Implements(typeof(IResponse)))
                 throw new TypeLoadException("Exposed methods must returns an IResponse object");
 
-            _routes.Add(new RouteTarget(this) { Method = httpMethod, MethodInfo = exposedMethod, Regex = regex, Type = type, GroupNames = regex.GetGroupNames(), Parameters = exposedMethod.GetParameters(), Index = index });
+            _routes.Add(new Route(this) { Method = httpMethod, MethodInfo = exposedMethod, Regex = regex, Type = type, GroupNames = regex.GetGroupNames(), Parameters = exposedMethod.GetParameters(), Index = index });
             _routes = _routes.OrderByDescending(x => x.Index).ToList();
 
             loadInstance(type);
@@ -458,7 +272,7 @@ namespace Netfluid
 
             var regex = getRegex(url);
 
-            _routes.Add(new RouteTarget(this) { Url=url, Method=httpMethod, MethodInfo=exposedMethod,Regex=regex, Type=type, GroupNames=regex.GetGroupNames(), Parameters=exposedMethod.GetParameters(), Index=index });
+            _routes.Add(new Route(this) { Url=url, Method=httpMethod, MethodInfo=exposedMethod,Regex=regex, Type=type, GroupNames=regex.GetGroupNames(), Parameters=exposedMethod.GetParameters(), Index=index });
             _routes = _routes.OrderByDescending(x => x.Index).ToList();
 
             loadInstance(type);
@@ -585,7 +399,7 @@ namespace Netfluid
 
             cnt.Response.StatusCode = (int)StatusCode.NotFound;
 
-            RouteTarget rt;
+            Route rt;
             if (_callOn.TryGetValue((StatusCode)cnt.Response.StatusCode, out rt))
             {
                 if (Engine.DevMode)
@@ -606,7 +420,7 @@ namespace Netfluid
 
             loadInstance(p);
 
-            var prefixes = p.CustomAttribute<Route>(true).Select(x=>x.Url);
+            var prefixes = p.CustomAttribute<RouteAttribute>(true).Select(x=>x.Url);
             if (prefixes.Count() == 0)
                 prefixes = new[] { string.Empty };
 
@@ -614,7 +428,7 @@ namespace Netfluid
             {
                 foreach (var prefix in prefixes)
                 {
-                    foreach (var att in m.CustomAttribute<Route>())
+                    foreach (var att in m.CustomAttribute<RouteAttribute>())
                     {
                         AddRoute(prefix+att.Url, m, att.Method, att.Index);
                     }
@@ -622,7 +436,7 @@ namespace Netfluid
 
                 foreach (var prefix in prefixes)
                 {
-                    foreach (var att in m.CustomAttribute<Netfluid.Filter>())
+                    foreach (var att in m.CustomAttribute<Netfluid.FilterAttribute>())
                     {
                         if (att.Regex != null)
                             AddFilter(m, new Regex(Regex.Escape(prefix) + att.Regex), att.Method, att.Index);
@@ -633,7 +447,7 @@ namespace Netfluid
 
                 foreach (var prefix in prefixes)
                 {
-                    foreach (var att in m.CustomAttribute<Netfluid.Trigger>())
+                    foreach (var att in m.CustomAttribute<Netfluid.TriggerAttribute>())
                     {
                         if (att.Regex != null)
                             AddTrigger(m, new Regex(Regex.Escape(prefix) + att.Regex), att.Method, att.Index);
@@ -642,7 +456,7 @@ namespace Netfluid
                     }
                 }
 
-                foreach (var att in m.CustomAttribute<CallOn>())
+                foreach (var att in m.CustomAttribute<CallOnAttribute>())
                 {
                     foreach (var code in att.StatusCode)
 	                {

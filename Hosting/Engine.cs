@@ -27,7 +27,6 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Threading;
-using Netfluid.Sessions;
 using System.Net;
 using System.Threading.Tasks;
 using System.Security.Permissions;
@@ -235,9 +234,9 @@ namespace Netfluid
                 foreach (Type p in pages)
                 {
                     Logger.Log("Loading " + p.Name);
-                    if (p.HasAttribute<VirtualHost>(true))
+                    if (p.HasAttribute<VirtualHostAttribute>(true))
                     {
-                        foreach (string h in p.CustomAttribute<VirtualHost>(true).Select(x => x.Name))
+                        foreach (string h in p.CustomAttribute<VirtualHostAttribute>(true).Select(x => x.Name))
                         {
                             if(h.EndsWith(".*"))
                             {
@@ -288,9 +287,9 @@ namespace Netfluid
                 foreach (var p in pages)
                 {
                     Logger.Log("Loading "+ p.Name);
-                    if (p.HasAttribute<VirtualHost>(true))
+                    if (p.HasAttribute<VirtualHostAttribute>(true))
                     {
-                        foreach (string h in p.CustomAttribute<VirtualHost>(true).Select(x => x.Name))
+                        foreach (string h in p.CustomAttribute<VirtualHostAttribute>(true).Select(x => x.Name))
                         {
                             if (h.EndsWith(".*"))
                             {
