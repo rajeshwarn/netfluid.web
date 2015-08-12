@@ -1,8 +1,0 @@
-D:\PROGETTI\Netfluid6\bin\Debug\x86\sqlite3.dll
-D:\PROGETTI\Netfluid6\bin\Debug\x64\sqlite3.dll
-D:\PROGETTI\Netfluid6\bin\Debug\Netfluid6.exe.config
-D:\PROGETTI\Netfluid6\bin\Debug\Netfluid6.exe
-D:\PROGETTI\Netfluid6\bin\Debug\Netfluid6.pdb
-D:\PROGETTI\Netfluid6\obj\Debug\Netfluid6.exe
-D:\PROGETTI\Netfluid6\obj\Debug\Netfluid6.pdb
-D:\PROGETTI\Netfluid6\obj\Debug\Netfluid6.csprojResolveAssemblyReference.cache

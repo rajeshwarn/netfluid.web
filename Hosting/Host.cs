@@ -21,14 +21,14 @@
 // 23/10/2013    Matteo Fabbri      Inital coding
 // ********************************************************************************************************
 
-using NetFluid.Sessions;
+using Netfluid.Sessions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Text.RegularExpressions;
 
-namespace NetFluid
+namespace Netfluid
 {
     /// <summary>
     /// Virtual host manager
@@ -215,37 +215,30 @@ namespace NetFluid
             }
         }
 
+        List<RouteTarget> _routes;
+        List<Filter> _filters;
+        List<Trigger> _triggers;
+        Dictionary<StatusCode,RouteTarget> _callOn;
 
         private readonly List<MethodExposer> _instances;
 
-        private List<RouteTarget> _routes;
-        private List<Filter> _filters;
-        private List<Trigger> _triggers;
-        private readonly Dictionary<StatusCode,RouteTarget> _callOn;
-
-        internal List<MethodExposer> instances;
-
-        public readonly string Name;
-        public List<IPublicFolder> PublicFolders;
-        public ISessionManager Sessions;
+        public string Name { get; private set; }
+        public List<IPublicFolder> PublicFolders { get; set; }
+        public ISessionManager Sessions { get; set; }
+        public bool SSL { get; set; }
        
         internal Host(string name)
         {
             Name = name;
-            _instances = new List<MethodExposer>();
             _filters = new List<Filter>();
             _triggers = new List<Trigger>();
             _routes = new List<RouteTarget>();
             _callOn = new Dictionary<StatusCode,RouteTarget>();
+            _instances = new List<MethodExposer>();
+
             PublicFolders = new List<IPublicFolder>();
             Sessions = new MemorySessionManager();
-
-            instances = new List<MethodExposer>();
-        }
-
-        public string Routes
-        {
-            get { return _routes.Select(x=>x.Regex.ToString()).Join("  "); }
+            SSL = false;
         }
 
         static Regex getRegex(string url)
@@ -261,10 +254,10 @@ namespace NetFluid
 
         void loadInstance(Type type)
         {
-            if (!instances.Any(x => x.GetType().Equals(type)))
+            if (!_instances.Any(x => x.GetType().Equals(type)))
                 try
                 {
-                    instances.Add(type.CreateIstance() as MethodExposer);
+                    _instances.Add(type.CreateIstance() as MethodExposer);
                 }
                 catch (Exception ex)
                 {
@@ -274,7 +267,7 @@ namespace NetFluid
 
         internal void OnServerStart()
         {
-            foreach (var type in instances.Select(x=>x.GetType()))
+            foreach (var type in _instances.Select(x=>x.GetType()))
             {
                 var m = type.GetMethod("OnServerStart",BindingFlags.FlattenHierarchy);
 
@@ -629,7 +622,7 @@ namespace NetFluid
 
                 foreach (var prefix in prefixes)
                 {
-                    foreach (var att in m.CustomAttribute<NetFluid.Filter>())
+                    foreach (var att in m.CustomAttribute<Netfluid.Filter>())
                     {
                         if (att.Regex != null)
                             AddFilter(m, new Regex(Regex.Escape(prefix) + att.Regex), att.Method, att.Index);
@@ -640,7 +633,7 @@ namespace NetFluid
 
                 foreach (var prefix in prefixes)
                 {
-                    foreach (var att in m.CustomAttribute<NetFluid.Trigger>())
+                    foreach (var att in m.CustomAttribute<Netfluid.Trigger>())
                     {
                         if (att.Regex != null)
                             AddTrigger(m, new Regex(Regex.Escape(prefix) + att.Regex), att.Method, att.Index);

@@ -22,7 +22,7 @@
 //   Represents a parsing problem occurring within the MultipartFormDataParser
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
-namespace NetFluid
+namespace Netfluid
 {
     using System;
 

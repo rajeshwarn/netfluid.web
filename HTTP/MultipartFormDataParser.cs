@@ -19,7 +19,7 @@
 // </copyright>
 // <author>Jake Woods</author>
 // --------------------------------------------------------------------------------------------------------------------
-namespace NetFluid
+namespace Netfluid
 {
     using HttpMultipartParser;
     using System;

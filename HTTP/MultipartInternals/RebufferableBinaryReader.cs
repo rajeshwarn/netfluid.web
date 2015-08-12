@@ -24,7 +24,7 @@
 //   data onto the front of the stream.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
-namespace NetFluid
+namespace Netfluid
 {
     using System;
     using System.IO;

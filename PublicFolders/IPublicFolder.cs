@@ -1,5 +1,5 @@
 
-namespace NetFluid
+namespace Netfluid
 {
     /// <summary>
     /// Interface to override Engine public folder managing

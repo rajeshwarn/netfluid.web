@@ -37,7 +37,7 @@ using System;
 
 #endregion
 
-namespace NetFluid.DNS.Records
+namespace Netfluid.DNS.Records
 {
         [Serializable]
     public class RecordKEY : Record

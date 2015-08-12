@@ -8,7 +8,7 @@
 
 using System;
 
-namespace NetFluid.DNS
+namespace Netfluid.DNS
 {
     /*
 	 * 3.2.2. TYPE values

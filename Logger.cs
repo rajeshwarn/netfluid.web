@@ -28,7 +28,7 @@ using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
 
-namespace NetFluid
+namespace Netfluid
 {
     internal class Logger : ILogger
     {

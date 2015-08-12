@@ -23,7 +23,7 @@
 
 using System;
 
-namespace NetFluid
+namespace Netfluid
 {
     [AttributeUsage(AttributeTargets.Class, AllowMultiple = true)]
     public class VirtualHost : Attribute

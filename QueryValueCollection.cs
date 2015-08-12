@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 
-namespace NetFluid
+namespace Netfluid
 {
     /// <summary>
     /// GET or POST values recieved from the client

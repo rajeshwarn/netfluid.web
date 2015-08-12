@@ -7,11 +7,12 @@
     <ProjectGuid>{040E039A-A67D-4C08-A299-CF0B90266966}</ProjectGuid>
     <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Netfluid6</RootNamespace>
-    <AssemblyName>Netfluid6</AssemblyName>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <RootNamespace>Netfluid</RootNamespace>
+    <AssemblyName>Netfluid</AssemblyName>
+    <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <NuGetPackageImportStamp>403f830c</NuGetPackageImportStamp>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -33,12 +34,18 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Microsoft.AspNet.Razor, Version=4.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>packages\Microsoft.AspNet.Razor.4.0.0-beta1\lib\net45\Microsoft.AspNet.Razor.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="RazorEngine, Version=4.2.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>packages\RazorEngine.4.2.0-beta2\lib\net45\RazorEngine.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Runtime.Caching" />
     <Reference Include="System.Security" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
@@ -119,6 +126,83 @@
     <Compile Include="Dns\Response.cs" />
     <Compile Include="Dns\Serializer.cs" />
     <Compile Include="Dns\Structs.cs" />
+    <Compile Include="DB\Database\Collections\Delete.cs" />
+    <Compile Include="DB\Database\Collections\Drop.cs" />
+    <Compile Include="DB\Database\Collections\Find.cs" />
+    <Compile Include="DB\Database\Collections\Include.cs" />
+    <Compile Include="DB\Database\Collections\Index.cs" />
+    <Compile Include="DB\Database\Collections\Insert.cs" />
+    <Compile Include="DB\Database\Collections\InsertBulk.cs" />
+    <Compile Include="DB\Database\Collections\LiteCollection.cs" />
+    <Compile Include="DB\Database\Collections\Update.cs" />
+    <Compile Include="DB\Database\FileStorage\LiteFileInfo.cs" />
+    <Compile Include="DB\Database\FileStorage\LiteFileStorage.cs" />
+    <Compile Include="DB\Database\FileStorage\LiteFileStream.cs" />
+    <Compile Include="DB\Database\LiteDatabase.cs" />
+    <Compile Include="DB\Database\Tools\DbRef.cs" />
+    <Compile Include="DB\Database\Tools\GetDatabaseInfo.cs" />
+    <Compile Include="DB\Database\Tools\UserVersion.cs" />
+    <Compile Include="DB\Document\BsonArray.cs" />
+    <Compile Include="DB\Document\BsonDocument.cs" />
+    <Compile Include="DB\Document\BsonType.cs" />
+    <Compile Include="DB\Document\BsonValue.cs" />
+    <Compile Include="DB\Document\ObjectId.cs" />
+    <Compile Include="DB\Query\Impl\QueryAll.cs" />
+    <Compile Include="DB\Query\Impl\QueryAnd.cs" />
+    <Compile Include="DB\Query\Impl\QueryBetween.cs" />
+    <Compile Include="DB\Query\Impl\QueryContains.cs" />
+    <Compile Include="DB\Query\Impl\QueryEquals.cs" />
+    <Compile Include="DB\Query\Impl\QueryGreater.cs" />
+    <Compile Include="DB\Query\Impl\QueryIn.cs" />
+    <Compile Include="DB\Query\Impl\QueryLess.cs" />
+    <Compile Include="DB\Query\Impl\QueryNot.cs" />
+    <Compile Include="DB\Query\Impl\QueryOr.cs" />
+    <Compile Include="DB\Query\Impl\QueryStartsWith.cs" />
+    <Compile Include="DB\Query\Linq\QueryVisitor.cs" />
+    <Compile Include="DB\Query\Query.cs" />
+    <Compile Include="Responses\EmptyResponse.cs" />
+    <Compile Include="Serialization\Bson\BsonReader.cs" />
+    <Compile Include="Serialization\Bson\BsonSerializer.cs" />
+    <Compile Include="Serialization\Bson\BsonWriter.cs" />
+    <Compile Include="Serialization\Bson\Mapper\AutoId.cs" />
+    <Compile Include="Serialization\Bson\Mapper\BsonFieldAttribute.cs" />
+    <Compile Include="Serialization\Bson\Mapper\BsonIdAttribute.cs" />
+    <Compile Include="Serialization\Bson\Mapper\BsonIgnoreAttribute.cs" />
+    <Compile Include="Serialization\Bson\Mapper\BsonIndexAttribute.cs" />
+    <Compile Include="Serialization\Bson\Mapper\BsonMapper.cs" />
+    <Compile Include="Serialization\Bson\Mapper\BsonMapper.Deserialize.cs" />
+    <Compile Include="Serialization\Bson\Mapper\BsonMapper.Serialize.cs" />
+    <Compile Include="Serialization\Bson\Mapper\PropertyMapper.cs" />
+    <Compile Include="Serialization\Bson\Mapper\Reflection.cs" />
+    <Compile Include="DB\Storage\Pages\BasePage.cs" />
+    <Compile Include="DB\Storage\Pages\CollectionPage.cs" />
+    <Compile Include="DB\Storage\Pages\DataPage.cs" />
+    <Compile Include="DB\Storage\Pages\ExtendPage.cs" />
+    <Compile Include="DB\Storage\Pages\HeaderPage.cs" />
+    <Compile Include="DB\Storage\Pages\IndexPage.cs" />
+    <Compile Include="DB\Storage\Services\CacheService.cs" />
+    <Compile Include="DB\Storage\Services\CollectionService.cs" />
+    <Compile Include="DB\Storage\Services\DataService.cs" />
+    <Compile Include="DB\Storage\Services\DiskService.cs" />
+    <Compile Include="DB\Storage\Services\IndexService.cs" />
+    <Compile Include="DB\Storage\Services\JournalService.cs" />
+    <Compile Include="DB\Storage\Services\PageService.cs" />
+    <Compile Include="DB\Storage\Services\RecoveryService.cs" />
+    <Compile Include="DB\Storage\Services\TransactionService.cs" />
+    <Compile Include="DB\Storage\Structures\CollectionIndex.cs" />
+    <Compile Include="DB\Storage\Structures\DataBlock.cs" />
+    <Compile Include="DB\Storage\Structures\IndexNode.cs" />
+    <Compile Include="DB\Storage\Structures\IndexOptions.cs" />
+    <Compile Include="DB\Storage\Structures\PageAddress.cs" />
+    <Compile Include="DB\Utils\BinaryExtensions.cs" />
+    <Compile Include="DB\Utils\BinaryReaderExtensions.cs" />
+    <Compile Include="DB\Utils\BinaryWriterExtensions.cs" />
+    <Compile Include="DB\Utils\Settings.cs" />
+    <Compile Include="DB\Utils\DictionaryExtensions.cs" />
+    <Compile Include="DB\Utils\DumpDatabase.cs" />
+    <Compile Include="DB\Utils\IOExceptionExtensions.cs" />
+    <Compile Include="DB\Utils\LiteException.cs" />
+    <Compile Include="DB\Utils\StringScanner.cs" />
     <Compile Include="Extensions.cs" />
     <Compile Include="Hosting\CallOn.cs" />
     <Compile Include="Hosting\Engine.cs" />
@@ -216,6 +300,10 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Embedded\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\NFService\packages\SQLitePCL.raw_basic.0.8.0\build\net45\SQLitePCL.raw_basic.targets" Condition="Exists('..\NFService\packages\SQLitePCL.raw_basic.0.8.0\build\net45\SQLitePCL.raw_basic.targets')" />

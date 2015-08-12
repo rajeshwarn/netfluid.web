@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace NetFluid
+namespace Netfluid
 {
     /// <summary>
     /// Return to the client a run time built CVS

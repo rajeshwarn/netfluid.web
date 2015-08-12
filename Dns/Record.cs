@@ -2,10 +2,10 @@
 
 using System;
 using System.Linq;
-using NetFluid.DNS.Records;
+using Netfluid.DNS.Records;
 using System.Collections.Generic;
 
-namespace NetFluid.DNS
+namespace Netfluid.DNS
 {
     /// <summary>
     /// DNS record base class

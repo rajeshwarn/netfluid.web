@@ -27,7 +27,7 @@ using System.Security;
 using System.Security.Cryptography;
 using System.Text;
 
-namespace NetFluid
+namespace Netfluid
 {
     /// <summary>
     /// Utilities for security

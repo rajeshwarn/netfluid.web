@@ -30,7 +30,7 @@ using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 
-namespace NetFluid.HTTP
+namespace Netfluid.HTTP
 {
     internal static class HttpUtility
     {

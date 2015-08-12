@@ -5,7 +5,7 @@ using System.Linq;
 using System.Net;
 using System.Text;
 
-namespace NetFluid
+namespace Netfluid
 {
     public class PublicFolder : IPublicFolder
     {

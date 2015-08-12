@@ -27,7 +27,7 @@ using System.Net;
 using System.Net.NetworkInformation;
 using System.Net.Sockets;
 
-namespace NetFluid
+namespace Netfluid
 {
     /// <summary>
     ///     Return important data about the connected network

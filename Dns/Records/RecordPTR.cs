@@ -19,7 +19,7 @@ description of the IN-ADDR.ARPA domain for an example.
 
 using System;
 
-namespace NetFluid.DNS.Records
+namespace Netfluid.DNS.Records
 {
     /// <summary>
     /// DNS record PTR

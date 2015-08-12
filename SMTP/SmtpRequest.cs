@@ -4,7 +4,7 @@ using System.IO;
 using System.Net.Mail;
 using System.Net.Sockets;
 
-namespace NetFluid.SMTP
+namespace Netfluid.SMTP
 {
     /// <summary>
     /// SMTP client request

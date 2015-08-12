@@ -24,7 +24,7 @@
 using System;
 using System.Text.RegularExpressions;
 
-namespace NetFluid
+namespace Netfluid
 {
     /// <summary>
     /// Set a fixed URI on wich Netfluid Engine will map the method. If putted on class it became a prefix.

@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 
-namespace NetFluid.Responses.Templates.MustacheSuperSet
+namespace Netfluid.Responses.Templates.MustacheSuperSet
 {
     /// Defines a tag that can iterate over a collection of items and render
     /// the content using each item as the context.

@@ -12,7 +12,7 @@ using System.Security.Cryptography.X509Certificates;
 using System.Threading.Tasks;
 #endregion
 
-namespace NetFluid.SMTP
+namespace Netfluid.SMTP
 {
     /// <summary>
     /// SMTP server for just in-bound comunication, relay is not directly allowed

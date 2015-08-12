@@ -1,12 +1,12 @@
 ﻿using Mustache;
-using NetFluid.Responses.Templates.MustacheSuperSet;
+using Netfluid.Responses.Templates.MustacheSuperSet;
 using System.Collections.Generic;
 using System.IO;
 
 
 using System;
 
-namespace NetFluid
+namespace Netfluid
 {
     /// <summary>
     /// Parse and return a Mustace template as HTTP response

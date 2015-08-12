@@ -27,13 +27,13 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Threading;
-using NetFluid.Sessions;
+using Netfluid.Sessions;
 using System.Net;
 using System.Threading.Tasks;
 using System.Security.Permissions;
 using System.Security.Principal;
 
-namespace NetFluid
+namespace Netfluid
 {
     /// <summary>
     /// Main class of Netfluid framework
@@ -59,7 +59,6 @@ namespace NetFluid
                     Logger.Log("Unhandled exception occurred.", e.ExceptionObject as Exception);
             };
             
-            Sessions = new MemorySessionManager();
             Logger = new Logger();
 
             var max = Environment.ProcessorCount * 250;
@@ -73,11 +72,13 @@ namespace NetFluid
             listener = new HttpListener();
         }
 
-        public static HttpListenerPrefixCollection Prefixes
+
+
+        public static IEnumerable<string> Prefixes
         {
             get
             {
-                return listener.Prefixes;
+                return listener.Prefixes.Select(x=>x.ToString());
             }
         }
 
@@ -93,11 +94,6 @@ namespace NetFluid
         public static ILogger Logger { get; set; }
 
         /// <summary>
-        /// Rewritable sessions manager
-        /// </summary>
-        public static ISessionManager Sessions { get; set; }
-
-        /// <summary>
         /// Currently running virtual hosts managers (reversed proxy excluded)
         /// </summary>
         public static IEnumerable<Host> Hosts
@@ -111,17 +107,6 @@ namespace NetFluid
         public static bool DevMode { get; set; }
 
         /// <summary>
-        /// XML summary of virtual host and relative routes
-        /// </summary>
-        public static string RoutesMap
-        {
-            get
-            {
-                return DefaultHost.Routes;
-            }
-        }
-
-        /// <summary>
         /// Check if the program is running as administrator
         /// </summary>
         /// <returns></returns>
@@ -133,7 +118,7 @@ namespace NetFluid
         }
 
         /// <summary>
-        /// Return the host manager from the host name (reversed proxy excluded)
+        /// Return the host manager from the host name 
         /// </summary>
         /// <param name="name">name of the host (ex: www.netfluid.org)</param>
         /// <returns>virtual host manager</returns>
@@ -195,14 +180,15 @@ namespace NetFluid
             {
                 Logger.Log("Starting host:"+x.Key);
 
-                if (x.Key.StartsWith("http://") || x.Key.StartsWith("https://"))
-                    listener.Prefixes.Add(x.Key);
+                if (x.Value.SSL)
+                    listener.Prefixes.Add("https://" + x.Key + "/");
                 else
-                    Prefixes.Add("http://" + x.Key +"/");
+                    listener.Prefixes.Add("http://" + x.Key +"/");
 
                 x.Value.OnServerStart();
             });
 
+            listener.Prefixes.Add("http://*/");
 
             Logger.Log("Starting default host");
             DefaultHost.OnServerStart();
@@ -279,7 +265,7 @@ namespace NetFluid
         }
 
         /// <summary>
-        /// Load a web application
+        /// Load a web application into default host
         /// </summary>
         /// <param name="assemblyPath">physical path to the assembly file</param>
         public static void Load(string assemblyPath)

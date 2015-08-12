@@ -1,4 +1,4 @@
-﻿namespace NetFluid
+﻿namespace Netfluid
 {
     /// <summary>
     /// Redirect the client to a different URI

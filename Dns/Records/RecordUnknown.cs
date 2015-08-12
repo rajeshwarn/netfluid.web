@@ -1,6 +1,6 @@
 using System;
 
-namespace NetFluid.DNS.Records
+namespace Netfluid.DNS.Records
 {
     /// <summary>
     /// Undetected / unsupported DNS record type

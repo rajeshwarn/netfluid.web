@@ -21,7 +21,7 @@
 // 23/10/2013    Matteo Fabbri      Inital coding
 // ********************************************************************************************************
 
-namespace NetFluid
+namespace Netfluid
 {
     /// <summary>
     /// JSON serialize an object and send it as a fake file 

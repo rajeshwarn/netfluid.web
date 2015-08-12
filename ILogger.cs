@@ -23,7 +23,7 @@
 
 using System;
 
-namespace NetFluid
+namespace Netfluid
 {
     /// <summary>
     ///     Implements methods for system logger

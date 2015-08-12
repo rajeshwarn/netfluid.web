@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using NetFluid;
+using Netfluid;
 using System.Net.Mail;
 
 namespace Example
@@ -12,7 +12,6 @@ namespace Example
     {
         static void Main(string[] args)
         {
-            Engine.Prefixes.Add("http://*/");
             Engine.Start();
         }
     }

@@ -23,7 +23,7 @@
 //   stream.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
-namespace NetFluid
+namespace Netfluid
 {
     /// <summary>
     ///     Represents a single parameter extracted from a multipart/form-data

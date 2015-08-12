@@ -17,7 +17,7 @@ records.
 using System;
 using System.Net;
 
-namespace NetFluid.DNS.Records
+namespace Netfluid.DNS.Records
 {
     /// <summary>
     /// DNS record A

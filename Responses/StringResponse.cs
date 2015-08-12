@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace NetFluid
+namespace Netfluid
 {
     public class StringResponse : IResponse
     {

@@ -6,10 +6,10 @@ using System.Net;
 using System.Net.Sockets;
 using System.Text;
 using System.Threading.Tasks;
-using NetFluid.DNS;
-using NetFluid.DNS.Records;
+using Netfluid.DNS;
+using Netfluid.DNS.Records;
 
-namespace NetFluid
+namespace Netfluid
 {
     //DNS INTEGRATION, QUERY AND RECORDS FROM http://www.codeproject.com/Articles/23673/DNS-NET-Resolver-C
 

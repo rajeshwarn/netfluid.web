@@ -25,7 +25,7 @@ using System;
 using System.Linq;
 using System.Collections.Generic;
 
-namespace NetFluid
+namespace Netfluid
 {
     /// <summary>
     /// Tell to the engine to call this method on specified http status code

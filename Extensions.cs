@@ -34,12 +34,12 @@ using System.Net.Sockets;
 using System.Reflection;
 using System.Security.Principal;
 using System.Text;
-using NetFluid.HTTP;
+using Netfluid.HTTP;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Text.RegularExpressions;
 using System.Drawing;
 
-namespace NetFluid
+namespace Netfluid
 {
     public static class Extensions
     {

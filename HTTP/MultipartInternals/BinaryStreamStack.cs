@@ -23,7 +23,7 @@
 //   streams and provides methods to add data to the front of the buffer.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
-namespace NetFluid
+namespace Netfluid
 {
     using System;
     using System.Collections.Generic;

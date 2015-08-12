@@ -26,7 +26,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace NetFluid
+namespace Netfluid
 {
     /// <summary>
     /// Multipart forma data files uploaded by the client

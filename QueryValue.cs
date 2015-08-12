@@ -29,7 +29,7 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 
-namespace NetFluid
+namespace Netfluid
 {
     /// <summary>
     /// POST or GET data sent by the client. It can be an array

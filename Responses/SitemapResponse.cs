@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace NetFluid
+namespace Netfluid
 {
     /// <summary>
     /// Used to reply to the client with a dynamic run-time generated sitemap

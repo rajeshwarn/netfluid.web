@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Net.Mail;
 
-namespace NetFluid.SMTP
+namespace Netfluid.SMTP
 {
     public class SmtpWarning : Exception
     {

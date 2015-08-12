@@ -25,7 +25,7 @@ using System;
 using System.IO;
 using System.Text;
 
-namespace NetFluid.IO
+namespace Netfluid.IO
 {
     [Serializable]
     public class ChunkedStream : Stream

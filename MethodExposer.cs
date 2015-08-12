@@ -21,7 +21,7 @@
 // 23/10/2013    Matteo Fabbri      Inital coding
 // ********************************************************************************************************
 
-using NetFluid.HTTP;
+using Netfluid.HTTP;
 using System;
 using System.Collections.Generic;
 using System.Dynamic;
@@ -29,7 +29,7 @@ using System.IO;
 using System.Net;
 using System.Runtime.Serialization.Formatters.Binary;
 
-namespace NetFluid
+namespace Netfluid
 {
     public class MethodExposer:IDisposable
     {

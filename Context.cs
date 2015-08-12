@@ -24,11 +24,9 @@
 using System;
 using System.IO;
 using System.Net;
-using NetFluid.HTTP;
-using HttpMultipartParser;
-using System.Globalization;
+using Netfluid.HTTP;
 
-namespace NetFluid
+namespace Netfluid
 {
     /// <summary>
     ///     HTTP Context.

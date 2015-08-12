@@ -10,7 +10,7 @@ using System.Linq.Expressions;
 using System.Reflection;
 using System.Text;
 
-namespace NetFluid.Serialization
+namespace Netfluid.Serialization
 {
     class CsvReader<T> : IEnumerable<T>, IEnumerator<T> where T : new()
     {

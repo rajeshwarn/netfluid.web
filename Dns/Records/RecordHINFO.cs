@@ -23,7 +23,7 @@ when talking between machines or operating systems of the same type.
 
 using System;
 
-namespace NetFluid.DNS.Records
+namespace Netfluid.DNS.Records
 {
     /// <summary>
     /// DNS record HINFO

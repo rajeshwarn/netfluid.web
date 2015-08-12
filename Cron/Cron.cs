@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace NetFluid.Cron
+namespace Netfluid.Cron
 {
     /// <summary>
     /// Handle cron task

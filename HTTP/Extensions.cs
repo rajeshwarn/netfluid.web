@@ -26,7 +26,7 @@ using System.Linq;
 using System.Net;
 using System.Text;
 
-namespace NetFluid.HTTP
+namespace Netfluid.HTTP
 {
     internal static class Extensions
     {

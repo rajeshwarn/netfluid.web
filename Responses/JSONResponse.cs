@@ -21,7 +21,7 @@
 // 23/10/2013    Matteo Fabbri      Inital coding
 // ********************************************************************************************************
 
-namespace NetFluid
+namespace Netfluid
 {
     /// <summary>
     /// Serialize an object sending it as a plain JSON response (not a JSON file)

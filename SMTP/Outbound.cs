@@ -4,7 +4,7 @@ using System.Linq;
 using System.Net.Mail;
 using System.Text;
 
-namespace NetFluid.SMTP
+namespace Netfluid.SMTP
 {
     /// <summary>
     /// SMTP client

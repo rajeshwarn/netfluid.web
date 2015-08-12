@@ -21,7 +21,7 @@
 // 23/10/2013    Matteo Fabbri      Inital coding
 // ********************************************************************************************************
 
-namespace NetFluid.Sessions
+namespace Netfluid.Sessions
 {
     /// <summary>
     /// Hanlde user context session variables. Used to override Engine Session Manager

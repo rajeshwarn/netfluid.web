@@ -10,9 +10,9 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
 using System.Text;
-using NetFluid.Serialization;
+using Netfluid.Serialization;
 
-namespace NetFluid
+namespace Netfluid
 {
     /// <summary>
     /// CSV Serializer and Deserializer

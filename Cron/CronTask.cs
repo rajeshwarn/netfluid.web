@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Timers;
 
-namespace NetFluid.Cron
+namespace Netfluid.Cron
 {
     class CronTask
     {

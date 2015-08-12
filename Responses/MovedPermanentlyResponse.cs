@@ -1,4 +1,4 @@
-﻿namespace NetFluid
+﻿namespace Netfluid
 {
     /// <summary>
     /// Permanent redirect for clients

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Net;
 using System.Text;
 
-namespace NetFluid.DNS.Records
+namespace Netfluid.DNS.Records
 {
 
     #region Rfc 1034/1035

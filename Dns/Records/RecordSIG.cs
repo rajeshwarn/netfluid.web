@@ -34,7 +34,7 @@ using System;
 
 #endregion
 
-namespace NetFluid.DNS.Records
+namespace Netfluid.DNS.Records
 {
     /// <summary>
     /// DNS record SIG

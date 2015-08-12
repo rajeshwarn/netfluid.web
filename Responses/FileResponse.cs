@@ -24,7 +24,7 @@
 using System;
 using System.IO;
 
-namespace NetFluid
+namespace Netfluid
 {
     /// <summary>
     /// Send a file to the client (http://stackoverflow.com/questions/1012437/uses-of-content-disposition-in-an-http-response-header)

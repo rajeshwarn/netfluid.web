@@ -27,7 +27,7 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 
-namespace NetFluid
+namespace Netfluid
 {
     /// <summary>
     /// Retrieve mime type of files

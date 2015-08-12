@@ -67,7 +67,7 @@ change the SOA RR with known semantics.
 
 using System;
 
-namespace NetFluid.DNS.Records
+namespace Netfluid.DNS.Records
 {
     /// <summary>
     /// DNS record SOA

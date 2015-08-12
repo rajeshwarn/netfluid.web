@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 
-namespace NetFluid.Responses.Templates.MustacheSuperSet
+namespace Netfluid.Responses.Templates.MustacheSuperSet
 {
     internal class DeCamel : InlineTagDefinition
     {

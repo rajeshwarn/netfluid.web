@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 
-namespace NetFluid.Collections
+namespace Netfluid.Collections
 {
     /// <summary>
     /// Generic interface for ORMs collections

@@ -1,8 +1,8 @@
 using System;
 using System.Collections.Generic;
-using NetFluid.DNS.Records;
+using Netfluid.DNS.Records;
 
-namespace NetFluid.DNS
+namespace Netfluid.DNS
 {
     /// <summary>
     /// List of DNS query used by DNS server and resolver
