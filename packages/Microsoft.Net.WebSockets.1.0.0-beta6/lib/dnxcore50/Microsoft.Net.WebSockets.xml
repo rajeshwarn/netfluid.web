@@ -1,0 +1,50 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Microsoft.Net.WebSockets</name>
+    </assembly>
+    <members>
+        <member name="F:System.ComponentModel.Win32Exception.nativeErrorCode">
+            <devdoc>
+               <para>Represents the Win32 error code associated with this exception. This 
+                  field is read-only.</para>
+            </devdoc>
+        </member>
+        <member name="M:System.ComponentModel.Win32Exception.#ctor">
+            <devdoc>
+            <para>Initializes a new instance of the <see cref='T:System.ComponentModel.Win32Exception'/> class with the last Win32 error 
+               that occured.</para>
+            </devdoc>
+        </member>
+        <member name="M:System.ComponentModel.Win32Exception.#ctor(System.Int32)">
+            <devdoc>
+            <para>Initializes a new instance of the <see cref='T:System.ComponentModel.Win32Exception'/> class with the specified error.</para>
+            </devdoc>
+        </member>
+        <member name="M:System.ComponentModel.Win32Exception.#ctor(System.Int32,System.String)">
+            <devdoc>
+            <para>Initializes a new instance of the <see cref='T:System.ComponentModel.Win32Exception'/> class with the specified error and the 
+               specified detailed description.</para>
+            </devdoc>
+        </member>
+        <member name="M:System.ComponentModel.Win32Exception.#ctor(System.String)">
+            <devdoc>
+                Initializes a new instance of the Exception class with a specified error message.
+                FxCop CA1032: Multiple constructors are required to correctly implement a custom exception.
+            </devdoc>
+        </member>
+        <member name="M:System.ComponentModel.Win32Exception.#ctor(System.String,System.Exception)">
+            <devdoc>
+                Initializes a new instance of the Exception class with a specified error message and a 
+                reference to the inner exception that is the cause of this exception.
+                FxCop CA1032: Multiple constructors are required to correctly implement a custom exception.
+            </devdoc>
+        </member>
+        <member name="P:System.ComponentModel.Win32Exception.NativeErrorCode">
+            <devdoc>
+               <para>Represents the Win32 error code associated with this exception. This 
+                  field is read-only.</para>
+            </devdoc>
+        </member>
+    </members>
+</doc>

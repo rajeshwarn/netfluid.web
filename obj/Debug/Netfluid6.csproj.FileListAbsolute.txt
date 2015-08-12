@@ -1,0 +1,2 @@
+D:\PROGETTI\NetFluid\obj\Debug\Netfluid6.csprojResolveAssemblyReference.cache
+D:\PROGETTI\NetFluid\bin\Debug\Netfluid.exe.config
