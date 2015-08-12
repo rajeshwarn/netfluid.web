@@ -35,10 +35,10 @@ namespace Netfluid
     /// </summary>
     public class Host
     {
-        List<Route> _routes;
-        List<Filter> _filters;
-        List<Trigger> _triggers;
-        Dictionary<StatusCode,Route> _callOn;
+        public List<Route> Routes { get; private set; }
+        public List<Filter> Filters { get; private set; }
+        public List<Trigger> Triggers { get; private set; }
+        public List<CallOn> StatusCodeHandlers { get; private set; }
 
         private readonly List<MethodExposer> _instances;
 
@@ -50,26 +50,15 @@ namespace Netfluid
         internal Host(string name)
         {
             Name = name;
-            _filters = new List<Filter>();
-            _triggers = new List<Trigger>();
-            _routes = new List<Route>();
-            _callOn = new Dictionary<StatusCode,Route>();
+            Filters = new List<Filter>();
+            Triggers = new List<Trigger>();
+            Routes = new List<Route>();
+            StatusCodeHandlers = new List<CallOn>();
             _instances = new List<MethodExposer>();
 
             PublicFolders = new List<IPublicFolder>();
             Sessions = new MemorySessionManager();
             SSL = false;
-        }
-
-        static Regex getRegex(string url)
-        {
-            var urlRegex = url;
-            var find = new Regex(":[^//]+");
-            foreach (Match item in find.Matches(url))
-            {
-                urlRegex = urlRegex.Replace(item.Value, "(?<" + item.Value.Substring(1) + ">[^//]+?)");
-            }
-            return new Regex("^"+urlRegex+"$");
         }
 
         void loadInstance(Type type)
@@ -105,177 +94,32 @@ namespace Netfluid
             }
         }
 
-        public void AddTrigger(MethodInfo exposedMethod, Regex regex = null, string httpMethod = null, int index = 99999)
+        void Handle(IEnumerable<Route> routes, Context cnt)
         {
-            var type = exposedMethod.DeclaringType;
-
-            if (!type.Inherit(typeof(MethodExposer)))
-                throw new TypeLoadException("Exposing type must inherit NetFluid.MethodExposer");
-
-            if (!type.HasDefaultConstructor())
-                throw new TypeLoadException(type.Name + " does not have a parameterless constructor");
-
-            _triggers.Add(new Trigger(this) { Url = null, Method = httpMethod, MethodInfo = exposedMethod, Regex = regex, Type = type, Index = index });
-            _triggers = _triggers.OrderByDescending(x => x.Index).ToList();
-
-            loadInstance(type);
-        }
-
-        public void AddTrigger(MethodInfo exposedMethod, string url=null, string httpMethod = null, int index = 99999)
-        {
-            if (string.IsNullOrWhiteSpace(url)) url = null;
-
-            var type = exposedMethod.DeclaringType;
-
-            if (!type.Inherit(typeof(MethodExposer)))
-                throw new TypeLoadException("Exposing type must inherit NetFluid.MethodExposer");
-
-            if (!type.HasDefaultConstructor())
-                throw new TypeLoadException(type.Name+" does not have a parameterless constructor");
-
-            var regex = string.IsNullOrEmpty(url) ? null : getRegex(url);
-
-            _triggers.Add(new Trigger(this) { Url = url, Method = httpMethod, MethodInfo = exposedMethod, Regex = regex, Type = type, Index = index });
-            _triggers = _triggers.OrderByDescending(x => x.Index).ToList();
-
-            loadInstance(type);
-        }
-
-        public void AddFilter(MethodInfo exposedMethod, Regex regex = null, string httpMethod = null, int index = 99999)
-        {
-            var type = exposedMethod.DeclaringType;
-
-            if (!type.Inherit(typeof(MethodExposer)))
-                throw new TypeLoadException("Exposing type must inherit NetFluid.MethodExposer");
-
-            if (!type.HasDefaultConstructor())
-                throw new TypeLoadException(type.Name + " does not have a parameterless constructor");
-
-            if (!exposedMethod.ReturnType.Implements(typeof(bool)))
-                throw new TypeLoadException("Filter methods must returns a bool");
-
-            var args = exposedMethod.GetParameters();
-            if (args.Length != 1 || args[0].ParameterType.FullName != "NetFluid.IResponse&")
-                throw new TypeLoadException("Filters must have one parameter (ref IResponse)");
-
-
-            _filters.Add(new Filter(this) { Url = null, Method = httpMethod, MethodInfo = exposedMethod, Regex = regex, Type = type, Index = index });
-            _filters = _filters.OrderByDescending(x => x.Index).ToList();
-
-            loadInstance(type);
-        }
-
-        public void AddFilter(MethodInfo exposedMethod, string url=null, string httpMethod = null, int index = 99999)
-        {
-            if (string.IsNullOrWhiteSpace(url)) url = null;
-
-            var type = exposedMethod.DeclaringType;
-
-            if (!type.Inherit(typeof(MethodExposer)))
-                throw new TypeLoadException("Exposing type must inherit NetFluid.MethodExposer");
-
-            if (!type.HasDefaultConstructor())
-                throw new TypeLoadException(type.Name + " does not have a parameterless constructor");
-
-            if (!exposedMethod.ReturnType.Implements(typeof(bool)))
-                throw new TypeLoadException("Filter methods must returns a bool");
-
-            var args = exposedMethod.GetParameters();
-            if (args.Length != 1 || args[0].ParameterType.FullName != "NetFluid.IResponse&")
-                throw new TypeLoadException("Filters must have one parameter (ref IResponse)");
-
-            var regex = url != null ? getRegex(url) : null;
-
-            _filters.Add(new Filter(this) { Url = url, Method = httpMethod, MethodInfo = exposedMethod, Regex = regex, Type = type, Index = index });
-            _filters = _filters.OrderByDescending(x => x.Index).ToList();
-
-            loadInstance(type);
-        }
-
-        public void AddStatusCodeHandler(StatusCode code, MethodInfo exposedMethod)
-        {
-            var type = exposedMethod.DeclaringType;
-
-            if (!type.Inherit(typeof(MethodExposer)))
-                throw new TypeLoadException("Exposing type must inherit NetFluid.MethodExposer");
-
-            if (!type.HasDefaultConstructor())
-                throw new TypeLoadException(type.Name + " does not have a parameterless constructor");
-
-            if (!exposedMethod.ReturnType.Implements(typeof(IResponse)))
-                throw new TypeLoadException("Exposed methods must returns an IResponse object");
-
-            if (code==StatusCode.AnyError)
-                foreach (StatusCode c in Enum.GetValues(typeof(StatusCode)))
+            foreach (var route in routes.Where(x => x.Method == cnt.Request.HttpMethod || x.Method == null))
+            {
+                if (route.Regex == null)
                 {
-                    if (c >= StatusCode.BadRequest && c <= StatusCode.UserAccessDenied)
-                        AddStatusCodeHandler(c, exposedMethod);
+                    route.Handle(cnt);
                 }
-
-            if (code == StatusCode.AnyClientError)
-                foreach (StatusCode c in Enum.GetValues(typeof(StatusCode)))
+                else
                 {
-                    if (c >= StatusCode.BadRequest && c <= StatusCode.BlockedbyWindowsParentalControls)
-                        AddStatusCodeHandler(c, exposedMethod);
+                    var m = route.Regex.Match(cnt.Request.Url.LocalPath);
+
+                    if (m.Success)
+                    {
+                        for (int i = 0; i < route.GroupNames.Length; i++)
+                        {
+                            var q = new QueryValue(route.GroupNames[i], m.Groups[route.GroupNames[i]].Value);
+                            q.Origin = QueryValue.QueryValueOrigin.URL;
+                            cnt.Values.Add(q.Name, q);
+                        }
+
+                        route.Handle(cnt);
+                        return;
+                    }
                 }
-
-            if (code == StatusCode.AnyServerError)
-                foreach (StatusCode c in Enum.GetValues(typeof(StatusCode)))
-                {
-                    if (c >= StatusCode.InternalServerError && c <= StatusCode.UserAccessDenied)
-                        AddStatusCodeHandler(c, exposedMethod);
-                }
-
-
-            if(!_callOn.ContainsKey(code))
-                _callOn.Add(code, new Route(this)
-                {
-                    Type = type,
-                    MethodInfo = exposedMethod
-                });
-
-            loadInstance(type);
-        }
-
-
-        public void AddRoute(Regex regex, MethodInfo exposedMethod, string httpMethod = null, int index = 99999)
-        {
-            var type = exposedMethod.DeclaringType;
-
-            if (!type.Inherit(typeof(MethodExposer)))
-                throw new TypeLoadException("Exposing type must inherit NetFluid.MethodExposer");
-
-            if (!type.HasDefaultConstructor())
-                throw new TypeLoadException(type.Name + " does not have a parameterless constructor");
-
-            if (!exposedMethod.ReturnType.Implements(typeof(IResponse)))
-                throw new TypeLoadException("Exposed methods must returns an IResponse object");
-
-            _routes.Add(new Route(this) { Method = httpMethod, MethodInfo = exposedMethod, Regex = regex, Type = type, GroupNames = regex.GetGroupNames(), Parameters = exposedMethod.GetParameters(), Index = index });
-            _routes = _routes.OrderByDescending(x => x.Index).ToList();
-
-            loadInstance(type);
-        }
-
-        public void AddRoute(string url, MethodInfo exposedMethod, string httpMethod = null, int index=99999)
-        {
-            var type = exposedMethod.DeclaringType;
-
-            if (!type.Inherit(typeof(MethodExposer)))
-                throw new TypeLoadException("Exposing type must inherit NetFluid.MethodExposer");
-
-            if (!type.HasDefaultConstructor())
-                throw new TypeLoadException(type.Name + " does not have a parameterless constructor");
-
-            if(!exposedMethod.ReturnType.Implements(typeof(IResponse)))
-                throw new TypeLoadException("Exposed methods must returns an IResponse object");
-
-            var regex = getRegex(url);
-
-            _routes.Add(new Route(this) { Url=url, Method=httpMethod, MethodInfo=exposedMethod,Regex=regex, Type=type, GroupNames=regex.GetGroupNames(), Parameters=exposedMethod.GetParameters(), Index=index });
-            _routes = _routes.OrderByDescending(x => x.Index).ToList();
-
-            loadInstance(type);
+            }
         }
 
         /// <summary>
@@ -300,93 +144,17 @@ namespace Netfluid
                 #endregion
             }
 
-            #region Filters
-            foreach (var filter in _filters.Where(x => x.Method == cnt.Request.HttpMethod || x.Method == null))
-            {
-                if (filter.Regex == null)
-                {
-                    if (Engine.DevMode)
-                        Console.WriteLine(cnt.Request.Url + " - " + "matched " + filter.Url);
-
-                    filter.Handle(cnt);
-                }
-                else
-                {
-                    var m = filter.Regex.Match(cnt.Request.Url.LocalPath);
-
-                    if (m.Success)
-                    {
-                        if (Engine.DevMode)
-                            Console.WriteLine(cnt.Request.Url + " - " + "matched " + filter.Url);
-
-                        filter.Handle(cnt);
-                    }
-                }
-
-                if (!cnt.IsOpen)
-                    return;
-            }
-            #endregion
-
-            #region triggers
-            if (!cnt.IsOpen)
-                return;
-
-            foreach (var trigger in _triggers.Where(x => x.Method == cnt.Request.HttpMethod || x.Method == null))
-            {
-                if (trigger.Regex == null)
-                {
-                    if (Engine.DevMode)
-                        Console.WriteLine(cnt.Request.Url + " - " + "matched " + trigger.Url);
-
-                    trigger.Handle(cnt);
-                }
-                else
-                {
-                    var m = trigger.Regex.Match(cnt.Request.Url.LocalPath);
-
-                    if (m.Success)
-                    {
-                        if (Engine.DevMode)
-                            Console.WriteLine(cnt.Request.Url + " - " + "matched " + trigger.Url);
-
-                        trigger.Handle(cnt);
-                    }
-                }
-                if (!cnt.IsOpen)
-                    return;
-            }
-            #endregion
+            Handle(Filters, cnt);
 
             if (!cnt.IsOpen)
                 return;
 
-            foreach (var route in _routes.Where(x => x.Method == cnt.Request.HttpMethod || x.Method == null))
-            {
-                var m = route.Regex.Match(cnt.Request.Url.LocalPath);
+            Handle(Triggers, cnt);
 
-                if (m.Success)
-                {
-                    for (int i = 0; i < route.GroupNames.Length; i++)
-                    {
-                        var q = new QueryValue(route.GroupNames[i], m.Groups[route.GroupNames[i]].Value);
-                        q.Origin = QueryValue.QueryValueOrigin.URL;
-                        cnt.Values.Add(q.Name, q);
-                    }
-
-                    if (Engine.DevMode)
-                        Console.WriteLine(cnt.Request.Url + " - " + "matched " + route.Url);
-
-                    route.Handle(cnt);
-                    return;
-                }
-            }
+            Handle(Routes, cnt);
 
             if (!cnt.IsOpen)
                 return;
-
-            if (Engine.DevMode)
-                Console.WriteLine(cnt.Request.Url + " - " + "Looking for a public folder");
 
             for (int i = 0; i < PublicFolders.Count; i++)
             {
@@ -399,17 +167,8 @@ namespace Netfluid
 
             cnt.Response.StatusCode = (int)StatusCode.NotFound;
 
-            Route rt;
-            if (_callOn.TryGetValue((StatusCode)cnt.Response.StatusCode, out rt))
-            {
-                if (Engine.DevMode)
-                    Console.WriteLine(cnt.Request.Url + " - " + "Goes to status " + cnt.Response.StatusCode + " handler");
+            Handle(StatusCodeHandlers, cnt);
 
-                rt.Handle(cnt);
-                return;
-            }
-
-            cnt.Response.StatusCode = (int)StatusCode.NotFound;
             cnt.Close();
         }
 
@@ -430,38 +189,50 @@ namespace Netfluid
                 {
                     foreach (var att in m.CustomAttribute<RouteAttribute>())
                     {
-                        AddRoute(prefix+att.Url, m, att.Method, att.Index);
+                        Routes.Add(new Route
+                        {
+                            Url = prefix + att.Url,
+                            Regex = att.Regex,
+                            Index = att.Index,
+                            MethodInfo = m 
+                        });
                     }
-                }
 
-                foreach (var prefix in prefixes)
-                {
                     foreach (var att in m.CustomAttribute<Netfluid.FilterAttribute>())
                     {
-                        if (att.Regex != null)
-                            AddFilter(m, new Regex(Regex.Escape(prefix) + att.Regex), att.Method, att.Index);
-                        else
-                            AddFilter(m, prefix + att.Url, att.Method, att.Index);
+                        Filters.Add(new Filter
+                        {
+                            Url = prefix + att.Url,
+                            Regex = att.Regex,
+                            Index = att.Index,
+                            MethodInfo = m
+                        });
                     }
-                }
 
-                foreach (var prefix in prefixes)
-                {
                     foreach (var att in m.CustomAttribute<Netfluid.TriggerAttribute>())
                     {
-                        if (att.Regex != null)
-                            AddTrigger(m, new Regex(Regex.Escape(prefix) + att.Regex), att.Method, att.Index);
-                        else
-                            AddTrigger(m, prefix + att.Url, att.Method, att.Index);
+                        Triggers.Add(new Trigger
+                        {
+                            Url = prefix + att.Url,
+                            Regex = att.Regex,
+                            Index = att.Index,
+                            MethodInfo = m
+                        });
                     }
-                }
 
-                foreach (var att in m.CustomAttribute<CallOnAttribute>())
-                {
-                    foreach (var code in att.StatusCode)
-	                {
-                        AddStatusCodeHandler(code, m);
-	                }
+                    foreach (var att in m.CustomAttribute<CallOnAttribute>())
+                    {
+                        foreach (var code in att.StatusCode)
+                        {
+                            Routes.Add(new Route
+                            {
+                                Url = prefix + att.Url,
+                                Regex = att.Regex,
+                                Index = att.Index,
+                                MethodInfo = m
+                            });
+                        }
+                    }
                 }
             }
         }

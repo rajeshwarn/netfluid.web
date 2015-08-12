@@ -6,21 +6,73 @@ namespace Netfluid
 {
     public class Route
     {
-        public string Url { get; set; }
+        MethodInfo methodInfo;
+        string url;
+        Regex regex;
+
+        public string Name { get; set; }
+
+        public string Url
+        {
+            get
+            {
+                return url;
+            }
+            set
+            {
+                var urlRegex = url;
+                var find = new Regex(":[^//]+");
+                foreach (Match item in find.Matches(url))
+                {
+                    urlRegex = urlRegex.Replace(item.Value, "(?<" + item.Value.Substring(1) + ">[^//]+?)");
+                }
+                regex = new Regex("^" + urlRegex + "$");
+            }
+        }
+
         public string Method { get; set; }
-        public Regex Regex { get; set; }
-        public MethodInfo MethodInfo { get; set; }
+
+        public Regex Regex
+        {
+            get
+            {
+                return regex;
+            }
+            set
+            {
+                regex = value;
+                url = regex.ToString();
+            }
+        }
+
+        public virtual MethodInfo MethodInfo
+        {
+            get
+            {
+                return methodInfo;
+            }
+            set
+            {
+                var type = value.DeclaringType;
+
+                if (!type.Inherit(typeof(MethodExposer)))
+                        throw new TypeLoadException(value.Name + " is declared by " + type.FullName +" wich is not a NetFluid.MethodExposer");
+
+                if (!type.HasDefaultConstructor())
+                    throw new TypeLoadException(type.FullName + " does not have a parameterless constructor");
+
+                methodInfo = value;
+                Type = type; 
+            }
+        }
+
         public int Index { get; set; }
+
         public Type Type { get; private set; }
         public ParameterInfo[] Parameters { get; private set; }
         public string[] GroupNames { get; private set; }
 
-        public Host Host { get; private set; }
-
-        public Route(Host host)
-        {
-            Host = host;
-        }
+        public Host Host { get; internal set; }
 
         public virtual void Handle(Context cnt)
         {
