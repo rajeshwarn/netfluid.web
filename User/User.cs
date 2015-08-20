@@ -1,5 +1,6 @@
 using System;
-namespace Netfluid.Mongo
+
+namespace Netfluid.Users
 {
 	public class User
 	{

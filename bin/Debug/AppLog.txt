@@ -104,3 +104,13 @@
 			System.TypeLoadException: Loaded types must inherit NetFluid.MethodExposer			in Netfluid.Host.Load(Type p) in D:\PROGETTI\Netfluid6\Hosting\Host.cs:riga 605			in Netfluid.Engine.Load(Assembly assembly) in D:\PROGETTI\Netfluid6\Hosting\Engine.cs:riga 31012/08/2015 10.59.50	Starting host:__default
 12/08/2015 10.59.53	Starting default host
 12/08/2015 10.59.53	NetFluid web application running
+20/08/2015 10.35.39	threadpool size 40 1000
+20/08/2015 10.35.39	Starting NetFluid Engine
+20/08/2015 10.35.39	Loading calling assembly
+20/08/2015 10.35.39	Loading Netfluid, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null into default host
+20/08/2015 10.35.39	Loading <>f__AnonymousType0`2
+
+20/08/2015 10.35.39	Error during loading Netfluid, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null as default host
+			System.TypeLoadException: Loaded types must inherit NetFluid.MethodExposer			in Netfluid.Host.Load(Type p) in D:\PROGETTI\NetFluid\Hosting\Host.cs:riga 178			in Netfluid.Engine.Load(Assembly assembly) in D:\PROGETTI\NetFluid\Hosting\Engine.cs:riga 30920/08/2015 10.35.40	Starting host:__default
+20/08/2015 10.35.42	Starting default host
+20/08/2015 10.35.42	NetFluid web application running

@@ -1,8 +1,6 @@
-using Netfluid;
-using System;
-namespace Netfluid.Mongo
+namespace Netfluid.Users
 {
-	[RouteAttribute("/user", null, 99999)]
+    [RouteAttribute("/user", null, 99999)]
 	class UserExposer:MethodExposer
 	{
 		[RouteAttribute("/signin", "GET", 99999)]

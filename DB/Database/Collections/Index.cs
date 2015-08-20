@@ -6,6 +6,11 @@ namespace Netfluid.DB
 {
     public partial class LiteCollection<T>
     {
+        public bool Any()
+        {
+            return this.Count() > 0;
+        }
+
         /// <summary>
         /// Create a new permanent index in all documents inside this collections if index not exists already. Returns true if index was created or false if already exits
         /// </summary>

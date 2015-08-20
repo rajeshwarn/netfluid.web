@@ -2,18 +2,20 @@
 using Netfluid.DB;
 using System;
 using System.Linq;
-using System.Reflection;
 
-namespace Netfluid.Mongo
+namespace Netfluid.Users
 {
 	public class UserManager : MethodExposer
 	{
 		private const string charset = "qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM123456789!£$%&/()=?^+;,:.-";
 
-        public static IRepository<User> Repository { get; set; }
+        static LiteCollection<User> Repository { get; set; }
 
 		static UserManager()
 		{
+            var db = new LiteDatabase("users.db");
+            Repository = db.GetCollection<User>("user");
+
 			if (!Repository.Any())
 			{
 				User admin = new User
@@ -68,14 +70,14 @@ namespace Netfluid.Mongo
 				int index = name.IndexOf('@');
 				string user = (index > 0) ? name.Substring(0, index) : name;
 				string domain = (index >= 0) ? name.Substring(index) : null;
-				result = Repository.FirstOrDefault(x => x.UserName == user && x.Domain == domain);
-			}
+				result = Repository.FirstOrDefault(Query.And(Query.EQ("UserName", user), Query.EQ("Domain", domain)));
+            }
 			return result;
 		}
-
+        
         public static bool CheckExists(User user)
 		{
-			return Repository.Any(x => x.UserName == user.UserName && x.Domain == user.Domain);
+            return Repository.Exists(Query.And(Query.EQ("UserName",user.UserName),Query.EQ("Domain",user.Domain)));
 		}
 
         public static bool CheckAuthority(string user, string auth)
@@ -105,22 +107,18 @@ namespace Netfluid.Mongo
 			{
 				newPassword = method(password + salt);
 			}
-            if (user._id == ObjectId.Empty)
+
+            user.Salt = salt;
+            user.Round = rounds;
+            user.Method = method.Method.Name;
+            user.Password = newPassword;
+
+            if (!Repository.Exists(x => x.Domain == user.Domain && x.UserName == user.UserName))
             {
-                user.Salt = salt;
-                user.Round = rounds;
-                user.Method = method.Method.Name;
-                user.Password = newPassword;
-                DBObject.Create(user);
+                Repository.Insert(user);
             }
-            else
-            {
-                DBObject.Update(user, x => x.Salt, salt);
-                DBObject.Update(user, x => x.Round, rounds);
-                DBObject.Update(user, x => x.Method, method.Method.Name);
-                DBObject.Update(user, x => x.Password, newPassword);
-            }
-		}
+            Repository.Update(user);
+        }
 
         public static User SignIn(string name, string pass)
         {
@@ -147,12 +145,13 @@ namespace Netfluid.Mongo
 
 			if (domain == null)
 			{
-				user = DBObject.FirstOrDefault<User>((User x) => x.UserName == name);
-			}
+				user = Repository.FirstOrDefault(Query.EQ("UserName", name));
+            }
 			else
 			{
-				user = DBObject.FirstOrDefault<User>((User x) => x.UserName == name && x.Domain == domain);
-			}
+				user = Repository.FirstOrDefault(Query.And(Query.EQ("UserName", name), Query.EQ("Domain", domain)));
+            }
+
 			User result;
 			if (user == null || (DateTime.Now - user.LastLogin).TotalSeconds <= 10.0)
 			{
@@ -197,7 +196,10 @@ namespace Netfluid.Mongo
 					}
 					if (user.Password == newPassword)
 					{
-                        DBObject.Update(user,x=>x.LastLogin,DateTime.Now);
+                        user.LastLogin = DateTime.Now;
+
+                        Repository.Update(user);
+                        
 						result = user;
 						return result;
 					}
@@ -268,7 +270,7 @@ namespace Netfluid.Mongo
 				}
 				else
 				{
-					DBObject.Delete<User>(user);
+                    Repository.Delete(x => x.Domain == user.Domain && x.UserName == user.UserName);
 					result = true;
 				}
 			}

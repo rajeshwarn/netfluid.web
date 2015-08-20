@@ -1,10 +1,8 @@
-using Netfluid;
-using System;
 using System.Linq;
 
-namespace Netfluid
+namespace Netfluid.Users
 {
-	internal class WalledGarden:MethodExposer
+    internal class WalledGarden:MethodExposer
 	{
 		[FilterAttribute]
 		public bool CheckSignedIn(ref IResponse resp)

@@ -1,2 +1,12 @@
 D:\PROGETTI\NetFluid\obj\Debug\Netfluid6.csprojResolveAssemblyReference.cache
 D:\PROGETTI\NetFluid\bin\Debug\Netfluid.exe.config
+D:\PROGETTI\NetFluid\bin\Debug\x86\sqlite3.dll
+D:\PROGETTI\NetFluid\bin\Debug\x64\sqlite3.dll
+D:\PROGETTI\NetFluid\bin\Debug\Netfluid.exe
+D:\PROGETTI\NetFluid\bin\Debug\Netfluid.pdb
+D:\PROGETTI\NetFluid\bin\Debug\Microsoft.AspNet.Razor.dll
+D:\PROGETTI\NetFluid\bin\Debug\RazorEngine.dll
+D:\PROGETTI\NetFluid\bin\Debug\Microsoft.AspNet.Razor.xml
+D:\PROGETTI\NetFluid\bin\Debug\RazorEngine.xml
+D:\PROGETTI\NetFluid\obj\Debug\Netfluid.exe
+D:\PROGETTI\NetFluid\obj\Debug\Netfluid.pdb

@@ -20,6 +20,10 @@ namespace Netfluid
             }
             set
             {
+                url = value;
+
+                if (url == null) return;
+
                 var urlRegex = url;
                 var find = new Regex(":[^//]+");
                 foreach (Match item in find.Matches(url))

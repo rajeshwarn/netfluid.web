@@ -65,7 +65,7 @@ namespace Netfluid.DB
         /// <summary>
         /// Find the first document using Query object. Returns null if not found. Must have index on query expression.
         /// </summary>
-        public T FindOne(Query query)
+        public T FirstOrDefault(Query query)
         {
             return this.Find(query).FirstOrDefault();
         }
