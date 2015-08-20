@@ -73,7 +73,7 @@ namespace Netfluid.DB
         /// <summary>
         /// Find the first document using Linq expression. Returns null if not found. Must have indexes on predicate.
         /// </summary>
-        public T FindOne(Expression<Func<T, bool>> predicate)
+        public T FirstOrDefault(Expression<Func<T, bool>> predicate)
         {
             return this.Find(_visitor.Visit(predicate)).FirstOrDefault();
         }
@@ -125,7 +125,7 @@ namespace Netfluid.DB
         /// <summary>
         /// Returns true if query returns any document. This method does not deserialize any document. Needs indexes on query expression
         /// </summary>
-        public bool Exists(Query query)
+        public bool Any(Query query)
         {
             if (query == null) throw new ArgumentNullException("query");
 
@@ -137,9 +137,9 @@ namespace Netfluid.DB
         /// <summary>
         /// Returns true if query returns any document. This method does not deserialize any document. Needs indexes on query expression
         /// </summary>
-        public bool Exists(Expression<Func<T, bool>> predicate)
+        public bool Any(Expression<Func<T, bool>> predicate)
         {
-            return this.Exists(_visitor.Visit(predicate));
+            return this.Any(_visitor.Visit(predicate));
         }
 
         #endregion

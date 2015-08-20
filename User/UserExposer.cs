@@ -1,16 +1,29 @@
+using System.Linq;
+
 namespace Netfluid.Users
 {
-    [RouteAttribute("/user", null, 99999)]
 	class UserExposer:MethodExposer
 	{
-		[RouteAttribute("/signin", "GET", 99999)]
 		public IResponse SignIn()
 		{
 			return new MustacheTemplate("./Users/signIn.html");
 		}
-		
-        [RouteAttribute("/signin", "POST", 99999)]
-		public IResponse SignIn(string user, string domain, string pass)
+
+        public bool WalledGarden(ref IResponse resp)
+        {
+            if (base.Session<User>("user") == null && base.Request.Url.LocalPath != "/signin" && base.Request.HttpMethod != "POST")
+            {
+                if (Engine.Hosts.Any(x => x.PublicFolders.Any(y => y.Map(Context))))
+                    return false;
+
+                resp = new MustacheTemplate("./Users/signIn.html", new { Redirect = Request.Url.LocalPath });
+                return true;
+            }
+
+            return false;
+        }
+
+        public IResponse SignIn(string user, string domain, string pass)
 		{
 			IResponse result;
 			if (user == null)
@@ -49,7 +62,6 @@ namespace Netfluid.Users
 			return result;
 		}
 		
-        [RouteAttribute("/signin", "POST", 99999)]
 		public IResponse SignInApi(string user, string domain, string pass)
 		{
 			IResponse result;
@@ -101,7 +113,6 @@ namespace Netfluid.Users
 			return result;
 		}
 
-        [RouteAttribute("/signout")]
         public IResponse SignOut()
         {
             Session("user", null);

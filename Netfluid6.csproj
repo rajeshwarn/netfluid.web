@@ -56,6 +56,7 @@
     <Compile Include="Context.cs" />
     <Compile Include="Cron\Cron.cs" />
     <Compile Include="Cron\CronTask.cs" />
+    <Compile Include="DB\IRepository.cs" />
     <Compile Include="Dns.cs" />
     <Compile Include="Cron\Dns\DomainNameAttribute.cs" />
     <Compile Include="Cron\Dns\Header.cs" />
@@ -133,12 +134,12 @@
     <Compile Include="DB\Database\Collections\Index.cs" />
     <Compile Include="DB\Database\Collections\Insert.cs" />
     <Compile Include="DB\Database\Collections\InsertBulk.cs" />
-    <Compile Include="DB\Database\Collections\LiteCollection.cs" />
+    <Compile Include="DB\LiteCollection.cs" />
     <Compile Include="DB\Database\Collections\Update.cs" />
     <Compile Include="DB\Database\FileStorage\LiteFileInfo.cs" />
     <Compile Include="DB\Database\FileStorage\LiteFileStorage.cs" />
     <Compile Include="DB\Database\FileStorage\LiteFileStream.cs" />
-    <Compile Include="DB\Database\LiteDatabase.cs" />
+    <Compile Include="DB\LiteDatabase.cs" />
     <Compile Include="DB\Database\Tools\DbRef.cs" />
     <Compile Include="DB\Database\Tools\GetDatabaseInfo.cs" />
     <Compile Include="DB\Database\Tools\UserVersion.cs" />
@@ -306,7 +307,6 @@
     <Compile Include="User\User.cs" />
     <Compile Include="User\UserExposer.cs" />
     <Compile Include="User\UserManager.cs" />
-    <Compile Include="User\WalledGarden.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

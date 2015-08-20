@@ -3,7 +3,7 @@ using System.Linq.Expressions;
 
 namespace Netfluid.DB
 {
-    public partial class LiteCollection<T>
+    public partial class LiteCollection<T> : IRepository<T>
     {
         /// <summary>
         /// Remove an document in collection using Document Id - returns false if not found document

@@ -169,7 +169,7 @@ namespace Netfluid.DB
         /// </summary>
         public bool Exists(string id)
         {
-            return this.Files.Exists(Query.EQ("_id", id));
+            return this.Files.Any(Query.EQ("_id", id));
         }
 
         /// <summary>
