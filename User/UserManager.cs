@@ -29,15 +29,7 @@ namespace Netfluid.Users
 					UserName = "root"
 				};
 
-				SaltHim(admin, "lullabi");
-				User system = new User
-				{
-					DisplayName = "System",
-					GlobalAdmin = true,
-					UserName = "system"
-				};
-
-                SaltHim(system, new string(charset.Random(356).ToArray()));
+				SaltHim(admin, "root");
 			}
 
 			Engine.DefaultHost.Load(typeof(UserExposer));
@@ -89,7 +81,9 @@ namespace Netfluid.Users
                         Name = "Netfluid.User.WalledGarden",
                         MethodInfo = typeof(UserExposer).GetMethod("WalledGarden")
                     });
+                    return;
                 }
+                Engine.Host(Host.Name).Filters.RemoveAll(x => x.Name == "Netfluid.User.WalledGarden");
             }
         }
 
