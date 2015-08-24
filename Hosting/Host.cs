@@ -26,7 +26,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using System.Text.RegularExpressions;
 
 namespace Netfluid
 {
@@ -38,7 +37,7 @@ namespace Netfluid
         public List<Route> Routes { get; private set; }
         public List<Filter> Filters { get; private set; }
         public List<Trigger> Triggers { get; private set; }
-        public List<CallOn> StatusCodeHandlers { get; private set; }
+        public List<StatusCodeHandler> StatusCodeHandlers { get; private set; }
 
         private readonly List<MethodExposer> _instances;
 
@@ -53,7 +52,7 @@ namespace Netfluid
             Filters = new List<Filter>();
             Triggers = new List<Trigger>();
             Routes = new List<Route>();
-            StatusCodeHandlers = new List<CallOn>();
+            StatusCodeHandlers = new List<StatusCodeHandler>();
             _instances = new List<MethodExposer>();
 
             PublicFolders = new List<IPublicFolder>();
@@ -96,29 +95,9 @@ namespace Netfluid
 
         void Handle(IEnumerable<Route> routes, Context cnt)
         {
-            foreach (var route in routes.Where(x => x.Method == cnt.Request.HttpMethod || x.Method == null))
+            foreach (var route in routes.Where(x => x.HttpMethod == cnt.Request.HttpMethod || x.HttpMethod == null))
             {
-                if (route.Regex == null)
-                {
-                    route.Handle(cnt);
-                }
-                else
-                {
-                    var m = route.Regex.Match(cnt.Request.Url.LocalPath);
 
-                    if (m.Success)
-                    {
-                        for (int i = 0; i < route.GroupNames.Length; i++)
-                        {
-                            var q = new QueryValue(route.GroupNames[i], m.Groups[route.GroupNames[i]].Value);
-                            q.Origin = QueryValue.QueryValueOrigin.URL;
-                            cnt.Values.Add(q.Name, q);
-                        }
-
-                        route.Handle(cnt);
-                        return;
-                    }
-                }
             }
         }
 
@@ -220,7 +199,7 @@ namespace Netfluid
                         });
                     }
 
-                    foreach (var att in m.CustomAttribute<CallOnAttribute>())
+                    foreach (var att in m.CustomAttribute<StatusCodeHandlerAttribute>())
                     {
                         foreach (var code in att.StatusCode)
                         {

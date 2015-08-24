@@ -24,7 +24,9 @@ namespace Netfluid.Users
 
         public User(string fullname)
         {
-
+            int index = fullname.IndexOf('@');
+            UserName = (index > 0) ? fullname.Substring(0, index) : fullname;
+            Domain = (index >= 0) ? fullname.Substring(index) : null;
         }
 
         public override string ToString()
@@ -34,7 +36,7 @@ namespace Netfluid.Users
 
         public static User Parse(string name)
 		{
-			return UserManager.GetUser(name);
+            return new User(name);
 		}
     }
 }

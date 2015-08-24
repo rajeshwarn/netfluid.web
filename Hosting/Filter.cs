@@ -1,65 +1,121 @@
 ﻿using System;
 using System.Reflection;
+using System.Text.RegularExpressions;
 
 namespace Netfluid
 {
-    public class Filter : Route
+    public class Filter
     {
-        public override MethodInfo MethodInfo
+        Delegate myDelegate;
+        string url;
+        Regex regex;
+        MethodInfo methodInfo;
+
+        public string Name { get; set; }
+
+        public string Url
         {
             get
             {
-                return base.MethodInfo;
+                return url;
             }
             set
             {
-                if (!value.ReturnType.Implements(typeof(bool)))
-                    throw new TypeLoadException("Filter methods must returns a bool");
+                if (url == null) return;
 
-                var args = value.GetParameters();
-                if (args.Length != 1 || args[0].ParameterType.FullName != "NetFluid.IResponse&")
-                    throw new TypeLoadException("Filters must have one parameter (ref IResponse)");
+                url = value;
 
-                base.MethodInfo = value;
+                var urlRegex = url;
+                var find = new Regex(":[^//]+");
+                foreach (Match item in find.Matches(url))
+                {
+                    urlRegex = urlRegex.Replace(item.Value, "(?<" + item.Value.Substring(1) + ">[^//]+?)");
+                }
+                regex = new Regex("^" + urlRegex + "$");
+                GroupNames = regex.GetGroupNames();
             }
         }
 
-        public override void Handle(Context cnt)
+        public string HttpMethod { get; set; }
+
+        public int Index { get; set; }
+
+        public ParameterInfo[] Parameters { get; private set; }
+
+        public string[] GroupNames { get; private set; }
+
+        public Delegate Delegate
         {
-            try
+            get
             {
-                var exposer = Type.CreateIstance() as MethodExposer;
-                exposer.Context = cnt;
-                exposer.Host = Host;
+                return myDelegate;
+            }
+            set
+            {
+                myDelegate = value;
+                methodInfo = value.Method;
+                Parameters = methodInfo.GetParameters();
 
-                var args = new object[] { null };
+                if (methodInfo.ReturnType != (typeof(bool)))
+                    throw new Exception("Filters must returns bool");
 
-                if ((bool)MethodInfo.Invoke(exposer, args) && args[0] != null)
+                var r = Parameters[0].ParameterType;
+
+                if (!r.Implements(typeof(IResponse)) || !r.IsByRef)
+                    throw new Exception("Filters first parameter must be ref IResponse");
+            }
+        }
+
+        public bool Handle(Context cnt)
+        {
+            if(regex != null)
+            {
+                var m = regex.Match(cnt.Request.Url.LocalPath);
+
+                if (!m.Success) return false;
+
+                for (int i = 0; i < GroupNames.Length; i++)
                 {
-                    var resp = args[0] as IResponse;
-
-                    if (resp != null)
-                        resp.SetHeaders(cnt);
-
-                    try
-                    {
-                        if (resp != null && cnt.Request.HttpMethod.ToLowerInvariant() != "head")
-                            resp.SendResponse(cnt);
-                    }
-                    catch (Exception ex)
-                    {
-                        if (Engine.ShowException)
-                        {
-                            cnt.Writer.Write(ex.ToString());
-                        }
-                    }
-                    cnt.Close();
+                    var q = new QueryValue(GroupNames[i], m.Groups[GroupNames[i]].Value);
+                    q.Origin = QueryValue.QueryValueOrigin.URL;
+                    cnt.Values.Add(q.Name, q);
                 }
             }
-            catch (Exception ex)
+
+            IResponse resp = null;
+            var args = new object[] { resp };
+
+            if (Parameters.Length > 1)
             {
-                ShowError(cnt, ex.InnerException);
+                args = new object[Parameters.Length];
+                for (int i = 1; i < Parameters.Length; i++)
+                {
+                    var param = Parameters[i];
+
+                    if (cnt.Values.Contains(param.Name))
+                    {
+                        args[i] = cnt.Values[param.Name].Parse(param.ParameterType);
+                    }
+                    else if (param.ParameterType == typeof(Context))
+                    {
+                        args[i] = cnt;
+                    }
+                }
             }
+
+            var res = (bool)Delegate.DynamicInvoke(args);
+
+            if (res && resp!=null)
+            {
+                resp.SetHeaders(cnt);
+
+                if (resp != null && cnt.Request.HttpMethod.ToLowerInvariant() != "head")
+                    resp.SendResponse(cnt);
+
+                cnt.Close();
+                return true;
+            }
+            return false;
         }
     }
 }

@@ -161,7 +161,7 @@
     <Compile Include="DB\Query\Impl\QueryStartsWith.cs" />
     <Compile Include="DB\Query\Linq\QueryVisitor.cs" />
     <Compile Include="DB\Query\Query.cs" />
-    <Compile Include="Hosting\CallOn.cs" />
+    <Compile Include="Hosting\StatusCodeHandler.cs" />
     <Compile Include="Hosting\Filter.cs" />
     <Compile Include="Hosting\FilterAttribute.cs" />
     <Compile Include="Hosting\Route.cs" />
@@ -211,7 +211,7 @@
     <Compile Include="DB\Utils\LiteException.cs" />
     <Compile Include="DB\Utils\StringScanner.cs" />
     <Compile Include="Extensions.cs" />
-    <Compile Include="Hosting\CallOnAttribute.cs" />
+    <Compile Include="Hosting\StatusCodeHandlerAttribute.cs" />
     <Compile Include="Hosting\Engine.cs" />
     <Compile Include="Hosting\Host.cs" />
     <Compile Include="Hosting\RouteAttribute.cs" />

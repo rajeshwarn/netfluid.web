@@ -6,9 +6,10 @@ namespace Netfluid
 {
     public class Route
     {
-        MethodInfo methodInfo;
+        Delegate myDelegate;
         string url;
         Regex regex;
+        MethodInfo methodInfo;
 
         public string Name { get; set; }
 
@@ -20,9 +21,9 @@ namespace Netfluid
             }
             set
             {
-                url = value;
+                if (url == null) throw new ArgumentNullException("Routes url can not be null");
 
-                if (url == null) return;
+                url = value;
 
                 var urlRegex = url;
                 var find = new Regex(":[^//]+");
@@ -31,132 +32,79 @@ namespace Netfluid
                     urlRegex = urlRegex.Replace(item.Value, "(?<" + item.Value.Substring(1) + ">[^//]+?)");
                 }
                 regex = new Regex("^" + urlRegex + "$");
+                GroupNames = regex.GetGroupNames();
             }
         }
 
-        public string Method { get; set; }
-
-        public Regex Regex
-        {
-            get
-            {
-                return regex;
-            }
-            set
-            {
-                regex = value;
-                url = regex.ToString();
-            }
-        }
-
-        public virtual MethodInfo MethodInfo
-        {
-            get
-            {
-                return methodInfo;
-            }
-            set
-            {
-                var type = value.DeclaringType;
-
-                if (!type.Inherit(typeof(MethodExposer)))
-                        throw new TypeLoadException(value.Name + " is declared by " + type.FullName +" wich is not a NetFluid.MethodExposer");
-
-                if (!type.HasDefaultConstructor())
-                    throw new TypeLoadException(type.FullName + " does not have a parameterless constructor");
-
-                methodInfo = value;
-                Type = type; 
-            }
-        }
+        public string HttpMethod { get; set; }
 
         public int Index { get; set; }
 
-        public Type Type { get; private set; }
         public ParameterInfo[] Parameters { get; private set; }
+
         public string[] GroupNames { get; private set; }
 
-        public Host Host { get; internal set; }
-
-        public virtual void Handle(Context cnt)
+        public Delegate Delegate
         {
-            MethodExposer exposer = null;
-            object[] args;
-            IResponse resp;
-
-            #region ARGS
-            try
+            get
             {
-                exposer = Type.CreateIstance() as MethodExposer;
-                exposer.Context = cnt;
-                exposer.Host = Host;
+                return myDelegate;
+            }
+            set
+            {
+                myDelegate = value;
+                methodInfo = value.Method;
+                Parameters = methodInfo.GetParameters();
 
-                args = null;
+                if (!methodInfo.ReturnType.Implements(typeof(IResponse)))
+                    throw new Exception("Routes must returns IResponse");
+            }
+        }
 
-                if (Parameters != null && Parameters.Length > 0)
+        public bool Handle(Context cnt)
+        {
+            var m = regex.Match(cnt.Request.Url.LocalPath);
+
+            if (!m.Success) return false;
+
+            for (int i = 0; i < GroupNames.Length; i++)
+            {
+                var q = new QueryValue(GroupNames[i], m.Groups[GroupNames[i]].Value);
+                q.Origin = QueryValue.QueryValueOrigin.URL;
+                cnt.Values.Add(q.Name, q);
+            }
+
+            object[] args = null;
+            if (Parameters.Length > 0)
+            {
+                args = new object[Parameters.Length];
+                for (int i = 0; i < Parameters.Length; i++)
                 {
-                    args = new object[Parameters.Length];
-                    for (int i = 0; i < Parameters.Length; i++)
+                    var param = Parameters[i];
+
+                    if (cnt.Values.Contains(param.Name))
                     {
-                        if (cnt.Values.Contains(Parameters[i].Name))
-                        {
-                            args[i] = cnt.Values[Parameters[i].Name].Parse(Parameters[i].ParameterType);
-                        }
+                        args[i] = cnt.Values[param.Name].Parse(param.ParameterType);
+                    }
+                    else if(param.ParameterType==typeof(Context))
+                    {
+                        args[i] = cnt;
                     }
                 }
             }
-            catch (Exception ex)
-            {
-                ShowError(cnt, ex);
-                return;
-            }
-            #endregion
 
-            #region RESPONSE
-            try
-            {
-                resp = MethodInfo.Invoke(exposer, args) as IResponse;
+            var resp = Delegate.DynamicInvoke(args) as IResponse;
 
-                if (resp != null)
-                    resp.SetHeaders(cnt);
-            }
-            catch (Exception ex)
+            if (resp != null)
             {
-                ShowError(cnt, ex.InnerException);
-                return;
-            }
-            #endregion
+                resp.SetHeaders(cnt);
 
-            try
-            {
                 if (resp != null && cnt.Request.HttpMethod.ToLowerInvariant() != "head")
                     resp.SendResponse(cnt);
 
                 cnt.Close();
             }
-            catch (Exception ex)
-            {
-                ShowError(cnt, ex);
-            }
-        }
-
-        public void ShowError(Context cnt, Exception ex)
-        {
-            try
-            {
-                Engine.Logger.Log("exception serving " + cnt.Request.Url, ex);
-
-                if (ex is TargetInvocationException)
-                    ex = ex.InnerException;
-
-                if (Engine.ShowException)
-                    cnt.Writer.Write(ex);
-            }
-            catch
-            {
-
-            }
-            cnt.Close();
+            return true;
         }
     }
 }

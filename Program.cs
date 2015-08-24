@@ -10,6 +10,11 @@ namespace Example
 {
     class Program
     {
+        static int k(int d)
+        {
+            return 0;
+        }
+
         static void Main(string[] args)
         {
             Engine.Start();
