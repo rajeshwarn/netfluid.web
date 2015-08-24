@@ -38,9 +38,6 @@ namespace Netfluid
         public List<Filter> Filters { get; private set; }
         public List<Trigger> Triggers { get; private set; }
         public List<StatusCodeHandler> StatusCodeHandlers { get; private set; }
-
-        private readonly List<MethodExposer> _instances;
-
         public string Name { get; private set; }
         public List<IPublicFolder> PublicFolders { get; set; }
         public ISessionManager Sessions { get; set; }
@@ -53,24 +50,10 @@ namespace Netfluid
             Triggers = new List<Trigger>();
             Routes = new List<Route>();
             StatusCodeHandlers = new List<StatusCodeHandler>();
-            _instances = new List<MethodExposer>();
 
             PublicFolders = new List<IPublicFolder>();
             Sessions = new MemorySessionManager();
             SSL = false;
-        }
-
-        void loadInstance(Type type)
-        {
-            if (!_instances.Any(x => x.GetType().Equals(type)))
-                try
-                {
-                    _instances.Add(type.CreateIstance() as MethodExposer);
-                }
-                catch (Exception ex)
-                {
-                    Engine.Logger.Log("Failure in " + type + " instancing", ex.InnerException);
-                }
         }
 
         /// <summary>
@@ -153,8 +136,6 @@ namespace Netfluid
 
         public void Load(Type type)
         {
-            loadInstance(type);
-
             var prefixes = type.CustomAttribute<RouteAttribute>(true).Select(x=>x.Url);
             if (prefixes.Count() == 0)
                 prefixes = new[] { string.Empty };
@@ -173,7 +154,7 @@ namespace Netfluid
                         });
                     }
 
-                    foreach (var att in m.CustomAttribute<Netfluid.FilterAttribute>())
+                    foreach (var att in m.CustomAttribute<FilterAttribute>())
                     {
                         Filters.Add(new Filter
                         {
@@ -183,7 +164,7 @@ namespace Netfluid
                         });
                     }
 
-                    foreach (var att in m.CustomAttribute<Netfluid.TriggerAttribute>())
+                    foreach (var att in m.CustomAttribute<TriggerAttribute>())
                     {
                         Triggers.Add(new Trigger
                         {

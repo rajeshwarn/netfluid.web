@@ -1,18 +1,21 @@
 ﻿using Netfluid;
 using System;
+using System.IO;
 
 namespace Example
 {
     class Program
     {
         [Route("/")]
-        static int k(int d)
+        static IResponse k()
         {
-            return 0;
+            return new StringResponse("suca");
         }
 
         static void Main(string[] args)
         {
+            Delegate f = (Func<IResponse>)k;
+
             Engine.DefaultHost.Load(typeof(Program));
 
             Engine.Start();
