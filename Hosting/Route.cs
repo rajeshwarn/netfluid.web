@@ -21,7 +21,7 @@ namespace Netfluid
             }
             set
             {
-                if (url == null) throw new ArgumentNullException("Routes url can not be null");
+                if (value == null) throw new ArgumentNullException("Routes url can not be null");
 
                 url = value;
 
