@@ -4,6 +4,13 @@ namespace Netfluid.Users
 {
 	class UserExposer:MethodExposer
 	{
+        UserManager manager;
+
+        public UserExposer(UserManager userManager)
+        {
+            manager = userManager;
+        }
+
 		public IResponse SignIn()
 		{
 			return new MustacheTemplate("./Users/signIn.html");
@@ -44,7 +51,8 @@ namespace Netfluid.Users
 				}
 				else
 				{
-					User u = UserManager.SignIn(user, domain, pass);
+                    var u = manager.SignIn(string.IsNullOrEmpty(domain) ? user : user + "@" + domain, pass);
+
 					if (u != null)
 					{
 						base.Session("user", u);
@@ -85,8 +93,8 @@ namespace Netfluid.Users
 				}
 				else
 				{
-					User u = UserManager.SignIn(user, domain, pass);
-					if (u != null)
+                    var u = manager.SignIn(string.IsNullOrEmpty(domain) ? user : user + "@" + domain, pass);
+                    if (u != null)
 					{
 						base.Session("user", u);
 						result = new JSONResponse(new

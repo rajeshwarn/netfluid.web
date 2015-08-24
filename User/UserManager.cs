@@ -9,6 +9,8 @@ namespace Netfluid.Users
 	{
 		private const string charset = "qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM123456789!£$%&/()=?^+;,:.-";
 
+        UserExposer exposer;
+
         public Host Host { get; set; }
         public LiteCollection<User> Repository { get; set; }
         public int SignInInterval { get; set; }
@@ -32,6 +34,7 @@ namespace Netfluid.Users
 				SaltHim(admin, "root");
 			}
 
+            exposer = new UserExposer(this);
 			Engine.DefaultHost.Load(typeof(UserExposer));
 		}
 
@@ -79,7 +82,6 @@ namespace Netfluid.Users
                     Engine.Host(Host.Name).Filters.Add(new Filter
                     {
                         Name = "Netfluid.User.WalledGarden",
-                        MethodInfo = typeof(UserExposer).GetMethod("WalledGarden")
                     });
                     return;
                 }

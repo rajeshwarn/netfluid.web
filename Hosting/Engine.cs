@@ -183,14 +183,9 @@ namespace Netfluid
                     listener.Prefixes.Add("https://" + x.Key + "/");
                 else
                     listener.Prefixes.Add("http://" + x.Key +"/");
-
-                x.Value.OnServerStart();
             });
 
             listener.Prefixes.Add("http://*/");
-
-            Logger.Log("Starting default host");
-            DefaultHost.OnServerStart();
 
             Logger.Log("NetFluid web application running");
 

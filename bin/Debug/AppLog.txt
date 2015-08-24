@@ -114,3 +114,53 @@
 			System.TypeLoadException: Loaded types must inherit NetFluid.MethodExposer			in Netfluid.Host.Load(Type p) in D:\PROGETTI\NetFluid\Hosting\Host.cs:riga 178			in Netfluid.Engine.Load(Assembly assembly) in D:\PROGETTI\NetFluid\Hosting\Engine.cs:riga 30920/08/2015 10.35.40	Starting host:__default
 20/08/2015 10.35.42	Starting default host
 20/08/2015 10.35.42	NetFluid web application running
+24/08/2015 08.23.17	threadpool size 40 1000
+24/08/2015 08.23.18	Starting NetFluid Engine
+24/08/2015 08.23.18	Loading calling assembly
+24/08/2015 08.23.18	Loading Netfluid, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null into default host
+24/08/2015 08.23.18	Loading <>f__AnonymousType0`2
+
+24/08/2015 08.23.18	Error during loading Netfluid, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null as default host
+			System.NullReferenceException: Riferimento a un oggetto non impostato su un'istanza di oggetto.			in Netfluid.Host.<>c__DisplayClass34_0.<loadInstance>b__0(MethodExposer x) in D:\PROGETTI\NetFluid\Hosting\Host.cs:riga 65			in System.Linq.Enumerable.Any[TSource](IEnumerable`1 source, Func`2 predicate)			in Netfluid.Host.loadInstance(Type type) in D:\PROGETTI\NetFluid\Hosting\Host.cs:riga 65			in Netfluid.Host.Load(Type type) in D:\PROGETTI\NetFluid\Hosting\Host.cs:riga 176			in Netfluid.Engine.Load(Assembly assembly) in D:\PROGETTI\NetFluid\Hosting\Engine.cs:riga 30924/08/2015 08.23.19	Starting host:__default
+
+24/08/2015 08.23.21	Unhandled fatal exception occurred.
+			System.NullReferenceException: Riferimento a un oggetto non impostato su un'istanza di oggetto.			in Netfluid.Extensions.ForEach[T](IEnumerable`1 enu, Action`1 act) in D:\PROGETTI\NetFluid\Extensions.cs:riga 679			in Netfluid.Engine.Start() in D:\PROGETTI\NetFluid\Hosting\Engine.cs:riga 178			in Example.Program.Main(String[] args) in D:\PROGETTI\NetFluid\Program.cs:riga 16			in System.AppDomain._nExecuteAssembly(RuntimeAssembly assembly, String[] args)			in System.AppDomain.ExecuteAssembly(String assemblyFile, Evidence assemblySecurity, String[] args)			in Microsoft.VisualStudio.HostingProcess.HostProc.RunUsersAssembly()			in System.Threading.ThreadHelper.ThreadStart_Context(Object state)			in System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state, Boolean preserveSyncCtx)			in System.Threading.ExecutionContext.Run(ExecutionContext executionContext, ContextCallback callback, Object state, Boolean preserveSyncCtx)			in System.Threading.ExecutionContext.Run(ExecutionContext executionContext, ContextCallback callback, Object state)			in System.Threading.ThreadHelper.ThreadStart()24/08/2015 08.31.23	threadpool size 40 1000
+24/08/2015 08.31.23	Starting NetFluid Engine
+24/08/2015 08.31.23	Loading calling assembly
+24/08/2015 08.31.23	Loading Netfluid, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null into default host
+24/08/2015 08.31.23	Loading <>f__AnonymousType0`2
+
+24/08/2015 08.31.24	Error during loading Netfluid, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null as default host
+			System.NullReferenceException: Riferimento a un oggetto non impostato su un'istanza di oggetto.			in Netfluid.Host.<>c__DisplayClass34_0.<loadInstance>b__0(MethodExposer x) in D:\PROGETTI\NetFluid\Hosting\Host.cs:riga 65			in System.Linq.Enumerable.Any[TSource](IEnumerable`1 source, Func`2 predicate)			in Netfluid.Host.loadInstance(Type type) in D:\PROGETTI\NetFluid\Hosting\Host.cs:riga 65			in Netfluid.Host.Load(Type type) in D:\PROGETTI\NetFluid\Hosting\Host.cs:riga 176			in Netfluid.Engine.Load(Assembly assembly) in D:\PROGETTI\NetFluid\Hosting\Engine.cs:riga 30924/08/2015 08.31.24	Starting host:__default
+
+24/08/2015 08.31.26	Unhandled fatal exception occurred.
+			System.NullReferenceException: Riferimento a un oggetto non impostato su un'istanza di oggetto.			in Netfluid.Extensions.ForEach[T](IEnumerable`1 enu, Action`1 act) in D:\PROGETTI\NetFluid\Extensions.cs:riga 679			in Netfluid.Engine.Start() in D:\PROGETTI\NetFluid\Hosting\Engine.cs:riga 178			in Example.Program.Main(String[] args) in D:\PROGETTI\NetFluid\Program.cs:riga 18			in System.AppDomain._nExecuteAssembly(RuntimeAssembly assembly, String[] args)			in System.AppDomain.ExecuteAssembly(String assemblyFile, Evidence assemblySecurity, String[] args)			in Microsoft.VisualStudio.HostingProcess.HostProc.RunUsersAssembly()			in System.Threading.ThreadHelper.ThreadStart_Context(Object state)			in System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state, Boolean preserveSyncCtx)			in System.Threading.ExecutionContext.Run(ExecutionContext executionContext, ContextCallback callback, Object state, Boolean preserveSyncCtx)			in System.Threading.ExecutionContext.Run(ExecutionContext executionContext, ContextCallback callback, Object state)			in System.Threading.ThreadHelper.ThreadStart()24/08/2015 08.31.54	threadpool size 40 1000
+24/08/2015 08.31.54	Starting NetFluid Engine
+24/08/2015 08.31.54	Loading calling assembly
+24/08/2015 08.31.54	Loading Netfluid, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null into default host
+24/08/2015 08.31.54	Loading <>f__AnonymousType0`2
+
+24/08/2015 08.31.54	Error during loading Netfluid, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null as default host
+			System.NullReferenceException: Riferimento a un oggetto non impostato su un'istanza di oggetto.			in Netfluid.Host.<>c__DisplayClass34_0.<loadInstance>b__0(MethodExposer x) in D:\PROGETTI\NetFluid\Hosting\Host.cs:riga 65			in System.Linq.Enumerable.Any[TSource](IEnumerable`1 source, Func`2 predicate)			in Netfluid.Host.loadInstance(Type type) in D:\PROGETTI\NetFluid\Hosting\Host.cs:riga 65			in Netfluid.Host.Load(Type type) in D:\PROGETTI\NetFluid\Hosting\Host.cs:riga 176			in Netfluid.Engine.Load(Assembly assembly) in D:\PROGETTI\NetFluid\Hosting\Engine.cs:riga 30924/08/2015 08.33.07	Starting host:__default
+24/08/2015 08.34.26	threadpool size 40 1000
+24/08/2015 08.34.26	Starting NetFluid Engine
+24/08/2015 08.34.26	Loading calling assembly
+24/08/2015 08.34.26	Loading Netfluid, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null into default host
+24/08/2015 08.34.27	Loading <>f__AnonymousType0`2
+
+24/08/2015 08.34.27	Error during loading Netfluid, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null as default host
+			System.NullReferenceException: Riferimento a un oggetto non impostato su un'istanza di oggetto.			in Netfluid.Host.<>c__DisplayClass34_0.<loadInstance>b__0(MethodExposer x) in D:\PROGETTI\NetFluid\Hosting\Host.cs:riga 65			in System.Linq.Enumerable.Any[TSource](IEnumerable`1 source, Func`2 predicate)			in Netfluid.Host.loadInstance(Type type) in D:\PROGETTI\NetFluid\Hosting\Host.cs:riga 65			in Netfluid.Host.Load(Type type) in D:\PROGETTI\NetFluid\Hosting\Host.cs:riga 156			in Netfluid.Engine.Load(Assembly assembly) in D:\PROGETTI\NetFluid\Hosting\Engine.cs:riga 30424/08/2015 08.34.30	Starting host:__default
+24/08/2015 08.34.32	NetFluid web application running
+24/08/2015 08.35.13	threadpool size 40 1000
+24/08/2015 08.36.07	Starting NetFluid Engine
+24/08/2015 08.36.07	Loading calling assembly
+24/08/2015 08.36.07	Loading Netfluid, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null into default host
+24/08/2015 08.36.07	Loading <>f__AnonymousType0`2
+
+24/08/2015 08.36.07	Error during loading Netfluid, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null as default host
+			System.NullReferenceException: Riferimento a un oggetto non impostato su un'istanza di oggetto.			in Netfluid.Host.<>c__DisplayClass34_0.<loadInstance>b__0(MethodExposer x) in D:\PROGETTI\NetFluid\Hosting\Host.cs:riga 65			in System.Linq.Enumerable.Any[TSource](IEnumerable`1 source, Func`2 predicate)			in Netfluid.Host.loadInstance(Type type) in D:\PROGETTI\NetFluid\Hosting\Host.cs:riga 65			in Netfluid.Host.Load(Type type) in D:\PROGETTI\NetFluid\Hosting\Host.cs:riga 156			in Netfluid.Engine.Load(Assembly assembly) in D:\PROGETTI\NetFluid\Hosting\Engine.cs:riga 30424/08/2015 08.36.07	Starting host:__default
+24/08/2015 08.36.09	NetFluid web application running
+24/08/2015 08.36.53	threadpool size 40 1000
+
+24/08/2015 08.36.53	Unhandled fatal exception occurred.
+			System.ArgumentNullException: Il valore non può essere null.			Nome parametro: Routes url can not be null			in Netfluid.Route.set_Url(String value) in D:\PROGETTI\NetFluid\Hosting\Route.cs:riga 24			in Netfluid.Host.Load(Type type) in D:\PROGETTI\NetFluid\Hosting\Host.cs:riga 168			in Example.Program.Main(String[] args) in D:\PROGETTI\NetFluid\Program.cs:riga 16			in System.AppDomain._nExecuteAssembly(RuntimeAssembly assembly, String[] args)			in System.AppDomain.ExecuteAssembly(String assemblyFile, Evidence assemblySecurity, String[] args)			in Microsoft.VisualStudio.HostingProcess.HostProc.RunUsersAssembly()			in System.Threading.ThreadHelper.ThreadStart_Context(Object state)			in System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state, Boolean preserveSyncCtx)			in System.Threading.ExecutionContext.Run(ExecutionContext executionContext, ContextCallback callback, Object state, Boolean preserveSyncCtx)			in System.Threading.ExecutionContext.Run(ExecutionContext executionContext, ContextCallback callback, Object state)			in System.Threading.ThreadHelper.ThreadStart()

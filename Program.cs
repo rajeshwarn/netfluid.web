@@ -1,15 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Netfluid;
-using System.Net.Mail;
+﻿using Netfluid;
+using System;
 
 namespace Example
 {
     class Program
     {
+        [Route("/")]
         static int k(int d)
         {
             return 0;
@@ -17,6 +13,8 @@ namespace Example
 
         static void Main(string[] args)
         {
+            Engine.DefaultHost.Load(typeof(Program));
+
             Engine.Start();
         }
     }

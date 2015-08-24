@@ -73,34 +73,6 @@ namespace Netfluid
                 }
         }
 
-        internal void OnServerStart()
-        {
-            foreach (var type in _instances.Select(x=>x.GetType()))
-            {
-                var m = type.GetMethod("OnServerStart",BindingFlags.FlattenHierarchy);
-
-                if(m!= null && m.IsOverride())
-                {
-                    try
-                    {
-                        var instance = type.CreateIstance() as MethodExposer;
-                    }
-                    catch (Exception ex)
-                    {
-                        Engine.Logger.Log("Exception during " + type.Name + ".OnServerStart", ex);
-                    }
-                }
-            }
-        }
-
-        void Handle(IEnumerable<Route> routes, Context cnt)
-        {
-            foreach (var route in routes.Where(x => x.HttpMethod == cnt.Request.HttpMethod || x.HttpMethod == null))
-            {
-
-            }
-        }
-
         /// <summary>
         /// The current virtual host serve the given context
         /// </summary>
@@ -123,14 +95,31 @@ namespace Netfluid
                 #endregion
             }
 
-            Handle(Filters, cnt);
+            foreach (var filter in Filters.Where(x => x.HttpMethod == cnt.Request.HttpMethod || x.HttpMethod == null))
+            {
+                if(filter.Handle(cnt))
+                {
+                    cnt.Close();
+                    return;
+                }
+            }
 
             if (!cnt.IsOpen)
                 return;
 
-            Handle(Triggers, cnt);
+            foreach (var trigger in Triggers.Where(x => x.HttpMethod == cnt.Request.HttpMethod || x.HttpMethod == null))
+            {
+                trigger.Handle(cnt);
+            }
 
-            Handle(Routes, cnt);
+            foreach (var routes in Routes.Where(x => x.HttpMethod == cnt.Request.HttpMethod || x.HttpMethod == null))
+            {
+                if (routes.Handle(cnt))
+                {
+                    cnt.Close();
+                    return;
+                }
+            }
 
             if (!cnt.IsOpen)
                 return;
@@ -146,23 +135,31 @@ namespace Netfluid
 
             cnt.Response.StatusCode = (int)StatusCode.NotFound;
 
-            Handle(StatusCodeHandlers, cnt);
-
+            foreach (var handler in StatusCodeHandlers.Where(x => x.HttpMethod == cnt.Request.HttpMethod || x.HttpMethod == null))
+            {
+                if (handler.Handle(cnt))
+                {
+                    cnt.Close();
+                    return;
+                }
+            }
             cnt.Close();
         }
 
-        public void Load(Type p)
+        public void Load(object obj)
         {
-            if (!p.Inherit(typeof(MethodExposer)))
-                throw new TypeLoadException("Loaded types must inherit NetFluid.MethodExposer");
+            Load(obj.GetType());
+        }
 
-            loadInstance(p);
+        public void Load(Type type)
+        {
+            loadInstance(type);
 
-            var prefixes = p.CustomAttribute<RouteAttribute>(true).Select(x=>x.Url);
+            var prefixes = type.CustomAttribute<RouteAttribute>(true).Select(x=>x.Url);
             if (prefixes.Count() == 0)
                 prefixes = new[] { string.Empty };
 
-            foreach (var m in p.GetMethods(BindingFlags.NonPublic|BindingFlags.Public|BindingFlags.Instance))
+            foreach (var m in type.GetMethods(BindingFlags.NonPublic|BindingFlags.Public|BindingFlags.Instance|BindingFlags.Static|BindingFlags.FlattenHierarchy))
             {
                 foreach (var prefix in prefixes)
                 {
@@ -171,9 +168,8 @@ namespace Netfluid
                         Routes.Add(new Route
                         {
                             Url = prefix + att.Url,
-                            Regex = att.Regex,
                             Index = att.Index,
-                            MethodInfo = m 
+                            Delegate = Delegate.CreateDelegate(type, m)
                         });
                     }
 
@@ -182,9 +178,8 @@ namespace Netfluid
                         Filters.Add(new Filter
                         {
                             Url = prefix + att.Url,
-                            Regex = att.Regex,
                             Index = att.Index,
-                            MethodInfo = m
+                            Delegate = Delegate.CreateDelegate(type, m)
                         });
                     }
 
@@ -193,9 +188,8 @@ namespace Netfluid
                         Triggers.Add(new Trigger
                         {
                             Url = prefix + att.Url,
-                            Regex = att.Regex,
                             Index = att.Index,
-                            MethodInfo = m
+                            Delegate = Delegate.CreateDelegate(type, m)
                         });
                     }
 
@@ -206,9 +200,8 @@ namespace Netfluid
                             Routes.Add(new Route
                             {
                                 Url = prefix + att.Url,
-                                Regex = att.Regex,
                                 Index = att.Index,
-                                MethodInfo = m
+                                Delegate = Delegate.CreateDelegate(type, m)
                             });
                         }
                     }
