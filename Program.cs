@@ -14,8 +14,6 @@ namespace Example
 
         static void Main(string[] args)
         {
-            Delegate f = (Func<IResponse>)k;
-
             Engine.DefaultHost.Load(typeof(Program));
 
             Engine.Start();

@@ -5,7 +5,6 @@ namespace Netfluid
 {
     public class StatusCodeHandler
     {
-        Delegate myDelegate;
         MethodInfo methodInfo;
 
         public string Name { get; set; }
@@ -18,16 +17,15 @@ namespace Netfluid
 
         public ParameterInfo[] Parameters { get; private set; }
 
-        public Delegate Delegate
+        public MethodInfo Delegate
         {
             get
             {
-                return myDelegate;
+                return methodInfo;
             }
             set
             {
-                myDelegate = value;
-                methodInfo = value.Method;
+                methodInfo = value;
                 Parameters = methodInfo.GetParameters();
 
                 if (!methodInfo.ReturnType.Implements(typeof(IResponse)))

@@ -7,7 +7,6 @@ namespace Netfluid
 {
     public class Trigger
     {
-        Delegate myDelegate;
         string url;
         Regex regex;
         MethodInfo methodInfo;
@@ -45,16 +44,15 @@ namespace Netfluid
 
         public string[] GroupNames { get; private set; }
 
-        public Delegate Delegate
+        public MethodInfo Delegate
         {
             get
             {
-                return myDelegate;
+                return methodInfo;
             }
             set
             {
-                myDelegate = value;
-                methodInfo = value.Method;
+                methodInfo = value;
                 Parameters = methodInfo.GetParameters();
             }
         }
