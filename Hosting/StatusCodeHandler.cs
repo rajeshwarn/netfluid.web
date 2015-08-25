@@ -4,7 +4,7 @@ using System.Text.RegularExpressions;
 
 namespace Netfluid
 {
-    public class StatusCodeHandler
+    public class StatusCodeHandler:IRoute
     {
         string url;
         Regex regex;

@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace Netfluid
 {
-    public class Trigger
+    public class Trigger:IRoute
     {
         string url;
         Regex regex;
@@ -59,13 +59,13 @@ namespace Netfluid
             }
         }
 
-        public void Handle(Context cnt)
+        public bool Handle(Context cnt)
         {
             if(regex != null)
             {
                 var m = regex.Match(cnt.Request.Url.LocalPath);
 
-                if (!m.Success) return;
+                if (!m.Success) return false;
 
                 for (int i = 0; i < GroupNames.Length; i++)
                 {
@@ -95,6 +95,7 @@ namespace Netfluid
             }
 
             Task.Factory.StartNew(() => MethodInfo.Invoke(Target,args));
+            return true;
         }
     }
 }

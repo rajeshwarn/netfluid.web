@@ -135,8 +135,11 @@ namespace Netfluid
             Load(obj.GetType());
         }
 
-        public void Load(Type type)
+        void Load(Type type, object instance)
         {
+            if (instance == null && type.IsInstantiable() && type.HasDefaultConstructor())
+                instance = type.CreateIstance();
+
             var prefixes = type.CustomAttribute<RouteAttribute>(true).Select(x=>x.Url);
             if (prefixes.Count() == 0)
                 prefixes = new[] { string.Empty };
@@ -151,10 +154,7 @@ namespace Netfluid
                         {
                             Url = prefix + att.Url,
                             Index = att.Index,
-                            MethodInfo = m.CreateDelegate(Expression.GetDelegateType(
-                                        (from parameter in m.GetParameters() select parameter.ParameterType)
-                                        .Concat(new[] { m.ReturnType })
-                                        .ToArray()))
+                            MethodInfo = m
                         });
                     }
 
@@ -164,10 +164,7 @@ namespace Netfluid
                         {
                             Url = prefix + att.Url,
                             Index = att.Index,
-                            MethodInfo = m.CreateDelegate(Expression.GetDelegateType(
-                                        (from parameter in m.GetParameters() select parameter.ParameterType)
-                                        .Concat(new[] { m.ReturnType })
-                                        .ToArray()))
+                            MethodInfo = m
                         });
                     }
 
@@ -177,10 +174,7 @@ namespace Netfluid
                         {
                             Url = prefix + att.Url,
                             Index = att.Index,
-                            MethodInfo = m.CreateDelegate(Expression.GetDelegateType(
-                                        (from parameter in m.GetParameters() select parameter.ParameterType)
-                                        .Concat(new[] { m.ReturnType })
-                                        .ToArray()))
+                            MethodInfo = m
                         });
                     }
 
@@ -192,10 +186,7 @@ namespace Netfluid
                             {
                                 Url = prefix + att.Url,
                                 Index = att.Index,
-                                MethodInfo = m.CreateDelegate(Expression.GetDelegateType(
-                                        (from parameter in m.GetParameters() select parameter.ParameterType)
-                                        .Concat(new[] { m.ReturnType })
-                                        .ToArray()))
+                                MethodInfo = m
                             });
                         }
                     }

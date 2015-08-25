@@ -4,7 +4,7 @@ using System.Text.RegularExpressions;
 
 namespace Netfluid
 {
-    public class Filter
+    public class Filter:IRoute
     {
         string url;
         Regex regex;

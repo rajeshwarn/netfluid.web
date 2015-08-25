@@ -894,6 +894,12 @@ namespace Netfluid
 
         #region TYPE
 
+        public static bool IsInstantiable(this Type type)
+        {
+            var c = type.GetConstructors(BindingFlags.Public);
+            return (!type.IsAbstract && c.Length > 0);
+        }
+
         public static bool HasDefaultConstructor(this Type type)
         {
             return type.GetConstructor(Type.EmptyTypes) != null;
