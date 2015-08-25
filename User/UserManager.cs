@@ -5,6 +5,7 @@ using System.Linq;
 
 namespace Netfluid.Users
 {
+    /*
 	public class UserManager
 	{
 		private const string charset = "qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM123456789!£$%&/()=?^+;,:.-";
@@ -185,4 +186,5 @@ namespace Netfluid.Users
             return true;
 		}
     }
+    */
 }

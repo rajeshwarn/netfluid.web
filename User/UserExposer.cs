@@ -2,7 +2,8 @@ using System.Linq;
 
 namespace Netfluid.Users
 {
-	class UserExposer:MethodExposer
+    /*
+	class UserExposer
 	{
         UserManager manager;
 
@@ -16,9 +17,9 @@ namespace Netfluid.Users
 			return new MustacheTemplate("./Users/signIn.html");
 		}
 
-        public bool WalledGarden(ref IResponse resp)
+        public bool WalledGarden(ref IResponse resp,Context context)
         {
-            if (base.Session<User>("user") == null && base.Request.Url.LocalPath != "/signin" && base.Request.HttpMethod != "POST")
+            if (context.<User>("user") == null && context.Request.Url.LocalPath != "/signin" && base.Request.HttpMethod != "POST")
             {
                 if (Engine.Hosts.Any(x => x.PublicFolders.Any(y => y.Map(Context))))
                     return false;
@@ -127,4 +128,5 @@ namespace Netfluid.Users
             return new RedirectResponse("/");
         }
 	}
+    */
 }
