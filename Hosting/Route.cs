@@ -93,7 +93,7 @@ namespace Netfluid
                 }
             }
 
-            var resp = methodInfo.Invoke(args) as IResponse;
+            var resp = methodInfo.Invoke(Target,args) as IResponse;
 
             if (resp != null)
             {

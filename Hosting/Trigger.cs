@@ -94,7 +94,7 @@ namespace Netfluid
                 }
             }
 
-            Task.Factory.StartNew(() => MethodInfo.DynamicInvoke(args));
+            Task.Factory.StartNew(() => MethodInfo.Invoke(Target,args));
         }
     }
 }

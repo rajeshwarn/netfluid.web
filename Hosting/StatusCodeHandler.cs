@@ -58,7 +58,7 @@ namespace Netfluid
                     }
                 }
 
-                var resp = MethodInfo.DynamicInvoke(args) as IResponse;
+                var resp = MethodInfo.Invoke(Target,args) as IResponse;
 
                 if (resp != null)
                 {

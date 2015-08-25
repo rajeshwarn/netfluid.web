@@ -103,16 +103,21 @@ namespace Netfluid
                 }
             }
 
-            var res = (bool)MethodInfo.DynamicInvoke(args);
+            var res = (bool)MethodInfo.Invoke(Target,args);
 
-            if (res && resp!=null)
+            if (res)
             {
-                resp.SetHeaders(cnt);
+                resp = args[0] as IResponse;
 
-                if (resp != null && cnt.Request.HttpMethod.ToLowerInvariant() != "head")
-                    resp.SendResponse(cnt);
+                if(resp != null)
+                {
+                    resp.SetHeaders(cnt);
 
-                cnt.Close();
+                    if (resp != null && cnt.Request.HttpMethod.ToLowerInvariant() != "head")
+                        resp.SendResponse(cnt);
+
+                    cnt.Close();
+                }
                 return true;
             }
             return false;
