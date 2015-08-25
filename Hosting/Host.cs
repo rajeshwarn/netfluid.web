@@ -190,7 +190,7 @@ namespace Netfluid
                     {
                         foreach (var code in att.StatusCode)
                         {
-                            Routes.Add(new Route
+                            StatusCodeHandlers.Add(new StatusCodeHandler
                             {
                                 Url = prefix + att.Url,
                                 Index = att.Index,
