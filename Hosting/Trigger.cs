@@ -44,6 +44,8 @@ namespace Netfluid
 
         public string[] GroupNames { get; private set; }
 
+        public object Target { get; set; }
+
         public MethodInfo MethodInfo
         {
             get

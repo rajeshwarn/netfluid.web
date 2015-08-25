@@ -17,6 +17,8 @@ namespace Netfluid
 
         public ParameterInfo[] Parameters { get; private set; }
 
+        public object Target { get; set; }
+
         public MethodInfo MethodInfo
         {
             get
