@@ -35,7 +35,7 @@ namespace Netfluid.Users
 			}
 
             exposer = new UserExposer(this);
-			Engine.DefaultHost.Load(typeof(UserExposer));
+			Engine.DefaultHost.Map(typeof(UserExposer));
 		}
 
         void SaltHim(User user, string password)

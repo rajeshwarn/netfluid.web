@@ -237,18 +237,18 @@ namespace Netfluid
                             {
                                 foreach (var app in Engine.Hosts)
                                 {
-                                    Host(h.Substring(0,h.Length-2)+app.Name).Load(p);
+                                    Host(h.Substring(0,h.Length-2)+app.Name).Map(p);
                                 }
                             }
                             else
                             {
-                                Host(h).Load(p);
+                                Host(h).Map(p);
                             }
                         }
                     }
                     else
                     {
-                        Host(host).Load(p);
+                        Host(host).Map(p);
                     }
                 }
             }
@@ -290,18 +290,18 @@ namespace Netfluid
                             {
                                 foreach (var app in Hosts)
                                 {
-                                    Host(h.Substring(0, h.Length - 2) + app.Name).Load(p);
+                                    Host(h.Substring(0, h.Length - 2) + app.Name).Map(p);
                                 }
                             }
                             else
                             {
-                                Host(h).Load(p);
+                                Host(h).Map(p);
                             }
                         }
                     }
                     else
                     {
-                        DefaultHost.Load(p);
+                        DefaultHost.Map(p);
                     }
                     Engine.Logger.Log(p.Name + " loaded");
                 }

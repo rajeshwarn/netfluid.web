@@ -14,7 +14,7 @@ namespace Example
 
         static void Main(string[] args)
         {
-            Engine.DefaultHost.Load(typeof(Program));
+            Engine.DefaultHost.Map(typeof(Program));
 
             Engine.Start();
         }

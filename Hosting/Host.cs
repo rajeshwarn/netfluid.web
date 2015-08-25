@@ -130,9 +130,14 @@ namespace Netfluid
             cnt.Close();
         }
 
-        public void Load(object obj)
+        public void Map(object obj)
         {
-            Load(obj.GetType());
+            Load(obj.GetType(), obj);
+        }
+
+        public void Map(Type type)
+        {
+            Load(type,null);
         }
 
         void Load(Type type, object instance)
@@ -154,7 +159,8 @@ namespace Netfluid
                         {
                             Url = prefix + att.Url,
                             Index = att.Index,
-                            MethodInfo = m
+                            MethodInfo = m,
+                            Target = instance
                         });
                     }
 
@@ -164,7 +170,8 @@ namespace Netfluid
                         {
                             Url = prefix + att.Url,
                             Index = att.Index,
-                            MethodInfo = m
+                            MethodInfo = m,
+                            Target = instance
                         });
                     }
 
@@ -174,7 +181,8 @@ namespace Netfluid
                         {
                             Url = prefix + att.Url,
                             Index = att.Index,
-                            MethodInfo = m
+                            MethodInfo = m,
+                            Target = instance
                         });
                     }
 
@@ -186,7 +194,8 @@ namespace Netfluid
                             {
                                 Url = prefix + att.Url,
                                 Index = att.Index,
-                                MethodInfo = m
+                                MethodInfo = m,
+                                Target = instance
                             });
                         }
                     }
