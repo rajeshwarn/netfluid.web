@@ -43,7 +43,7 @@ namespace Netfluid
 
         public string[] GroupNames { get; private set; }
 
-        public MethodInfo Delegate
+        public MethodInfo MethodInfo
         {
             get
             {
@@ -101,7 +101,7 @@ namespace Netfluid
                 }
             }
 
-            var res = (bool)Delegate.DynamicInvoke(args);
+            var res = (bool)MethodInfo.DynamicInvoke(args);
 
             if (res && resp!=null)
             {

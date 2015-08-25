@@ -44,7 +44,7 @@ namespace Netfluid
 
         public string[] GroupNames { get; private set; }
 
-        public MethodInfo Delegate
+        public MethodInfo MethodInfo
         {
             get
             {
@@ -92,7 +92,7 @@ namespace Netfluid
                 }
             }
 
-            Task.Factory.StartNew(() => Delegate.DynamicInvoke(args));
+            Task.Factory.StartNew(() => MethodInfo.DynamicInvoke(args));
         }
     }
 }

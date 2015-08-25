@@ -17,7 +17,7 @@ namespace Netfluid
 
         public ParameterInfo[] Parameters { get; private set; }
 
-        public MethodInfo Delegate
+        public MethodInfo MethodInfo
         {
             get
             {
@@ -56,7 +56,7 @@ namespace Netfluid
                     }
                 }
 
-                var resp = Delegate.DynamicInvoke(args) as IResponse;
+                var resp = MethodInfo.DynamicInvoke(args) as IResponse;
 
                 if (resp != null)
                 {

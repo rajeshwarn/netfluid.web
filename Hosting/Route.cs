@@ -43,7 +43,7 @@ namespace Netfluid
 
         public string[] GroupNames { get; private set; }
 
-        public MethodInfo Delegate
+        public MethodInfo MethodInfo
         {
             get
             {

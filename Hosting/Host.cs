@@ -151,7 +151,7 @@ namespace Netfluid
                         {
                             Url = prefix + att.Url,
                             Index = att.Index,
-                            Delegate = m.CreateDelegate(Expression.GetDelegateType(
+                            MethodInfo = m.CreateDelegate(Expression.GetDelegateType(
                                         (from parameter in m.GetParameters() select parameter.ParameterType)
                                         .Concat(new[] { m.ReturnType })
                                         .ToArray()))
@@ -164,7 +164,7 @@ namespace Netfluid
                         {
                             Url = prefix + att.Url,
                             Index = att.Index,
-                            Delegate = m.CreateDelegate(Expression.GetDelegateType(
+                            MethodInfo = m.CreateDelegate(Expression.GetDelegateType(
                                         (from parameter in m.GetParameters() select parameter.ParameterType)
                                         .Concat(new[] { m.ReturnType })
                                         .ToArray()))
@@ -177,7 +177,7 @@ namespace Netfluid
                         {
                             Url = prefix + att.Url,
                             Index = att.Index,
-                            Delegate = m.CreateDelegate(Expression.GetDelegateType(
+                            MethodInfo = m.CreateDelegate(Expression.GetDelegateType(
                                         (from parameter in m.GetParameters() select parameter.ParameterType)
                                         .Concat(new[] { m.ReturnType })
                                         .ToArray()))
@@ -192,7 +192,7 @@ namespace Netfluid
                             {
                                 Url = prefix + att.Url,
                                 Index = att.Index,
-                                Delegate = m.CreateDelegate(Expression.GetDelegateType(
+                                MethodInfo = m.CreateDelegate(Expression.GetDelegateType(
                                         (from parameter in m.GetParameters() select parameter.ParameterType)
                                         .Concat(new[] { m.ReturnType })
                                         .ToArray()))
