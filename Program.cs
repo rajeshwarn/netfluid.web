@@ -12,9 +12,13 @@ namespace Example
             return new StringResponse("suca");
         }
 
+        public dynamic Filter(bool t)
+        {
+            if(t)return true;
+        }
+
         static void Main(string[] args)
         {
-            Engine.DefaultHost.Map(typeof(Program));
 
             Engine.Start();
         }

@@ -25,6 +25,7 @@ using System;
 using System.IO;
 using System.Net;
 using Netfluid.HTTP;
+using System.Runtime.CompilerServices;
 
 namespace Netfluid
 {
@@ -143,6 +144,7 @@ namespace Netfluid
         {
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal void Close()
         {
             if (!IsOpen) return;

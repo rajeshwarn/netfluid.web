@@ -24,9 +24,11 @@
 using Netfluid.Sessions;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
+using System.Runtime.CompilerServices;
 
 namespace Netfluid
 {
@@ -81,9 +83,28 @@ namespace Netfluid
 
             foreach (var filter in Filters.Where(x => x.HttpMethod == cnt.Request.HttpMethod || x.HttpMethod == null))
             {
-                if(filter.Handle(cnt))
+                var value = filter.Handle(cnt);
+                if (value is IResponse)
+                {
+                    value.SetHeaders(cnt);
+
+                    if (value != null && cnt.Request.HttpMethod.ToLowerInvariant() != "head")
+                        value.SendResponse(cnt);
+                }
+                else if (value is bool && value)
                 {
                     cnt.Close();
+                    return;
+                }
+                else if(value is Stream)
+                {
+                    value.CopyTo(cnt.Response.OutputStream);
+                    cnt.Close();
+                    return;
+                }
+                else
+                {
+                    cnt.Writer.Write(value);
                     return;
                 }
             }
@@ -98,9 +119,28 @@ namespace Netfluid
 
             foreach (var routes in Routes.Where(x => x.HttpMethod == cnt.Request.HttpMethod || x.HttpMethod == null))
             {
-                if (routes.Handle(cnt))
+                var value = routes.Handle(cnt);
+                if (value is IResponse)
+                {
+                    value.SetHeaders(cnt);
+
+                    if (value != null && cnt.Request.HttpMethod.ToLowerInvariant() != "head")
+                        value.SendResponse(cnt);
+                }
+                else if (value is bool && value)
                 {
                     cnt.Close();
+                    return;
+                }
+                else if (value is Stream)
+                {
+                    value.CopyTo(cnt.Response.OutputStream);
+                    cnt.Close();
+                    return;
+                }
+                else
+                {
+                    cnt.Writer.Write(value);
                     return;
                 }
             }
@@ -121,9 +161,28 @@ namespace Netfluid
 
             foreach (var handler in StatusCodeHandlers.Where(x => x.HttpMethod == cnt.Request.HttpMethod || x.HttpMethod == null))
             {
-                if (handler.Handle(cnt))
+                var value = handler.Handle(cnt);
+                if (value is IResponse)
+                {
+                    value.SetHeaders(cnt);
+
+                    if (value != null && cnt.Request.HttpMethod.ToLowerInvariant() != "head")
+                        value.SendResponse(cnt);
+                }
+                else if (value is bool && value)
                 {
                     cnt.Close();
+                    return;
+                }
+                else if (value is Stream)
+                {
+                    value.CopyTo(cnt.Response.OutputStream);
+                    cnt.Close();
+                    return;
+                }
+                else
+                {
+                    cnt.Writer.Write(value);
                     return;
                 }
             }

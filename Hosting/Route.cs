@@ -4,7 +4,7 @@ using System.Text.RegularExpressions;
 
 namespace Netfluid
 {
-    public class Route : IRoute
+    public class Route
     {
         string url;
         Regex regex;
@@ -20,7 +20,8 @@ namespace Netfluid
             }
             set
             {
-                if (value == null) throw new ArgumentNullException("Routes url can not be null");
+                if (value == null && this.GetType()==typeof(Route))
+                    throw new ArgumentNullException("Routes url can not be null");
 
                 url = value;
 
@@ -61,17 +62,20 @@ namespace Netfluid
             }
         }
 
-        public bool Handle(Context cnt)
+        public virtual dynamic Handle(Context cnt)
         {
-            var m = regex.Match(cnt.Request.Url.LocalPath);
-
-            if (!m.Success) return false;
-
-            for (int i = 0; i < GroupNames.Length; i++)
+            if (regex != null)
             {
-                var q = new QueryValue(GroupNames[i], m.Groups[GroupNames[i]].Value);
-                q.Origin = QueryValue.QueryValueOrigin.URL;
-                cnt.Values.Add(q.Name, q);
+                var m = regex.Match(cnt.Request.Url.LocalPath);
+
+                if (!m.Success) return false;
+
+                for (int i = 0; i < GroupNames.Length; i++)
+                {
+                    var q = new QueryValue(GroupNames[i], m.Groups[GroupNames[i]].Value);
+                    q.Origin = QueryValue.QueryValueOrigin.URL;
+                    cnt.Values.Add(q.Name, q);
+                }
             }
 
             object[] args = null;
@@ -92,19 +96,7 @@ namespace Netfluid
                     }
                 }
             }
-
-            var resp = methodInfo.Invoke(Target,args) as IResponse;
-
-            if (resp != null)
-            {
-                resp.SetHeaders(cnt);
-
-                if (resp != null && cnt.Request.HttpMethod.ToLowerInvariant() != "head")
-                    resp.SendResponse(cnt);
-
-                cnt.Close();
-            }
-            return true;
+            return methodInfo.Invoke(Target, args);
         }
     }
 }
