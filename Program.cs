@@ -12,14 +12,16 @@ namespace Example
             return new StringResponse("suca");
         }
 
+        [Filter]
         public dynamic Filter(bool t)
         {
-            if(t)return true;
+            Console.Write("FILTRATO !");
+            return true;
         }
 
         static void Main(string[] args)
         {
-
+            Engine.DefaultHost.Map(typeof(Program));
             Engine.Start();
         }
     }

@@ -156,6 +156,8 @@ namespace Netfluid
 
                 DefaultHost.Serve(cnt);
             }
+
+            cnt.Close();
         }
 
 
@@ -170,11 +172,6 @@ namespace Netfluid
             var assembly = Assembly.GetEntryAssembly();
             var location = assembly.Location;
             
-            if(string.IsNullOrEmpty(location))
-                Load(assembly);
-            else
-                Load(location);
-
             _hosts.ForEach(x =>
             {
                 Logger.Log("Starting host:"+x.Key);
@@ -255,67 +252,6 @@ namespace Netfluid
             catch (Exception ex)
             {
                 Logger.Log("Error during loading " + assembly + " as " + host + " host", ex);
-            }
-        }
-
-        /// <summary>
-        /// Load a web application into default host
-        /// </summary>
-        /// <param name="assemblyPath">physical path to the assembly file</param>
-        public static void Load(string assemblyPath)
-        {
-            Load(Assembly.LoadFile(Path.GetFullPath(assemblyPath)));
-        }
-
-        /// <summary>
-        /// Load all types in assembly as default webapplication
-        /// </summary>
-        /// <param name="assembly">assembly to be loaded</param>
-        public static void Load(Assembly assembly)
-        {
-            Logger.Log("Loading "+assembly+" into default host");
-
-            try
-            {
-                var pages = assembly.GetTypes().ToArray();
-
-                foreach (var p in pages)
-                {
-                    Logger.Log("Loading "+ p.Name);
-                    if (p.HasAttribute<VirtualHostAttribute>(true))
-                    {
-                        foreach (string h in p.CustomAttribute<VirtualHostAttribute>(true).Select(x => x.Name))
-                        {
-                            if (h.EndsWith(".*"))
-                            {
-                                foreach (var app in Hosts)
-                                {
-                                    Host(h.Substring(0, h.Length - 2) + app.Name).Map(p);
-                                }
-                            }
-                            else
-                            {
-                                Host(h).Map(p);
-                            }
-                        }
-                    }
-                    else
-                    {
-                        DefaultHost.Map(p);
-                    }
-                    Engine.Logger.Log(p.Name + " loaded");
-                }
-            }
-            catch (ReflectionTypeLoadException lex)
-            {
-                foreach (var loader in lex.LoaderExceptions)
-                {
-                    Logger.Log("Error during loading type " + loader.Message + " as default host",loader);
-                }
-            }
-            catch (Exception ex)
-            {
-                Logger.Log("Error during loading " + assembly + " as default host", ex);
             }
         }
 

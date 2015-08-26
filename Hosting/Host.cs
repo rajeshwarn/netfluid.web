@@ -91,15 +91,13 @@ namespace Netfluid
                     if (value != null && cnt.Request.HttpMethod.ToLowerInvariant() != "head")
                         value.SendResponse(cnt);
                 }
-                else if (value is bool && value)
+                else if (value is bool)
                 {
-                    cnt.Close();
-                    return;
+                    if(value) return;
                 }
                 else if(value is Stream)
                 {
                     value.CopyTo(cnt.Response.OutputStream);
-                    cnt.Close();
                     return;
                 }
                 else
@@ -127,15 +125,13 @@ namespace Netfluid
                     if (value != null && cnt.Request.HttpMethod.ToLowerInvariant() != "head")
                         value.SendResponse(cnt);
                 }
-                else if (value is bool && value)
+                else if (value is bool)
                 {
-                    cnt.Close();
-                    return;
+                    if (value) return;
                 }
                 else if (value is Stream)
                 {
                     value.CopyTo(cnt.Response.OutputStream);
-                    cnt.Close();
                     return;
                 }
                 else
@@ -152,7 +148,6 @@ namespace Netfluid
             {
                 if (PublicFolders[i].TryGetFile(cnt))
                 {
-                    cnt.Close();
                     return;
                 }
             }
@@ -169,15 +164,13 @@ namespace Netfluid
                     if (value != null && cnt.Request.HttpMethod.ToLowerInvariant() != "head")
                         value.SendResponse(cnt);
                 }
-                else if (value is bool && value)
+                else if (value is bool)
                 {
-                    cnt.Close();
-                    return;
+                    if (value) return;
                 }
                 else if (value is Stream)
                 {
                     value.CopyTo(cnt.Response.OutputStream);
-                    cnt.Close();
                     return;
                 }
                 else
@@ -186,7 +179,6 @@ namespace Netfluid
                     return;
                 }
             }
-            cnt.Close();
         }
 
         public void Map(object obj)
@@ -208,7 +200,7 @@ namespace Netfluid
             if (prefixes.Count() == 0)
                 prefixes = new[] { string.Empty };
 
-            foreach (var m in type.GetMethods(BindingFlags.NonPublic|BindingFlags.Public|BindingFlags.Instance|BindingFlags.Static|BindingFlags.FlattenHierarchy))
+            foreach (var m in type.GetMethods(BindingFlags.NonPublic|BindingFlags.Public|BindingFlags.Instance|BindingFlags.Static))
             {
                 foreach (var prefix in prefixes)
                 {

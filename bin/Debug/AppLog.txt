@@ -4055,3 +4055,665 @@
 25/08/2015 20.05.33	<>c loaded
 25/08/2015 20.05.33	Loading <GetDirtyPages>d__14
 25/08/2015 20.05.33	<GetDirtyPages>d__14 loaded
+26/08/2015 12.46.16	threadpool size 40 1000
+26/08/2015 12.46.17	Starting NetFluid Engine
+26/08/2015 12.46.17	Loading calling assembly
+26/08/2015 12.46.17	Loading Netfluid, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null into default host
+26/08/2015 12.46.18	Loading <>f__AnonymousType0`2
+26/08/2015 12.46.18	<>f__AnonymousType0`2 loaded
+26/08/2015 12.46.18	Loading <>f__AnonymousType1`2
+26/08/2015 12.46.18	<>f__AnonymousType1`2 loaded
+26/08/2015 12.46.18	Loading <>f__AnonymousType2`2
+26/08/2015 12.46.18	<>f__AnonymousType2`2 loaded
+26/08/2015 12.46.18	Loading ArgumentCollection
+26/08/2015 12.46.18	ArgumentCollection loaded
+26/08/2015 12.46.18	Loading CompoundGenerator
+26/08/2015 12.46.18	CompoundGenerator loaded
+26/08/2015 12.46.18	Loading ConditionTagDefinition
+26/08/2015 12.46.18	ConditionTagDefinition loaded
+26/08/2015 12.46.18	Loading ContentTagDefinition
+26/08/2015 12.46.18	ContentTagDefinition loaded
+26/08/2015 12.46.18	Loading Context
+26/08/2015 12.46.18	Context loaded
+26/08/2015 12.46.18	Loading ContextParameter
+26/08/2015 12.46.18	ContextParameter loaded
+26/08/2015 12.46.18	Loading EachTagDefinition
+26/08/2015 12.46.18	EachTagDefinition loaded
+26/08/2015 12.46.18	Loading ElifTagDefinition
+26/08/2015 12.46.18	ElifTagDefinition loaded
+26/08/2015 12.46.18	Loading ElseTagDefinition
+26/08/2015 12.46.18	ElseTagDefinition loaded
+26/08/2015 12.46.18	Loading FormatCompiler
+26/08/2015 12.46.18	FormatCompiler loaded
+26/08/2015 12.46.18	Loading Generator
+26/08/2015 12.46.18	Generator loaded
+26/08/2015 12.46.18	Loading IArgument
+26/08/2015 12.46.18	IArgument loaded
+26/08/2015 12.46.18	Loading IfTagDefinition
+26/08/2015 12.46.18	IfTagDefinition loaded
+26/08/2015 12.46.18	Loading IGenerator
+26/08/2015 12.46.18	IGenerator loaded
+26/08/2015 12.46.18	Loading IndexTagDefinition
+26/08/2015 12.46.18	IndexTagDefinition loaded
+26/08/2015 12.46.18	Loading InlineGenerator
+26/08/2015 12.46.18	InlineGenerator loaded
+26/08/2015 12.46.18	Loading InlineTagDefinition
+26/08/2015 12.46.18	InlineTagDefinition loaded
+26/08/2015 12.46.18	Loading KeyFoundEventArgs
+26/08/2015 12.46.18	KeyFoundEventArgs loaded
+26/08/2015 12.46.18	Loading KeyGenerator
+26/08/2015 12.46.18	KeyGenerator loaded
+26/08/2015 12.46.18	Loading KeyNotFoundEventArgs
+26/08/2015 12.46.18	KeyNotFoundEventArgs loaded
+26/08/2015 12.46.18	Loading MasterTagDefinition
+26/08/2015 12.46.18	MasterTagDefinition loaded
+26/08/2015 12.46.18	Loading NestedContext
+26/08/2015 12.46.18	NestedContext loaded
+26/08/2015 12.46.18	Loading NewlineTagDefinition
+26/08/2015 12.46.18	NewlineTagDefinition loaded
+26/08/2015 12.46.18	Loading NumberArgument
+26/08/2015 12.46.18	NumberArgument loaded
+26/08/2015 12.46.18	Loading PlaceholderArgument
+26/08/2015 12.46.18	PlaceholderArgument loaded
+26/08/2015 12.46.18	Loading PlaceholderFoundEventArgs
+26/08/2015 12.46.18	PlaceholderFoundEventArgs loaded
+26/08/2015 12.46.18	Loading PropertyDictionary
+26/08/2015 12.46.18	PropertyDictionary loaded
+26/08/2015 12.46.18	Loading RegexHelper
+26/08/2015 12.46.18	RegexHelper loaded
+26/08/2015 12.46.18	Loading Scope
+26/08/2015 12.46.18	Scope loaded
+26/08/2015 12.46.18	Loading SearchResults
+26/08/2015 12.46.18	SearchResults loaded
+26/08/2015 12.46.18	Loading SetTagDefinition
+26/08/2015 12.46.18	SetTagDefinition loaded
+26/08/2015 12.46.18	Loading StaticGenerator
+26/08/2015 12.46.18	StaticGenerator loaded
+26/08/2015 12.46.18	Loading StringArgument
+26/08/2015 12.46.18	StringArgument loaded
+26/08/2015 12.46.18	Loading TagDefinition
+26/08/2015 12.46.18	TagDefinition loaded
+26/08/2015 12.46.18	Loading TagParameter
+26/08/2015 12.46.18	TagParameter loaded
+26/08/2015 12.46.18	Loading UpcastDictionary
+26/08/2015 12.46.18	UpcastDictionary loaded
+26/08/2015 12.46.18	Loading UpcastDictionary`1
+26/08/2015 12.46.18	UpcastDictionary`1 loaded
+26/08/2015 12.46.18	Loading ValueRequestEventArgs
+26/08/2015 12.46.18	ValueRequestEventArgs loaded
+26/08/2015 12.46.18	Loading VariableArgument
+26/08/2015 12.46.18	VariableArgument loaded
+26/08/2015 12.46.18	Loading VariableFoundEventArgs
+26/08/2015 12.46.18	VariableFoundEventArgs loaded
+26/08/2015 12.46.18	Loading WithTagDefinition
+26/08/2015 12.46.18	WithTagDefinition loaded
+26/08/2015 12.46.18	Loading Value
+26/08/2015 12.46.18	Value loaded
+26/08/2015 12.46.18	Loading Program
+
+26/08/2015 12.46.21	Error during loading Netfluid, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null as default host
+			System.Exception: Routes must returns IResponse			in Netfluid.Route.set_MethodInfo(MethodInfo value) in D:\PROGETTI\NetFluid\Hosting\Route.cs:riga 61			in Netfluid.Host.Load(Type type, Object instance) in D:\PROGETTI\NetFluid\Hosting\Host.cs:riga 217			in Netfluid.Host.Map(Type type) in D:\PROGETTI\NetFluid\Hosting\Host.cs:riga 199			in Netfluid.Engine.Load(Assembly assembly) in D:\PROGETTI\NetFluid\Hosting\Engine.cs:riga 30426/08/2015 12.46.22	Starting host:__default
+26/08/2015 12.46.25	NetFluid web application running
+26/08/2015 12.49.24	threadpool size 40 1000
+26/08/2015 12.49.24	Starting NetFluid Engine
+26/08/2015 12.49.24	Loading calling assembly
+26/08/2015 12.49.24	Loading Netfluid, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null into default host
+26/08/2015 12.49.24	Loading <>f__AnonymousType0`2
+26/08/2015 12.49.24	<>f__AnonymousType0`2 loaded
+26/08/2015 12.49.24	Loading <>f__AnonymousType1`2
+26/08/2015 12.49.24	<>f__AnonymousType1`2 loaded
+26/08/2015 12.49.24	Loading <>f__AnonymousType2`2
+26/08/2015 12.49.24	<>f__AnonymousType2`2 loaded
+26/08/2015 12.49.24	Loading ArgumentCollection
+26/08/2015 12.49.24	ArgumentCollection loaded
+26/08/2015 12.49.24	Loading CompoundGenerator
+26/08/2015 12.49.24	CompoundGenerator loaded
+26/08/2015 12.49.24	Loading ConditionTagDefinition
+26/08/2015 12.49.24	ConditionTagDefinition loaded
+26/08/2015 12.49.24	Loading ContentTagDefinition
+26/08/2015 12.49.24	ContentTagDefinition loaded
+26/08/2015 12.49.24	Loading Context
+26/08/2015 12.49.24	Context loaded
+26/08/2015 12.49.24	Loading ContextParameter
+26/08/2015 12.49.24	ContextParameter loaded
+26/08/2015 12.49.24	Loading EachTagDefinition
+26/08/2015 12.49.24	EachTagDefinition loaded
+26/08/2015 12.49.24	Loading ElifTagDefinition
+26/08/2015 12.49.24	ElifTagDefinition loaded
+26/08/2015 12.49.24	Loading ElseTagDefinition
+26/08/2015 12.49.24	ElseTagDefinition loaded
+26/08/2015 12.49.24	Loading FormatCompiler
+26/08/2015 12.49.24	FormatCompiler loaded
+26/08/2015 12.49.24	Loading Generator
+26/08/2015 12.49.24	Generator loaded
+26/08/2015 12.49.24	Loading IArgument
+26/08/2015 12.49.24	IArgument loaded
+26/08/2015 12.49.24	Loading IfTagDefinition
+26/08/2015 12.49.24	IfTagDefinition loaded
+26/08/2015 12.49.24	Loading IGenerator
+26/08/2015 12.49.24	IGenerator loaded
+26/08/2015 12.49.24	Loading IndexTagDefinition
+26/08/2015 12.49.24	IndexTagDefinition loaded
+26/08/2015 12.49.24	Loading InlineGenerator
+26/08/2015 12.49.24	InlineGenerator loaded
+26/08/2015 12.49.24	Loading InlineTagDefinition
+26/08/2015 12.49.24	InlineTagDefinition loaded
+26/08/2015 12.49.24	Loading KeyFoundEventArgs
+26/08/2015 12.49.24	KeyFoundEventArgs loaded
+26/08/2015 12.49.24	Loading KeyGenerator
+26/08/2015 12.49.24	KeyGenerator loaded
+26/08/2015 12.49.24	Loading KeyNotFoundEventArgs
+26/08/2015 12.49.24	KeyNotFoundEventArgs loaded
+26/08/2015 12.49.24	Loading MasterTagDefinition
+26/08/2015 12.49.24	MasterTagDefinition loaded
+26/08/2015 12.49.24	Loading NestedContext
+26/08/2015 12.49.24	NestedContext loaded
+26/08/2015 12.49.24	Loading NewlineTagDefinition
+26/08/2015 12.49.24	NewlineTagDefinition loaded
+26/08/2015 12.49.24	Loading NumberArgument
+26/08/2015 12.49.24	NumberArgument loaded
+26/08/2015 12.49.24	Loading PlaceholderArgument
+26/08/2015 12.49.24	PlaceholderArgument loaded
+26/08/2015 12.49.24	Loading PlaceholderFoundEventArgs
+26/08/2015 12.49.24	PlaceholderFoundEventArgs loaded
+26/08/2015 12.49.24	Loading PropertyDictionary
+26/08/2015 12.49.24	PropertyDictionary loaded
+26/08/2015 12.49.24	Loading RegexHelper
+26/08/2015 12.49.24	RegexHelper loaded
+26/08/2015 12.49.24	Loading Scope
+26/08/2015 12.49.24	Scope loaded
+26/08/2015 12.49.24	Loading SearchResults
+26/08/2015 12.49.24	SearchResults loaded
+26/08/2015 12.49.24	Loading SetTagDefinition
+26/08/2015 12.49.25	SetTagDefinition loaded
+26/08/2015 12.49.25	Loading StaticGenerator
+26/08/2015 12.49.25	StaticGenerator loaded
+26/08/2015 12.49.25	Loading StringArgument
+26/08/2015 12.49.25	StringArgument loaded
+26/08/2015 12.49.25	Loading TagDefinition
+26/08/2015 12.49.25	TagDefinition loaded
+26/08/2015 12.49.25	Loading TagParameter
+26/08/2015 12.49.25	TagParameter loaded
+26/08/2015 12.49.25	Loading UpcastDictionary
+26/08/2015 12.49.25	UpcastDictionary loaded
+26/08/2015 12.49.25	Loading UpcastDictionary`1
+26/08/2015 12.49.25	UpcastDictionary`1 loaded
+26/08/2015 12.49.25	Loading ValueRequestEventArgs
+26/08/2015 12.49.25	ValueRequestEventArgs loaded
+26/08/2015 12.49.25	Loading VariableArgument
+26/08/2015 12.49.25	VariableArgument loaded
+26/08/2015 12.49.25	Loading VariableFoundEventArgs
+26/08/2015 12.49.25	VariableFoundEventArgs loaded
+26/08/2015 12.49.25	Loading WithTagDefinition
+26/08/2015 12.49.25	WithTagDefinition loaded
+26/08/2015 12.49.25	Loading Value
+26/08/2015 12.49.25	Value loaded
+26/08/2015 12.49.25	Loading Program
+
+26/08/2015 12.49.25	Error during loading Netfluid, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null as default host
+			System.Exception: Routes must returns IResponse			in Netfluid.Route.set_MethodInfo(MethodInfo value) in D:\PROGETTI\NetFluid\Hosting\Route.cs:riga 61			in Netfluid.Host.Load(Type type, Object instance) in D:\PROGETTI\NetFluid\Hosting\Host.cs:riga 218			in Netfluid.Host.Map(Type type) in D:\PROGETTI\NetFluid\Hosting\Host.cs:riga 199			in Netfluid.Engine.Load(Assembly assembly) in D:\PROGETTI\NetFluid\Hosting\Engine.cs:riga 30426/08/2015 12.49.25	Starting host:__default
+26/08/2015 12.49.27	NetFluid web application running
+26/08/2015 12.56.26	threadpool size 40 1000
+26/08/2015 12.56.27	Starting NetFluid Engine
+26/08/2015 12.56.27	Loading calling assembly
+26/08/2015 12.56.27	Loading Netfluid, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null into default host
+26/08/2015 12.56.27	Loading <>f__AnonymousType0`2
+26/08/2015 13.00.31	threadpool size 40 1000
+26/08/2015 13.00.31	Starting NetFluid Engine
+26/08/2015 13.00.31	Loading calling assembly
+26/08/2015 13.00.31	Loading Netfluid, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null into default host
+26/08/2015 13.00.31	Loading <>f__AnonymousType0`2
+26/08/2015 13.00.31	<>f__AnonymousType0`2 loaded
+26/08/2015 13.00.31	Loading <>f__AnonymousType1`2
+26/08/2015 13.00.31	<>f__AnonymousType1`2 loaded
+26/08/2015 13.00.31	Loading <>f__AnonymousType2`2
+26/08/2015 13.00.31	<>f__AnonymousType2`2 loaded
+26/08/2015 13.00.31	Loading ArgumentCollection
+26/08/2015 13.00.31	ArgumentCollection loaded
+26/08/2015 13.00.31	Loading CompoundGenerator
+26/08/2015 13.00.31	CompoundGenerator loaded
+26/08/2015 13.00.31	Loading ConditionTagDefinition
+26/08/2015 13.00.31	ConditionTagDefinition loaded
+26/08/2015 13.00.31	Loading ContentTagDefinition
+26/08/2015 13.00.31	ContentTagDefinition loaded
+26/08/2015 13.00.31	Loading Context
+26/08/2015 13.00.31	Context loaded
+26/08/2015 13.00.31	Loading ContextParameter
+26/08/2015 13.00.31	ContextParameter loaded
+26/08/2015 13.00.31	Loading EachTagDefinition
+26/08/2015 13.00.31	EachTagDefinition loaded
+26/08/2015 13.00.31	Loading ElifTagDefinition
+26/08/2015 13.00.31	ElifTagDefinition loaded
+26/08/2015 13.00.31	Loading ElseTagDefinition
+26/08/2015 13.00.31	ElseTagDefinition loaded
+26/08/2015 13.00.31	Loading FormatCompiler
+26/08/2015 13.00.31	FormatCompiler loaded
+26/08/2015 13.00.31	Loading Generator
+26/08/2015 13.00.31	Generator loaded
+26/08/2015 13.00.31	Loading IArgument
+26/08/2015 13.00.31	IArgument loaded
+26/08/2015 13.00.31	Loading IfTagDefinition
+26/08/2015 13.00.31	IfTagDefinition loaded
+26/08/2015 13.00.31	Loading IGenerator
+26/08/2015 13.00.31	IGenerator loaded
+26/08/2015 13.00.31	Loading IndexTagDefinition
+26/08/2015 13.00.31	IndexTagDefinition loaded
+26/08/2015 13.00.31	Loading InlineGenerator
+26/08/2015 13.00.31	InlineGenerator loaded
+26/08/2015 13.00.31	Loading InlineTagDefinition
+26/08/2015 13.00.31	InlineTagDefinition loaded
+26/08/2015 13.00.31	Loading KeyFoundEventArgs
+26/08/2015 13.00.31	KeyFoundEventArgs loaded
+26/08/2015 13.00.31	Loading KeyGenerator
+26/08/2015 13.00.31	KeyGenerator loaded
+26/08/2015 13.00.31	Loading KeyNotFoundEventArgs
+26/08/2015 13.00.31	KeyNotFoundEventArgs loaded
+26/08/2015 13.00.31	Loading MasterTagDefinition
+26/08/2015 13.00.31	MasterTagDefinition loaded
+26/08/2015 13.00.31	Loading NestedContext
+26/08/2015 13.00.31	NestedContext loaded
+26/08/2015 13.00.31	Loading NewlineTagDefinition
+26/08/2015 13.00.31	NewlineTagDefinition loaded
+26/08/2015 13.00.31	Loading NumberArgument
+26/08/2015 13.00.31	NumberArgument loaded
+26/08/2015 13.00.31	Loading PlaceholderArgument
+26/08/2015 13.00.31	PlaceholderArgument loaded
+26/08/2015 13.00.31	Loading PlaceholderFoundEventArgs
+26/08/2015 13.00.31	PlaceholderFoundEventArgs loaded
+26/08/2015 13.00.31	Loading PropertyDictionary
+26/08/2015 13.00.31	PropertyDictionary loaded
+26/08/2015 13.00.31	Loading RegexHelper
+26/08/2015 13.00.31	RegexHelper loaded
+26/08/2015 13.00.31	Loading Scope
+26/08/2015 13.00.31	Scope loaded
+26/08/2015 13.00.31	Loading SearchResults
+26/08/2015 13.00.31	SearchResults loaded
+26/08/2015 13.00.31	Loading SetTagDefinition
+26/08/2015 13.00.31	SetTagDefinition loaded
+26/08/2015 13.00.31	Loading StaticGenerator
+26/08/2015 13.00.31	StaticGenerator loaded
+26/08/2015 13.00.31	Loading StringArgument
+26/08/2015 13.00.31	StringArgument loaded
+26/08/2015 13.00.31	Loading TagDefinition
+26/08/2015 13.00.31	TagDefinition loaded
+26/08/2015 13.00.31	Loading TagParameter
+26/08/2015 13.00.31	TagParameter loaded
+26/08/2015 13.00.31	Loading UpcastDictionary
+26/08/2015 13.00.31	UpcastDictionary loaded
+26/08/2015 13.00.31	Loading UpcastDictionary`1
+26/08/2015 13.00.31	UpcastDictionary`1 loaded
+26/08/2015 13.00.31	Loading ValueRequestEventArgs
+26/08/2015 13.00.31	ValueRequestEventArgs loaded
+26/08/2015 13.00.31	Loading VariableArgument
+26/08/2015 13.00.31	VariableArgument loaded
+26/08/2015 13.00.31	Loading VariableFoundEventArgs
+26/08/2015 13.00.31	VariableFoundEventArgs loaded
+26/08/2015 13.00.31	Loading WithTagDefinition
+26/08/2015 13.00.31	WithTagDefinition loaded
+26/08/2015 13.00.31	Loading Value
+26/08/2015 13.00.31	Value loaded
+26/08/2015 13.00.31	Loading Program
+
+26/08/2015 13.00.31	Error during loading Netfluid, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null as default host
+			System.Exception: Routes must returns IResponse			in Netfluid.Route.set_MethodInfo(MethodInfo value) in D:\PROGETTI\NetFluid\Hosting\Route.cs:riga 61			in Netfluid.Host.Load(Type type, Object instance) in D:\PROGETTI\NetFluid\Hosting\Host.cs:riga 217			in Netfluid.Host.Map(Type type) in D:\PROGETTI\NetFluid\Hosting\Host.cs:riga 199			in Netfluid.Engine.Load(Assembly assembly) in D:\PROGETTI\NetFluid\Hosting\Engine.cs:riga 30426/08/2015 13.00.31	Starting host:__default
+26/08/2015 13.00.34	NetFluid web application running
+26/08/2015 17.16.49	threadpool size 40 1000
+26/08/2015 17.16.50	Starting NetFluid Engine
+26/08/2015 17.16.50	Loading calling assembly
+26/08/2015 17.16.50	Loading Netfluid, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null into default host
+26/08/2015 17.16.51	Loading <>f__AnonymousType0`2
+26/08/2015 17.16.51	<>f__AnonymousType0`2 loaded
+26/08/2015 17.16.51	Loading <>f__AnonymousType1`2
+26/08/2015 17.16.51	<>f__AnonymousType1`2 loaded
+26/08/2015 17.16.51	Loading <>f__AnonymousType2`2
+26/08/2015 17.16.51	<>f__AnonymousType2`2 loaded
+26/08/2015 17.16.51	Loading ArgumentCollection
+26/08/2015 17.16.51	ArgumentCollection loaded
+26/08/2015 17.16.51	Loading CompoundGenerator
+26/08/2015 17.16.51	CompoundGenerator loaded
+26/08/2015 17.16.51	Loading ConditionTagDefinition
+26/08/2015 17.16.51	ConditionTagDefinition loaded
+26/08/2015 17.16.51	Loading ContentTagDefinition
+26/08/2015 17.16.51	ContentTagDefinition loaded
+26/08/2015 17.16.51	Loading Context
+26/08/2015 17.16.51	Context loaded
+26/08/2015 17.16.51	Loading ContextParameter
+26/08/2015 17.16.51	ContextParameter loaded
+26/08/2015 17.16.51	Loading EachTagDefinition
+26/08/2015 17.16.51	EachTagDefinition loaded
+26/08/2015 17.16.51	Loading ElifTagDefinition
+26/08/2015 17.16.51	ElifTagDefinition loaded
+26/08/2015 17.16.51	Loading ElseTagDefinition
+26/08/2015 17.16.51	ElseTagDefinition loaded
+26/08/2015 17.16.51	Loading FormatCompiler
+26/08/2015 17.16.51	FormatCompiler loaded
+26/08/2015 17.16.51	Loading Generator
+26/08/2015 17.16.51	Generator loaded
+26/08/2015 17.16.51	Loading IArgument
+26/08/2015 17.16.51	IArgument loaded
+26/08/2015 17.16.51	Loading IfTagDefinition
+26/08/2015 17.16.51	IfTagDefinition loaded
+26/08/2015 17.16.51	Loading IGenerator
+26/08/2015 17.16.51	IGenerator loaded
+26/08/2015 17.16.51	Loading IndexTagDefinition
+26/08/2015 17.16.51	IndexTagDefinition loaded
+26/08/2015 17.16.51	Loading InlineGenerator
+26/08/2015 17.16.51	InlineGenerator loaded
+26/08/2015 17.16.51	Loading InlineTagDefinition
+26/08/2015 17.16.51	InlineTagDefinition loaded
+26/08/2015 17.16.51	Loading KeyFoundEventArgs
+26/08/2015 17.16.51	KeyFoundEventArgs loaded
+26/08/2015 17.16.51	Loading KeyGenerator
+26/08/2015 17.16.51	KeyGenerator loaded
+26/08/2015 17.16.51	Loading KeyNotFoundEventArgs
+26/08/2015 17.16.51	KeyNotFoundEventArgs loaded
+26/08/2015 17.16.51	Loading MasterTagDefinition
+26/08/2015 17.16.51	MasterTagDefinition loaded
+26/08/2015 17.16.51	Loading NestedContext
+26/08/2015 17.16.51	NestedContext loaded
+26/08/2015 17.16.51	Loading NewlineTagDefinition
+26/08/2015 17.16.51	NewlineTagDefinition loaded
+26/08/2015 17.16.51	Loading NumberArgument
+26/08/2015 17.16.51	NumberArgument loaded
+26/08/2015 17.16.51	Loading PlaceholderArgument
+26/08/2015 17.16.51	PlaceholderArgument loaded
+26/08/2015 17.16.51	Loading PlaceholderFoundEventArgs
+26/08/2015 17.16.51	PlaceholderFoundEventArgs loaded
+26/08/2015 17.16.51	Loading PropertyDictionary
+26/08/2015 17.16.51	PropertyDictionary loaded
+26/08/2015 17.16.51	Loading RegexHelper
+26/08/2015 17.16.51	RegexHelper loaded
+26/08/2015 17.16.51	Loading Scope
+26/08/2015 17.16.51	Scope loaded
+26/08/2015 17.16.51	Loading SearchResults
+26/08/2015 17.16.51	SearchResults loaded
+26/08/2015 17.16.51	Loading SetTagDefinition
+26/08/2015 17.16.51	SetTagDefinition loaded
+26/08/2015 17.16.51	Loading StaticGenerator
+26/08/2015 17.16.51	StaticGenerator loaded
+26/08/2015 17.16.51	Loading StringArgument
+26/08/2015 17.16.51	StringArgument loaded
+26/08/2015 17.16.51	Loading TagDefinition
+26/08/2015 17.16.51	TagDefinition loaded
+26/08/2015 17.16.51	Loading TagParameter
+26/08/2015 17.16.51	TagParameter loaded
+26/08/2015 17.16.51	Loading UpcastDictionary
+26/08/2015 17.16.51	UpcastDictionary loaded
+26/08/2015 17.16.51	Loading UpcastDictionary`1
+26/08/2015 17.16.51	UpcastDictionary`1 loaded
+26/08/2015 17.16.51	Loading ValueRequestEventArgs
+26/08/2015 17.16.51	ValueRequestEventArgs loaded
+26/08/2015 17.16.51	Loading VariableArgument
+26/08/2015 17.16.51	VariableArgument loaded
+26/08/2015 17.16.51	Loading VariableFoundEventArgs
+26/08/2015 17.16.51	VariableFoundEventArgs loaded
+26/08/2015 17.16.51	Loading WithTagDefinition
+26/08/2015 17.16.51	WithTagDefinition loaded
+26/08/2015 17.16.51	Loading Value
+26/08/2015 17.16.51	Value loaded
+26/08/2015 17.16.51	Loading Program
+
+26/08/2015 17.16.52	Error during loading Netfluid, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null as default host
+			System.Exception: Routes must returns IResponse			in Netfluid.Route.set_MethodInfo(MethodInfo value) in D:\PROGETTI\NetFluid\Hosting\Route.cs:riga 61			in Netfluid.Host.Load(Type type, Object instance) in D:\PROGETTI\NetFluid\Hosting\Host.cs:riga 217			in Netfluid.Host.Map(Type type) in D:\PROGETTI\NetFluid\Hosting\Host.cs:riga 199			in Netfluid.Engine.Load(Assembly assembly) in D:\PROGETTI\NetFluid\Hosting\Engine.cs:riga 30426/08/2015 17.16.53	Starting host:__default
+26/08/2015 17.16.55	NetFluid web application running
+26/08/2015 17.18.15	threadpool size 40 1000
+26/08/2015 17.18.15	Starting NetFluid Engine
+26/08/2015 17.18.15	Loading calling assembly
+26/08/2015 17.18.15	Loading Netfluid, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null into default host
+26/08/2015 17.18.15	Loading <>f__AnonymousType0`2
+26/08/2015 17.18.15	<>f__AnonymousType0`2 loaded
+26/08/2015 17.18.15	Loading <>f__AnonymousType1`2
+26/08/2015 17.18.15	<>f__AnonymousType1`2 loaded
+26/08/2015 17.18.15	Loading <>f__AnonymousType2`2
+26/08/2015 17.18.15	<>f__AnonymousType2`2 loaded
+26/08/2015 17.18.15	Loading ArgumentCollection
+26/08/2015 17.18.15	ArgumentCollection loaded
+26/08/2015 17.18.15	Loading CompoundGenerator
+26/08/2015 17.18.15	CompoundGenerator loaded
+26/08/2015 17.18.15	Loading ConditionTagDefinition
+26/08/2015 17.18.15	ConditionTagDefinition loaded
+26/08/2015 17.18.15	Loading ContentTagDefinition
+26/08/2015 17.18.15	ContentTagDefinition loaded
+26/08/2015 17.18.15	Loading Context
+26/08/2015 17.18.15	Context loaded
+26/08/2015 17.18.15	Loading ContextParameter
+26/08/2015 17.18.15	ContextParameter loaded
+26/08/2015 17.18.15	Loading EachTagDefinition
+26/08/2015 17.18.15	EachTagDefinition loaded
+26/08/2015 17.18.15	Loading ElifTagDefinition
+26/08/2015 17.18.15	ElifTagDefinition loaded
+26/08/2015 17.18.15	Loading ElseTagDefinition
+26/08/2015 17.18.15	ElseTagDefinition loaded
+26/08/2015 17.18.15	Loading FormatCompiler
+26/08/2015 17.18.15	FormatCompiler loaded
+26/08/2015 17.18.15	Loading Generator
+26/08/2015 17.18.15	Generator loaded
+26/08/2015 17.18.15	Loading IArgument
+26/08/2015 17.18.15	IArgument loaded
+26/08/2015 17.18.15	Loading IfTagDefinition
+26/08/2015 17.18.15	IfTagDefinition loaded
+26/08/2015 17.18.15	Loading IGenerator
+26/08/2015 17.18.15	IGenerator loaded
+26/08/2015 17.18.15	Loading IndexTagDefinition
+26/08/2015 17.18.15	IndexTagDefinition loaded
+26/08/2015 17.18.15	Loading InlineGenerator
+26/08/2015 17.18.15	InlineGenerator loaded
+26/08/2015 17.18.15	Loading InlineTagDefinition
+26/08/2015 17.18.15	InlineTagDefinition loaded
+26/08/2015 17.18.15	Loading KeyFoundEventArgs
+26/08/2015 17.18.15	KeyFoundEventArgs loaded
+26/08/2015 17.18.15	Loading KeyGenerator
+26/08/2015 17.18.15	KeyGenerator loaded
+26/08/2015 17.18.15	Loading KeyNotFoundEventArgs
+26/08/2015 17.18.15	KeyNotFoundEventArgs loaded
+26/08/2015 17.18.15	Loading MasterTagDefinition
+26/08/2015 17.18.15	MasterTagDefinition loaded
+26/08/2015 17.18.15	Loading NestedContext
+26/08/2015 17.18.15	NestedContext loaded
+26/08/2015 17.18.15	Loading NewlineTagDefinition
+26/08/2015 17.18.15	NewlineTagDefinition loaded
+26/08/2015 17.18.15	Loading NumberArgument
+26/08/2015 17.18.15	NumberArgument loaded
+26/08/2015 17.18.15	Loading PlaceholderArgument
+26/08/2015 17.18.15	PlaceholderArgument loaded
+26/08/2015 17.18.15	Loading PlaceholderFoundEventArgs
+26/08/2015 17.18.15	PlaceholderFoundEventArgs loaded
+26/08/2015 17.18.15	Loading PropertyDictionary
+26/08/2015 17.18.15	PropertyDictionary loaded
+26/08/2015 17.18.15	Loading RegexHelper
+26/08/2015 17.18.15	RegexHelper loaded
+26/08/2015 17.18.15	Loading Scope
+26/08/2015 17.18.15	Scope loaded
+26/08/2015 17.18.15	Loading SearchResults
+26/08/2015 17.18.15	SearchResults loaded
+26/08/2015 17.18.15	Loading SetTagDefinition
+26/08/2015 17.18.15	SetTagDefinition loaded
+26/08/2015 17.18.15	Loading StaticGenerator
+26/08/2015 17.18.15	StaticGenerator loaded
+26/08/2015 17.18.15	Loading StringArgument
+26/08/2015 17.18.15	StringArgument loaded
+26/08/2015 17.18.15	Loading TagDefinition
+26/08/2015 17.18.15	TagDefinition loaded
+26/08/2015 17.18.15	Loading TagParameter
+26/08/2015 17.18.15	TagParameter loaded
+26/08/2015 17.18.15	Loading UpcastDictionary
+26/08/2015 17.18.15	UpcastDictionary loaded
+26/08/2015 17.18.15	Loading UpcastDictionary`1
+26/08/2015 17.18.15	UpcastDictionary`1 loaded
+26/08/2015 17.18.15	Loading ValueRequestEventArgs
+26/08/2015 17.18.15	ValueRequestEventArgs loaded
+26/08/2015 17.18.15	Loading VariableArgument
+26/08/2015 17.18.15	VariableArgument loaded
+26/08/2015 17.18.15	Loading VariableFoundEventArgs
+26/08/2015 17.18.15	VariableFoundEventArgs loaded
+26/08/2015 17.18.15	Loading WithTagDefinition
+26/08/2015 17.18.15	WithTagDefinition loaded
+26/08/2015 17.18.15	Loading Value
+26/08/2015 17.18.15	Value loaded
+26/08/2015 17.18.15	Loading Program
+
+26/08/2015 17.18.15	Error during loading Netfluid, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null as default host
+			System.Exception: Routes must returns IResponse			in Netfluid.Route.set_MethodInfo(MethodInfo value) in D:\PROGETTI\NetFluid\Hosting\Route.cs:riga 61			in Netfluid.Host.Load(Type type, Object instance) in D:\PROGETTI\NetFluid\Hosting\Host.cs:riga 217			in Netfluid.Host.Map(Type type) in D:\PROGETTI\NetFluid\Hosting\Host.cs:riga 199			in Netfluid.Engine.Load(Assembly assembly) in D:\PROGETTI\NetFluid\Hosting\Engine.cs:riga 30426/08/2015 17.18.15	Starting host:__default
+26/08/2015 17.18.18	NetFluid web application running
+26/08/2015 17.18.47	threadpool size 40 1000
+26/08/2015 17.18.47	Starting NetFluid Engine
+26/08/2015 17.18.47	Loading calling assembly
+26/08/2015 17.18.47	Loading Netfluid, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null into default host
+26/08/2015 17.18.47	Loading <>f__AnonymousType0`2
+26/08/2015 17.18.47	<>f__AnonymousType0`2 loaded
+26/08/2015 17.18.47	Loading <>f__AnonymousType1`2
+26/08/2015 17.18.47	<>f__AnonymousType1`2 loaded
+26/08/2015 17.18.47	Loading <>f__AnonymousType2`2
+26/08/2015 17.18.47	<>f__AnonymousType2`2 loaded
+26/08/2015 17.18.47	Loading ArgumentCollection
+26/08/2015 17.18.47	ArgumentCollection loaded
+26/08/2015 17.18.47	Loading CompoundGenerator
+26/08/2015 17.18.47	CompoundGenerator loaded
+26/08/2015 17.18.47	Loading ConditionTagDefinition
+26/08/2015 17.18.47	ConditionTagDefinition loaded
+26/08/2015 17.18.47	Loading ContentTagDefinition
+26/08/2015 17.18.47	ContentTagDefinition loaded
+26/08/2015 17.18.47	Loading Context
+26/08/2015 17.18.47	Context loaded
+26/08/2015 17.18.47	Loading ContextParameter
+26/08/2015 17.18.47	ContextParameter loaded
+26/08/2015 17.18.47	Loading EachTagDefinition
+26/08/2015 17.18.47	EachTagDefinition loaded
+26/08/2015 17.18.47	Loading ElifTagDefinition
+26/08/2015 17.18.47	ElifTagDefinition loaded
+26/08/2015 17.18.47	Loading ElseTagDefinition
+26/08/2015 17.18.47	ElseTagDefinition loaded
+26/08/2015 17.18.47	Loading FormatCompiler
+26/08/2015 17.18.47	FormatCompiler loaded
+26/08/2015 17.18.47	Loading Generator
+26/08/2015 17.18.47	Generator loaded
+26/08/2015 17.18.47	Loading IArgument
+26/08/2015 17.18.47	IArgument loaded
+26/08/2015 17.18.47	Loading IfTagDefinition
+26/08/2015 17.18.47	IfTagDefinition loaded
+26/08/2015 17.18.47	Loading IGenerator
+26/08/2015 17.18.47	IGenerator loaded
+26/08/2015 17.18.47	Loading IndexTagDefinition
+26/08/2015 17.18.47	IndexTagDefinition loaded
+26/08/2015 17.18.47	Loading InlineGenerator
+26/08/2015 17.18.47	InlineGenerator loaded
+26/08/2015 17.18.47	Loading InlineTagDefinition
+26/08/2015 17.18.47	InlineTagDefinition loaded
+26/08/2015 17.18.47	Loading KeyFoundEventArgs
+26/08/2015 17.18.47	KeyFoundEventArgs loaded
+26/08/2015 17.18.47	Loading KeyGenerator
+26/08/2015 17.18.47	KeyGenerator loaded
+26/08/2015 17.18.47	Loading KeyNotFoundEventArgs
+26/08/2015 17.18.47	KeyNotFoundEventArgs loaded
+26/08/2015 17.18.47	Loading MasterTagDefinition
+26/08/2015 17.18.47	MasterTagDefinition loaded
+26/08/2015 17.18.47	Loading NestedContext
+26/08/2015 17.18.47	NestedContext loaded
+26/08/2015 17.18.47	Loading NewlineTagDefinition
+26/08/2015 17.18.47	NewlineTagDefinition loaded
+26/08/2015 17.18.47	Loading NumberArgument
+26/08/2015 17.18.47	NumberArgument loaded
+26/08/2015 17.18.47	Loading PlaceholderArgument
+26/08/2015 17.18.47	PlaceholderArgument loaded
+26/08/2015 17.18.47	Loading PlaceholderFoundEventArgs
+26/08/2015 17.18.47	PlaceholderFoundEventArgs loaded
+26/08/2015 17.18.47	Loading PropertyDictionary
+26/08/2015 17.18.47	PropertyDictionary loaded
+26/08/2015 17.18.47	Loading RegexHelper
+26/08/2015 17.18.47	RegexHelper loaded
+26/08/2015 17.18.47	Loading Scope
+26/08/2015 17.18.47	Scope loaded
+26/08/2015 17.18.47	Loading SearchResults
+26/08/2015 17.18.47	SearchResults loaded
+26/08/2015 17.18.47	Loading SetTagDefinition
+26/08/2015 17.18.47	SetTagDefinition loaded
+26/08/2015 17.18.47	Loading StaticGenerator
+26/08/2015 17.18.47	StaticGenerator loaded
+26/08/2015 17.18.47	Loading StringArgument
+26/08/2015 17.18.47	StringArgument loaded
+26/08/2015 17.18.47	Loading TagDefinition
+26/08/2015 17.18.47	TagDefinition loaded
+26/08/2015 17.18.47	Loading TagParameter
+26/08/2015 17.18.47	TagParameter loaded
+26/08/2015 17.18.47	Loading UpcastDictionary
+26/08/2015 17.18.47	UpcastDictionary loaded
+26/08/2015 17.18.47	Loading UpcastDictionary`1
+26/08/2015 17.18.47	UpcastDictionary`1 loaded
+26/08/2015 17.18.47	Loading ValueRequestEventArgs
+26/08/2015 17.18.47	ValueRequestEventArgs loaded
+26/08/2015 17.18.47	Loading VariableArgument
+26/08/2015 17.18.47	VariableArgument loaded
+26/08/2015 17.18.47	Loading VariableFoundEventArgs
+26/08/2015 17.18.47	VariableFoundEventArgs loaded
+26/08/2015 17.18.47	Loading WithTagDefinition
+26/08/2015 17.18.47	WithTagDefinition loaded
+26/08/2015 17.18.47	Loading Value
+26/08/2015 17.18.47	Value loaded
+26/08/2015 17.18.47	Loading Program
+
+26/08/2015 17.18.47	Error during loading Netfluid, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null as default host
+			System.Exception: Routes must returns IResponse			in Netfluid.Route.set_MethodInfo(MethodInfo value) in D:\PROGETTI\NetFluid\Hosting\Route.cs:riga 61			in Netfluid.Host.Load(Type type, Object instance) in D:\PROGETTI\NetFluid\Hosting\Host.cs:riga 219			in Netfluid.Host.Map(Type type) in D:\PROGETTI\NetFluid\Hosting\Host.cs:riga 199			in Netfluid.Engine.Load(Assembly assembly) in D:\PROGETTI\NetFluid\Hosting\Engine.cs:riga 30426/08/2015 17.18.47	Starting host:__default
+26/08/2015 17.18.50	NetFluid web application running
+26/08/2015 17.19.32	threadpool size 40 1000
+26/08/2015 17.19.32	Starting NetFluid Engine
+26/08/2015 17.19.32	Loading calling assembly
+26/08/2015 17.19.32	Loading Netfluid, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null into default host
+26/08/2015 17.19.32	Loading <>f__AnonymousType0`2
+26/08/2015 17.20.09	<>f__AnonymousType0`2 loaded
+26/08/2015 17.20.09	Loading <>f__AnonymousType1`2
+26/08/2015 17.20.13	<>f__AnonymousType1`2 loaded
+26/08/2015 17.20.13	Loading <>f__AnonymousType2`2
+26/08/2015 17.20.16	<>f__AnonymousType2`2 loaded
+26/08/2015 17.20.16	Loading ArgumentCollection
+26/08/2015 17.20.19	ArgumentCollection loaded
+26/08/2015 17.20.19	Loading CompoundGenerator
+26/08/2015 17.20.24	CompoundGenerator loaded
+26/08/2015 17.20.24	Loading ConditionTagDefinition
+26/08/2015 17.20.25	ConditionTagDefinition loaded
+26/08/2015 17.20.25	Loading ContentTagDefinition
+26/08/2015 17.20.26	ContentTagDefinition loaded
+26/08/2015 17.20.26	Loading Context
+26/08/2015 17.20.27	Context loaded
+26/08/2015 17.20.27	Loading ContextParameter
+26/08/2015 17.20.29	ContextParameter loaded
+26/08/2015 17.20.29	Loading EachTagDefinition
+26/08/2015 17.20.30	EachTagDefinition loaded
+26/08/2015 17.20.30	Loading ElifTagDefinition
+26/08/2015 17.20.32	ElifTagDefinition loaded
+26/08/2015 17.20.32	Loading ElseTagDefinition
+26/08/2015 17.20.33	ElseTagDefinition loaded
+26/08/2015 17.20.33	Loading FormatCompiler
+26/08/2015 17.20.34	FormatCompiler loaded
+26/08/2015 17.22.15	threadpool size 40 1000
+
+26/08/2015 17.22.16	Unhandled fatal exception occurred.
+			System.Exception: Routes must returns IResponse			in Netfluid.Route.set_MethodInfo(MethodInfo value) in D:\PROGETTI\NetFluid\Hosting\Route.cs:riga 61			in Netfluid.Host.Load(Type type, Object instance) in D:\PROGETTI\NetFluid\Hosting\Host.cs:riga 219			in Netfluid.Host.Map(Type type) in D:\PROGETTI\NetFluid\Hosting\Host.cs:riga 199			in Example.Program.Main(String[] args) in D:\PROGETTI\NetFluid\Program.cs:riga 24			in System.AppDomain._nExecuteAssembly(RuntimeAssembly assembly, String[] args)			in System.AppDomain.ExecuteAssembly(String assemblyFile, Evidence assemblySecurity, String[] args)			in Microsoft.VisualStudio.HostingProcess.HostProc.RunUsersAssembly()			in System.Threading.ThreadHelper.ThreadStart_Context(Object state)			in System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state, Boolean preserveSyncCtx)			in System.Threading.ExecutionContext.Run(ExecutionContext executionContext, ContextCallback callback, Object state, Boolean preserveSyncCtx)			in System.Threading.ExecutionContext.Run(ExecutionContext executionContext, ContextCallback callback, Object state)			in System.Threading.ThreadHelper.ThreadStart()26/08/2015 17.23.49	threadpool size 40 1000
+26/08/2015 17.23.53	Starting NetFluid Engine
+26/08/2015 17.23.53	Loading calling assembly
+26/08/2015 17.23.53	Starting host:__default
+26/08/2015 17.23.56	NetFluid web application running
+26/08/2015 17.24.51	threadpool size 40 1000
+26/08/2015 17.24.51	Starting NetFluid Engine
+26/08/2015 17.24.51	Loading calling assembly
+26/08/2015 17.24.51	Starting host:__default
+26/08/2015 17.24.53	NetFluid web application running
+26/08/2015 17.26.24	threadpool size 40 1000
+26/08/2015 17.26.24	Starting NetFluid Engine
+26/08/2015 17.26.24	Loading calling assembly
+26/08/2015 17.26.24	Starting host:__default
+26/08/2015 17.26.26	NetFluid web application running
+26/08/2015 17.28.24	threadpool size 40 1000
+26/08/2015 17.28.24	Starting NetFluid Engine
+26/08/2015 17.28.24	Loading calling assembly
+26/08/2015 17.28.24	Starting host:__default
+26/08/2015 17.28.26	NetFluid web application running
+26/08/2015 17.49.31	threadpool size 40 1000
+26/08/2015 17.49.33	Starting NetFluid Engine
+26/08/2015 17.49.33	Loading calling assembly
+26/08/2015 17.49.33	Starting host:__default
+26/08/2015 17.49.36	NetFluid web application running
+26/08/2015 18.03.11	threadpool size 40 1000
+26/08/2015 18.03.11	Starting NetFluid Engine
+26/08/2015 18.03.11	Loading calling assembly
+26/08/2015 18.03.11	Starting host:__default
+26/08/2015 18.03.13	NetFluid web application running

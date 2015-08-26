@@ -25,6 +25,8 @@ namespace Netfluid
 
                 url = value;
 
+                if (value == null) return;
+
                 var urlRegex = url;
                 var find = new Regex(":[^//]+");
                 foreach (Match item in find.Matches(url))
@@ -56,9 +58,6 @@ namespace Netfluid
             {
                 methodInfo = value;
                 Parameters = methodInfo.GetParameters();
-
-                if (!methodInfo.ReturnType.Implements(typeof(IResponse)))
-                    throw new Exception("Routes must returns IResponse");
             }
         }
 
