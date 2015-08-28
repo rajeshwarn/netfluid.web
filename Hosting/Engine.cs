@@ -38,16 +38,16 @@ namespace Netfluid
     /// Main class of Netfluid framework
     /// </summary>
     [PermissionSet(SecurityAction.InheritanceDemand, Name = "FullTrust")]
-    public static class Engine
+    public class Engine
     {
-        private static readonly Dictionary<string, Host> _hosts;
-        static HttpListener listener;
+        Dictionary<string, Host> hosts;
+        HttpListener listener;
 
-        static Engine()
+        public Engine()
         {
-            DefaultHost = new Host("default");
-            _hosts = new Dictionary<string, Host>();
-            _hosts.Add("__default", DefaultHost);
+            DefaultHost = new Host("*");
+            hosts = new Dictionary<string, Host>();
+            hosts.Add("*", DefaultHost);
 
 
             AppDomain.CurrentDomain.UnhandledException += (s, e) => 
@@ -66,14 +66,13 @@ namespace Netfluid
             ThreadPool.SetMaxThreads(max, max);
 
             ThreadPool.GetMinThreads(out min,out max);
-            Logger.Log("threadpool size " + min + " " + max);
 
             listener = new HttpListener();
         }
 
 
 
-        public static IEnumerable<string> Prefixes
+        public IEnumerable<string> Prefixes
         {
             get
             {
@@ -84,32 +83,24 @@ namespace Netfluid
         /// <summary>
         /// Main of host of the apllication. Any request not handled by virtual hosts will be handled by this one.
         /// </summary>
-        public static readonly Host DefaultHost;
-        public static bool ShowException;
+        public readonly Host DefaultHost;
+        public bool ShowException;
 
         /// <summary>
         /// Rewritable log manager
         /// </summary>
-        public static ILogger Logger { get; set; }
-
-        /// <summary>
-        /// Currently running virtual hosts managers (reversed proxy excluded)
-        /// </summary>
-        public static IEnumerable<Host> Hosts
-        {
-            get { return _hosts.Values; }
-        }
+        public ILogger Logger { get; set; }
 
         /// <summary>
         /// If true log message and request serving flow are shown on the console
         /// </summary>
-        public static bool DevMode { get; set; }
+        public bool DevMode { get; set; }
 
         /// <summary>
         /// Check if the program is running as administrator
         /// </summary>
         /// <returns></returns>
-        public static bool IsAdministrator()
+        public bool IsAdministrator()
         {
             var identity = WindowsIdentity.GetCurrent();
             var principal = new WindowsPrincipal(identity);
@@ -121,22 +112,25 @@ namespace Netfluid
         /// </summary>
         /// <param name="name">name of the host (ex: www.netfluid.org)</param>
         /// <returns>virtual host manager</returns>
-        public static Host Host(string host)
+        public Host this [string host]
         {
-            if (string.IsNullOrEmpty(host))
-                return DefaultHost;
+            get
+            {
+                if (host == "*")
+                    return DefaultHost;
 
-            Host h;
-            if (_hosts.TryGetValue(host, out h))
+                Host h;
+                if (hosts.TryGetValue(host, out h))
+                    return h;
+
+                h = new Host(host);
+                hosts.Add(host, h);
+
                 return h;
-
-            h=new Host(host);
-            _hosts.Add(host, h);
-
-            return h;
+            }
         }
 
-        public static void Serve(Context cnt)
+        public void Serve(Context cnt)
         {
             if (DevMode)
                 Console.WriteLine("Serving " + cnt.Request.Url);
@@ -144,7 +138,7 @@ namespace Netfluid
             try
             {
                 Host host;
-                if (_hosts.TryGetValue(cnt.Request.Url.Host, out host))
+                if (hosts.TryGetValue(cnt.Request.Url.Host, out host))
                 {
                     if (DevMode)
                         Console.WriteLine(cnt.Request.Url + " - Using host " + cnt.Request.Url.Host);
@@ -171,7 +165,7 @@ namespace Netfluid
         /// <summary>
         /// Open all interfaces and start to serve clients
         /// </summary>
-        public static void Start()
+        public void Start()
         {
             Logger.Log("Starting NetFluid Engine");
             Logger.Log("Loading calling assembly");
@@ -179,7 +173,7 @@ namespace Netfluid
             var assembly = Assembly.GetEntryAssembly();
             var location = assembly.Location;
             
-            _hosts.ForEach(x =>
+            hosts.ForEach(x =>
             {
                 Logger.Log("Starting host:"+x.Key);
 
@@ -207,62 +201,7 @@ namespace Netfluid
             }
         }
 
-        /// <summary>
-        /// Load a web application into the virtual host
-        /// </summary>
-        /// <param name="host">virtual host name</param>
-        /// <param name="assemblyPath">physical path to the assembly file</param>
-        public static void LoadHost(string host, string assemblyPath)
-        {
-            LoadHost(host, Assembly.LoadFile(Path.GetFullPath(assemblyPath)));
-        }
-
-        /// <summary>
-        /// Load all types of assembly under a new virtual host
-        /// </summary>
-        /// <param name="host">virtual host name</param>
-        /// <param name="assembly">assembly to load</param>
-        public static void LoadHost(string host, Assembly assembly)
-        {
-            Logger.Log("Loading " + assembly + " into "+host+" host");
-
-            try
-            {
-                var pages = assembly.GetTypes();
-
-                foreach (Type p in pages)
-                {
-                    Logger.Log("Loading " + p.Name);
-                    if (p.HasAttribute<VirtualHostAttribute>(true))
-                    {
-                        foreach (string h in p.CustomAttribute<VirtualHostAttribute>(true).Select(x => x.Name))
-                        {
-                            if(h.EndsWith(".*"))
-                            {
-                                foreach (var app in Engine.Hosts)
-                                {
-                                    Host(h.Substring(0,h.Length-2)+app.Name).Map(p);
-                                }
-                            }
-                            else
-                            {
-                                Host(h).Map(p);
-                            }
-                        }
-                    }
-                    else
-                    {
-                        Host(host).Map(p);
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                Logger.Log("Error during loading " + assembly + " as " + host + " host", ex);
-            }
-        }
-
-        public static void Stop()
+        public void Stop()
         {
             listener.Stop();
         }

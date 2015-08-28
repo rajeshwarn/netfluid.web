@@ -63,6 +63,8 @@ namespace Netfluid
         /// <param name="cnt"></param>
         public void Serve(Context cnt)
         {
+            cnt.Host = this;
+
             if (cnt.Request.HttpMethod.ToLowerInvariant() == "options")
             {
                 #region options

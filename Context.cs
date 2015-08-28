@@ -52,6 +52,8 @@ namespace Netfluid
 
         public bool IsOpen { get; private set; }
 
+        public Host Host { get; internal set; }
+
         public StreamReader Reader
         {
             get
