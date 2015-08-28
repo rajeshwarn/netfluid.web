@@ -20,10 +20,15 @@ namespace Netfluid
             }
             set
             {
-                if (value == null && this.GetType()==typeof(Route))
-                    throw new ArgumentNullException("Routes url can not be null");
-
                 url = value;
+
+                if (string.IsNullOrEmpty(value))
+                {
+                    if (this.GetType() == typeof(Route))
+                        throw new ArgumentNullException("Routes url can not be null");
+
+                    return;
+                }
 
                 if (value == null) return;
 
@@ -92,6 +97,10 @@ namespace Netfluid
                     else if(param.ParameterType==typeof(Context))
                     {
                         args[i] = cnt;
+                    }
+                    else if(param.ParameterType.IsValueType)
+                    {
+                        args[i] = param.ParameterType.DefaultValue();
                     }
                 }
             }

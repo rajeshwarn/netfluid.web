@@ -26,9 +26,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Linq.Expressions;
 using System.Reflection;
-using System.Runtime.CompilerServices;
 
 namespace Netfluid
 {
@@ -37,10 +35,10 @@ namespace Netfluid
     /// </summary>
     public class Host
     {
-        public List<Route> Routes { get; private set; }
-        public List<Filter> Filters { get; private set; }
-        public List<Trigger> Triggers { get; private set; }
-        public List<StatusCodeHandler> StatusCodeHandlers { get; private set; }
+        public RouteCollection<Route> Routes { get; private set; }
+        public RouteCollection<Filter> Filters { get; private set; }
+        public RouteCollection<Trigger> Triggers { get; private set; }
+        public RouteCollection<StatusCodeHandler> StatusCodeHandlers { get; private set; }
         public string Name { get; private set; }
         public List<IPublicFolder> PublicFolders { get; set; }
         public ISessionManager Sessions { get; set; }
@@ -49,10 +47,10 @@ namespace Netfluid
         internal Host(string name)
         {
             Name = name;
-            Filters = new List<Filter>();
-            Triggers = new List<Trigger>();
-            Routes = new List<Route>();
-            StatusCodeHandlers = new List<StatusCodeHandler>();
+            Filters = new RouteCollection<Filter>();
+            Triggers = new RouteCollection<Trigger>();
+            Routes = new RouteCollection<Route>();
+            StatusCodeHandlers = new RouteCollection<StatusCodeHandler>();
 
             PublicFolders = new List<IPublicFolder>();
             Sessions = new MemorySessionManager();
@@ -84,6 +82,9 @@ namespace Netfluid
             foreach (var filter in Filters.Where(x => x.HttpMethod == cnt.Request.HttpMethod || x.HttpMethod == null))
             {
                 var value = filter.Handle(cnt);
+
+                if (value == null) return;
+
                 if (value is IResponse)
                 {
                     value.SetHeaders(cnt);
@@ -102,7 +103,7 @@ namespace Netfluid
                 }
                 else
                 {
-                    cnt.Writer.Write(value);
+                    cnt.Writer.Write(value.ToString());
                     return;
                 }
             }
@@ -118,6 +119,9 @@ namespace Netfluid
             foreach (var routes in Routes.Where(x => x.HttpMethod == cnt.Request.HttpMethod || x.HttpMethod == null))
             {
                 var value = routes.Handle(cnt);
+
+                if(value == null) return;
+
                 if (value is IResponse)
                 {
                     value.SetHeaders(cnt);
@@ -136,7 +140,7 @@ namespace Netfluid
                 }
                 else
                 {
-                    cnt.Writer.Write(value);
+                    cnt.Writer.Write(value.ToString());
                     return;
                 }
             }
@@ -175,7 +179,7 @@ namespace Netfluid
                 }
                 else
                 {
-                    cnt.Writer.Write(value);
+                    cnt.Writer.Write(value.ToString());
                     return;
                 }
             }

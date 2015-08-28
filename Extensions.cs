@@ -825,7 +825,7 @@ namespace Netfluid
         /// </summary>
         public static T[] CustomAttribute<T>(this MethodInfo type) where T : Attribute
         {
-            return type.GetCustomAttributes(false).OfType<T>().ToArray();
+            return type.GetCustomAttributes(false).Where(x => x.GetType() == typeof(T)).Cast<T>().ToArray();
         }
 
         #endregion
@@ -896,8 +896,7 @@ namespace Netfluid
 
         public static bool IsInstantiable(this Type type)
         {
-            var c = type.GetConstructors(BindingFlags.Public);
-            return (!type.IsAbstract && c.Length > 0);
+            return (!type.IsAbstract && type.GetConstructors().Any());
         }
 
         public static bool HasDefaultConstructor(this Type type)

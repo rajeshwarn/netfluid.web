@@ -162,6 +162,7 @@
     <Compile Include="DB\Query\Linq\QueryVisitor.cs" />
     <Compile Include="DB\Query\Query.cs" />
     <Compile Include="Hosting\Filter.cs" />
+    <Compile Include="Hosting\RouteCollection.cs" />
     <Compile Include="Hosting\StatusCodeHandler.cs" />
     <Compile Include="Hosting\FilterAttribute.cs" />
     <Compile Include="Hosting\Route.cs" />

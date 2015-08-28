@@ -141,23 +141,30 @@ namespace Netfluid
             if (DevMode)
                 Console.WriteLine("Serving " + cnt.Request.Url);
 
-            Host host;
-            if (_hosts.TryGetValue(cnt.Request.Url.Host, out host))
+            try
             {
-                if (DevMode)
-                    Console.WriteLine(cnt.Request.Url + " - Using host " + cnt.Request.Url.Host);
+                Host host;
+                if (_hosts.TryGetValue(cnt.Request.Url.Host, out host))
+                {
+                    if (DevMode)
+                        Console.WriteLine(cnt.Request.Url + " - Using host " + cnt.Request.Url.Host);
 
-                host.Serve(cnt);
+                    host.Serve(cnt);
+                }
+                else
+                {
+                    if (DevMode)
+                        Console.WriteLine(cnt.Request.Url + " - Using default web application");
+
+                    DefaultHost.Serve(cnt);
+                }
+
+                cnt.Close();
             }
-            else
+            catch (Exception ex)
             {
-                if (DevMode)
-                    Console.WriteLine(cnt.Request.Url + " - Using default web application");
-
-                DefaultHost.Serve(cnt);
+                throw ex;  
             }
-
-            cnt.Close();
         }
 
 
