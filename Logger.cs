@@ -60,17 +60,10 @@ namespace Netfluid
             string s = ("\r\n" + DateTime.Now + "\t" + msg + "\r\n");
             do
             {
-                if (Engine.DevMode)
-                    Console.WriteLine(s);
-
                 if(ex!=null)
                 {
                     var stack = string.Join("\r", ex.ToString().Split(new[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries).Select(item => "\t\t\t" + item.Trim()));
 
-                    if (Engine.DevMode)
-                    {
-                        Console.WriteLine(stack);
-                    }
                     s += stack;
 
                     ex = ex.InnerException;
@@ -85,9 +78,6 @@ namespace Netfluid
         public void Log(string msg)
         {
             string s = DateTime.Now + "\t" + msg+"\r\n";
-            if (Engine.DevMode)
-                Console.WriteLine(s);
-
             outQueue.Add(s);
         }
 

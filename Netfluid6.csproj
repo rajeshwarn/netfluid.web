@@ -213,7 +213,6 @@
     <Compile Include="DB\Utils\StringScanner.cs" />
     <Compile Include="Extensions.cs" />
     <Compile Include="Hosting\StatusCodeHandlerAttribute.cs" />
-    <Compile Include="Hosting\Engine.cs" />
     <Compile Include="Hosting\Host.cs" />
     <Compile Include="Hosting\RouteAttribute.cs" />
     <Compile Include="Hosting\VirtualHostAttribute.cs" />

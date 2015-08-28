@@ -28,6 +28,8 @@ namespace Netfluid
         /// </summary>
         public static Func<Request, Response> OnRequest;
 
+        public static ILogger Logger;
+
         public static IPAddress[] Roots
         {
             get 
@@ -87,7 +89,7 @@ namespace Netfluid
                     }
                     catch (Exception ex)
                     {
-                        Engine.Logger.Log("DNS Server exception", ex);
+                        Logger.Log("DNS Server exception", ex);
                     }
                 }
             });
