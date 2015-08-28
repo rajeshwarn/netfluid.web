@@ -31,6 +31,7 @@ using System.Net;
 using System.Threading.Tasks;
 using System.Security.Permissions;
 using System.Security.Principal;
+using System.Collections;
 
 namespace Netfluid
 {
@@ -38,7 +39,7 @@ namespace Netfluid
     /// Main class of Netfluid framework
     /// </summary>
     [PermissionSet(SecurityAction.InheritanceDemand, Name = "FullTrust")]
-    public class Engine
+    public class Engine : IEnumerable<Host>
     {
         Dictionary<string, Host> hosts;
         HttpListener listener;
@@ -84,6 +85,10 @@ namespace Netfluid
         /// Main of host of the apllication. Any request not handled by virtual hosts will be handled by this one.
         /// </summary>
         public readonly Host DefaultHost;
+
+        /// <summary>
+        /// Show execution exception as html results
+        /// </summary>
         public bool ShowException;
 
         /// <summary>
@@ -116,17 +121,32 @@ namespace Netfluid
         {
             get
             {
-                if (host == "*")
-                    return DefaultHost;
+                bool ssl= false;
+                
+                if(host.StartsWith("https://"))
+                {
+                    host = host.Substring("https://".Length);
+                    ssl = true;
+                }
+
+                if (host.StartsWith("http://"))
+                    host.Substring("http://".Length);
+
+                if (host.EndsWith('/'))
+                    host = host.Substring(0, host.Length - 1);
 
                 Host h;
                 if (hosts.TryGetValue(host, out h))
                     return h;
 
-                h = new Host(host);
+                h = new Host(host) { SSL = ssl };
                 hosts.Add(host, h);
 
                 return h;
+            }
+            set
+            {
+                hosts[host] = value;
             }
         }
 
@@ -183,7 +203,8 @@ namespace Netfluid
                     listener.Prefixes.Add("http://" + x.Key +"/");
             });
 
-            listener.Prefixes.Add("http://*/");
+            if(DefaultHost.HasRoutes)
+                listener.Prefixes.Add("http://*/");
 
             Logger.Log("NetFluid web application running");
 
@@ -204,6 +225,16 @@ namespace Netfluid
         public void Stop()
         {
             listener.Stop();
+        }
+
+        public IEnumerator<Host> GetEnumerator()
+        {
+            return hosts.Values.GetEnumerator();
+        }
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return hosts.Values.GetEnumerator();
         }
     }
 }

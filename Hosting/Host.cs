@@ -42,7 +42,7 @@ namespace Netfluid
         public string Name { get; private set; }
         public List<IPublicFolder> PublicFolders { get; set; }
         public ISessionManager Sessions { get; set; }
-        public bool SSL { get; set; }
+        public bool SSL { get; internal set; }
        
         internal Host(string name)
         {
@@ -55,6 +55,14 @@ namespace Netfluid
             PublicFolders = new List<IPublicFolder>();
             Sessions = new MemorySessionManager();
             SSL = false;
+        }
+
+        public bool HasRoutes
+        {
+            get
+            {
+                return (Filters.Any() || Triggers.Any() || Routes.Any() || StatusCodeHandlers.Any() || PublicFolders.Any());
+            }
         }
 
         /// <summary>

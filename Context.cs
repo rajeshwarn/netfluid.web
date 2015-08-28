@@ -142,6 +142,21 @@ namespace Netfluid
             #endregion
         }
 
+        public void Session(string key, object value)
+        {
+            Host.Sessions.Set(SessionId, key, value);
+        }
+
+        public T Session<T>(string key)
+        {
+            return (T)Host.Sessions.Get(SessionId, key);
+        }
+
+        public dynamic Session(string key)
+        {
+            return Host.Sessions.Get(SessionId, key);
+        }
+
         public void Dispose()
         {
         }
