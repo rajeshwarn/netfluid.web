@@ -253,7 +253,7 @@ namespace Netfluid
         // Exceptions:
         //   T:System.ObjectDisposedException:
         //     This object has been closed.
-        public bool UnsafeConnectionNtlmAuthentication { get { return listener.UnsafeConnectionNtlmAuthentication; } set { listener.IgnoreWriuteExceptions = value; } }
+        public bool UnsafeConnectionNtlmAuthentication { get { return listener.UnsafeConnectionNtlmAuthentication; } set { listener.IgnoreWriteExceptions = value; } }
         #endregion
 
         #region NETFLUID METHODS
