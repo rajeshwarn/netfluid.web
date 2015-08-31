@@ -169,6 +169,11 @@
     <Compile Include="Hosting\Route.cs" />
     <Compile Include="Hosting\Trigger.cs" />
     <Compile Include="Hosting\TriggerAttribute.cs" />
+    <Compile Include="Logging\ConsoleLogger.cs" />
+    <Compile Include="Logging\DebugLogger.cs" />
+    <Compile Include="Logging\Logger.cs" />
+    <Compile Include="Logging\LogLevel.cs" />
+    <Compile Include="Logging\NullLogger.cs" />
     <Compile Include="Responses\EmptyResponse.cs" />
     <Compile Include="Serialization\Bson\BsonReader.cs" />
     <Compile Include="Serialization\Bson\BsonSerializer.cs" />
