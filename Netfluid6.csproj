@@ -232,10 +232,8 @@
     <Compile Include="HTTP\MultipartInternals\ParameterPart.cs" />
     <Compile Include="HTTP\MultipartInternals\RebufferableBinaryReader.cs" />
     <Compile Include="HTTP\MultipartInternals\SubsequenceFinder.cs" />
-    <Compile Include="ILogger.cs" />
     <Compile Include="IO\ChunkedStream.cs" />
     <Compile Include="IResponse.cs" />
-    <Compile Include="Logger.cs" />
     <Compile Include="MimeTypes.cs" />
     <Compile Include="Network.cs" />
     <Compile Include="Program.cs" />
