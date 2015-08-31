@@ -31,6 +31,7 @@ using System.Threading.Tasks;
 
 using Netfluid.Smtp.Config;
 using System.Net.Mail;
+using Netfluid.Net;
 
 namespace Netfluid.Smtp
 {
