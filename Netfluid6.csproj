@@ -311,7 +311,7 @@
     <Compile Include="Smtp\Mime\QuotedPrintableEncoderStream.cs" />
     <Compile Include="Smtp\Mime\Rfc5335Decoder.cs" />
     <Compile Include="Smtp\Mime\StringReaderStream.cs" />
-    <Compile Include="Smtp\PortListener.cs" />
+    <Compile Include="Net\PortListener.cs" />
     <Compile Include="Smtp\RawLineDecoder.cs" />
     <Compile Include="Smtp\RawLineEventArgs.cs" />
     <Compile Include="Smtp\RequestDisconnectionEventArgs.cs" />

@@ -27,7 +27,7 @@ using System.Net;
 using System.Net.Sockets;
 using System.Threading.Tasks;
 
-namespace Netfluid.Smtp
+namespace Netfluid.Net
 {
     [DebuggerDisplay("{ListenAddress}:{Port}")]
     public class PortListener : IDisposable
