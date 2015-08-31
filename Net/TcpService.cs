@@ -30,7 +30,7 @@ using System.Threading.Tasks;
 namespace Netfluid.Net
 {
     [DebuggerDisplay("{ListenAddress}:{Port}")]
-    public class PortListener : IDisposable
+    public class TcpService : IDisposable
     {
         public int Port { get; private set; }
         public IPAddress ListenAddress { get; private set; }
@@ -39,9 +39,9 @@ namespace Netfluid.Net
         private Task _task;
         private bool _stopRequested;
 
-        public event Action<PortListener, TcpClient> ClientConnected = (portListener, tcpClient) => { };
+        public event Action<TcpService, TcpClient> ClientConnected = (portListener, tcpClient) => { };
 
-        public PortListener(IPAddress listenAddress, int port)
+        public TcpService(IPAddress listenAddress, int port)
         {
             ListenAddress = listenAddress;
             Port = port;
@@ -140,7 +140,7 @@ namespace Netfluid.Net
         /// <summary>
         /// Destructor
         /// </summary>
-        ~PortListener()
+        ~TcpService()
         {
             Dispose(false);
         }

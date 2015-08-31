@@ -20,7 +20,7 @@ depends on the domain where it is found.
 
 using System;
 
-namespace Netfluid.DNS.Records
+namespace Netfluid.Dns.Records
 {
     /// <summary>
     /// DNS record TXT

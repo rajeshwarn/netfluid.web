@@ -71,7 +71,7 @@ using System;
 
  */
 
-namespace Netfluid.DNS.Records
+namespace Netfluid.Dns.Records
 {
     /// <summary>
     /// DNS record PX

@@ -47,7 +47,7 @@ or decimal numbers.
 using System;
 using System.Net;
 
-namespace Netfluid.DNS.Records
+namespace Netfluid.Dns.Records
 {
     /// <summary>
     /// DNS record WKS

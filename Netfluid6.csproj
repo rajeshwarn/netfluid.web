@@ -57,7 +57,8 @@
     <Compile Include="Cron\Cron.cs" />
     <Compile Include="Cron\CronTask.cs" />
     <Compile Include="DB\IRepository.cs" />
-    <Compile Include="Dns.cs" />
+    <Compile Include="Dns\DnsClient.cs" />
+    <Compile Include="Dns\DnsServer.cs" />
     <Compile Include="Dns\DomainNameAttribute.cs" />
     <Compile Include="Dns\Header.cs" />
     <Compile Include="Dns\Question.cs" />
@@ -311,7 +312,7 @@
     <Compile Include="Smtp\Mime\QuotedPrintableEncoderStream.cs" />
     <Compile Include="Smtp\Mime\Rfc5335Decoder.cs" />
     <Compile Include="Smtp\Mime\StringReaderStream.cs" />
-    <Compile Include="Net\PortListener.cs" />
+    <Compile Include="Net\TcpService.cs" />
     <Compile Include="Smtp\RawLineDecoder.cs" />
     <Compile Include="Smtp\RawLineEventArgs.cs" />
     <Compile Include="Smtp\RequestDisconnectionEventArgs.cs" />

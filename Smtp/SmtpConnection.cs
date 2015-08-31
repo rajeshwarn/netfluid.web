@@ -36,7 +36,7 @@ namespace Netfluid.Smtp
     {
         internal NetworkStream NetworkStream { get; set; }
         internal IPEndPoint RemoteEndPoint { get; set; }
-        internal PortListener PortBinding { get; set; }
+        internal TcpService PortBinding { get; set; }
         internal TcpClient TcpClient { get; set; }
         internal DateTime ConnectionInitiated { get; set; }
 
@@ -53,7 +53,7 @@ namespace Netfluid.Smtp
         internal event EventHandler<SmtpSessionEventArgs> SessionCreated;
 
 
-        public SmtpConnection(SmtpServer server, PortListener portBinding, TcpClient tcpClient)
+        public SmtpConnection(SmtpServer server, TcpService portBinding, TcpClient tcpClient)
         {
             if (server == null) throw new ArgumentNullException("server");
             if (portBinding == null) throw new ArgumentNullException("portBinding");

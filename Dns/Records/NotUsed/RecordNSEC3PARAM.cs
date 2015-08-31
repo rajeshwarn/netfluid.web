@@ -5,7 +5,7 @@
 
 using System;
 
-namespace Netfluid.DNS.Records
+namespace Netfluid.Dns.Records
 {
     /// <summary>
     /// DNS record NSEC3PARAM (work in progress)

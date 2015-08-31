@@ -16,7 +16,7 @@ experimental extensions of the DNS.
 
 using System;
 
-namespace Netfluid.DNS.Records
+namespace Netfluid.Dns.Records
 {
     /// <summary>
     /// DNS record NULL

@@ -17,7 +17,7 @@ RRs corresponding to MADNAME.
 
 using System;
 
-namespace Netfluid.DNS.Records
+namespace Netfluid.Dns.Records
 {
     /// <summary>
     /// DNS record MB

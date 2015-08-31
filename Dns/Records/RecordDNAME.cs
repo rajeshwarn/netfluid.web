@@ -16,7 +16,7 @@
 
 using System;
 
-namespace Netfluid.DNS.Records
+namespace Netfluid.Dns.Records
 {
         [Serializable]
     public class RecordDNAME : Record

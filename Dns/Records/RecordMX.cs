@@ -1,6 +1,6 @@
 using System;
 
-namespace Netfluid.DNS.Records
+namespace Netfluid.Dns.Records
 {
     /*
 	3.3.9. MX RDATA format

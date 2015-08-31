@@ -25,7 +25,7 @@ class information are normally queried using IN class protocols.
 
 using System;
 
-namespace Netfluid.DNS.Records
+namespace Netfluid.Dns.Records
 {
     /// <summary>
     /// DNS record NS

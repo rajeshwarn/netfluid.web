@@ -21,7 +21,7 @@ the description of name server logic in [RFC-1034] for details.
 
 using System;
 
-namespace Netfluid.DNS.Records
+namespace Netfluid.Dns.Records
 {
     /// <summary>
     /// DNS record CNAME

@@ -39,7 +39,7 @@ namespace Netfluid.Smtp
     {
         public string Greeting { get; set; }
 
-        ConcurrentBag<PortListener> Bindings { get; set; }
+        ConcurrentBag<TcpService> Bindings { get; set; }
         ConcurrentDictionary<EndPoint, SmtpConnection> Connections { get; set; }
         public SmtpServerConfiguration Configuration { get; set; }
 
@@ -56,7 +56,7 @@ namespace Netfluid.Smtp
 
         public SmtpServer()
         {
-            Bindings = new ConcurrentBag<PortListener>();
+            Bindings = new ConcurrentBag<TcpService>();
             Connections = new ConcurrentDictionary<EndPoint, SmtpConnection>();
             Configuration = new SmtpServerConfiguration();
             Watchdog = new IdleConnectionDisconnectWatchdog(this);
@@ -88,7 +88,7 @@ namespace Netfluid.Smtp
                 if (!_disposed)
                 {
                     var oldBindings = Bindings;
-                    Bindings = new ConcurrentBag<PortListener>();
+                    Bindings = new ConcurrentBag<TcpService>();
 
                     StopListenTo(oldBindings);
 
@@ -98,7 +98,7 @@ namespace Netfluid.Smtp
             }
         }
 
-        private static void StopListenTo(IEnumerable<PortListener> bindings)
+        private static void StopListenTo(IEnumerable<TcpService> bindings)
         {
             if (bindings == null) return;
 
@@ -133,7 +133,7 @@ namespace Netfluid.Smtp
 
         private readonly object _bindAndListenLock = new object();
 
-        public PortListener BindAndListenTo(IPAddress serverListenAddress, int serverPort)
+        public TcpService BindAndListenTo(IPAddress serverListenAddress, int serverPort)
         {
             lock (_bindAndListenLock)
             {
@@ -151,16 +151,16 @@ namespace Netfluid.Smtp
                 Watchdog.Start();
         }
 
-        private PortListener CreateNewPortBindingAndStartListen(IPAddress serverListenAddress, int serverPort)
+        private TcpService CreateNewPortBindingAndStartListen(IPAddress serverListenAddress, int serverPort)
         {
-            var portBinding = new PortListener(serverListenAddress ?? IPAddress.Any, serverPort);
+            var portBinding = new TcpService(serverListenAddress ?? IPAddress.Any, serverPort);
             portBinding.ClientConnected += PortBindingClientConnected;
             portBinding.StartListen();
             Logger.Info(String.Format("Started listening to {0}:{1}", serverListenAddress, serverPort));
             return portBinding;
         }
 
-        private async void PortBindingClientConnected(PortListener serverPortBinding, TcpClient newConnectedTcpClient)
+        private async void PortBindingClientConnected(TcpService serverPortBinding, TcpClient newConnectedTcpClient)
         {
             var connection = new SmtpConnection(this, serverPortBinding, newConnectedTcpClient);
             connection.ClientDisconnected += (sender, args) => ClientDisconnected(this, new SmtpConnectionEventArgs(args.Connection));

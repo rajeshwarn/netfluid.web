@@ -23,7 +23,7 @@ preference of 10. */
 
 using System;
 
-namespace Netfluid.DNS.Records
+namespace Netfluid.Dns.Records
 {
     /// <summary>
     /// DNS record MF

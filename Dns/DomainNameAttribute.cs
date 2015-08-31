@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Netfluid.DNS
+namespace Netfluid.Dns
 {
     [Serializable]
     internal class DomainNameAttribute : Attribute

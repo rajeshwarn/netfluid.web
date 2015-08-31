@@ -32,7 +32,7 @@ using System.Text;
 
  */
 
-namespace Netfluid.DNS.Records
+namespace Netfluid.Dns.Records
 {
     /// <summary>
     /// DNS record NSAP

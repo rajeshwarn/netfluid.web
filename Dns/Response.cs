@@ -1,9 +1,9 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Netfluid.DNS.Records;
+using Netfluid.Dns.Records;
 
-namespace Netfluid.DNS
+namespace Netfluid.Dns
 {
     /// <summary>
     /// List of returned DNS record used by DNS server and resolver

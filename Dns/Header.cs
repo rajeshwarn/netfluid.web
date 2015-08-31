@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Net;
 
-namespace Netfluid.DNS.Records
+namespace Netfluid.Dns.Records
 {
 
     #region RFC specification

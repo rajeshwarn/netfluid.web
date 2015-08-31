@@ -4,9 +4,9 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text;
-using Netfluid.DNS.Records;
+using Netfluid.Dns.Records;
 
-namespace Netfluid.DNS
+namespace Netfluid.Dns
 {
     class Serializer
     {

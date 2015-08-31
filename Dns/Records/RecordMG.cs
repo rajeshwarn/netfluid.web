@@ -16,7 +16,7 @@ MG records cause no additional section processing.
 
 using System;
 
-namespace Netfluid.DNS.Records
+namespace Netfluid.Dns.Records
 {
     /// <summary>
     /// DNS record MG

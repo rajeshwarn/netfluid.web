@@ -96,7 +96,7 @@ ALTITUDE     The altitude of the center of the sphere described by the
 
  */
 
-namespace Netfluid.DNS.Records
+namespace Netfluid.Dns.Records
 {
     /// <summary>
     /// DNS record LOC
