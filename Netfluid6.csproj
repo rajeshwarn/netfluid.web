@@ -303,6 +303,34 @@
     <Compile Include="Serialization\JsonParser.cs" />
     <Compile Include="Sessions\ISessionManager.cs" />
     <Compile Include="Sessions\MemorySessionManager.cs" />
+    <Compile Include="Smtp\BufferEventArgs.cs" />
+    <Compile Include="Smtp\ClientConnectionEventArgs.cs" />
+    <Compile Include="Smtp\Extensions\StreamReaderExtensions.cs" />
+    <Compile Include="Smtp\IdleConnectionDisconnectorWatchdog.cs" />
+    <Compile Include="Smtp\Mime\DateTimeRfc2822.cs" />
+    <Compile Include="Smtp\Mime\DelimitingReadableStream.cs" />
+    <Compile Include="Smtp\Mime\QuotedPrintableDecoderStream.cs" />
+    <Compile Include="Smtp\Mime\QuotedPrintableEncoderStream.cs" />
+    <Compile Include="Smtp\Mime\Rfc5335Decoder.cs" />
+    <Compile Include="Smtp\Mime\StringReaderStream.cs" />
+    <Compile Include="Smtp\PortListener.cs" />
+    <Compile Include="Smtp\RawLineDecoder.cs" />
+    <Compile Include="Smtp\RawLineEventArgs.cs" />
+    <Compile Include="Smtp\RequestDisconnectionEventArgs.cs" />
+    <Compile Include="Smtp\ResponseEventArgs.cs" />
+    <Compile Include="Smtp\SessionEventArgs.cs" />
+    <Compile Include="Smtp\SmtpCapability.cs" />
+    <Compile Include="Smtp\SmtpCommandParser.cs" />
+    <Compile Include="Smtp\SmtpConnection.cs" />
+    <Compile Include="Smtp\SmtpConnectionEventArgs.cs" />
+    <Compile Include="Smtp\SmtpIdentification.cs" />
+    <Compile Include="Smtp\SmtpIdentificationMode.cs" />
+    <Compile Include="Smtp\SmtpResponse.cs" />
+    <Compile Include="Smtp\SmtpServer.cs" />
+    <Compile Include="Smtp\SmtpServerConfiguration.cs" />
+    <Compile Include="Smtp\SmtpSession.cs" />
+    <Compile Include="Smtp\SmtpSessionEventArgs.cs" />
+    <Compile Include="Smtp\SmtpSessionInfo.cs" />
     <Compile Include="StatusCode.cs" />
     <Compile Include="User\User.cs" />
     <Compile Include="User\UserExposer.cs" />
@@ -314,7 +342,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Embedded\" />
-    <Folder Include="Smtp\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\NFService\packages\SQLitePCL.raw_basic.0.8.0\build\net45\SQLitePCL.raw_basic.targets" Condition="Exists('..\NFService\packages\SQLitePCL.raw_basic.0.8.0\build\net45\SQLitePCL.raw_basic.targets')" />
