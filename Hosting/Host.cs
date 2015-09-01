@@ -277,10 +277,20 @@ namespace Netfluid
                 while (IsListening)
                 {
                     var accept = listener.GetContextAsync();
-                    accept.ContinueWith(x => Task.Factory.StartNew(() => Serve(new Context(x.Result))));
+                    accept.ContinueWith(x => Task.Factory.StartNew(() =>
+                    {
+                        try
+                        {
+                            Serve(new Context(x.Result));
+                        }
+                        finally
+                        {
+                            x.Result.Response.Close();
+                        }
+                    }));
                 }
             });
-            listeningTask.Start();
+
             return listeningTask;
         }
 

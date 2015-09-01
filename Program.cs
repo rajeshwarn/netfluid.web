@@ -23,6 +23,9 @@ namespace Example
 
         static void Main(string[] args)
         {
+            var host = new Host("*");
+            host.Map(typeof(Program));
+            host.Start();
 
             Console.ReadLine();
         }
