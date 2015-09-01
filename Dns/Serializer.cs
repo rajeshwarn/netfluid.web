@@ -343,46 +343,6 @@ namespace Netfluid.Dns
 
         private static void WriteDomainName(Stream ms, string name)
         {
-            /*var arr = name.Split(new[] {'.'}, StringSplitOptions.RemoveEmptyEntries);
-
-            foreach (var e in arr)
-            {
-                var buffer = Encoding.ASCII.GetBytes(e);
-                ms.WriteByte((byte)e.Length);
-                ms.Write(buffer,0,buffer.Length);
-            }
-            ms.WriteByte(0);
-            return;*/
-
-            /*var src = name;
-
-            if (!src.EndsWith("."))
-                src += ".";
-
-            if (src == ".")
-            {
-                ms.WriteByte(0);
-                return;
-            }
-
-            var sb = new StringBuilder();
-            int intI, intJ, intLen = src.Length;
-            sb.Append('\0');
-            for (intI = 0, intJ = 0; intI < intLen; intI++, intJ++)
-            {
-                sb.Append(src[intI]);
-
-                if (src[intI] != '.')
-                    continue;
-
-                sb[intI - intJ] = (char)(intJ & 0xff);
-                intJ = -1;
-            }
-            sb[sb.Length - 1] = '\0';
-
-            var b = Encoding.ASCII.GetBytes(sb.ToString());
-            ms.Write(b,0,b.Length);*/
-
             while (true)
             {
                 if (String.IsNullOrEmpty(name) || (name == "."))
