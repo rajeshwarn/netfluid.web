@@ -57,8 +57,6 @@ namespace Netfluid
             ThreadPool.SetMaxThreads(max, max);
         }
 
-
-
         public Host(params string[] prefixes)
         {
             listener = new HttpListener();
@@ -276,18 +274,19 @@ namespace Netfluid
 
                 while (IsListening)
                 {
-                    var accept = listener.GetContextAsync();
-                    accept.ContinueWith(x => Task.Factory.StartNew(() =>
+                    var accept = listener.GetContext();
+                    Task.Factory.StartNew(() =>
                     {
+                        var c = new Context(accept);
                         try
                         {
-                            Serve(new Context(x.Result));
+                            Serve(c);
                         }
                         finally
                         {
-                            x.Result.Response.Close();
+                            c.Close();
                         }
-                    }));
+                    });
                 }
             });
 
