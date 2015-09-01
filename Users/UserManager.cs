@@ -58,10 +58,13 @@ namespace Netfluid.Users
 
         private void Mount(string mountPoint)
         {
-            Host.Routes["GET", "/signin"] = Route.New(Exposer.SignInForm);
-            Host.Routes["POST", "/signin"] = Route.New(new Func<Context, string, string, string, IResponse>(Exposer.SignIn));
+            Host.Routes["GET", mountPoint+"signin"] = Route.New(Exposer.SignInForm);
+            Host.Routes["POST", mountPoint + "signin"] = Route.New(new Func<Context, string, string, string, IResponse>(Exposer.SignIn));
 
-            Host.Routes["GET", "/signout"] = Route.New(new Func<Context,IResponse>(Exposer.SignOut));
+            Host.Routes["GET", mountPoint + "signout"] = Route.New(new Func<Context,IResponse>(Exposer.SignOut));
+
+            Host.Routes["GET", mountPoint + "signup"] = Route.New(Exposer.SignUpForm);
+            Host.Routes["POST", mountPoint + "signup"] = Route.New(new Func<Context, string, string, string,string,string, IResponse>(Exposer.SignedUp));
         }
 
         void SaltHim(User user, string password)
