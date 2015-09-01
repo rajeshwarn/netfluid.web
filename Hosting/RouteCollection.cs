@@ -210,7 +210,7 @@ namespace Netfluid
             var r = (new T()
             {
                 Url = url,
-                HttpMethod = url,
+                HttpMethod = method,
                 Target = mdelegate.Target,
                 MethodInfo = mdelegate.Method
             });
@@ -224,7 +224,7 @@ namespace Netfluid
             var r = (new T()
             {
                 Url = url,
-                HttpMethod = url,
+                HttpMethod = method,
                 Target = mdelegate.Target,
                 MethodInfo = mdelegate.Method
             });
@@ -237,7 +237,7 @@ namespace Netfluid
             var r = (new T()
             {
                 Url = url,
-                HttpMethod = url,
+                HttpMethod = method,
                 Target = mdelegate.Target,
                 MethodInfo = mdelegate.Method
             });
@@ -250,7 +250,7 @@ namespace Netfluid
             var r = (new T()
             {
                 Url = url,
-                HttpMethod = url,
+                HttpMethod = method,
                 Target = mdelegate.Target,
                 MethodInfo = mdelegate.Method
             });
@@ -263,7 +263,7 @@ namespace Netfluid
             var r = (new T()
             {
                 Url = url,
-                HttpMethod = url,
+                HttpMethod = method,
                 Target = mdelegate.Target,
                 MethodInfo = mdelegate.Method
             });
@@ -276,7 +276,7 @@ namespace Netfluid
             var r = (new T()
             {
                 Url = url,
-                HttpMethod = url,
+                HttpMethod = method,
                 Target = mdelegate.Target,
                 MethodInfo = mdelegate.Method
             });
@@ -289,7 +289,7 @@ namespace Netfluid
             var r = (new T()
             {
                 Url = url,
-                HttpMethod = url,
+                HttpMethod = method,
                 Target = mdelegate.Target,
                 MethodInfo = mdelegate.Method
             });
@@ -302,7 +302,7 @@ namespace Netfluid
             var r = (new T()
             {
                 Url = url,
-                HttpMethod = url,
+                HttpMethod = method,
                 Target = mdelegate.Target,
                 MethodInfo = mdelegate.Method
             });
@@ -315,7 +315,7 @@ namespace Netfluid
             var r = (new T()
             {
                 Url = url,
-                HttpMethod = url,
+                HttpMethod = method,
                 Target = mdelegate.Target,
                 MethodInfo = mdelegate.Method
             });
@@ -328,7 +328,7 @@ namespace Netfluid
             var r = (new T()
             {
                 Url = url,
-                HttpMethod = url,
+                HttpMethod = method,
                 Target = mdelegate.Target,
                 MethodInfo = mdelegate.Method
             });
@@ -341,7 +341,7 @@ namespace Netfluid
             var r = (new T()
             {
                 Url = url,
-                HttpMethod = url,
+                HttpMethod = method,
                 Target = mdelegate.Target,
                 MethodInfo = mdelegate.Method
             });
@@ -354,7 +354,7 @@ namespace Netfluid
             var r = (new T()
             {
                 Url = url,
-                HttpMethod = url,
+                HttpMethod = method,
                 Target = mdelegate.Target,
                 MethodInfo = mdelegate.Method
             });
@@ -367,7 +367,7 @@ namespace Netfluid
             var r = (new T()
             {
                 Url = url,
-                HttpMethod = url,
+                HttpMethod = method,
                 Target = mdelegate.Target,
                 MethodInfo = mdelegate.Method
             });
@@ -380,7 +380,7 @@ namespace Netfluid
             var r = (new T()
             {
                 Url = url,
-                HttpMethod = url,
+                HttpMethod = method,
                 Target = mdelegate.Target,
                 MethodInfo = mdelegate.Method
             });
@@ -393,7 +393,7 @@ namespace Netfluid
             var r = (new T()
             {
                 Url = url,
-                HttpMethod = url,
+                HttpMethod = method,
                 Target = mdelegate.Target,
                 MethodInfo = mdelegate.Method
             });
@@ -407,7 +407,7 @@ namespace Netfluid
             var r = (new T()
             {
                 Url = url,
-                HttpMethod = url,
+                HttpMethod = method,
                 Target = mdelegate.Target,
                 MethodInfo = mdelegate.Method
             });
@@ -421,7 +421,7 @@ namespace Netfluid
             var r = (new T()
             {
                 Url = url,
-                HttpMethod = url,
+                HttpMethod = method,
                 Target = mdelegate.Target,
                 MethodInfo = mdelegate.Method
             });
@@ -434,7 +434,7 @@ namespace Netfluid
             var r = (new T()
             {
                 Url = url,
-                HttpMethod = url,
+                HttpMethod = method,
                 Target = mdelegate.Target,
                 MethodInfo = mdelegate.Method
             });
@@ -447,7 +447,7 @@ namespace Netfluid
             var r = (new T()
             {
                 Url = url,
-                HttpMethod = url,
+                HttpMethod = method,
                 Target = mdelegate.Target,
                 MethodInfo = mdelegate.Method
             });
@@ -460,7 +460,7 @@ namespace Netfluid
             var r = (new T()
             {
                 Url = url,
-                HttpMethod = url,
+                HttpMethod = method,
                 Target = mdelegate.Target,
                 MethodInfo = mdelegate.Method
             });
@@ -473,7 +473,7 @@ namespace Netfluid
             var r = (new T()
             {
                 Url = url,
-                HttpMethod = url,
+                HttpMethod = method,
                 Target = mdelegate.Target,
                 MethodInfo = mdelegate.Method
             });
@@ -486,7 +486,7 @@ namespace Netfluid
             var r = (new T()
             {
                 Url = url,
-                HttpMethod = url,
+                HttpMethod = method,
                 Target = mdelegate.Target,
                 MethodInfo = mdelegate.Method
             });
@@ -499,7 +499,7 @@ namespace Netfluid
             var r = (new T()
             {
                 Url = url,
-                HttpMethod = url,
+                HttpMethod = method,
                 Target = mdelegate.Target,
                 MethodInfo = mdelegate.Method
             });
@@ -512,7 +512,7 @@ namespace Netfluid
             var r = (new T()
             {
                 Url = url,
-                HttpMethod = url,
+                HttpMethod = method,
                 Target = mdelegate.Target,
                 MethodInfo = mdelegate.Method
             });
@@ -525,7 +525,7 @@ namespace Netfluid
             var r = (new T()
             {
                 Url = url,
-                HttpMethod = url,
+                HttpMethod = method,
                 Target = mdelegate.Target,
                 MethodInfo = mdelegate.Method
             });
@@ -538,7 +538,7 @@ namespace Netfluid
             var r = (new T()
             {
                 Url = url,
-                HttpMethod = url,
+                HttpMethod = method,
                 Target = mdelegate.Target,
                 MethodInfo = mdelegate.Method
             });
@@ -551,7 +551,7 @@ namespace Netfluid
             var r = (new T()
             {
                 Url = url,
-                HttpMethod = url,
+                HttpMethod = method,
                 Target = mdelegate.Target,
                 MethodInfo = mdelegate.Method
             });
@@ -564,7 +564,7 @@ namespace Netfluid
             var r = (new T()
             {
                 Url = url,
-                HttpMethod = url,
+                HttpMethod = method,
                 Target = mdelegate.Target,
                 MethodInfo = mdelegate.Method
             });
@@ -577,7 +577,7 @@ namespace Netfluid
             var r = (new T()
             {
                 Url = url,
-                HttpMethod = url,
+                HttpMethod = method,
                 Target = mdelegate.Target,
                 MethodInfo = mdelegate.Method
             });
@@ -590,7 +590,7 @@ namespace Netfluid
             var r = (new T()
             {
                 Url = url,
-                HttpMethod = url,
+                HttpMethod = method,
                 Target = mdelegate.Target,
                 MethodInfo = mdelegate.Method
             });
