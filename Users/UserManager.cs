@@ -21,11 +21,10 @@ namespace Netfluid.Users
         
         internal User System { get; private set; } 
 
-        public UserManager(Host host, string mountPoint="/")
+        public UserManager()
 		{
             var db = new LiteDatabase("users.db");
             Repository = db.GetCollection<User>("user");
-            this.Host = host;
 
             SignInInterval = 10;
 
@@ -52,12 +51,15 @@ namespace Netfluid.Users
 
             System = GetUser("system");
             Exposer = new HtmlUserExposer(this);
-
-            Mount(mountPoint);
 		}
 
-        private void Mount(string mountPoint)
+        public void Mount(Host host,string mountPoint)
         {
+            this.Host = host;
+
+            if (mountPoint[0] != '/') mountPoint = "/" + mountPoint;
+            if (mountPoint[mountPoint.Length - 1] != '/') mountPoint = mountPoint + "/";
+
             Host.Routes["GET", mountPoint+"signin"] = Route.New(Exposer.SignInForm);
             Host.Routes["POST", mountPoint + "signin"] = Route.New(new Func<Context, string, string, string, IResponse>(Exposer.SignIn));
 

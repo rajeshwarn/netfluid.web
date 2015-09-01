@@ -15,7 +15,7 @@ namespace Netfluid.Users
 
         public Func<Context, IResponse> SignUpForm { get; set; }
         public Func<Context, string, IResponse> SignupError { get; set; }
-        public Func<Context, User, IResponse> SignupOK { get; set; }
+        public Func<Context, User, IResponse> SignUpOK { get; set; }
 
         public HtmlUserExposer(UserManager userManager)
         {
@@ -104,7 +104,7 @@ namespace Netfluid.Users
             if(!manager.Add(user, password, manager.System))
                 return SignupError(cnt, "Something went wrong");
 
-            return SignupOK(cnt,user);
+            return SignUpOK(cnt,user);
         }
     }
 }

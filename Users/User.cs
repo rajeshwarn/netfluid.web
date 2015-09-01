@@ -4,6 +4,7 @@ namespace Netfluid.Users
 {
 	public class User
 	{
+        public string _id { get; set; }
 		public string DisplayName { get; set; }
         public string Email { get; set; }
 		public string UserName { get; set; }
