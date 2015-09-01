@@ -40,8 +40,6 @@ namespace Netfluid
     public class Host
     {
         HttpListener listener;
-
-        public string Name { get; private set; }
         public RouteCollection<Route> Routes { get; private set; }
         public RouteCollection<Filter> Filters { get; private set; }
         public RouteCollection<Trigger> Triggers { get; private set; }
@@ -59,12 +57,21 @@ namespace Netfluid
             ThreadPool.SetMaxThreads(max, max);
         }
 
-        public Host(string prefix)
+
+
+        public Host(params string[] prefixes)
         {
             listener = new HttpListener();
-            listener.Prefixes.Add(prefix);
+            prefixes.Select(x =>
+            {
+                if (!(x.StartsWith("http://") || x.StartsWith("https://")))
+                    x = "http://" + x;
 
-            Name = prefix;
+                if (!x.EndsWith("/")) x = x + "/";
+
+                return x;
+            }).ForEach(listener.Prefixes.Add);
+
             Filters = new RouteCollection<Filter>();
             Triggers = new RouteCollection<Trigger>();
             Routes = new RouteCollection<Route>();
