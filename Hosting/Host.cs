@@ -30,6 +30,7 @@ using System.Net;
 using System.Reflection;
 using System.Security.Authentication.ExtendedProtection;
 using System.Threading;
+using System.Threading.Tasks;
 
 namespace Netfluid
 {
@@ -47,6 +48,8 @@ namespace Netfluid
         public RouteCollection<StatusCodeHandler> StatusCodeHandlers { get; private set; }
         public List<IPublicFolder> PublicFolders { get; set; }
         public ISessionManager Sessions { get; set; }
+
+        Task listeningTask; 
 
         static Host()
         {
@@ -257,11 +260,33 @@ namespace Netfluid
         #endregion
 
         #region NETFLUID METHODS
+
+        public Task Start()
+        {
+            listeningTask = Task.Factory.StartNew(() =>
+            {
+                listener.Start();
+
+                while (IsListening)
+                {
+                    var accept = listener.GetContextAsync();
+                    accept.ContinueWith(x => Task.Factory.StartNew(() => Serve(new Context(x.Result))));
+                }
+            });
+            listeningTask.Start();
+            return listeningTask;
+        }
+
+        public void Stop()
+        {
+            listener.Stop();
+        }
+
         /// <summary>
         /// The current virtual host serve the given context
         /// </summary>
         /// <param name="cnt"></param>
-        public void Serve(Context cnt)
+        void Serve(Context cnt)
         {
             cnt.Host = this;
 

@@ -66,7 +66,7 @@ namespace Netfluid
             }
         }
 
-        public virtual dynamic Handle(Context cnt)
+        internal virtual dynamic Handle(Context cnt)
         {
             if (regex != null)
             {
