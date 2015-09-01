@@ -26,6 +26,7 @@ using System.IO;
 using System.Net;
 using Netfluid.HTTP;
 using System.Runtime.CompilerServices;
+using System.Diagnostics;
 
 namespace Netfluid
 {
@@ -39,6 +40,15 @@ namespace Netfluid
         private StreamWriter writer;
 
         HttpListenerContext context;
+
+        Stopwatch stopwatch;
+
+        public decimal ElapsedTime
+        {
+            get { return (decimal)stopwatch.ElapsedTicks / (decimal)Stopwatch.Frequency; }
+        }
+
+        public event Action<Context> Closed = x => { };
 
         public string SessionId { get; private set; }
 
@@ -74,6 +84,9 @@ namespace Netfluid
 
         public Context(HttpListenerContext c)
         {
+            stopwatch = new Stopwatch();
+            stopwatch.Start();
+
             context = c;
             Values = new QueryValueCollection();
             Files = new HttpFileCollection();
@@ -142,16 +155,19 @@ namespace Netfluid
             #endregion
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public void Session(string key, object value)
         {
             Host.Sessions.Set(SessionId, key, value);
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public T Session<T>(string key)
         {
             return (T)Host.Sessions.Get(SessionId, key);
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public dynamic Session(string key)
         {
             return Host.Sessions.Get(SessionId, key);
@@ -159,6 +175,10 @@ namespace Netfluid
 
         public void Dispose()
         {
+            stopwatch = null;
+            context = null;
+            reader = null;
+            writer = null;
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -172,6 +192,8 @@ namespace Netfluid
                 Writer.Flush();
                 Response.OutputStream.Flush();
                 Response.Close();
+
+                Closed(this);
             }
             catch (Exception)
             {
