@@ -21,7 +21,7 @@ namespace Netfluid.Users
         
         internal User System { get; private set; } 
 
-        public UserManager(Host host)
+        public UserManager(Host host, string mountPoint="/")
 		{
             var db = new LiteDatabase("users.db");
             Repository = db.GetCollection<User>("user");
@@ -52,7 +52,17 @@ namespace Netfluid.Users
 
             System = GetUser("system");
             Exposer = new HtmlUserExposer(this);
+
+            Mount(mountPoint);
 		}
+
+        private void Mount(string mountPoint)
+        {
+            Host.Routes["GET", "/signin"] = Route.New(Exposer.SignInForm);
+            Host.Routes["POST", "/signin"] = Route.New(new Func<Context, string, string, string, IResponse>(Exposer.SignIn));
+
+            Host.Routes["GET", "/signout"] = Route.New(new Func<Context,IResponse>(Exposer.SignOut));
+        }
 
         void SaltHim(User user, string password)
         {

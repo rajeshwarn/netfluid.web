@@ -54,6 +54,14 @@ namespace Netfluid
                 .ToArray();
         }
 
+        #region LIST
+        public static void Add<T>(this List<T> list, params T[] arr)
+        {
+            list.AddRange(arr);
+        }
+
+        #endregion
+
         #region APPDOMAIN
 
         /// <summary>
