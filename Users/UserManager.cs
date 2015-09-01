@@ -5,22 +5,28 @@ using System.Linq;
 
 namespace Netfluid.Users
 {
-    /*
-	public class UserManager
-	{
-		private const string charset = "qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM123456789!£$%&/()=?^+;,:.-";
 
-        UserExposer exposer;
+    public class UserManager
+    {
+        private const string charset = "qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM123456789!£$%&/()=?^+;,:.-";
 
-        public Host Host { get; set; }
+
+        public HtmlUserExposer Exposer { get; private set; }
+        public Host Host { get; private set; }
         public LiteCollection<User> Repository { get; set; }
         public int SignInInterval { get; set; }
+    
+        public bool WalledGarden { get; set; }
+        public Configuration Configuration { get; set; }
+        
+        internal User System { get; private set; } 
 
-		public UserManager()
+        public UserManager(Host host)
 		{
             var db = new LiteDatabase("users.db");
             Repository = db.GetCollection<User>("user");
-            Host = Engine.DefaultHost;
+            this.Host = host;
+
             SignInInterval = 10;
 
 			if (!Repository.Any())
@@ -33,10 +39,19 @@ namespace Netfluid.Users
 				};
 
 				SaltHim(admin, "root");
-			}
 
-            exposer = new UserExposer(this);
-			Engine.DefaultHost.Map(typeof(UserExposer));
+                User sys = new User
+                {
+                    DisplayName = "System",
+                    GlobalAdmin = true,
+                    UserName = "system"
+                };
+
+                SaltHim(sys, Guid.NewGuid().ToString());
+            }
+
+            System = GetUser("system");
+            Exposer = new HtmlUserExposer(this);
 		}
 
         void SaltHim(User user, string password)
@@ -69,27 +84,6 @@ namespace Netfluid.Users
             Repository.Update(user);
         }
 
-
-        public bool WalledGarden
-        {
-            get
-            {
-                return Engine.Host(Host.Name).Filters.Any(x=>x.Name == "Netfluid.User.WalledGarden");
-            }
-            set
-            {
-                if(value)
-                {
-                    Engine.Host(Host.Name).Filters.Add(new Filter
-                    {
-                        Name = "Netfluid.User.WalledGarden",
-                    });
-                    return;
-                }
-                Engine.Host(Host.Name).Filters.RemoveAll(x => x.Name == "Netfluid.User.WalledGarden");
-            }
-        }
-
 		public User GetUser(string name)
 		{
             if (string.IsNullOrEmpty(name)) return null;
@@ -100,7 +94,12 @@ namespace Netfluid.Users
 
             return Repository.FirstOrDefault(x=>x.UserName == user && x.Domain == domain);
         }
-        
+
+        public bool Exists(string fullname)
+        {
+            return Exists(GetUser(fullname));
+        }
+
         public bool Exists(User user)
 		{
             if (user == null) return false;
@@ -186,5 +185,4 @@ namespace Netfluid.Users
             return true;
 		}
     }
-    */
 }
