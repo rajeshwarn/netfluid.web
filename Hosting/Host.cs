@@ -28,6 +28,7 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Reflection;
+using System.Runtime.CompilerServices;
 using System.Security.Authentication.ExtendedProtection;
 using System.Threading;
 using System.Threading.Tasks;
@@ -86,6 +87,10 @@ namespace Netfluid
                 return (Filters.Any() || Triggers.Any() || Routes.Any() || StatusCodeHandlers.Any() || PublicFolders.Any());
             }
         }
+
+        public DateTime StartDateTime { get; private set; }
+
+        public TimeSpan UpTime { get { return DateTime.Now - StartDateTime; } }
 
         #region HTTP LISTENER PROPERTIES
         //
@@ -302,6 +307,7 @@ namespace Netfluid
         /// The current virtual host serve the given context
         /// </summary>
         /// <param name="cnt"></param>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         void Serve(Context cnt)
         {
             cnt.Host = this;
