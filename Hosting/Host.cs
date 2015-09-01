@@ -287,6 +287,11 @@ namespace Netfluid
                         {
                             Serve(c);
                         }
+                        catch(Exception ex)
+                        {
+                            c.Writer.Write(ex.Message);
+                            c.Writer.Write(ex.StackTrace);
+                        }
                         finally
                         {
                             c.Close();
@@ -437,6 +442,11 @@ namespace Netfluid
         public void Map(object obj)
         {
             Load(obj.GetType(), obj);
+        }
+
+        public void Map(Assembly assembly)
+        {
+            assembly.GetTypes().ForEach(Map);
         }
 
         public void Map(Type type)

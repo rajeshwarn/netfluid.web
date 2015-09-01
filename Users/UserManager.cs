@@ -60,6 +60,8 @@ namespace Netfluid.Users
             if (mountPoint[0] != '/') mountPoint = "/" + mountPoint;
             if (mountPoint[mountPoint.Length - 1] != '/') mountPoint = mountPoint + "/";
 
+            Host.Filters.Add(Filter.New(new Func<Context,dynamic>(x => Exposer.WalledGarden(x))));
+
             Host.Routes["GET", mountPoint+"signin"] = Route.New(Exposer.SignInForm);
             Host.Routes["POST", mountPoint + "signin"] = Route.New(new Func<Context, string, string, string, IResponse>(Exposer.SignIn));
 
