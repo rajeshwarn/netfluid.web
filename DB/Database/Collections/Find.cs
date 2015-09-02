@@ -93,7 +93,7 @@ namespace Netfluid.DB
         /// <summary>
         /// Get document count using property on collection.
         /// </summary>
-        public int Count()
+        public long Count()
         {
             var col = this.GetCollectionPage(false);
 
@@ -105,7 +105,7 @@ namespace Netfluid.DB
         /// <summary>
         /// Count documnets with a query. This method does not deserialize any document. Needs indexes on query expression
         /// </summary>
-        public int Count(Query query)
+        public long Count(Query query)
         {
             if (query == null) throw new ArgumentNullException("query");
 
@@ -117,7 +117,7 @@ namespace Netfluid.DB
         /// <summary>
         /// Count documnets with a query. This method does not deserialize any document. Needs indexes on query expression
         /// </summary>
-        public int Count(Expression<Func<T, bool>> predicate)
+        public long Count(Expression<Func<T, bool>> predicate)
         {
             return this.Count(_visitor.Visit(predicate));
         }

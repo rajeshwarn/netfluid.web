@@ -11,8 +11,8 @@ namespace Netfluid.DB
         bool Any();
         bool Any(Expression<Func<T, bool>> predicate);
 
-        int Count();
-        int Count(Expression<Func<T, bool>> predicate);
+        long Count();
+        long Count(Expression<Func<T, bool>> predicate);
 
         int Delete(Expression<Func<T, bool>> predicate);
 

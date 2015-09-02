@@ -289,6 +289,8 @@ namespace Netfluid
                         }
                         catch(Exception ex)
                         {
+                            Console.WriteLine(ex.Message);
+
                             ex = ex.InnerException;
                             c.Writer.Write(ex.Message);
                             c.Writer.Write(ex.StackTrace);
@@ -462,7 +464,7 @@ namespace Netfluid
 
         void Load(Type type, object instance)
         {
-            if (instance == null && type.IsInstantiable() && type.HasDefaultConstructor())
+            if (instance == null && type.HasDefaultConstructor())
                 instance = type.CreateIstance();
 
             var prefixes = type.CustomAttribute<RouteAttribute>(true).Select(x=>x.Url);
@@ -478,9 +480,10 @@ namespace Netfluid
                         Routes.Add(new Route
                         {
                             Url = prefix + att.Url,
+                            HttpMethod = att.Method,
                             Index = att.Index,
                             MethodInfo = m,
-                            Target = instance
+                            Target = m.IsStatic ? null : instance
                         });
                     }
 
@@ -489,9 +492,10 @@ namespace Netfluid
                         Filters.Add(new Filter
                         {
                             Url = prefix + att.Url,
+                            HttpMethod = att.Method,
                             Index = att.Index,
                             MethodInfo = m,
-                            Target = instance
+                            Target = m.IsStatic ? null : instance
                         });
                     }
 
@@ -500,9 +504,10 @@ namespace Netfluid
                         Triggers.Add(new Trigger
                         {
                             Url = prefix + att.Url,
+                            HttpMethod = att.Method,
                             Index = att.Index,
                             MethodInfo = m,
-                            Target = instance
+                            Target = m.IsStatic ? null : instance
                         });
                     }
 
@@ -513,9 +518,10 @@ namespace Netfluid
                             StatusCodeHandlers.Add(new StatusCodeHandler
                             {
                                 Url = prefix + att.Url,
+                                HttpMethod = att.Method,
                                 Index = att.Index,
                                 MethodInfo = m,
-                                Target = instance
+                                Target = m.IsStatic ? null : instance
                             });
                         }
                     }

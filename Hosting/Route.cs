@@ -105,6 +105,10 @@ namespace Netfluid
                     }
                 }
             }
+
+            if (!methodInfo.IsStatic && Target == null)
+                Console.WriteLine("PORCODIO");
+
             return methodInfo.Invoke(Target, args);
         }
 

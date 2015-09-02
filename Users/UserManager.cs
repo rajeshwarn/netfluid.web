@@ -20,7 +20,7 @@ namespace Netfluid.Users
         
         internal T System { get; private set; }
 
-        public LiteCollection<T> Repository { get; set; }
+        public IRepository<T> Repository { get; set; }
 
         public UserManager()
 		{

@@ -52,7 +52,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Collections\AutoCache.cs" />
-    <Compile Include="Collections\IRepository.cs" />
     <Compile Include="Context.cs" />
     <Compile Include="Cron\Cron.cs" />
     <Compile Include="Cron\CronTask.cs" />

@@ -32,8 +32,13 @@ namespace Netfluid
         {
             var path = UriToPath(cnt.Request.Url.LocalPath);
 
+            Console.WriteLine(path);
+
             //security check
-            if (!File.Exists(path) || !path.StartsWith(Path.GetFullPath(RealPath)))
+            if (!File.Exists(path))
+                return false;
+
+            if (!path.StartsWith(Path.GetFullPath(RealPath)))
                 return false;
 
             return true;

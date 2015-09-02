@@ -371,6 +371,20 @@ namespace Netfluid
 
         #region STRING
 
+        public static string JsStyle(this string str)
+        {
+            if (string.IsNullOrWhiteSpace(str)) return str;
+
+            var arr = str.ToCharArray();
+            arr[0] = char.ToLowerInvariant(arr[0]);
+
+            for (int i = 0; i < arr.Length; i++)
+                if (!char.IsLetterOrDigit(arr[i]))
+                    arr[i] = '_';
+
+            return new string(arr);
+        }
+
         /// <summary>
         /// Trasnform a string into a stream
         /// </summary>
@@ -924,11 +938,6 @@ namespace Netfluid
         #endregion
 
         #region TYPE
-
-        public static bool IsInstantiable(this Type type)
-        {
-            return (!type.IsAbstract && type.GetConstructors().Any());
-        }
 
         public static bool HasDefaultConstructor(this Type type)
         {
