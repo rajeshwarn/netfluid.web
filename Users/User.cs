@@ -19,7 +19,8 @@ namespace Netfluid.Users
 
         public User()
         {
-            UserName = "Anonymous";
+            UserName = "anon";
+            DisplayName = "Anonymous";
         }
 
         public User(string fullname)
