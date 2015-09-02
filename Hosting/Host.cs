@@ -346,6 +346,7 @@ namespace Netfluid
 
                     if (value != null && cnt.Request.HttpMethod.ToLowerInvariant() != "head")
                         value.SendResponse(cnt);
+                    return;
                 }
                 else if (value is bool)
                 {
@@ -383,6 +384,8 @@ namespace Netfluid
 
                     if (value != null && cnt.Request.HttpMethod.ToLowerInvariant() != "head")
                         value.SendResponse(cnt);
+
+                    return;
                 }
                 else if (value is bool)
                 {
@@ -422,6 +425,8 @@ namespace Netfluid
 
                     if (value != null && cnt.Request.HttpMethod.ToLowerInvariant() != "head")
                         value.SendResponse(cnt);
+
+                    return;
                 }
                 else if (value is bool)
                 {
