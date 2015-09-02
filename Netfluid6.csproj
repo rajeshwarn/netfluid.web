@@ -332,6 +332,7 @@
     <Compile Include="Smtp\SmtpSessionInfo.cs" />
     <Compile Include="StatusCode.cs" />
     <Compile Include="Users\Configuration.cs" />
+    <Compile Include="Users\LiteUser.cs" />
     <Compile Include="Users\User.cs" />
     <Compile Include="Users\HtmlUserExposer.cs" />
     <Compile Include="Users\UserManager.cs" />

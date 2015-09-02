@@ -1,11 +1,12 @@
+using Netfluid.Users;
 using System;
 using System.Linq;
 
 namespace Netfluid.Users
 {
-	public class HtmlUserExposer
+	public class HtmlUserExposer<T> where T: User,new()
 	{
-        UserManager manager;
+        UserManager<T> manager;
 
         public Func<Context, IResponse> SignInForm { get; set; }
         public Func<Context, string, IResponse> SignInError { get; set; }
@@ -15,18 +16,26 @@ namespace Netfluid.Users
 
         public Func<Context, IResponse> SignUpForm { get; set; }
         public Func<Context, string, IResponse> SignupError { get; set; }
-        public Func<Context, User, IResponse> SignUpOK { get; set; }
+        public Func<Context, T, IResponse> SignUpOK { get; set; }
 
-        public HtmlUserExposer(UserManager userManager)
+        public HtmlUserExposer(UserManager<T> userManager)
         {
             manager = userManager;
+
+            SignInError = (x, y) => new MustacheTemplate("./Users/signIn.html");
+            SignInForm = x => new MustacheTemplate("./Users/signIn.html");
+            SignInOK = x => new RedirectResponse("/");
+            SignOutOK = SignInOK;
+            SignupError = SignInError;
+            SignUpForm = SignInForm;
+            SignUpOK = (x, u) => new RedirectResponse("/");
         }
 
         public dynamic WalledGarden(Context context)
         {
             if (!manager.WalledGarden) return false;
 
-            if (context.Session<User>("user") == null && context.Request.Url.LocalPath != "/signin" && context.Request.HttpMethod != "POST")
+            if (context.Session<T>("user") == null && context.Request.Url.LocalPath != "/signin" && context.Request.HttpMethod != "POST")
             {
                 if (manager.Host.PublicFolders.Any(y => y.Map(context)))
                     return false;
@@ -90,7 +99,7 @@ namespace Netfluid.Users
 
             username = username.HTMLEncode();
 
-            var user = new User
+            var user = new T
             {
                 DisplayName = displayName,
                 Domain = domain,

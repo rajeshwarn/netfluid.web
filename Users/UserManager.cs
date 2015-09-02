@@ -6,51 +6,27 @@ using System.Linq;
 namespace Netfluid.Users
 {
 
-    public class UserManager
+    public class UserManager<T> where T: User,new()
     {
         private const string charset = "qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM123456789!£$%&/()=?^+;,:.-";
 
 
-        public HtmlUserExposer Exposer { get; private set; }
+        public HtmlUserExposer<T> Exposer { get; private set; }
         public Host Host { get; private set; }
-        public LiteCollection<User> Repository { get; set; }
         public int SignInInterval { get; set; }
     
         public bool WalledGarden { get; set; }
         public Configuration Configuration { get; set; }
         
-        internal User System { get; private set; } 
+        internal T System { get; private set; }
+
+        public LiteCollection<T> Repository { get; set; }
 
         public UserManager()
 		{
-            var db = new LiteDatabase("users.db");
-            Repository = db.GetCollection<User>("user");
-
             SignInInterval = 10;
 
-			if (!Repository.Any())
-			{
-				User admin = new User
-				{
-					DisplayName = "Administrator",
-					GlobalAdmin = true,
-					UserName = "root"
-				};
-
-				SaltHim(admin, "root");
-
-                User sys = new User
-                {
-                    DisplayName = "System",
-                    GlobalAdmin = true,
-                    UserName = "system"
-                };
-
-                SaltHim(sys, Guid.NewGuid().ToString());
-            }
-
-            System = GetUser("system");
-            Exposer = new HtmlUserExposer(this);
+            Exposer = new HtmlUserExposer<T>(this);
 		}
 
         public void Mount(Host host,string mountPoint)
@@ -69,9 +45,41 @@ namespace Netfluid.Users
 
             Host.Routes["GET", mountPoint + "signup"] = Route.New(Exposer.SignUpForm);
             Host.Routes["POST", mountPoint + "signup"] = Route.New(new Func<Context, string, string, string,string,string, IResponse>(Exposer.SignedUp));
+
+            #region SETUP DATABASE
+
+            if (Repository == null)
+            {
+                var db = new LiteDatabase("users.db");
+                Repository = db.GetCollection<T>("user");
+            }
+
+            if (!Repository.Any())
+            {
+                T admin = new T
+                {
+                    DisplayName = "Administrator",
+                    GlobalAdmin = true,
+                    UserName = "root"
+                };
+
+                SaltHim(admin, "root");
+
+                T sys = new T
+                {
+                    DisplayName = "System",
+                    GlobalAdmin = true,
+                    UserName = "system"
+                };
+
+                SaltHim(sys, Guid.NewGuid().ToString());
+            }
+
+            System = GetUser("system");
+            #endregion
         }
 
-        void SaltHim(User user, string password)
+        void SaltHim(T user, string password)
         {
             string salt = new string(charset.Random(32).ToArray<char>());
             int rounds = Security.Random(4000);
@@ -101,7 +109,7 @@ namespace Netfluid.Users
             Repository.Update(user);
         }
 
-		public User GetUser(string name)
+		public T GetUser(string name)
 		{
             if (string.IsNullOrEmpty(name)) return null;
 
@@ -117,7 +125,7 @@ namespace Netfluid.Users
             return Exists(GetUser(fullname));
         }
 
-        public bool Exists(User user)
+        public bool Exists(T user)
 		{
             if (user == null) return false;
 
@@ -129,7 +137,7 @@ namespace Netfluid.Users
 			return CheckAuthority(GetUser(user), GetUser(auth));
 		}
 
-        public bool CheckAuthority(User user, User auth)
+        public bool CheckAuthority(T user, T auth)
 		{
             if (!Exists(user) || !Exists(auth)) return false;
 
@@ -141,11 +149,11 @@ namespace Netfluid.Users
             return false;
 		}
 
-		public User SignIn(string fullname, string pass)
+		public T SignIn(string fullname, string pass)
 		{
-            User user = GetUser(fullname);
+            T user = GetUser(fullname);
 
-			User result;
+			T result;
             if (user == null || (DateTime.Now - user.LastLogin).TotalSeconds <= SignInInterval)
                 return null;
 
@@ -179,7 +187,7 @@ namespace Netfluid.Users
             return result;
         }
 
-        public bool Add(User user, string password, User auth)
+        public bool Add(T user, string password, T auth)
 		{
             if (!Exists(user) || !CheckAuthority(user, auth)) return false;
 
@@ -187,7 +195,7 @@ namespace Netfluid.Users
             return true;
         }
 
-        public bool Remove(User user, User auth)
+        public bool Remove(T user, T auth)
 		{
             if (!CheckAuthority(user, auth)) return false;
 
@@ -195,7 +203,7 @@ namespace Netfluid.Users
             return true;
         }
 
-		public bool ChangePassword(User user, User auth, string newPassword)
+		public bool ChangePassword(T user, T auth, string newPassword)
 		{
             if (!CheckAuthority(user, auth)) return false;
             SaltHim(user, newPassword);
