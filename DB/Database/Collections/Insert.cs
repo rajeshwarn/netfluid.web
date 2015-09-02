@@ -8,7 +8,7 @@ namespace Netfluid.DB
         /// <summary>
         /// Insert a new document to this collection. Document Id must be a new value in collection - Returns document Id
         /// </summary>
-        public virtual BsonValue Insert(T document)
+        public virtual void Insert(T document)
         {
             if (document == null) throw new ArgumentNullException("document");
 
@@ -63,7 +63,6 @@ namespace Netfluid.DB
 
                 this.Database.Transaction.Commit();
 
-                return id;
             }
             catch
             {
@@ -75,7 +74,7 @@ namespace Netfluid.DB
         /// <summary>
         /// Insert an array of new documents to this collection. Document Id must be a new value in collection
         /// </summary>
-        public virtual int Insert(IEnumerable<T> docs)
+        public virtual void Insert(IEnumerable<T> docs)
         {
             if (docs == null) throw new ArgumentNullException("docs");
 
@@ -91,8 +90,6 @@ namespace Netfluid.DB
                 }
 
                 this.Database.Transaction.Commit();
-
-                return count;
             }
             catch
             {

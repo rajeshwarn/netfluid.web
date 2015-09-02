@@ -103,7 +103,7 @@ namespace Netfluid.DB
         /// </summary>
         /// <param name="field">Document field name (case sensitive)</param>
         /// <param name="unique">All index options</param>
-        public virtual bool EnsureIndex(string field, bool unique = false)
+        public virtual bool EnsureIndex(string field, bool unique)
         {
             return this.EnsureIndex(field, new IndexOptions { Unique = unique });
         }

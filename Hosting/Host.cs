@@ -289,6 +289,7 @@ namespace Netfluid
                         }
                         catch(Exception ex)
                         {
+                            ex = ex.InnerException;
                             c.Writer.Write(ex.Message);
                             c.Writer.Write(ex.StackTrace);
                         }

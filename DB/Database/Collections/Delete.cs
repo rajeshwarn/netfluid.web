@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq.Expressions;
 
 namespace Netfluid.DB
@@ -108,6 +109,11 @@ namespace Netfluid.DB
             return this.Delete(_visitor.Visit(predicate));
         }
 
+        public bool EnsureIndex(string field)
+        {
+            return EnsureIndex(field, false);
+        }
+
         internal virtual void Delete(CollectionPage col, IndexNode node)
         {
             // read dataBlock 
@@ -121,6 +127,16 @@ namespace Netfluid.DB
 
             // remove object data
             this.Database.Data.Delete(col, node.DataBlock);
+        }
+
+        void IRepository<T>.Insert(IEnumerable<T> docs)
+        {
+            
+        }
+
+        void IRepository<T>.Insert(T document)
+        {
+            throw new NotImplementedException();
         }
     }
 }
