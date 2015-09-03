@@ -2868,7 +2868,9 @@ namespace Netfluid
         /// <summary>
         /// Zimbabwe
         /// </summary>
-        Zw
+        Zw,
+
+        World
     }
 
     #endregion

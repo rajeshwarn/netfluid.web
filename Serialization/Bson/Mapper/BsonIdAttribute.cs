@@ -1,7 +1,7 @@
 ﻿
 using System;
 
-namespace Netfluid
+namespace Netfluid.Bson
 {
     /// <summary>
     /// Indicate that property will be used as BsonDocument Id

@@ -2,7 +2,7 @@
 using System;
 using System.Collections;
 
-namespace Netfluid
+namespace Netfluid.DB
 {
     public partial class BsonMapper
     {

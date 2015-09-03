@@ -1,7 +1,8 @@
 ﻿
+using Netfluid.DB;
 using System;
 
-namespace Netfluid.DB
+namespace Netfluid.Bson
 {
     /// <summary>
     /// Add an index in this entity property.

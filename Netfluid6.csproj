@@ -186,11 +186,11 @@
     <Compile Include="Serialization\Bson\Mapper\BsonIdAttribute.cs" />
     <Compile Include="Serialization\Bson\Mapper\BsonIgnoreAttribute.cs" />
     <Compile Include="Serialization\Bson\Mapper\BsonIndexAttribute.cs" />
-    <Compile Include="Serialization\Bson\Mapper\BsonMapper.cs" />
-    <Compile Include="Serialization\Bson\Mapper\BsonMapper.Deserialize.cs" />
-    <Compile Include="Serialization\Bson\Mapper\BsonMapper.Serialize.cs" />
-    <Compile Include="Serialization\Bson\Mapper\PropertyMapper.cs" />
-    <Compile Include="Serialization\Bson\Mapper\Reflection.cs" />
+    <Compile Include="DB\BsonMapper.cs" />
+    <Compile Include="DB\BsonMapper.Deserialize.cs" />
+    <Compile Include="DB\BsonMapper.Serialize.cs" />
+    <Compile Include="DB\PropertyMapper.cs" />
+    <Compile Include="DB\Reflection.cs" />
     <Compile Include="DB\Storage\Pages\BasePage.cs" />
     <Compile Include="DB\Storage\Pages\CollectionPage.cs" />
     <Compile Include="DB\Storage\Pages\DataPage.cs" />

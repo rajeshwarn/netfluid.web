@@ -1,7 +1,7 @@
 ﻿using Netfluid.DB;
 using System;
 
-namespace Netfluid
+namespace Netfluid.Bson
 {
     internal class AutoId
     {

@@ -1,7 +1,7 @@
 ﻿
 using System;
 
-namespace Netfluid
+namespace Netfluid.Bson
 {
     /// <summary>
     /// Set a name to this property in BsonDocument
