@@ -3,8 +3,9 @@ using System.Diagnostics;
 using System.Runtime.CompilerServices;
 using System.Security;
 using System.Threading;
+using Netfluid.Bson;
 
-namespace Netfluid
+namespace Netfluid.DB
 {
     /// <summary>
     /// Represent a 12-bytes BSON type used in document Id

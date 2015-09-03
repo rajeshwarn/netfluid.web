@@ -5,7 +5,7 @@ using System.Globalization;
 using System.IO;
 using System.Text;
 
-namespace Netfluid
+namespace Netfluid.Bson
 {
     /// <summary>
     /// Represent a Bson Value used in BsonDocument

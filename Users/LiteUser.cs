@@ -1,4 +1,6 @@
-﻿namespace Netfluid.Users
+﻿using Netfluid.DB;
+
+namespace Netfluid.Users
 {
     public class LiteUser:User
     {

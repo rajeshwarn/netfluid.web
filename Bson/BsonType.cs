@@ -1,4 +1,4 @@
-﻿namespace Netfluid
+﻿namespace Netfluid.Bson
 {
     /// <summary>
     /// All supported BsonTypes in sort order

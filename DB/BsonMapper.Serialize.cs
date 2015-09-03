@@ -1,4 +1,5 @@
-﻿using Netfluid.DB;
+﻿using Netfluid.Bson;
+using Netfluid.DB;
 using System;
 using System.Collections;
 

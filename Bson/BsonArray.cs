@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Netfluid
+namespace Netfluid.Bson
 {
     public class BsonArray : BsonValue, IEnumerable<BsonValue>
     {

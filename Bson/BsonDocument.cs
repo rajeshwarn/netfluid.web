@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Netfluid.DB;
 
-namespace Netfluid
+namespace Netfluid.Bson
 {
     public class BsonDocument : BsonValue
     {

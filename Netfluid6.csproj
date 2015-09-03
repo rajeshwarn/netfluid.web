@@ -51,6 +51,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Bson\BsonArray.cs" />
+    <Compile Include="Bson\BsonDocument.cs" />
+    <Compile Include="Bson\BsonType.cs" />
+    <Compile Include="Bson\BsonValue.cs" />
     <Compile Include="Collections\AutoCache.cs" />
     <Compile Include="Context.cs" />
     <Compile Include="CountryInfo.cs" />
@@ -145,11 +149,7 @@
     <Compile Include="DB\Database\Tools\DbRef.cs" />
     <Compile Include="DB\Database\Tools\GetDatabaseInfo.cs" />
     <Compile Include="DB\Database\Tools\UserVersion.cs" />
-    <Compile Include="DB\Document\BsonArray.cs" />
-    <Compile Include="DB\Document\BsonDocument.cs" />
-    <Compile Include="DB\Document\BsonType.cs" />
-    <Compile Include="DB\Document\BsonValue.cs" />
-    <Compile Include="DB\Document\ObjectId.cs" />
+    <Compile Include="DB\ObjectId.cs" />
     <Compile Include="DB\Query\Impl\QueryAll.cs" />
     <Compile Include="DB\Query\Impl\QueryAnd.cs" />
     <Compile Include="DB\Query\Impl\QueryBetween.cs" />

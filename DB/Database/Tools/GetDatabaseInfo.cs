@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using Netfluid.Bson;
+using System.Linq;
 
 namespace Netfluid.DB
 {
