@@ -53,8 +53,10 @@
   <ItemGroup>
     <Compile Include="Collections\AutoCache.cs" />
     <Compile Include="Context.cs" />
+    <Compile Include="CountryInfo.cs" />
     <Compile Include="Cron\Cron.cs" />
     <Compile Include="Cron\CronTask.cs" />
+    <Compile Include="CurrencyInfo.cs" />
     <Compile Include="DB\IRepository.cs" />
     <Compile Include="Dns\DnsClient.cs" />
     <Compile Include="Dns\DnsServer.cs" />
@@ -169,6 +171,7 @@
     <Compile Include="Hosting\Route.cs" />
     <Compile Include="Hosting\Trigger.cs" />
     <Compile Include="Hosting\TriggerAttribute.cs" />
+    <Compile Include="LanguageInfo.cs" />
     <Compile Include="Logging\ConsoleLogger.cs" />
     <Compile Include="Logging\DebugLogger.cs" />
     <Compile Include="Logging\Logger.cs" />
