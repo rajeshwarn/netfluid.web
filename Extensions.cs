@@ -54,6 +54,26 @@ namespace Netfluid
                 .ToArray();
         }
 
+        public static T SanifyHTML<T>(this T obj)
+        {
+            obj.GetType().GetProperties()
+                .Where(x => x.PropertyType.Equals(typeof(string)))
+                .ForEach(x=>
+                {
+                    var value = (x.GetValue(obj) ?? "") as string;
+                    x.SetValue(obj, Extensions.HTMLEncode(value));
+                });
+
+            obj.GetType().GetFields()
+                .Where(x => x.FieldType.Equals(typeof(string)))
+                .ForEach(x =>
+                {
+                    var value = (x.GetValue(obj) ?? "") as string;
+                    x.SetValue(obj, Extensions.HTMLEncode(value));
+                });
+            return obj;
+        }
+
         #region String
 
         /// <summary>
