@@ -2235,6 +2235,8 @@ namespace Netfluid
     /// </remarks>
     public enum CountryCode
     {
+        World,
+
         /// <summary>
         /// U.A.E.
         /// </summary>
@@ -2868,9 +2870,7 @@ namespace Netfluid
         /// <summary>
         /// Zimbabwe
         /// </summary>
-        Zw,
-
-        World
+        Zw
     }
 
     #endregion

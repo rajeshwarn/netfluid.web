@@ -108,6 +108,31 @@ namespace Netfluid
 
             c.Response.Cookies.Add(sess);
 
+            #region GET PARAMETERS
+            if(c.Request.Url.Query != null)
+            {
+                var parts = (c.Request.Url.Query[0] == '?' ? c.Request.Url.Query.Substring(1) : c.Request.Url.Query).Split(new[] { '&' }, StringSplitOptions.RemoveEmptyEntries);
+
+                foreach (string s in parts)
+                {
+                    string[] val = s.Split(new[] { '=' });
+                    int count = val.Length;
+                    string k = HttpUtility.UrlDecode(val[0]);
+
+                    switch (count)
+                    {
+                        case 2:
+                            string v = HttpUtility.UrlDecode(val[1]);
+                            Values.Add(k, v);
+                            break;
+                        case 1:
+                            Values.Add(k, "true");
+                            break;
+                    }
+                }
+            }
+            #endregion
+
             #region read request
             if (context.Request.HttpMethod == "GET" || context.Request.ContentLength64 <= 0) return;
 
