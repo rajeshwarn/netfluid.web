@@ -1,0 +1,13 @@
+C:\Users\Matte\Desktop\Netfluid\bin\Debug\Netfluid.exe.config
+C:\Users\Matte\Desktop\Netfluid\bin\Debug\Netfluid.exe
+C:\Users\Matte\Desktop\Netfluid\bin\Debug\Netfluid.pdb
+C:\Users\Matte\Desktop\Netfluid\obj\Debug\Netfluid.exe
+C:\Users\Matte\Desktop\Netfluid\obj\Debug\Netfluid.pdb
+D:\PROGETTI\NetFluid\Netfluid\bin\Debug\Netfluid.exe.config
+D:\PROGETTI\NetFluid\Netfluid\obj\Debug\Netfluid.exe
+D:\PROGETTI\NetFluid\Netfluid\obj\Debug\Netfluid.pdb
+D:\PROGETTI\NetFluid\Netfluid\bin\Debug\Netfluid.exe
+D:\PROGETTI\NetFluid\Netfluid\bin\Debug\Netfluid.pdb
+D:\PROGETTI\NetFluid\Netfluid\obj\Debug\Netfluid.csprojResolveAssemblyReference.cache
+D:\PROGETTI\NetFluid\Netfluid\bin\Debug\Vlc.DotNet.Core.dll
+D:\PROGETTI\NetFluid\Netfluid\bin\Debug\Vlc.DotNet.Core.Interops.dll

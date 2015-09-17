@@ -1,0 +1,379 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{4A1E586A-1627-469B-A0B9-0E2C48A3BDED}</ProjectGuid>
+    <OutputType>Exe</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Netfluid</RootNamespace>
+    <AssemblyName>Netfluid</AssemblyName>
+    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Runtime.Caching" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml" />
+    <Reference Include="Vlc.DotNet.Core, Version=2.1.62.0, Culture=neutral, PublicKeyToken=84529da31f4eb963, processorArchitecture=x86">
+      <HintPath>C:\Users\Matte\Documents\Visual Studio 2013\Projects\GennyCRM\packages\Vlc.DotNet.Core.2.1.62\lib\net45\x86\Vlc.DotNet.Core.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Vlc.DotNet.Core.Interops, Version=2.1.62.0, Culture=neutral, PublicKeyToken=84529da31f4eb963, processorArchitecture=x86">
+      <HintPath>C:\Users\Matte\Documents\Visual Studio 2013\Projects\GennyCRM\packages\Vlc.DotNet.Core.Interops.2.1.62\lib\net45\x86\Vlc.DotNet.Core.Interops.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Bson\BsonArray.cs" />
+    <Compile Include="Bson\BsonDocument.cs" />
+    <Compile Include="Bson\BsonType.cs" />
+    <Compile Include="Bson\BsonValue.cs" />
+    <Compile Include="Collections\AutoCache.cs" />
+    <Compile Include="Context.cs" />
+    <Compile Include="Country.cs" />
+    <Compile Include="Date.cs" />
+    <Compile Include="DB\BsonMapper.cs" />
+    <Compile Include="DB\BsonMapper.Deserialize.cs" />
+    <Compile Include="DB\BsonMapper.Serialize.cs" />
+    <Compile Include="DB\Database\Collections\Delete.cs" />
+    <Compile Include="DB\Database\Collections\Drop.cs" />
+    <Compile Include="DB\Database\Collections\Find.cs" />
+    <Compile Include="DB\Database\Collections\Include.cs" />
+    <Compile Include="DB\Database\Collections\Index.cs" />
+    <Compile Include="DB\Database\Collections\Insert.cs" />
+    <Compile Include="DB\Database\Collections\InsertBulk.cs" />
+    <Compile Include="DB\Database\Collections\Update.cs" />
+    <Compile Include="DB\Database\FileStorage\LiteFileInfo.cs" />
+    <Compile Include="DB\Database\FileStorage\LiteFileStorage.cs" />
+    <Compile Include="DB\Database\FileStorage\LiteFileStream.cs" />
+    <Compile Include="DB\Database\Tools\DbRef.cs" />
+    <Compile Include="DB\Database\Tools\GetDatabaseInfo.cs" />
+    <Compile Include="DB\Database\Tools\UserVersion.cs" />
+    <Compile Include="DB\IRepository.cs" />
+    <Compile Include="DB\LiteCollection.cs" />
+    <Compile Include="DB\LiteDatabase.cs" />
+    <Compile Include="DB\ObjectId.cs" />
+    <Compile Include="DB\PropertyMapper.cs" />
+    <Compile Include="DB\Query\Impl\QueryAll.cs" />
+    <Compile Include="DB\Query\Impl\QueryAnd.cs" />
+    <Compile Include="DB\Query\Impl\QueryBetween.cs" />
+    <Compile Include="DB\Query\Impl\QueryContains.cs" />
+    <Compile Include="DB\Query\Impl\QueryEquals.cs" />
+    <Compile Include="DB\Query\Impl\QueryGreater.cs" />
+    <Compile Include="DB\Query\Impl\QueryIn.cs" />
+    <Compile Include="DB\Query\Impl\QueryLess.cs" />
+    <Compile Include="DB\Query\Impl\QueryNot.cs" />
+    <Compile Include="DB\Query\Impl\QueryOr.cs" />
+    <Compile Include="DB\Query\Impl\QueryStartsWith.cs" />
+    <Compile Include="DB\Query\Linq\QueryVisitor.cs" />
+    <Compile Include="DB\Query\Query.cs" />
+    <Compile Include="DB\Reflection.cs" />
+    <Compile Include="DB\Storage\Pages\BasePage.cs" />
+    <Compile Include="DB\Storage\Pages\CollectionPage.cs" />
+    <Compile Include="DB\Storage\Pages\DataPage.cs" />
+    <Compile Include="DB\Storage\Pages\ExtendPage.cs" />
+    <Compile Include="DB\Storage\Pages\HeaderPage.cs" />
+    <Compile Include="DB\Storage\Pages\IndexPage.cs" />
+    <Compile Include="DB\Storage\Services\CacheService.cs" />
+    <Compile Include="DB\Storage\Services\CollectionService.cs" />
+    <Compile Include="DB\Storage\Services\DataService.cs" />
+    <Compile Include="DB\Storage\Services\DiskService.cs" />
+    <Compile Include="DB\Storage\Services\IndexService.cs" />
+    <Compile Include="DB\Storage\Services\JournalService.cs" />
+    <Compile Include="DB\Storage\Services\PageService.cs" />
+    <Compile Include="DB\Storage\Services\RecoveryService.cs" />
+    <Compile Include="DB\Storage\Services\TransactionService.cs" />
+    <Compile Include="DB\Storage\Structures\CollectionIndex.cs" />
+    <Compile Include="DB\Storage\Structures\DataBlock.cs" />
+    <Compile Include="DB\Storage\Structures\IndexNode.cs" />
+    <Compile Include="DB\Storage\Structures\IndexOptions.cs" />
+    <Compile Include="DB\Storage\Structures\PageAddress.cs" />
+    <Compile Include="DB\Utils\BinaryExtensions.cs" />
+    <Compile Include="DB\Utils\BinaryReaderExtensions.cs" />
+    <Compile Include="DB\Utils\BinaryWriterExtensions.cs" />
+    <Compile Include="DB\Utils\DictionaryExtensions.cs" />
+    <Compile Include="DB\Utils\DumpDatabase.cs" />
+    <Compile Include="DB\Utils\IOExceptionExtensions.cs" />
+    <Compile Include="DB\Utils\LiteException.cs" />
+    <Compile Include="DB\Utils\Settings.cs" />
+    <Compile Include="DB\Utils\StringScanner.cs" />
+    <Compile Include="Dns\DnsClient.cs" />
+    <Compile Include="Dns\DnsServer.cs" />
+    <Compile Include="Dns\DomainNameAttribute.cs" />
+    <Compile Include="Dns\Header.cs" />
+    <Compile Include="Dns\Question.cs" />
+    <Compile Include="Dns\Record.cs" />
+    <Compile Include="Dns\Records\NotUsed\RecordA6.cs" />
+    <Compile Include="Dns\Records\NotUsed\RecordAPL.cs" />
+    <Compile Include="Dns\Records\NotUsed\RecordATMA.cs" />
+    <Compile Include="Dns\Records\NotUsed\RecordCERT.cs" />
+    <Compile Include="Dns\Records\NotUsed\RecordDHCID.cs" />
+    <Compile Include="Dns\Records\NotUsed\RecordDNSKEY.cs" />
+    <Compile Include="Dns\Records\NotUsed\RecordEID.cs" />
+    <Compile Include="Dns\Records\NotUsed\RecordGID.cs" />
+    <Compile Include="Dns\Records\NotUsed\RecordHIP.cs" />
+    <Compile Include="Dns\Records\NotUsed\RecordIPSECKEY.cs" />
+    <Compile Include="Dns\Records\NotUsed\RecordNIMLOC.cs" />
+    <Compile Include="Dns\Records\NotUsed\RecordNSEC.cs" />
+    <Compile Include="Dns\Records\NotUsed\RecordNSEC3.cs" />
+    <Compile Include="Dns\Records\NotUsed\RecordNSEC3PARAM.cs" />
+    <Compile Include="Dns\Records\NotUsed\RecordOPT.cs" />
+    <Compile Include="Dns\Records\NotUsed\RecordRRSIG.cs" />
+    <Compile Include="Dns\Records\NotUsed\RecordSINK.cs" />
+    <Compile Include="Dns\Records\NotUsed\RecordSPF.cs" />
+    <Compile Include="Dns\Records\NotUsed\RecordSSHFP.cs" />
+    <Compile Include="Dns\Records\NotUsed\RecordUID.cs" />
+    <Compile Include="Dns\Records\NotUsed\RecordUINFO.cs" />
+    <Compile Include="Dns\Records\NotUsed\RecordUNSPEC.cs" />
+    <Compile Include="Dns\Records\RecordA.cs" />
+    <Compile Include="Dns\Records\RecordAAAA.cs" />
+    <Compile Include="Dns\Records\RecordAFSDB.cs" />
+    <Compile Include="Dns\Records\RecordCNAME.cs" />
+    <Compile Include="Dns\Records\RecordDNAME.cs" />
+    <Compile Include="Dns\Records\RecordDS.cs" />
+    <Compile Include="Dns\Records\RecordGPOS.cs" />
+    <Compile Include="Dns\Records\RecordHINFO.cs" />
+    <Compile Include="Dns\Records\RecordISDN.cs" />
+    <Compile Include="Dns\Records\RecordKEY.cs" />
+    <Compile Include="Dns\Records\RecordKX.cs" />
+    <Compile Include="Dns\Records\RecordLOC.cs" />
+    <Compile Include="Dns\Records\RecordMB.cs" />
+    <Compile Include="Dns\Records\RecordMD.cs" />
+    <Compile Include="Dns\Records\RecordMF.cs" />
+    <Compile Include="Dns\Records\RecordMG.cs" />
+    <Compile Include="Dns\Records\RecordMINFO.cs" />
+    <Compile Include="Dns\Records\RecordMR.cs" />
+    <Compile Include="Dns\Records\RecordMX.cs" />
+    <Compile Include="Dns\Records\RecordNAPTR.cs" />
+    <Compile Include="Dns\Records\RecordNS.cs" />
+    <Compile Include="Dns\Records\RecordNSAP.cs" />
+    <Compile Include="Dns\Records\RecordNSAPPTR.cs" />
+    <Compile Include="Dns\Records\RecordNULL.cs" />
+    <Compile Include="Dns\Records\RecordNXT.cs" />
+    <Compile Include="Dns\Records\RecordPTR.cs" />
+    <Compile Include="Dns\Records\RecordPX.cs" />
+    <Compile Include="Dns\Records\RecordRP.cs" />
+    <Compile Include="Dns\Records\RecordRT.cs" />
+    <Compile Include="Dns\Records\RecordSIG.cs" />
+    <Compile Include="Dns\Records\RecordSOA.cs" />
+    <Compile Include="Dns\Records\RecordSRV.cs" />
+    <Compile Include="Dns\Records\RecordTKEY.cs" />
+    <Compile Include="Dns\Records\RecordTSIG.cs" />
+    <Compile Include="Dns\Records\RecordTXT.cs" />
+    <Compile Include="Dns\Records\RecordUnknown.cs" />
+    <Compile Include="Dns\Records\RecordWKS.cs" />
+    <Compile Include="Dns\Records\RecordX25.cs" />
+    <Compile Include="Dns\Request.cs" />
+    <Compile Include="Dns\Resolver.cs" />
+    <Compile Include="Dns\Response.cs" />
+    <Compile Include="Dns\Serializer.cs" />
+    <Compile Include="Dns\Structs.cs" />
+    <Compile Include="EmailValidator.cs" />
+    <Compile Include="Extensions.cs" />
+    <Compile Include="Hosting\Filter.cs" />
+    <Compile Include="Hosting\FilterAttribute.cs" />
+    <Compile Include="Hosting\Host.cs" />
+    <Compile Include="Hosting\Route.cs" />
+    <Compile Include="Hosting\RouteAttribute.cs" />
+    <Compile Include="Hosting\RouteCollection.cs" />
+    <Compile Include="Hosting\StatusCodeHandler.cs" />
+    <Compile Include="Hosting\StatusCodeHandlerAttribute.cs" />
+    <Compile Include="Hosting\Trigger.cs" />
+    <Compile Include="Hosting\TriggerAttribute.cs" />
+    <Compile Include="Hosting\VirtualHostAttribute.cs" />
+    <Compile Include="HttpFile.cs" />
+    <Compile Include="HttpFileCollection.cs" />
+    <Compile Include="HTTP\Extensions.cs" />
+    <Compile Include="HTTP\HttpUtility.cs" />
+    <Compile Include="HTTP\MultipartFormDataParser.cs" />
+    <Compile Include="HTTP\MultipartInternals\BinaryStreamStack.cs" />
+    <Compile Include="HTTP\MultipartInternals\MultipartParseException.cs" />
+    <Compile Include="HTTP\MultipartInternals\ParameterPart.cs" />
+    <Compile Include="HTTP\MultipartInternals\RebufferableBinaryReader.cs" />
+    <Compile Include="HTTP\MultipartInternals\SubsequenceFinder.cs" />
+    <Compile Include="IO\ChunkedStream.cs" />
+    <Compile Include="IResponse.cs" />
+    <Compile Include="Logging\ConsoleLogger.cs" />
+    <Compile Include="Logging\DebugLogger.cs" />
+    <Compile Include="Logging\FileLogger.cs" />
+    <Compile Include="Logging\Logger.cs" />
+    <Compile Include="Logging\LogLevel.cs" />
+    <Compile Include="Logging\NullLogger.cs" />
+    <Compile Include="MimeTypes.cs" />
+    <Compile Include="Network.cs" />
+    <Compile Include="Net\TcpService.cs" />
+    <Compile Include="Program.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="PublicFolders\IPublicFolder.cs" />
+    <Compile Include="PublicFolders\PublicFolder.cs" />
+    <Compile Include="QueryValue.cs" />
+    <Compile Include="QueryValueCollection.cs" />
+    <Compile Include="Responses\CSVResponse.cs" />
+    <Compile Include="Responses\EmptyResponse.cs" />
+    <Compile Include="Responses\FileResponse.cs" />
+    <Compile Include="Responses\JSONFileResponse.cs" />
+    <Compile Include="Responses\JSONResponse.cs" />
+    <Compile Include="Responses\MovedPermanentlyResponse.cs" />
+    <Compile Include="Responses\RedirectResponse.cs" />
+    <Compile Include="Responses\SitemapResponse.cs" />
+    <Compile Include="Responses\StringResponse.cs" />
+    <Compile Include="Responses\Templates\MustacheInternals\Arguments\ArgumentCollection.cs" />
+    <Compile Include="Responses\Templates\MustacheInternals\Arguments\IArgument.cs" />
+    <Compile Include="Responses\Templates\MustacheInternals\Arguments\NumberArgument.cs" />
+    <Compile Include="Responses\Templates\MustacheInternals\Arguments\PlaceholderArgument.cs" />
+    <Compile Include="Responses\Templates\MustacheInternals\Arguments\StringArgument.cs" />
+    <Compile Include="Responses\Templates\MustacheInternals\Arguments\VariableArgument.cs" />
+    <Compile Include="Responses\Templates\MustacheInternals\ConditionTagDefinition.cs" />
+    <Compile Include="Responses\Templates\MustacheInternals\ContentTagDefinition.cs" />
+    <Compile Include="Responses\Templates\MustacheInternals\Context.cs" />
+    <Compile Include="Responses\Templates\MustacheInternals\ContextParameter.cs" />
+    <Compile Include="Responses\Templates\MustacheInternals\Flow\EachTagDefinition.cs" />
+    <Compile Include="Responses\Templates\MustacheInternals\Flow\ElifTagDefinition.cs" />
+    <Compile Include="Responses\Templates\MustacheInternals\Flow\ElseTagDefinition.cs" />
+    <Compile Include="Responses\Templates\MustacheInternals\FormatCompiler.cs" />
+    <Compile Include="Responses\Templates\MustacheInternals\Generator.cs" />
+    <Compile Include="Responses\Templates\MustacheInternals\Generators\CompoundGenerator.cs" />
+    <Compile Include="Responses\Templates\MustacheInternals\Generators\IGenerator.cs" />
+    <Compile Include="Responses\Templates\MustacheInternals\Generators\InlineGenerator.cs" />
+    <Compile Include="Responses\Templates\MustacheInternals\Generators\KeyGenerator.cs" />
+    <Compile Include="Responses\Templates\MustacheInternals\IfTagDefinition.cs" />
+    <Compile Include="Responses\Templates\MustacheInternals\IndexTagDefinition.cs" />
+    <Compile Include="Responses\Templates\MustacheInternals\InlineTagDefinition.cs" />
+    <Compile Include="Responses\Templates\MustacheInternals\KeyFoundEventArgs.cs" />
+    <Compile Include="Responses\Templates\MustacheInternals\KeyNotFoundEventArgs.cs" />
+    <Compile Include="Responses\Templates\MustacheInternals\MasterTagDefinition.cs" />
+    <Compile Include="Responses\Templates\MustacheInternals\NestedContext.cs" />
+    <Compile Include="Responses\Templates\MustacheInternals\NewlineTagDefinition.cs" />
+    <Compile Include="Responses\Templates\MustacheInternals\PlaceholderFoundEventArgs.cs" />
+    <Compile Include="Responses\Templates\MustacheInternals\PropertyDictionary.cs" />
+    <Compile Include="Responses\Templates\MustacheInternals\RegexHelper.cs" />
+    <Compile Include="Responses\Templates\MustacheInternals\Scope.cs" />
+    <Compile Include="Responses\Templates\MustacheInternals\SetTagDefinition.cs" />
+    <Compile Include="Responses\Templates\MustacheInternals\StaticGenerator.cs" />
+    <Compile Include="Responses\Templates\MustacheInternals\TagDefinition.cs" />
+    <Compile Include="Responses\Templates\MustacheInternals\TagParameter.cs" />
+    <Compile Include="Responses\Templates\MustacheInternals\UpcastDictionary.cs" />
+    <Compile Include="Responses\Templates\MustacheInternals\ValueRequestEventArgs.cs" />
+    <Compile Include="Responses\Templates\MustacheInternals\VariableFoundEventArgs.cs" />
+    <Compile Include="Responses\Templates\MustacheInternals\WithTagDefinition.cs" />
+    <Compile Include="Responses\Templates\MustacheSuperSet\Count.cs" />
+    <Compile Include="Responses\Templates\MustacheSuperSet\DeCamel.cs" />
+    <Compile Include="Responses\Templates\MustacheSuperSet\First.cs" />
+    <Compile Include="Responses\Templates\MustacheSuperSet\Include.cs" />
+    <Compile Include="Responses\Templates\MustacheSuperSet\Value.cs" />
+    <Compile Include="Responses\Templates\MustacheTemplate.cs" />
+    <Compile Include="Security.cs" />
+    <Compile Include="Serialization\Bson\BsonReader.cs" />
+    <Compile Include="Serialization\Bson\BsonSerializer.cs" />
+    <Compile Include="Serialization\Bson\BsonWriter.cs" />
+    <Compile Include="Serialization\Bson\Mapper\AutoId.cs" />
+    <Compile Include="Serialization\Bson\Mapper\BsonFieldAttribute.cs" />
+    <Compile Include="Serialization\Bson\Mapper\BsonIdAttribute.cs" />
+    <Compile Include="Serialization\Bson\Mapper\BsonIgnoreAttribute.cs" />
+    <Compile Include="Serialization\Bson\Mapper\BsonIndexAttribute.cs" />
+    <Compile Include="Serialization\CSV.cs" />
+    <Compile Include="Serialization\CsvFile.cs" />
+    <Compile Include="Serialization\JsonParser.cs" />
+    <Compile Include="Sessions\ISessionManager.cs" />
+    <Compile Include="Sessions\MemorySessionManager.cs" />
+    <Compile Include="Smtp\BufferEventArgs.cs" />
+    <Compile Include="Smtp\ClientConnectionEventArgs.cs" />
+    <Compile Include="Smtp\Extensions\StreamReaderExtensions.cs" />
+    <Compile Include="Smtp\IdleConnectionDisconnectorWatchdog.cs" />
+    <Compile Include="Smtp\Mime\DateTimeRfc2822.cs" />
+    <Compile Include="Smtp\Mime\DelimitingReadableStream.cs" />
+    <Compile Include="Smtp\Mime\QuotedPrintableDecoderStream.cs" />
+    <Compile Include="Smtp\Mime\QuotedPrintableEncoderStream.cs" />
+    <Compile Include="Smtp\Mime\Rfc5335Decoder.cs" />
+    <Compile Include="Smtp\Mime\StringReaderStream.cs" />
+    <Compile Include="Smtp\RawLineDecoder.cs" />
+    <Compile Include="Smtp\RawLineEventArgs.cs" />
+    <Compile Include="Smtp\RequestDisconnectionEventArgs.cs" />
+    <Compile Include="Smtp\ResponseEventArgs.cs" />
+    <Compile Include="Smtp\SessionEventArgs.cs" />
+    <Compile Include="Smtp\SmtpCapability.cs" />
+    <Compile Include="Smtp\SmtpCommandParser.cs" />
+    <Compile Include="Smtp\SmtpConnection.cs" />
+    <Compile Include="Smtp\SmtpConnectionEventArgs.cs" />
+    <Compile Include="Smtp\SmtpIdentification.cs" />
+    <Compile Include="Smtp\SmtpIdentificationMode.cs" />
+    <Compile Include="Smtp\SmtpResponse.cs" />
+    <Compile Include="Smtp\SmtpServer.cs" />
+    <Compile Include="Smtp\SmtpServerConfiguration.cs" />
+    <Compile Include="Smtp\SmtpSession.cs" />
+    <Compile Include="Smtp\SmtpSessionEventArgs.cs" />
+    <Compile Include="Smtp\SmtpSessionInfo.cs" />
+    <Compile Include="StatusCode.cs" />
+    <Compile Include="Users\Configuration.cs" />
+    <Compile Include="Users\HtmlUserExposer.cs" />
+    <Compile Include="Users\LiteUser.cs" />
+    <Compile Include="Users\User.cs" />
+    <Compile Include="Users\UserManager.cs" />
+    <Compile Include="WebDav\DAV2.cs" />
+    <Compile Include="WebDav\Exceptions\WebDavConflictException.cs" />
+    <Compile Include="WebDav\Exceptions\WebDavException.cs" />
+    <Compile Include="WebDav\Exceptions\WebDavForbiddenException.cs" />
+    <Compile Include="WebDav\Exceptions\WebDavInternalServerException.cs" />
+    <Compile Include="WebDav\Exceptions\WebDavLengthRequiredException.cs" />
+    <Compile Include="WebDav\Exceptions\WebDavMethodNotAllowedException.cs" />
+    <Compile Include="WebDav\Exceptions\WebDavNotFoundException.cs" />
+    <Compile Include="WebDav\Exceptions\WebDavNotImplementedException.cs" />
+    <Compile Include="WebDav\Exceptions\WebDavPreconditionFailedException.cs" />
+    <Compile Include="WebDav\Exceptions\WebDavUnauthorizedException.cs" />
+    <Compile Include="WebDav\Exceptions\WebDavUnsupportedMediaTypeException.cs" />
+    <Compile Include="WebDav\LockProperty.cs" />
+    <Compile Include="WebDav\Stores\IWebDAVStore.cs" />
+    <Compile Include="WebDav\Stores\IWebDAVStoreCollection.cs" />
+    <Compile Include="WebDav\Stores\IWebDAVStoreDocument.cs" />
+    <Compile Include="WebDav\Stores\IWebDAVStoreItem.cs" />
+    <Compile Include="WebDav\Utilities\Md5Util.cs" />
+    <Compile Include="WebDav\Utilities\WebDavStatusCode.cs" />
+    <Compile Include="WebDav\WebDavDirectory.cs" />
+    <Compile Include="WebDav\WebDavFile.cs" />
+    <Compile Include="WebDav\WebDAVProperty.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Embedded\" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

@@ -1,13 +1,0 @@
-11/08/2015 12.07.09	threadpool size 40 1000
-11/08/2015 12.07.09	Starting NetFluid Engine
-11/08/2015 12.07.09	Loading calling assembly
-11/08/2015 12.07.09	Loading Netfluid6, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null into default host
-11/08/2015 12.07.09	Loading <>f__AnonymousType0`2
-
-11/08/2015 12.07.09	Error during loading Netfluid6, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null as default host
-			System.TypeLoadException: Loaded types must inherit NetFluid.MethodExposer			in NetFluid.Host.Load(Type p) in D:\PROGETTI\Netfluid6\Hosting\Host.cs:riga 612			in NetFluid.Engine.Load(Assembly assembly) in D:\PROGETTI\Netfluid6\Hosting\Engine.cs:riga 32411/08/2015 12.07.09	Starting host:__default
-11/08/2015 12.07.12	Starting default host
-11/08/2015 12.07.12	NetFluid web application running
-
-11/08/2015 12.07.12	Unhandled fatal exception occurred.
-			System.Net.HttpListenerException (0x80004005): Accesso negato			in System.Net.HttpListener.AddAllPrefixes()			in System.Net.HttpListener.Start()			in NetFluid.Engine.Start() in D:\PROGETTI\Netfluid6\Hosting\Engine.cs:riga 212			in Example.Program.Main(String[] args) in D:\PROGETTI\Netfluid6\Program.cs:riga 16
