@@ -60,34 +60,26 @@ namespace Netfluid
             ThreadPool.SetMaxThreads(max, max);
         }
 
-        public NetfluidHost():this(Network.AddressesWithLocalhost.Select(x=>x.ToString()).ToArray())
-        {
-
-        }
-
         public NetfluidHost(params string[] prefixes)
         {
             Logger = new Logging.ConsoleLogger();
 
             listener = new HttpListener();
-            prefixes.Select(x =>
-            {
-                if (!x.Contains(':'))
-                {
-                    if (x[x.Length - 1] == '/') x = x.Substring(0, x.Length - 1);
 
-                    x = x + ":80";
-                }
+            prefixes.ForEach(x =>
+            {
+                Logger.Debug("Setting up prefix " + x);
 
                 if (!(x.StartsWith("http://") || x.StartsWith("https://")))
                     x = "http://" + x;
 
                 if (!x.EndsWith("/")) x = x + "/";
 
-                Logger.Debug("Setting up prefix" + x);
+                if (x.Contains("*") && !x.Contains("*:"))
+                    x = x.Replace("*","*:80");
 
-                return x;
-            }).ForEach(listener.Prefixes.Add);
+                listener.Prefixes.Add(x);
+            });
 
             Filters = new RouteCollection<Filter>();
             Triggers = new RouteCollection<Trigger>();

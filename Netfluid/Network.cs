@@ -83,13 +83,35 @@ namespace Netfluid
         }
 
         /// <summary>
-        ///     Return all ip address of the current machine
+        ///     Return all ip address of the current machine plus 127.0.0.1
         /// </summary>
         public static IPAddress[] AddressesWithLocalhost
         {
             get
             {
                 return System.Net.Dns.GetHostEntry(System.Net.Dns.GetHostName()).AddressList.Concat(IPAddress.Parse("127.0.0.1")).ToArray();
+            }
+        }
+
+        /// <summary>
+        ///   Return all ip V4 address of the current machine
+        /// </summary>
+        public static IPAddress[] AddressesIPV4
+        {
+            get
+            {
+                return AddressesWithLocalhost.Where(x => x.GetAddressBytes().Length == 4).ToArray();
+            }
+        }
+
+        /// <summary>
+        ///   Return all ip V6 address of the current machine
+        /// </summary>
+        public static IPAddress[] AddressesIPV6
+        {
+            get
+            {
+                return AddressesWithLocalhost.Where(x => x.GetAddressBytes().Length == 16).ToArray();
             }
         }
 
