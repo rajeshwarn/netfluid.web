@@ -7,8 +7,16 @@ namespace Netfluid
     /// <summary>
     /// Class to call method for convert BsonDocument to/from byte[] - based on http://bsonspec.org/spec.html
     /// </summary>
-    public class BsonSerializer
+    public static class BsonSerializer
     {
+        public static void Serialize(BsonDocument value, Stream stream)
+        {
+            if (value == null) throw new ArgumentNullException("value");
+
+            var writer = new BsonWriter();
+            writer.Serialize(stream, value);
+        }
+
         public static byte[] Serialize(BsonDocument value)
         {
             if (value == null) throw new ArgumentNullException("value");
