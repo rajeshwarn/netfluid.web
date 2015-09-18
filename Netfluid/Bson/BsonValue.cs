@@ -89,12 +89,6 @@ namespace Netfluid.Bson
             this.RawValue = value;
         }
 
-        public BsonValue(ObjectId value)
-        {
-            this.Type = BsonType.ObjectId;
-            this.RawValue = value;
-        }
-
         public BsonValue(Guid value)
         {
             this.Type = BsonType.Guid;
@@ -218,11 +212,6 @@ namespace Netfluid.Bson
         public DateTime AsDateTime
         {
             get { return this.Type == BsonType.DateTime ? (DateTime)this.RawValue : default(DateTime); }
-        }
-
-        public ObjectId AsObjectId
-        {
-            get { return this.Type == BsonType.ObjectId ? (ObjectId)this.RawValue : default(ObjectId); }
         }
 
         public Guid AsGuid
@@ -395,18 +384,6 @@ namespace Netfluid.Bson
         public static implicit operator BsonValue(Byte[] value)
         {
             return new BsonValue { Type = BsonType.Binary, RawValue = value };
-        }
-
-        // ObjectId
-        public static implicit operator ObjectId(BsonValue value)
-        {
-            return (ObjectId)value.RawValue;
-        }
-
-        // ObjectId
-        public static implicit operator BsonValue(ObjectId value)
-        {
-            return new BsonValue { Type = BsonType.ObjectId, RawValue = value };
         }
 
         // Guid
@@ -614,48 +591,6 @@ namespace Netfluid.Bson
 
             // limits in ushort.MaxValue (store in 2 bytes only)
             return (ushort)Math.Min(length, ushort.MaxValue);
-        }
-
-        /// <summary>
-        /// Normalize a string value using IndexOptions and returns a new BsonValue - if is not a string, returns some BsonValue instance
-        /// </summary>
-        internal BsonValue Normalize(IndexOptions options)
-        {
-            // if not string, do nothing
-            if (this.Type != BsonType.String) return this;
-
-            // removing whitespaces
-            var text = (String)RawValue;
-
-            if (options.TrimWhitespace) text = text.Trim();
-            if (options.IgnoreCase) text = text.ToLower();
-            
-            // convert emptystring to null
-            if (text.Length == 0 && options.EmptyStringToNull)
-            {
-                return BsonValue.Null;
-            }
-
-            if (!options.RemoveAccents)
-            {
-                return text;
-            }
-
-            // removing accents
-            var normalized = text.Normalize(NormalizationForm.FormD);
-            var sb = new StringBuilder();
-
-            for (int i = 0; i < normalized.Length; i++)
-            {
-                var c = normalized[i];
-
-                if (CharUnicodeInfo.GetUnicodeCategory(c) != UnicodeCategory.NonSpacingMark)
-                {
-                    sb.Append(c);
-                }
-            }
-
-            return sb.ToString();
         }
 
         #endregion

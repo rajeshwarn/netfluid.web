@@ -100,29 +100,6 @@ namespace Netfluid.Bson
                     return nv;
                 }
             );
-
-            // register AutoId for ObjectId, Guid and Int32
-            this.RegisterAutoId<ObjectId>
-            (
-                isEmpty: (v) => v.Equals(ObjectId.Empty),
-                newId: (c) => ObjectId.NewObjectId()
-            );
-
-            this.RegisterAutoId<Guid>
-            (
-                isEmpty: (v) => v == Guid.Empty,
-                newId: (c) => Guid.NewGuid()
-            );
-
-            this.RegisterAutoId<Int32>
-            (
-                isEmpty: (v) => v == 0, 
-                newId: (c) => 
-                { 
-                    var max = c.Max(); 
-                    return max.IsMaxValue ? 1 : (max + 1); 
-                }
-            );
         }
 
         /// <summary>
@@ -137,50 +114,6 @@ namespace Netfluid.Bson
         {
             _customSerializer[typeof(T)] = (o) => serialize((T)o);
             _customDeserializer[typeof(T)] = (b) => (T)deserialize(b);
-        }
-
-        /// <summary>
-        /// Register a custom Auto Id generator function for a type
-        /// </summary>
-        public void RegisterAutoId<T>(Func<T, bool> isEmpty, Func<LiteCollection<BsonDocument>, T> newId)
-        {
-            _autoId[typeof(T)] = new AutoId
-            {
-                IsEmpty = (o) => isEmpty((T)o),
-                NewId = (c) => (T)newId(c)
-            };
-        }
-
-        /// <summary>
-        /// Set new Id in entity class if entity needs one
-        /// </summary>
-        public void SetAutoId(object entity, LiteCollection<BsonDocument> col)
-        {
-            // if object is BsonDocument, there is no AutoId
-            if (entity is BsonDocument) return;
-
-            // get fields mapper
-            var mapper = this.GetPropertyMapper(entity.GetType());
-
-            // it's not best way because is scan all properties - but Id propably is first field :)
-            var id = mapper.Select(x => x.Value).FirstOrDefault(x => x.FieldName == "_id");
-
-            // if not id or no autoId = true
-            if (id == null || id.AutoId == false) return;
-
-            AutoId autoId;
-
-            if (_autoId.TryGetValue(id.PropertyType, out autoId))
-            {
-                var value = id.Getter(entity);
-
-                if (value == null || autoId.IsEmpty(value) == true)
-                {
-                    var newId = autoId.NewId(col);
-
-                    id.Setter(entity, newId);
-                }
-            }
         }
 
         #region Predefinded Property Resolvers

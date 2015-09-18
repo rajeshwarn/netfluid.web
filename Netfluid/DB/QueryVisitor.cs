@@ -5,6 +5,7 @@ using Netfluid.Bson;
 
 namespace Netfluid.DB
 {
+    /*
     /// <summary>
     /// Class helper to create Queries based on Linq expressions
     /// </summary>
@@ -205,5 +206,5 @@ namespace Netfluid.DB
                 throw LiteException.PropertyNotMapped(property);
             }
         }
-    }
+    }*/
 }

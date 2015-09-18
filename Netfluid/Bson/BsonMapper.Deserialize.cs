@@ -47,7 +47,6 @@ namespace Netfluid.Bson
             typeof(Guid),
             typeof(DateTime),
             typeof(Byte[]),
-            typeof(ObjectId),
             typeof(Double)
         };
 
