@@ -6,7 +6,7 @@ using System.Collections.Specialized;
 using System.Linq;
 using System.Text.RegularExpressions;
 
-namespace Netfluid.DB
+namespace Netfluid.Bson
 {
     /// <summary>
     /// Class that converts your entity class to/from BsonDocument

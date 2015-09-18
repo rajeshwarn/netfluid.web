@@ -61,9 +61,9 @@
     <Compile Include="Context.cs" />
     <Compile Include="Country.cs" />
     <Compile Include="Date.cs" />
-    <Compile Include="DB\BsonMapper.cs" />
-    <Compile Include="DB\BsonMapper.Deserialize.cs" />
-    <Compile Include="DB\BsonMapper.Serialize.cs" />
+    <Compile Include="Bson\BsonMapper.cs" />
+    <Compile Include="Bson\BsonMapper.Deserialize.cs" />
+    <Compile Include="Bson\BsonMapper.Serialize.cs" />
     <Compile Include="DB\Database\Collections\Delete.cs" />
     <Compile Include="DB\Database\Collections\Drop.cs" />
     <Compile Include="DB\Database\Collections\Find.cs" />

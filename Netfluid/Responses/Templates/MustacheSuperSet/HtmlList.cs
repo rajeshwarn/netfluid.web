@@ -22,12 +22,13 @@ namespace Netfluid.Responses.Templates.MustacheSuperSet
         public override void GetText(TextWriter writer, Dictionary<string, object> arguments, Scope context)
         {
             var source = arguments["object"] as IEnumerable;
-            int count = 0;
+
+            if (source == null) return;
 
             writer.Write("<ul>");
             foreach (var item in source)
             {
-                writer.Write("<li>"+count+"</li>");
+                writer.Write("<li>"+item+"</li>");
             }
             writer.Write("</ul>");
         }
