@@ -62,7 +62,7 @@ namespace Netfluid
 
         public NetfluidHost(params string[] prefixes)
         {
-            Logger = new Logging.ConsoleLogger();
+            Logger = new Logging.NullLogger();
 
             listener = new HttpListener();
 
@@ -476,6 +476,11 @@ namespace Netfluid
         public void Map(Assembly assembly)
         {
             assembly.GetTypes().ForEach(Map);
+        }
+
+        public void Map(IEnumerable<Type> types)
+        {
+            types.ForEach(x=>Load(x,null));
         }
 
         public void Map(Type type)

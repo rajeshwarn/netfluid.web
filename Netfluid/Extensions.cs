@@ -37,6 +37,7 @@ using System.Text;
 using Netfluid.HTTP;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Text.RegularExpressions;
+using Newtonsoft.Json;
 
 namespace Netfluid
 {
@@ -791,7 +792,7 @@ namespace Netfluid
             }
             catch (Exception exception)
             {
-                throw exception.InnerException;
+               throw exception.InnerException;
             }
 
         }
@@ -879,7 +880,7 @@ namespace Netfluid
 
         public static string ToJSON(this object obj)
         {
-            return Netfluid.Json.JsonSerializer.Serialize(obj);
+            return JsonConvert.SerializeObject(obj);
         }
 
         #endregion

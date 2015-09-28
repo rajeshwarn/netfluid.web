@@ -40,6 +40,7 @@ namespace Netfluid.Sessions
         /// <param name="name">name of the variable</param>
         /// <returns>valueof variable</returns>
         object Get(string sessionId, string name);
+        void Delete(string sessionId, string v);
 
         /// <summary>
         /// Set the value of a variable for a specific user session

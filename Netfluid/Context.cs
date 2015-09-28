@@ -195,6 +195,17 @@ namespace Netfluid
             return Host.Sessions.Get(SessionId, key);
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public void SessionDelete(string v)
+        {
+            Host.Sessions.Delete(SessionId, v);
+        }
+
+        public void SessionDestroy(string v)
+        {
+            Host.Sessions.Destroy(SessionId);
+        }
+
         public void Dispose()
         {
             stopwatch = null;

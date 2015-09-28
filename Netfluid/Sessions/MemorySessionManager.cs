@@ -77,6 +77,11 @@ namespace Netfluid.Sessions
             return sessions.Any(x => x.Key.StartsWith(id));
         }
 
+        public void Delete(string sessionId, string v)
+        {
+            sessions.Remove(sessionId + "." + v);
+        }
+
         #endregion
     }
 }

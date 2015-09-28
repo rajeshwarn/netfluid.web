@@ -1,9 +1,6 @@
 ﻿using System;
 using System.Collections.Concurrent;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace Netfluid.Logging
@@ -20,7 +17,7 @@ namespace Netfluid.Logging
             writer = new StreamWriter(new FileStream(path, FileMode.OpenOrCreate));
             task = Task.Factory.StartNew(()=> 
             {
-                while (true) { writer.Write(queue.Take()); }
+                while (true) { writer.WriteLine(queue.Take()); }
             });
         }
 
@@ -28,13 +25,13 @@ namespace Netfluid.Logging
 
         public void Debug(string message)
         {
-            Console.WriteLine(message);
+            //Console.WriteLine(message);
             if (LogLevel <= LogLevel.Debug) queue.Add(DateTime.Now + " [DEBUG] " + message);
         }
 
         public void Error(Exception ex)
         {
-            Console.WriteLine(ex.Message);
+            //Console.WriteLine(ex.Message);
             if (LogLevel <= LogLevel.Error)
             {
                 queue.Add(DateTime.Now + " [ERROR] " + ex.Message);
@@ -43,25 +40,25 @@ namespace Netfluid.Logging
 
         public void Error(string message)
         {
-            Console.WriteLine(message);
+            //Console.WriteLine(message);
             if (LogLevel <= LogLevel.Debug) queue.Add(DateTime.Now + " [ERROR] " + message);
         }
 
         public void Error(Exception ex, string message)
         {
-            Console.WriteLine(message);
+            //Console.WriteLine(message);
             if (LogLevel <= LogLevel.Debug) queue.Add(DateTime.Now + " [ERROR] " + message);
         }
 
         public void Info(string message)
         {
-            Console.WriteLine(message);
+            //Console.WriteLine(message);
             if (LogLevel <= LogLevel.Debug) queue.Add(DateTime.Now + " [INFO] " + message);
         }
 
         public void Warn(string message)
         {
-            Console.WriteLine(message);
+            //Console.WriteLine(message);
             if (LogLevel <= LogLevel.Debug) queue.Add(DateTime.Now + " [WARN] " + message);
         }
     }
