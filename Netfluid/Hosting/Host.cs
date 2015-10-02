@@ -48,6 +48,8 @@ namespace Netfluid
         public List<IPublicFolder> PublicFolders { get; set; }
         public ISessionManager Sessions { get; set; }
 
+        public event Action<Exception> OnException;
+
         public Logger Logger { get; set; }
 
         Task listeningTask; 
@@ -62,7 +64,7 @@ namespace Netfluid
 
         public NetfluidHost(params string[] prefixes)
         {
-            Logger = new Logging.NullLogger();
+            Logger = new Logging.ConsoleLogger();
 
             listener = new HttpListener();
 
@@ -305,6 +307,8 @@ namespace Netfluid
                         catch(Exception ex)
                         {
                             Logger.Error("Error "+ex.Message);
+
+                            if (OnException != null) OnException(ex);
 
                             ex = ex.InnerException;
                             while(ex != null)

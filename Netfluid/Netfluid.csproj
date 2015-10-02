@@ -207,6 +207,7 @@
     <Compile Include="Responses\Templates\MustacheInternals\ValueRequestEventArgs.cs" />
     <Compile Include="Responses\Templates\MustacheInternals\VariableFoundEventArgs.cs" />
     <Compile Include="Responses\Templates\MustacheInternals\WithTagDefinition.cs" />
+    <Compile Include="Responses\Templates\MustacheSuperSet\LocalTime.cs" />
     <Compile Include="Responses\Templates\MustacheSuperSet\HtmlList.cs" />
     <Compile Include="Responses\Templates\MustacheSuperSet\Count.cs" />
     <Compile Include="Responses\Templates\MustacheSuperSet\DeCamel.cs" />

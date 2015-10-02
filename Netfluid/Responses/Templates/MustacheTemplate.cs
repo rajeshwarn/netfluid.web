@@ -29,6 +29,7 @@ namespace Netfluid
             customTags.Add(new DeCamel());
             customTags.Add(new First());
             customTags.Add(new Include());
+            customTags.Add(new LocalTime());
             customTags.Add(new Value());
             customTags.Add(new Count());
             customTags.Add(new HtmlList());

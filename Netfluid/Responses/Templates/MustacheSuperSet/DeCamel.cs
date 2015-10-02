@@ -18,7 +18,11 @@ namespace Netfluid.Responses.Templates.MustacheSuperSet
         }
         public override void GetText(TextWriter writer, Dictionary<string, object> arguments, Scope context)
         {
-            var source = arguments["object"].ToString();
+            var obj = arguments["object"];
+
+            if (obj == null) return;
+
+            var source = obj.ToString();
 
             for (int i = 1; i < source.Length; i++)
             {
