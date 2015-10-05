@@ -27,7 +27,6 @@ using System;
 using System.IO;
 using System.Globalization;
 using System.Numerics;
-using System.Threading.Tasks;
 using Netfluid.JsonInternals.Utilities;
 using System.Xml;
 using Netfluid.JsonInternals.Converters;
