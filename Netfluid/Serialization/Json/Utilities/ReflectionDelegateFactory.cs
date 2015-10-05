@@ -26,13 +26,13 @@
 using System;
 using System.Globalization;
 using System.Reflection;
-using Newtonsoft.Json.Serialization;
+using Netfluid.JsonInternals.Serialization;
 
 #if NET20
-using Newtonsoft.Json.Utilities.LinqBridge;
+using Netfluid.Json.Utilities.LinqBridge;
 #endif
 
-namespace Newtonsoft.Json.Utilities
+namespace Netfluid.JsonInternals.Utilities
 {
     internal abstract class ReflectionDelegateFactory
     {

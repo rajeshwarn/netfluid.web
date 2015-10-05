@@ -25,12 +25,12 @@
 
 using System;
 using System.Collections.Generic;
-using Newtonsoft.Json.Linq;
-using Newtonsoft.Json.Utilities;
+using Netfluid.JsonInternals.Linq;
+using Netfluid.JsonInternals.Utilities;
 
-namespace Newtonsoft.Json.Schema
+namespace Netfluid.JsonInternals.Schema
 {
-    [Obsolete("JSON Schema validation has been moved to its own package. See http://www.newtonsoft.com/jsonschema for more details.")]
+    [Obsolete("JSON Schema validation has been moved to its own package. See http://www.Netfluid.com/jsonschema for more details.")]
     internal class JsonSchemaModel
     {
         public bool Required { get; set; }

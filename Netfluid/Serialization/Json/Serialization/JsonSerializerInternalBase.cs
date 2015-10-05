@@ -27,9 +27,9 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Runtime.CompilerServices;
-using Newtonsoft.Json.Utilities;
+using Netfluid.JsonInternals.Utilities;
 
-namespace Newtonsoft.Json.Serialization
+namespace Netfluid.JsonInternals.Serialization
 {
     internal abstract class JsonSerializerInternalBase
     {

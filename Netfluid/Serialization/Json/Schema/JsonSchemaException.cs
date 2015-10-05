@@ -26,20 +26,20 @@
 using System;
 using System.Runtime.Serialization;
 
-namespace Newtonsoft.Json.Schema
+namespace Netfluid.JsonInternals.Schema
 {
     /// <summary>
     /// <para>
     /// Returns detailed information about the schema exception.
     /// </para>
     /// <note type="caution">
-    /// JSON Schema validation has been moved to its own package. See <see href="http://www.newtonsoft.com/jsonschema">http://www.newtonsoft.com/jsonschema</see> for more details.
+    /// JSON Schema validation has been moved to its own package. See <see href="http://www.Netfluid.com/jsonschema">http://www.Netfluid.com/jsonschema</see> for more details.
     /// </note>
     /// </summary>
 #if !(DOTNET || PORTABLE40 || PORTABLE)
     [Serializable]
 #endif
-    [Obsolete("JSON Schema validation has been moved to its own package. See http://www.newtonsoft.com/jsonschema for more details.")]
+    [Obsolete("JSON Schema validation has been moved to its own package. See http://www.Netfluid.com/jsonschema for more details.")]
     public class JsonSchemaException : JsonException
     {
         /// <summary>

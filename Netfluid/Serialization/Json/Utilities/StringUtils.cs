@@ -29,13 +29,13 @@ using System.IO;
 using System.Text;
 using System.Globalization;
 #if NET20
-using Newtonsoft.Json.Utilities.LinqBridge;
+using Netfluid.Json.Utilities.LinqBridge;
 #else
 using System.Linq;
 #endif
-using Newtonsoft.Json.Serialization;
+using Netfluid.JsonInternals.Serialization;
 
-namespace Newtonsoft.Json.Utilities
+namespace Netfluid.JsonInternals.Utilities
 {
     internal static class StringUtils
     {

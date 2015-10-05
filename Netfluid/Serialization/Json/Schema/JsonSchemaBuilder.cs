@@ -25,19 +25,19 @@
 
 using System;
 using System.Collections.Generic;
-using Newtonsoft.Json.Serialization;
+using Netfluid.JsonInternals.Serialization;
 #if NET20
-using Newtonsoft.Json.Utilities.LinqBridge;
+using Netfluid.Json.Utilities.LinqBridge;
 #else
 using System.Linq;
 #endif
 using System.Globalization;
-using Newtonsoft.Json.Utilities;
-using Newtonsoft.Json.Linq;
+using Netfluid.JsonInternals.Utilities;
+using Netfluid.JsonInternals.Linq;
 
-namespace Newtonsoft.Json.Schema
+namespace Netfluid.JsonInternals.Schema
 {
-    [Obsolete("JSON Schema validation has been moved to its own package. See http://www.newtonsoft.com/jsonschema for more details.")]
+    [Obsolete("JSON Schema validation has been moved to its own package. See http://www.Netfluid.com/jsonschema for more details.")]
     internal class JsonSchemaBuilder
     {
         private readonly IList<JsonSchema> _stack;

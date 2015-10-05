@@ -30,9 +30,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Text;
-using Newtonsoft.Json.Serialization;
+using Netfluid.JsonInternals.Serialization;
 
-namespace Newtonsoft.Json.Utilities
+namespace Netfluid.JsonInternals.Utilities
 {
     internal class FSharpFunction
     {

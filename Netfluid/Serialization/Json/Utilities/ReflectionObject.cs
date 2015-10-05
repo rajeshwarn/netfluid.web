@@ -23,19 +23,19 @@
 // OTHER DEALINGS IN THE SOFTWARE.
 #endregion
 
-using Newtonsoft.Json.Serialization;
+using Netfluid.JsonInternals.Serialization;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
 using System.Globalization;
 #if NET20
-using Newtonsoft.Json.Utilities.LinqBridge;
+using Netfluid.Json.Utilities.LinqBridge;
 #else
 using System.Linq;
 #endif
 
-namespace Newtonsoft.Json.Utilities
+namespace Netfluid.JsonInternals.Utilities
 {
     internal class ReflectionMember
     {

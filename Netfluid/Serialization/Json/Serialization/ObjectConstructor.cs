@@ -23,7 +23,7 @@
 // OTHER DEALINGS IN THE SOFTWARE.
 #endregion
 
-namespace Newtonsoft.Json.Serialization
+namespace Netfluid.JsonInternals.Serialization
 {
     /// <summary>
     /// Represents a method that constructs an object.

@@ -26,9 +26,9 @@
 using System;
 using System.Collections.ObjectModel;
 
-namespace Newtonsoft.Json.Schema
+namespace Netfluid.JsonInternals.Schema
 {
-    [Obsolete("JSON Schema validation has been moved to its own package. See http://www.newtonsoft.com/jsonschema for more details.")]
+    [Obsolete("JSON Schema validation has been moved to its own package. See http://www.Netfluid.com/jsonschema for more details.")]
     internal class JsonSchemaNodeCollection : KeyedCollection<string, JsonSchemaNode>
     {
         protected override string GetKeyForItem(JsonSchemaNode item)

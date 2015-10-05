@@ -24,21 +24,21 @@
 #endregion
 
 #if !(NET35 || NET20)
-using Newtonsoft.Json.Linq;
+using Netfluid.JsonInternals.Linq;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 #if NET20
-using Newtonsoft.Json.Utilities.LinqBridge;
+using Netfluid.Json.Utilities.LinqBridge;
 #else
 using System.Linq;
 #endif
 using System.Reflection;
-using Newtonsoft.Json.Serialization;
+using Netfluid.JsonInternals.Serialization;
 using System.Globalization;
-using Newtonsoft.Json.Utilities;
+using Netfluid.JsonInternals.Utilities;
 
-namespace Newtonsoft.Json.Converters
+namespace Netfluid.JsonInternals.Converters
 {
     /// <summary>
     /// Converts a F# discriminated union type to and from JSON.

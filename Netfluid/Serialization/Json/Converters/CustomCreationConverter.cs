@@ -25,9 +25,9 @@
 
 using System;
 using System.Reflection;
-using Newtonsoft.Json.Utilities;
+using Netfluid.JsonInternals.Utilities;
 
-namespace Newtonsoft.Json.Converters
+namespace Netfluid.JsonInternals.Converters
 {
     /// <summary>
     /// Create a custom object

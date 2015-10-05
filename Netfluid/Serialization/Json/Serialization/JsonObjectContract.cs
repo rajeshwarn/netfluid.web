@@ -28,9 +28,9 @@ using System.Globalization;
 using System.Reflection;
 using System.Runtime.Serialization;
 using System.Security;
-using Newtonsoft.Json.Utilities;
+using Netfluid.JsonInternals.Utilities;
 
-namespace Newtonsoft.Json.Serialization
+namespace Netfluid.JsonInternals.Serialization
 {
     /// <summary>
     /// Contract details for a <see cref="System.Type"/> used by the <see cref="JsonSerializer"/>.

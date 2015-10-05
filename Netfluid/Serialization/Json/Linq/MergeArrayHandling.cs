@@ -1,4 +1,4 @@
-namespace Newtonsoft.Json.Linq
+namespace Netfluid.JsonInternals.Linq
 {
     /// <summary>
     /// Specifies how JSON arrays are merged together.

@@ -28,26 +28,26 @@ using System.IO;
 using System.Globalization;
 using System.Numerics;
 using System.Threading.Tasks;
-using Newtonsoft.Json.Utilities;
+using Netfluid.JsonInternals.Utilities;
 using System.Xml;
-using Newtonsoft.Json.Converters;
+using Netfluid.JsonInternals.Converters;
 using System.Text;
 using System.Xml.Linq;
 
 
-namespace Newtonsoft.Json
+namespace Netfluid.JsonInternals
 {
     /// <summary>
     /// Provides methods for converting between common language runtime types and JSON types.
     /// </summary>
     /// <example>
-    ///   <code lang="cs" source="..\Src\Newtonsoft.Json.Tests\Documentation\SerializationTests.cs" region="SerializeObject" title="Serializing and Deserializing JSON with JsonConvert" />
+    ///   <code lang="cs" source="..\Src\Netfluid.Json.Tests\Documentation\SerializationTests.cs" region="SerializeObject" title="Serializing and Deserializing JSON with JsonConvert" />
     /// </example>
-    public static class JsonConvert
+    public static class Json
     {
         /// <summary>
         /// Gets or sets a function that creates default <see cref="JsonSerializerSettings"/>.
-        /// Default settings are automatically used by serialization methods on <see cref="JsonConvert"/>,
+        /// Default settings are automatically used by serialization methods on <see cref="Json"/>,
         /// and <see cref="JToken.ToObject{T}()"/> and <see cref="JToken.FromObject(object)"/> on <see cref="JToken"/>.
         /// To serialize without using any default settings create a <see cref="JsonSerializer"/> with
         /// <see cref="JsonSerializer.Create()"/>.

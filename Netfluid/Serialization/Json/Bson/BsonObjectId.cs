@@ -24,9 +24,9 @@
 #endregion
 
 using System;
-using Newtonsoft.Json.Utilities;
+using Netfluid.JsonInternals.Utilities;
 
-namespace Newtonsoft.Json.Bson
+namespace Netfluid.JsonInternals.Bson
 {
     /// <summary>
     /// Represents a BSON Oid (object id).

@@ -2,9 +2,9 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
-using Newtonsoft.Json.Utilities;
+using Netfluid.JsonInternals.Utilities;
 
-namespace Newtonsoft.Json.Linq.JsonPath
+namespace Netfluid.JsonInternals.Linq.JsonPath
 {
     internal enum QueryOperator
     {

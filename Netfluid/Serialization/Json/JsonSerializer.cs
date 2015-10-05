@@ -30,13 +30,13 @@ using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using System.Runtime.Serialization.Formatters;
-using Newtonsoft.Json.Converters;
-using Newtonsoft.Json.Serialization;
-using Newtonsoft.Json.Utilities;
+using Netfluid.JsonInternals.Converters;
+using Netfluid.JsonInternals.Serialization;
+using Netfluid.JsonInternals.Utilities;
 using System.Runtime.Serialization;
-using ErrorEventArgs = Newtonsoft.Json.Serialization.ErrorEventArgs;
+using ErrorEventArgs = Netfluid.JsonInternals.Serialization.ErrorEventArgs;
 
-namespace Newtonsoft.Json
+namespace Netfluid.JsonInternals
 {
     /// <summary>
     /// Serializes and deserializes objects into and from the JSON format.
@@ -504,7 +504,7 @@ namespace Newtonsoft.Json
         public static JsonSerializer CreateDefault()
         {
             // copy static to local variable to avoid concurrency issues
-            Func<JsonSerializerSettings> defaultSettingsCreator = JsonConvert.DefaultSettings;
+            Func<JsonSerializerSettings> defaultSettingsCreator = Json.DefaultSettings;
             JsonSerializerSettings defaultSettings = (defaultSettingsCreator != null) ? defaultSettingsCreator() : null;
 
             return Create(defaultSettings);

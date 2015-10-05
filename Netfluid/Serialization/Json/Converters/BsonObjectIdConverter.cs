@@ -24,11 +24,11 @@
 #endregion
 
 using System;
-using Newtonsoft.Json.Bson;
+using Netfluid.JsonInternals.Bson;
 using System.Globalization;
-using Newtonsoft.Json.Utilities;
+using Netfluid.JsonInternals.Utilities;
 
-namespace Newtonsoft.Json.Converters
+namespace Netfluid.JsonInternals.Converters
 {
     /// <summary>
     /// Converts a <see cref="BsonObjectId"/> to and from JSON and BSON.

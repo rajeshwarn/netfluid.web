@@ -24,14 +24,14 @@
 #endregion
 
 using System;
-using Newtonsoft.Json.Serialization;
+using Netfluid.JsonInternals.Serialization;
 using System.Reflection;
 
 #if NET20
-using Newtonsoft.Json.Utilities.LinqBridge;
+using Netfluid.Json.Utilities.LinqBridge;
 #endif
 
-namespace Newtonsoft.Json.Utilities
+namespace Netfluid.JsonInternals.Utilities
 {
     internal class LateBoundReflectionDelegateFactory : ReflectionDelegateFactory
     {
@@ -50,7 +50,7 @@ namespace Newtonsoft.Json.Utilities
             if (c != null)
             {
                 // don't convert to method group to avoid medium trust issues
-                // https://github.com/JamesNK/Newtonsoft.Json/issues/476
+                // https://github.com/JamesNK/Netfluid.Json/issues/476
                 return a =>
                 {
                     object[] args = a;

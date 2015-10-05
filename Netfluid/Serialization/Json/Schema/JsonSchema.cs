@@ -26,21 +26,21 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using Newtonsoft.Json.Linq;
-using Newtonsoft.Json.Utilities;
+using Netfluid.JsonInternals.Linq;
+using Netfluid.JsonInternals.Utilities;
 using System.Globalization;
 
-namespace Newtonsoft.Json.Schema
+namespace Netfluid.JsonInternals.Schema
 {
     /// <summary>
     /// <para>
     /// An in-memory representation of a JSON Schema.
     /// </para>
     /// <note type="caution">
-    /// JSON Schema validation has been moved to its own package. See <see href="http://www.newtonsoft.com/jsonschema">http://www.newtonsoft.com/jsonschema</see> for more details.
+    /// JSON Schema validation has been moved to its own package. See <see href="http://www.Netfluid.com/jsonschema">http://www.Netfluid.com/jsonschema</see> for more details.
     /// </note>
     /// </summary>
-    [Obsolete("JSON Schema validation has been moved to its own package. See http://www.newtonsoft.com/jsonschema for more details.")]
+    [Obsolete("JSON Schema validation has been moved to its own package. See http://www.Netfluid.com/jsonschema for more details.")]
     public class JsonSchema
     {
         /// <summary>

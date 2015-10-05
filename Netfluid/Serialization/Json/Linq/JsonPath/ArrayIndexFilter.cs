@@ -1,8 +1,8 @@
 using System.Collections.Generic;
 using System.Globalization;
-using Newtonsoft.Json.Utilities;
+using Netfluid.JsonInternals.Utilities;
 
-namespace Newtonsoft.Json.Linq.JsonPath
+namespace Netfluid.JsonInternals.Linq.JsonPath
 {
     internal class ArrayIndexFilter : PathFilter
     {

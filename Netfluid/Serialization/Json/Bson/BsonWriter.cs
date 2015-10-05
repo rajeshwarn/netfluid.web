@@ -31,11 +31,11 @@ using System.IO;
 using System.Numerics;
 #endif
 using System.Text;
-using Newtonsoft.Json.Utilities;
-using Newtonsoft.Json.Linq;
+using Netfluid.JsonInternals.Utilities;
+using Netfluid.JsonInternals.Linq;
 using System.Globalization;
 
-namespace Newtonsoft.Json.Bson
+namespace Netfluid.JsonInternals.Bson
 {
     /// <summary>
     /// Represents a writer that provides a fast, non-cached, forward-only way of generating JSON data.

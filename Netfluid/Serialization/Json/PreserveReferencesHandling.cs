@@ -27,14 +27,14 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Newtonsoft.Json
+namespace Netfluid.JsonInternals
 {
     /// <summary>
     /// Specifies reference handling options for the <see cref="JsonSerializer"/>.
     /// Note that references cannot be preserved when a value is set via a non-default constructor such as types that implement ISerializable.
     /// </summary>
     /// <example>
-    ///   <code lang="cs" source="..\Src\Newtonsoft.Json.Tests\Documentation\SerializationTests.cs" region="PreservingObjectReferencesOn" title="Preserve Object References" />       
+    ///   <code lang="cs" source="..\Src\Netfluid.Json.Tests\Documentation\SerializationTests.cs" region="PreservingObjectReferencesOn" title="Preserve Object References" />       
     /// </example>
     [Flags]
     public enum PreserveReferencesHandling

@@ -29,18 +29,18 @@ using System.Collections.Generic;
 using System.Collections.Specialized;
 #endif
 using System.Threading;
-using Newtonsoft.Json.Utilities;
+using Netfluid.JsonInternals.Utilities;
 using System.Collections;
 using System.Globalization;
 using System.ComponentModel;
 #if NET20
-using Newtonsoft.Json.Utilities.LinqBridge;
+using Netfluid.Json.Utilities.LinqBridge;
 #else
 using System.Linq;
 
 #endif
 
-namespace Newtonsoft.Json.Linq
+namespace Netfluid.JsonInternals.Linq
 {
     /// <summary>
     /// Represents a token that can contain other tokens.

@@ -28,7 +28,7 @@ using System;
 using System.Reflection.Emit;
 using System.Reflection;
 
-namespace Newtonsoft.Json.Utilities
+namespace Netfluid.JsonInternals.Utilities
 {
     internal static class ILGeneratorExtensions
     {

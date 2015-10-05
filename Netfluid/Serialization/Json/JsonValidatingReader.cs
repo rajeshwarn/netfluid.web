@@ -28,29 +28,29 @@ using System.Collections.Generic;
 #if !(NET20 || NET35 || PORTABLE40 || PORTABLE)
 using System.Numerics;
 #endif
-using Newtonsoft.Json.Linq;
-using Newtonsoft.Json.Schema;
-using Newtonsoft.Json.Utilities;
+using Netfluid.JsonInternals.Linq;
+using Netfluid.JsonInternals.Schema;
+using Netfluid.JsonInternals.Utilities;
 using System.Globalization;
 using System.Text.RegularExpressions;
 using System.IO;
 #if NET20
-using Newtonsoft.Json.Utilities.LinqBridge;
+using Netfluid.Json.Utilities.LinqBridge;
 #else
 using System.Linq;
 #endif
 
-namespace Newtonsoft.Json
+namespace Netfluid.JsonInternals
 {
     /// <summary>
     /// <para>
     /// Represents a reader that provides <see cref="JsonSchema"/> validation.
     /// </para>
     /// <note type="caution">
-    /// JSON Schema validation has been moved to its own package. See <see href="http://www.newtonsoft.com/jsonschema">http://www.newtonsoft.com/jsonschema</see> for more details.
+    /// JSON Schema validation has been moved to its own package. See <see href="http://www.Netfluid.com/jsonschema">http://www.Netfluid.com/jsonschema</see> for more details.
     /// </note>
     /// </summary>
-    [Obsolete("JSON Schema validation has been moved to its own package. See http://www.newtonsoft.com/jsonschema for more details.")]
+    [Obsolete("JSON Schema validation has been moved to its own package. See http://www.Netfluid.com/jsonschema for more details.")]
     public class JsonValidatingReader : JsonReader, IJsonLineInfo
     {
         private class SchemaScope
@@ -756,7 +756,7 @@ namespace Newtonsoft.Json
                     notDivisible = !IsZero(Convert.ToInt64(value, CultureInfo.InvariantCulture) % schema.DivisibleBy.Value);
 
                 if (notDivisible)
-                    RaiseError("Integer {0} is not evenly divisible by {1}.".FormatWith(CultureInfo.InvariantCulture, JsonConvert.ToString(value), schema.DivisibleBy), schema);
+                    RaiseError("Integer {0} is not evenly divisible by {1}.".FormatWith(CultureInfo.InvariantCulture, Json.ToString(value), schema.DivisibleBy), schema);
             }
         }
 
@@ -795,17 +795,17 @@ namespace Newtonsoft.Json
             if (schema.Maximum != null)
             {
                 if (value > schema.Maximum)
-                    RaiseError("Float {0} exceeds maximum value of {1}.".FormatWith(CultureInfo.InvariantCulture, JsonConvert.ToString(value), schema.Maximum), schema);
+                    RaiseError("Float {0} exceeds maximum value of {1}.".FormatWith(CultureInfo.InvariantCulture, Json.ToString(value), schema.Maximum), schema);
                 if (schema.ExclusiveMaximum && value == schema.Maximum)
-                    RaiseError("Float {0} equals maximum value of {1} and exclusive maximum is true.".FormatWith(CultureInfo.InvariantCulture, JsonConvert.ToString(value), schema.Maximum), schema);
+                    RaiseError("Float {0} equals maximum value of {1} and exclusive maximum is true.".FormatWith(CultureInfo.InvariantCulture, Json.ToString(value), schema.Maximum), schema);
             }
 
             if (schema.Minimum != null)
             {
                 if (value < schema.Minimum)
-                    RaiseError("Float {0} is less than minimum value of {1}.".FormatWith(CultureInfo.InvariantCulture, JsonConvert.ToString(value), schema.Minimum), schema);
+                    RaiseError("Float {0} is less than minimum value of {1}.".FormatWith(CultureInfo.InvariantCulture, Json.ToString(value), schema.Minimum), schema);
                 if (schema.ExclusiveMinimum && value == schema.Minimum)
-                    RaiseError("Float {0} equals minimum value of {1} and exclusive minimum is true.".FormatWith(CultureInfo.InvariantCulture, JsonConvert.ToString(value), schema.Minimum), schema);
+                    RaiseError("Float {0} equals minimum value of {1} and exclusive minimum is true.".FormatWith(CultureInfo.InvariantCulture, Json.ToString(value), schema.Minimum), schema);
             }
 
             if (schema.DivisibleBy != null)
@@ -813,7 +813,7 @@ namespace Newtonsoft.Json
                 double remainder = FloatingPointRemainder(value, schema.DivisibleBy.Value);
 
                 if (!IsZero(remainder))
-                    RaiseError("Float {0} is not evenly divisible by {1}.".FormatWith(CultureInfo.InvariantCulture, JsonConvert.ToString(value), schema.DivisibleBy), schema);
+                    RaiseError("Float {0} is not evenly divisible by {1}.".FormatWith(CultureInfo.InvariantCulture, Json.ToString(value), schema.DivisibleBy), schema);
             }
         }
 

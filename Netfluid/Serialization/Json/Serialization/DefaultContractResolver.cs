@@ -25,7 +25,7 @@
 
 using System;
 using System.Collections;
-using Newtonsoft.Json.Schema;
+using Netfluid.JsonInternals.Schema;
 #if !(NET35 || NET20 || PORTABLE || PORTABLE40)
 using System.Collections.Concurrent;
 #endif
@@ -41,18 +41,18 @@ using System.Runtime.Serialization;
 using System.Security.Permissions;
 #endif
 using System.Xml.Serialization;
-using Newtonsoft.Json.Converters;
-using Newtonsoft.Json.Utilities;
-using Newtonsoft.Json.Linq;
+using Netfluid.JsonInternals.Converters;
+using Netfluid.JsonInternals.Utilities;
+using Netfluid.JsonInternals.Linq;
 using System.Runtime.CompilerServices;
 #if NET20
-using Newtonsoft.Json.Utilities.LinqBridge;
+using Netfluid.Json.Utilities.LinqBridge;
 #else
 using System.Linq;
 
 #endif
 
-namespace Newtonsoft.Json.Serialization
+namespace Netfluid.JsonInternals.Serialization
 {
     internal struct ResolverContractKey : IEquatable<ResolverContractKey>
     {

@@ -26,10 +26,10 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
-using Newtonsoft.Json.Utilities;
-using Newtonsoft.Json.Schema;
+using Netfluid.JsonInternals.Utilities;
+using Netfluid.JsonInternals.Schema;
 
-namespace Newtonsoft.Json
+namespace Netfluid.JsonInternals
 {
     /// <summary>
     /// Converts an object to and from JSON.
@@ -68,7 +68,7 @@ namespace Newtonsoft.Json
         /// Gets the <see cref="JsonSchema"/> of the JSON produced by the JsonConverter.
         /// </para>
         /// <note type="caution">
-        /// JSON Schema validation has been moved to its own package. See <see href="http://www.newtonsoft.com/jsonschema">http://www.newtonsoft.com/jsonschema</see> for more details.
+        /// JSON Schema validation has been moved to its own package. See <see href="http://www.Netfluid.com/jsonschema">http://www.Netfluid.com/jsonschema</see> for more details.
         /// </note>
         /// </summary>
         /// <returns>The <see cref="JsonSchema"/> of the JSON produced by the JsonConverter.</returns>

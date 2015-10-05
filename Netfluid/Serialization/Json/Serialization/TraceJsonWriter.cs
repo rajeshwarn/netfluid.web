@@ -7,7 +7,7 @@ using System.Numerics;
 #endif
 using System.Text;
 
-namespace Newtonsoft.Json.Serialization
+namespace Netfluid.JsonInternals.Serialization
 {
     internal class TraceJsonWriter : JsonWriter
     {

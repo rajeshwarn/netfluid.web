@@ -27,9 +27,9 @@ using System;
 using System.Globalization;
 using System.IO;
 using System.Text;
-using Newtonsoft.Json.Utilities;
+using Netfluid.JsonInternals.Utilities;
 
-namespace Newtonsoft.Json.Bson
+namespace Netfluid.JsonInternals.Bson
 {
     internal class BsonBinaryWriter
     {

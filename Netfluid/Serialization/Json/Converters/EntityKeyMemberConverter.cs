@@ -25,11 +25,11 @@
 
 #if !(NET20 || DOTNET || PORTABLE40 || PORTABLE)
 using System;
-using Newtonsoft.Json.Serialization;
+using Netfluid.JsonInternals.Serialization;
 using System.Globalization;
-using Newtonsoft.Json.Utilities;
+using Netfluid.JsonInternals.Utilities;
 
-namespace Newtonsoft.Json.Converters
+namespace Netfluid.JsonInternals.Converters
 {
     /// <summary>
     /// Converts an Entity Framework EntityKey to and from JSON.

@@ -32,9 +32,9 @@ using System.Numerics;
 using System.Text;
 using System.IO;
 using System.Xml;
-using Newtonsoft.Json.Utilities;
+using Netfluid.JsonInternals.Utilities;
 
-namespace Newtonsoft.Json
+namespace Netfluid.JsonInternals
 {
     /// <summary>
     /// Represents a writer that provides a fast, non-cached, forward-only way of generating JSON data.
@@ -340,7 +340,7 @@ namespace Newtonsoft.Json
         public override void WriteNull()
         {
             InternalWriteValue(JsonToken.Null);
-            WriteValueInternal(JsonConvert.Null, JsonToken.Null);
+            WriteValueInternal(Json.Null, JsonToken.Null);
         }
 
         /// <summary>
@@ -349,7 +349,7 @@ namespace Newtonsoft.Json
         public override void WriteUndefined()
         {
             InternalWriteValue(JsonToken.Undefined);
-            WriteValueInternal(JsonConvert.Undefined, JsonToken.Undefined);
+            WriteValueInternal(Json.Undefined, JsonToken.Undefined);
         }
 
         /// <summary>
@@ -372,7 +372,7 @@ namespace Newtonsoft.Json
             InternalWriteValue(JsonToken.String);
 
             if (value == null)
-                WriteValueInternal(JsonConvert.Null, JsonToken.Null);
+                WriteValueInternal(Json.Null, JsonToken.Null);
             else
                 WriteEscapedString(value, true);
         }
@@ -432,7 +432,7 @@ namespace Newtonsoft.Json
         public override void WriteValue(float value)
         {
             InternalWriteValue(JsonToken.Float);
-            WriteValueInternal(JsonConvert.ToString(value, FloatFormatHandling, QuoteChar, false), JsonToken.Float);
+            WriteValueInternal(Json.ToString(value, FloatFormatHandling, QuoteChar, false), JsonToken.Float);
         }
 
         /// <summary>
@@ -448,7 +448,7 @@ namespace Newtonsoft.Json
             else
             {
                 InternalWriteValue(JsonToken.Float);
-                WriteValueInternal(JsonConvert.ToString(value.Value, FloatFormatHandling, QuoteChar, true), JsonToken.Float);
+                WriteValueInternal(Json.ToString(value.Value, FloatFormatHandling, QuoteChar, true), JsonToken.Float);
             }
         }
 
@@ -459,7 +459,7 @@ namespace Newtonsoft.Json
         public override void WriteValue(double value)
         {
             InternalWriteValue(JsonToken.Float);
-            WriteValueInternal(JsonConvert.ToString(value, FloatFormatHandling, QuoteChar, false), JsonToken.Float);
+            WriteValueInternal(Json.ToString(value, FloatFormatHandling, QuoteChar, false), JsonToken.Float);
         }
 
         /// <summary>
@@ -475,7 +475,7 @@ namespace Newtonsoft.Json
             else
             {
                 InternalWriteValue(JsonToken.Float);
-                WriteValueInternal(JsonConvert.ToString(value.Value, FloatFormatHandling, QuoteChar, true), JsonToken.Float);
+                WriteValueInternal(Json.ToString(value.Value, FloatFormatHandling, QuoteChar, true), JsonToken.Float);
             }
         }
 
@@ -486,7 +486,7 @@ namespace Newtonsoft.Json
         public override void WriteValue(bool value)
         {
             InternalWriteValue(JsonToken.Boolean);
-            WriteValueInternal(JsonConvert.ToString(value), JsonToken.Boolean);
+            WriteValueInternal(Json.ToString(value), JsonToken.Boolean);
         }
 
         /// <summary>
@@ -517,7 +517,7 @@ namespace Newtonsoft.Json
         public override void WriteValue(char value)
         {
             InternalWriteValue(JsonToken.String);
-            WriteValueInternal(JsonConvert.ToString(value), JsonToken.String);
+            WriteValueInternal(Json.ToString(value), JsonToken.String);
         }
 
         /// <summary>
@@ -548,7 +548,7 @@ namespace Newtonsoft.Json
         public override void WriteValue(decimal value)
         {
             InternalWriteValue(JsonToken.Float);
-            WriteValueInternal(JsonConvert.ToString(value), JsonToken.Float);
+            WriteValueInternal(Json.ToString(value), JsonToken.Float);
         }
 
         /// <summary>

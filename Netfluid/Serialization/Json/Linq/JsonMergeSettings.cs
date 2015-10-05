@@ -1,6 +1,6 @@
 using System;
 
-namespace Newtonsoft.Json.Linq
+namespace Netfluid.JsonInternals.Linq
 {
     /// <summary>
     /// Specifies the settings used when merging JSON.

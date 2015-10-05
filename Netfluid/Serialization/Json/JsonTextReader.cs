@@ -30,9 +30,9 @@ using System.Runtime.CompilerServices;
 using System.Text;
 using System.IO;
 using System.Globalization;
-using Newtonsoft.Json.Utilities;
+using Netfluid.JsonInternals.Utilities;
 
-namespace Newtonsoft.Json
+namespace Netfluid.JsonInternals
 {
     internal enum ReadType
     {
@@ -1525,7 +1525,7 @@ namespace Newtonsoft.Json
             // check characters equal 'true'
             // and that it is followed by either a separator character
             // or the text ends
-            if (MatchValueWithTrailingSeparator(JsonConvert.True))
+            if (MatchValueWithTrailingSeparator(Json.True))
             {
                 SetToken(JsonToken.Boolean, true);
             }
@@ -1537,7 +1537,7 @@ namespace Newtonsoft.Json
 
         private void ParseNull()
         {
-            if (MatchValueWithTrailingSeparator(JsonConvert.Null))
+            if (MatchValueWithTrailingSeparator(Json.Null))
             {
                 SetToken(JsonToken.Null);
             }
@@ -1549,7 +1549,7 @@ namespace Newtonsoft.Json
 
         private void ParseUndefined()
         {
-            if (MatchValueWithTrailingSeparator(JsonConvert.Undefined))
+            if (MatchValueWithTrailingSeparator(Json.Undefined))
             {
                 SetToken(JsonToken.Undefined);
             }
@@ -1561,7 +1561,7 @@ namespace Newtonsoft.Json
 
         private void ParseFalse()
         {
-            if (MatchValueWithTrailingSeparator(JsonConvert.False))
+            if (MatchValueWithTrailingSeparator(Json.False))
             {
                 SetToken(JsonToken.Boolean, false);
             }
@@ -1573,7 +1573,7 @@ namespace Newtonsoft.Json
 
         private void ParseNumberNegativeInfinity()
         {
-            if (MatchValueWithTrailingSeparator(JsonConvert.NegativeInfinity))
+            if (MatchValueWithTrailingSeparator(Json.NegativeInfinity))
             {
                 if (_floatParseHandling == FloatParseHandling.Decimal)
                     throw new JsonReaderException("Cannot read -Infinity as a decimal.");
@@ -1588,7 +1588,7 @@ namespace Newtonsoft.Json
 
         private void ParseNumberPositiveInfinity()
         {
-            if (MatchValueWithTrailingSeparator(JsonConvert.PositiveInfinity))
+            if (MatchValueWithTrailingSeparator(Json.PositiveInfinity))
             {
                 if (_floatParseHandling == FloatParseHandling.Decimal)
                     throw new JsonReaderException("Cannot read Infinity as a decimal.");
@@ -1603,7 +1603,7 @@ namespace Newtonsoft.Json
 
         private void ParseNumberNaN()
         {
-            if (MatchValueWithTrailingSeparator(JsonConvert.NaN))
+            if (MatchValueWithTrailingSeparator(Json.NaN))
             {
                 if (_floatParseHandling == FloatParseHandling.Decimal)
                     throw new JsonReaderException("Cannot read NaN as a decimal.");

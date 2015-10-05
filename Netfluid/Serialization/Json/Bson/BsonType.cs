@@ -23,7 +23,7 @@
 // OTHER DEALINGS IN THE SOFTWARE.
 #endregion
 
-namespace Newtonsoft.Json.Bson
+namespace Netfluid.JsonInternals.Bson
 {
     internal enum BsonType : sbyte
     {
