@@ -25,32 +25,18 @@
 
 using System;
 using System.Collections;
-using Netfluid.JsonInternals.Schema;
-#if !(NET35 || NET20 || PORTABLE || PORTABLE40)
 using System.Collections.Concurrent;
-#endif
 using System.Collections.Generic;
 using System.ComponentModel;
-#if !(NET35 || NET20 || PORTABLE40)
 using System.Dynamic;
-#endif
 using System.Globalization;
 using System.Reflection;
 using System.Runtime.Serialization;
-#if !(DOTNET || PORTABLE || PORTABLE40)
-using System.Security.Permissions;
-#endif
-using System.Xml.Serialization;
 using Netfluid.JsonInternals.Converters;
 using Netfluid.JsonInternals.Utilities;
 using Netfluid.JsonInternals.Linq;
 using System.Runtime.CompilerServices;
-#if NET20
-using Netfluid.Json.Utilities.LinqBridge;
-#else
 using System.Linq;
-
-#endif
 
 namespace Netfluid.JsonInternals.Serialization
 {
