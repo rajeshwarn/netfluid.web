@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Collections;
+using System.Net.Mail;
 
 namespace Example
 {
@@ -14,7 +15,7 @@ namespace Example
         }
 
         static void Main(string[] args)
-        {
+        { 
             var host = new NetfluidHost("*");
             host.Logger = new Netfluid.Logging.ConsoleLogger(LogLevel.Debug);
             host.Map(typeof(Program));
@@ -24,6 +25,7 @@ namespace Example
             {
                 host.Logger.Error(e.ExceptionObject as Exception);
             };
+
 
             while (Console.ReadLine() != "end");
         }
