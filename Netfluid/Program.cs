@@ -5,6 +5,15 @@ namespace Example
 {
     class Program
     {
+        public int KKK = 777;
+
+        public Ivan Ivanovick = new Ivan();
+
+        public class Ivan
+        {
+            public string Name { get; set; } = "Il coglionazzo";
+        }
+
         static void Main(string[] args)
         { 
             var host = new NetfluidHost("*");
@@ -12,6 +21,11 @@ namespace Example
             host.PublicFolders.Add(new PublicFolder { RealPath="./Resources", VirtualPath="/cdn" });
             host.Map(typeof(Program));
             host.Start();
+
+            var k = Json.SerializeObject(new Program());
+            var d = Json.DeserializeObject(k);
+
+            Console.WriteLine(d.GetType());
 
             AppDomain.CurrentDomain.UnhandledException += (s,e)=>
             {

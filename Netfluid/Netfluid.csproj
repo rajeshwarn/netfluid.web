@@ -276,7 +276,6 @@
     <Compile Include="Serialization\JsonInternals\JsonTextReader.cs" />
     <Compile Include="Serialization\JsonInternals\JsonTextWriter.cs" />
     <Compile Include="Serialization\JsonInternals\JsonToken.cs" />
-    <Compile Include="Serialization\JsonInternals\JsonValidatingReader.cs" />
     <Compile Include="Serialization\JsonInternals\JsonWriter.cs" />
     <Compile Include="Serialization\JsonInternals\JsonWriterException.cs" />
     <Compile Include="Serialization\JsonInternals\Linq\Extensions.cs" />
