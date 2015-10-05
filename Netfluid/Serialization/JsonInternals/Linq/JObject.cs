@@ -60,12 +60,10 @@ namespace Netfluid.JsonInternals.Linq
         /// </summary>
         public event PropertyChangedEventHandler PropertyChanged;
 
-#if !(NET20 || PORTABLE || PORTABLE40)
         /// <summary>
         /// Occurs when a property value is changing.
         /// </summary>
         public event PropertyChangingEventHandler PropertyChanging;
-#endif
 
         /// <summary>
         /// Initializes a new instance of the <see cref="JObject"/> class.
@@ -177,21 +175,17 @@ namespace Netfluid.JsonInternals.Linq
         internal void InternalPropertyChanged(JProperty childProperty)
         {
             OnPropertyChanged(childProperty.Name);
-#if !(DOTNET || PORTABLE40 || PORTABLE)
+
             if (_listChanged != null)
                 OnListChanged(new ListChangedEventArgs(ListChangedType.ItemChanged, IndexOfItem(childProperty)));
-#endif
-#if !(NET20 || NET35 || PORTABLE40)
+
             if (_collectionChanged != null)
                 OnCollectionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Replace, childProperty, childProperty, IndexOfItem(childProperty)));
-#endif
         }
 
         internal void InternalPropertyChanging(JProperty childProperty)
         {
-#if !(NET20 || PORTABLE40 || PORTABLE)
             OnPropertyChanging(childProperty.Name);
-#endif
         }
 
         internal override JToken CloneToken()
@@ -292,9 +286,7 @@ namespace Netfluid.JsonInternals.Linq
                 }
                 else
                 {
-#if !(NET20 || PORTABLE40 || PORTABLE)
                     OnPropertyChanging(propertyName);
-#endif
                     Add(new JProperty(propertyName, value));
                     OnPropertyChanged(propertyName);
                 }
@@ -765,7 +757,6 @@ namespace Netfluid.JsonInternals.Linq
 
 #endif
 
-#if !(NET35 || NET20 || PORTABLE40)
         /// <summary>
         /// Returns the <see cref="T:System.Dynamic.DynamicMetaObject"/> responsible for binding operations performed on this object.
         /// </summary>
@@ -804,6 +795,6 @@ namespace Netfluid.JsonInternals.Linq
                 return instance.Properties().Select(p => p.Name);
             }
         }
-#endif
+
     }
 }
