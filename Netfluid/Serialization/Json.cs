@@ -625,53 +625,6 @@ namespace Netfluid.JsonInternals
             return sw.ToString();
         }
 
-#if !(NET20 || NET35 || PORTABLE40)
-        /// <summary>
-        /// Asynchronously serializes the specified object to a JSON string.
-        /// Serialization will happen on a new thread.
-        /// </summary>
-        /// <param name="value">The object to serialize.</param>
-        /// <returns>
-        /// A task that represents the asynchronous serialize operation. The value of the <c>TResult</c> parameter contains a JSON string representation of the object.
-        /// </returns>
-        [ObsoleteAttribute("SerializeObjectAsync is obsolete. Use the Task.Factory.StartNew method to serialize JSON asynchronously: Task.Factory.StartNew(() => JsonConvert.SerializeObject(value))")]
-        public static Task<string> SerializeObjectAsync(object value)
-        {
-            return SerializeObjectAsync(value, Formatting.None, null);
-        }
-
-        /// <summary>
-        /// Asynchronously serializes the specified object to a JSON string using formatting.
-        /// Serialization will happen on a new thread.
-        /// </summary>
-        /// <param name="value">The object to serialize.</param>
-        /// <param name="formatting">Indicates how the output is formatted.</param>
-        /// <returns>
-        /// A task that represents the asynchronous serialize operation. The value of the <c>TResult</c> parameter contains a JSON string representation of the object.
-        /// </returns>
-        [ObsoleteAttribute("SerializeObjectAsync is obsolete. Use the Task.Factory.StartNew method to serialize JSON asynchronously: Task.Factory.StartNew(() => JsonConvert.SerializeObject(value, formatting))")]
-        public static Task<string> SerializeObjectAsync(object value, Formatting formatting)
-        {
-            return SerializeObjectAsync(value, formatting, null);
-        }
-
-        /// <summary>
-        /// Asynchronously serializes the specified object to a JSON string using formatting and a collection of <see cref="JsonConverter"/>.
-        /// Serialization will happen on a new thread.
-        /// </summary>
-        /// <param name="value">The object to serialize.</param>
-        /// <param name="formatting">Indicates how the output is formatted.</param>
-        /// <param name="settings">The <see cref="JsonSerializerSettings"/> used to serialize the object.
-        /// If this is null, default serialization settings will be used.</param>
-        /// <returns>
-        /// A task that represents the asynchronous serialize operation. The value of the <c>TResult</c> parameter contains a JSON string representation of the object.
-        /// </returns>
-        [ObsoleteAttribute("SerializeObjectAsync is obsolete. Use the Task.Factory.StartNew method to serialize JSON asynchronously: Task.Factory.StartNew(() => JsonConvert.SerializeObject(value, formatting, settings))")]
-        public static Task<string> SerializeObjectAsync(object value, Formatting formatting, JsonSerializerSettings settings)
-        {
-            return Task.Factory.StartNew(() => SerializeObject(value, formatting, settings));
-        }
-#endif
         #endregion
 
         #region Deserialize
