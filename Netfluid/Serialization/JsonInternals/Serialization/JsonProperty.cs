@@ -27,10 +27,6 @@ using System;
 using System.Reflection;
 using Netfluid.JsonInternals.Utilities;
 
-#if NET20
-using Netfluid.Json.Utilities.LinqBridge;
-#endif
-
 namespace Netfluid.JsonInternals.Serialization
 {
     /// <summary>

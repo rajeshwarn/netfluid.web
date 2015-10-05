@@ -25,23 +25,14 @@
 
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
-#if !PORTABLE40
 using System.Collections.Specialized;
-#endif
 using System.ComponentModel;
-#if !(NET35 || NET20 || PORTABLE40)
 using System.Dynamic;
 using System.Linq.Expressions;
-#endif
 using System.IO;
 using Netfluid.JsonInternals.Utilities;
 using System.Globalization;
-#if NET20
-using Netfluid.Json.Utilities.LinqBridge;
-#else
 using System.Linq;
-#endif
 
 namespace Netfluid.JsonInternals.Linq
 {
@@ -51,13 +42,7 @@ namespace Netfluid.JsonInternals.Linq
     /// <example>
     ///   <code lang="cs" source="..\Src\Netfluid.Json.Tests\Documentation\LinqToJsonTests.cs" region="LinqToJsonCreateParse" title="Parsing a JSON Object from Text" />
     /// </example>
-    public class JObject : JContainer, IDictionary<string, JToken>, INotifyPropertyChanged
-#if !(DOTNET || PORTABLE40 || PORTABLE)
-        , ICustomTypeDescriptor
-#endif
-#if !(NET20 || PORTABLE40 || PORTABLE)
-        , INotifyPropertyChanging
-#endif
+    public class JObject : JContainer, IDictionary<string, JToken>, INotifyPropertyChanged, ICustomTypeDescriptor, INotifyPropertyChanging
     {
         private readonly JPropertyKeyedCollection _properties = new JPropertyKeyedCollection();
 
