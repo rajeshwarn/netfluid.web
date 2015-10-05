@@ -226,19 +226,16 @@ namespace Netfluid
             return value.ToString(null, CultureInfo.InvariantCulture);
         }
 
-#if !(NET20 || NET35 || PORTABLE40 || PORTABLE)
         private static string ToStringInternal(BigInteger value)
         {
             return value.ToString(null, CultureInfo.InvariantCulture);
         }
-#endif
 
         /// <summary>
         /// Converts the <see cref="UInt64"/> to its JSON string representation.
         /// </summary>
         /// <param name="value">The value to convert.</param>
         /// <returns>A JSON string representation of the <see cref="UInt64"/>.</returns>
-        
         public static string ToString(ulong value)
         {
             return value.ToString(null, CultureInfo.InvariantCulture);
