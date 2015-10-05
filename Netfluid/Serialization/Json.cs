@@ -33,9 +33,9 @@ using System.Xml;
 using Netfluid.JsonInternals.Converters;
 using System.Text;
 using System.Xml.Linq;
+using Netfluid.JsonInternals;
 
-
-namespace Netfluid.JsonInternals
+namespace Netfluid
 {
     /// <summary>
     /// Provides methods for converting between common language runtime types and JSON types.
