@@ -56,37 +56,37 @@ namespace Netfluid
         /// <summary>
         /// Represents JavaScript's boolean value true as a string. This field is read-only.
         /// </summary>
-        public static readonly string True = "true";
+        static readonly string True = "true";
 
         /// <summary>
         /// Represents JavaScript's boolean value false as a string. This field is read-only.
         /// </summary>
-        public static readonly string False = "false";
+        static readonly string False = "false";
 
         /// <summary>
         /// Represents JavaScript's null as a string. This field is read-only.
         /// </summary>
-        public static readonly string Null = "null";
+        static readonly string Null = "null";
 
         /// <summary>
         /// Represents JavaScript's undefined as a string. This field is read-only.
         /// </summary>
-        public static readonly string Undefined = "undefined";
+        static readonly string Undefined = "undefined";
 
         /// <summary>
         /// Represents JavaScript's positive infinity as a string. This field is read-only.
         /// </summary>
-        public static readonly string PositiveInfinity = "Infinity";
+        static readonly string PositiveInfinity = "Infinity";
 
         /// <summary>
         /// Represents JavaScript's negative infinity as a string. This field is read-only.
         /// </summary>
-        public static readonly string NegativeInfinity = "-Infinity";
+        static readonly string NegativeInfinity = "-Infinity";
 
         /// <summary>
         /// Represents JavaScript's NaN as a string. This field is read-only.
         /// </summary>
-        public static readonly string NaN = "NaN";
+        static readonly string NaN = "NaN";
 
         /// <summary>
         /// Converts the <see cref="DateTime"/> to its JSON string representation.
