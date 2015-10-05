@@ -216,6 +216,7 @@
     <Compile Include="Responses\Templates\MustacheSuperSet\Value.cs" />
     <Compile Include="Responses\Templates\MustacheTemplate.cs" />
     <Compile Include="Security.cs" />
+    <Compile Include="Serialization\Bson.cs" />
     <Compile Include="Serialization\CSV.cs" />
     <Compile Include="Serialization\CsvFile.cs" />
     <Compile Include="Serialization\JsonInternals\Bson\BsonBinaryType.cs" />
@@ -250,7 +251,7 @@
     <Compile Include="Serialization\JsonInternals\FloatFormatHandling.cs" />
     <Compile Include="Serialization\JsonInternals\FloatParseHandling.cs" />
     <Compile Include="Serialization\JsonInternals\FormatterAssemblyStyle.cs" />
-    <Compile Include="Serialization\Json\Formatting.cs" />
+    <Compile Include="Serialization\Formatting.cs" />
     <Compile Include="Serialization\JsonInternals\IJsonLineInfo.cs" />
     <Compile Include="Serialization\JsonInternals\JsonArrayAttribute.cs" />
     <Compile Include="Serialization\JsonInternals\JsonConstructorAttribute.cs" />
@@ -500,7 +501,9 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Serialization\Json\" />
+  </ItemGroup>
   <ItemGroup>
     <Content Include="Resources\css\bootstrap-theme.css">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
