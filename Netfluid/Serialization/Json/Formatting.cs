@@ -23,7 +23,7 @@
 // OTHER DEALINGS IN THE SOFTWARE.
 #endregion
 
-namespace Netfluid.JsonInternals
+namespace Netfluid
 {
     /// <summary>
     /// Specifies formatting options for the <see cref="JsonTextWriter"/>.
