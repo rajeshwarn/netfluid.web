@@ -882,24 +882,6 @@ namespace Netfluid
         }
 
         /// <summary>
-        /// Asynchronously populates the object with values from the JSON string using <see cref="JsonSerializerSettings"/>.
-        /// </summary>
-        /// <param name="value">The JSON to populate values from.</param>
-        /// <param name="target">The target object to populate values onto.</param>
-        /// <param name="settings">
-        /// The <see cref="JsonSerializerSettings"/> used to deserialize the object.
-        /// If this is null, default serialization settings will be used.
-        /// </param>
-        /// <returns>
-        /// A task that represents the asynchronous populate operation.
-        /// </returns>
-        [ObsoleteAttribute("PopulateObjectAsync is obsolete. Use the Task.Factory.StartNew method to populate an object with JSON values asynchronously: Task.Factory.StartNew(() => JsonConvert.PopulateObject(value, target, settings))")]
-        public static Task PopulateObjectAsync(string value, object target, JsonSerializerSettings settings)
-        {
-            return Task.Factory.StartNew(() => PopulateObject(value, target, settings));
-        }
-
-        /// <summary>
         /// Serializes the XML node to a JSON string.
         /// </summary>
         /// <param name="node">The node to serialize.</param>
