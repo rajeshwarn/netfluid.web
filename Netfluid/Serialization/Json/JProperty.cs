@@ -29,8 +29,10 @@ using System.Collections.Generic;
 using Netfluid.JsonInternals.Utilities;
 using System.Diagnostics;
 using System.Globalization;
+using Netfluid.JsonInternals;
+using Netfluid.JsonInternals.Linq;
 
-namespace Netfluid.JsonInternals.Linq
+namespace Netfluid
 {
     /// <summary>
     /// Represents a JSON property.

@@ -25,34 +25,21 @@
 
 using System;
 using System.Collections.Generic;
-#if !PORTABLE40
 using System.Collections.Specialized;
-#endif
 using System.Threading;
 using Netfluid.JsonInternals.Utilities;
 using System.Collections;
 using System.Globalization;
 using System.ComponentModel;
-#if NET20
-using Netfluid.Json.Utilities.LinqBridge;
-#else
-using System.Linq;
+using Netfluid.JsonInternals.Linq;
+using Netfluid.JsonInternals;
 
-#endif
-
-namespace Netfluid.JsonInternals.Linq
+namespace Netfluid
 {
     /// <summary>
     /// Represents a token that can contain other tokens.
     /// </summary>
-    public abstract class JContainer : JToken, IList<JToken>
-#if !(DOTNET || PORTABLE || PORTABLE40)
-        , ITypedList, IBindingList
-#endif
-        , IList
-#if !(NET20 || NET35 || PORTABLE40)
-        , INotifyCollectionChanged
-#endif
+    public abstract class JContainer : JToken, IList<JToken> , ITypedList, IBindingList, IList, INotifyCollectionChanged
     {
 #if !(DOTNET || PORTABLE40 || PORTABLE)
         internal ListChangedEventHandler _listChanged;
@@ -76,7 +63,7 @@ namespace Netfluid.JsonInternals.Linq
             remove { _addingNew -= value; }
         }
 #endif
-#if !(NET20 || NET35 || PORTABLE40)
+
         internal NotifyCollectionChangedEventHandler _collectionChanged;
 
         /// <summary>
@@ -87,7 +74,6 @@ namespace Netfluid.JsonInternals.Linq
             add { _collectionChanged += value; }
             remove { _collectionChanged -= value; }
         }
-#endif
 
         /// <summary>
         /// Gets the container's children tokens.
@@ -96,9 +82,8 @@ namespace Netfluid.JsonInternals.Linq
         protected abstract IList<JToken> ChildrenTokens { get; }
 
         private object _syncRoot;
-#if !(PORTABLE40)
+
         private bool _busy;
-#endif
 
         internal JContainer()
         {
@@ -164,7 +149,6 @@ namespace Netfluid.JsonInternals.Linq
             }
         }
 #endif
-#if !(NET20 || NET35 || PORTABLE40)
         /// <summary>
         /// Raises the <see cref="CollectionChanged"/> event.
         /// </summary>
@@ -186,7 +170,6 @@ namespace Netfluid.JsonInternals.Linq
                 }
             }
         }
-#endif
 
         /// <summary>
         /// Gets a value indicating whether this token has child tokens.

@@ -42,9 +42,7 @@ namespace Netfluid.JsonInternals
         ReadAsString,
         ReadAsDecimal,
         ReadAsDateTime,
-#if !NET20
         ReadAsDateTimeOffset
-#endif
     }
 
     /// <summary>

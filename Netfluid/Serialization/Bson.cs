@@ -1,12 +1,8 @@
 ﻿using Netfluid.JsonInternals.Bson;
 using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace Netfluid.Serialization
+namespace Netfluid
 {
     public static class Bson
     {

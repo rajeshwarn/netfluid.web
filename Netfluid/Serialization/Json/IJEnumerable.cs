@@ -25,17 +25,13 @@
 
 using System.Collections.Generic;
 
-namespace Netfluid.JsonInternals.Linq
+namespace Netfluid
 {
     /// <summary>
     /// Represents a collection of <see cref="JToken"/> objects.
     /// </summary>
     /// <typeparam name="T">The type of token</typeparam>
-    public interface IJEnumerable<
-#if !(NET20 || NET35)
-        out
-#endif
-            T> : IEnumerable<T> where T : JToken
+    public interface IJEnumerable<out T> : IEnumerable<T> where T : JToken
     {
         /// <summary>
         /// Gets the <see cref="IJEnumerable{JToken}"/> with the specified key.

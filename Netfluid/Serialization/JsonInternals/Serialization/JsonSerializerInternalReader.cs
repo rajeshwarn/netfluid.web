@@ -720,11 +720,7 @@ namespace Netfluid.JsonInternals.Serialization
                 if (TraceWriter != null && TraceWriter.LevelFilter >= TraceLevel.Verbose)
                     TraceWriter.Trace(TraceLevel.Verbose, JsonPosition.FormatMessage(reader as IJsonLineInfo, reader.Path, "Resolved type '{0}' to {1}.".FormatWith(CultureInfo.InvariantCulture, qualifiedTypeName, specifiedType)), null);
 
-                if (objectType != null
-#if !(NET35 || NET20 || PORTABLE40)
-                    && objectType != typeof(IDynamicMetaObjectProvider)
-#endif
-                    && !objectType.IsAssignableFrom(specifiedType))
+                if (objectType != null && objectType != typeof(IDynamicMetaObjectProvider) && !objectType.IsAssignableFrom(specifiedType))
                     throw JsonSerializationException.Create(reader, "Type specified in JSON '{0}' is not compatible with '{1}'.".FormatWith(CultureInfo.InvariantCulture, specifiedType.AssemblyQualifiedName, objectType.AssemblyQualifiedName));
 
                 objectType = specifiedType;

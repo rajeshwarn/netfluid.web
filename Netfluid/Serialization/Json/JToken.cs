@@ -43,21 +43,17 @@ using System.Collections;
 using Netfluid.Json.Utilities.LinqBridge;
 #else
 using System.Linq;
+using Netfluid.JsonInternals.Linq;
+using Netfluid.JsonInternals;
 
 #endif
 
-namespace Netfluid.JsonInternals.Linq
+namespace Netfluid
 {
     /// <summary>
     /// Represents an abstract JSON token.
     /// </summary>
-    public abstract class JToken : IJEnumerable<JToken>, IJsonLineInfo
-#if !(DOTNET || PORTABLE40 || PORTABLE)
-        , ICloneable
-#endif
-#if !(NET35 || NET20 || PORTABLE40)
-        , IDynamicMetaObjectProvider
-#endif
+    public abstract class JToken : IJEnumerable<JToken>, Netfluid.JsonInternals.IJsonLineInfo, ICloneable, IDynamicMetaObjectProvider
     {
         private static JTokenEqualityComparer _equalityComparer;
 
@@ -322,7 +318,7 @@ namespace Netfluid.JsonInternals.Linq
             JToken token = this[key];
 
             // null check to fix MonoTouch issue - https://github.com/dolbz/Netfluid.Json/commit/a24e3062846b30ee505f3271ac08862bb471b822
-            return token == null ? default(T) : Extensions.Convert<JToken, T>(token);
+            return token == null ? default(T) : Netfluid.JsonInternals.Linq.Extensions.Convert<JToken, T>(token);
         }
 
         /// <summary>
@@ -763,10 +759,8 @@ namespace Netfluid.JsonInternals.Linq
             if (v == null || !ValidateToken(v, NumberTypes, false))
                 throw new ArgumentException("Can not convert {0} to SByte.".FormatWith(CultureInfo.InvariantCulture, GetType(value)));
 
-#if !(NET20 || NET35 || PORTABLE40 || PORTABLE)
             if (v.Value is BigInteger)
                 return (sbyte)(BigInteger)v.Value;
-#endif
 
             return Convert.ToSByte(v.Value, CultureInfo.InvariantCulture);
         }

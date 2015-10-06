@@ -25,7 +25,7 @@
 
 using System.Collections.Generic;
 
-namespace Netfluid.JsonInternals.Linq
+namespace Netfluid
 {
     /// <summary>
     /// Compares tokens to determine whether they are equal.

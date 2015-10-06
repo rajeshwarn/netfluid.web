@@ -1,4 +1,5 @@
 ﻿using Netfluid;
+using Netfluid.JsonInternals.Linq;
 using System;
 
 namespace Example
@@ -22,7 +23,9 @@ namespace Example
             host.Map(typeof(Program));
             host.Start();
 
-            var k = Json.SerializeObject(new Program());
+            JObject obj;
+
+            var k = Json.SerializeObject(new[] {1,2,3,4,5,6,77,8,9,9 });
             var d = Json.DeserializeObject(k);
 
             Console.WriteLine(d.GetType());

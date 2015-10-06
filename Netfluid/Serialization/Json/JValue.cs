@@ -30,21 +30,20 @@ using System.Globalization;
 #if !(NET35 || NET20 || PORTABLE40)
 using System.Dynamic;
 using System.Linq.Expressions;
+using Netfluid.JsonInternals;
+using Netfluid.JsonInternals.Linq;
 #endif
 #if !(NET20 || NET35 || PORTABLE40 || PORTABLE)
 using System.Numerics;
 
 #endif
 
-namespace Netfluid.JsonInternals.Linq
+namespace Netfluid
 {
     /// <summary>
     /// Represents a value in JSON (string, integer, date, etc).
     /// </summary>
-    public class JValue : JToken, IEquatable<JValue>, IFormattable, IComparable, IComparable<JValue>
-#if !PORTABLE
-        , IConvertible
-#endif
+    public class JValue : JToken, IEquatable<JValue>, IFormattable, IComparable, IComparable<JValue>, IConvertible
     {
         private JTokenType _valueType;
         private object _value;
@@ -705,11 +704,9 @@ namespace Netfluid.JsonInternals.Linq
                     writer.WriteValue(Convert.ToBoolean(_value, CultureInfo.InvariantCulture));
                     return;
                 case JTokenType.Date:
-#if !NET20
                     if (_value is DateTimeOffset)
                         writer.WriteValue((DateTimeOffset)_value);
                     else
-#endif
                         writer.WriteValue(Convert.ToDateTime(_value, CultureInfo.InvariantCulture));
                     return;
                 case JTokenType.Bytes:

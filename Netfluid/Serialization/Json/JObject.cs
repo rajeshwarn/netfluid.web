@@ -33,8 +33,10 @@ using System.IO;
 using Netfluid.JsonInternals.Utilities;
 using System.Globalization;
 using System.Linq;
+using Netfluid.JsonInternals.Linq;
+using Netfluid.JsonInternals;
 
-namespace Netfluid.JsonInternals.Linq
+namespace Netfluid
 {
     /// <summary>
     /// Represents a JSON object.
@@ -216,7 +218,7 @@ namespace Netfluid.JsonInternals.Linq
         /// </summary>
         /// <param name="name">The property name.</param>
         /// <returns>A <see cref="JProperty"/> with the specified name or null.</returns>
-        public JProperty Property(string name)
+        internal JProperty Property(string name)
         {
             if (name == null)
                 return null;

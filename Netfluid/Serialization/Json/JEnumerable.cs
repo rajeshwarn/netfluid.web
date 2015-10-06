@@ -25,15 +25,12 @@
 
 using System;
 using System.Collections.Generic;
-#if NET20
-using Netfluid.Json.Utilities.LinqBridge;
-#else
 using System.Linq;
-#endif
 using Netfluid.JsonInternals.Utilities;
 using System.Collections;
+using Netfluid.JsonInternals.Linq;
 
-namespace Netfluid.JsonInternals.Linq
+namespace Netfluid
 {
     /// <summary>
     /// Represents a collection of <see cref="JToken"/> objects.

@@ -279,13 +279,13 @@
     <Compile Include="Serialization\JsonInternals\JsonWriter.cs" />
     <Compile Include="Serialization\JsonInternals\JsonWriterException.cs" />
     <Compile Include="Serialization\JsonInternals\Linq\Extensions.cs" />
-    <Compile Include="Serialization\JsonInternals\Linq\IJEnumerable.cs" />
-    <Compile Include="Serialization\JsonInternals\Linq\JArray.cs" />
+    <Compile Include="Serialization\Json\IJEnumerable.cs" />
+    <Compile Include="Serialization\Json\JArray.cs" />
     <Compile Include="Serialization\JsonInternals\Linq\JConstructor.cs" />
-    <Compile Include="Serialization\JsonInternals\Linq\JContainer.cs" />
-    <Compile Include="Serialization\JsonInternals\Linq\JEnumerable.cs" />
-    <Compile Include="Serialization\JsonInternals\Linq\JObject.cs" />
-    <Compile Include="Serialization\JsonInternals\Linq\JProperty.cs" />
+    <Compile Include="Serialization\Json\JContainer.cs" />
+    <Compile Include="Serialization\Json\JEnumerable.cs" />
+    <Compile Include="Serialization\Json\JObject.cs" />
+    <Compile Include="Serialization\Json\JProperty.cs" />
     <Compile Include="Serialization\JsonInternals\Linq\JPropertyDescriptor.cs" />
     <Compile Include="Serialization\JsonInternals\Linq\JPropertyKeyedCollection.cs" />
     <Compile Include="Serialization\JsonInternals\Linq\JRaw.cs" />
@@ -300,12 +300,12 @@
     <Compile Include="Serialization\JsonInternals\Linq\JsonPath\QueryExpression.cs" />
     <Compile Include="Serialization\JsonInternals\Linq\JsonPath\QueryFilter.cs" />
     <Compile Include="Serialization\JsonInternals\Linq\JsonPath\ScanFilter.cs" />
-    <Compile Include="Serialization\JsonInternals\Linq\JToken.cs" />
+    <Compile Include="Serialization\Json\JToken.cs" />
     <Compile Include="Serialization\JsonInternals\Linq\JTokenEqualityComparer.cs" />
     <Compile Include="Serialization\JsonInternals\Linq\JTokenReader.cs" />
     <Compile Include="Serialization\JsonInternals\Linq\JTokenType.cs" />
     <Compile Include="Serialization\JsonInternals\Linq\JTokenWriter.cs" />
-    <Compile Include="Serialization\JsonInternals\Linq\JValue.cs" />
+    <Compile Include="Serialization\Json\JValue.cs" />
     <Compile Include="Serialization\JsonInternals\Linq\MergeArrayHandling.cs" />
     <Compile Include="Serialization\JsonInternals\MemberSerialization.cs" />
     <Compile Include="Serialization\JsonInternals\MetadataPropertyHandling.cs" />
@@ -484,9 +484,7 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Serialization\Json\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <Content Include="Resources\css\bootstrap-theme.css">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
