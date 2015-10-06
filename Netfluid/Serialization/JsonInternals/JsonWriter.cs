@@ -29,7 +29,7 @@ using System.IO;
 #if !(NET20 || NET35 || PORTABLE40 || PORTABLE)
 using System.Numerics;
 #endif
-using Netfluid.JsonInternals.Utilities;
+using Netfluid.Json.Utilities;
 using System.Globalization;
 #if NET20
 using Netfluid.Json.Utilities.LinqBridge;
@@ -38,7 +38,7 @@ using System.Linq;
 
 #endif
 
-namespace Netfluid.JsonInternals
+namespace Netfluid.Json
 {
     /// <summary>
     /// Represents a writer that provides a fast, non-cached, forward-only way of generating JSON data.

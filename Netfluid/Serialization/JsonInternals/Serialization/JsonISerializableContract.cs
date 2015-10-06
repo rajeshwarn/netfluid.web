@@ -27,7 +27,7 @@
 using System;
 using System.Runtime.Serialization;
 
-namespace Netfluid.JsonInternals.Serialization
+namespace Netfluid.Json.Serialization
 {
     /// <summary>
     /// Contract details for a <see cref="Type"/> used by the <see cref="JsonSerializer"/>.

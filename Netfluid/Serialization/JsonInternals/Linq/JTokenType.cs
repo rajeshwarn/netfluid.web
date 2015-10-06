@@ -23,7 +23,7 @@
 // OTHER DEALINGS IN THE SOFTWARE.
 #endregion
 
-namespace Netfluid.JsonInternals.Linq
+namespace Netfluid.Json.Linq
 {
     /// <summary>
     /// Specifies the type of token.

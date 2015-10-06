@@ -25,11 +25,11 @@
 
 using System;
 using System.Text.RegularExpressions;
-using Netfluid.JsonInternals.Bson;
+using Netfluid.Json.Bson;
 using System.Globalization;
-using Netfluid.JsonInternals.Serialization;
+using Netfluid.Json.Serialization;
 
-namespace Netfluid.JsonInternals.Converters
+namespace Netfluid.Json.Converters
 {
     /// <summary>
     /// Converts a <see cref="Regex"/> to and from JSON and BSON.

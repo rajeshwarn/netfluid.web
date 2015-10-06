@@ -23,7 +23,7 @@
 // OTHER DEALINGS IN THE SOFTWARE.
 #endregion
 
-namespace Netfluid.JsonInternals
+namespace Netfluid.Json
 {
     /// <summary>
     /// Specifies how object creation is handled by the <see cref="JsonSerializer"/>.

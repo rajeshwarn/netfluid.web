@@ -24,9 +24,9 @@
 #endregion
 
 using System.Globalization;
-using Netfluid.JsonInternals.Utilities;
+using Netfluid.Json.Utilities;
 
-namespace Netfluid.JsonInternals.Serialization
+namespace Netfluid.Json.Serialization
 {
     /// <summary>
     /// Resolves member mappings for a type, camel casing property names.

@@ -26,7 +26,7 @@
 using System;
 using System.Text;
 
-namespace Netfluid.JsonInternals.Utilities
+namespace Netfluid.Json.Utilities
 {
     internal static class JsonTokenUtils
     {

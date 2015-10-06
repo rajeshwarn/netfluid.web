@@ -31,10 +31,10 @@ using Netfluid.Json.Utilities.LinqBridge;
 #endif
 using System.Reflection;
 using System.Reflection.Emit;
-using Netfluid.JsonInternals.Serialization;
+using Netfluid.Json.Serialization;
 using System.Globalization;
 
-namespace Netfluid.JsonInternals.Utilities
+namespace Netfluid.Json.Utilities
 {
     internal class DynamicReflectionDelegateFactory : ReflectionDelegateFactory
     {

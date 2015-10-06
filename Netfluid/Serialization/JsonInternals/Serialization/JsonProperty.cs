@@ -25,9 +25,9 @@
 
 using System;
 using System.Reflection;
-using Netfluid.JsonInternals.Utilities;
+using Netfluid.Json.Utilities;
 
-namespace Netfluid.JsonInternals.Serialization
+namespace Netfluid.Json.Serialization
 {
     /// <summary>
     /// Maps a JSON property to a .NET member or constructor parameter.

@@ -26,9 +26,9 @@
 using System;
 using System.Globalization;
 using System.Runtime.Serialization;
-using Netfluid.JsonInternals.Utilities;
+using Netfluid.Json.Utilities;
 
-namespace Netfluid.JsonInternals
+namespace Netfluid.Json
 {
     /// <summary>
     /// The exception thrown when an error occurs while reading JSON text.

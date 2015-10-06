@@ -25,9 +25,9 @@
 
 using System;
 using System.Reflection;
-using Netfluid.JsonInternals.Utilities;
+using Netfluid.Json.Utilities;
 
-namespace Netfluid.JsonInternals.Serialization
+namespace Netfluid.Json.Serialization
 {
     internal static class CachedAttributeGetter<T> where T : Attribute
     {

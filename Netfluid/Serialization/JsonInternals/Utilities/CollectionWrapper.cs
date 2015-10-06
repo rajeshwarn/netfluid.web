@@ -35,7 +35,7 @@ using System.Linq;
 
 #endif
 
-namespace Netfluid.JsonInternals.Utilities
+namespace Netfluid.Json.Utilities
 {
     internal interface IWrappedCollection : IList
     {

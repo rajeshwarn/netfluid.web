@@ -27,10 +27,10 @@
 using System;
 using System.Data.SqlTypes;
 using System.Globalization;
-using Netfluid.JsonInternals.Utilities;
+using Netfluid.Json.Utilities;
 using System.Collections.Generic;
 
-namespace Netfluid.JsonInternals.Converters
+namespace Netfluid.Json.Converters
 {
     /// <summary>
     /// Converts a binary value to and from a base 64 string value.

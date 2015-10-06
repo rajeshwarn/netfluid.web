@@ -30,13 +30,13 @@ using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using System.Runtime.Serialization.Formatters;
-using Netfluid.JsonInternals.Converters;
-using Netfluid.JsonInternals.Serialization;
-using Netfluid.JsonInternals.Utilities;
+using Netfluid.Json.Converters;
+using Netfluid.Json.Serialization;
+using Netfluid.Json.Utilities;
 using System.Runtime.Serialization;
-using ErrorEventArgs = Netfluid.JsonInternals.Serialization.ErrorEventArgs;
+using ErrorEventArgs = Netfluid.Json.Serialization.ErrorEventArgs;
 
-namespace Netfluid.JsonInternals
+namespace Netfluid.Json
 {
     /// <summary>
     /// Serializes and deserializes objects into and from the JSON format.
@@ -504,7 +504,7 @@ namespace Netfluid.JsonInternals
         public static JsonSerializer CreateDefault()
         {
             // copy static to local variable to avoid concurrency issues
-            Func<JsonSerializerSettings> defaultSettingsCreator = Json.DefaultSettings;
+            Func<JsonSerializerSettings> defaultSettingsCreator = JSON.DefaultSettings;
             JsonSerializerSettings defaultSettings = (defaultSettingsCreator != null) ? defaultSettingsCreator() : null;
 
             return Create(defaultSettings);

@@ -26,13 +26,13 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using Netfluid.JsonInternals.Utilities;
+using Netfluid.Json.Utilities;
 using System.Diagnostics;
 using System.Globalization;
-using Netfluid.JsonInternals;
-using Netfluid.JsonInternals.Linq;
+using Netfluid.Json;
+using Netfluid.Json.Linq;
 
-namespace Netfluid
+namespace Netfluid.Json
 {
     /// <summary>
     /// Represents a JSON property.

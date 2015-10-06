@@ -27,8 +27,8 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Globalization;
-using Netfluid.JsonInternals.Serialization;
-using Netfluid.JsonInternals.Utilities;
+using Netfluid.Json.Serialization;
+using Netfluid.Json.Utilities;
 #if NET20
 using Netfluid.Json.Utilities.LinqBridge;
 #else
@@ -36,7 +36,7 @@ using System.Linq;
 
 #endif
 
-namespace Netfluid.JsonInternals
+namespace Netfluid.Json
 {
     /// <summary>
     /// Represents a reader that provides fast, non-cached, forward-only access to serialized JSON data.

@@ -25,10 +25,10 @@
 
 using System;
 using System.Reflection;
-using Netfluid.JsonInternals.Utilities;
+using Netfluid.Json.Utilities;
 using System.Globalization;
 
-namespace Netfluid.JsonInternals.Serialization
+namespace Netfluid.Json.Serialization
 {
     /// <summary>
     /// Get and set values for a <see cref="MemberInfo"/> using reflection.

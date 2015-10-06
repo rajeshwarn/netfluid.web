@@ -25,7 +25,7 @@
 
 using System;
 
-namespace Netfluid.JsonInternals
+namespace Netfluid.Json
 {
     /// <summary>
     /// Specifies type name handling options for the <see cref="JsonSerializer"/>.

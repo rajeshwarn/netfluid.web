@@ -30,9 +30,9 @@ using System.Runtime.CompilerServices;
 using System.Text;
 using System.IO;
 using System.Globalization;
-using Netfluid.JsonInternals.Utilities;
+using Netfluid.Json.Utilities;
 
-namespace Netfluid.JsonInternals
+namespace Netfluid.Json
 {
     internal enum ReadType
     {
@@ -1523,7 +1523,7 @@ namespace Netfluid.JsonInternals
             // check characters equal 'true'
             // and that it is followed by either a separator character
             // or the text ends
-            if (MatchValueWithTrailingSeparator(Json.True))
+            if (MatchValueWithTrailingSeparator(JSON.True))
             {
                 SetToken(JsonToken.Boolean, true);
             }
@@ -1535,7 +1535,7 @@ namespace Netfluid.JsonInternals
 
         private void ParseNull()
         {
-            if (MatchValueWithTrailingSeparator(Json.Null))
+            if (MatchValueWithTrailingSeparator(JSON.Null))
             {
                 SetToken(JsonToken.Null);
             }
@@ -1547,7 +1547,7 @@ namespace Netfluid.JsonInternals
 
         private void ParseUndefined()
         {
-            if (MatchValueWithTrailingSeparator(Json.Undefined))
+            if (MatchValueWithTrailingSeparator(JSON.Undefined))
             {
                 SetToken(JsonToken.Undefined);
             }
@@ -1559,7 +1559,7 @@ namespace Netfluid.JsonInternals
 
         private void ParseFalse()
         {
-            if (MatchValueWithTrailingSeparator(Json.False))
+            if (MatchValueWithTrailingSeparator(JSON.False))
             {
                 SetToken(JsonToken.Boolean, false);
             }
@@ -1571,7 +1571,7 @@ namespace Netfluid.JsonInternals
 
         private void ParseNumberNegativeInfinity()
         {
-            if (MatchValueWithTrailingSeparator(Json.NegativeInfinity))
+            if (MatchValueWithTrailingSeparator(JSON.NegativeInfinity))
             {
                 if (_floatParseHandling == FloatParseHandling.Decimal)
                     throw new JsonReaderException("Cannot read -Infinity as a decimal.");
@@ -1586,7 +1586,7 @@ namespace Netfluid.JsonInternals
 
         private void ParseNumberPositiveInfinity()
         {
-            if (MatchValueWithTrailingSeparator(Json.PositiveInfinity))
+            if (MatchValueWithTrailingSeparator(JSON.PositiveInfinity))
             {
                 if (_floatParseHandling == FloatParseHandling.Decimal)
                     throw new JsonReaderException("Cannot read Infinity as a decimal.");
@@ -1601,7 +1601,7 @@ namespace Netfluid.JsonInternals
 
         private void ParseNumberNaN()
         {
-            if (MatchValueWithTrailingSeparator(Json.NaN))
+            if (MatchValueWithTrailingSeparator(JSON.NaN))
             {
                 if (_floatParseHandling == FloatParseHandling.Decimal)
                     throw new JsonReaderException("Cannot read NaN as a decimal.");

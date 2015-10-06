@@ -28,14 +28,14 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Reflection;
 using System.Runtime.Serialization;
-using Netfluid.JsonInternals.Utilities;
+using Netfluid.Json.Utilities;
 #if NET20
 using Netfluid.Json.Utilities.LinqBridge;
 #else
 using System.Linq;
 #endif
 
-namespace Netfluid.JsonInternals.Converters
+namespace Netfluid.Json.Converters
 {
     /// <summary>
     /// Converts an <see cref="Enum"/> to and from its name string value.

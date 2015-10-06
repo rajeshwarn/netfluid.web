@@ -25,7 +25,7 @@
 
 using System.Collections.Generic;
 
-namespace Netfluid
+namespace Netfluid.Json
 {
     /// <summary>
     /// Represents a collection of <see cref="JToken"/> objects.

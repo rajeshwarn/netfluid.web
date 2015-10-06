@@ -39,9 +39,9 @@ using Netfluid.Json.Utilities.LinqBridge;
 #else
 using System.Linq;
 #endif
-using Netfluid.JsonInternals.Serialization;
+using Netfluid.Json.Serialization;
 
-namespace Netfluid.JsonInternals.Utilities
+namespace Netfluid.Json.Utilities
 {
 #if (DOTNET || PORTABLE || PORTABLE40)
     internal enum MemberTypes

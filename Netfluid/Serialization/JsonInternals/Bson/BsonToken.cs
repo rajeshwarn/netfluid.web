@@ -26,7 +26,7 @@
 using System.Collections;
 using System.Collections.Generic;
 
-namespace Netfluid.JsonInternals.Bson
+namespace Netfluid.Json.Bson
 {
     internal abstract class BsonToken
     {

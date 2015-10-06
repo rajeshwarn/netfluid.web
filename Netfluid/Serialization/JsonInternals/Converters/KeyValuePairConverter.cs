@@ -25,11 +25,11 @@
 
 using System;
 using System.Collections.Generic;
-using Netfluid.JsonInternals.Serialization;
-using Netfluid.JsonInternals.Utilities;
+using Netfluid.Json.Serialization;
+using Netfluid.Json.Utilities;
 using System.Reflection;
 
-namespace Netfluid.JsonInternals.Converters
+namespace Netfluid.Json.Converters
 {
     /// <summary>
     /// Converts a <see cref="KeyValuePair{TKey,TValue}"/> to and from JSON.

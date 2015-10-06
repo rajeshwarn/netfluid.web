@@ -31,7 +31,7 @@ using System.Reflection;
 using System.Text;
 using System.Globalization;
 
-namespace Netfluid.JsonInternals.Utilities
+namespace Netfluid.Json.Utilities
 {
     internal delegate T Creator<T>();
 

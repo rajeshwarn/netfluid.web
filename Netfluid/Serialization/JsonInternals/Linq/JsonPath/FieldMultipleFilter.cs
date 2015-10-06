@@ -5,9 +5,9 @@ using Netfluid.Json.Utilities.LinqBridge;
 #else
 using System.Linq;
 #endif
-using Netfluid.JsonInternals.Utilities;
+using Netfluid.Json.Utilities;
 
-namespace Netfluid.JsonInternals.Linq.JsonPath
+namespace Netfluid.Json.Linq.JsonPath
 {
     internal class FieldMultipleFilter : PathFilter
     {

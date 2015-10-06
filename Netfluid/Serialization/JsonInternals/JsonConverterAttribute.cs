@@ -24,10 +24,9 @@
 #endregion
 
 using System;
-using Netfluid.JsonInternals.Utilities;
-using System.Globalization;
 
-namespace Netfluid.JsonInternals
+
+namespace Netfluid.Json
 {
     /// <summary>
     /// Instructs the <see cref="JsonSerializer"/> to use the specified <see cref="JsonConverter"/> when serializing the member or class.

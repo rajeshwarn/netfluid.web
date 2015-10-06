@@ -27,7 +27,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 
-namespace Netfluid.JsonInternals.Linq
+namespace Netfluid.Json.Linq
 {
     internal class JPropertyKeyedCollection : Collection<JToken>
     {

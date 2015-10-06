@@ -27,12 +27,12 @@ using System;
 using System.IO;
 using System.Globalization;
 using System.Numerics;
-using Netfluid.JsonInternals.Utilities;
+using Netfluid.Json.Utilities;
 using System.Xml;
-using Netfluid.JsonInternals.Converters;
+using Netfluid.Json.Converters;
 using System.Text;
 using System.Xml.Linq;
-using Netfluid.JsonInternals;
+using Netfluid.Json;
 
 namespace Netfluid
 {
@@ -42,11 +42,11 @@ namespace Netfluid
     /// <example>
     ///   <code lang="cs" source="..\Src\Netfluid.Json.Tests\Documentation\SerializationTests.cs" region="SerializeObject" title="Serializing and Deserializing JSON with JsonConvert" />
     /// </example>
-    public static class Json
+    public static class JSON
     {
         /// <summary>
         /// Gets or sets a function that creates default <see cref="JsonSerializerSettings"/>.
-        /// Default settings are automatically used by serialization methods on <see cref="Json"/>,
+        /// Default settings are automatically used by serialization methods on <see cref="JSON"/>,
         /// and <see cref="JToken.ToObject{T}()"/> and <see cref="JToken.FromObject(object)"/> on <see cref="JToken"/>.
         /// To serialize without using any default settings create a <see cref="JsonSerializer"/> with
         /// <see cref="JsonSerializer.Create()"/>.
@@ -629,7 +629,7 @@ namespace Netfluid
         /// </summary>
         /// <param name="value">The JSON to deserialize.</param>
         /// <returns>The deserialized object from the JSON string.</returns>
-        public static object DeserializeObject(string value)
+        public static object Deserialize(string value)
         {
             return DeserializeObject(value, null, (JsonSerializerSettings)null);
         }

@@ -25,9 +25,9 @@
 
 using System;
 using System.Globalization;
-using Netfluid.JsonInternals.Utilities;
+using Netfluid.Json.Utilities;
 
-namespace Netfluid.JsonInternals.Converters
+namespace Netfluid.Json.Converters
 {
     /// <summary>
     /// Converts a <see cref="Version"/> to and from a string (e.g. "1.2.3.4").

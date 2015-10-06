@@ -26,7 +26,7 @@
 using System;
 using System.Collections.Generic;
 using System.Reflection;
-using Netfluid.JsonInternals.Utilities;
+using Netfluid.Json.Utilities;
 using System.Collections;
 #if NET20
 using Netfluid.Json.Utilities.LinqBridge;
@@ -35,7 +35,7 @@ using System.Linq;
 
 #endif
 
-namespace Netfluid.JsonInternals.Serialization
+namespace Netfluid.Json.Serialization
 {
     /// <summary>
     /// Contract details for a <see cref="System.Type"/> used by the <see cref="JsonSerializer"/>.

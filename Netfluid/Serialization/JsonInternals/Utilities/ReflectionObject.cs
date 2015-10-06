@@ -23,7 +23,7 @@
 // OTHER DEALINGS IN THE SOFTWARE.
 #endregion
 
-using Netfluid.JsonInternals.Serialization;
+using Netfluid.Json.Serialization;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -35,7 +35,7 @@ using Netfluid.Json.Utilities.LinqBridge;
 using System.Linq;
 #endif
 
-namespace Netfluid.JsonInternals.Utilities
+namespace Netfluid.Json.Utilities
 {
     internal class ReflectionMember
     {

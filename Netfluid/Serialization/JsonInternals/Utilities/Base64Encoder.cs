@@ -26,7 +26,7 @@
 using System;
 using System.IO;
 
-namespace Netfluid.JsonInternals.Utilities
+namespace Netfluid.Json.Utilities
 {
     internal class Base64Encoder
     {

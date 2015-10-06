@@ -28,10 +28,10 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Runtime.Serialization.Formatters;
-using Netfluid.JsonInternals.Serialization;
+using Netfluid.Json.Serialization;
 using System.Runtime.Serialization;
 
-namespace Netfluid.JsonInternals
+namespace Netfluid.Json
 {
     /// <summary>
     /// Specifies the settings on a <see cref="JsonSerializer"/> object.

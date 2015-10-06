@@ -25,7 +25,7 @@
 
 using System;
 
-namespace Netfluid.JsonInternals
+namespace Netfluid.Json
 {
     /// <summary>
     /// Instructs the <see cref="JsonSerializer"/> how to serialize the object.

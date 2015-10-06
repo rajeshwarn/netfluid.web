@@ -26,10 +26,10 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using Netfluid.JsonInternals.Utilities;
+using Netfluid.Json.Utilities;
 using System.Globalization;
 
-namespace Netfluid.JsonInternals.Linq
+namespace Netfluid.Json.Linq
 {
     /// <summary>
     /// Represents a JSON constructor.

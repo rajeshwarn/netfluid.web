@@ -24,10 +24,10 @@
 #endregion
 
 using System;
-using Netfluid.JsonInternals.Utilities;
+using Netfluid.Json.Utilities;
 using System.Globalization;
 
-namespace Netfluid.JsonInternals.Serialization
+namespace Netfluid.Json.Serialization
 {
     internal class DefaultReferenceResolver : IReferenceResolver
     {

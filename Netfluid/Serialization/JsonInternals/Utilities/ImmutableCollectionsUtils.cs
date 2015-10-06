@@ -30,9 +30,9 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
-using Netfluid.JsonInternals.Serialization;
+using Netfluid.Json.Serialization;
 
-namespace Netfluid.JsonInternals.Utilities
+namespace Netfluid.Json.Utilities
 {
     internal static class ImmutableCollectionsUtils
     {

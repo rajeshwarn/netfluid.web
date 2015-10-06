@@ -28,7 +28,7 @@ using System.IO;
 using System.Xml;
 using System.Globalization;
 
-namespace Netfluid.JsonInternals.Utilities
+namespace Netfluid.Json.Utilities
 {
     internal static class DateTimeUtils
     {

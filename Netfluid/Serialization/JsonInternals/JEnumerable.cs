@@ -26,11 +26,11 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Netfluid.JsonInternals.Utilities;
+using Netfluid.Json.Utilities;
 using System.Collections;
-using Netfluid.JsonInternals.Linq;
+using Netfluid.Json.Linq;
 
-namespace Netfluid
+namespace Netfluid.Json
 {
     /// <summary>
     /// Represents a collection of <see cref="JToken"/> objects.

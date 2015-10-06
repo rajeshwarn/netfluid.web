@@ -26,9 +26,9 @@
 #if !(DOTNET || PORTABLE40 || PORTABLE)
 using System;
 using System.Data;
-using Netfluid.JsonInternals.Serialization;
+using Netfluid.Json.Serialization;
 
-namespace Netfluid.JsonInternals.Converters
+namespace Netfluid.Json.Converters
 {
     /// <summary>
     /// Converts a <see cref="DataSet"/> to and from JSON.

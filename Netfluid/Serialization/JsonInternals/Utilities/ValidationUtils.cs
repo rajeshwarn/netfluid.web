@@ -29,7 +29,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Globalization;
 
-namespace Netfluid.JsonInternals.Utilities
+namespace Netfluid.Json.Utilities
 {
     internal static class ValidationUtils
     {

@@ -32,9 +32,9 @@ using System.Numerics;
 using System.Text;
 using System.IO;
 using System.Xml;
-using Netfluid.JsonInternals.Utilities;
+using Netfluid.Json.Utilities;
 
-namespace Netfluid.JsonInternals
+namespace Netfluid.Json
 {
     /// <summary>
     /// Represents a writer that provides a fast, non-cached, forward-only way of generating JSON data.
@@ -340,7 +340,7 @@ namespace Netfluid.JsonInternals
         public override void WriteNull()
         {
             InternalWriteValue(JsonToken.Null);
-            WriteValueInternal(Json.Null, JsonToken.Null);
+            WriteValueInternal(JSON.Null, JsonToken.Null);
         }
 
         /// <summary>
@@ -349,7 +349,7 @@ namespace Netfluid.JsonInternals
         public override void WriteUndefined()
         {
             InternalWriteValue(JsonToken.Undefined);
-            WriteValueInternal(Json.Undefined, JsonToken.Undefined);
+            WriteValueInternal(JSON.Undefined, JsonToken.Undefined);
         }
 
         /// <summary>
@@ -372,7 +372,7 @@ namespace Netfluid.JsonInternals
             InternalWriteValue(JsonToken.String);
 
             if (value == null)
-                WriteValueInternal(Json.Null, JsonToken.Null);
+                WriteValueInternal(JSON.Null, JsonToken.Null);
             else
                 WriteEscapedString(value, true);
         }
@@ -432,7 +432,7 @@ namespace Netfluid.JsonInternals
         public override void WriteValue(float value)
         {
             InternalWriteValue(JsonToken.Float);
-            WriteValueInternal(Json.ToString(value, FloatFormatHandling, QuoteChar, false), JsonToken.Float);
+            WriteValueInternal(JSON.ToString(value, FloatFormatHandling, QuoteChar, false), JsonToken.Float);
         }
 
         /// <summary>
@@ -448,7 +448,7 @@ namespace Netfluid.JsonInternals
             else
             {
                 InternalWriteValue(JsonToken.Float);
-                WriteValueInternal(Json.ToString(value.Value, FloatFormatHandling, QuoteChar, true), JsonToken.Float);
+                WriteValueInternal(JSON.ToString(value.Value, FloatFormatHandling, QuoteChar, true), JsonToken.Float);
             }
         }
 
@@ -459,7 +459,7 @@ namespace Netfluid.JsonInternals
         public override void WriteValue(double value)
         {
             InternalWriteValue(JsonToken.Float);
-            WriteValueInternal(Json.ToString(value, FloatFormatHandling, QuoteChar, false), JsonToken.Float);
+            WriteValueInternal(JSON.ToString(value, FloatFormatHandling, QuoteChar, false), JsonToken.Float);
         }
 
         /// <summary>
@@ -475,7 +475,7 @@ namespace Netfluid.JsonInternals
             else
             {
                 InternalWriteValue(JsonToken.Float);
-                WriteValueInternal(Json.ToString(value.Value, FloatFormatHandling, QuoteChar, true), JsonToken.Float);
+                WriteValueInternal(JSON.ToString(value.Value, FloatFormatHandling, QuoteChar, true), JsonToken.Float);
             }
         }
 
@@ -486,7 +486,7 @@ namespace Netfluid.JsonInternals
         public override void WriteValue(bool value)
         {
             InternalWriteValue(JsonToken.Boolean);
-            WriteValueInternal(Json.ToString(value), JsonToken.Boolean);
+            WriteValueInternal(JSON.ToString(value), JsonToken.Boolean);
         }
 
         /// <summary>
@@ -517,7 +517,7 @@ namespace Netfluid.JsonInternals
         public override void WriteValue(char value)
         {
             InternalWriteValue(JsonToken.String);
-            WriteValueInternal(Json.ToString(value), JsonToken.String);
+            WriteValueInternal(JSON.ToString(value), JsonToken.String);
         }
 
         /// <summary>
@@ -548,7 +548,7 @@ namespace Netfluid.JsonInternals
         public override void WriteValue(decimal value)
         {
             InternalWriteValue(JsonToken.Float);
-            WriteValueInternal(Json.ToString(value), JsonToken.Float);
+            WriteValueInternal(JSON.ToString(value), JsonToken.Float);
         }
 
         /// <summary>

@@ -24,7 +24,7 @@
 #endregion
 
 #if !(NET35 || NET20)
-using Netfluid.JsonInternals.Linq;
+using Netfluid.Json.Linq;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -34,11 +34,11 @@ using Netfluid.Json.Utilities.LinqBridge;
 using System.Linq;
 #endif
 using System.Reflection;
-using Netfluid.JsonInternals.Serialization;
+using Netfluid.Json.Serialization;
 using System.Globalization;
-using Netfluid.JsonInternals.Utilities;
+using Netfluid.Json.Utilities;
 
-namespace Netfluid.JsonInternals.Converters
+namespace Netfluid.Json.Converters
 {
     /// <summary>
     /// Converts a F# discriminated union type to and from JSON.

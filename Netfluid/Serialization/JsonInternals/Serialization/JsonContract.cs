@@ -28,10 +28,10 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Reflection;
 using System.Runtime.Serialization;
-using Netfluid.JsonInternals.Linq;
-using Netfluid.JsonInternals.Utilities;
+using Netfluid.Json.Linq;
+using Netfluid.Json.Utilities;
 
-namespace Netfluid.JsonInternals.Serialization
+namespace Netfluid.Json.Serialization
 {
     internal enum JsonContractType
     {

@@ -26,13 +26,12 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using Netfluid.JsonInternals.Utilities;
+using Netfluid.Json.Utilities;
 using System.IO;
 using System.Globalization;
-using Netfluid.JsonInternals.Linq;
-using Netfluid.JsonInternals;
+using Netfluid.Json.Linq;
 
-namespace Netfluid
+namespace Netfluid.Json
 {
     /// <summary>
     /// Represents a JSON array.
@@ -227,7 +226,7 @@ namespace Netfluid
         }
 
         /// <summary>
-        /// Gets or sets the <see cref="Netfluid.JsonInternals.Linq.JToken"/> at the specified index.
+        /// Gets or sets the <see cref="Netfluid.Json.Linq.JToken"/> at the specified index.
         /// </summary>
         /// <value></value>
         public JToken this[int index]

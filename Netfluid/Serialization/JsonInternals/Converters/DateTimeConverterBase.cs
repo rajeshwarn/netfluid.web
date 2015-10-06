@@ -25,7 +25,7 @@
 
 using System;
 
-namespace Netfluid.JsonInternals.Converters
+namespace Netfluid.Json.Converters
 {
     /// <summary>
     /// Provides a base class for converting a <see cref="DateTime"/> to and from JSON.

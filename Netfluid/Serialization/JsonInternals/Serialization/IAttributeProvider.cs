@@ -26,7 +26,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace Netfluid.JsonInternals.Serialization
+namespace Netfluid.Json.Serialization
 {
     /// <summary>
     /// Provides methods to get attributes.

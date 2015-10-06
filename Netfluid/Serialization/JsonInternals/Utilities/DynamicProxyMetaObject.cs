@@ -31,7 +31,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
 
-namespace Netfluid.JsonInternals.Utilities
+namespace Netfluid.Json.Utilities
 {
     internal sealed class DynamicProxyMetaObject<T> : DynamicMetaObject
     {

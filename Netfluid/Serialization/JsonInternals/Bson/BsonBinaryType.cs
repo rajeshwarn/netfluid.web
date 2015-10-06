@@ -25,7 +25,7 @@
 
 using System;
 
-namespace Netfluid.JsonInternals.Bson
+namespace Netfluid.Json.Bson
 {
     internal enum BsonBinaryType : byte
     {

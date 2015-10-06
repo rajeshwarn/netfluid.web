@@ -26,15 +26,10 @@
 using System;
 using System.Collections.Generic;
 using System.Globalization;
-using System.Runtime.Serialization;
-#if NET20
-using Netfluid.Json.Utilities.LinqBridge;
-#else
 using System.Linq;
-#endif
 using System.Reflection;
 
-namespace Netfluid.JsonInternals.Utilities
+namespace Netfluid.Json.Utilities
 {
     internal static class EnumUtils
     {

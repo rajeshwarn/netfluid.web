@@ -30,13 +30,13 @@ using System.ComponentModel;
 using System.Dynamic;
 using System.Linq.Expressions;
 using System.IO;
-using Netfluid.JsonInternals.Utilities;
+using Netfluid.Json.Utilities;
 using System.Globalization;
 using System.Linq;
-using Netfluid.JsonInternals.Linq;
-using Netfluid.JsonInternals;
+using Netfluid.Json.Linq;
+using Netfluid.Json;
 
-namespace Netfluid
+namespace Netfluid.Json
 {
     /// <summary>
     /// Represents a JSON object.
@@ -266,7 +266,7 @@ namespace Netfluid
         }
 
         /// <summary>
-        /// Gets or sets the <see cref="Netfluid.JsonInternals.Linq.JToken"/> with the specified property name.
+        /// Gets or sets the <see cref="Netfluid.Json.Linq.JToken"/> with the specified property name.
         /// </summary>
         /// <value></value>
         public JToken this[string propertyName]
@@ -393,23 +393,23 @@ namespace Netfluid
         }
 
         /// <summary>
-        /// Gets the <see cref="Netfluid.JsonInternals.Linq.JToken"/> with the specified property name.
+        /// Gets the <see cref="Netfluid.Json.Linq.JToken"/> with the specified property name.
         /// </summary>
         /// <param name="propertyName">Name of the property.</param>
-        /// <returns>The <see cref="Netfluid.JsonInternals.Linq.JToken"/> with the specified property name.</returns>
+        /// <returns>The <see cref="Netfluid.Json.Linq.JToken"/> with the specified property name.</returns>
         public JToken GetValue(string propertyName)
         {
             return GetValue(propertyName, StringComparison.Ordinal);
         }
 
         /// <summary>
-        /// Gets the <see cref="Netfluid.JsonInternals.Linq.JToken"/> with the specified property name.
+        /// Gets the <see cref="Netfluid.Json.Linq.JToken"/> with the specified property name.
         /// The exact property name will be searched for first and if no matching property is found then
         /// the <see cref="StringComparison"/> will be used to match a property.
         /// </summary>
         /// <param name="propertyName">Name of the property.</param>
         /// <param name="comparison">One of the enumeration values that specifies how the strings will be compared.</param>
-        /// <returns>The <see cref="Netfluid.JsonInternals.Linq.JToken"/> with the specified property name.</returns>
+        /// <returns>The <see cref="Netfluid.Json.Linq.JToken"/> with the specified property name.</returns>
         public JToken GetValue(string propertyName, StringComparison comparison)
         {
             if (propertyName == null)
@@ -434,7 +434,7 @@ namespace Netfluid
         }
 
         /// <summary>
-        /// Tries to get the <see cref="Netfluid.JsonInternals.Linq.JToken"/> with the specified property name.
+        /// Tries to get the <see cref="Netfluid.Json.Linq.JToken"/> with the specified property name.
         /// The exact property name will be searched for first and if no matching property is found then
         /// the <see cref="StringComparison"/> will be used to match a property.
         /// </summary>

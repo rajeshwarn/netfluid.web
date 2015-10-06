@@ -26,12 +26,12 @@
 #if !(DOTNET || PORTABLE40 || PORTABLE)
 using System.Collections.Generic;
 using System.Globalization;
-using Netfluid.JsonInternals.Utilities;
+using Netfluid.Json.Utilities;
 using System;
 using System.Data;
-using Netfluid.JsonInternals.Serialization;
+using Netfluid.Json.Serialization;
 
-namespace Netfluid.JsonInternals.Converters
+namespace Netfluid.Json.Converters
 {
     /// <summary>
     /// Converts a <see cref="DataTable"/> to and from JSON.

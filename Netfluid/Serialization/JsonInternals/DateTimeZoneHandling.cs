@@ -25,7 +25,7 @@
 
 using System;
 
-namespace Netfluid.JsonInternals
+namespace Netfluid.Json
 {
     /// <summary>
     /// Specifies how to treat the time value when converting between string and <see cref="DateTime"/>.

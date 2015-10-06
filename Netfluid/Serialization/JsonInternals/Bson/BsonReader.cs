@@ -28,11 +28,11 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Text;
 using System.IO;
-using Netfluid.JsonInternals.Serialization;
-using Netfluid.JsonInternals.Utilities;
-using Netfluid.JsonInternals.Linq;
+using Netfluid.Json.Serialization;
+using Netfluid.Json.Utilities;
+using Netfluid.Json.Linq;
 
-namespace Netfluid.JsonInternals.Bson
+namespace Netfluid.Json.Bson
 {
     /// <summary>
     /// Represents a reader that provides fast, non-cached, forward-only access to serialized JSON data.
@@ -242,7 +242,7 @@ namespace Netfluid.JsonInternals.Bson
         /// </returns>
         public override bool Read()
         {
-            _readType = JsonInternals.ReadType.Read;
+            _readType = Json.ReadType.Read;
 
             return ReadInternal();
         }

@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace Netfluid.JsonInternals.Linq.JsonPath
+namespace Netfluid.Json.Linq.JsonPath
 {
     internal class QueryFilter : PathFilter
     {

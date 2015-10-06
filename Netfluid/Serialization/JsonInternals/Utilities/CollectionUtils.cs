@@ -35,9 +35,9 @@ using Netfluid.Json.Utilities.LinqBridge;
 using System.Linq;
 #endif
 using System.Globalization;
-using Netfluid.JsonInternals.Serialization;
+using Netfluid.Json.Serialization;
 
-namespace Netfluid.JsonInternals.Utilities
+namespace Netfluid.Json.Utilities
 {
     internal static class CollectionUtils
     {

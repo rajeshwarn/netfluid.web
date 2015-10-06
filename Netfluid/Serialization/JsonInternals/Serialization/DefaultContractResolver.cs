@@ -32,13 +32,13 @@ using System.Dynamic;
 using System.Globalization;
 using System.Reflection;
 using System.Runtime.Serialization;
-using Netfluid.JsonInternals.Converters;
-using Netfluid.JsonInternals.Utilities;
-using Netfluid.JsonInternals.Linq;
+using Netfluid.Json.Converters;
+using Netfluid.Json.Utilities;
+using Netfluid.Json.Linq;
 using System.Runtime.CompilerServices;
 using System.Linq;
 
-namespace Netfluid.JsonInternals.Serialization
+namespace Netfluid.Json.Serialization
 {
     internal struct ResolverContractKey : IEquatable<ResolverContractKey>
     {

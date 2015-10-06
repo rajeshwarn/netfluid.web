@@ -35,14 +35,14 @@ using System.Reflection;
 #if !(NET20 || PORTABLE40)
 using System.Xml.Linq;
 #endif
-using Netfluid.JsonInternals.Utilities;
+using Netfluid.Json.Utilities;
 #if NET20
 using Netfluid.Json.Utilities.LinqBridge;
 #else
 using System.Linq;
 #endif
 
-namespace Netfluid.JsonInternals.Converters
+namespace Netfluid.Json.Converters
 {
     #region XmlNodeWrappers
 #if !DOTNET && !PORTABLE && !PORTABLE40

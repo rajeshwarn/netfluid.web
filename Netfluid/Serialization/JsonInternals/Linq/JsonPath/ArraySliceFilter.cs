@@ -1,9 +1,9 @@
 using System;
 using System.Collections.Generic;
 using System.Globalization;
-using Netfluid.JsonInternals.Utilities;
+using Netfluid.Json.Utilities;
 
-namespace Netfluid.JsonInternals.Linq.JsonPath
+namespace Netfluid.Json.Linq.JsonPath
 {
     internal class ArraySliceFilter : PathFilter
     {

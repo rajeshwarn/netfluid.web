@@ -25,20 +25,19 @@
 
 using System;
 using System.Collections.Generic;
-using Netfluid.JsonInternals.Utilities;
+using Netfluid.Json.Utilities;
 using System.Globalization;
 #if !(NET35 || NET20 || PORTABLE40)
 using System.Dynamic;
 using System.Linq.Expressions;
-using Netfluid.JsonInternals;
-using Netfluid.JsonInternals.Linq;
+using Netfluid.Json.Linq;
 #endif
 #if !(NET20 || NET35 || PORTABLE40 || PORTABLE)
 using System.Numerics;
 
 #endif
 
-namespace Netfluid
+namespace Netfluid.Json
 {
     /// <summary>
     /// Represents a value in JSON (string, integer, date, etc).

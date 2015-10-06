@@ -25,7 +25,7 @@
 
 using System;
 
-namespace Netfluid.JsonInternals.Serialization
+namespace Netfluid.Json.Serialization
 {
     /// <summary>
     /// Provides data for the Error event.

@@ -25,7 +25,7 @@
 
 using System;
 
-namespace Netfluid.JsonInternals.Utilities
+namespace Netfluid.Json.Utilities
 {
     internal enum ParserTimeZone
     {

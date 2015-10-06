@@ -29,10 +29,10 @@ using System.Collections.Generic;
 using System.Dynamic;
 using System.Reflection;
 using System.Runtime.CompilerServices;
-using Netfluid.JsonInternals.Utilities;
+using Netfluid.Json.Utilities;
 using System.Collections;
 
-namespace Netfluid.JsonInternals.Serialization
+namespace Netfluid.Json.Serialization
 {
     /// <summary>
     /// Contract details for a <see cref="Type"/> used by the <see cref="JsonSerializer"/>.

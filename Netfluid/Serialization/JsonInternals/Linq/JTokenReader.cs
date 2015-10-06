@@ -24,9 +24,9 @@
 #endregion
 
 using System;
-using Netfluid.JsonInternals.Utilities;
+using Netfluid.Json.Utilities;
 
-namespace Netfluid.JsonInternals.Linq
+namespace Netfluid.Json.Linq
 {
     /// <summary>
     /// Represents a reader that provides fast, non-cached, forward-only access to serialized JSON data.

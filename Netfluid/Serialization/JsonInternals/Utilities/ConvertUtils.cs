@@ -32,7 +32,7 @@ using System.Numerics;
 #endif
 using System.Text;
 using System.Text.RegularExpressions;
-using Netfluid.JsonInternals.Serialization;
+using Netfluid.Json.Serialization;
 using System.Reflection;
 #if NET20
 using Netfluid.Json.Utilities.LinqBridge;
@@ -41,7 +41,7 @@ using Netfluid.Json.Utilities.LinqBridge;
 using System.Data.SqlTypes;
 #endif
 
-namespace Netfluid.JsonInternals.Utilities
+namespace Netfluid.Json.Utilities
 {
     internal enum PrimitiveTypeCode
     {

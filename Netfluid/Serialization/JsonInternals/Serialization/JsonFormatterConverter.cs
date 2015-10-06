@@ -27,10 +27,10 @@
 using System;
 using System.Globalization;
 using System.Runtime.Serialization;
-using Netfluid.JsonInternals.Utilities;
-using Netfluid.JsonInternals.Linq;
+using Netfluid.Json.Utilities;
+using Netfluid.Json.Linq;
 
-namespace Netfluid.JsonInternals.Serialization
+namespace Netfluid.Json.Serialization
 {
     internal class JsonFormatterConverter : IFormatterConverter
     {

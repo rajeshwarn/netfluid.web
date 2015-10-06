@@ -27,21 +27,20 @@ using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Threading;
-using Netfluid.JsonInternals.Utilities;
+using Netfluid.Json.Utilities;
 using System.Collections;
 using System.Globalization;
 using System.ComponentModel;
-using Netfluid.JsonInternals.Linq;
-using Netfluid.JsonInternals;
+using Netfluid.Json.Linq;
+using Netfluid.Json;
 
-namespace Netfluid
+namespace Netfluid.Json
 {
     /// <summary>
     /// Represents a token that can contain other tokens.
     /// </summary>
     public abstract class JContainer : JToken, IList<JToken> , ITypedList, IBindingList, IList, INotifyCollectionChanged
     {
-#if !(DOTNET || PORTABLE40 || PORTABLE)
         internal ListChangedEventHandler _listChanged;
         internal AddingNewEventHandler _addingNew;
 
@@ -62,7 +61,6 @@ namespace Netfluid
             add { _addingNew += value; }
             remove { _addingNew -= value; }
         }
-#endif
 
         internal NotifyCollectionChangedEventHandler _collectionChanged;
 
@@ -104,10 +102,8 @@ namespace Netfluid
 
         internal void CheckReentrancy()
         {
-#if !(PORTABLE40)
             if (_busy)
                 throw new InvalidOperationException("Cannot change {0} during a collection change event.".FormatWith(CultureInfo.InvariantCulture, GetType()));
-#endif
         }
 
         internal virtual IList<JToken> CreateChildrenCollection()
@@ -1057,7 +1053,7 @@ namespace Netfluid
                     }
                     break;
                 case MergeArrayHandling.Union:
-#if !NET20
+
                     HashSet<JToken> items = new HashSet<JToken>(target, EqualityComparer);
 
                     foreach (JToken item in content)
@@ -1067,22 +1063,6 @@ namespace Netfluid
                             target.Add(item);
                         }
                     }
-#else
-                    IDictionary<JToken, bool> items = new Dictionary<JToken, bool>(EqualityComparer);
-                    foreach (JToken t in target)
-                    {
-                        items[t] = true;
-                    }
-
-                    foreach (JToken item in content)
-                    {
-                        if (!items.ContainsKey(item))
-                        {
-                            items[item] = true;
-                            target.Add(item);
-                        }
-                    }
-#endif
                     break;
                 case MergeArrayHandling.Replace:
                     target.ClearItems();

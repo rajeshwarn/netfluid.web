@@ -27,7 +27,7 @@
 using System;
 using System.ComponentModel;
 
-namespace Netfluid.JsonInternals.Linq
+namespace Netfluid.Json.Linq
 {
     /// <summary>
     /// Represents a view of a <see cref="JProperty"/>.

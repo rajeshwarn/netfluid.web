@@ -31,7 +31,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Text;
 
-namespace Netfluid.JsonInternals.Utilities
+namespace Netfluid.Json.Utilities
 {
     internal class DynamicProxy<T>
     {

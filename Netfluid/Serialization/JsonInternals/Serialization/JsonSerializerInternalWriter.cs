@@ -34,8 +34,8 @@ using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using System.Security;
-using Netfluid.JsonInternals.Linq;
-using Netfluid.JsonInternals.Utilities;
+using Netfluid.Json.Linq;
+using Netfluid.Json.Utilities;
 using System.Runtime.Serialization;
 #if NET20
 using Netfluid.Json.Utilities.LinqBridge;
@@ -44,7 +44,7 @@ using System.Linq;
 
 #endif
 
-namespace Netfluid.JsonInternals.Serialization
+namespace Netfluid.Json.Serialization
 {
     internal class JsonSerializerInternalWriter : JsonSerializerInternalBase
     {

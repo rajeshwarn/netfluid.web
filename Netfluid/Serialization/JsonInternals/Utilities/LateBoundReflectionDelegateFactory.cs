@@ -24,14 +24,14 @@
 #endregion
 
 using System;
-using Netfluid.JsonInternals.Serialization;
+using Netfluid.Json.Serialization;
 using System.Reflection;
 
 #if NET20
 using Netfluid.Json.Utilities.LinqBridge;
 #endif
 
-namespace Netfluid.JsonInternals.Utilities
+namespace Netfluid.Json.Utilities
 {
     internal class LateBoundReflectionDelegateFactory : ReflectionDelegateFactory
     {

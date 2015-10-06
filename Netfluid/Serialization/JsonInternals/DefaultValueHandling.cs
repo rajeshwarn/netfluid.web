@@ -26,7 +26,7 @@
 using System;
 using System.ComponentModel;
 
-namespace Netfluid.JsonInternals
+namespace Netfluid.Json
 {
     /// <summary>
     /// Specifies default value handling options for the <see cref="JsonSerializer"/>.

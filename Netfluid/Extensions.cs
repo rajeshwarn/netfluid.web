@@ -37,7 +37,7 @@ using System.Text;
 using Netfluid.HTTP;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Text.RegularExpressions;
-using Netfluid.JsonInternals;
+using Netfluid.Json;
 
 namespace Netfluid
 {
@@ -880,7 +880,7 @@ namespace Netfluid
 
         public static string ToJSON(this object obj)
         {
-            return Json.SerializeObject(obj);
+            return JSON.SerializeObject(obj);
         }
 
         #endregion

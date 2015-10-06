@@ -25,7 +25,7 @@
 
 using System;
 using System.Collections.Generic;
-using Netfluid.JsonInternals.Utilities;
+using Netfluid.Json.Utilities;
 using System.Globalization;
 #if NET20
 using Netfluid.Json.Utilities.LinqBridge;
@@ -34,7 +34,7 @@ using System.Linq;
 
 #endif
 
-namespace Netfluid.JsonInternals.Linq
+namespace Netfluid.Json.Linq
 {
     /// <summary>
     /// Contains the LINQ to JSON extension methods.

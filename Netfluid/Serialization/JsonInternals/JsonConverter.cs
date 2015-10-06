@@ -26,7 +26,7 @@
 using System;
 
 
-namespace Netfluid.JsonInternals
+namespace Netfluid.Json
 {
     /// <summary>
     /// Converts an object to and from JSON.

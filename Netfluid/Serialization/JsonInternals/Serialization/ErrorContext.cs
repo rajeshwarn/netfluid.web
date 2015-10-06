@@ -25,7 +25,7 @@
 
 using System;
 
-namespace Netfluid.JsonInternals.Serialization
+namespace Netfluid.Json.Serialization
 {
     /// <summary>
     /// Provides information surrounding an error.

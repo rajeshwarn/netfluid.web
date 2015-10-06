@@ -29,9 +29,9 @@ using System.Collections.Generic;
 using Netfluid.Json.Utilities.LinqBridge;
 #endif
 using System.Threading;
-using Netfluid.JsonInternals.Serialization;
+using Netfluid.Json.Serialization;
 
-namespace Netfluid.JsonInternals.Utilities
+namespace Netfluid.Json.Utilities
 {
     internal class ThreadSafeStore<TKey, TValue>
     {

@@ -25,7 +25,7 @@
 
 using System;
 
-namespace Netfluid.JsonInternals
+namespace Netfluid.Json
 {
     /// <summary>
     /// Instructs the <see cref="JsonSerializer"/> to always serialize the member with the specified name.

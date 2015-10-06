@@ -32,7 +32,7 @@ using System.Security;
 #if !(DOTNET || PORTABLE || PORTABLE40)
 using System.Security.Permissions;
 #endif
-using Netfluid.JsonInternals.Utilities;
+using Netfluid.Json.Utilities;
 #if NET20
 using Netfluid.Json.Utilities.LinqBridge;
 #else
@@ -40,7 +40,7 @@ using System.Linq;
 #endif
 using System.Runtime.Serialization;
 
-namespace Netfluid.JsonInternals.Serialization
+namespace Netfluid.Json.Serialization
 {
     internal static class JsonTypeReflector
     {

@@ -25,7 +25,7 @@
 
 using System;
 
-namespace Netfluid.JsonInternals.Serialization
+namespace Netfluid.Json.Serialization
 {
     /// <summary>
     /// When applied to a method, specifies that the method is called when an error occurs serializing an object.

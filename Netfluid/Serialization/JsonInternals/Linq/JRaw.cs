@@ -26,7 +26,7 @@
 using System.Globalization;
 using System.IO;
 
-namespace Netfluid.JsonInternals.Linq
+namespace Netfluid.Json.Linq
 {
     /// <summary>
     /// Represents a raw JSON string.
