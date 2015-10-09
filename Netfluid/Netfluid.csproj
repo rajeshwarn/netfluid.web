@@ -121,6 +121,7 @@
     <Compile Include="Dns\Structs.cs" />
     <Compile Include="EmailValidator.cs" />
     <Compile Include="Extensions.cs" />
+    <Compile Include="Form.cs" />
     <Compile Include="Hosting\Filter.cs" />
     <Compile Include="Hosting\FilterAttribute.cs" />
     <Compile Include="Hosting\Host.cs" />

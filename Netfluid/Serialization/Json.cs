@@ -643,7 +643,7 @@ namespace Netfluid
         /// If this is null, default serialization settings will be used.
         /// </param>
         /// <returns>The deserialized object from the JSON string.</returns>
-        public static object DeserializeObject(string value, JsonSerializerSettings settings)
+        public static object Deserialize(string value, JsonSerializerSettings settings)
         {
             return DeserializeObject(value, null, settings);
         }
@@ -654,7 +654,7 @@ namespace Netfluid
         /// <param name="value">The JSON to deserialize.</param>
         /// <param name="type">The <see cref="Type"/> of object being deserialized.</param>
         /// <returns>The deserialized object from the JSON string.</returns>
-        public static object DeserializeObject(string value, Type type)
+        public static object Deserialize(string value, Type type)
         {
             return DeserializeObject(value, type, (JsonSerializerSettings)null);
         }
@@ -665,7 +665,7 @@ namespace Netfluid
         /// <typeparam name="T">The type of the object to deserialize to.</typeparam>
         /// <param name="value">The JSON to deserialize.</param>
         /// <returns>The deserialized object from the JSON string.</returns>
-        public static T DeserializeObject<T>(string value)
+        public static T Deserialize<T>(string value)
         {
             return DeserializeObject<T>(value, (JsonSerializerSettings)null);
         }
@@ -681,9 +681,9 @@ namespace Netfluid
         /// <param name="value">The JSON to deserialize.</param>
         /// <param name="anonymousTypeObject">The anonymous type object.</param>
         /// <returns>The deserialized anonymous type from the JSON string.</returns>
-        public static T DeserializeAnonymousType<T>(string value, T anonymousTypeObject)
+        public static T Deserialize<T>(string value, T anonymousTypeObject)
         {
-            return DeserializeObject<T>(value);
+            return Deserialize<T>(value);
         }
 
         /// <summary>

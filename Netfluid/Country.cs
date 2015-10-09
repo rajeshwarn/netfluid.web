@@ -544,7 +544,6 @@ namespace Netfluid
             {
                 foreach (var k in typeof(Country).GetProperties(BindingFlags.Public | BindingFlags.Static).Where(x=>x.PropertyType == typeof(Country)))
                 {
-
                     yield return k.GetValue(null) as Country;
                 }
             }

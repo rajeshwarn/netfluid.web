@@ -3,11 +3,6 @@ C:\Users\Matte\Desktop\Netfluid\bin\Release\Netfluid.exe
 C:\Users\Matte\Desktop\Netfluid\bin\Release\Netfluid.pdb
 C:\Users\Matte\Desktop\Netfluid\obj\Release\Netfluid.exe
 C:\Users\Matte\Desktop\Netfluid\obj\Release\Netfluid.pdb
-D:\PROGETTI\NetFluid\Netfluid\bin\Release\Netfluid.exe.config
-D:\PROGETTI\NetFluid\Netfluid\bin\Release\Netfluid.exe
-D:\PROGETTI\NetFluid\Netfluid\bin\Release\Netfluid.pdb
-D:\PROGETTI\NetFluid\Netfluid\obj\Release\Netfluid.exe
-D:\PROGETTI\NetFluid\Netfluid\obj\Release\Netfluid.pdb
 D:\PROGETTI\NetFluid\Netfluid\bin\Release\Resources\css\bootstrap-theme.css
 D:\PROGETTI\NetFluid\Netfluid\bin\Release\Resources\css\bootstrap-theme.min.css
 D:\PROGETTI\NetFluid\Netfluid\bin\Release\Resources\css\bootstrap.css
@@ -46,3 +41,8 @@ D:\PROGETTI\NetFluid\Netfluid\bin\Release\Resources\fonts\glyphicons-halflings-r
 D:\PROGETTI\NetFluid\Netfluid\bin\Release\Resources\fonts\glyphicons-halflings-regular.ttf
 D:\PROGETTI\NetFluid\Netfluid\bin\Release\Resources\fonts\glyphicons-halflings-regular.woff
 D:\PROGETTI\NetFluid\Netfluid\bin\Release\Resources\fonts\glyphicons-halflings-regular.woff2
+D:\PROGETTI\NetFluid\Netfluid\bin\Release\Netfluid.exe.config
+D:\PROGETTI\NetFluid\Netfluid\bin\Release\Netfluid.exe
+D:\PROGETTI\NetFluid\Netfluid\bin\Release\Netfluid.pdb
+D:\PROGETTI\NetFluid\Netfluid\obj\Release\Netfluid.exe
+D:\PROGETTI\NetFluid\Netfluid\obj\Release\Netfluid.pdb

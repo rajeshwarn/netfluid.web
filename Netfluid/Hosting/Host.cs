@@ -28,7 +28,6 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Reflection;
-using System.Runtime.CompilerServices;
 using System.Security.Authentication.ExtendedProtection;
 using System.Threading;
 using System.Threading.Tasks;
@@ -283,7 +282,50 @@ namespace Netfluid
 
         #region NETFLUID METHODS
 
-        public Task Start()
+        public void Start()
+        {
+            Logger.Info("Starting serving clients");
+
+            listener.Start();
+
+            while (IsListening)
+            {
+                var accept = listener.GetContext();
+                Task.Factory.StartNew(() =>
+                {
+                    Logger.Debug("New client " + accept.Request.HttpMethod + " " + accept.Request.Url.LocalPath);
+
+                    var c = new Context(accept);
+
+                    try
+                    {
+                        Serve(c);
+                    }
+                    catch (Exception ex)
+                    {
+                        Logger.Error("Error " + ex.Message);
+
+                        if (OnException != null) OnException(ex);
+
+                        ex = ex.InnerException;
+                        while (ex != null)
+                        {
+                            c.Writer.Write(ex.Message);
+                            c.Writer.Write(ex.StackTrace);
+                            c.Writer.Write("\r\n\r\n\r\n");
+                            ex = ex.InnerException;
+                        }
+                    }
+                    finally
+                    {
+                        Logger.Debug("New client " + accept.Request.HttpMethod + " " + accept.Request.Url.LocalPath);
+                        c.Close();
+                    }
+                });
+            }
+        }
+
+        public Task StartAsync()
         {
             Logger.Info("Starting serving clients");
 

@@ -265,7 +265,7 @@ namespace Netfluid
                 }
 
                 if (x.IsEnum)
-                    return Enum.Parse(x, values[0]);
+                    return Enum.Parse(x, values[0],true);
 
                 var method = x.GetMethod("Parse", BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.FlattenHierarchy);
                 if (method != null)

@@ -1,4 +1,5 @@
 ﻿using Netfluid;
+using Netfluid.Json;
 using Netfluid.Json.Linq;
 using System;
 
@@ -21,7 +22,7 @@ namespace Example
             host.Logger = new Netfluid.Logging.ConsoleLogger(LogLevel.Debug);
             host.PublicFolders.Add(new PublicFolder { RealPath="./Resources", VirtualPath="/cdn" });
             host.Map(typeof(Program));
-            host.Start();
+            host.StartAsync();
 
             JObject obj;
 

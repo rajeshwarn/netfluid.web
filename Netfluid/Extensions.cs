@@ -783,18 +783,10 @@ namespace Netfluid
         /// <param name="batchSize">The action</param>
         public static void ForEach<T>(this IEnumerable<T> enu, Action<T> act)
         {
-            try
+            foreach (var obj in enu)
             {
-                foreach (var obj in enu)
-                {
-                    act.Invoke(obj);
-                }
+                act.Invoke(obj);
             }
-            catch (Exception exception)
-            {
-               throw exception.InnerException;
-            }
-
         }
 
         /// <summary>

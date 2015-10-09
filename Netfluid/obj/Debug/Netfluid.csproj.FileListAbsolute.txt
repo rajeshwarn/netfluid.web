@@ -46,3 +46,4 @@ D:\PROGETTI\NetFluid\Netfluid\bin\Debug\Resources\fonts\glyphicons-halflings-reg
 D:\PROGETTI\NetFluid\Netfluid\bin\Debug\Resources\fonts\glyphicons-halflings-regular.ttf
 D:\PROGETTI\NetFluid\Netfluid\bin\Debug\Resources\fonts\glyphicons-halflings-regular.woff
 D:\PROGETTI\NetFluid\Netfluid\bin\Debug\Resources\fonts\glyphicons-halflings-regular.woff2
+D:\PROGETTI\NetFluid\Netfluid\obj\Debug\Netfluid.csprojResolveAssemblyReference.cache

@@ -23,6 +23,7 @@
 // OTHER DEALINGS IN THE SOFTWARE.
 #endregion
 
+using Netfluid.Json;
 using System.Collections.Generic;
 
 namespace Netfluid
