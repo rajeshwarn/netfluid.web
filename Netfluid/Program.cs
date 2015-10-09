@@ -1,21 +1,9 @@
 ﻿using Netfluid;
-using Netfluid.Json;
-using Netfluid.Json.Linq;
-using System;
 
 namespace Example
 {
     class Program
     {
-        public int KKK = 777;
-
-        public Ivan Ivanovick = new Ivan();
-
-        public class Ivan
-        {
-            public string Name { get; set; } = "Il coglionazzo";
-        }
-
         static void Main(string[] args)
         { 
             var host = new NetfluidHost("*");
