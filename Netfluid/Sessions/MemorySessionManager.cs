@@ -21,19 +21,16 @@
 // 23/10/2013    Matteo Fabbri      Inital coding
 // ********************************************************************************************************
 
+using Netfluid.Collections;
 using System;
 using System.Linq;
-using System.Runtime.Caching;
 
 namespace Netfluid.Sessions
 {
     internal class MemorySessionManager : ISessionManager
     {
-        private readonly MemoryCache sessions;
-
         public MemorySessionManager()
         {
-            sessions = MemoryCache.Default;
             SessionDuration = 3600;
         }
 
@@ -43,43 +40,28 @@ namespace Netfluid.Sessions
 
         public void Set(string sessionId, string name, object obj)
         {
-            if (obj == null)
-            {
-                sessions.Remove(sessionId + "." + name);
-                return;
-            }
-            sessions.Set(sessionId + "." + name, obj, DateTimeOffset.Now + TimeSpan.FromSeconds(SessionDuration));
         }
 
         public object Get(string sessionId, string name)
         {
-            var obj =  sessions.Get(sessionId + "." + name);
-            return obj;
+            return null;
         }
 
         public void Remove(string sessionId, string name)
         {
-            sessions.Remove(sessionId + "." + name);
         }
 
         public void Destroy(string sessionId)
         {
-            sessions.ForEach(x=>
-            {
-                if (x.Key.StartsWith(sessionId + "."))
-                    sessions.Remove(x.Key);
-            });
         }
 
         public bool HasItems(string sessionId)
         {
-            var id = sessionId + ".";
-            return sessions.Any(x => x.Key.StartsWith(id));
+            return false;
         }
 
         public void Delete(string sessionId, string v)
-        {
-            sessions.Remove(sessionId + "." + v);
+        { 
         }
 
         #endregion

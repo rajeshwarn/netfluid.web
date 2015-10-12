@@ -9,9 +9,10 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Netfluid</RootNamespace>
     <AssemblyName>Netfluid</AssemblyName>
-    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -36,18 +37,52 @@
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Numerics" />
-    <Reference Include="System.Runtime.Caching" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Collections\AutoCache.cs" />
+    <Compile Include="Collections\ByteCache.cs" />
+    <Compile Include="Collections\StringCache.cs" />
+    <Compile Include="Collections\ObjectCache.cs" />
     <Compile Include="Context.cs" />
     <Compile Include="Country.cs" />
     <Compile Include="Date.cs" />
+    <Compile Include="DB\Collection.cs" />
+    <Compile Include="DB\DiskCollection.cs" />
+    <Compile Include="DB\FooCore.Lib\Block.cs" />
+    <Compile Include="DB\FooCore.Lib\BlockStorage.cs" />
+    <Compile Include="DB\FooCore.Lib\BufferHelper.cs" />
+    <Compile Include="DB\FooCore.Lib\IBlock.cs" />
+    <Compile Include="DB\FooCore.Lib\IBlockStorage.cs" />
+    <Compile Include="DB\FooCore.Lib\IIndex.cs" />
+    <Compile Include="DB\FooCore.Lib\IRecordStorage.cs" />
+    <Compile Include="DB\FooCore.Lib\ISerializer.cs" />
+    <Compile Include="DB\FooCore.Lib\ITreeNodeManager.cs" />
+    <Compile Include="DB\FooCore.Lib\LittleEndianByteOrder.cs" />
+    <Compile Include="DB\FooCore.Lib\RecordStorage.cs" />
+    <Compile Include="DB\FooCore.Lib\StreamExtension.cs" />
+    <Compile Include="DB\FooCore.Lib\StreamReadWrapper.cs" />
+    <Compile Include="DB\GenericSerializer.cs" />
+    <Compile Include="DB\Index.cs" />
+    <Compile Include="DB\KeyValueStore.cs" />
     <Compile Include="DB\QueryVisitor.cs" />
+    <Compile Include="DB\ThreadSafeEnumerator.cs" />
+    <Compile Include="DB\Tree\Tree.cs" />
+    <Compile Include="DB\Tree\TreeDiskNodeManager.cs" />
+    <Compile Include="DB\Tree\TreeDiskNodeSerializer.cs" />
+    <Compile Include="DB\Tree\TreeEnumerator.cs" />
+    <Compile Include="DB\Tree\TreeHelper.cs" />
+    <Compile Include="DB\Tree\TreeIntSerializer.cs" />
+    <Compile Include="DB\Tree\TreeKeyExistsException.cs" />
+    <Compile Include="DB\Tree\TreeLongSerializer.cs" />
+    <Compile Include="DB\Tree\TreeMemoryNodeManager.cs" />
+    <Compile Include="DB\Tree\TreeNode.cs" />
+    <Compile Include="DB\Tree\TreeNodeSerializationException.cs" />
+    <Compile Include="DB\Tree\TreeStringSerialzier.cs" />
+    <Compile Include="DB\Tree\TreeTraverseDirection.cs" />
+    <Compile Include="DB\Tree\TreeTraverser.cs" />
     <Compile Include="Dns\DnsClient.cs" />
     <Compile Include="Dns\DnsServer.cs" />
     <Compile Include="Dns\DomainNameAttribute.cs" />

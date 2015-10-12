@@ -1,5 +1,6 @@
 ﻿namespace Netfluid.DB
 {
+    //FIXME:To be implemented
     /*
     /// <summary>
     /// Class helper to create Queries based on Linq expressions

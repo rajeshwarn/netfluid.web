@@ -20,6 +20,15 @@ namespace Netfluid
             s.Serialize(w, obj);
         }
 
+        public static byte[] Serialize<T>(T value)
+        {
+            var m = new MemoryStream();
+            var w = new BsonWriter(m);
+            var s = new Json.JsonSerializer();
+            s.Serialize(w, value);
+            return m.ToArray();
+        }
+
         public static byte[] Serialize(object obj)
         {
             var m = new MemoryStream();

@@ -6,6 +6,7 @@ using System.IO;
 
 using System;
 using System.Text;
+using Netfluid.Collections;
 
 namespace Netfluid
 {
@@ -20,7 +21,7 @@ namespace Netfluid
         string templateFile;
 
         static List<TagDefinition> customTags;
-        static AutoCache<string> cache;
+        static StringCache<string> cache;
 
 
         static MustacheTemplate()
@@ -34,11 +35,9 @@ namespace Netfluid
             customTags.Add(new Count());
             customTags.Add(new HtmlList());
 
-            cache = new AutoCache<string>
+            cache = new StringCache<string>
             {
-                AutoRenew = true,
-                Expiration = TimeSpan.FromHours(1),
-                Get = x=> 
+                Load = x=> 
                 {
                     var str = File.ReadAllText(x);
                     //str = Encoding.UTF8.GetString(Encoding.Default.GetBytes(str));
