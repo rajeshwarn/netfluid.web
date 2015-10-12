@@ -2,7 +2,7 @@
 using System.Diagnostics;
 using System.IO;
 
-namespace Netfluid.Db
+namespace Netfluid.DB
 {
 	internal class Block : IBlock
 	{

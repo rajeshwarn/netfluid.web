@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 
-namespace Netfluid.Db
+namespace Netfluid.DB
 {
 	internal class BlockStorage : IBlockStorage
 	{

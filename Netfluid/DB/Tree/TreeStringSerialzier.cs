@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Netfluid.Db
+namespace Netfluid.DB
 {
 	internal class TreeStringSerialzier : ISerializer<string>
 	{

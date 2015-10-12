@@ -2,7 +2,7 @@
 using System.Text;
 using Netfluid;
 
-namespace Netfluid.Db
+namespace Netfluid.DB
 {
     class GenericSerializer : ISerializer<object>
     {

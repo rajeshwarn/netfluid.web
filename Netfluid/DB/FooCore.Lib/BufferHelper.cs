@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Netfluid.Db
+namespace Netfluid.DB
 {
 	/// <summary>
 	/// Helper class contains static methods that read and write numeric values

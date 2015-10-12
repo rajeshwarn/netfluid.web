@@ -1,8 +1,8 @@
 ﻿using System;
 
-namespace Netfluid.Db
+namespace Netfluid.DB
 {
-	internal class IBlock : IDisposable
+	internal interface IBlock : IDisposable
 	{
 		/// <summary>
 		/// Id of the block, must be unique
@@ -32,5 +32,5 @@ namespace Netfluid.Db
 		/// Write content of given buffer (src) into this (dst)
 		/// </summary>
 		void Write (byte[] src, int srcOffset, int dstOffset, int count);
-	}
+    }
 }

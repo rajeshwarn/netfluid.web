@@ -1,7 +1,7 @@
 ﻿using System;
 using System.IO;
 
-namespace Netfluid.Db
+namespace Netfluid.DB
 {
 	/// <summary>
 	/// Wrapper around a Stream, for reading only.

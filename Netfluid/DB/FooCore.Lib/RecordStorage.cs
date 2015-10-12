@@ -2,7 +2,7 @@
 using System.IO;
 using System.Collections.Generic;
 
-namespace Netfluid.Db
+namespace Netfluid.DB
 {
 	/// <summary>
 	/// Record storage service that store data in form of records, each

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 
-namespace Netfluid.Db
+namespace Netfluid.DB
 {
 	internal class TreeNode<K, V>
 	{

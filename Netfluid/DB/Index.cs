@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Netfluid.Db
+namespace Netfluid.DB
 {
     //FIXME:to be implemented
     class Index

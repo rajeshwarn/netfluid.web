@@ -1,8 +1,8 @@
 using System;
 
-namespace Netfluid.Db
+namespace Netfluid.DB
 {
-	internal class ISerializer<K>
+	internal interface ISerializer<K>
 	{
 		byte[] Serialize (K value);
 

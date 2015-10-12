@@ -49,7 +49,6 @@
     <Compile Include="Context.cs" />
     <Compile Include="Country.cs" />
     <Compile Include="Date.cs" />
-    <Compile Include="DB\Collection.cs" />
     <Compile Include="DB\DiskCollection.cs" />
     <Compile Include="DB\FooCore.Lib\Block.cs" />
     <Compile Include="DB\FooCore.Lib\BlockStorage.cs" />

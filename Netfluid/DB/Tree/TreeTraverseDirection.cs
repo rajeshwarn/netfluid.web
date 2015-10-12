@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections;
 
-namespace Netfluid.Db
+namespace Netfluid.DB
 {
 	enum TreeTraverseDirection
 	{

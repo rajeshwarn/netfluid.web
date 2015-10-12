@@ -1,8 +1,8 @@
 ﻿using System;
 
-namespace Netfluid.Db
+namespace Netfluid.DB
 {
-	internal class IBlockStorage
+	internal interface IBlockStorage
 	{
 		/// <summary>
 		/// Number of bytes of custom data per block that this storage can handle.

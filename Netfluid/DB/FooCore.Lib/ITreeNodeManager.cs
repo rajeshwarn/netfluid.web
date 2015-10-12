@@ -1,9 +1,9 @@
 using System;
 using System.Collections.Generic;
 
-namespace Netfluid.Db
+namespace Netfluid.DB
 {
-	internal class ITreeNodeManager<K, V>
+	internal interface ITreeNodeManager<K, V>
 	{
 		/// <summary>
 		/// Minimum number of entries per node. Maximum number of entries

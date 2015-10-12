@@ -5,7 +5,7 @@ using System.IO.Compression;
 using System.Linq;
 using System.Threading;
 
-namespace Netfluid.Db
+namespace Netfluid.DB
 {
     class DiskCollection
     {

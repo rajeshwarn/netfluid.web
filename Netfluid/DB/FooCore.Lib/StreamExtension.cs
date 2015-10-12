@@ -2,7 +2,7 @@
 using System.IO;
 using System.Threading.Tasks;
 
-namespace Netfluid.Db
+namespace Netfluid.DB
 {
 	static class StreamExtension
 	{

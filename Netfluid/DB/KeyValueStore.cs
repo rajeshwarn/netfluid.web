@@ -2,11 +2,9 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Collections;
 
-namespace Netfluid.Db
+namespace Netfluid.DB
 {
     public class KeyValueStore<T>: IEnumerable<T> where T :new()
     {

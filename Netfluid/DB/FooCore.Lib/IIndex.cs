@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Netfluid.Db
+namespace Netfluid.DB
 {
-	internal class IIndex<K, V>
+	internal interface IIndex<K, V>
 	{
 		/// <summary>
 		/// Create new entry in this index that maps key K to value V

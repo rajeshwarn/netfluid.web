@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Collections;
 
-namespace Netfluid.Db
+namespace Netfluid.DB
 {
 	internal class TreeTraverser<K, V> : IEnumerable<Tuple<K, V>>
 	{

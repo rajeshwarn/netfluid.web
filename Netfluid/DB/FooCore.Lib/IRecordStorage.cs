@@ -1,13 +1,13 @@
 ﻿using System;
 
-namespace Netfluid.Db
+namespace Netfluid.DB
 {
 	/// <summary>
 	/// While IBlockStorage allows client to see a Stream as individual equal length blocks,
 	/// IRecordStorage creates another layer on top of IBlockStorage that uses the blocks
 	/// to make up variable length records.
 	/// </summary>
-	internal class IRecordStorage
+	internal interface IRecordStorage
 	{
 		/// <summary>
 		/// Effectively update an record

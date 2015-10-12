@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Collections;
 
-namespace Netfluid.Db
+namespace Netfluid.DB
 {
 	internal class TreeEnumerator<K, V> : IEnumerator<Tuple<K, V>>
 	{

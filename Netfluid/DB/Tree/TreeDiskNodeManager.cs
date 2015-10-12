@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Netfluid.Db
+namespace Netfluid.DB
 {
     internal class TreeDiskNodeManager<K, V> : ITreeNodeManager<K, V>
 	{
