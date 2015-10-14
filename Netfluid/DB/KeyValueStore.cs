@@ -55,7 +55,7 @@ namespace Netfluid.DB
 
         public IEnumerable<string> GetId(int from=0, int take=1000)
         {
-            disk.ForEach(x => act(Get(x)));
+            return disk.GetId(from, take);
         }
 
         public void ForEach(Action<T> act)

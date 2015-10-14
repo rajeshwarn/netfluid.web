@@ -63,9 +63,9 @@ namespace Netfluid.WebDav
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        static void SendSimpleResponse(Context context, StatusCode statusCode = StatusCode.Ok)
+        static void SendSimpleResponse(Context context, int statusCode = StatusCode.Ok)
         {
-            context.Response.StatusCode = (int)statusCode;
+            context.Response.StatusCode = statusCode;
             context.Response.Close();
         }
 

@@ -1,18 +1,14 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Netfluid.Responses
 {
     class EmptyResponse : IResponse
     {
-        public StatusCode StatusCode { get; set; }
+        int status;
 
-        public EmptyResponse(StatusCode status = StatusCode.Ok)
+        public EmptyResponse(int status = StatusCode.Ok)
         {
-
+            this.status = status;
         }
 
         public void Dispose()
@@ -27,7 +23,7 @@ namespace Netfluid.Responses
 
         public void SetHeaders(Context cnt)
         {
-            cnt.Response.StatusCode = (int)StatusCode;
+            cnt.Response.StatusCode = status;
         }
     }
 }

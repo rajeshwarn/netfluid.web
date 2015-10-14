@@ -87,8 +87,5 @@ namespace Netfluid
         public const int BandwidthLimitExceeded = 509;
         public const int NotExtended = 510;
         public const int UserAccessDenied = 530;
-        public const int AnyError = 999;
-        public const int AnyClientError = 1000;
-        public const int AnyServerError = 2000
     }
 }
