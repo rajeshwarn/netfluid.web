@@ -41,8 +41,8 @@ namespace Netfluid
     {
         HttpListener listener;
         public RouteCollection<Route> Routes { get; private set; }
-        public RouteCollection<Filter> Filters { get; private set; }
-        public RouteCollection<Trigger> Triggers { get; private set; }
+        public RouteCollection<Route> Filters { get; private set; }
+        public RouteCollection<Route> Triggers { get; private set; }
         public List<IPublicFolder> PublicFolders { get; set; }
         public ISessionManager Sessions { get; set; }
 
@@ -81,8 +81,8 @@ namespace Netfluid
                 listener.Prefixes.Add(x);
             });
 
-            Filters = new RouteCollection<Filter>();
-            Triggers = new RouteCollection<Trigger>();
+            Filters = new RouteCollection<Route>();
+            Triggers = new RouteCollection<Route>();
             Routes = new RouteCollection<Route>();
 
             PublicFolders = new List<IPublicFolder>();
@@ -276,6 +276,9 @@ namespace Netfluid
         //   T:System.ObjectDisposedException:
         //     This object has been closed.
         public bool UnsafeConnectionNtlmAuthentication { get { return listener.UnsafeConnectionNtlmAuthentication; } set { listener.IgnoreWriteExceptions = value; } }
+
+        public Func<dynamic,Context> On404 { get; set; }
+
         #endregion
 
         #region NETFLUID METHODS
@@ -483,33 +486,28 @@ namespace Netfluid
 
             cnt.Response.StatusCode = (int)StatusCode.NotFound;
 
-            foreach (var handler in StatusCodeHandlers.Where(x => x.HttpMethod == cnt.Request.HttpMethod || x.HttpMethod == null))
+            if (On404 == null) return;
+
+            dynamic r404 = On404.Invoke(cnt);
+
+            if (r404 is IResponse)
             {
-                var value = handler.Handle(cnt);
-                if (value is IResponse)
-                {
-                    value.SetHeaders(cnt);
+                r404.SetHeaders(cnt);
 
-                    if (value != null && cnt.Request.HttpMethod.ToLowerInvariant() != "head")
-                        value.SendResponse(cnt);
+                if (r404 != null && cnt.Request.HttpMethod.ToLowerInvariant() != "head")
+                    r404.SendResponse(cnt);
 
-                    return;
-                }
-                else if (value is bool)
-                {
-                    if (value) return;
-                }
-                else if (value is Stream)
-                {
-                    value.CopyTo(cnt.Response.OutputStream);
-                    return;
-                }
-                else
-                {
-                    cnt.Writer.Write(value.ToString());
-                    return;
-                }
+                return;
             }
+            else if (r404 is bool)
+            {
+                if (r404) return;
+            }
+            else if (r404 is Stream)
+            {
+                r404.CopyTo(cnt.Response.OutputStream);
+            }
+            cnt.Writer.Write(r404.ToString());
         }
 
         public void Map(object obj)
@@ -557,7 +555,7 @@ namespace Netfluid
 
                     foreach (var att in m.CustomAttribute<FilterAttribute>())
                     {
-                        Filters.Add(new Filter(m, m.IsStatic ? null : instance)
+                        Filters.Add(new Route(m, m.IsStatic ? null : instance)
                         {
                             Url = prefix + att.Url,
                             HttpMethod = att.Method,
@@ -567,7 +565,7 @@ namespace Netfluid
 
                     foreach (var att in m.CustomAttribute<TriggerAttribute>())
                     {
-                        Triggers.Add(new Trigger(m, m.IsStatic ? null : instance)
+                        Triggers.Add(new Route(m, m.IsStatic ? null : instance)
                         {
                             Url = prefix + att.Url,
                             HttpMethod = att.Method,
