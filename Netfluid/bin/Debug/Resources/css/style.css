@@ -1,0 +1,20 @@
+﻿
+*
+{
+    margin:0;
+}
+
+html,body
+{
+    padding:0;
+}
+
+.container
+{
+    width:100% !important;
+}
+
+.master
+{
+    height:100vh;
+}

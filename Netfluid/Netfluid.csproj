@@ -156,14 +156,12 @@
     <Compile Include="EmailValidator.cs" />
     <Compile Include="Extensions.cs" />
     <Compile Include="Form.cs" />
-    <Compile Include="Hosting\Filter.cs" />
     <Compile Include="Hosting\FilterAttribute.cs" />
     <Compile Include="Hosting\Host.cs" />
     <Compile Include="Hosting\MethodInfoWrapper.cs" />
     <Compile Include="Hosting\Route.cs" />
     <Compile Include="Hosting\RouteAttribute.cs" />
     <Compile Include="Hosting\RouteCollection.cs" />
-    <Compile Include="Hosting\Trigger.cs" />
     <Compile Include="Hosting\TriggerAttribute.cs" />
     <Compile Include="Hosting\VirtualHostAttribute.cs" />
     <Compile Include="HttpFile.cs" />
