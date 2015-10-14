@@ -85,7 +85,6 @@ namespace Netfluid
             Filters = new RouteCollection<Filter>();
             Triggers = new RouteCollection<Trigger>();
             Routes = new RouteCollection<Route>();
-            StatusCodeHandlers = new RouteCollection<StatusCodeHandler>();
 
             PublicFolders = new List<IPublicFolder>();
             Sessions = new DefaultSessionManager();

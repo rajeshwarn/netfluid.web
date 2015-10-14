@@ -54,7 +54,7 @@ namespace Netfluid.DB
 
         public void ForEach(Action<T> act)
         {
-            disk.ForEach(x => act(Get(x));
+            disk.ForEach(x => act(Get(x)));
         }
     }
 }
