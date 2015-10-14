@@ -16,6 +16,7 @@ namespace Netfluid
         public Route(dynamic funcOrAction)
         {
             method = funcOrAction;
+            Parameters = method.Method.GetParameters();
         }
 
         public Route(MethodInfo mi, object instance)
@@ -25,6 +26,8 @@ namespace Netfluid
                 MethodInfo = mi,
                 Target = instance
             };
+
+            Parameters = mi.GetParameters();
         }
 
         public string Name { get; set; }
@@ -106,6 +109,15 @@ namespace Netfluid
             }
 
             return method.Invoke(args);
+        }
+
+        public static Route New(Action act)
+        {
+            return new Route(act);
+        }
+        public static Route New<T>(Action<T> act)
+        {
+            return new Route(act);
         }
     }
 }
