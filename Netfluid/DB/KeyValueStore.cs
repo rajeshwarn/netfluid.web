@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace Netfluid.DB
 {
-    public class KeyValueStore<T>
+    public class KeyValueStore<T> : IKeyValueStore<T>
     {
         DiskCollection disk;
         ByteCache<string> cache;
@@ -20,6 +20,13 @@ namespace Netfluid.DB
         }
 
         public long MemoryLimit => cache.MemoryLimit;
+
+        public long Count => disk.Count;
+
+        public bool Any()
+        {
+            return Count != 0;
+        }
 
         public void Insert(string key,T value)
         {

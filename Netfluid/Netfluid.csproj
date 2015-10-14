@@ -63,6 +63,7 @@
     <Compile Include="DB\FooCore.Lib\RecordStorage.cs" />
     <Compile Include="DB\FooCore.Lib\StreamExtension.cs" />
     <Compile Include="DB\FooCore.Lib\StreamReadWrapper.cs" />
+    <Compile Include="DB\IKeyValueStore.cs" />
     <Compile Include="DB\RestCollection.cs" />
     <Compile Include="DB\TOBEIMPLEMENTED\GenericSerializer.cs" />
     <Compile Include="DB\TOBEIMPLEMENTED\Index.cs" />
@@ -456,6 +457,9 @@
     <Compile Include="Smtp\SmtpSessionEventArgs.cs" />
     <Compile Include="Smtp\SmtpSessionInfo.cs" />
     <Compile Include="StatusCode.cs" />
+    <Compile Include="Users\User.cs" />
+    <Compile Include="Users\UserExposer.cs" />
+    <Compile Include="Users\UserManager.cs" />
     <Compile Include="WebDav\DAV2.cs" />
     <Compile Include="WebDav\Exceptions\WebDavConflictException.cs" />
     <Compile Include="WebDav\Exceptions\WebDavException.cs" />
