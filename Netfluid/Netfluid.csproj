@@ -163,8 +163,6 @@
     <Compile Include="Hosting\Route.cs" />
     <Compile Include="Hosting\RouteAttribute.cs" />
     <Compile Include="Hosting\RouteCollection.cs" />
-    <Compile Include="Hosting\StatusCodeHandler.cs" />
-    <Compile Include="Hosting\StatusCodeHandlerAttribute.cs" />
     <Compile Include="Hosting\Trigger.cs" />
     <Compile Include="Hosting\TriggerAttribute.cs" />
     <Compile Include="Hosting\VirtualHostAttribute.cs" />
