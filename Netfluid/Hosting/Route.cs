@@ -9,7 +9,23 @@ namespace Netfluid
     {
         string url;
         Regex regex;
-        MethodInfo methodInfo;
+        protected dynamic method;
+
+        protected Route() { }
+
+        public Route(dynamic funcOrAction)
+        {
+            method = funcOrAction;
+        }
+
+        public Route(MethodInfo mi, object instance)
+        {
+            method = new MethodInfoWrapper
+            {
+                MethodInfo = mi,
+                Target = instance
+            };
+        }
 
         public string Name { get; set; }
 
@@ -48,24 +64,9 @@ namespace Netfluid
 
         public int Index { get; set; }
 
-        internal ParameterInfo[] Parameters { get; private set; }
-
         internal string[] GroupNames { get; private set; }
 
-        internal object Target { get; set; }
-
-        internal MethodInfo MethodInfo
-        {
-            get
-            {
-                return methodInfo;
-            }
-            set
-            {
-                methodInfo = value;
-                Parameters = methodInfo.GetParameters();
-            }
-        }
+        internal ParameterInfo[] Parameters { get; private set; }
 
         internal virtual dynamic Handle(Context cnt)
         {
@@ -104,7 +105,7 @@ namespace Netfluid
                 }
             }
 
-            return methodInfo.Invoke(Target, args);
+            return method.Invoke(args);
         }
     }
 }

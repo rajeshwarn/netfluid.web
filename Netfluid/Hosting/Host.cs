@@ -549,13 +549,11 @@ namespace Netfluid
                 {
                     foreach (var att in m.CustomAttribute<RouteAttribute>())
                     {
-                        Routes.Add(new Route
+                        Routes.Add(new Route(m, m.IsStatic ? null : instance)
                         {
                             Url = prefix + att.Url,
                             HttpMethod = att.Method,
                             Index = att.Index,
-                            MethodInfo = m,
-                            Target = m.IsStatic ? null : instance
                         });
                     }
 
