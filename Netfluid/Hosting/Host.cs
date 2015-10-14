@@ -321,10 +321,6 @@ namespace Netfluid
 
                                 return;
                             }
-                            else if (value is bool)
-                            {
-                                if (value) return;
-                            }
                             else if (value is Stream)
                             {
                                 value.CopyTo(c.Response.OutputStream);
@@ -382,10 +378,6 @@ namespace Netfluid
                                         value.SendResponse(c);
 
                                     return;
-                                }
-                                else if (value is bool)
-                                {
-                                    if (value) return;
                                 }
                                 else if (value is Stream)
                                 {
