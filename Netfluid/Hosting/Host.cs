@@ -46,7 +46,7 @@ namespace Netfluid
         public List<IPublicFolder> PublicFolders { get; set; }
         public ISessionManager Sessions { get; set; }
 
-        public event Action<Exception> OnException;
+        public event Func<Context,Exception,dynamic> OnException;
 
         public Logger Logger { get; set; }
 
@@ -306,15 +306,32 @@ namespace Netfluid
                     {
                         Logger.Error("Error " + ex.Message);
 
-                        if (OnException != null) OnException(ex);
-
-                        ex = ex.InnerException;
-                        while (ex != null)
+                        if (OnException != null)
                         {
-                            c.Writer.Write(ex.Message);
-                            c.Writer.Write(ex.StackTrace);
-                            c.Writer.Write("\r\n\r\n\r\n");
-                            ex = ex.InnerException;
+                            var value = OnException(c,ex);
+
+                            if (value == null) return;
+
+                            if (value is IResponse)
+                            {
+                                value.SetHeaders(c);
+
+                                if (value != null && c.Request.HttpMethod.ToLowerInvariant() != "head")
+                                    value.SendResponse(c);
+
+                                return;
+                            }
+                            else if (value is bool)
+                            {
+                                if (value) return;
+                            }
+                            else if (value is Stream)
+                            {
+                                value.CopyTo(c.Response.OutputStream);
+                                return;
+                            }
+                            c.Writer.Write(value.ToString());
+                            return;
                         }
                     }
                     finally
@@ -351,15 +368,32 @@ namespace Netfluid
                         {
                             Logger.Error("Error "+ex.Message);
 
-                            if (OnException != null) OnException(ex);
-
-                            ex = ex.InnerException;
-                            while(ex != null)
+                            if (OnException != null)
                             {
-                                c.Writer.Write(ex.Message);
-                                c.Writer.Write(ex.StackTrace);
-                                c.Writer.Write("\r\n\r\n\r\n");
-                                ex = ex.InnerException;
+                                var value = OnException(c, ex);
+
+                                if (value == null) return;
+
+                                if (value is IResponse)
+                                {
+                                    value.SetHeaders(c);
+
+                                    if (value != null && c.Request.HttpMethod.ToLowerInvariant() != "head")
+                                        value.SendResponse(c);
+
+                                    return;
+                                }
+                                else if (value is bool)
+                                {
+                                    if (value) return;
+                                }
+                                else if (value is Stream)
+                                {
+                                    value.CopyTo(c.Response.OutputStream);
+                                    return;
+                                }
+                                c.Writer.Write(value.ToString());
+                                return;
                             }
                         }
                         finally
