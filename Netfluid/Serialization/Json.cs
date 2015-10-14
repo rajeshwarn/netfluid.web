@@ -631,7 +631,7 @@ namespace Netfluid
         /// <returns>The deserialized object from the JSON string.</returns>
         public static object Deserialize(string value)
         {
-            return Deserialize(value, null, (JsonSerializerSettings)null);
+            return Deserialize(value, null, null);
         }
 
         /// <summary>
@@ -656,7 +656,7 @@ namespace Netfluid
         /// <returns>The deserialized object from the JSON string.</returns>
         public static object Deserialize(string value, Type type)
         {
-            return Deserialize(value, type, (JsonSerializerSettings)null);
+            return Deserialize(value, type, null);
         }
 
         /// <summary>
@@ -752,7 +752,20 @@ namespace Netfluid
         /// <summary>
         /// Deserializes the JSON to the specified .NET type using <see cref="JsonSerializerSettings"/>.
         /// </summary>
-        /// <param name="value">The JSON to deserialize.</param>
+        /// <param name="textReader">The JSON to deserialize.</param>
+        /// The <see cref="JsonSerializerSettings"/> used to deserialize the object.
+        /// If this is null, default serialization settings will be used.
+        /// </param>
+        /// <returns>The deserialized object from the JSON string.</returns>
+        public static object Deserialize(TextReader textReader)
+        {
+            return Deserialize(textReader, null, null);
+        }
+
+        /// <summary>
+        /// Deserializes the JSON to the specified .NET type using <see cref="JsonSerializerSettings"/>.
+        /// </summary>
+        /// <param name="textReader">The JSON to deserialize.</param>
         /// <param name="type">The type of the object to deserialize to.</param>
         /// <param name="settings">
         /// The <see cref="JsonSerializerSettings"/> used to deserialize the object.
