@@ -172,6 +172,16 @@ namespace Netfluid.DB
             indexLocker.ExitReadLock();
         }
 
+        public IEnumerable<string> GetId(int from = 0, int take = 1000)
+        {
+            indexLocker.EnterReadLock();
+            var all = PrimaryIndex.LargerThanOrEqualTo("");
+            var res = all.Any() ? all.Select(x=>x.Item1).Skip(from).Take(take).ToArray() : new string[0];
+            indexLocker.ExitReadLock();
+
+            return res;
+        }
+
         public void Replace(string id, byte[] obj)
         {
             var bytes = Compress(obj);

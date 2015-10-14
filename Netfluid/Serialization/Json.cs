@@ -631,7 +631,7 @@ namespace Netfluid
         /// <returns>The deserialized object from the JSON string.</returns>
         public static object Deserialize(string value)
         {
-            return DeserializeObject(value, null, (JsonSerializerSettings)null);
+            return Deserialize(value, null, (JsonSerializerSettings)null);
         }
 
         /// <summary>
@@ -645,7 +645,7 @@ namespace Netfluid
         /// <returns>The deserialized object from the JSON string.</returns>
         public static object Deserialize(string value, JsonSerializerSettings settings)
         {
-            return DeserializeObject(value, null, settings);
+            return Deserialize(value, null, settings);
         }
 
         /// <summary>
@@ -656,7 +656,7 @@ namespace Netfluid
         /// <returns>The deserialized object from the JSON string.</returns>
         public static object Deserialize(string value, Type type)
         {
-            return DeserializeObject(value, type, (JsonSerializerSettings)null);
+            return Deserialize(value, type, (JsonSerializerSettings)null);
         }
 
         /// <summary>
@@ -730,7 +730,7 @@ namespace Netfluid
         /// <returns>The deserialized object from the JSON string.</returns>
         public static T DeserializeObject<T>(string value, JsonSerializerSettings settings)
         {
-            return (T)DeserializeObject(value, typeof(T), settings);
+            return (T)Deserialize(value, typeof(T), settings);
         }
 
         /// <summary>
@@ -746,7 +746,7 @@ namespace Netfluid
                 ? new JsonSerializerSettings { Converters = converters }
                 : null;
 
-            return DeserializeObject(value, type, settings);
+            return Deserialize(value, type, settings);
         }
 
         /// <summary>
@@ -759,7 +759,33 @@ namespace Netfluid
         /// If this is null, default serialization settings will be used.
         /// </param>
         /// <returns>The deserialized object from the JSON string.</returns>
-        public static object DeserializeObject(string value, Type type, JsonSerializerSettings settings)
+        public static object Deserialize(TextReader textReader, Type type, JsonSerializerSettings settings)
+        {
+            ValidationUtils.ArgumentNotNull(textReader, "textReader");
+
+            JsonSerializer jsonSerializer = JsonSerializer.CreateDefault(settings);
+
+            // by default DeserializeObject should check for additional content
+            if (!jsonSerializer.IsCheckAdditionalContentSet())
+                jsonSerializer.CheckAdditionalContent = true;
+
+            using (var reader = new JsonTextReader(textReader))
+            {
+                return jsonSerializer.Deserialize(reader, type);
+            }
+        }
+
+        /// <summary>
+        /// Deserializes the JSON to the specified .NET type using <see cref="JsonSerializerSettings"/>.
+        /// </summary>
+        /// <param name="value">The JSON to deserialize.</param>
+        /// <param name="type">The type of the object to deserialize to.</param>
+        /// <param name="settings">
+        /// The <see cref="JsonSerializerSettings"/> used to deserialize the object.
+        /// If this is null, default serialization settings will be used.
+        /// </param>
+        /// <returns>The deserialized object from the JSON string.</returns>
+        public static object Deserialize(string value, Type type, JsonSerializerSettings settings)
         {
             ValidationUtils.ArgumentNotNull(value, "value");
 

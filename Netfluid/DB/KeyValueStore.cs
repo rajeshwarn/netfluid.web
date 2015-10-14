@@ -1,5 +1,6 @@
 ﻿using Netfluid.Collections;
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace Netfluid.DB
@@ -50,6 +51,11 @@ namespace Netfluid.DB
         {
             cache.Remove(key);
             Task.Factory.StartNew(() => disk.Delete(key));
+        }
+
+        public IEnumerable<string> GetId(int from=0, int take=1000)
+        {
+            disk.ForEach(x => act(Get(x)));
         }
 
         public void ForEach(Action<T> act)

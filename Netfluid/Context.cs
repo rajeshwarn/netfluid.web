@@ -47,7 +47,7 @@ namespace Netfluid
 
         public decimal ElapsedTime
         {
-            get { return (decimal)stopwatch.ElapsedTicks / (decimal)Stopwatch.Frequency; }
+            get { return stopwatch.ElapsedTicks / (decimal)Stopwatch.Frequency; }
         }
 
         public IPrincipal User { get { return HttpListernerContext.User; } }
