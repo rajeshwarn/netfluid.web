@@ -427,11 +427,8 @@ namespace Netfluid
                     value.CopyTo(cnt.Response.OutputStream);
                     return;
                 }
-                else
-                {
-                    cnt.Writer.Write(value.ToString());
-                    return;
-                }
+                cnt.Writer.Write(value.ToString());
+                return;
             }
 
             if (!cnt.IsOpen)
@@ -466,11 +463,8 @@ namespace Netfluid
                     value.CopyTo(cnt.Response.OutputStream);
                     return;
                 }
-                else
-                {
-                    cnt.Writer.Write(value.ToString());
-                    return;
-                }
+                cnt.Writer.Write(value.ToString());
+                return;
             }
 
             if (!cnt.IsOpen)
