@@ -43,7 +43,6 @@ namespace Netfluid
         public RouteCollection<Route> Routes { get; private set; }
         public RouteCollection<Filter> Filters { get; private set; }
         public RouteCollection<Trigger> Triggers { get; private set; }
-        public RouteCollection<StatusCodeHandler> StatusCodeHandlers { get; private set; }
         public List<IPublicFolder> PublicFolders { get; set; }
         public ISessionManager Sessions { get; set; }
 
@@ -94,7 +93,7 @@ namespace Netfluid
         {
             get
             {
-                return (Filters.Any() || Triggers.Any() || Routes.Any() || StatusCodeHandlers.Any() || PublicFolders.Any());
+                return (Filters.Any() || Triggers.Any() || Routes.Any() || PublicFolders.Any());
             }
         }
 
