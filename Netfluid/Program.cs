@@ -15,23 +15,12 @@ namespace Example
         {
             var alfa = "qwertyuiopasdfghjklzxcvbnm1234567890";
 
-            var k = new KeyValueStore<Program>("ciao", x => x.name);
+            var k = new KeyValueStore<Program>("ciao");
 
-            for (int l = 0; l < 2000; l++)
+            for (int i = 1; i < 455555; i++)
             {
-                var list = new List<Program>();
-
-                for (int i = 1; i < 50000; i++)
-                {
-                    list.Add(new Program { name = new string(alfa.Random(80).ToArray()) });
-                    if (i % 2000 == 0) Console.WriteLine("LOADING " + i);
-                }
-
-                for (int i = 1; i < list.Count; i++)
-                {
-                    k.Insert(list[i]);
-                    if (i % 2000 == 0) Console.WriteLine("LOADING " + i);
-                }
+                k.Insert(new string(alfa.Random(128).ToArray()), new Program());
+                if (i % 2000 == 0) Console.WriteLine("LOADING " + i);
             }
 
             Console.WriteLine("SUCA");

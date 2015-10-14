@@ -4,7 +4,16 @@ using System.Collections.Generic;
 
 namespace Netfluid
 {
-    public class RouteCollection<T>: List<T> where T: Route
+    public class RouteCollection: List<Route>
     {
+        public Route this[string httpMethod,string url]
+        {
+            set
+            {
+                value.HttpMethod = httpMethod;
+                value.Url = url;
+                base.Add(value);
+            }
+        }
     }
 }

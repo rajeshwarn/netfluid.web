@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Linq;
 using System.Reflection;
 using System.Text.RegularExpressions;
 
@@ -42,15 +41,7 @@ namespace Netfluid
             {
                 url = value;
 
-                if (string.IsNullOrEmpty(value))
-                {
-                    if (this.GetType() == typeof(Route))
-                        throw new ArgumentNullException("Routes url can not be null");
-
-                    return;
-                }
-
-                if (value == null) return;
+                if (string.IsNullOrEmpty(value)) return;
 
                 var urlRegex = url;
                 var find = new Regex(":[^//]+");

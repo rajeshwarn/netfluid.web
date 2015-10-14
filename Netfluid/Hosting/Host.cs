@@ -40,9 +40,9 @@ namespace Netfluid
     public class NetfluidHost
     {
         HttpListener listener;
-        public RouteCollection<Route> Routes { get; private set; }
-        public RouteCollection<Route> Filters { get; private set; }
-        public RouteCollection<Route> Triggers { get; private set; }
+        public RouteCollection Routes { get; private set; }
+        public RouteCollection Filters { get; private set; }
+        public RouteCollection Triggers { get; private set; }
         public List<IPublicFolder> PublicFolders { get; set; }
         public ISessionManager Sessions { get; set; }
 
@@ -81,9 +81,9 @@ namespace Netfluid
                 listener.Prefixes.Add(x);
             });
 
-            Filters = new RouteCollection<Route>();
-            Triggers = new RouteCollection<Route>();
-            Routes = new RouteCollection<Route>();
+            Filters = new RouteCollection();
+            Triggers = new RouteCollection();
+            Routes = new RouteCollection();
 
             PublicFolders = new List<IPublicFolder>();
             Sessions = new DefaultSessionManager();
@@ -454,7 +454,7 @@ namespace Netfluid
                 }
                 else if (value is bool)
                 {
-                    if(value) return;
+                    if (value) return; else continue;
                 }
                 else if(value is Stream)
                 {
@@ -470,7 +470,7 @@ namespace Netfluid
 
             foreach (var trigger in Triggers.Where(x => x.HttpMethod == cnt.Request.HttpMethod || x.HttpMethod == null))
             {
-                trigger.Handle(cnt);
+                Task.Factory.StartNew(()=>trigger.Handle(cnt));
             }
 
             foreach (var routes in Routes.Where(x => x.HttpMethod == cnt.Request.HttpMethod || x.HttpMethod == null))
@@ -490,7 +490,7 @@ namespace Netfluid
                 }
                 else if (value is bool)
                 {
-                    if (value) return;
+                    if (value) return; else continue;
                 }
                 else if (value is Stream)
                 {
@@ -529,7 +529,7 @@ namespace Netfluid
             }
             else if (r404 is bool)
             {
-                if (r404) return;
+                return;
             }
             else if (r404 is Stream)
             {
