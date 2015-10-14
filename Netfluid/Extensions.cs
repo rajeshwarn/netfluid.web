@@ -631,6 +631,21 @@ namespace Netfluid
             return HttpUtility.UrlDecode(str);
         }
 
+        public static string RemoveCamel(this string source)
+        {
+            for (int i = 1; i < source.Length; i++)
+            {
+                if (char.IsUpper(source[i]))
+                {
+                    source = source.Replace("" + source[i], " " + char.ToLower(source[i]));
+                }
+                else if (char.IsNumber(source[i]) && !char.IsNumber(source[i]))
+                {
+                    source = source.Replace("" + source[i], " " + char.ToLower(source[i]));
+                }
+            }
+            return source;
+        }
 
         /// <summary>
         ///     Replace invalid HTML chars with relative HTML entities

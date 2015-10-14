@@ -1,52 +1,60 @@
 ﻿using Netfluid.Collections;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Collections;
+using System.Threading.Tasks;
 
 namespace Netfluid.DB
 {
-    public class KeyValueStore<T>: IEnumerable<T> where T :new()
+    public class KeyValueStore<T>
     {
         DiskCollection disk;
-        ObjectCache<string,T> cache;
-        Func<T, string> key;
+        ByteCache<string> cache;
 
-        public KeyValueStore(string path,Func<T,string> keyselector)
+        public KeyValueStore(string path)
         {
             disk = new DiskCollection(path);
-            cache = new ObjectCache<string, T>();
-            key = keyselector;
+            cache = new ByteCache<string>();
+            cache.Load = id=> disk.Get(id);
+
+            cache.OnRemove += (k, v) => disk.Replace(k, v);
         }
 
-        public void Insert(T value)
+        public long MemoryLimit => cache.MemoryLimit;
+
+        public void Insert(string key,T value)
         {
-            disk.Insert(key(value), BSON.Serialize(value));
+            var bytes = BSON.Serialize(value);
+            cache.AddOrUpdate(key, bytes, 10000);
+
+            Task.Factory.StartNew(()=>disk.Insert(key, BSON.Serialize(value)));
         }
 
         public T Get(string id)
         {
-            return BSON.Deserialize<T>(disk.Get(id));
+            var f = cache.Get(id);
+
+            if (f != null)
+                return BSON.Deserialize<T>(f);
+
+            return default(T);
         }
 
-        public void Update(T obj)
+        public void Update(string key,T value)
         {
-            disk.Replace(key(obj), BSON.Serialize<T>(obj));
+            var bytes = BSON.Serialize(value);
+            cache.AddOrUpdate(key, bytes, 10000);
+
+            Task.Factory.StartNew(() => disk.Replace(key, BSON.Serialize(value)));
         }
 
-        public void Delete(T obj)
+        public void Delete(string key)
         {
-            disk.Delete(key(obj));
+            cache.Remove(key);
+            Task.Factory.StartNew(() => disk.Delete(key));
         }
 
-        public IEnumerator<T> GetEnumerator()
+        public void ForEach(Action<T> act)
         {
-            return disk.All().Select(x=>BSON.Deserialize<T>(disk.Get(x))).GetEnumerator();
-        }
-
-        IEnumerator IEnumerable.GetEnumerator()
-        {
-            return disk.All().Select(x => BSON.Deserialize<T>(disk.Get(x))).GetEnumerator();
+            disk.ForEach(x => act(Get(x));
         }
     }
 }

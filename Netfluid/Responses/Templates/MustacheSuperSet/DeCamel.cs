@@ -21,17 +21,8 @@ namespace Netfluid.Responses.Templates.MustacheSuperSet
             var obj = arguments["object"];
 
             if (obj == null) return;
-
-            var source = obj.ToString();
-
-            for (int i = 1; i < source.Length; i++)
-            {
-                if (char.IsUpper(source[i]))
-                {
-                    source = source.Replace("" + source[i], " " + char.ToLower(source[i]));
-                }
-            }
-            writer.Write(source.TrimStart());
+            
+            writer.Write(obj.ToString().RemoveCamel());
         }
     }
 }

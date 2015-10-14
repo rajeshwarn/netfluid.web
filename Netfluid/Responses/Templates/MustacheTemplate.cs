@@ -34,6 +34,7 @@ namespace Netfluid
             customTags.Add(new Value());
             customTags.Add(new Count());
             customTags.Add(new HtmlList());
+            customTags.Add(new HtmlOptions());
 
             cache = new StringCache<string>
             {

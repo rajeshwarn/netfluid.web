@@ -178,7 +178,7 @@ namespace Netfluid
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public void Session(string key, object value)
+        public void Session<T>(string key, T value)
         {
             Host.Sessions.Set(SessionId, key, value);
         }
@@ -190,17 +190,12 @@ namespace Netfluid
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public dynamic Session(string key)
+        public void SessionDelete(string v)
         {
-            return Host.Sessions.Get(SessionId, key);
+            Host.Sessions.Remove(SessionId, v);
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public void SessionDelete(string v)
-        {
-            Host.Sessions.Delete(SessionId, v);
-        }
-
         public void SessionDestroy(string v)
         {
             Host.Sessions.Destroy(SessionId);

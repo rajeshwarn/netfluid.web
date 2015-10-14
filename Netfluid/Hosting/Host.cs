@@ -88,7 +88,7 @@ namespace Netfluid
             StatusCodeHandlers = new RouteCollection<StatusCodeHandler>();
 
             PublicFolders = new List<IPublicFolder>();
-            Sessions = new MemorySessionManager();
+            Sessions = new DefaultSessionManager();
         }
 
         public bool HasRoutes

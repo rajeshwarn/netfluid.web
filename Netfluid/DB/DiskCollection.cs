@@ -18,8 +18,11 @@ namespace Netfluid.DB
         ReaderWriterLockSlim storeLocker;
         ReaderWriterLockSlim indexLocker;
 
+        public long Count { get; private set; }
+
         public DiskCollection(string path)
         {
+            path = Path.GetFullPath(path);
             var name = Path.GetFileName(path);
             var dir = Path.GetDirectoryName(path);
 
@@ -31,6 +34,8 @@ namespace Netfluid.DB
 
             storeLocker = new ReaderWriterLockSlim();
             indexLocker = new ReaderWriterLockSlim();
+
+            Count = PrimaryIndex.LargerThanOrEqualTo("").Count();
         }
 
         private static byte[] Compress(byte[] bytes)
@@ -68,6 +73,27 @@ namespace Netfluid.DB
             indexLocker.EnterWriteLock();
             PrimaryIndex.Insert(id, r);
             indexLocker.ExitWriteLock();
+            Count++;
+        }
+
+
+        public byte[] Pop()
+        {
+            indexLocker.EnterReadLock();
+
+            var last = PrimaryIndex.LargerThanOrEqualTo("").Select(x => x.Item1).LastOrDefault();
+
+            byte[] found=null;
+            if (last != null)
+                found = Get(last);
+
+            indexLocker.ExitReadLock();
+
+            if(last!=null)
+                Delete(last);
+
+            Count--;
+            return found;
         }
 
         public string Push(byte[] obj)
@@ -85,6 +111,8 @@ namespace Netfluid.DB
             indexLocker.EnterWriteLock();
             PrimaryIndex.Insert(r, id);
             indexLocker.ExitWriteLock();
+
+            Count++;
             return r;
         }
 
@@ -98,6 +126,7 @@ namespace Netfluid.DB
             rd = PrimaryIndex.Get(id);
             indexLocker.ExitReadLock();
 
+            if (rd == null) throw new KeyNotFoundException(id);
 
             storeLocker.EnterReadLock();
             bytes = Storage.Find(rd.Item2);
@@ -106,9 +135,41 @@ namespace Netfluid.DB
             return DeCompress(bytes);
         }
 
-        public IEnumerable<string> All()
+        public string Last
         {
-            return new ThreadSafeEnumerator<string>(PrimaryIndex.LargerThanOrEqualTo("").Select(x => x.Item1), indexLocker);
+            get
+            {
+                indexLocker.EnterReadLock();
+                var last = PrimaryIndex.LargerThanOrEqualTo("").LastOrDefault();
+                indexLocker.ExitReadLock();
+
+                return last != null ? last.Item1 : null;
+            }
+        }
+
+        public string First
+        {
+            get
+            {
+                indexLocker.EnterReadLock();
+                var last = PrimaryIndex.LargerThanOrEqualTo("").FirstOrDefault();
+                indexLocker.ExitReadLock();
+
+                return last != null ? last.Item1 : null;
+            }
+        }
+
+        public void ForEach(Action<string> act)
+        {
+            indexLocker.EnterReadLock();
+            var all = PrimaryIndex.LargerThanOrEqualTo("");
+
+            foreach (var item in all)
+            {
+                act(item.Item1);
+            }
+
+            indexLocker.ExitReadLock();
         }
 
         public void Replace(string id, byte[] obj)
@@ -129,6 +190,8 @@ namespace Netfluid.DB
             indexLocker.EnterWriteLock();
             PrimaryIndex.Delete(id);
             indexLocker.ExitWriteLock();
+
+            Count--;
         }
     }
 }

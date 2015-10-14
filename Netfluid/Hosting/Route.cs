@@ -48,13 +48,13 @@ namespace Netfluid
 
         public int Index { get; set; }
 
-        public ParameterInfo[] Parameters { get; private set; }
+        internal ParameterInfo[] Parameters { get; private set; }
 
-        public string[] GroupNames { get; private set; }
+        internal string[] GroupNames { get; private set; }
 
-        public object Target { get; set; }
+        internal object Target { get; set; }
 
-        public MethodInfo MethodInfo
+        internal MethodInfo MethodInfo
         {
             get
             {

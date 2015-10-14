@@ -23,47 +23,49 @@
 
 using Netfluid.Collections;
 using System;
+using System.Collections.Concurrent;
 using System.Linq;
 
 namespace Netfluid.Sessions
 {
-    internal class MemorySessionManager : ISessionManager
+    public class DefaultSessionManager : ISessionManager
     {
-        public MemorySessionManager()
-        {
-            SessionDuration = 3600;
-        }
+        ConcurrentDictionary<string, object> dic;
 
-        #region ISessionManager Members
+        public DefaultSessionManager()
+        {
+            dic = new ConcurrentDictionary<string, object>();
+        }
 
         public int SessionDuration { get; set; }
 
-        public void Set(string sessionId, string name, object obj)
+        public void Destroy(string sessionId)
         {
+            object obj;
+            dic.Keys.Where(x => x.StartsWith(sessionId + ".")).ToArray().ForEach(x=>dic.TryRemove(x,out obj));
         }
 
         public object Get(string sessionId, string name)
         {
-            return null;
-        }
-
-        public void Remove(string sessionId, string name)
-        {
-        }
-
-        public void Destroy(string sessionId)
-        {
+            object obj;
+            dic.TryGetValue(sessionId+"."+name,out obj);
+            return obj;
         }
 
         public bool HasItems(string sessionId)
         {
-            return false;
+            return dic.Keys.Where(x => x.StartsWith(sessionId + ".")).Any();
         }
 
-        public void Delete(string sessionId, string v)
-        { 
+        public void Remove(string sessionId, string name)
+        {
+            object obj;
+            dic.TryRemove(sessionId + "." + name, out obj);
         }
 
-        #endregion
+        public void Set(string sessionId, string name, object obj)
+        {
+            dic[sessionId + "." + name]= obj;
+        }
     }
 }
