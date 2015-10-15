@@ -1,18 +1,37 @@
 using Netfluid;
+using System;
 using System.Linq;
 
 namespace Netfluid.Users
 {
     class UserExposer
 	{
-        [Filter]
-        public dynamic WalledGarden(Context context)
+        NetfluidHost Host;
+        UserManager UserManager;
+
+        public UserExposer(NetfluidHost host,UserManager manager)
+        {
+            Host = host;
+            UserManager = manager;
+
+            host.Filters.Add(Route.New(new Func<Context,dynamic>(WalledGarden)));
+
+            host.Routes["GET", "/users/signin"] = new Route(new Func<IResponse>(SignIn));
+            host.Routes["POST", "/users/signin"] = new Route(new Func<Context,string,string,string,IResponse>(SignedIn));
+
+            host.Routes["/users/signout"] = new Route(new Func<Context,IResponse>(SignOut));
+
+            host.Routes["GET", "/users/signup"] = new Route(new Func<IResponse>(SignUp));
+            host.Routes["POST", "/users/signup"] = new Route(new Func<Context,string,IResponse>(SignedUp));
+        }
+
+        dynamic WalledGarden(Context context)
         {
             if (!UserManager.WalledGarden) return false;
 
             if (context.Session<User>("user") == null && context.Request.Url.LocalPath != "/users/signin")
             {
-                if (Program.InternalHost.PublicFolders.Any(y => y.Map(context)))
+                if (Host.PublicFolders.Any(y => y.Map(context)))
                     return false;
 
                 if(context.Request.HttpMethod=="GET" && !context.Request.Url.LocalPath.Contains('.'))
@@ -24,14 +43,17 @@ namespace Netfluid.Users
             return false;
         }
 
-        [Route("/users/signin", "GET")]
-        public IResponse SignIn()
+        IResponse SignIn()
         {
             return new MustacheTemplate("./views/user/sign_in.html");
         }
 
-        [Route("/users/signin","POST")]
-        public IResponse SignIn(Context context, string user, string domain, string pass)
+        IResponse SignUp()
+        {
+            return new MustacheTemplate("./views/user/sign_up.html");
+        }
+
+        IResponse SignedIn(Context context, string user, string domain, string pass)
 		{
             if (string.IsNullOrWhiteSpace(user))
                 return new MustacheTemplate("./views/user/sign_in.html", "Username required");
@@ -51,35 +73,21 @@ namespace Netfluid.Users
             return new RedirectResponse(redirect);
 		}
 		
-        [Route("/users/signout")]
-        public IResponse SignOut(Context cnt)
+        IResponse SignOut(Context cnt)
         {
             cnt.SessionDelete("user");
             return new RedirectResponse("/");
         }
 
-        public IResponse SignedUp(Context cnt, string displayName, string domain, string email, string username, string password )
+        IResponse SignedUp(Context cnt,string password)
         {
-            displayName = displayName.HTMLEncode();
-            domain = domain.HTMLEncode();
-            email = email.HTMLEncode();
+            var user = cnt.Values.Parse<User>();
 
-
-            if (string.IsNullOrWhiteSpace(username))
+            if (string.IsNullOrWhiteSpace(user.UserName))
                 return new MustacheTemplate("./views/user/sign_in.html", "Username is mandatory");
 
             if (string.IsNullOrWhiteSpace(password))
                 return new MustacheTemplate("./views/user/sign_in.html", "Password is mandatory");
-
-            username = username.HTMLEncode();
-
-            var user = new User
-            {
-                DisplayName = displayName,
-                Domain = domain,
-                Email = email,
-                UserName = username
-            };
 
             if (UserManager.Exists(user))
                 return new MustacheTemplate("./views/user/sign_in.html", "Username already taken");

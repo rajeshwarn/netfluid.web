@@ -20,6 +20,14 @@ namespace Netfluid.Users
         public int Round { get; set; }
         public string Method { get; set; }
 
+        public string Fullname
+        {
+            get
+            {
+                return (this.Domain == null) ? this.UserName : (this.UserName + "@" + this.Domain);
+            }
+        }
+
         public User()
         {
             UserName = "anon";

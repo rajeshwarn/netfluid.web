@@ -1,31 +1,37 @@
 
+using Netfluid.DB;
 using System;
+using System.ComponentModel;
 using System.Linq;
 
 namespace Netfluid.Users
 {
     class UserManager
     {
-        private const string charset = "qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM123456789!£$%&/()=?^+;,:.-";
+        UserExposer exposer;
+        const string charset = "qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM123456789!£$%&/()=?^+;,:.-";
 
-        public static NetfluidHost Host { get; private set; }
-        public static int SignInInterval { get; set; }
-        public static bool WalledGarden { get; set; }
-        public static User System { get; private set; }
+        public NetfluidHost Host { get; private set; }
 
-        public static IMongoCollection<User> Repository { get; set; }
+        [DefaultValue(10)]
+        public int SignInInterval { get; set; }
 
-        static UserManager()
+        [DefaultValue(false)]
+        public bool WalledGarden { get; set; }
+
+        public User System { get; private set; }
+
+        public IKeyValueStore<User> Repository { get; set; }
+
+        public void Setup(NetfluidHost host)
 		{
-            SignInInterval = 10;
-            WalledGarden = true;
+            Host = host;
+            exposer = new UserExposer(host, this);
 
-            Repository = Program.Database.GetCollection<User>("users");
+            if(Repository==null)
+                Repository = new KeyValueStore<User>("users");
 
-            var task = Repository.CountAsync(x=>x.UserName == "root" || x.UserName=="system");
-            task.Wait();
-
-            if (task.Result == 0)
+            if (!Repository.Any())
             {
                 User admin = new User
                 {
@@ -49,14 +55,7 @@ namespace Netfluid.Users
             System = GetUser("system");
         }
 
-        public static User ByID(ObjectId id)
-        {
-            var task = Repository.Find(x => x._id == id).FirstOrDefaultAsync();
-            task.Wait();
-            return task.Result;
-        }
-
-        static void SaltHim(User user, string password)
+        void SaltHim(User user, string password)
         {
             string salt = new string(charset.Random(32).ToArray<char>());
             int rounds = Security.Random(4000);
@@ -67,7 +66,7 @@ namespace Netfluid.Users
                 new Func<string, string>(Security.SHA384),
                 new Func<string, string>(Security.SHA512)
             };
-            Func<string, string> method = methods.Random<Func<string, string>>();
+            Func<string, string> method = methods.Random();
             string newPassword = "";
             for (int i = 0; i < rounds; i++)
             {
@@ -81,45 +80,32 @@ namespace Netfluid.Users
 
             if (!Exists(user))
             {
-                Repository.InsertOneAsync(user).Wait();
+                Repository.Insert(user.Fullname,user);
                 return;
             }
-            Repository.ReplaceOneAsync(x=>x._id==user._id,user);
+            Repository.Update(user.Fullname,user);
         }
 
-		public static User GetUser(string name)
+		public User GetUser(string name)
 		{
             if (string.IsNullOrEmpty(name)) return null;
 
-            int index = name.IndexOf('@');
-            string user = (index > 0) ? name.Substring(0, index) : name;
-            string domain = (index >= 0) ? name.Substring(index) : null;
-
-            var task = Repository.Find(x=>x.UserName == user && x.Domain == domain).FirstOrDefaultAsync();
-            task.Wait();
-            return task.Result;
+            return Repository.Get(name);
         }
 
-        public static bool Exists(string fullname)
-        {
-            return Exists(GetUser(fullname));
-        }
-
-        public static bool Exists(User user)
+        public bool Exists(User user)
 		{
             if (user == null) return false;
 
-            var task = Repository.Find(x => x.UserName == user.UserName && x.Domain == user.Domain).FirstOrDefaultAsync();
-            task.Wait();
-            return task.Result != null;
+            return Repository.Get(user.Fullname) != null;
         }
 
-        public static bool CheckAuthority(string user, string auth)
+        public bool CheckAuthority(string user, string auth)
 		{
 			return CheckAuthority(GetUser(user), GetUser(auth));
 		}
 
-        public static bool CheckAuthority(User user, User auth)
+        public bool CheckAuthority(User user, User auth)
 		{
             if (!Exists(user) || !Exists(auth)) return false;
 
@@ -131,7 +117,7 @@ namespace Netfluid.Users
             return false;
 		}
 
-		public static User SignIn(string fullname, string pass)
+		public User SignIn(string fullname, string pass)
 		{
             User user = GetUser(fullname);
 
@@ -160,7 +146,7 @@ namespace Netfluid.Users
             {
                 user.LastLogin = DateTime.Now;
 
-                Repository.ReplaceOneAsync(x=>x._id == user._id, user);
+                Repository.Update(user.Fullname, user);
 
                 result = user;
                 return result;
@@ -169,7 +155,7 @@ namespace Netfluid.Users
             return result;
         }
 
-        public static bool Add(User user, string password, User auth)
+        public bool Add(User user, string password, User auth)
 		{
             if (!Exists(user) || !CheckAuthority(user, auth)) return false;
 
@@ -177,15 +163,15 @@ namespace Netfluid.Users
             return true;
         }
 
-        public static bool Remove(User user, User auth)
+        public bool Remove(User user, User auth)
 		{
             if (!CheckAuthority(user, auth)) return false;
 
-            Repository.DeleteOneAsync(x => x.Domain == user.Domain && x.UserName == user.UserName);
+            Repository.Delete(user.Fullname);
             return true;
         }
 
-		public static bool ChangePassword(User user, User auth, string newPassword)
+		public bool ChangePassword(User user, User auth, string newPassword)
 		{
             if (!CheckAuthority(user, auth)) return false;
             SaltHim(user, newPassword);

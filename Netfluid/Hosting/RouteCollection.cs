@@ -15,5 +15,14 @@ namespace Netfluid
                 base.Add(value);
             }
         }
+        public Route this[string url]
+        {
+            set
+            {
+                value.HttpMethod = null;
+                value.Url = url;
+                base.Add(value);
+            }
+        }
     }
 }
