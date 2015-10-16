@@ -281,6 +281,22 @@ namespace Netfluid
 
         #endregion
 
+        static void SendValue(Context c, dynamic value)
+        {
+            if (value == null) return;
+
+            if (value is IResponse)
+            {
+                value.SetHeaders(c);
+
+                if (value != null && c.Request.HttpMethod.ToLowerInvariant() != "head")
+                    value.SendResponse(c);
+            }
+            else if (value is Stream) value.CopyTo(c.Response.OutputStream);
+            else if (value.GetType().IsValueType) c.Writer.Write(value.ToString());
+            else c.Writer.Write(JSON.SerializeObject(value));
+        }
+
         #region NETFLUID METHODS
 
         public void Start()
@@ -309,25 +325,7 @@ namespace Netfluid
                         if (OnException != null)
                         {
                             var value = OnException(c,ex);
-
-                            if (value == null) return;
-
-                            if (value is IResponse)
-                            {
-                                value.SetHeaders(c);
-
-                                if (value != null && c.Request.HttpMethod.ToLowerInvariant() != "head")
-                                    value.SendResponse(c);
-
-                                return;
-                            }
-                            else if (value is Stream)
-                            {
-                                value.CopyTo(c.Response.OutputStream);
-                                return;
-                            }
-                            c.Writer.Write(value.ToString());
-                            return;
+                            SendValue(c,value);
                         }
                     }
                     finally
@@ -367,25 +365,7 @@ namespace Netfluid
                             if (OnException != null)
                             {
                                 var value = OnException(c, ex);
-
-                                if (value == null) return;
-
-                                if (value is IResponse)
-                                {
-                                    value.SetHeaders(c);
-
-                                    if (value != null && c.Request.HttpMethod.ToLowerInvariant() != "head")
-                                        value.SendResponse(c);
-
-                                    return;
-                                }
-                                else if (value is Stream)
-                                {
-                                    value.CopyTo(c.Response.OutputStream);
-                                    return;
-                                }
-                                c.Writer.Write(value.ToString());
-                                return;
+                                SendValue(c, value);
                             }
                         }
                         finally
@@ -434,26 +414,9 @@ namespace Netfluid
             {
                 var value = filter.Handle(cnt);
 
-                if (value == null) return;
+                if (value is bool && value == false) continue;
 
-                if (value is IResponse)
-                {
-                    value.SetHeaders(cnt);
-
-                    if (value != null && cnt.Request.HttpMethod.ToLowerInvariant() != "head")
-                        value.SendResponse(cnt);
-                    return;
-                }
-                else if (value is bool)
-                {
-                    if (value) return; else continue;
-                }
-                else if(value is Stream)
-                {
-                    value.CopyTo(cnt.Response.OutputStream);
-                    return;
-                }
-                cnt.Writer.Write(value.ToString());
+                SendValue(cnt,value);
                 return;
             }
 
@@ -469,27 +432,8 @@ namespace Netfluid
             {
                 var value = routes.Handle(cnt);
 
-                if(value == null) return;
-
-                if (value is IResponse)
-                {
-                    value.SetHeaders(cnt);
-
-                    if (value != null && cnt.Request.HttpMethod.ToLowerInvariant() != "head")
-                        value.SendResponse(cnt);
-
-                    return;
-                }
-                else if (value is bool)
-                {
-                    if (value) return; else continue;
-                }
-                else if (value is Stream)
-                {
-                    value.CopyTo(cnt.Response.OutputStream);
-                    return;
-                }
-                cnt.Writer.Write(value.ToString());
+                if (value is bool && value == false) continue;
+                SendValue(cnt, value);
                 return;
             }
 
@@ -504,30 +448,13 @@ namespace Netfluid
                 }
             }
 
-            cnt.Response.StatusCode = (int)StatusCode.NotFound;
+            cnt.Response.StatusCode = StatusCode.NotFound;
 
             if (On404 == null) return;
 
             dynamic r404 = On404.Invoke(cnt);
 
-            if (r404 is IResponse)
-            {
-                r404.SetHeaders(cnt);
-
-                if (r404 != null && cnt.Request.HttpMethod.ToLowerInvariant() != "head")
-                    r404.SendResponse(cnt);
-
-                return;
-            }
-            else if (r404 is bool)
-            {
-                return;
-            }
-            else if (r404 is Stream)
-            {
-                r404.CopyTo(cnt.Response.OutputStream);
-            }
-            cnt.Writer.Write(r404.ToString());
+            SendValue(cnt, r404);
         }
 
         public void Map(object obj)
