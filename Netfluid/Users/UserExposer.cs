@@ -24,7 +24,7 @@ namespace Netfluid.Users
             host.Routes["GET", "/users/signup"] = new Route(new Func<IResponse>(SignUp));
             host.Routes["POST", "/users/signup"] = new Route(new Func<Context,string,IResponse>(SignedUp));
         }
-
+        
         dynamic WalledGarden(Context context)
         {
             if (!UserManager.WalledGarden) return false;
