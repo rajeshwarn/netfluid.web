@@ -1,13 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Net;
 using System.Net.Sockets;
-using System.Text;
 using System.Threading.Tasks;
-using Netfluid.Dns;
-using Netfluid.Dns.Records;
 
 namespace Netfluid.Dns
 {
@@ -18,21 +13,9 @@ namespace Netfluid.Dns
     /// </summary>
     public class DnsServer
     {
-        /// <summary>
-        /// True if DNS Server is running
-        /// </summary>
-        public bool AcceptingRequest { get; private set; }
-
-        /// <summary>
-        /// Executed when Local DNS Server recieve a request
-        /// </summary>
-        public Func<Request, Response> OnRequest;
-
-        public Logger Logger;
-
-        public IPAddress[] Roots
+        public static IPAddress[] Roots
         {
-            get 
+            get
             {
                 return new[]
                 {
@@ -54,62 +37,91 @@ namespace Netfluid.Dns
         }
 
         /// <summary>
+        /// True if DNS Server is running
+        /// </summary>
+        public bool AcceptingRequest { get; private set; }
+
+        /// <summary>
+        /// Implement this function to fill the response
+        /// </summary>
+        public Func<Request, Response> OnRequest;
+
+        /// <summary>
+        /// If true when a local server response is empty it will hask to roots servers
+        /// </summary>
+        public bool FallbackToRoots;
+
+        /// <summary>
+        /// Rewrite it to log DNS server events
+        /// </summary>
+        public Logger Logger;
+
+        IPEndPoint endPoint;
+        UdpClient c;
+
+        public DnsServer():this(IPAddress.Any)
+        {
+        }
+
+        public DnsServer(IPAddress ip, int port=53)
+        {
+            endPoint = new IPEndPoint(ip, port);
+            c = new UdpClient(endPoint);
+        }
+
+        /// <summary>
+        /// Start syncronosly accepting requests
+        /// </summary>
+        public void Start()
+        {
+            AcceptingRequest = true;
+
+            if (OnRequest == null) throw new ArgumentNullException("Assign the OnRequest handler before start the server");
+
+            while (AcceptingRequest)
+            {
+                try
+                {
+                    var buffer = c.Receive(ref endPoint);
+
+                    var req = Serializer.ReadRequest(new MemoryStream(buffer));
+
+                    if (OnRequest == null)
+                        continue;
+
+                    var resp = OnRequest(req);
+
+                    if(FallbackToRoots && resp.Answers.Count == 0 && resp.Authorities.Count==0 && resp.Additionals.Count==0)
+                        resp = DnsClient.Query(req, Roots);
+
+                    var r = Serializer.WriteResponse(resp);
+                    c.Send(r, r.Length, endPoint);
+                }
+                catch (SocketException)
+                {
+                }
+                catch (Exception ex)
+                {
+                    Logger.Error("DNS Server exception " + ex.Message);
+                }
+            }
+        }
+
+        /// <summary>
         /// Start local DNS Server
         /// </summary>
         /// <param name="ip"></param>
-        public void StartAcceptRequest(IPAddress ip)
+        public void StartAsync()
         {
-            if (AcceptingRequest)
-                return;
-
-            AcceptingRequest = true;
-            var endPoint = new IPEndPoint(ip, 53);
-            var c = new UdpClient(endPoint);
-
-            Task.Factory.StartNew(() =>
-            {
-                while (AcceptingRequest)
-                {
-                    try
-                    {
-                        var buffer = c.Receive(ref endPoint);
-
-                        var req = Serializer.ReadRequest(new MemoryStream(buffer));
-
-                        if (OnRequest == null)
-                            continue;
-
-                        var resp = OnRequest(req);
-
-                        var r = Serializer.WriteResponse(resp);
-                        c.Send(r, r.Length, endPoint);
-                    }
-                    catch(SocketException)
-                    {
-                    }
-                    catch (Exception ex)
-                    {
-                        Logger.Error("DNS Server exception "+  ex.Message);
-                    }
-                }
-            });
+            Task.Factory.StartNew(() =>Start());
         }
 
         /// <summary>
         /// Start local DNS server
         /// </summary>
-        public void StopAcceptiongRequest()
+        public void Stop()
         {
             AcceptingRequest = false;
-        }
-
-        /// <summary>
-        /// Start local DNS Server
-        /// </summary>
-        /// <param name="ip"></param>
-        public void StartAcceptRequest(string ip)
-        {
-            StartAcceptRequest(IPAddress.Parse(ip));
         }
     }
 }
