@@ -190,7 +190,6 @@
     <Compile Include="MimeTypes.cs" />
     <Compile Include="Network.cs" />
     <Compile Include="Net\TcpService.cs" />
-    <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="PublicFolders\IPublicFolder.cs" />
     <Compile Include="PublicFolders\PublicFolder.cs" />
