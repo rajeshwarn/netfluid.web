@@ -146,10 +146,16 @@ namespace Netfluid.DB
 			return node.GetEntry (insertionIndex);
 		}
 
-		/// <summary>
-		/// Search for all elements that larger than or equal to given key
-		/// </summary>
-		public IEnumerable<Tuple<K, V>> LargerThanOrEqualTo (K key)
+
+        public IEnumerable<Tuple<K, V>> EqualTo(K key)
+        {
+            return System.Linq.Enumerable.Intersect(LargerThanOrEqualTo(key), LessThanOrEqualTo(key));
+        }
+
+        /// <summary>
+        /// Search for all elements that larger than or equal to given key
+        /// </summary>
+        public IEnumerable<Tuple<K, V>> LargerThanOrEqualTo (K key)
 		{
 			var startIterationIndex = 0;
 			var node = FindNodeForIteration (key, this.nodeManager.RootNode, true, ref startIterationIndex);

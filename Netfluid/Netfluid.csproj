@@ -92,6 +92,7 @@
     <Compile Include="Dns\Header.cs" />
     <Compile Include="Dns\Question.cs" />
     <Compile Include="Dns\Record.cs" />
+    <Compile Include="Dns\RecordDatabase.cs" />
     <Compile Include="Dns\Records\NotUsed\RecordA6.cs" />
     <Compile Include="Dns\Records\NotUsed\RecordAPL.cs" />
     <Compile Include="Dns\Records\NotUsed\RecordATMA.cs" />

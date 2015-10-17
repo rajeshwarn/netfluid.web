@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Collections.Generic;
+using System.Threading;
 
 namespace Netfluid.DB
 {
@@ -11,8 +12,9 @@ namespace Netfluid.DB
 	class RecordStorage : IRecordStorage
 	{
 		readonly IBlockStorage storage;
+        readonly ReaderWriterLockSlim storeLocker;
 
-		const int MaxRecordSize = 4194304; // 4MB
+        const int MaxRecordSize = 4194304; // 4MB
 		const int kNextBlockId = 0;
 		const int kRecordLength = 1;
 		const int kBlockContentLength = 2;
@@ -25,7 +27,9 @@ namespace Netfluid.DB
 
 		public RecordStorage (IBlockStorage storage)
 		{
-			if (storage == null)
+            storeLocker = new ReaderWriterLockSlim();
+
+            if (storage == null)
 				throw new ArgumentNullException ("storage");
 
 			this.storage = storage;
@@ -41,27 +45,36 @@ namespace Netfluid.DB
 
 		public virtual byte[] Find (uint recordId)
 		{
+            storeLocker.EnterReadLock();
 			// First grab the block
 			using (var block = storage.Find (recordId))
 			{
-				if (block == null) {
+				if (block == null)
+                {
+                    storeLocker.ExitReadLock();
 					return null;
 				}
 
 				// If this is a deleted block then ignore it
-				if (1L == block.GetHeader(kIsDeleted)) {
-					return null;
+				if (1L == block.GetHeader(kIsDeleted))
+                {
+                    storeLocker.ExitReadLock();
+                    return null;
 				}
 
 				// If this block is a child block then also ignore it
-				if (0L != block.GetHeader (kPreviousBlockId)) {
-					return null;
+				if (0L != block.GetHeader (kPreviousBlockId))
+                {
+                    storeLocker.ExitReadLock();
+                    return null;
 				}
 
 				// Grab total record size and allocate coressponded memory
 				var totalRecordSize = block.GetHeader (kRecordLength);
-				if (totalRecordSize > MaxRecordSize) {
-					throw new NotSupportedException ("Unexpected record length: " + totalRecordSize);
+				if (totalRecordSize > MaxRecordSize)
+                {
+                    storeLocker.ExitReadLock();
+                    throw new NotSupportedException ("Unexpected record length: " + totalRecordSize);
 				}
 				var data = new byte[totalRecordSize];
 				var bytesRead = 0;
@@ -75,8 +88,10 @@ namespace Netfluid.DB
 					using (currentBlock)
 					{
 						var thisBlockContentLength = currentBlock.GetHeader (kBlockContentLength);
-						if (thisBlockContentLength > storage.BlockContentSize) {
-							throw new InvalidDataException ("Unexpected block content length: " + thisBlockContentLength);
+						if (thisBlockContentLength > storage.BlockContentSize)
+                        {
+                            storeLocker.ExitReadLock();
+                            throw new InvalidDataException ("Unexpected block content length: " + thisBlockContentLength);
 						}
 
 						// Read all available content of current block
@@ -87,18 +102,22 @@ namespace Netfluid.DB
 
 						// Move to the next block if there is any
 						nextBlockId = (uint)currentBlock.GetHeader (kNextBlockId);
-						if (nextBlockId == 0) {
-							return data;
+						if (nextBlockId == 0)
+                        {
+                            storeLocker.ExitReadLock();
+                            return data;
 						}
 					}// Using currentBlock
 
 					currentBlock = this.storage.Find (nextBlockId);
-					if (currentBlock == null) {
-						throw new InvalidDataException ("Block not found by id: " + nextBlockId);
+					if (currentBlock == null)
+                    {
+                        storeLocker.ExitReadLock();
+                        throw new InvalidDataException ("Block not found by id: " + nextBlockId);
 					}
 				}
 			}
-		}
+        }
 
 		public virtual uint Create (Func<uint, byte[]> dataGenerator)
 		{
@@ -106,7 +125,8 @@ namespace Netfluid.DB
 				throw new ArgumentException ();
 			}
 
-			using (var firstBlock = AllocateBlock ())
+            storeLocker.EnterWriteLock();
+            using (var firstBlock = AllocateBlock ())
 			{
 				var returnId = firstBlock.Id;
 
@@ -118,7 +138,9 @@ namespace Netfluid.DB
 
 				// If no data tobe written,
 				// return this block straight away
-				if (dataTobeWritten == 0) {
+				if (dataTobeWritten == 0)
+                {
+                    storeLocker.ExitWriteLock();
 					return returnId;
 				}
 
@@ -161,11 +183,11 @@ namespace Netfluid.DB
 						currentBlock = nextBlock;
 					}
 				}
-
-				// return id of the first block that got dequeued
-				return returnId;
+                storeLocker.ExitWriteLock();
+                // return id of the first block that got dequeued
+                return returnId;
 			}
-		}
+        }
 
 		public virtual uint Create (byte[] data)
 		{
@@ -178,14 +200,17 @@ namespace Netfluid.DB
 
 		public virtual uint Create ()
 		{
+            storeLocker.EnterWriteLock();
 			using (var firstBlock = AllocateBlock ())
 			{
-				return firstBlock.Id;
+                storeLocker.ExitWriteLock();
+                return firstBlock.Id;
 			}
 		}
 
 		public virtual void Delete (uint recordId)
 		{
+            storeLocker.EnterWriteLock();
 			using (var block = storage.Find (recordId))
 			{
 				IBlock currentBlock = block;
@@ -203,8 +228,10 @@ namespace Netfluid.DB
 							break;
 						} else {
 							nextBlock = storage.Find (nextBlockId);
-							if (currentBlock == null) {
-								throw new InvalidDataException ("Block not found by id: " + nextBlockId);
+							if (currentBlock == null)
+                            {
+                                storeLocker.ExitWriteLock();
+                                throw new InvalidDataException ("Block not found by id: " + nextBlockId);
 							}
 						}
 					}// Using currentBlock
@@ -214,8 +241,9 @@ namespace Netfluid.DB
 						currentBlock = nextBlock;
 					}
 				}
-			}
-		}
+            }
+            storeLocker.ExitWriteLock();
+        }
 
 		public virtual void Update (uint recordId, byte[] data)
 		{
@@ -225,7 +253,8 @@ namespace Netfluid.DB
 			var blocksUsed = 0;
 			var previousBlock = (IBlock)null;
 
-			try {
+            storeLocker.EnterWriteLock();
+            try {
 				// Start writing block by block..
 				while (written < total)
 				{
@@ -243,8 +272,10 @@ namespace Netfluid.DB
 						target = blocks[blockIndex];
 					} else {
 						target = AllocateBlock ();
-						if (target == null) {
-							throw new Exception ("Failed to allocate new block");
+						if (target == null)
+                        {
+                            storeLocker.ExitWriteLock();
+                            throw new Exception ("Failed to allocate new block");
 						}
 						blocks.Add (target);
 					} 
@@ -282,7 +313,8 @@ namespace Netfluid.DB
 					block.Dispose ();
 				}
 			}
-		}
+            storeLocker.ExitWriteLock();
+        }
 
 		//
 		// Private Methods
@@ -297,7 +329,9 @@ namespace Netfluid.DB
 			var blocks = new List<IBlock>();
 			var success = false;
 
-			try {
+            storeLocker.EnterReadLock();
+			try
+            {
 				var currentBlockId = recordId;
 
 				do {
@@ -307,15 +341,19 @@ namespace Netfluid.DB
 						// Special case: if block #0 never created, then attempt to create it
 						if (currentBlockId == 0) {
 							block = storage.CreateNew ();
-						} else {
-							throw new Exception ("Block not found by id: " + currentBlockId);
+						} else
+                        {
+                            storeLocker.ExitReadLock();
+                            throw new Exception ("Block not found by id: " + currentBlockId);
 						}
 					}
 					blocks.Add (block);
 
 					// If this is a deleted block then ignore the fuck out of it
-					if (1L == block.GetHeader(kIsDeleted)) {
-						throw new InvalidDataException ("Block not found: " + currentBlockId);
+					if (1L == block.GetHeader(kIsDeleted))
+                    {
+                        storeLocker.ExitReadLock();
+                        throw new InvalidDataException ("Block not found: " + currentBlockId);
 					}
 
 					// Move next
@@ -323,7 +361,9 @@ namespace Netfluid.DB
 				} while (currentBlockId != 0);
 
 				success = true;
-				return blocks;
+
+                storeLocker.ExitReadLock();
+                return blocks;
 			} finally {
 				// Incase shit happens, dispose all fetched blocks
 				if (false == success) {
@@ -331,8 +371,9 @@ namespace Netfluid.DB
 						block.Dispose ();
 					}
 				}
-			}
-		}
+                storeLocker.ExitReadLock();
+            }
+        }
 
 		/// <summary>
 		/// Allocate new block for use, either by dequeueing an exising non-used block
@@ -343,13 +384,18 @@ namespace Netfluid.DB
 		{
 			uint resuableBlockId;
 			IBlock newBlock;
-			if (false == TryFindFreeBlock (out resuableBlockId)) {
+
+			if (false == TryFindFreeBlock (out resuableBlockId))
+            {
 				newBlock = storage.CreateNew ();
-				if (newBlock == null) {
+
+                if (newBlock == null)
+                {
 					throw new Exception ("Failed to create new block");
 				}
 			}
-			else {
+			else
+            {
 				newBlock = storage.Find (resuableBlockId);
 				if (newBlock == null) {
 					throw new InvalidDataException ("Block not found by id: " + resuableBlockId);

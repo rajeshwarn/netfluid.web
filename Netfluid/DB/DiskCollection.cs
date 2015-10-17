@@ -15,7 +15,6 @@ namespace Netfluid.DB
         RecordStorage Storage;
         Tree<string, uint> PrimaryIndex;
 
-        ReaderWriterLockSlim storeLocker;
         ReaderWriterLockSlim indexLocker;
 
         public long Count { get; private set; }
@@ -32,7 +31,6 @@ namespace Netfluid.DB
 
             PrimaryIndex = new Tree<string, uint>(new TreeDiskNodeManager<string, uint>(new TreeStringSerialzier(), new TreeUIntSerializer(), new RecordStorage(new BlockStorage(this.primaryIndexFile, 4096))), false);
 
-            storeLocker = new ReaderWriterLockSlim();
             indexLocker = new ReaderWriterLockSlim();
 
             Count = PrimaryIndex.LargerThanOrEqualTo("").Count();
@@ -66,9 +64,7 @@ namespace Netfluid.DB
             var bytes = Compress(obj);
             uint r;
 
-            storeLocker.EnterWriteLock();
             r = Storage.Create(bytes);
-            storeLocker.ExitWriteLock();
 
             indexLocker.EnterWriteLock();
             PrimaryIndex.Insert(id, r);
@@ -102,9 +98,7 @@ namespace Netfluid.DB
             uint id;
             string r;
 
-            storeLocker.EnterWriteLock();
             id = Storage.Create(bytes);
-            storeLocker.ExitWriteLock();
 
             r = id.ToString();
 
@@ -128,9 +122,7 @@ namespace Netfluid.DB
 
             if (rd == null) throw new KeyNotFoundException(id);
 
-            storeLocker.EnterReadLock();
             bytes = Storage.Find(rd.Item2);
-            storeLocker.ExitReadLock();
 
             return DeCompress(bytes);
         }
@@ -186,16 +178,12 @@ namespace Netfluid.DB
         {
             var bytes = Compress(obj);
 
-            storeLocker.EnterWriteLock();
             Storage.Update(PrimaryIndex.Get(id).Item2, bytes);
-            storeLocker.ExitWriteLock();
         }
 
         public void Delete(string id)
         {
-            storeLocker.EnterWriteLock();
             Storage.Delete(PrimaryIndex.Get(id).Item2);
-            storeLocker.ExitWriteLock();
 
             indexLocker.EnterWriteLock();
             PrimaryIndex.Delete(id);
