@@ -14,6 +14,7 @@ namespace Netfluid.DB
 
         RecordStorage Storage;
         Tree<string, uint> PrimaryIndex;
+        ReaderWriterLockSlim locker;
 
         public long Count { get; private set; }
 
@@ -29,7 +30,7 @@ namespace Netfluid.DB
 
             PrimaryIndex = new Tree<string, uint>(new TreeDiskNodeManager<string, uint>(new TreeStringSerialzier(), new TreeUIntSerializer(), new RecordStorage(new BlockStorage(this.primaryIndexFile, 4096))), false);
 
-            indexLocker = new ReaderWriterLockSlim();
+            locker = new ReaderWriterLockSlim();
 
             Count = PrimaryIndex.LargerThanOrEqualTo("").Count();
         }
@@ -62,31 +63,32 @@ namespace Netfluid.DB
             var bytes = Compress(obj);
             uint r;
 
+            locker.EnterWriteLock();
             r = Storage.Create(bytes);
-
-            indexLocker.EnterWriteLock();
             PrimaryIndex.Insert(id, r);
-            indexLocker.ExitWriteLock();
+
             Count++;
+            locker.ExitWriteLock();
         }
 
 
         public byte[] Pop()
         {
-            indexLocker.EnterReadLock();
-
+            locker.EnterReadLock();
             var last = PrimaryIndex.LargerThanOrEqualTo("").Select(x => x.Item1).LastOrDefault();
 
             byte[] found=null;
             if (last != null)
                 found = Get(last);
 
-            indexLocker.ExitReadLock();
+            locker.ExitReadLock();
 
+            locker.EnterWriteLock();
             if(last!=null)
                 Delete(last);
 
             Count--;
+            locker.ExitWriteLock();
             return found;
         }
 
@@ -96,15 +98,17 @@ namespace Netfluid.DB
             uint id;
             string r;
 
+            locker.EnterWriteLock();
             id = Storage.Create(bytes);
 
             r = id.ToString();
 
-            indexLocker.EnterWriteLock();
             PrimaryIndex.Insert(r, id);
-            indexLocker.ExitWriteLock();
 
             Count++;
+
+            locker.ExitWriteLock();
+
             return r;
         }
 
@@ -112,15 +116,19 @@ namespace Netfluid.DB
         {
             byte[] bytes;
 
-            Tuple<string, uint> rd;
+            locker.EnterReadLock();
+            
+            var rd = PrimaryIndex.Get(id);
 
-            indexLocker.EnterReadLock();
-            rd = PrimaryIndex.Get(id);
-            indexLocker.ExitReadLock();
-
-            if (rd == null) throw new KeyNotFoundException(id);
+            if (rd == null)
+            {
+                locker.ExitReadLock();
+                throw new KeyNotFoundException(id);
+            }
 
             bytes = Storage.Find(rd.Item2);
+
+            locker.ExitReadLock();
 
             return DeCompress(bytes);
         }
@@ -129,9 +137,11 @@ namespace Netfluid.DB
         {
             get
             {
-                indexLocker.EnterReadLock();
+                locker.EnterReadLock();
+
                 var last = PrimaryIndex.LargerThanOrEqualTo("").LastOrDefault();
-                indexLocker.ExitReadLock();
+
+                locker.ExitReadLock();
 
                 return last != null ? last.Item1 : null;
             }
@@ -141,9 +151,11 @@ namespace Netfluid.DB
         {
             get
             {
-                indexLocker.EnterReadLock();
+                locker.EnterReadLock();
+
                 var last = PrimaryIndex.LargerThanOrEqualTo("").FirstOrDefault();
-                indexLocker.ExitReadLock();
+
+                locker.ExitReadLock();
 
                 return last != null ? last.Item1 : null;
             }
@@ -151,7 +163,8 @@ namespace Netfluid.DB
 
         public void ForEach(Action<string> act)
         {
-            indexLocker.EnterReadLock();
+            locker.EnterReadLock();
+
             var all = PrimaryIndex.LargerThanOrEqualTo("");
 
             foreach (var item in all)
@@ -159,35 +172,40 @@ namespace Netfluid.DB
                 act(item.Item1);
             }
 
-            indexLocker.ExitReadLock();
+            locker.ExitReadLock();
         }
 
         public IEnumerable<string> GetId(int from = 0, int take = 1000)
         {
-            indexLocker.EnterReadLock();
+            locker.EnterReadLock();
+
             var all = PrimaryIndex.LargerThanOrEqualTo("");
             var res = all.Any() ? all.Select(x=>x.Item1).Skip(from).Take(take).ToArray() : new string[0];
-            indexLocker.ExitReadLock();
+
+            locker.ExitReadLock();
 
             return res;
         }
 
         public void Replace(string id, byte[] obj)
         {
-            var bytes = Compress(obj);
+            locker.EnterWriteLock();
 
+            var bytes = Compress(obj);
             Storage.Update(PrimaryIndex.Get(id).Item2, bytes);
+
+            locker.ExitWriteLock();
         }
 
         public void Delete(string id)
         {
+            locker.EnterWriteLock();
+
             Storage.Delete(PrimaryIndex.Get(id).Item2);
-
-            indexLocker.EnterWriteLock();
             PrimaryIndex.Delete(id);
-            indexLocker.ExitWriteLock();
-
             Count--;
+
+            locker.EnterWriteLock();
         }
     }
 }
