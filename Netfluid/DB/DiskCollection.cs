@@ -15,8 +15,6 @@ namespace Netfluid.DB
         RecordStorage Storage;
         Tree<string, uint> PrimaryIndex;
 
-        ReaderWriterLockSlim indexLocker;
-
         public long Count { get; private set; }
 
         public DiskCollection(string path)

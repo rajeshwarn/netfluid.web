@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading;
 
 namespace Netfluid.DB
 {
@@ -7,13 +8,14 @@ namespace Netfluid.DB
 	{
 		readonly ITreeNodeManager<K, V> nodeManager;
 		readonly bool allowDuplicateKeys;
+        ReaderWriterLockSlim locker;
 
-		/// <summary>
-		/// Initializes a new instance of the <see cref="Sdb.BTree.Tree`2"/> class.
-		/// </summary>
-		/// <param name="logger">Logger.</param>
-		/// <param name="nodeManager">Node manager.</param>
-		public Tree (ITreeNodeManager<K, V> nodeManager, bool allowDuplicateKeys = false)
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Sdb.BTree.Tree`2"/> class.
+        /// </summary>
+        /// <param name="logger">Logger.</param>
+        /// <param name="nodeManager">Node manager.</param>
+        public Tree (ITreeNodeManager<K, V> nodeManager, bool allowDuplicateKeys = false)
 		{
 			if (nodeManager == null)
 				throw new ArgumentNullException ("nodeManager");
@@ -35,7 +37,9 @@ namespace Netfluid.DB
 			var deleted = false;
 			var shouldContinue = true;
 
-			try {
+            locker.EnterWriteLock();
+			try
+            {
 				while (shouldContinue)
 				{
 					// Iterating to find all entries we wish to delete
@@ -75,6 +79,8 @@ namespace Netfluid.DB
 
 			// Finalize stuff
 			nodeManager.SaveChanges ();
+            locker.ExitWriteLock();
+
 			return deleted;
 		}
 
@@ -89,6 +95,7 @@ namespace Netfluid.DB
 				throw new InvalidOperationException ("This method should be called only from unique tree");
 			}
 
+            locker.EnterReadLock();
 			// Find the node tobe deleted using an enumerator
 			using (var enumerator = (TreeEnumerator<K, V>)LargerThanOrEqualTo (key).GetEnumerator())
 			{
@@ -97,11 +104,15 @@ namespace Netfluid.DB
 				// Otherwise, consider the key client specified is not found.
 				if (enumerator.MoveNext() && (nodeManager.KeyComparer.Compare (enumerator.Current.Item1, key) == 0))
 				{
+                    locker.EnterWriteLock();
 					enumerator.CurrentNode.Remove (enumerator.CurrentEntry);
+                    locker.ExitWriteLock();
+                    locker.ExitReadLock();
 					return true;
 				}
 			}
 
+            locker.ExitReadLock();
 			// Return false by default
 			return false;
 		}
@@ -111,15 +122,19 @@ namespace Netfluid.DB
 		/// </summary>
 		public void Insert (K key, V value)
 		{
+            locker.EnterReadLock();
 			// First find the node where key should be inserted
 			var insertionIndex = 0;
 			var leafNode = FindNodeForInsertion (key, ref insertionIndex);
 
 			// Duplication check
-			if (insertionIndex >= 0 && false == allowDuplicateKeys) {
+			if (insertionIndex >= 0 && false == allowDuplicateKeys)
+            {
+                locker.ExitReadLock();
 				throw new TreeKeyExistsException (key);
 			}
 
+            locker.EnterWriteLock();
 			// Now insert to the leaf
 			leafNode.InsertAsLeaf (key, value, insertionIndex >= 0 ? insertionIndex : ~insertionIndex);
 
@@ -131,6 +146,7 @@ namespace Netfluid.DB
 
 			// Save changes, if any
 			nodeManager.SaveChanges ();
+            locker.ExitWriteLock();
 		}
 
 		/// <summary>
@@ -139,8 +155,12 @@ namespace Netfluid.DB
 		public Tuple<K, V> Get (K key)
 		{
 			var insertionIndex = 0;
+            locker.EnterReadLock();
+
 			var node = FindNodeForInsertion (key, ref insertionIndex);
-			if (insertionIndex < 0) {
+			if (insertionIndex < 0)
+            {
+                locker.ExitReadLock();
 				return null;
 			}
 			return node.GetEntry (insertionIndex);
@@ -158,7 +178,10 @@ namespace Netfluid.DB
         public IEnumerable<Tuple<K, V>> LargerThanOrEqualTo (K key)
 		{
 			var startIterationIndex = 0;
+
+            locker.EnterReadLock();
 			var node = FindNodeForIteration (key, this.nodeManager.RootNode, true, ref startIterationIndex);
+            locker.ExitReadLock();
 
 			return new TreeTraverser<K, V> (nodeManager
 				, node
@@ -172,7 +195,10 @@ namespace Netfluid.DB
 		public IEnumerable<Tuple<K, V>> LargerThan (K key)
 		{
 			var startIterationIndex = 0;
+
+            locker.EnterReadLock();
 			var node = FindNodeForIteration (key, this.nodeManager.RootNode, false, ref startIterationIndex);
+            locker.ExitReadLock();
 
 			return new TreeTraverser<K, V> (nodeManager
 				, node
@@ -186,7 +212,9 @@ namespace Netfluid.DB
 		public IEnumerable<Tuple<K, V>> LessThanOrEqualTo (K key)
 		{
 			var startIterationIndex = 0;
+            locker.EnterReadLock();
 			var node = FindNodeForIteration (key, this.nodeManager.RootNode, false, ref startIterationIndex);
+            locker.ExitReadLock();
 
 			return new TreeTraverser<K, V> (nodeManager
 				, node
@@ -200,7 +228,10 @@ namespace Netfluid.DB
 		public IEnumerable<Tuple<K, V>> LessThan (K key)
 		{
 			var startIterationIndex = 0;
+
+            locker.EnterReadLock();
 			var node = FindNodeForIteration (key, this.nodeManager.RootNode, true, ref startIterationIndex);
+            locker.ExitReadLock();
 
 			return new TreeTraverser<K, V> (nodeManager
 				, node
@@ -224,31 +255,40 @@ namespace Netfluid.DB
 				return node;
 			}
 
+            locker.ExitReadLock();
 			// Perform binary search on specified node
 			var binarySearchResult = node.BinarySearchEntriesForKey (key, moveLeft ? true : false);
 
 			// If found, drill down to children node 
-			if (binarySearchResult >= 0) {
-				if (node.IsLeaf) {
+			if (binarySearchResult >= 0)
+            {
+				if (node.IsLeaf)
+                {
 					// We reached the leaf node, cant drill down any more.
 					// Let's start iterating from there
 					startIterationIndex = binarySearchResult;
+                    locker.ExitReadLock();
 					return node;
 				}
-				else {
+				else
+                {
+                    locker.ExitReadLock();
 					// What direction to drill down depends on `direction` parameterr
 					return FindNodeForIteration (key, node.GetChildNode(moveLeft ? binarySearchResult : binarySearchResult + 1), moveLeft, ref startIterationIndex);
 				}
 			}
 			// Node found, continue searching on the child node which
 			// is positiioned at binarySearchResult
-			else if (false == node.IsLeaf){
+			else if (false == node.IsLeaf)
+            {
+                locker.ExitReadLock();
 				return FindNodeForIteration (key, node.GetChildNode(~binarySearchResult), moveLeft, ref startIterationIndex);
 			}
 			// Otherwise, this is a leaf node, no more children to search,
 			// return this one
 			else {
 				startIterationIndex = binarySearchResult;
+                locker.ExitReadLock();
 				return node;
 			}
 		}
@@ -267,25 +307,33 @@ namespace Netfluid.DB
 				return node;
 			}
 
+            locker.EnterReadLock();
 			// If X=Vi, for some i, then we are done (X has been found).
 			var binarySearchResult = node.BinarySearchEntriesForKey (key);
 			if (binarySearchResult >= 0) {
-				if (allowDuplicateKeys && false == node.IsLeaf) {
+				if (allowDuplicateKeys && false == node.IsLeaf)
+                {
+                    locker.ExitReadLock();
 					return FindNodeForInsertion (key, node.GetChildNode(binarySearchResult), ref insertionIndex);
-				} else {
+				} else
+                {
 					insertionIndex = binarySearchResult;
+                    locker.ExitReadLock();
 					return node;
 				}
 			}
 			// Otherwise, continue searching on the child node which
 			// is positiioned at binarySearchResult
-			else if (false == node.IsLeaf){
+			else if (false == node.IsLeaf)
+            {
+                locker.ExitReadLock();
 				return FindNodeForInsertion (key, node.GetChildNode(~binarySearchResult), ref insertionIndex);
 			}
 			// Otherwise, this is a leaf node, no more children to search,
 			// return this one
 			else {
 				insertionIndex = binarySearchResult;
+                locker.ExitReadLock();
 				return node;
 			}
 		}
