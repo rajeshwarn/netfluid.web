@@ -1,8 +1,8 @@
 ﻿using System;
 
-namespace Netfluid.DB
+namespace Netfluid.DB.Serializers
 {
-	internal class TreeStringSerialzier : ISerializer<string>
+	internal class StringSerializer : ISerializer<string>
 	{
 		public byte[] Serialize (string value)
 		{

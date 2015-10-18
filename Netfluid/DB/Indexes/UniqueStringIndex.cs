@@ -1,10 +1,11 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Text;
 
 namespace Netfluid.DB.Indexes
 {
-    public class UniqueStringIndex:IDisposable, ISerializer<string>
+    public class UniqueStringIndex:IDisposable, ISerializer<string>,IIndex<string,string>
     {
         FileStream stream;
         Tree<string, string> tree;
@@ -32,6 +33,51 @@ namespace Netfluid.DB.Indexes
             return Encoding.UTF8.GetString(buffer, offset, length);
         }
 
+        public bool Delete(string key)
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool Delete(string key, string value, IComparer<string> valueComparer = null)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IEnumerable<Tuple<string, string>> EqualTo(string key)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Tuple<string, string> Get(string key)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void Insert(string key, string value)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IEnumerable<Tuple<string, string>> LargerThan(string key)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IEnumerable<Tuple<string, string>> LargerThanOrEqualTo(string key)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IEnumerable<Tuple<string, string>> LessThan(string key)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IEnumerable<Tuple<string, string>> LessThanOrEqualTo(string key)
+        {
+            throw new NotImplementedException();
+        }
+
         public bool IsFixedSize
         {
             get
@@ -45,6 +91,14 @@ namespace Netfluid.DB.Indexes
             get
             {
                 throw new InvalidOperationException();
+            }
+        }
+
+        public IEnumerable<Tuple<string, string>> All
+        {
+            get
+            {
+                throw new NotImplementedException();
             }
         }
         #endregion

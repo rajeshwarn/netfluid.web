@@ -1,8 +1,8 @@
 ﻿using System;
 
-namespace Netfluid.DB
+namespace Netfluid.DB.Serializers
 {
-	internal class TreeLongSerializer : ISerializer<long>
+	internal class LongSerializer : ISerializer<long>
 	{
 		public byte[] Serialize (long value)
 		{

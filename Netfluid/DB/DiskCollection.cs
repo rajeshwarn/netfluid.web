@@ -28,7 +28,7 @@ namespace Netfluid.DB
             primaryIndexFile = new FileStream(Path.Combine(dir, name + ".pidx"), FileMode.OpenOrCreate, FileAccess.ReadWrite, FileShare.None, 4096);
             Storage = new RecordStorage(new BlockStorage(mainDatabaseFile, 4096, 48));
 
-            PrimaryIndex = new Tree<string, uint>(new TreeDiskNodeManager<string, uint>(new TreeStringSerialzier(), new TreeUIntSerializer(), new RecordStorage(new BlockStorage(this.primaryIndexFile, 4096))), false);
+            PrimaryIndex = new Tree<string, uint>(new TreeDiskNodeManager<string, uint>(Serializer.String, Serializer.UInt, new RecordStorage(new BlockStorage(this.primaryIndexFile, 4096))), false);
 
             locker = new ReaderWriterLockSlim(LockRecursionPolicy.SupportsRecursion);
 
@@ -70,7 +70,6 @@ namespace Netfluid.DB
             Count++;
             locker.ExitWriteLock();
         }
-
 
         public byte[] Pop()
         {
