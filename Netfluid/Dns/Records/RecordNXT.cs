@@ -46,14 +46,14 @@ namespace Netfluid.Dns.Records
         [Serializable]
     public class RecordNXT : Record
     {
-        public byte[] BITMAP;
-        [DomainName] public string NEXTDOMAINNAME;
+        public byte[] Bitmap;
+        [DomainName] public string NextDomainName;
 
         private bool IsSet(int bitNr)
         {
             int intByte = bitNr/8;
             int intOffset = (bitNr%8);
-            byte b = BITMAP[intByte];
+            byte b = Bitmap[intByte];
             int intTest = 1 << intOffset;
             if ((b & intTest) == 0)
                 return false;
@@ -64,12 +64,12 @@ namespace Netfluid.Dns.Records
         public override string ToString()
         {
             var sb = new StringBuilder();
-            for (int bitNr = 1; bitNr < (BITMAP.Length*8); bitNr++)
+            for (int bitNr = 1; bitNr < (Bitmap.Length*8); bitNr++)
             {
                 if (IsSet(bitNr))
                     sb.Append(" " + (RecordType) bitNr);
             }
-            return string.Format("{0}{1}", NEXTDOMAINNAME, sb);
+            return string.Format("{0}{1}", NextDomainName, sb);
         }
     }
 }
