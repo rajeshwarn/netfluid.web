@@ -31,6 +31,11 @@ namespace Netfluid.DB
             return Count != 0;
         }
 
+        public bool Exists(string id)
+        {
+            return disk.Exists(id);
+        }
+
         public T Pop()
         {
             var f = disk.Pop();

@@ -22,6 +22,11 @@ namespace Netfluid.DB
         public string Name => store.Name;
         public long Count => store.Count;
 
+        public bool Exists(string id)
+        {
+            return store.Exists(id);
+        }
+
         public object Pop(object obj)
         {
             var f = store.Pop();
