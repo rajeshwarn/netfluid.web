@@ -1,10 +1,5 @@
-﻿using Netfluid.DB.Serializers;
-using System;
-using System.Collections.Generic;
+﻿using System;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Netfluid.DB
 {
@@ -56,6 +51,18 @@ namespace Netfluid.DB
         {
             var stream = new FileStream(path, FileMode.OpenOrCreate, FileAccess.ReadWrite, FileShare.None, 4096);
             return new Tree<int, string>(new TreeDiskNodeManager<int, string>(Serializer.Int, Serializer.String, new RecordStorage(new BlockStorage(stream, 4096))), true);
+        }
+
+        public static Tree<double, string> UniqueDoubleIndex(string path)
+        {
+            var stream = new FileStream(path, FileMode.OpenOrCreate, FileAccess.ReadWrite, FileShare.None, 4096);
+            return new Tree<double, string>(new TreeDiskNodeManager<double, string>(Serializer.Double, Serializer.String, new RecordStorage(new BlockStorage(stream, 4096))), false);
+        }
+
+        public static Tree<double, string> MultipleDoubleIndex(string path)
+        {
+            var stream = new FileStream(path, FileMode.OpenOrCreate, FileAccess.ReadWrite, FileShare.None, 4096);
+            return new Tree<double, string>(new TreeDiskNodeManager<double, string>(Serializer.Double, Serializer.String, new RecordStorage(new BlockStorage(stream, 4096))), true);
         }
     }
 }

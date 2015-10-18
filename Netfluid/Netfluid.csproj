@@ -73,6 +73,7 @@
     <Compile Include="DB\KeyValueStore.cs" />
     <Compile Include="DB\Serializer.cs" />
     <Compile Include="DB\Serializers\DateTimeSerializer.cs" />
+    <Compile Include="DB\Serializers\DoubleSerializer.cs" />
     <Compile Include="DB\Serializers\UIntSerializer.cs" />
     <Compile Include="DB\Tree\Tree.cs" />
     <Compile Include="DB\Tree\TreeDiskNodeManager.cs" />

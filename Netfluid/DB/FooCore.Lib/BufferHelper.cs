@@ -29,7 +29,7 @@ namespace Netfluid.DB
 			return LittleEndianByteOrder.GetInt32 (intBuffer);
 		}
 
-		public static long ReadBufferInt64 (byte[] buffer, int bufferOffset)
+        public static long ReadBufferInt64 (byte[] buffer, int bufferOffset)
 		{
 			var longBuffer = new byte[8];
 			Buffer.BlockCopy (buffer, bufferOffset, longBuffer, 0, 8);

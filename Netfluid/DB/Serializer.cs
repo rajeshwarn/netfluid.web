@@ -58,5 +58,16 @@ namespace Netfluid.DB
                 return dateTimeSerializer;
             }
         }
+
+
+        static DoubleSerializer doubleSerializer;
+        public static ISerializer<double> Double
+        {
+            get
+            {
+                if (doubleSerializer == null) doubleSerializer = new DoubleSerializer();
+                return doubleSerializer;
+            }
+        }
     }
 }

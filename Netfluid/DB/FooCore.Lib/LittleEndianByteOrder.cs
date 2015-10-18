@@ -8,7 +8,7 @@ namespace Netfluid.DB
 	/// </summary>
 	static class LittleEndianByteOrder
 	{
-		public static byte[] GetBytes (int value)
+        public static byte[] GetBytes (int value)
 		{
 			var bytes = BitConverter.GetBytes (value);
 
@@ -68,7 +68,7 @@ namespace Netfluid.DB
 			return bytes;
 		}
 
-		public static float GetSingle (byte[] bytes)
+        public static float GetSingle (byte[] bytes)
 		{
 			// Given bytes are little endian
 			// If this computer is big endian then result need to be reversed
