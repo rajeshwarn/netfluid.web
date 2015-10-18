@@ -76,7 +76,7 @@ namespace Netfluid.DB
         public byte[] Pop()
         {
             locker.EnterReadLock();
-            var last = PrimaryIndex.LargerThanOrEqualTo("").Select(x => x.Item1).LastOrDefault();
+            var last = PrimaryIndex.All.Select(x => x.Item1).LastOrDefault();
 
             byte[] found=null;
             if (last != null)

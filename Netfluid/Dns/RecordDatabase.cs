@@ -3,7 +3,6 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Threading;
 
 namespace Netfluid.Dns
 {
@@ -15,6 +14,20 @@ namespace Netfluid.Dns
         public RecordDatabase(string path)
         {
             store = new KeyValueStore(path);
+            domainIndex = Index.MultipleStringIndex(Path.Combine(store.Directory, store.Name + ".domain.sidx"));
+        }
+
+        public IEnumerable<Record> ByDomain(string domain)
+        {
+            return domainIndex.EqualTo(domain).Select(x=> store.Get<Record>(x.Item2));
+        }
+
+        public void Insert(Record record)
+        {
+            if (string.IsNullOrEmpty(record.RecordId)) record.RecordId = Security.UID() + Security.UID();
+            store.Insert(record.RecordId, record);
+
+
         }
     }
 }

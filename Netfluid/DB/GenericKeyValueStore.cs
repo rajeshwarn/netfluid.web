@@ -27,6 +27,11 @@ namespace Netfluid.DB
             return Count != 0;
         }
 
+        public T Get<T>(string item2)
+        {
+            return (T)Get(item2);
+        }
+
         public void Insert(string key,object value)
         {
             var slot = new Slot
