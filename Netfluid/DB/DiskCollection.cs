@@ -1,6 +1,4 @@
-﻿using Netfluid.Json;
-using Netfluid.Json.Converters;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.IO.Compression;
@@ -141,7 +139,7 @@ namespace Netfluid.DB
             {
                 locker.EnterReadLock();
 
-                var last = PrimaryIndex.LargerThanOrEqualTo("").LastOrDefault();
+                var last = PrimaryIndex.All.LastOrDefault();
 
                 locker.ExitReadLock();
 
@@ -155,7 +153,7 @@ namespace Netfluid.DB
             {
                 locker.EnterReadLock();
 
-                var last = PrimaryIndex.LargerThanOrEqualTo("").FirstOrDefault();
+                var last = PrimaryIndex.All.FirstOrDefault();
 
                 locker.ExitReadLock();
 
@@ -167,7 +165,7 @@ namespace Netfluid.DB
         {
             locker.EnterReadLock();
 
-            var all = PrimaryIndex.LargerThanOrEqualTo("");
+            var all = PrimaryIndex.All;
 
             foreach (var item in all)
             {
