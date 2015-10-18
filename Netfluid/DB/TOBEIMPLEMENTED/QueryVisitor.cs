@@ -1,7 +1,9 @@
-﻿namespace Netfluid.DB
+﻿using System.Linq.Expressions;
+
+namespace Netfluid.DB
 {
-    //FIXME:To be implemented
     /*
+    //FIXME:To be implemented
     /// <summary>
     /// Class helper to create Queries based on Linq expressions
     /// </summary>
@@ -156,51 +158,6 @@
             }
 
             return this.GetBsonField(((PropertyInfo)member.Member).Name);
-        }
-
-        /// <summary>
-        /// Get a bson string field based on class PropertyInfo using BsonMapper class
-        /// Support Name1.Name2 dotted notation
-        /// </summary>
-        private string GetBsonField(string property)
-        {
-            var parts = property.Split('.');
-            Type propType;
-
-            if (parts.Length == 1) return this.GetTypeField(_type, property, out propType);
-
-            var fields = new string[parts.Length];
-            var type = _type;
-
-            for (var i = 0; i < fields.Length; i++)
-            {
-                fields[i] = this.GetTypeField(type, parts[i], out propType);
-
-                type = propType;
-            }
-
-            return string.Join(".", fields);
-        }
-
-        /// <summary>
-        /// Get a field name passing mapper type and returns property type
-        /// </summary>
-        private string GetTypeField(Type type, string property, out Type propertyType)
-        {
-            // lets get mapping bettwen .NET class and BsonDocument
-            var map = _mapper.GetPropertyMapper(type);
-            PropertyMapper prop;
-
-            if (map.TryGetValue(property, out prop))
-            {
-                propertyType = prop.PropertyType;
-
-                return prop.FieldName;
-            }
-            else
-            {
-                throw LiteException.PropertyNotMapped(property);
-            }
         }
     }*/
 }
