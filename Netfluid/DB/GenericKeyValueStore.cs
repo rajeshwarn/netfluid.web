@@ -22,6 +22,19 @@ namespace Netfluid.DB
         public string Name => store.Name;
         public long Count => store.Count;
 
+        public object Pop(object obj)
+        {
+            var f = store.Pop();
+
+            if (f != null) return BSON.Deserialize(f.Payload, f.Type);
+            return null;
+        }
+
+        public string Push(object obj)
+        {
+            return store.Push(new Slot { Type = obj.GetType(), Payload = BSON.Serialize(obj) });
+        }
+
         public bool Any()
         {
             return Count != 0;

@@ -24,10 +24,11 @@ namespace Netfluid.Dns
 
         public void Insert(Record record)
         {
-            if (string.IsNullOrEmpty(record.RecordId)) record.RecordId = Security.UID() + Security.UID();
+            if (string.IsNullOrEmpty(record.RecordId))
+            {
+                store.Push
+            }
             store.Insert(record.RecordId, record);
-
-
         }
     }
 }

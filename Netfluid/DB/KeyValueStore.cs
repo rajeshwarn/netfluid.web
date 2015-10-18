@@ -31,6 +31,18 @@ namespace Netfluid.DB
             return Count != 0;
         }
 
+        public T Pop()
+        {
+            var f = disk.Pop();
+            if (f != null) return BSON.Deserialize<T>(f);
+            return default(T);
+        }
+
+        public string Push(T value)
+        {
+            return disk.Push(BSON.Serialize(value));
+        }
+
         public void Insert(string key,T value)
         {
             disk.Insert(key, BSON.Serialize(value));
