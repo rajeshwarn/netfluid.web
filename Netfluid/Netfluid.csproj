@@ -67,6 +67,7 @@
     <Compile Include="DB\FooCore.Lib\StreamExtension.cs" />
     <Compile Include="DB\FooCore.Lib\StreamReadWrapper.cs" />
     <Compile Include="DB\IKeyValueStore.cs" />
+    <Compile Include="DB\GenericKeyValueStore.cs" />
     <Compile Include="DB\RestCollection.cs" />
     <Compile Include="DB\TOBEIMPLEMENTED\GenericSerializer.cs" />
     <Compile Include="DB\TOBEIMPLEMENTED\Index.cs" />
@@ -273,6 +274,7 @@
     <Compile Include="Serialization\JsonInternals\Converters\DiscriminatedUnionConverter.cs" />
     <Compile Include="Serialization\JsonInternals\Converters\EntityKeyMemberConverter.cs" />
     <Compile Include="Serialization\JsonInternals\Converters\ExpandoObjectConverter.cs" />
+    <Compile Include="Serialization\JsonInternals\Converters\IPConverter.cs" />
     <Compile Include="Serialization\JsonInternals\Converters\IsoDateTimeConverter.cs" />
     <Compile Include="Serialization\JsonInternals\Converters\JavaScriptDateTimeConverter.cs" />
     <Compile Include="Serialization\JsonInternals\Converters\JsonValueConverter.cs" />

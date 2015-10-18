@@ -294,7 +294,7 @@ namespace Netfluid
             }
             else if (value is Stream) value.CopyTo(c.Response.OutputStream);
             else if (value.GetType().IsValueType) c.Writer.Write(value.ToString());
-            else c.Writer.Write(JSON.SerializeObject(value));
+            else c.Writer.Write(JSON.Serialize(value));
         }
 
         #region NETFLUID METHODS

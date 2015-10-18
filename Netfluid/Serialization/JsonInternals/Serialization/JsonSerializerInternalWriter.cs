@@ -27,22 +27,15 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
-#if !(NET35 || NET20 || PORTABLE40)
 using System.Dynamic;
-#endif
 using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using System.Security;
-using Netfluid.Json.Linq;
 using Netfluid.Json.Utilities;
 using System.Runtime.Serialization;
-#if NET20
-using Netfluid.Json.Utilities.LinqBridge;
-#else
 using System.Linq;
 
-#endif
 
 namespace Netfluid.Json.Serialization
 {
@@ -183,16 +176,12 @@ namespace Netfluid.Json.Serialization
                     JsonDictionaryContract dictionaryContract = (JsonDictionaryContract)valueContract;
                     SerializeDictionary(writer, (value is IDictionary) ? (IDictionary)value : dictionaryContract.CreateWrapper(value), dictionaryContract, member, containerContract, containerProperty);
                     break;
-#if !(NET35 || NET20 || PORTABLE40)
                 case JsonContractType.Dynamic:
                     SerializeDynamic(writer, (IDynamicMetaObjectProvider)value, (JsonDynamicContract)valueContract, member, containerContract, containerProperty);
                     break;
-#endif
-#if !(DOTNET || PORTABLE40 || PORTABLE)
                 case JsonContractType.Serializable:
                     SerializeISerializable(writer, (ISerializable)value, (JsonISerializableContract)valueContract, member, containerContract, containerProperty);
                     break;
-#endif
                 case JsonContractType.Linq:
                     ((JToken)value).WriteTo(writer, Serializer.Converters.ToArray());
                     break;

@@ -24,16 +24,9 @@
 #endregion
 
 using System;
-using System.Collections.Generic;
 using System.Globalization;
-using System.Reflection;
-using System.Runtime.Serialization;
 using Netfluid.Json.Utilities;
-#if NET20
-using Netfluid.Json.Utilities.LinqBridge;
-#else
-using System.Linq;
-#endif
+
 
 namespace Netfluid.Json.Converters
 {

@@ -1,4 +1,6 @@
 ﻿using Netfluid.Collections;
+using Netfluid.Json;
+using Netfluid.Json.Converters;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -9,6 +11,14 @@ namespace Netfluid.DB
     {
         DiskCollection disk;
         ByteCache<string> cache;
+
+        static KeyValueStore()
+        {
+            JSON.DefaultSettings = () => new JsonSerializerSettings
+            {
+                Converters = new List<JsonConverter> { new IPAddressConverter() }
+            };
+        }
 
         public KeyValueStore(string path)
         {

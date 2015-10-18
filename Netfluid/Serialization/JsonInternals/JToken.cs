@@ -1765,12 +1765,10 @@ namespace Netfluid.Json
                         return (DateTime?)this;
                     case PrimitiveTypeCode.DateTime:
                         return (DateTime)this;
-#if !NET20
                     case PrimitiveTypeCode.DateTimeOffsetNullable:
                         return (DateTimeOffset?)this;
                     case PrimitiveTypeCode.DateTimeOffset:
                         return (DateTimeOffset)this;
-#endif
                     case PrimitiveTypeCode.String:
                         return (string)this;
                     case PrimitiveTypeCode.GuidNullable:
@@ -1783,12 +1781,10 @@ namespace Netfluid.Json
                         return (TimeSpan?)this;
                     case PrimitiveTypeCode.TimeSpan:
                         return (TimeSpan)this;
-#if !(NET20 || NET35 || PORTABLE40 || PORTABLE)
                     case PrimitiveTypeCode.BigIntegerNullable:
                         return ToBigIntegerNullable(this);
                     case PrimitiveTypeCode.BigInteger:
                         return ToBigInteger(this);
-#endif
                 }
             }
 

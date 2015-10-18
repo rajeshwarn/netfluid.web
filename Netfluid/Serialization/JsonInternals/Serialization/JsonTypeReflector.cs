@@ -24,21 +24,13 @@
 #endregion
 
 using System;
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.Globalization;
 using System.Reflection;
 using System.Security;
-#if !(DOTNET || PORTABLE || PORTABLE40)
 using System.Security.Permissions;
-#endif
 using Netfluid.Json.Utilities;
-#if NET20
-using Netfluid.Json.Utilities.LinqBridge;
-#else
 using System.Linq;
-#endif
-using System.Runtime.Serialization;
 
 namespace Netfluid.Json.Serialization
 {
@@ -159,14 +151,11 @@ namespace Netfluid.Json.Serialization
             };
         }
 
-#if !(PORTABLE40 || PORTABLE)
         public static TypeConverter GetTypeConverter(Type type)
         {
             return TypeDescriptor.GetConverter(type);
         }
-#endif
 
-#if !(NET20 || DOTNET)
         private static Type GetAssociatedMetadataType(Type type)
         {
             return AssociatedMetadataTypesCache.Get(type);
@@ -195,13 +184,11 @@ namespace Netfluid.Json.Serialization
 
             return null;
         }
-#endif
 
         private static T GetAttribute<T>(Type type) where T : Attribute
         {
             T attribute;
 
-#if !(NET20 || DOTNET)
             Type metadataType = GetAssociatedMetadataType(type);
             if (metadataType != null)
             {
@@ -209,7 +196,6 @@ namespace Netfluid.Json.Serialization
                 if (attribute != null)
                     return attribute;
             }
-#endif
 
             attribute = ReflectionUtils.GetAttribute<T>(type, true);
             if (attribute != null)
@@ -279,7 +265,6 @@ namespace Netfluid.Json.Serialization
             return ReflectionUtils.GetAttribute<T>(provider, true);
         }
 
-#if DEBUG
         internal static void SetFullyTrusted(bool fullyTrusted)
         {
             _fullyTrusted = fullyTrusted;
@@ -289,18 +274,14 @@ namespace Netfluid.Json.Serialization
         {
             _dynamicCodeGeneration = dynamicCodeGeneration;
         }
-#endif
 
         public static bool DynamicCodeGeneration
         {
-#if !(NET20 || NET35 || PORTABLE)
             [SecuritySafeCritical]
-#endif
-                get
+            get
             {
                 if (_dynamicCodeGeneration == null)
                 {
-#if !(DOTNET || PORTABLE40 || PORTABLE)
                     try
                     {
                         new ReflectionPermission(ReflectionPermissionFlag.MemberAccess).Demand();
@@ -314,9 +295,6 @@ namespace Netfluid.Json.Serialization
                     {
                         _dynamicCodeGeneration = false;
                     }
-#else
-                    _dynamicCodeGeneration = false;
-#endif
                 }
 
                 return _dynamicCodeGeneration.Value;
@@ -329,13 +307,9 @@ namespace Netfluid.Json.Serialization
             {
                 if (_fullyTrusted == null)
                 {
-#if (DOTNET || PORTABLE || PORTABLE40)
-                    _fullyTrusted = false;
-#elif !(NET20 || NET35 || PORTABLE40)
                     AppDomain appDomain = AppDomain.CurrentDomain;
-
                     _fullyTrusted = appDomain.IsHomogenous && appDomain.IsFullyTrusted;
-#else
+
                     try
                     {
                         new SecurityPermission(PermissionState.Unrestricted).Demand();
@@ -345,7 +319,7 @@ namespace Netfluid.Json.Serialization
                     {
                         _fullyTrusted = false;
                     }
-#endif
+
                 }
 
                 return _fullyTrusted.Value;
@@ -356,14 +330,10 @@ namespace Netfluid.Json.Serialization
         {
             get
             {
-#if !(PORTABLE40 || PORTABLE || DOTNET)
                 if (DynamicCodeGeneration)
                     return DynamicReflectionDelegateFactory.Instance;
 
                 return LateBoundReflectionDelegateFactory.Instance;
-#else
-                return ExpressionReflectionDelegateFactory.Instance;
-#endif
             }
         }
     }

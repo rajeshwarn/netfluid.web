@@ -329,7 +329,6 @@ namespace Netfluid.DB
 			var blocks = new List<IBlock>();
 			var success = false;
 
-            storeLocker.EnterReadLock();
 			try
             {
 				var currentBlockId = recordId;
@@ -343,7 +342,6 @@ namespace Netfluid.DB
 							block = storage.CreateNew ();
 						} else
                         {
-                            storeLocker.ExitReadLock();
                             throw new Exception ("Block not found by id: " + currentBlockId);
 						}
 					}
@@ -352,7 +350,6 @@ namespace Netfluid.DB
 					// If this is a deleted block then ignore the fuck out of it
 					if (1L == block.GetHeader(kIsDeleted))
                     {
-                        storeLocker.ExitReadLock();
                         throw new InvalidDataException ("Block not found: " + currentBlockId);
 					}
 
@@ -361,8 +358,6 @@ namespace Netfluid.DB
 				} while (currentBlockId != 0);
 
 				success = true;
-
-                storeLocker.ExitReadLock();
                 return blocks;
 			} finally {
 				// Incase shit happens, dispose all fetched blocks
@@ -371,7 +366,6 @@ namespace Netfluid.DB
 						block.Dispose ();
 					}
 				}
-                storeLocker.ExitReadLock();
             }
         }
 

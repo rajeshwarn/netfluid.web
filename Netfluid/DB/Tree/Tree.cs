@@ -21,6 +21,8 @@ namespace Netfluid.DB
 				throw new ArgumentNullException ("nodeManager");
 			this.nodeManager = nodeManager;
 			this.allowDuplicateKeys = allowDuplicateKeys;
+
+            locker = new ReaderWriterLockSlim();
 		}
 
 		/// <summary>

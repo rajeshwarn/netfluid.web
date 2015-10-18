@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Netfluid.Json;
+using Netfluid.Json.Converters;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.IO.Compression;

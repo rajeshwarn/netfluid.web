@@ -40,7 +40,7 @@ namespace Netfluid
     /// Provides methods for converting between common language runtime types and JSON types.
     /// </summary>
     /// <example>
-    ///   <code lang="cs" source="..\Src\Netfluid.Json.Tests\Documentation\SerializationTests.cs" region="SerializeObject" title="Serializing and Deserializing JSON with JsonConvert" />
+    ///   <code lang="cs" source="..\Src\Netfluid.Json.Tests\Documentation\SerializationTests.cs" region="Serialize" title="Serializing and Deserializing JSON with JsonConvert" />
     /// </example>
     public static class JSON
     {
@@ -485,9 +485,9 @@ namespace Netfluid
         /// </summary>
         /// <param name="value">The object to serialize.</param>
         /// <returns>A JSON string representation of the object.</returns>
-        public static string SerializeObject(object value)
+        public static string Serialize(object value)
         {
-            return SerializeObject(value, null, (JsonSerializerSettings)null);
+            return Serialize(value, null, (JsonSerializerSettings)null);
         }
 
         /// <summary>
@@ -498,9 +498,9 @@ namespace Netfluid
         /// <returns>
         /// A JSON string representation of the object.
         /// </returns>
-        public static string SerializeObject(object value, Formatting formatting)
+        public static string Serialize(object value, Formatting formatting)
         {
-            return SerializeObject(value, formatting, (JsonSerializerSettings)null);
+            return Serialize(value, formatting, (JsonSerializerSettings)null);
         }
 
         /// <summary>
@@ -509,13 +509,13 @@ namespace Netfluid
         /// <param name="value">The object to serialize.</param>
         /// <param name="converters">A collection converters used while serializing.</param>
         /// <returns>A JSON string representation of the object.</returns>
-        public static string SerializeObject(object value, params JsonConverter[] converters)
+        public static string Serialize(object value, params JsonConverter[] converters)
         {
             JsonSerializerSettings settings = (converters != null && converters.Length > 0)
                 ? new JsonSerializerSettings { Converters = converters }
                 : null;
 
-            return SerializeObject(value, null, settings);
+            return Serialize(value, null, settings);
         }
 
         /// <summary>
@@ -525,13 +525,13 @@ namespace Netfluid
         /// <param name="formatting">Indicates how the output is formatted.</param>
         /// <param name="converters">A collection converters used while serializing.</param>
         /// <returns>A JSON string representation of the object.</returns>
-        public static string SerializeObject(object value, Formatting formatting, params JsonConverter[] converters)
+        public static string Serialize(object value, Formatting formatting, params JsonConverter[] converters)
         {
             JsonSerializerSettings settings = (converters != null && converters.Length > 0)
                 ? new JsonSerializerSettings { Converters = converters }
                 : null;
 
-            return SerializeObject(value, null, formatting, settings);
+            return Serialize(value, null, formatting, settings);
         }
 
         /// <summary>
@@ -543,9 +543,9 @@ namespace Netfluid
         /// <returns>
         /// A JSON string representation of the object.
         /// </returns>
-        public static string SerializeObject(object value, JsonSerializerSettings settings)
+        public static string Serialize(object value, JsonSerializerSettings settings)
         {
-            return SerializeObject(value, null, settings);
+            return Serialize(value, null, settings);
         }
 
         /// <summary>
@@ -562,7 +562,7 @@ namespace Netfluid
         /// <returns>
         /// A JSON string representation of the object.
         /// </returns>
-        public static string SerializeObject(object value, Type type, JsonSerializerSettings settings)
+        public static string Serialize(object value, Type type, JsonSerializerSettings settings)
         {
             JsonSerializer jsonSerializer = JsonSerializer.CreateDefault(settings);
 
@@ -579,9 +579,9 @@ namespace Netfluid
         /// <returns>
         /// A JSON string representation of the object.
         /// </returns>
-        public static string SerializeObject(object value, Formatting formatting, JsonSerializerSettings settings)
+        public static string Serialize(object value, Formatting formatting, JsonSerializerSettings settings)
         {
-            return SerializeObject(value, null, formatting, settings);
+            return Serialize(value, null, formatting, settings);
         }
 
         /// <summary>
@@ -599,7 +599,7 @@ namespace Netfluid
         /// <returns>
         /// A JSON string representation of the object.
         /// </returns>
-        public static string SerializeObject(object value, Type type, Formatting formatting, JsonSerializerSettings settings)
+        public static string Serialize(object value, Type type, Formatting formatting, JsonSerializerSettings settings)
         {
             JsonSerializer jsonSerializer = JsonSerializer.CreateDefault(settings);
             jsonSerializer.Formatting = formatting;
@@ -868,7 +868,7 @@ namespace Netfluid
         {
             XmlNodeConverter converter = new XmlNodeConverter();
 
-            return SerializeObject(node, formatting, converter);
+            return Serialize(node, formatting, converter);
         }
 
         /// <summary>
@@ -882,7 +882,7 @@ namespace Netfluid
         {
             XmlNodeConverter converter = new XmlNodeConverter { OmitRootObject = omitRootObject };
 
-            return SerializeObject(node, formatting, converter);
+            return Serialize(node, formatting, converter);
         }
 
         /// <summary>
@@ -958,7 +958,7 @@ namespace Netfluid
         {
             XmlNodeConverter converter = new XmlNodeConverter { OmitRootObject = omitRootObject };
 
-            return SerializeObject(node, formatting, converter);
+            return Serialize(node, formatting, converter);
         }
 
         /// <summary>

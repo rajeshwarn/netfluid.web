@@ -111,6 +111,8 @@ namespace Netfluid
             return cultureInfo;
         }
         
+
+
         #region LIST
         public static void Add<T>(this List<T> list, params T[] arr)
         {
@@ -911,7 +913,7 @@ namespace Netfluid
 
         public static string ToJSON(this object obj)
         {
-            return JSON.SerializeObject(obj);
+            return JSON.Serialize(obj);
         }
 
         #endregion
