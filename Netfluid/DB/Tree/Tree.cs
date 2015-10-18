@@ -167,6 +167,7 @@ namespace Netfluid.DB
                 locker.ExitReadLock();
 				return null;
 			}
+            locker.ExitReadLock();
 			return node.GetEntry (insertionIndex);
 		}
 
@@ -193,10 +194,26 @@ namespace Netfluid.DB
 				, TreeTraverseDirection.Ascending);
 		}
 
-		/// <summary>
-		/// Search for all elements that larger than given key
-		/// </summary>
-		public IEnumerable<Tuple<K, V>> LargerThan (K key)
+
+        /// <summary>
+        /// Search for all elements that larger than given key
+        /// </summary>
+        public IEnumerable<Tuple<K, V>> All
+        {
+            get
+            {
+                var startIterationIndex = 0;
+                return new TreeTraverser<K, V>(nodeManager
+                    , nodeManager.RootNode
+                    , (startIterationIndex >= 0 ? startIterationIndex : (~startIterationIndex - 1))
+                    , TreeTraverseDirection.Ascending);
+            }
+        }
+
+        /// <summary>
+        /// Search for all elements that larger than given key
+        /// </summary>
+        public IEnumerable<Tuple<K, V>> LargerThan (K key)
 		{
 			var startIterationIndex = 0;
 
