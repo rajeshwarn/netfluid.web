@@ -16,6 +16,7 @@ namespace Netfluid.DB
         Tree<string, uint> PrimaryIndex;
         ReaderWriterLockSlim locker;
 
+        public string Directory { get; private set; }
         public string Name { get; private set; }
         public long Count { get; private set; }
 
@@ -23,10 +24,10 @@ namespace Netfluid.DB
         {
             path = Path.GetFullPath(path);
             Name = Path.GetFileNameWithoutExtension(path);
-            var dir = Path.GetDirectoryName(path);
+            Directory = Path.GetDirectoryName(path);
 
-            mainDatabaseFile = new FileStream(Path.Combine(dir,Name+".data"), FileMode.OpenOrCreate, FileAccess.ReadWrite, FileShare.None, 4096);
-            primaryIndexFile = new FileStream(Path.Combine(dir, Name + ".pidx"), FileMode.OpenOrCreate, FileAccess.ReadWrite, FileShare.None, 4096);
+            mainDatabaseFile = new FileStream(Path.Combine(Directory, Name+".data"), FileMode.OpenOrCreate, FileAccess.ReadWrite, FileShare.None, 4096);
+            primaryIndexFile = new FileStream(Path.Combine(Directory, Name + ".pidx"), FileMode.OpenOrCreate, FileAccess.ReadWrite, FileShare.None, 4096);
             Storage = new RecordStorage(new BlockStorage(mainDatabaseFile, 4096, 48));
 
             PrimaryIndex = new Tree<string, uint>(new TreeDiskNodeManager<string, uint>(Serializer.String, Serializer.UInt, new RecordStorage(new BlockStorage(this.primaryIndexFile, 4096))), false);

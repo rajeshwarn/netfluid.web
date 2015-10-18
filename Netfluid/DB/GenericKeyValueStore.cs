@@ -18,6 +18,8 @@ namespace Netfluid.DB
             store = new KeyValueStore<Slot>(path);
         }
 
+        public string Directory => store.Directory;
+        public string Name => store.Name;
         public long Count => store.Count;
 
         public bool Any()

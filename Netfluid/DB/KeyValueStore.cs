@@ -22,6 +22,8 @@ namespace Netfluid.DB
             disk = new DiskCollection(path);
         }
 
+        public string Directory => disk.Directory;
+        public string Name => disk.Name;
         public long Count => disk.Count;
 
         public bool Any()
