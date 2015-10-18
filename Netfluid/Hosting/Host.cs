@@ -29,6 +29,7 @@ using System.Linq;
 using System.Net;
 using System.Reflection;
 using System.Security.Authentication.ExtendedProtection;
+using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -46,7 +47,7 @@ namespace Netfluid
         public List<IPublicFolder> PublicFolders { get; set; }
         public ISessionManager Sessions { get; set; }
 
-        public event Func<Context,Exception,dynamic> OnException;
+        public Func<Context,Exception,dynamic> OnException;
 
         public Logger Logger { get; set; }
 
@@ -62,6 +63,19 @@ namespace Netfluid
 
         public NetfluidHost(params string[] prefixes)
         {
+            OnException = (c, e) => 
+            {
+                var ex = e;
+                var sb = new StringBuilder();
+
+                while (ex!=null)
+                {
+                    sb.Append(ex.Message + "<br/>" + ex.StackTrace+"<br/>");
+                    ex = ex.InnerException;
+                }
+                return sb.ToString();
+            };
+
             Logger = new Logging.ConsoleLogger();
 
             listener = new HttpListener();
@@ -321,6 +335,7 @@ namespace Netfluid
                     catch (Exception ex)
                     {
                         Logger.Error("Error " + ex.Message);
+                        c.Response.StatusCode = StatusCode.InternalServerError;
 
                         if (OnException != null)
                         {
@@ -427,6 +442,7 @@ namespace Netfluid
             {
                 Task.Factory.StartNew(()=>trigger.Handle(cnt));
             }
+
 
             foreach (var routes in Routes.Where(x => x.HttpMethod == cnt.Request.HttpMethod || x.HttpMethod == null))
             {

@@ -6,7 +6,7 @@ using System.Linq;
 
 namespace Netfluid.Users
 {
-    class UserManager
+    public class UserManager
     {
         UserExposer exposer;
         const string charset = "qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM123456789!£$%&/()=?^+;,:.-";

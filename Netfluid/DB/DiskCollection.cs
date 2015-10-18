@@ -133,7 +133,7 @@ namespace Netfluid.DB
             if (rd == null)
             {
                 locker.ExitReadLock();
-                throw new KeyNotFoundException(id);
+                return null;
             }
 
             bytes = Storage.Find(rd.Item2);
