@@ -32,7 +32,7 @@ namespace Netfluid.DB
 
             PrimaryIndex = new Tree<string, uint>(new TreeDiskNodeManager<string, uint>(new TreeStringSerialzier(), new TreeUIntSerializer(), new RecordStorage(new BlockStorage(this.primaryIndexFile, 4096))), false);
 
-            locker = new ReaderWriterLockSlim();
+            locker = new ReaderWriterLockSlim(LockRecursionPolicy.SupportsRecursion);
 
             Count = PrimaryIndex.LargerThanOrEqualTo("").Count();
         }

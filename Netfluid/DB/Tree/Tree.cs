@@ -22,7 +22,7 @@ namespace Netfluid.DB
 			this.nodeManager = nodeManager;
 			this.allowDuplicateKeys = allowDuplicateKeys;
 
-            locker = new ReaderWriterLockSlim();
+            locker = new ReaderWriterLockSlim(LockRecursionPolicy.SupportsRecursion);
 		}
 
 		/// <summary>
@@ -135,6 +135,8 @@ namespace Netfluid.DB
                 locker.ExitReadLock();
 				throw new TreeKeyExistsException (key);
 			}
+
+            locker.ExitReadLock();
 
             locker.EnterWriteLock();
 			// Now insert to the leaf
@@ -257,7 +259,7 @@ namespace Netfluid.DB
 				return node;
 			}
 
-            locker.ExitReadLock();
+            locker.EnterReadLock();
 			// Perform binary search on specified node
 			var binarySearchResult = node.BinarySearchEntriesForKey (key, moveLeft ? true : false);
 

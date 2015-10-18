@@ -10,7 +10,6 @@ namespace Netfluid.DB
     public class KeyValueStore<T> : IKeyValueStore<T>
     {
         DiskCollection disk;
-        ByteCache<string> cache;
 
         static KeyValueStore()
         {
@@ -23,13 +22,7 @@ namespace Netfluid.DB
         public KeyValueStore(string path)
         {
             disk = new DiskCollection(path);
-            cache = new ByteCache<string>();
-            cache.Load = id=> disk.Get(id);
-
-            cache.OnRemove += (k, v) => disk.Replace(k, v);
         }
-
-        public long MemoryLimit => cache.MemoryLimit;
 
         public long Count => disk.Count;
 
@@ -40,15 +33,12 @@ namespace Netfluid.DB
 
         public void Insert(string key,T value)
         {
-            var bytes = BSON.Serialize(value);
-            cache.AddOrUpdate(key, bytes, 10000);
-
-            Task.Factory.StartNew(()=>disk.Insert(key, BSON.Serialize(value)));
+            disk.Insert(key, BSON.Serialize(value));
         }
 
         public T Get(string id)
         {
-            var f = cache.Get(id);
+            var f = disk.Get(id);
 
             if (f != null)
                 return BSON.Deserialize<T>(f);
@@ -58,16 +48,12 @@ namespace Netfluid.DB
 
         public void Update(string key,T value)
         {
-            var bytes = BSON.Serialize(value);
-            cache.AddOrUpdate(key, bytes, 10000);
-
-            Task.Factory.StartNew(() => disk.Replace(key, BSON.Serialize(value)));
+            disk.Replace(key, BSON.Serialize(value));
         }
 
         public void Delete(string key)
         {
-            cache.Remove(key);
-            Task.Factory.StartNew(() => disk.Delete(key));
+            disk.Delete(key);
         }
 
         public IEnumerable<string> GetId(int from=0, int take=1000)

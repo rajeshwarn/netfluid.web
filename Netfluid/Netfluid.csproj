@@ -433,7 +433,7 @@
     <Compile Include="Serialization\JsonInternals\Utilities\ValidationUtils.cs" />
     <Compile Include="Serialization\JsonInternals\WriteState.cs" />
     <Compile Include="Sessions\ISessionManager.cs" />
-    <Compile Include="Sessions\MemorySessionManager.cs" />
+    <Compile Include="Sessions\DefaultSessionManager.cs" />
     <Compile Include="Smtp\BufferEventArgs.cs" />
     <Compile Include="Smtp\ClientConnectionEventArgs.cs" />
     <Compile Include="Smtp\Extensions\StreamReaderExtensions.cs" />

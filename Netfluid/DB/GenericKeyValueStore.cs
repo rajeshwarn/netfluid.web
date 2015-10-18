@@ -19,8 +19,6 @@ namespace Netfluid.DB
             store = new KeyValueStore<Slot>(path);
         }
 
-        public long MemoryLimit => store.MemoryLimit;
-
         public long Count => store.Count;
 
         public bool Any()

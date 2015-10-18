@@ -18,7 +18,7 @@ namespace Netfluid.Json.Converters
 
         public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
         {
-            return IPAddress.Parse(reader.ToString());
+            return IPAddress.Parse(reader.Value as string);
         }
     }
 }
