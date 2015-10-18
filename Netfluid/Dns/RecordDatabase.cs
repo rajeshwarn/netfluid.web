@@ -25,10 +25,9 @@ namespace Netfluid.Dns
         public void Insert(Record record)
         {
             if (string.IsNullOrEmpty(record.RecordId))
-            {
-                store.Push
-            }
-            store.Insert(record.RecordId, record);
+                record.RecordId = store.Push(record.RecordId)+Security.UID();
+            else
+                store.Insert(record.RecordId, record);
         }
     }
 }

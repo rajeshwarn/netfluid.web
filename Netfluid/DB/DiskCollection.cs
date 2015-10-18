@@ -60,6 +60,15 @@ namespace Netfluid.DB
             }
         }
 
+        public bool Exists(string id)
+        {
+            locker.EnterReadLock();
+            bool e = PrimaryIndex.Get(id)!=null;
+            locker.ExitReadLock();
+
+            return e;
+        }
+
         public void Insert(string id,byte[] obj)
         {
             var bytes = Compress(obj);
