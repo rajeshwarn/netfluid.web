@@ -1,4 +1,5 @@
-﻿using System.Reflection;
+﻿using System;
+using System.Reflection;
 
 namespace Netfluid
 {
@@ -8,7 +9,7 @@ namespace Netfluid
 
         internal MethodInfo MethodInfo;
 
-        public object Invoke(object[] parameters)
+        public object DynamicInvoke(object[] parameters)
         {
             return MethodInfo.Invoke(Target, parameters);
         }

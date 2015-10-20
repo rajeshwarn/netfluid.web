@@ -17,6 +17,11 @@ namespace Netfluid.Dns
             domainIndex = Index.MultipleStringIndex(Path.Combine(store.Directory, store.Name + ".domain.sidx"));
         }
 
+        public Record ByID(string id)
+        {
+            return store.Get<Record>(id);
+        }
+
         public IEnumerable<Record> ByDomain(string domain)
         {
             return domainIndex.EqualTo(domain).Select(x=> store.Get<Record>(x.Item2));

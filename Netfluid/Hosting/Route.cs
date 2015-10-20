@@ -8,18 +8,13 @@ namespace Netfluid
     {
         string url;
         Regex regex;
-        MethodInfoWrapper method;
+        dynamic method;
 
         protected Route() { }
 
-        public Route(dynamic funcOrAction)
+        public Route(Delegate funcOrAction)
         {
-            method = new MethodInfoWrapper
-            {
-                MethodInfo = funcOrAction.Method,
-                Target = funcOrAction.Target
-            };
-
+            method = funcOrAction;
             Parameters = funcOrAction.Method.GetParameters();
         }
 
@@ -105,7 +100,7 @@ namespace Netfluid
             }
 
 
-            return method.Invoke(args);
+            return method.DynamicInvoke(args);
         }
 
         public static Route New<T0>(Func<T0> f) { return new Route(f); }

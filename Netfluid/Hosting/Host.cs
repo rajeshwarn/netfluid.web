@@ -189,36 +189,7 @@ namespace Netfluid
         //     property was set to System.Security.Authentication.ExtendedProtection.PolicyEnforcement.Always
         //     on a platform that does not support extended protection.
         public ExtendedProtectionPolicy ExtendedProtectionPolicy { get { return listener.ExtendedProtectionPolicy; } set { listener.ExtendedProtectionPolicy = value; } }
-        //
-        // Summary:
-        //     Get or set the delegate called to determine the System.Security.Authentication.ExtendedProtection.ExtendedProtectionPolicy
-        //     to use for each request.
-        //
-        // Returns:
-        //     A System.Security.Authentication.ExtendedProtection.ExtendedProtectionPolicy
-        //     that specifies the policy to use for extended protection.
-        //
-        // Exceptions:
-        //   T:System.ArgumentException:
-        //     An attempt was made to set the System.Net.HttpListener.ExtendedProtectionSelectorDelegate
-        //     property, but the System.Security.Authentication.ExtendedProtection.ExtendedProtectionPolicy.CustomChannelBinding
-        //     property must be null.
-        //
-        //   T:System.ArgumentNullException:
-        //     An attempt was made to set the System.Net.HttpListener.ExtendedProtectionSelectorDelegate
-        //     property to null.
-        //
-        //   T:System.InvalidOperationException:
-        //     An attempt was made to set the System.Net.HttpListener.ExtendedProtectionSelectorDelegate
-        //     property after the System.Net.HttpListener.Start method was already called.
-        //
-        //   T:System.ObjectDisposedException:
-        //     This object is closed.
-        //
-        //   T:System.PlatformNotSupportedException:
-        //     An attempt was made to set the System.Net.HttpListener.ExtendedProtectionSelectorDelegate
-        //     property on a platform that does not support extended protection.
-        public HttpListener.ExtendedProtectionSelector ExtendedProtectionSelectorDelegate { get { return listener.ExtendedProtectionSelectorDelegate; } set { listener.ExtendedProtectionSelectorDelegate = value; } }
+
         //
         // Summary:
         //     Gets or sets a System.Boolean value that specifies whether your application receives
@@ -295,20 +266,38 @@ namespace Netfluid
 
         #endregion
 
-        static void SendValue(Context c, dynamic value)
+        static void SendValue(Context cnt, object obj)
         {
+            dynamic value = obj;
+
+            Console.WriteLine("SEND VALUE");
             if (value == null) return;
 
+            Console.WriteLine("SEND VALUE 2");
             if (value is IResponse)
             {
-                value.SetHeaders(c);
+                value.SetHeaders(cnt);
 
-                if (value != null && c.Request.HttpMethod.ToLowerInvariant() != "head")
-                    value.SendResponse(c);
+                Console.WriteLine("SEND VALUE 3");
+                if (value != null && cnt.Request.HttpMethod.ToLowerInvariant() != "head")
+                {
+                    Console.WriteLine("SEND VALUE 4");
+                    value.SendResponse(cnt);
+                    Console.WriteLine("SEND VALUE 5");
+                }
             }
-            else if (value is Stream) value.CopyTo(c.Response.OutputStream);
-            else if (value.GetType().IsValueType) c.Writer.Write(value.ToString());
-            else c.Writer.Write(JSON.Serialize(value));
+            else if (value is Stream)
+            {
+                value.CopyTo(cnt.Response.OutputStream);
+            }
+            else if (value.GetType().IsValueType) cnt.Writer.Write(value.ToString());
+            else
+            {
+                Console.WriteLine("SEND VALUE 6");
+                cnt.Response.Headers.Set("Content-Type", "application/json");
+                cnt.Writer.Write(JSON.Serialize(value));
+                Console.WriteLine("SEND VALUE 7");
+            }
         }
 
         #region NETFLUID METHODS
@@ -428,13 +417,32 @@ namespace Netfluid
             foreach (var filter in Filters.Where(x => x.HttpMethod == cnt.Request.HttpMethod || x.HttpMethod == null))
             {
                 var value = filter.Handle(cnt);
-
                 if (value is bool && value == false) continue;
 
-                SendValue(cnt,value);
+                if (value == null) return;
+                
+                if (value is IResponse)
+                {
+                    value.SetHeaders(cnt);
+
+                    if (value != null && cnt.Request.HttpMethod.ToLowerInvariant() != "head")
+                    {
+                        value.SendResponse(cnt);
+                    }
+                }
+                else if (value is Stream)
+                {
+                    value.CopyTo(cnt.Response.OutputStream);
+                }
+                else if (value.GetType().IsValueType) cnt.Writer.Write(value.ToString());
+                else
+                {
+                    cnt.Response.Headers.Set("Content-Type", "application/json");
+                    cnt.Writer.Write(JSON.Serialize(value));
+                }
+
                 return;
             }
-
             if (!cnt.IsOpen)
                 return;
 
@@ -443,13 +451,33 @@ namespace Netfluid
                 Task.Factory.StartNew(()=>trigger.Handle(cnt));
             }
 
-
             foreach (var routes in Routes.Where(x => x.HttpMethod == cnt.Request.HttpMethod || x.HttpMethod == null))
             {
                 var value = routes.Handle(cnt);
 
                 if (value is bool && value == false) continue;
-                SendValue(cnt, value);
+
+                if (value == null) return;
+
+                if (value is IResponse)
+                {
+                    value.SetHeaders(cnt);
+
+                    if (value != null && cnt.Request.HttpMethod.ToLowerInvariant() != "head")
+                    {
+                        value.SendResponse(cnt);
+                    }
+                }
+                else if (value is Stream)
+                {
+                    value.CopyTo(cnt.Response.OutputStream);
+                }
+                else if (value.GetType().IsValueType) cnt.Writer.Write(value.ToString());
+                else
+                {
+                    cnt.Response.Headers.Set("Content-Type", "application/json");
+                    cnt.Writer.Write(JSON.Serialize(value));
+                }
                 return;
             }
 
