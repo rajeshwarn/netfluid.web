@@ -67,8 +67,8 @@
     <Compile Include="DB\Blocks\StreamExtension.cs" />
     <Compile Include="DB\Blocks\StreamReadWrapper.cs" />
     <Compile Include="DB\PersistentQueue.cs" />
-    <Compile Include="OLAP\Fact.cs" />
-    <Compile Include="OLAP\FactCube.cs" />
+    <Compile Include="DB\Fact.cs" />
+    <Compile Include="DB\FactList.cs" />
     <Compile Include="DB\Graph.cs" />
     <Compile Include="DB\IKeyValueStore.cs" />
     <Compile Include="DB\GenericKeyValueStore.cs" />

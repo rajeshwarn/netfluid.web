@@ -430,6 +430,18 @@ namespace Netfluid
 
         #region STRING
 
+        public static IEnumerable<string> RegexValues(this string str, string regex)
+        {
+            var r = new Regex(regex);
+            var res = new List<string>();
+
+            foreach (Match item in r.Matches(str))
+            {
+                if (item.Success) res.Add(item.Value);
+            }
+            return res;
+        }
+
         public static string GetDescription<T>(this T enumerationValue) where T : struct
         {
             Type type = enumerationValue.GetType();

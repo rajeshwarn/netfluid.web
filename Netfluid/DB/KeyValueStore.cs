@@ -26,22 +26,34 @@ namespace Netfluid.DB
         public string Name => disk.Name;
         public long Count => disk.Count;
 
-        public bool Any()
+        public virtual bool Any()
         {
             return Count != 0;
         }
 
-        public bool Exists(string id)
+        public virtual string Push(T obj)
+        {
+            return disk.Push(BSON.Serialize(obj));
+        }
+
+        public virtual T Pop()
+        {
+            var b = disk.Pop();
+            if (b == null) return default(T);
+            return BSON.Deserialize<T>(b);
+        }
+
+        public virtual bool Exists(string id)
         {
             return disk.Exists(id);
         }
 
-        public void Insert(string key,T value)
+        public virtual void Insert(string key,T value)
         {
             disk.Insert(key, BSON.Serialize(value));
         }
 
-        public T Get(string id)
+        public virtual T Get(string id)
         {
             var f = disk.Get(id);
 
