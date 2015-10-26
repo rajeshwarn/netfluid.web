@@ -42,7 +42,6 @@ namespace Netfluid.Sessions
 
         public void Destroy(string sessionId)
         {
-            object obj;
             dic.Keys.Where(x => x.StartsWith(sessionId + ".")).ToArray().ForEach(x=>dic.Remove(x));
         }
 
@@ -60,7 +59,6 @@ namespace Netfluid.Sessions
 
         public void Remove(string sessionId, string name)
         {
-            object obj;
             dic.Remove(sessionId + "." + name);
         }
 

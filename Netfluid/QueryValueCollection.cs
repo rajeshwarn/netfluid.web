@@ -164,7 +164,7 @@ namespace Netfluid
 
             foreach (var field in type.GetProperties())
             {
-                foreach (var name in _values.Keys.Where(name => String.Equals(name, field.Name, StringComparison.InvariantCultureIgnoreCase)))
+                foreach (var name in _values.Keys.Where(name => string.Equals(name, field.Name, StringComparison.InvariantCultureIgnoreCase)))
                 {
                     try
                     {
@@ -191,7 +191,7 @@ namespace Netfluid
 
             foreach (var field in type.GetFields())
             {
-                foreach (var name in _values.Keys.Where(name => String.Equals(name, field.Name, StringComparison.InvariantCultureIgnoreCase)))
+                foreach (var name in _values.Keys.Where(name => string.Equals(name, field.Name, StringComparison.InvariantCultureIgnoreCase)))
                 {
                     try
                     {
@@ -205,7 +205,7 @@ namespace Netfluid
 
             foreach (var field in type.GetProperties())
             {
-                foreach (var name in _values.Keys.Where(name => String.Equals(name, field.Name, StringComparison.InvariantCultureIgnoreCase)))
+                foreach (var name in _values.Keys.Where(name => string.Equals(name, field.Name, StringComparison.InvariantCultureIgnoreCase)))
                 {
                     try
                     {

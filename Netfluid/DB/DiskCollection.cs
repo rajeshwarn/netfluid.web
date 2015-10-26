@@ -60,6 +60,41 @@ namespace Netfluid.DB
             }
         }
 
+        public string Push(byte[] obj)
+        {
+            var bytes = Compress(obj);
+
+            locker.EnterWriteLock();
+            var r = Storage.Create(bytes);
+            var id = r.ToString();
+            PrimaryIndex.Insert(id, r);
+
+            Count++;
+            locker.ExitWriteLock();
+            return id;
+        }
+
+        public byte[] Pop()
+        {
+            locker.EnterWriteLock();
+
+            var id = Last;
+
+            if(Last==null)
+            {
+                locker.ExitWriteLock();
+                return null;
+            }
+
+            var r = Get(id);
+
+            if(r!=null) Count--;
+
+            locker.ExitWriteLock();
+            return r;
+        }
+
+
         public bool Exists(string id)
         {
             locker.EnterReadLock();
@@ -82,45 +117,6 @@ namespace Netfluid.DB
             locker.ExitWriteLock();
         }
 
-        public byte[] Pop()
-        {
-            locker.EnterReadLock();
-            var last = PrimaryIndex.All.Select(x => x.Item1).LastOrDefault();
-
-            byte[] found=null;
-            if (last != null)
-                found = Get(last);
-
-            locker.ExitReadLock();
-
-            locker.EnterWriteLock();
-            if(last!=null)
-                Delete(last);
-
-            Count--;
-            locker.ExitWriteLock();
-            return found;
-        }
-
-        public string Push(byte[] obj)
-        {
-            var bytes = Compress(obj); 
-            uint id;
-            string r;
-
-            locker.EnterWriteLock();
-            id = Storage.Create(bytes);
-
-            r = id.ToString();
-
-            PrimaryIndex.Insert(r, id);
-
-            Count++;
-
-            locker.ExitWriteLock();
-
-            return r;
-        }
 
         public byte[] Get(string id)
         {
@@ -169,6 +165,25 @@ namespace Netfluid.DB
 
                 return last != null ? last.Item1 : null;
             }
+        }
+
+
+        public void SyncWrite(Action act)
+        {
+            locker.EnterReadLock();
+
+            act();
+
+            locker.ExitReadLock();
+        }
+
+        public void SyncRead(Action act)
+        {
+            locker.EnterReadLock();
+
+            act();
+
+            locker.ExitReadLock();
         }
 
         public void ForEach(Action<string> act)

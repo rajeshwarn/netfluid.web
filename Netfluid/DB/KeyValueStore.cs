@@ -36,18 +36,6 @@ namespace Netfluid.DB
             return disk.Exists(id);
         }
 
-        public T Pop()
-        {
-            var f = disk.Pop();
-            if (f != null) return BSON.Deserialize<T>(f);
-            return default(T);
-        }
-
-        public string Push(T value)
-        {
-            return disk.Push(BSON.Serialize(value));
-        }
-
         public void Insert(string key,T value)
         {
             disk.Insert(key, BSON.Serialize(value));
@@ -63,22 +51,22 @@ namespace Netfluid.DB
             return default(T);
         }
 
-        public void Update(string key,T value)
+        public virtual void Update(string key,T value)
         {
             disk.Replace(key, BSON.Serialize(value));
         }
 
-        public void Delete(string key)
+        public virtual void Delete(string key)
         {
             disk.Delete(key);
         }
 
-        public IEnumerable<string> GetId(int from=0, int take=1000)
+        public virtual IEnumerable<string> GetId(int from=0, int take=1000)
         {
             return disk.GetId(from, take);
         }
 
-        public void ForEach(Action<T> act)
+        public virtual void ForEach(Action<T> act)
         {
             disk.ForEach(x => act(Get(x)));
         }

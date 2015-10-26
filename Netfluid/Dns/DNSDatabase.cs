@@ -44,14 +44,9 @@ namespace Netfluid.Dns
             return resp;
         } 
 
-        public Record Insert(Record record)
+        public void Insert(Record record)
         {
-            if (string.IsNullOrEmpty(record.RecordId))
-                record.RecordId = store.Push(record.RecordId)+Security.UID();
-            else
-                store.Insert(record.RecordId, record);
-
-            return record;
+            store.Insert(record.RecordId, record);
         }
 
         public void Delete(Record record)

@@ -196,7 +196,7 @@ namespace Netfluid.DB
 
 
         /// <summary>
-        /// Search for all elements that larger than given key
+        /// Search for all elements
         /// </summary>
         public IEnumerable<Tuple<K, V>> All
         {
