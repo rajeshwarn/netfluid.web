@@ -87,6 +87,19 @@ namespace Netfluid
             }
         }
 
+        public CountryCode Country
+        {
+            get
+            {
+                var wc = new WebClient();
+                dynamic obj = JSON.Deserialize(wc.DownloadString("http://ipinfo.io/json"));
+
+                CountryCode code;
+                Enum.TryParse<CountryCode>(obj.country,out code);
+                return code;
+            }
+        }
+
         public bool IsMobile
         {
             get
