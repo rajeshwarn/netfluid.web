@@ -1,9 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Net;
-using System.Text;
 
 namespace Netfluid
 {
@@ -53,16 +49,15 @@ namespace Netfluid
                     return false;
 
                 cnt.Response.ContentType = MimeTypes.GetType(path);
-                cnt.Response.Headers["Expires"] = (DateTime.Now + TimeSpan.FromDays(7)).ToGMT();
-
+                cnt.Response.Headers["Expires"] = (DateTime.Now + TimeSpan.FromDays(31)).ToGMT();
+                cnt.Response.Headers["ETag"] = cnt.Request.Url.GetHashCode().ToString() + File.GetLastWriteTimeUtc(path).Ticks;
                 try
                 {
                     var fs = new FileStream(path, FileMode.OpenOrCreate, FileAccess.ReadWrite, FileShare.ReadWrite);
                     fs.CopyTo(cnt.Response.OutputStream);
-                    cnt.Close();
                     fs.Close();
                 }
-                catch (Exception)
+                finally
                 {
                     cnt.Close();
                 }

@@ -262,7 +262,7 @@ namespace Netfluid
         //     This object has been closed.
         public bool UnsafeConnectionNtlmAuthentication { get { return listener.UnsafeConnectionNtlmAuthentication; } set { listener.IgnoreWriteExceptions = value; } }
 
-        public Func<dynamic,Context> On404 { get; set; }
+        public Func<Context, dynamic> On404 { get; set; }
 
         #endregion
 
@@ -270,20 +270,15 @@ namespace Netfluid
         {
             dynamic value = obj;
 
-            Console.WriteLine("SEND VALUE");
             if (value == null) return;
 
-            Console.WriteLine("SEND VALUE 2");
             if (value is IResponse)
             {
                 value.SetHeaders(cnt);
 
-                Console.WriteLine("SEND VALUE 3");
                 if (value != null && cnt.Request.HttpMethod.ToLowerInvariant() != "head")
                 {
-                    Console.WriteLine("SEND VALUE 4");
                     value.SendResponse(cnt);
-                    Console.WriteLine("SEND VALUE 5");
                 }
             }
             else if (value is Stream)
@@ -293,10 +288,8 @@ namespace Netfluid
             else if (value.GetType().IsValueType) cnt.Writer.Write(value.ToString());
             else
             {
-                Console.WriteLine("SEND VALUE 6");
                 cnt.Response.Headers.Set("Content-Type", "application/json");
                 cnt.Writer.Write(JSON.Serialize(value));
-                Console.WriteLine("SEND VALUE 7");
             }
         }
 
