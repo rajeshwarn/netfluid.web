@@ -49,7 +49,7 @@ namespace Netfluid.Dns
         /// <summary>
         /// If true when a local server response is empty it will hask to roots servers
         /// </summary>
-        public bool FallbackToRoots;
+        public bool Recursive;
 
         /// <summary>
         /// Rewrite it to log DNS server events
@@ -91,7 +91,7 @@ namespace Netfluid.Dns
 
                     var resp = OnRequest(req);
 
-                    if(FallbackToRoots && resp.Answers.Count == 0 && resp.Authorities.Count==0 && resp.Additionals.Count==0)
+                    if(Recursive && resp.Answers.Count == 0 && resp.Authorities.Count==0 && resp.Additionals.Count==0)
                         resp = DnsClient.Query(req, Roots);
 
                     var r = Serializer.WriteResponse(resp);

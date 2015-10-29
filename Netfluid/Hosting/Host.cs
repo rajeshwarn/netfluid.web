@@ -323,6 +323,8 @@ namespace Netfluid
                     }
                     catch (Exception ex)
                     {
+                        if (ex is TargetInvocationException) ex = ex.InnerException;
+
                         Logger.Error("Error " + ex.Message);
                         c.Response.StatusCode = StatusCode.InternalServerError;
 
@@ -364,7 +366,10 @@ namespace Netfluid
                         }
                         catch(Exception ex)
                         {
+                            if (ex is TargetInvocationException) ex = ex.InnerException;
+
                             Logger.Error("Error "+ex.Message);
+                            c.Response.StatusCode = StatusCode.InternalServerError;
 
                             if (OnException != null)
                             {

@@ -39,6 +39,7 @@ using System.Runtime.Serialization.Formatters.Binary;
 using System.Text.RegularExpressions;
 using Netfluid.Json;
 using System.ComponentModel;
+using System.Net.Mail;
 
 namespace Netfluid
 {

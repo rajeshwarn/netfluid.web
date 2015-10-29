@@ -66,12 +66,7 @@
     <Compile Include="DB\Blocks\RecordStorage.cs" />
     <Compile Include="DB\Blocks\StreamExtension.cs" />
     <Compile Include="DB\Blocks\StreamReadWrapper.cs" />
-    <Compile Include="DB\PersistentQueue.cs" />
-    <Compile Include="DB\Fact.cs" />
-    <Compile Include="DB\FactList.cs" />
-    <Compile Include="DB\Graph.cs" />
     <Compile Include="DB\IKeyValueStore.cs" />
-    <Compile Include="DB\GenericKeyValueStore.cs" />
     <Compile Include="DB\Index.cs" />
     <Compile Include="DB\Indexes\UniqueStringIndex.cs" />
     <Compile Include="DB\KeyValueStore.cs" />
@@ -167,7 +162,6 @@
     <Compile Include="Dns\Structs.cs" />
     <Compile Include="EmailValidator.cs" />
     <Compile Include="Extensions.cs" />
-    <Compile Include="Form.cs" />
     <Compile Include="Hosting\FilterAttribute.cs" />
     <Compile Include="Hosting\Host.cs" />
     <Compile Include="Hosting\MethodInfoWrapper.cs" />

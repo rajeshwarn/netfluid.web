@@ -2,18 +2,33 @@
 using Netfluid.Json.Converters;
 using System;
 using System.Collections.Generic;
+using System.Text;
 
 namespace Netfluid.DB
 {
     public class KeyValueStore<T> : IKeyValueStore<T>
     {
+        class Slot
+        {
+            public DateTime Timestamp;
+            public T Value;
+
+            public Slot(T value)
+            {
+                Value = value;
+                Timestamp = DateTime.Now;
+            }
+        }
+
+        static JsonSerializerSettings settings;
         DiskCollection disk;
 
         static KeyValueStore()
         {
-            JSON.DefaultSettings = () => new JsonSerializerSettings
+            settings = new JsonSerializerSettings
             {
-                Converters = new List<JsonConverter> { new IPAddressConverter() }
+                Converters = new List<JsonConverter> { new IPAddressConverter() },
+                TypeNameHandling = TypeNameHandling.All
             };
         }
 
@@ -31,18 +46,6 @@ namespace Netfluid.DB
             return Count != 0;
         }
 
-        public virtual string Push(T obj)
-        {
-            return disk.Push(BSON.Serialize(obj));
-        }
-
-        public virtual T Pop()
-        {
-            var b = disk.Pop();
-            if (b == null) return default(T);
-            return BSON.Deserialize<T>(b);
-        }
-
         public virtual bool Exists(string id)
         {
             return disk.Exists(id);
@@ -50,7 +53,9 @@ namespace Netfluid.DB
 
         public virtual void Insert(string key,T value)
         {
-            disk.Insert(key, BSON.Serialize(value));
+            var str = JSON.Serialize(new Slot(value), settings);
+            var bytes = Encoding.UTF8.GetBytes(str);
+            disk.Insert(key, bytes);
         }
 
         public virtual T Get(string id)
@@ -58,14 +63,21 @@ namespace Netfluid.DB
             var f = disk.Get(id);
 
             if (f != null)
-                return BSON.Deserialize<T>(f);
+            {
+                var json = Encoding.UTF8.GetString(f);
+                var slot = JSON.Deserialize(json, settings) as Slot;
+                return slot.Value;
+            }
 
             return default(T);
         }
 
         public virtual void Update(string key,T value)
         {
-            disk.Replace(key, BSON.Serialize(value));
+            var str = JSON.Serialize(new Slot(value), settings);
+            var bytes = Encoding.UTF8.GetBytes(str);
+
+            disk.Replace(key, bytes);
         }
 
         public virtual void Delete(string key)

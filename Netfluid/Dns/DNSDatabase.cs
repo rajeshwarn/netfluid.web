@@ -8,23 +8,23 @@ namespace Netfluid.Dns
 {
     public class DNSDatabase
     {
-        KeyValueStore store;
+        KeyValueStore<Record> store;
         Tree<string, string> domainIndex;
 
         public DNSDatabase(string path)
         {
-            store = new KeyValueStore(path);
+            store = new KeyValueStore<Record>(path);
             domainIndex = Index.MultipleStringIndex(Path.Combine(store.Directory, store.Name + ".domain.sidx"));
         }
 
         public Record ByID(string id)
         {
-            return store.Get<Record>(id);
+            return store.Get(id);
         }
 
         public IEnumerable<Record> ByDomain(string domain)
         {
-            return domainIndex.EqualTo(domain).Select(x=> store.Get<Record>(x.Item2));
+            return domainIndex.EqualTo(domain).Select(x=> store.Get(x.Item2));
         }
 
         public Response GetResponse(Request request)
