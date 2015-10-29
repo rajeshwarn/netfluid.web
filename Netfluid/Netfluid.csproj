@@ -461,6 +461,7 @@
     <Compile Include="Smtp\SmtpSession.cs" />
     <Compile Include="Smtp\SmtpSessionEventArgs.cs" />
     <Compile Include="Smtp\SmtpSessionInfo.cs" />
+    <Compile Include="Smtp\SmtpSubscriber.cs" />
     <Compile Include="StatusCode.cs" />
     <Compile Include="Users\User.cs" />
     <Compile Include="Users\UserExposer.cs" />
