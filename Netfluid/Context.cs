@@ -94,14 +94,13 @@ namespace Netfluid
                 CountryCode code = CountryCode.World;
                 try
                 {
-
-                }
-                finally
-                {
                     var wc = new WebClient();
                     dynamic obj = JSON.Deserialize(wc.DownloadString("http://ipinfo.io/json"));
 
                     if (!Enum.TryParse<CountryCode>(obj.country, out code)) code = CountryCode.World;
+                }
+                finally
+                {
                 }
                 return code;
             }
