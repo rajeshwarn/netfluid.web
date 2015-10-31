@@ -162,8 +162,11 @@
     <Compile Include="Dns\Structs.cs" />
     <Compile Include="EmailValidator.cs" />
     <Compile Include="Extensions.cs" />
+    <Compile Include="Hosting\ErrorHandler.cs" />
     <Compile Include="Hosting\FilterAttribute.cs" />
+    <Compile Include="Hosting\Handler404.cs" />
     <Compile Include="Hosting\Host.cs" />
+    <Compile Include="Hosting\IgnoreUpdate.cs" />
     <Compile Include="Hosting\MethodInfoWrapper.cs" />
     <Compile Include="Hosting\Route.cs" />
     <Compile Include="Hosting\RouteAttribute.cs" />
@@ -192,7 +195,7 @@
     <Compile Include="Network.cs" />
     <Compile Include="Net\TcpService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="PublicFolders\CachedFolder.cs" />
+    <Compile Include="PublicFolders\CDNFolder.cs" />
     <Compile Include="PublicFolders\IPublicFolder.cs" />
     <Compile Include="PublicFolders\PublicFolder.cs" />
     <Compile Include="QueryValue.cs" />

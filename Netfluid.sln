@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NetfluidAppServer", "..\Net
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GraphCollection", "C:\Users\Matte\Desktop\GraphCollection-master\GraphCollection\GraphCollection.csproj", "{A480A2D8-8A75-46E6-B42B-763888086103}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Netfluid.WebSite", "..\Netfluid.WebSIte\Netfluid.WebSite.csproj", "{46505E6F-136E-4223-BA39-3B74C13043A1}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{A480A2D8-8A75-46E6-B42B-763888086103}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A480A2D8-8A75-46E6-B42B-763888086103}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A480A2D8-8A75-46E6-B42B-763888086103}.Release|Any CPU.Build.0 = Release|Any CPU
+		{46505E6F-136E-4223-BA39-3B74C13043A1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{46505E6F-136E-4223-BA39-3B74C13043A1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{46505E6F-136E-4223-BA39-3B74C13043A1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{46505E6F-136E-4223-BA39-3B74C13043A1}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

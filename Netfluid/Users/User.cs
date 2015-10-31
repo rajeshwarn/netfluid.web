@@ -10,23 +10,29 @@ namespace Netfluid.Users
         public string Domain { get; set; }
         public CountryCode Country { get; set; }
 
+        [IgnoreUpdate]
         public bool DomainAdmin { get; set; }
+
+        [IgnoreUpdate]
         public bool GlobalAdmin { get; set; }
 
+        [IgnoreUpdate]
         public string Password { get; set; }
-        public DateTime LastLogin { get; set; }
-        public DateTime LastModify { get; set; }
-        public string Salt { get; set; }
-        public int Round { get; set; }
-        public string Method { get; set; }
 
-        public string Fullname
-        {
-            get
-            {
-                return (this.Domain == null) ? this.UserName : (this.UserName + "@" + this.Domain);
-            }
-        }
+        [IgnoreUpdate]
+        public DateTime LastLogin { get; set; }
+
+        [IgnoreUpdate]
+        public DateTime LastModify { get; set; }
+
+        [IgnoreUpdate]
+        public string Salt { get; set; }
+
+        [IgnoreUpdate]
+        public int Round { get; set; }
+
+        [IgnoreUpdate]
+        public string Method { get; set; }
 
         public User()
         {
@@ -43,12 +49,12 @@ namespace Netfluid.Users
 
         public override string ToString()
 		{
-			return (this.Domain == null) ? this.UserName : (this.UserName + "@" + this.Domain);
+            return UserName;
 		}
 
         public static User Parse(string name)
 		{
-            return new User(name);
+            return new User { UserName = name };
 		}
     }
 }

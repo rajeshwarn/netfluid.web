@@ -6,10 +6,19 @@ using System.Linq;
 
 namespace Netfluid.Users
 {
-    public class UserManager
+    public class UserManager<T> where T :User
     {
-        UserExposer exposer;
+        UserExposer<T> exposer;
         const string charset = "qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM123456789!£$%&/()=?^+;,:.-";
+
+        public UserManager()
+        {
+        }
+
+        public UserManager(IKeyValueStore<T> repository)
+        {
+            Repository = repository;
+        }
 
         public NetfluidHost Host { get; private set; }
 
@@ -19,43 +28,17 @@ namespace Netfluid.Users
         [DefaultValue(false)]
         public bool WalledGarden { get; set; }
 
-        public User System { get; private set; }
+        public T System { get; private set; }
 
-        public IKeyValueStore<User> Repository { get; set; }
+        public IKeyValueStore<T> Repository { get; set; }
 
         public void Setup(NetfluidHost host)
 		{
             Host = host;
-            exposer = new UserExposer(host, this);
-
-            if(Repository==null)
-                Repository = new KeyValueStore<User>("users");
-
-            if (!Repository.Any())
-            {
-                User admin = new User
-                {
-                    DisplayName = "Administrator",
-                    GlobalAdmin = true,
-                    UserName = "root"
-                };
-
-                SaltHim(admin, "root");
-
-                User sys = new User
-                {
-                    DisplayName = "System",
-                    GlobalAdmin = true,
-                    UserName = "system"
-                };
-
-                SaltHim(sys, Guid.NewGuid().ToString());
-            }
-
-            System = GetUser("system");
+            exposer = new UserExposer<T>(host, this);
         }
 
-        void SaltHim(User user, string password)
+        void SaltHim(T user, string password)
         {
             string salt = new string(charset.Random(32).ToArray<char>());
             int rounds = Security.Random(4000);
@@ -80,24 +63,24 @@ namespace Netfluid.Users
 
             if (!Exists(user))
             {
-                Repository.Insert(user.Fullname,user);
+                Repository.Insert(user.UserName,user);
                 return;
             }
-            Repository.Update(user.Fullname,user);
+            Repository.Update(user.UserName,user);
         }
 
-		public User GetUser(string name)
+		public T GetUser(string name)
 		{
             if (string.IsNullOrEmpty(name)) return null;
 
             return Repository.Get(name);
         }
 
-        public bool Exists(User user)
+        public bool Exists(T user)
 		{
             if (user == null) return false;
 
-            return Repository.Get(user.Fullname) != null;
+            return Repository.Get(user.UserName) != null;
         }
 
         public bool CheckAuthority(string user, string auth)
@@ -105,7 +88,7 @@ namespace Netfluid.Users
 			return CheckAuthority(GetUser(user), GetUser(auth));
 		}
 
-        public bool CheckAuthority(User user, User auth)
+        public bool CheckAuthority(T user, T auth)
 		{
             if (!Exists(user) || !Exists(auth)) return false;
 
@@ -117,11 +100,11 @@ namespace Netfluid.Users
             return false;
 		}
 
-		public User SignIn(string fullname, string pass)
+		public T SignIn(string fullname, string pass)
 		{
-            User user = GetUser(fullname);
+            T user = GetUser(fullname);
 
-			User result;
+			T result;
             if (user == null || (DateTime.Now - user.LastLogin).TotalSeconds <= SignInInterval)
                 return null;
 
@@ -146,7 +129,7 @@ namespace Netfluid.Users
             {
                 user.LastLogin = DateTime.Now;
 
-                Repository.Update(user.Fullname, user);
+                Repository.Update(user.UserName, user);
 
                 result = user;
                 return result;
@@ -155,23 +138,21 @@ namespace Netfluid.Users
             return result;
         }
 
-        public bool Add(User user, string password, User auth)
+        public bool Add(T user, string password)
 		{
-            if (!Exists(user) || !CheckAuthority(user, auth)) return false;
-
             SaltHim(user, password);
             return true;
         }
 
-        public bool Remove(User user, User auth)
+        public bool Remove(T user, T auth)
 		{
             if (!CheckAuthority(user, auth)) return false;
 
-            Repository.Delete(user.Fullname);
+            Repository.Delete(user.UserName);
             return true;
         }
 
-		public bool ChangePassword(User user, User auth, string newPassword)
+		public bool ChangePassword(T user, T auth, string newPassword)
 		{
             if (!CheckAuthority(user, auth)) return false;
             SaltHim(user, newPassword);

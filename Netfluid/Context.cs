@@ -137,6 +137,7 @@ namespace Netfluid
             Response.ContentType = "text/html";
             Response.Headers["Access-Control-Allow-Origin"] = "*";
 
+
             //FIXME: valutare qualcosa di ancora piu sicuro
             sess = new Cookie("session", SessionId, "/");
             sess.Expires = DateTime.Now + TimeSpan.FromDays(1);

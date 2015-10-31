@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Netfluid.PublicFolders
+namespace Netfluid.Hosting
 {
-    class CachedFolder
+    public class ErrorHandler:Attribute
     {
     }
 }

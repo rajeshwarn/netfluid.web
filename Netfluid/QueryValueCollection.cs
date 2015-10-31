@@ -43,6 +43,27 @@ namespace Netfluid
             set { _values[name] = value; }
         }
 
+        public T Update<T>(T obj)
+        {
+            var type = obj.GetType();
+
+            foreach (var key in _values.Keys)
+            {
+                var field = type.GetField(key, BindingFlags.IgnoreCase | BindingFlags.Public | BindingFlags.Instance);
+                if (field != null && !field.HasAttribute<IgnoreUpdate>())
+                {
+                    field.SetValue(obj, _values[key].Parse(field.FieldType));
+                }
+
+                var prop = type.GetProperty(key, BindingFlags.IgnoreCase | BindingFlags.Public | BindingFlags.Instance);
+                if (prop != null && !prop.HasAttribute<IgnoreUpdate>())
+                {
+                    prop.SetValue(obj, _values[key].Parse(prop.PropertyType), null);
+                }
+            }
+            return obj;
+        }
+
         public T Parse<T>() where T :class
         {
             return Parse(typeof(T)) as T;

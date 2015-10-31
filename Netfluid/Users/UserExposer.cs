@@ -4,12 +4,12 @@ using System.Linq;
 
 namespace Netfluid.Users
 {
-    class UserExposer
+    class UserExposer<T> where T:User
 	{
         NetfluidHost Host;
-        UserManager UserManager;
+        UserManager<T> UserManager;
 
-        public UserExposer(NetfluidHost host,UserManager manager)
+        public UserExposer(NetfluidHost host,UserManager<T> manager)
         {
             Host = host;
             UserManager = manager;
@@ -17,7 +17,7 @@ namespace Netfluid.Users
             host.Filters.Add(Route.New(new Func<Context,dynamic>(WalledGarden)));
 
             host.Routes["GET", "/users/signin"] = new Route(new Func<IResponse>(SignIn));
-            host.Routes["POST", "/users/signin"] = new Route(new Func<Context,string,string,string,IResponse>(SignedIn));
+            host.Routes["POST", "/users/signin"] = new Route(new Func<Context,string,string,IResponse>(SignedIn));
 
             host.Routes["/users/signout"] = new Route(new Func<Context,IResponse>(SignOut));
 
@@ -29,7 +29,7 @@ namespace Netfluid.Users
         {
             if (!UserManager.WalledGarden) return false;
 
-            if (context.Session<User>("user") == null && context.Request.Url.LocalPath != "/users/signin")
+            if (context.Session<T>("user") == null && context.Request.Url.LocalPath != "/users/signin")
             {
                 if (Host.PublicFolders.Any(y => y.Map(context)))
                     return false;
@@ -48,12 +48,7 @@ namespace Netfluid.Users
             return new MustacheTemplate("./views/user/sign_in.html");
         }
 
-        IResponse SignUp()
-        {
-            return new MustacheTemplate("./views/user/sign_up.html");
-        }
-
-        IResponse SignedIn(Context context, string user, string domain, string pass)
+        IResponse SignedIn(Context context, string user, string pass)
 		{
             if (string.IsNullOrWhiteSpace(user))
                 return new MustacheTemplate("./views/user/sign_in.html", "Username required");
@@ -61,7 +56,7 @@ namespace Netfluid.Users
             if (string.IsNullOrWhiteSpace(pass))
                 return new MustacheTemplate("./views/user/sign_in.html", "Password required");
 
-            var u = UserManager.SignIn(string.IsNullOrEmpty(domain) ? user : user + "@" + domain, pass);
+            var u = UserManager.SignIn(user, pass);
 
             if (u == null)
                 return new MustacheTemplate("./views/user/sign_in.html", "Invalid user name or password.");
@@ -79,9 +74,14 @@ namespace Netfluid.Users
             return new RedirectResponse("/");
         }
 
+        IResponse SignUp()
+        {
+            return new MustacheTemplate("./views/user/sign_up.html");
+        }
+
         IResponse SignedUp(Context cnt,string password)
         {
-            var user = cnt.Values.Parse<User>();
+            var user = cnt.Values.Parse<T>();
 
             if (string.IsNullOrWhiteSpace(user.UserName))
                 return new MustacheTemplate("./views/user/sign_in.html", "Username is mandatory");
@@ -92,7 +92,7 @@ namespace Netfluid.Users
             if (UserManager.Exists(user))
                 return new MustacheTemplate("./views/user/sign_in.html", "Username already taken");
 
-            if(!UserManager.Add(user, password, UserManager.System))
+            if(!UserManager.Add(user, password))
                 return new MustacheTemplate("./views/user/sign_in.html", "Something went wrong");
 
             return new RedirectResponse("/");
