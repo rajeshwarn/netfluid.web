@@ -33,6 +33,7 @@ using Netfluid.Json.Converters;
 using System.Text;
 using System.Xml.Linq;
 using Netfluid.Json;
+using System.Net;
 
 namespace Netfluid
 {
@@ -62,6 +63,15 @@ namespace Netfluid
         /// Represents JavaScript's boolean value false as a string. This field is read-only.
         /// </summary>
         internal static readonly string False = "false";
+
+        public static object DeserializeUrl(string url)
+        {
+            var wc = new WebClient();
+            var js = wc.DownloadString(url);
+            Console.WriteLine(js);
+
+            return Deserialize(js);
+        }
 
         /// <summary>
         /// Represents JavaScript's null as a string. This field is read-only.

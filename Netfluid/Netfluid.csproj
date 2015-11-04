@@ -172,7 +172,6 @@
     <Compile Include="Hosting\RouteAttribute.cs" />
     <Compile Include="Hosting\RouteCollection.cs" />
     <Compile Include="Hosting\TriggerAttribute.cs" />
-    <Compile Include="Hosting\VirtualHostAttribute.cs" />
     <Compile Include="HttpFile.cs" />
     <Compile Include="HttpFileCollection.cs" />
     <Compile Include="HTTP\Extensions.cs" />

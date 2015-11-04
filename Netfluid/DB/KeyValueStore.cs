@@ -94,5 +94,12 @@ namespace Netfluid.DB
         {
             disk.ForEach(x => act(Get(x)));
         }
+
+        public virtual IEnumerable<T> ReadAll()
+        {
+            var list = new List<T>();
+            ForEach(x=>list.Add(x));
+            return list;
+        }
     }
 }

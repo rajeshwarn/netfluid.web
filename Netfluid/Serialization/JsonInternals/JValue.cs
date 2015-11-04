@@ -27,15 +27,11 @@ using System;
 using System.Collections.Generic;
 using Netfluid.Json.Utilities;
 using System.Globalization;
-#if !(NET35 || NET20 || PORTABLE40)
 using System.Dynamic;
 using System.Linq.Expressions;
 using Netfluid.Json.Linq;
-#endif
-#if !(NET20 || NET35 || PORTABLE40 || PORTABLE)
 using System.Numerics;
 
-#endif
 
 namespace Netfluid.Json
 {
@@ -125,7 +121,6 @@ namespace Netfluid.Json
         {
         }
 
-#if !NET20
         /// <summary>
         /// Initializes a new instance of the <see cref="JValue"/> class with the given value.
         /// </summary>
@@ -134,7 +129,6 @@ namespace Netfluid.Json
             : this(value, JTokenType.Date)
         {
         }
-#endif
 
         /// <summary>
         /// Initializes a new instance of the <see cref="JValue"/> class with the given value.
@@ -188,6 +182,11 @@ namespace Netfluid.Json
         public JValue(object value)
             : this(value, GetValueType(null, value))
         {
+        }
+
+        public static implicit operator string (JValue val)
+        {
+            return val.Value.ToString();
         }
 
         internal override bool DeepEquals(JToken node)
@@ -249,12 +248,10 @@ namespace Netfluid.Json
             switch (valueType)
             {
                 case JTokenType.Integer:
-#if !(NET20 || NET35 || PORTABLE40 || PORTABLE)
                     if (objA is BigInteger)
                         return CompareBigInteger((BigInteger)objA, objB);
                     if (objB is BigInteger)
                         return -CompareBigInteger((BigInteger)objB, objA);
-#endif
                     if (objA is ulong || objB is ulong || objA is decimal || objB is decimal)
                         return Convert.ToDecimal(objA, CultureInfo.InvariantCulture).CompareTo(Convert.ToDecimal(objB, CultureInfo.InvariantCulture));
                     else if (objA is float || objB is float || objA is double || objB is double)
@@ -262,12 +259,10 @@ namespace Netfluid.Json
                     else
                         return Convert.ToInt64(objA, CultureInfo.InvariantCulture).CompareTo(Convert.ToInt64(objB, CultureInfo.InvariantCulture));
                 case JTokenType.Float:
-#if !(NET20 || NET35 || PORTABLE40 || PORTABLE)
                     if (objA is BigInteger)
                         return CompareBigInteger((BigInteger)objA, objB);
                     if (objB is BigInteger)
                         return -CompareBigInteger((BigInteger)objB, objA);
-#endif
                     return CompareFloat(objA, objB);
                 case JTokenType.Comment:
                 case JTokenType.String:
@@ -282,18 +277,14 @@ namespace Netfluid.Json
 
                     return b1.CompareTo(b2);
                 case JTokenType.Date:
-#if !NET20
                     if (objA is DateTime)
                     {
-#endif
                         DateTime date1 = (DateTime)objA;
                         DateTime date2;
 
-#if !NET20
                         if (objB is DateTimeOffset)
                             date2 = ((DateTimeOffset)objB).DateTime;
                         else
-#endif
                             date2 = Convert.ToDateTime(objB, CultureInfo.InvariantCulture);
 
                         return date1.CompareTo(date2);
@@ -365,7 +356,6 @@ namespace Netfluid.Json
             return d1.CompareTo(d2);
         }
 
-#if !(NET35 || NET20 || PORTABLE40)
         private static bool Operation(ExpressionType operation, object objA, object objB, out object result)
         {
             if (objA is string || objB is string)
@@ -377,7 +367,6 @@ namespace Netfluid.Json
                 }
             }
 
-#if !(NET20 || NET35 || PORTABLE40 || PORTABLE)
             if (objA is BigInteger || objB is BigInteger)
             {
                 if (objA == null || objB == null)
@@ -411,9 +400,7 @@ namespace Netfluid.Json
                         return true;
                 }
             }
-            else
-#endif
-                if (objA is ulong || objB is ulong || objA is decimal || objB is decimal)
+            else if (objA is ulong || objB is ulong || objA is decimal || objB is decimal)
                 {
                     if (objA == null || objB == null)
                     {
@@ -511,7 +498,6 @@ namespace Netfluid.Json
             result = null;
             return false;
         }
-#endif
 
         internal override JToken CloneToken()
         {
@@ -968,14 +954,11 @@ namespace Netfluid.Json
             if (_value == null)
                 return TypeCode.Empty;
 
-#if !NET20
             if (_value is DateTimeOffset)
                 return TypeCode.DateTime;
-#endif
-#if !(NET20 || NET35 || PORTABLE40)
+
             if (_value is BigInteger)
                 return TypeCode.Object;
-#endif
 
             IConvertible convertable = _value as IConvertible;
             

@@ -41,14 +41,25 @@ namespace Netfluid
     public class NetfluidHost
     {
         HttpListener listener;
+
+        [Json.JsonIgnore]
         public RouteCollection Routes { get; private set; }
+
+        [Json.JsonIgnore]
         public RouteCollection Filters { get; private set; }
+
+        [Json.JsonIgnore]
         public RouteCollection Triggers { get; private set; }
+
         public List<IPublicFolder> PublicFolders { get; set; }
+
+        [Json.JsonIgnore]
         public ISessionManager Sessions { get; set; }
 
+        [Json.JsonIgnore]
         public Func<Context,Exception,dynamic> OnException;
 
+        [Json.JsonIgnore]
         public Logger Logger { get; set; }
 
         Task listeningTask; 
@@ -59,10 +70,14 @@ namespace Netfluid
             var min = Environment.ProcessorCount * 10;
             ThreadPool.SetMinThreads(min, max);
             ThreadPool.SetMaxThreads(max, max);
+
+            ServicePointManager.DefaultConnectionLimit = 65000;
         }
 
-        public NetfluidHost(params string[] prefixes)
+        public NetfluidHost()
         {
+            listener = new HttpListener();
+
             OnException = (c, e) => 
             {
                 var ex = e;
@@ -76,33 +91,23 @@ namespace Netfluid
                 return sb.ToString();
             };
 
-            Logger = new Logging.ConsoleLogger();
-
-            listener = new HttpListener();
-
-            prefixes.ForEach(x =>
-            {
-                Logger.Debug("Setting up prefix " + x);
-
-                if (!(x.StartsWith("http://") || x.StartsWith("https://")))
-                    x = "http://" + x;
-
-                if (!x.EndsWith("/")) x = x + "/";
-
-                if (x.Contains("*") && !x.Contains("*:"))
-                    x = x.Replace("*","*:80");
-
-                listener.Prefixes.Add(x);
-            });
-
+            Logger = new Logging.NullLogger();
             Filters = new RouteCollection();
             Triggers = new RouteCollection();
             Routes = new RouteCollection();
 
             PublicFolders = new List<IPublicFolder>();
             Sessions = new DefaultSessionManager();
+
+            StartTime = DateTime.Now;
         }
 
+        public NetfluidHost(params string[] prefixes):this()
+        {
+            prefixes.ForEach(x => listener.Prefixes.Add(x));
+        }
+
+        [Json.JsonIgnore]
         public bool HasRoutes
         {
             get
@@ -111,9 +116,9 @@ namespace Netfluid
             }
         }
 
-        public DateTime StartDateTime { get; private set; }
+        public DateTime StartTime { get; private set; }
 
-        public TimeSpan UpTime { get { return DateTime.Now - StartDateTime; } }
+        public TimeSpan UpTime { get { return DateTime.Now - StartTime; } }
 
         #region HTTP LISTENER PROPERTIES
         //
@@ -262,6 +267,7 @@ namespace Netfluid
         //     This object has been closed.
         public bool UnsafeConnectionNtlmAuthentication { get { return listener.UnsafeConnectionNtlmAuthentication; } set { listener.IgnoreWriteExceptions = value; } }
 
+        [Json.JsonIgnore]
         public Func<Context, dynamic> On404 { get; set; }
 
         #endregion
@@ -499,14 +505,16 @@ namespace Netfluid
             SendValue(cnt, r404);
         }
 
+        public void Map(Assembly assembly)
+        {
+            var types = assembly.GetTypes();
+            Logger.Debug($"Mapping {assembly} found {types.Length} types");
+            types.ForEach(Map);
+        }
+
         public void Map(object obj)
         {
             Load(obj.GetType(), obj);
-        }
-
-        public void Map(Assembly assembly)
-        {
-            assembly.GetTypes().ForEach(Map);
         }
 
         public void Map(IEnumerable<Type> types)
@@ -521,6 +529,8 @@ namespace Netfluid
 
         void Load(Type type, object instance)
         {
+            Logger.Debug("Mapping type "+type);
+
             if (instance == null && type.HasDefaultConstructor())
                 instance = type.CreateIstance();
 
@@ -530,10 +540,16 @@ namespace Netfluid
 
             foreach (var m in type.GetMethods(BindingFlags.NonPublic|BindingFlags.Public|BindingFlags.Instance|BindingFlags.Static))
             {
+                if(m.HasAttribute<Handler404>())
+                {
+                    On404 = x => m.Invoke(instance,new[] { x });
+                }
+
                 foreach (var prefix in prefixes)
                 {
                     foreach (var att in m.CustomAttribute<RouteAttribute>())
                     {
+                        Logger.Debug("Setting route "+att.Url+" for method "+m.Name);
                         Routes.Add(new Route(m, m.IsStatic ? null : instance)
                         {
                             Url = prefix + att.Url,
@@ -544,6 +560,7 @@ namespace Netfluid
 
                     foreach (var att in m.CustomAttribute<FilterAttribute>())
                     {
+                        Logger.Debug("Setting filter " + att.Url + " for method " + m.Name);
                         Filters.Add(new Route(m, m.IsStatic ? null : instance)
                         {
                             Url = prefix + att.Url,
@@ -554,6 +571,7 @@ namespace Netfluid
 
                     foreach (var att in m.CustomAttribute<TriggerAttribute>())
                     {
+                        Logger.Debug("Setting trigger " + att.Url + " for method " + m.Name);
                         Triggers.Add(new Route(m, m.IsStatic ? null : instance)
                         {
                             Url = prefix + att.Url,

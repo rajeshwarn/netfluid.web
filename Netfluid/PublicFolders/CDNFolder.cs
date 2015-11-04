@@ -2,7 +2,7 @@
 using System;
 using System.IO;
 
-namespace Netfluid.PublicFolders
+namespace Netfluid
 {
     public class CDNFolder : IPublicFolder
     {
