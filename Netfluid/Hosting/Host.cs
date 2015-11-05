@@ -531,8 +531,17 @@ namespace Netfluid
         {
             Logger.Debug("Mapping type "+type);
 
-            if (instance == null && type.HasDefaultConstructor())
-                instance = type.CreateIstance();
+            if (instance == null && type.HasDefaultConstructor() && !type.IsGenericType && !type.IsAbstract)
+            {
+                try
+                {
+                    instance = type.CreateIstance();
+                }
+                catch (Exception)
+                {
+
+                }
+            }
 
             var prefixes = type.CustomAttribute<RouteAttribute>(true).Select(x=>x.Url);
             if (prefixes.Count() == 0)
