@@ -539,7 +539,7 @@ namespace Netfluid
                 }
                 catch (Exception)
                 {
-
+                    return;
                 }
             }
 
