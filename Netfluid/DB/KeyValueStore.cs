@@ -21,7 +21,7 @@ namespace Netfluid.DB
         }
 
         static JsonSerializerSettings settings;
-        DiskCollection disk;
+        BinaryStore disk;
 
         static KeyValueStore()
         {
@@ -34,7 +34,7 @@ namespace Netfluid.DB
 
         public KeyValueStore(string path)
         {
-            disk = new DiskCollection(path);
+            disk = new BinaryStore(path);
         }
 
         public string Directory => disk.Directory;

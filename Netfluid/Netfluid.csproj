@@ -52,7 +52,7 @@
     <Compile Include="Context.cs" />
     <Compile Include="Country.cs" />
     <Compile Include="Date.cs" />
-    <Compile Include="DB\DiskCollection.cs" />
+    <Compile Include="DB\BinaryStore.cs" />
     <Compile Include="DB\Blocks\Block.cs" />
     <Compile Include="DB\Blocks\BlockStorage.cs" />
     <Compile Include="DB\Blocks\BufferHelper.cs" />

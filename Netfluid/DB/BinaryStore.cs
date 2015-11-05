@@ -7,7 +7,7 @@ using System.Threading;
 
 namespace Netfluid.DB
 {
-    class DiskCollection
+    public class BinaryStore
     {
         readonly Stream mainDatabaseFile;
         readonly Stream primaryIndexFile;
@@ -20,7 +20,7 @@ namespace Netfluid.DB
         public string Name { get; private set; }
         public long Count { get; private set; }
 
-        public DiskCollection(string path)
+        public BinaryStore(string path)
         {
             path = Path.GetFullPath(path);
             Name = Path.GetFileNameWithoutExtension(path);
