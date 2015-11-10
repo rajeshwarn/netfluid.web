@@ -1,108 +1,82 @@
-﻿#region Header
-// Copyright (c) 2013 Hans Wolff
-// 
-// Permission is hereby granted, free of charge, to any person obtaining a copy
-// of this software and associated documentation files (the "Software"), to deal
-// in the Software without restriction, including without limitation the rights
-// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-// copies of the Software, and to permit persons to whom the Software is
-// furnished to do so, subject to the following conditions:
-// 
-// The above copyright notice and this permission notice shall be included in
-// all copies or substantial portions of the Software.
-// 
-// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-// THE SOFTWARE.
-#endregion
 
+using Netfluid.SmtpParser;
 using System;
-using System.Diagnostics;
+using System.Collections.Generic;
+using System.Net.Sockets;
+using System.Text;
+using System.Threading;
+using System.Threading.Tasks;
+using System.Net.Mail;
 
 namespace Netfluid.Smtp
 {
-    class SmtpSession : IDisposable
-    {
-        public bool Active { get; protected set; }
-        public bool Disconnected { get; protected set; }
+	public sealed class SmtpSession
+	{
+		readonly SmtpServer _server;
+		readonly SmtpStateMachine _stateMachine;
+		private bool closed;
+        StringBuilder Mime;
 
-        internal SmtpConnection Connection { get; private set; }
-        internal event EventHandler<SessionEventArgs> OnSessionDisconnected = (s, e) => { };
+        internal NetworkTextStream Stream;
 
-        public object Tag { get; set; }
+        public string Username { get; set; }
+        public int RetryCount { get; private set; }
+        public MailAddress From { get; set; }
+        public List<MailAddress> To { get; set; }
+        public string Content { get { return Mime.ToString(); } }
 
-        readonly Stopwatch Stopwatch = Stopwatch.StartNew();
-        public SmtpSessionInfo SessionInfo { get; set; }
-
-        public SmtpSession(SmtpConnection connection)
-        {
-            SessionInfo = new SmtpSessionInfo();
-            Active = true;
-            Connection = connection;
+        internal SmtpSession(SmtpServer server, TcpClient tcpClient)
+		{
+			_server = server;
+			_stateMachine = new SmtpStateMachine(_server);
+			Stream = new NetworkTextStream(tcpClient);
+            RetryCount = 5;
+            Reset();
         }
 
-
-        public TimeSpan GetIdleTime()
+        internal void AppendLine(string v)
         {
-            return Stopwatch.Elapsed;
+            Mime.AppendLine(v);
         }
 
-        public void UpdateActivity()
+        public void Reset()
         {
-            Stopwatch.Restart();
+            From = null;
+            To = new List<MailAddress>();
+            Mime = new StringBuilder();
         }
 
-        public void Disconnect()
-        {
-            if (!Disconnected)
-            {
-                Disconnected = true;
-                Active = false;
-                if (Connection != null)
-                    Connection.Disconnect();
-                OnSessionDisconnected(this, new SessionEventArgs(this));
-            }
-        }
+        public async Task HandleAsync(CancellationToken cancellationToken)
+		{
+			cancellationToken.ThrowIfCancellationRequested();
 
-        #region Dispose
-        private bool _disposed;
-        private readonly object _disposeLock = new object();
+            Version version = typeof(SmtpSession).Assembly.GetName().Version;
+            await Stream.WriteLineAsync(string.Format("220 {0} v{1} ESMTP ready", _server.ServerName, version), cancellationToken).ConfigureAwait(false);
+            await Stream.FlushAsync(cancellationToken).ConfigureAwait(false);
 
-        /// <summary>
-        /// Inheritable dispose method
-        /// </summary>
-        /// <param name="disposing">true, suppress GC finalizer call</param>
-        protected virtual void Dispose(bool disposing) 
-        {
-            lock (_disposeLock)
-            {
-                if (!_disposed)
-                {
-                    _disposed = true;
-                    if (disposing) GC.SuppressFinalize(this);
-                }
-            }
-        }
+            while (true)
+			{
+				int expr_201 = RetryCount;
+				RetryCount = expr_201 - 1;
+				if (expr_201 <= 0 || closed)
+				{
+					break;
+				}
+				cancellationToken.ThrowIfCancellationRequested();
+				string text = await Stream.ReadLineAsync(cancellationToken).ConfigureAwait(false);
+				SmtpCommand smtpCommand;
 
-        /// <summary>
-        /// Free resources being used
-        /// </summary>
-        public void Dispose()
-        {
-            Dispose(true);
-        }
+				if (_stateMachine.TryAccept(new TokenEnumerator(new StringTokenizer(text)), out smtpCommand))
+				{
+					RetryCount = 5;
+				}
+				await smtpCommand.ExecuteAsync(this, cancellationToken).ConfigureAwait(false);
+			}
+		}
 
-        /// <summary>
-        /// Destructor
-        /// </summary>
-        ~SmtpSession()
-        {
-            Dispose(false);
-        }
-        #endregion
-    }
+		public void Close()
+		{
+			closed = true;
+		}
+	}
 }

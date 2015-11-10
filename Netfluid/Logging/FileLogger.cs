@@ -17,7 +17,11 @@ namespace Netfluid.Logging
             writer = new StreamWriter(new FileStream(path, FileMode.OpenOrCreate));
             task = Task.Factory.StartNew(()=> 
             {
-                while (true) { writer.WriteLine(queue.Take()); }
+                while (true)
+                {
+                    writer.WriteLine(queue.Take());
+                    writer.Flush();
+                }
             });
         }
 
@@ -41,25 +45,25 @@ namespace Netfluid.Logging
         public void Error(string message)
         {
             //Console.WriteLine(message);
-            if (LogLevel <= LogLevel.Debug) queue.Add(DateTime.Now + " [ERROR] " + message);
+            if (LogLevel <= LogLevel.Error) queue.Add(DateTime.Now + " [ERROR] " + message);
         }
 
         public void Error(Exception ex, string message)
         {
             //Console.WriteLine(message);
-            if (LogLevel <= LogLevel.Debug) queue.Add(DateTime.Now + " [ERROR] " + message);
+            if (LogLevel <= LogLevel.Error) queue.Add(DateTime.Now + " [ERROR] " + message);
         }
 
         public void Info(string message)
         {
             //Console.WriteLine(message);
-            if (LogLevel <= LogLevel.Debug) queue.Add(DateTime.Now + " [INFO] " + message);
+            if (LogLevel <= LogLevel.Info) queue.Add(DateTime.Now + " [INFO] " + message);
         }
 
         public void Warn(string message)
         {
             //Console.WriteLine(message);
-            if (LogLevel <= LogLevel.Debug) queue.Add(DateTime.Now + " [WARN] " + message);
+            if (LogLevel <= LogLevel.Warn) queue.Add(DateTime.Now + " [WARN] " + message);
         }
     }
 }
