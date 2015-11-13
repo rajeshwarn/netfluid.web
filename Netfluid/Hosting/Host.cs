@@ -102,6 +102,11 @@ namespace Netfluid
             StartTime = DateTime.Now;
         }
 
+        public NetfluidHost(IEnumerable<string> prefixes) : this()
+        {
+            prefixes.ForEach(x => listener.Prefixes.Add(x));
+        }
+
         public NetfluidHost(params string[] prefixes):this()
         {
             prefixes.ForEach(x => listener.Prefixes.Add(x));
@@ -365,7 +370,7 @@ namespace Netfluid
                         }
                         catch(Exception ex)
                         {
-                            if (ex is TargetInvocationException) ex = ex.InnerException;
+                            while (ex is TargetInvocationException) ex = ex.InnerException;
 
                             Logger.Error("Error "+ex.Message);
                             c.Response.StatusCode = StatusCode.InternalServerError;
@@ -529,7 +534,7 @@ namespace Netfluid
 
         void Load(Type type, object instance)
         {
-            Logger.Debug("Mapping type "+type);
+            //Logger.Debug("Mapping type "+type);
 
             if (instance == null && type.HasDefaultConstructor() && !type.IsGenericType && !type.IsAbstract)
             {
@@ -558,35 +563,56 @@ namespace Netfluid
                 {
                     foreach (var att in m.CustomAttribute<RouteAttribute>())
                     {
-                        Logger.Debug("Setting route "+att.Url+" for method "+m.Name);
-                        Routes.Add(new Route(m, m.IsStatic ? null : instance)
+                        try
                         {
-                            Url = prefix + att.Url,
-                            HttpMethod = att.Method,
-                            Index = att.Index,
-                        });
+                            Logger.Debug("Setting route " + att.Url + " for method " + m.Name);
+                            Routes.Add(new Route(m, m.IsStatic ? null : instance)
+                            {
+                                Url = prefix + att.Url,
+                                HttpMethod = att.Method,
+                                Index = att.Index,
+                            });
+                        }
+                        catch (Exception ex)
+                        {
+                            Logger.Error("Failed to load filter " + att.Url + " for method " + m.Name + "." + ex.Message);
+                        }
                     }
 
                     foreach (var att in m.CustomAttribute<FilterAttribute>())
                     {
-                        Logger.Debug("Setting filter " + att.Url + " for method " + m.Name);
-                        Filters.Add(new Route(m, m.IsStatic ? null : instance)
+                        try
                         {
-                            Url = prefix + att.Url,
-                            HttpMethod = att.Method,
-                            Index = att.Index
-                        });
+                            Logger.Debug("Setting filter " + att.Url + " for method " + m.Name);
+                            Filters.Add(new Route(m, m.IsStatic ? null : instance)
+                            {
+                                Url = prefix + att.Url,
+                                HttpMethod = att.Method,
+                                Index = att.Index
+                            });
+                        }
+                        catch (Exception ex)
+                        {
+                            Logger.Error("Failed to load filter "+att.Url+" for method " + m.Name+"."+ex.Message);
+                        }
                     }
 
                     foreach (var att in m.CustomAttribute<TriggerAttribute>())
                     {
-                        Logger.Debug("Setting trigger " + att.Url + " for method " + m.Name);
-                        Triggers.Add(new Route(m, m.IsStatic ? null : instance)
+                        try
                         {
-                            Url = prefix + att.Url,
-                            HttpMethod = att.Method,
-                            Index = att.Index
-                        });
+                            Logger.Debug("Setting trigger " + att.Url + " for method " + m.Name);
+                            Triggers.Add(new Route(m, m.IsStatic ? null : instance)
+                            {
+                                Url = prefix + att.Url,
+                                HttpMethod = att.Method,
+                                Index = att.Index
+                            });
+                        }
+                        catch (Exception ex)
+                        {
+                            Logger.Error("Failed to load filter " + att.Url + " for method " + m.Name + "." + ex.Message);
+                        }
                     }
                 }
             }

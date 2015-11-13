@@ -471,7 +471,7 @@
     <Compile Include="Users\User.cs" />
     <Compile Include="Users\UserExposer.cs" />
     <Compile Include="Users\UserManager.cs" />
-    <Compile Include="WebDav\DAV2.cs" />
+    <Compile Include="WebDav\WebDavServer.cs" />
     <Compile Include="WebDav\Exceptions\WebDavConflictException.cs" />
     <Compile Include="WebDav\Exceptions\WebDavException.cs" />
     <Compile Include="WebDav\Exceptions\WebDavForbiddenException.cs" />

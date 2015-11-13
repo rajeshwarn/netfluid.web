@@ -59,12 +59,20 @@ namespace Netfluid
 
         public static T SanifyHTML<T>(this T obj)
         {
-            obj.GetType().GetProperties()
-                .Where(x => x.PropertyType.Equals(typeof(string)))
-                .ForEach(x=>
+            var p = obj.GetType().GetProperties()
+                .Where(x => x.PropertyType.Equals(typeof(string)) && x.CanWrite && x.CanRead).ToArray();
+
+            p.ForEach(x=>
                 {
-                    var value = (x.GetValue(obj) ?? "") as string;
-                    x.SetValue(obj, Extensions.HTMLEncode(value));
+                    try
+                    {
+                        var value = (x.GetValue(obj) ?? "") as string;
+                        x.SetValue(obj, HTMLEncode(value));
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine(ex.Message);
+                    }
                 });
 
             obj.GetType().GetFields()

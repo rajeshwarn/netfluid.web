@@ -64,11 +64,19 @@ namespace Netfluid
         /// </summary>
         internal static readonly string False = "false";
 
+
+        public static T DeserializeUrl<T>(string url)
+        {
+            var wc = new WebClient();
+            var js = wc.DownloadString(url);
+
+            return Deserialize<T>(js);
+        }
+
         public static object DeserializeUrl(string url)
         {
             var wc = new WebClient();
             var js = wc.DownloadString(url);
-            Console.WriteLine(js);
 
             return Deserialize(js);
         }

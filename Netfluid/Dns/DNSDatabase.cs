@@ -6,12 +6,12 @@ using System.Linq;
 
 namespace Netfluid.Dns
 {
-    public class DNSDatabase
+    public class DnsDatabase
     {
         KeyValueStore<Record> store;
         Tree<string, string> domainIndex;
 
-        public DNSDatabase(string path)
+        public DnsDatabase(string path)
         {
             store = new KeyValueStore<Record>(path);
             domainIndex = Index.MultipleStringIndex(Path.Combine(store.Directory, store.Name + ".domain.sidx"));

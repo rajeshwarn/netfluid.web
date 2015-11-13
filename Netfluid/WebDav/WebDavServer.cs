@@ -13,7 +13,7 @@ using WebDAVSharp.Server.Utilities;
 
 namespace Netfluid.WebDav
 {
-    class DAV2
+    class WebDavServer
     {
         IWebDavStoreCollection Store;
 
@@ -226,7 +226,7 @@ namespace Netfluid.WebDav
             return list;
         }
 
-        public DAV2(WebDavDirectory webDavDirectory, NetfluidHost host, string mountPoint)
+        public WebDavServer(WebDavDirectory webDavDirectory, NetfluidHost host, string mountPoint)
         {
             Store = webDavDirectory;
 
