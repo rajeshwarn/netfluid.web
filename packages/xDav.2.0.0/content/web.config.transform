@@ -1,0 +1,14 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<configuration>
+  <configSections>
+    <section name="XDavConfig" type="XDav.Config.XDavConfig, XDav" allowLocation="true" allowDefinition="Everywhere"/>
+  </configSections>
+  <system.webServer>
+        <modules>
+            <add name="XDav" type="XDav.XDavModule, XDav"/>
+        </modules>
+  </system.webServer>
+  <XDavConfig Name="xdav">
+    <FileLocation URL="xdav" PathType="Local"></FileLocation>
+  </XDavConfig>
+</configuration>

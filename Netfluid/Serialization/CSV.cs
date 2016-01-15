@@ -58,11 +58,19 @@ namespace Netfluid
         {
             var type = (typeof(T));
 
-            var columns = type.GetProperties(BindingFlags.Public | BindingFlags.Instance).Where(pi => pi.GetIndexParameters().Length == 0).Select(pi => pi.Name).ToArray();
+            var columns = type.GetProperties(BindingFlags.Public | BindingFlags.Instance).Where(pi =>
+            {
+                if (pi.GetIndexParameters().Length == 0 && !pi.HasAttribute<NonSerializedAttribute>())
+                    return true;
+
+                return false;
+             }).Select(pi => pi.Name).ToArray();
+
             if (columns.Length == 0)
             {
                 columns = type.GetFields(BindingFlags.Public | BindingFlags.Instance).Select(fi => fi.Name).ToArray();
             }
+
 
             var fieldSeparatorAsString = fieldSeparator.ToString(CultureInfo.InvariantCulture);
             var invalidCharsInFields = new[] { '\r', '\n', textQualifier, fieldSeparator };

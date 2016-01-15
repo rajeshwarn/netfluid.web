@@ -10,7 +10,7 @@ namespace Netfluid
 
         string UriToPath(string uri)
         {
-            if (uri == "/") return uri;
+            if (uri == "/" || uri.Length<VirtualPath.Length) return uri;
 
             var subUrl = uri.Substring(VirtualPath.Length).Replace('/', Path.DirectorySeparatorChar);
             var fpath = Path.GetFullPath(RealPath);
@@ -18,7 +18,7 @@ namespace Netfluid
             if (string.IsNullOrEmpty(subUrl) || subUrl[0] != Path.DirectorySeparatorChar)
                 subUrl = Path.DirectorySeparatorChar + subUrl;
 
-            if (fpath.EndsWith(Path.DirectorySeparatorChar))
+            if (fpath.EndsWith(Path.DirectorySeparatorChar) && fpath.Length>= fpath.Length - 1)
                 fpath = fpath.Substring(0, fpath.Length - 1);
 
             return Path.GetFullPath(fpath + subUrl);

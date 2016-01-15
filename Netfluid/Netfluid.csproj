@@ -52,7 +52,8 @@
     <Compile Include="Context.cs" />
     <Compile Include="Country.cs" />
     <Compile Include="Date.cs" />
-    <Compile Include="DB\BinaryStore.cs" />
+    <Compile Include="DB\BinaryPersistentList.cs" />
+    <Compile Include="DB\BinaryKeyValueStore.cs" />
     <Compile Include="DB\Blocks\Block.cs" />
     <Compile Include="DB\Blocks\BlockStorage.cs" />
     <Compile Include="DB\Blocks\BufferHelper.cs" />
@@ -70,10 +71,13 @@
     <Compile Include="DB\Index.cs" />
     <Compile Include="DB\Indexes\UniqueStringIndex.cs" />
     <Compile Include="DB\KeyValueStore.cs" />
+    <Compile Include="DB\OLAP\Cube.cs" />
+    <Compile Include="DB\PersistentQueue.cs" />
     <Compile Include="DB\Serializer.cs" />
     <Compile Include="DB\Serializers\DateTimeSerializer.cs" />
     <Compile Include="DB\Serializers\DoubleSerializer.cs" />
     <Compile Include="DB\Serializers\UIntSerializer.cs" />
+    <Compile Include="DB\StringGraph.cs" />
     <Compile Include="DB\Tree\Tree.cs" />
     <Compile Include="DB\Tree\TreeDiskNodeManager.cs" />
     <Compile Include="DB\Tree\TreeDiskNodeSerializer.cs" />
@@ -175,6 +179,8 @@
     <Compile Include="HttpFile.cs" />
     <Compile Include="HttpFileCollection.cs" />
     <Compile Include="HTTP\Extensions.cs" />
+    <Compile Include="HTTP\HttpRequest.cs" />
+    <Compile Include="HTTP\HttpResponse.cs" />
     <Compile Include="HTTP\HttpUtility.cs" />
     <Compile Include="HTTP\MultipartFormDataParser.cs" />
     <Compile Include="HTTP\MultipartInternals\BinaryStreamStack.cs" />
@@ -192,7 +198,6 @@
     <Compile Include="Logging\NullLogger.cs" />
     <Compile Include="MimeTypes.cs" />
     <Compile Include="Network.cs" />
-    <Compile Include="Net\TcpService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="PublicFolders\CDNFolder.cs" />
     <Compile Include="PublicFolders\IPublicFolder.cs" />
@@ -248,6 +253,7 @@
     <Compile Include="Responses\Templates\MustacheInternals\ValueRequestEventArgs.cs" />
     <Compile Include="Responses\Templates\MustacheInternals\VariableFoundEventArgs.cs" />
     <Compile Include="Responses\Templates\MustacheInternals\WithTagDefinition.cs" />
+    <Compile Include="Responses\Templates\MustacheSuperSet\Dotted.cs" />
     <Compile Include="Responses\Templates\MustacheSuperSet\HtmlOptions.cs" />
     <Compile Include="Responses\Templates\MustacheSuperSet\LocalTime.cs" />
     <Compile Include="Responses\Templates\MustacheSuperSet\HtmlList.cs" />
@@ -255,6 +261,7 @@
     <Compile Include="Responses\Templates\MustacheSuperSet\DeCamel.cs" />
     <Compile Include="Responses\Templates\MustacheSuperSet\First.cs" />
     <Compile Include="Responses\Templates\MustacheSuperSet\Include.cs" />
+    <Compile Include="Responses\Templates\MustacheSuperSet\Lower.cs" />
     <Compile Include="Responses\Templates\MustacheSuperSet\Value.cs" />
     <Compile Include="Responses\Templates\MustacheTemplate.cs" />
     <Compile Include="Security.cs" />
@@ -471,28 +478,6 @@
     <Compile Include="Users\User.cs" />
     <Compile Include="Users\UserExposer.cs" />
     <Compile Include="Users\UserManager.cs" />
-    <Compile Include="WebDav\WebDavServer.cs" />
-    <Compile Include="WebDav\Exceptions\WebDavConflictException.cs" />
-    <Compile Include="WebDav\Exceptions\WebDavException.cs" />
-    <Compile Include="WebDav\Exceptions\WebDavForbiddenException.cs" />
-    <Compile Include="WebDav\Exceptions\WebDavInternalServerException.cs" />
-    <Compile Include="WebDav\Exceptions\WebDavLengthRequiredException.cs" />
-    <Compile Include="WebDav\Exceptions\WebDavMethodNotAllowedException.cs" />
-    <Compile Include="WebDav\Exceptions\WebDavNotFoundException.cs" />
-    <Compile Include="WebDav\Exceptions\WebDavNotImplementedException.cs" />
-    <Compile Include="WebDav\Exceptions\WebDavPreconditionFailedException.cs" />
-    <Compile Include="WebDav\Exceptions\WebDavUnauthorizedException.cs" />
-    <Compile Include="WebDav\Exceptions\WebDavUnsupportedMediaTypeException.cs" />
-    <Compile Include="WebDav\LockProperty.cs" />
-    <Compile Include="WebDav\Stores\IWebDAVStore.cs" />
-    <Compile Include="WebDav\Stores\IWebDAVStoreCollection.cs" />
-    <Compile Include="WebDav\Stores\IWebDAVStoreDocument.cs" />
-    <Compile Include="WebDav\Stores\IWebDAVStoreItem.cs" />
-    <Compile Include="WebDav\Utilities\Md5Util.cs" />
-    <Compile Include="WebDav\Utilities\WebDavStatusCode.cs" />
-    <Compile Include="WebDav\WebDavDirectory.cs" />
-    <Compile Include="WebDav\WebDavFile.cs" />
-    <Compile Include="WebDav\WebDAVProperty.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

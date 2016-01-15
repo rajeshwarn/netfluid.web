@@ -262,7 +262,7 @@ namespace Netfluid.DB
 					var bytesToWrite = Math.Min (total-written, storage.BlockContentSize);
 
 					// Get the block where the first byte of remaining data will be written to
-					var blockIndex = (int)Math.Floor ((double)written/(double)storage.BlockContentSize);
+					var blockIndex = (int)Math.Floor (written/(double)storage.BlockContentSize);
 
 					// Find the block to write to:
 					// If `blockIndex` exists in `blocks`, then write into it,

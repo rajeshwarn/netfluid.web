@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections;
+using System.Collections.Generic;
 
 namespace Netfluid
 {
@@ -23,6 +24,8 @@ namespace Netfluid
         /// </summary>
         public IEnumerable<T> Collection;
 
+        public string FileName;
+
         /// <summary>
         /// Transform the collection into a CSV
         /// </summary>
@@ -40,6 +43,9 @@ namespace Netfluid
         /// <param name="cnt">client context</param>
         public void SetHeaders(Context cnt)
         {
+            if(!string.IsNullOrWhiteSpace(FileName))
+                cnt.Response.Headers["Content-Disposition"] = "attachment; filename=\"" + FileName + "\"";
+
             cnt.Response.ContentType = "application/csv";
         }
 

@@ -16,7 +16,7 @@
 // The Initial Developer of this file is Matteo Fabbri.
 // 
 // Contributor(s): (Open source contributors should list themselves and their modifications here). 
-// Change Log: 
+// Change Log: D:\PROGETTI\NetFluid\Netfluid\Context.cs
 // Date           Changed By      Notes
 // 23/10/2013    Matteo Fabbri      Inital coding
 // ********************************************************************************************************
@@ -61,9 +61,9 @@ namespace Netfluid
 
         public HttpFileCollection Files { get; private set; }
 
-        public HttpListenerRequest Request { get { return HttpListernerContext.Request; } }
+        public HttpRequest Request { get; private set; }
 
-        public HttpListenerResponse Response { get { return HttpListernerContext.Response; } }
+        public HttpResponse Response { get; private set; }
 
         public bool IsOpen { get; private set; }
 
@@ -123,6 +123,9 @@ namespace Netfluid
             stopwatch.Start();
 
             HttpListernerContext = c;
+            Request = new HttpRequest(c.Request);
+            Response = new HttpResponse(this,c.Response);
+
             Values = new QueryValueCollection();
             Files = new HttpFileCollection();
             IsOpen = true;

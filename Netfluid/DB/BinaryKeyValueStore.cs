@@ -7,7 +7,7 @@ using System.Threading;
 
 namespace Netfluid.DB
 {
-    public class BinaryStore
+    public class BinaryKeyValueStore
     {
         readonly Stream mainDatabaseFile;
         readonly Stream primaryIndexFile;
@@ -20,7 +20,7 @@ namespace Netfluid.DB
         public string Name { get; private set; }
         public long Count { get; private set; }
 
-        public BinaryStore(string path)
+        public BinaryKeyValueStore(string path)
         {
             path = Path.GetFullPath(path);
             Name = Path.GetFileNameWithoutExtension(path);
@@ -29,6 +29,7 @@ namespace Netfluid.DB
             mainDatabaseFile = new FileStream(Path.Combine(Directory, Name+".data"), FileMode.OpenOrCreate, FileAccess.ReadWrite, FileShare.None, 4096);
             primaryIndexFile = new FileStream(Path.Combine(Directory, Name + ".pidx"), FileMode.OpenOrCreate, FileAccess.ReadWrite, FileShare.None, 4096);
             Storage = new RecordStorage(new BlockStorage(mainDatabaseFile, 4096, 48));
+
 
             PrimaryIndex = new Tree<string, uint>(new TreeDiskNodeManager<string, uint>(Serializer.String, Serializer.UInt, new RecordStorage(new BlockStorage(this.primaryIndexFile, 4096))), false);
 
@@ -93,7 +94,6 @@ namespace Netfluid.DB
             locker.ExitWriteLock();
             return r;
         }
-
 
         public bool Exists(string id)
         {

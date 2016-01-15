@@ -82,7 +82,7 @@ namespace Netfluid
                 }
 
                 var prop = type.GetProperty(key, BindingFlags.IgnoreCase | BindingFlags.Public | BindingFlags.Instance);
-                if (prop != null)
+                if (prop != null && prop.GetSetMethod()!=null)
                 {
                     prop.SetValue(t, _values[key].Parse(prop.PropertyType),null);
                 }

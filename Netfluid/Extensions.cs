@@ -439,6 +439,17 @@ namespace Netfluid
 
         #region STRING
 
+        public static string DeCamel(this string str)
+        {
+            var arr = str.Where(x => char.IsUpper(x)).ToArray();
+
+            foreach (var item in arr)
+            {
+                str = str.Replace(item.ToString(), " " + item);
+            }
+            return str.Trim();
+        }
+
         public static IEnumerable<string> RegexValues(this string str, string regex)
         {
             var r = new Regex(regex);

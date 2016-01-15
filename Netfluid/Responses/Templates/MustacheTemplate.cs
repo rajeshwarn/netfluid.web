@@ -28,6 +28,7 @@ namespace Netfluid
         {
             customTags = new List<TagDefinition>();
             customTags.Add(new DeCamel());
+            customTags.Add(new Dotted());
             customTags.Add(new First());
             customTags.Add(new Include());
             customTags.Add(new LocalTime());
@@ -35,6 +36,7 @@ namespace Netfluid
             customTags.Add(new Count());
             customTags.Add(new HtmlList());
             customTags.Add(new HtmlOptions());
+            customTags.Add(new Lower());
 
             cache = new StringCache<string>
             {

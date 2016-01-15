@@ -563,6 +563,7 @@ namespace Netfluid
 
                 data.Flush();
                 data.Close();
+                data.Dispose();
             }
 
             var contentType = parameters.ContainsKey("content-type") ? parameters["content-type"] : "text/plain";
@@ -654,6 +655,7 @@ namespace Netfluid
             var parameters = new Dictionary<string, string>();
 
             string line = reader.ReadLine();
+
             while (line != string.Empty)
             {
                 if (line == null)
