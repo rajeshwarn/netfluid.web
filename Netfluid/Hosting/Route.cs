@@ -80,25 +80,32 @@ namespace Netfluid
             if (Parameters.Length > 0)
             {
                 args = new object[Parameters.Length];
-                for (int i = 0; i < Parameters.Length; i++)
-                {
-                    var param = Parameters[i];
 
-                    if (cnt.Values.Contains(param.Name))
+                if(Parameters.Length == 1 && cnt.Request.ContentType.Contains("json"))
+                {
+                    args[0] = JSON.Deserialize(cnt.Reader.ReadToEnd(),Parameters[0].ParameterType);
+                }
+                else
+                {
+                    for (int i = 0; i < Parameters.Length; i++)
                     {
-                        args[i] = cnt.Values[param.Name].Parse(param.ParameterType);
-                    }
-                    else if(param.ParameterType==typeof(Context))
-                    {
-                        args[i] = cnt;
-                    }
-                    else if(param.ParameterType.IsValueType)
-                    {
-                        args[i] = param.ParameterType.DefaultValue();
+                        var param = Parameters[i];
+
+                        if (cnt.Values.Contains(param.Name))
+                        {
+                            args[i] = cnt.Values[param.Name].Parse(param.ParameterType);
+                        }
+                        else if (param.ParameterType == typeof(Context))
+                        {
+                            args[i] = cnt;
+                        }
+                        else if (param.ParameterType.IsValueType)
+                        {
+                            args[i] = param.ParameterType.DefaultValue();
+                        }
                     }
                 }
             }
-
 
             return method.DynamicInvoke(args);
         }
