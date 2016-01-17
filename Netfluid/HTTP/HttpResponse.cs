@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.IO.Compression;
 using System.Net;
 using System.Text;
 
@@ -19,6 +20,29 @@ namespace Netfluid.HTTP
 
             if (cnt.Request.ProtocolVersion > HttpVersion.Version10)
                 response.SendChunked = true;
+
+            var enc = cnt.Request.Headers["Accept-Encoding"];
+
+            if (!string.IsNullOrEmpty(enc))
+            {
+                var encs = enc.Split(new[] { ' ',',' },StringSplitOptions.RemoveEmptyEntries);
+
+                if (encs.Length == 0) return;
+
+                if(encs[0]=="gzip")
+                {
+                    stream = new GZipStream(response.OutputStream, CompressionMode.Compress, false);
+                    response.AddHeader("Content-Encoding", "gzip");
+                    return;
+                }
+
+                if (encs[0] == "deflate")
+                {
+                    stream = new DeflateStream(response.OutputStream, CompressionMode.Compress, false);
+                    response.AddHeader("Content-Encoding", "deflate");
+                    return;
+                }
+            }
         }
 
         //
