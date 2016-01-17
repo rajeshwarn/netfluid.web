@@ -85,6 +85,10 @@ namespace Netfluid
                 {
                     args[0] = JSON.Deserialize(cnt.Reader.ReadToEnd(),Parameters[0].ParameterType);
                 }
+                else if(Parameters.Length == 1 && cnt.Request.ContentType.Contains("bson"))
+                {
+                    args[0] = BSON.Deserialize(cnt.Request.InputStream, Parameters[0].ParameterType);
+                }
                 else
                 {
                     for (int i = 0; i < Parameters.Length; i++)
