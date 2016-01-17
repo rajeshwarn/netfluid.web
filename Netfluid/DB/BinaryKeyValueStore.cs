@@ -35,7 +35,7 @@ namespace Netfluid.DB
 
             locker = new ReaderWriterLockSlim(LockRecursionPolicy.SupportsRecursion);
 
-            Count = PrimaryIndex.LargerThanOrEqualTo("").Count();
+            Count = PrimaryIndex.All.Count();
         }
 
         private static byte[] Compress(byte[] bytes)
