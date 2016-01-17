@@ -69,9 +69,7 @@
     <Compile Include="DB\Blocks\StreamReadWrapper.cs" />
     <Compile Include="DB\IKeyValueStore.cs" />
     <Compile Include="DB\Index.cs" />
-    <Compile Include="DB\Indexes\UniqueStringIndex.cs" />
     <Compile Include="DB\KeyValueStore.cs" />
-    <Compile Include="DB\OLAP\Cube.cs" />
     <Compile Include="DB\PersistentQueue.cs" />
     <Compile Include="DB\Serializer.cs" />
     <Compile Include="DB\Serializers\DateTimeSerializer.cs" />
