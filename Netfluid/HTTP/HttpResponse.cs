@@ -6,7 +6,7 @@ using System.Text;
 
 namespace Netfluid.HTTP
 {
-    public class HttpResponse
+    public class HttpResponse : IDisposable
     {
         Stream stream;
         Context context;
@@ -20,7 +20,8 @@ namespace Netfluid.HTTP
 
             if (cnt.Request.ProtocolVersion > HttpVersion.Version10)
                 response.SendChunked = true;
-
+            
+            /*
             var enc = cnt.Request.Headers["Accept-Encoding"];
 
             if (!string.IsNullOrEmpty(enc))
@@ -35,14 +36,14 @@ namespace Netfluid.HTTP
                     response.AddHeader("Content-Encoding", "gzip");
                     return;
                 }
-
-                if (encs[0] == "deflate")
+                else if (encs[0] == "deflate")
                 {
                     stream = new DeflateStream(response.OutputStream, CompressionMode.Compress, false);
                     response.AddHeader("Content-Encoding", "deflate");
                     return;
                 }
             }
+            */
         }
 
         //
@@ -301,6 +302,7 @@ namespace Netfluid.HTTP
         //     instance.
         public void Close()
         {
+            stream.FlushAsync().Wait();
             response.Close();
             context.Close();
         }
@@ -372,6 +374,12 @@ namespace Netfluid.HTTP
         public void SetCookie(Cookie cookie)
         {
             response.SetCookie(cookie);
+        }
+
+        public void Dispose()
+        {
+            stream.FlushAsync().Wait();
+            response.Close();
         }
     }
 }

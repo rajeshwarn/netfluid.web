@@ -2,10 +2,6 @@
 using Netfluid.Responses.Templates.MustacheSuperSet;
 using System.Collections.Generic;
 using System.IO;
-
-
-using System;
-using System.Text;
 using Netfluid.Collections;
 
 namespace Netfluid
@@ -121,6 +117,7 @@ namespace Netfluid
             }
 
             generator.Render(args,cnt.Writer);
+            cnt.Writer.Flush();
         }
 
         /// <summary>

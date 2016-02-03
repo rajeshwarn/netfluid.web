@@ -50,13 +50,13 @@ namespace Netfluid
             foreach (var key in _values.Keys)
             {
                 var field = type.GetField(key, BindingFlags.IgnoreCase | BindingFlags.Public | BindingFlags.Instance);
-                if (field != null && !field.HasAttribute<IgnoreUpdate>())
+                if (field != null && !field.HasAttribute<Ignore>())
                 {
                     field.SetValue(obj, _values[key].Parse(field.FieldType));
                 }
 
                 var prop = type.GetProperty(key, BindingFlags.IgnoreCase | BindingFlags.Public | BindingFlags.Instance);
-                if (prop != null && !prop.HasAttribute<IgnoreUpdate>())
+                if (prop != null && !prop.HasAttribute<Ignore>())
                 {
                     prop.SetValue(obj, _values[key].Parse(prop.PropertyType), null);
                 }

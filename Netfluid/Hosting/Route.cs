@@ -81,36 +81,38 @@ namespace Netfluid
             {
                 args = new object[Parameters.Length];
 
-                if(Parameters.Length == 1 && cnt.Request.ContentType.Contains("json"))
+                if(cnt.Request.ContentType!=null)
                 {
-                    args[0] = JSON.Deserialize(cnt.Reader.ReadToEnd(),Parameters[0].ParameterType);
-                }
-                else if(Parameters.Length == 1 && cnt.Request.ContentType.Contains("bson"))
-                {
-                    args[0] = BSON.Deserialize(cnt.Request.InputStream, Parameters[0].ParameterType);
-                }
-                else
-                {
-                    for (int i = 0; i < Parameters.Length; i++)
+                    if (Parameters.Length == 1 && cnt.Request.ContentType.Contains("json"))
                     {
-                        var param = Parameters[i];
+                        args[0] = JSON.Deserialize(cnt.Reader.ReadToEnd(), Parameters[0].ParameterType);
+                        return method.DynamicInvoke(args);
+                    }
+                    else if (Parameters.Length == 1 && cnt.Request.ContentType.Contains("bson"))
+                    {
+                        args[0] = BSON.Deserialize(cnt.Request.InputStream, Parameters[0].ParameterType);
+                        return method.DynamicInvoke(args);
+                    }
+                }
 
-                        if (cnt.Values.Contains(param.Name))
-                        {
-                            args[i] = cnt.Values[param.Name].Parse(param.ParameterType);
-                        }
-                        else if (param.ParameterType == typeof(Context))
-                        {
-                            args[i] = cnt;
-                        }
-                        else if (param.ParameterType.IsValueType)
-                        {
-                            args[i] = param.ParameterType.DefaultValue();
-                        }
+                for (int i = 0; i < Parameters.Length; i++)
+                {
+                    var param = Parameters[i];
+
+                    if (cnt.Values.Contains(param.Name))
+                    {
+                        args[i] = cnt.Values[param.Name].Parse(param.ParameterType);
+                    }
+                    else if (param.ParameterType == typeof(Context))
+                    {
+                        args[i] = cnt;
+                    }
+                    else if (param.ParameterType.IsValueType)
+                    {
+                        args[i] = param.ParameterType.DefaultValue();
                     }
                 }
             }
-
             return method.DynamicInvoke(args);
         }
 

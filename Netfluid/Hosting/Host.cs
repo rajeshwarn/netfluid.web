@@ -300,7 +300,7 @@ namespace Netfluid
             else
             {
                 cnt.Response.Headers.Set("Content-Type", "application/json");
-                //cnt.Writer.Write(JSON.Serialize(value));
+                cnt.Writer.Write(JSON.Serialize(value));
             }
         }
 
@@ -366,6 +366,7 @@ namespace Netfluid
 
                         try
                         {
+
                             Serve(c);
                         }
                         catch(Exception ex)

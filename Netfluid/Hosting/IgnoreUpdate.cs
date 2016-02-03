@@ -2,7 +2,7 @@
 
 namespace Netfluid
 {
-    public class IgnoreUpdate :Attribute
+    public class Ignore :Attribute
     {
     }
 }

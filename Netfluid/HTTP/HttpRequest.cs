@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Netfluid.HTTP
 {
-    public class HttpRequest
+    public class HttpRequest : IDisposable
     {
         HttpListenerRequest request;
 
@@ -269,6 +269,12 @@ namespace Netfluid.HTTP
         {
             return request.BeginGetClientCertificate(requestCallback,state);
         }
+
+        public void Dispose()
+        {
+            throw new NotImplementedException();
+        }
+
         //
         // Summary:
         //     Ends an asynchronous request for the client's X.509 v.3 certificate.

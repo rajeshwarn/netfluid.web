@@ -60,7 +60,7 @@ namespace Netfluid
 
             var columns = type.GetProperties(BindingFlags.Public | BindingFlags.Instance).Where(pi =>
             {
-                if (pi.GetIndexParameters().Length == 0 && !pi.HasAttribute<NonSerializedAttribute>())
+                if (pi.GetIndexParameters().Length == 0 && !pi.HasAttribute<Ignore>())
                     return true;
 
                 return false;

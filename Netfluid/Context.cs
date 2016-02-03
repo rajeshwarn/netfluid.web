@@ -97,7 +97,7 @@ namespace Netfluid
                     var wc = new WebClient();
                     dynamic obj = JSON.Deserialize(wc.DownloadString("http://ipinfo.io/json"));
 
-                    if (!Enum.TryParse<CountryCode>(obj.country, out code)) code = CountryCode.World;
+                    if (!Enum.TryParse<CountryCode>(obj.country,true, out code)) code = CountryCode.World;
                 }
                 finally
                 {
@@ -238,6 +238,9 @@ namespace Netfluid
 
         public void Dispose()
         {
+            Request.Dispose();
+            Response.Dispose();
+
             stopwatch = null;
             HttpListernerContext = null;
             reader = null;

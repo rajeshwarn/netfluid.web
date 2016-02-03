@@ -33,34 +33,34 @@ namespace Netfluid.Serialization
             this.fieldSeparator = fieldSeparator;
             this.textQualifier = textQualifier;
 
-            this.streamReader = reader;
+            streamReader = reader;
 
-            this.ReadNextLine();
+            ReadNextLine();
 
             var readColumns = new List<string>();
             string columnName;
 
-            while ((columnName = this.ParseField()) != null)
+            while ((columnName = ParseField()) != null)
             {
                 readColumns.Add(columnName);
-                if (this.curChar == this.fieldSeparator)
-                    this.NextChar();
+                if (curChar == fieldSeparator)
+                    NextChar();
                 else
                     break;
             }
-            this.columns = readColumns.ToArray();
+            columns = readColumns.ToArray();
 
         }
 
         public T Current
         {
-            get { return this.record; }
+            get { return record; }
         }
 
 
         object IEnumerator.Current
         {
-            get { return this.Current; }
+            get { return Current; }
         }
 
         public void Dispose()
@@ -69,7 +69,7 @@ namespace Netfluid.Serialization
 
         IEnumerator IEnumerable.GetEnumerator()
         {
-            return this.GetEnumerator();
+            return GetEnumerator();
         }
 
         public IEnumerator<T> GetEnumerator()
@@ -79,22 +79,22 @@ namespace Netfluid.Serialization
 
         public bool MoveNext()
         {
-            this.ReadNextLine();
-            if (this.line == null && (this.line = this.streamReader.ReadLine()) == null)
+            ReadNextLine();
+            if (line == null && (line = streamReader.ReadLine()) == null)
             {
-                this.record = default(T);
+                record = default(T);
             }
             else
             {
-                this.record = new T();
+                record = new T();
                 Type recordType = typeof(T);
                 List<Action<T, String>> setters;
-                if (!this.allSetters.TryGetValue(recordType, out setters))
+                if (!allSetters.TryGetValue(recordType, out setters))
                 {
                     var list = new List<Action<T, string>>();
-                    for (int i = 0; i < this.columns.Length; i++)
+                    for (int i = 0; i < columns.Length; i++)
                     {
-                        string columnName = this.columns[i];
+                        string columnName = columns[i];
                         Action<T, string> action = null;
                         if (columnName.IndexOf(' ') >= 0)
                             columnName = columnName.Replace(" ", "");
@@ -103,15 +103,15 @@ namespace Netfluid.Serialization
                         list.Add(action);
                     }
                     setters = list;
-                    this.allSetters[recordType] = setters;
+                    allSetters[recordType] = setters;
                 }
 
                 var fieldValues = new string[setters.Count];
                 for (int i = 0; i < setters.Count; i++)
                 {
-                    fieldValues[i] = this.ParseField();
-                    if (this.curChar == this.fieldSeparator)
-                        this.NextChar();
+                    fieldValues[i] = ParseField();
+                    if (curChar == fieldSeparator)
+                        NextChar();
                     else
                         break;
                 }
@@ -120,11 +120,11 @@ namespace Netfluid.Serialization
                     var setter = setters[i];
                     if (setter != null)
                     {
-                        setter(this.record, fieldValues[i]);
+                        setter(record, fieldValues[i]);
                     }
                 }
             }
-            return (this.record != null);
+            return (record != null);
         }
 
 
@@ -196,10 +196,10 @@ namespace Netfluid.Serialization
 
         private void NextChar()
         {
-            if (this.pos < this.len)
+            if (pos < len)
             {
-                this.pos++;
-                this.curChar = this.pos < this.len ? this.line[this.pos] : '\0';
+                pos++;
+                curChar = pos < len ? line[pos] : '\0';
             }
         }
 
@@ -212,47 +212,47 @@ namespace Netfluid.Serialization
         private string ParseField()
         {
             parseFieldResult.Length = 0;
-            if (this.line == null || this.pos >= this.len)
+            if (line == null || pos >= len)
                 return null;
-            while (this.curChar == ' ' || this.curChar == '\t')
+            while (curChar == ' ' || curChar == '\t')
             {
-                this.NextChar();
+                NextChar();
             }
-            if (this.curChar == this.textQualifier)
+            if (curChar == textQualifier)
             {
-                this.NextChar();
-                while (this.curChar != 0)
+                NextChar();
+                while (curChar != 0)
                 {
-                    if (this.curChar == this.textQualifier)
+                    if (curChar == textQualifier)
                     {
-                        this.NextChar();
-                        if (this.curChar == this.textQualifier)
+                        NextChar();
+                        if (curChar == textQualifier)
                         {
-                            this.NextChar();
-                            parseFieldResult.Append(this.textQualifier);
+                            NextChar();
+                            parseFieldResult.Append(textQualifier);
                         }
                         else
                             return parseFieldResult.ToString();
                     }
-                    else if (this.curChar == '\0')
+                    else if (curChar == '\0')
                     {
-                        if (this.line == null)
+                        if (line == null)
                             return parseFieldResult.ToString();
-                        this.ReadNextLine();
+                        ReadNextLine();
                     }
                     else
                     {
-                        parseFieldResult.Append(this.curChar);
-                        this.NextChar();
+                        parseFieldResult.Append(curChar);
+                        NextChar();
                     }
                 }
             }
             else
             {
-                while (this.curChar != 0 && this.curChar != this.fieldSeparator && this.curChar != '\r' && this.curChar != '\n')
+                while (curChar != 0 && curChar != fieldSeparator && curChar != '\r' && curChar != '\n')
                 {
-                    parseFieldResult.Append(this.curChar);
-                    this.NextChar();
+                    parseFieldResult.Append(curChar);
+                    NextChar();
                 }
             }
             return parseFieldResult.ToString();
@@ -260,17 +260,17 @@ namespace Netfluid.Serialization
 
         private void ReadNextLine()
         {
-            this.line = this.streamReader.ReadLine();
-            this.pos = -1;
-            if (this.line == null)
+            line = streamReader.ReadLine();
+            pos = -1;
+            if (line == null)
             {
-                this.len = 0;
-                this.curChar = '\0';
+                len = 0;
+                curChar = '\0';
             }
             else
             {
-                this.len = this.line.Length;
-                this.NextChar();
+                len = line.Length;
+                NextChar();
             }
         }
     }

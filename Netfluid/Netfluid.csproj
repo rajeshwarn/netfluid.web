@@ -162,6 +162,7 @@
     <Compile Include="Dns\Response.cs" />
     <Compile Include="Dns\Serializer.cs" />
     <Compile Include="Dns\Structs.cs" />
+    <Compile Include="ElasticObject.cs" />
     <Compile Include="EmailValidator.cs" />
     <Compile Include="Extensions.cs" />
     <Compile Include="Geo\Converters\CrsConverter.cs" />
@@ -507,9 +508,7 @@
     <Compile Include="Smtp\TextStream.cs" />
     <Compile Include="Smtp\ValidationResult.cs" />
     <Compile Include="StatusCode.cs" />
-    <Compile Include="Users\User.cs" />
-    <Compile Include="Users\UserExposer.cs" />
-    <Compile Include="Users\UserManager.cs" />
+    <Compile Include="Users\LogIn.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
