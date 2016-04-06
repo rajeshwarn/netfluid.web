@@ -5,7 +5,7 @@ namespace Mustache
     /// <summary>
     /// Represents a context within a template.
     /// </summary>
-    public sealed class Context
+    internal sealed class Context
     {
         /// <summary>
         /// Initializes a new instance of a Context.

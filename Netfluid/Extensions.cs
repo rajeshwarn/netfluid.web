@@ -723,6 +723,11 @@ namespace Netfluid
             return HttpUtility.HtmlDecode(str);
         }
 
+        public static string DynamicSubstring(this string source, int maxLength)
+        {
+            return source.Length >= maxLength ? source.Substring(0, maxLength) : source;
+        }
+
         /// <summary>
         ///     Remove all HTML tags
         /// </summary>
@@ -860,6 +865,14 @@ namespace Netfluid
             {
                 act.Invoke(obj);
             }
+        }
+
+        /// <summary>
+        ///     Sintactic sugar for (new[]{elem}).Concat(enu)
+        /// </summary>
+        public static IEnumerable<T> Concat<T>(this T elem, IEnumerable<T> enu)
+        {
+            return (new[] { elem }).Concat(enu);
         }
 
         /// <summary>

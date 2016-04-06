@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Reflection;
 using System.Linq;
@@ -528,9 +529,25 @@ namespace Netfluid
         public bool Landlocked { get; private set; }
         public double Area { get; private set; }
 
+        public static Country Parse(string value)
+        {
+            CountryCode code;
+            if (Enum.TryParse(value,true, out code)) return FromCode(code);
+
+            CountryCodeISO3 isoCode;
+            if (Enum.TryParse(value,true, out isoCode)) return FromCode(isoCode);
+
+            return null;
+        }
+
         public static Country FromCode(CountryCode cc)
         {
             return All.FirstOrDefault(x => x.CountryCode == cc) ?? World;
+        }
+
+        public static Country FromCode(CountryCodeISO3 cc)
+        {
+            return All.FirstOrDefault(x => x.ISO3 == cc) ?? World;
         }
 
         public IEnumerable<CultureInfo> GetCultures()

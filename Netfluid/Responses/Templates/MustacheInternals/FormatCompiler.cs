@@ -9,7 +9,7 @@ namespace Mustache
     /// <summary>
     /// Parses a format string and returns a text generator.
     /// </summary>
-    public sealed class FormatCompiler
+    internal sealed class FormatCompiler
     {
         private readonly Dictionary<string, TagDefinition> _tagLookup;
         private readonly Dictionary<string, Regex> _regexLookup;

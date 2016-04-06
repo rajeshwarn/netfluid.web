@@ -72,7 +72,7 @@ namespace Netfluid
 
                 for (int i = 0; i < GroupNames.Length; i++)
                 {
-                    cnt.Values.Add(new QueryValue() { Name = GroupNames[i], Value = m.Groups[GroupNames[i]].Value, Origin = QueryValue.QueryValueOrigin.URL });
+                    cnt.Values.Add(GroupNames[i],m.Groups[GroupNames[i]].Value);
                 }
             }
 

@@ -5,7 +5,7 @@ namespace Mustache
     /// <summary>
     /// Holds the information descibing a key that is found in a template.
     /// </summary>
-    public class PlaceholderFoundEventArgs : EventArgs
+    internal class PlaceholderFoundEventArgs : EventArgs
     {
         /// <summary>
         /// Initializes a new instance of a PlaceholderFoundEventArgs.

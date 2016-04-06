@@ -57,7 +57,7 @@ namespace Netfluid
 
         public string SessionId { get; private set; }
 
-        public QueryValueCollection Values { get; private set; }
+        public QueryValues Values { get; private set; }
 
         public HttpFileCollection Files { get; private set; }
 
@@ -95,8 +95,8 @@ namespace Netfluid
                 try
                 {
                     var wc = new WebClient();
-                    dynamic obj = JSON.Deserialize(wc.DownloadString("http://ipinfo.io/json"));
-
+                    dynamic obj = JSON.Deserialize(wc.DownloadString($"http://ipinfo.io/{Request.RemoteEndPoint.Address.ToString()}/json"));
+                    
                     if (!Enum.TryParse<CountryCode>(obj.country,true, out code)) code = CountryCode.World;
                 }
                 finally
@@ -126,7 +126,7 @@ namespace Netfluid
             Request = new HttpRequest(c.Request);
             Response = new HttpResponse(this,c.Response);
 
-            Values = new QueryValueCollection();
+            Values = new QueryValues();
             Files = new HttpFileCollection();
             IsOpen = true;
 
@@ -162,10 +162,10 @@ namespace Netfluid
                     {
                         case 2:
                             string v = HttpUtility.UrlDecode(val[1]);
-                            Values.Add(new QueryValue() { Name = k, Value = v, Origin = QueryValue.QueryValueOrigin.GET });
+                            Values.Add(k,v);
                             break;
                         case 1:
-                            Values.Add(new QueryValue() { Name = k, Value = "true", Origin = QueryValue.QueryValueOrigin.GET });
+                            Values.Add(k,"true");
                             break;
                     }
                 }
@@ -193,10 +193,10 @@ namespace Netfluid
                     {
                         case 2:
                             string v = HttpUtility.UrlDecode(val[1]);
-                            Values.Add(new QueryValue() { Name = k, Value = v, Origin = QueryValue.QueryValueOrigin.POST });
+                            Values.Add(k,v);
                             break;
                         case 1:
-                            Values.Add(new QueryValue() { Name = k, Value = "true", Origin = QueryValue.QueryValueOrigin.POST });
+                            Values.Add(k,"true");
                             break;
                     }
                 }
@@ -206,7 +206,7 @@ namespace Netfluid
                 var b = HttpListernerContext.Request.Headers["Content-Type"].Substring("multipart/form-data; boundary=".Length);
 
                 var parser = new MultipartFormDataParser(HttpListernerContext.Request.InputStream, b, HttpListernerContext.Request.ContentEncoding);
-                parser.Parameters.ForEach(x => Values.Add(new QueryValue { Name = x.Key, Value = x.Value.Data, Origin = QueryValue.QueryValueOrigin.POST }));
+                parser.Parameters.ForEach(x => Values.Add( x.Key,x.Value.Data));
                 parser.Files.ForEach(x => Files.Add(x));
             }
             #endregion

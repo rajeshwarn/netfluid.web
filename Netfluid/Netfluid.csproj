@@ -235,8 +235,7 @@
     <Compile Include="PublicFolders\CDNFolder.cs" />
     <Compile Include="PublicFolders\IPublicFolder.cs" />
     <Compile Include="PublicFolders\PublicFolder.cs" />
-    <Compile Include="QueryValue.cs" />
-    <Compile Include="QueryValueCollection.cs" />
+    <Compile Include="QueryValues.cs" />
     <Compile Include="Responses\CSVResponse.cs" />
     <Compile Include="Responses\EmptyResponse.cs" />
     <Compile Include="Responses\FileResponse.cs" />
