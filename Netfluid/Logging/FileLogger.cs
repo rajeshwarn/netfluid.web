@@ -14,7 +14,7 @@ namespace Netfluid.Logging
         public FileLogger(string path)
         {
             queue = new BlockingCollection<string>();
-            writer = new StreamWriter(new FileStream(path, FileMode.OpenOrCreate));
+            writer = new StreamWriter(new FileStream(path, FileMode.Append));
             task = Task.Factory.StartNew(()=> 
             {
                 while (true)

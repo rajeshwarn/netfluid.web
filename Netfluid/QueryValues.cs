@@ -115,9 +115,9 @@ namespace Netfluid
             return obj;
         }
 
-        public T Parse<T>() where T :class
+        public T Parse<T>()
         {
-            return Parse(typeof(T)) as T;
+            return (T)Parse(typeof(T));
         }
 
         public object ParseArray(Type elemType)
@@ -179,6 +179,8 @@ namespace Netfluid
 
         public object Parse(Type type)
         {
+            if (Values.Count == 0) return type.DefaultValue();
+
             try
             {
                 if (type.IsArray)

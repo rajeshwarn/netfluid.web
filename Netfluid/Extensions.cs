@@ -861,6 +861,8 @@ namespace Netfluid
         /// <param name="batchSize">The action</param>
         public static void ForEach<T>(this IEnumerable<T> enu, Action<T> act)
         {
+            if (enu == null) return;
+
             foreach (var obj in enu)
             {
                 act.Invoke(obj);
