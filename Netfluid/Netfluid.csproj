@@ -57,8 +57,6 @@
     <Compile Include="DB\Blocks\BlockStorage.cs" />
     <Compile Include="DB\Blocks\BufferHelper.cs" />
     <Compile Include="DB\Blocks\IBlockStorage.cs" />
-    <Compile Include="DB\Blocks\IIndex.cs" />
-    <Compile Include="DB\Blocks\IRecordStorage.cs" />
     <Compile Include="DB\Blocks\ISerializer.cs" />
     <Compile Include="DB\Blocks\ITreeNodeManager.cs" />
     <Compile Include="DB\Blocks\LittleEndianByteOrder.cs" />
@@ -72,7 +70,6 @@
     <Compile Include="DB\Serializers\DateTimeSerializer.cs" />
     <Compile Include="DB\Serializers\DoubleSerializer.cs" />
     <Compile Include="DB\Serializers\UIntSerializer.cs" />
-    <Compile Include="DB\StringGraph.cs" />
     <Compile Include="DB\Tree\Tree.cs" />
     <Compile Include="DB\Tree\TreeDiskNodeManager.cs" />
     <Compile Include="DB\Tree\TreeDiskNodeSerializer.cs" />

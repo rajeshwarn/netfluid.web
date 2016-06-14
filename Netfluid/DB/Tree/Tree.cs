@@ -4,7 +4,7 @@ using System.Threading;
 
 namespace Netfluid.DB
 {
-	internal class Tree<K, V> : IIndex<K, V>
+	internal class Tree<K, V>
     {
 		readonly ITreeNodeManager<K, V> nodeManager;
 		readonly bool allowDuplicateKeys;

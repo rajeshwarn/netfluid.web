@@ -9,7 +9,7 @@ namespace Netfluid.DB
 	/// Record storage service that store data in form of records, each
 	/// record made up from one or several blocks
 	/// </summary>
-	class RecordStorage : IRecordStorage
+	class RecordStorage
 	{
 		readonly IBlockStorage storage;
         readonly ReaderWriterLockSlim storeLocker;

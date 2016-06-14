@@ -211,12 +211,9 @@ namespace Netfluid.DB
 				index = this.entries.Count -1;
 				return;
 			}
-			// Otherwise, keep drilling down to the right
-			else {
-				var rightMostNode = nodeManager.Find(this.childrenIds[this.childrenIds.Count -1]);
-				rightMostNode.FindLargest (out node, out index);
-			}
-		}
+            var rightMostNode = nodeManager.Find(this.childrenIds[this.childrenIds.Count - 1]);
+            rightMostNode.FindLargest(out node, out index);
+        }
 
 		/// <summary>
 		/// Find the smallest entry on this subtree and output it to specified parameters
@@ -230,12 +227,9 @@ namespace Netfluid.DB
 				index = 0;
 				return;
 			}
-			// Otherwise, keep drilling down to the right
-			else {
-				var leftMostNode = nodeManager.Find(this.childrenIds[0]);
-				leftMostNode.FindSmallest (out node, out index);
-			}
-		}
+            var leftMostNode = nodeManager.Find(this.childrenIds[0]);
+            leftMostNode.FindSmallest(out node, out index);
+        }
 
 		public void InsertAsLeaf (K key, V value, int insertPosition)
 		{
@@ -317,7 +311,8 @@ namespace Netfluid.DB
 			}
 			// Otherwise, elevate the middle element
 			// to the parent node
-			else {
+			else
+            {
 				int insertPosition;
 				parent.InsertAsParent (middleEntry.Item1
 					, middleEntry.Item2
@@ -357,11 +352,10 @@ namespace Netfluid.DB
 		/// <param name="firstOccurence">If set to <c>true</c> first occurence.</param>
 		public int BinarySearchEntriesForKey (K key, bool firstOccurence)
 		{
-			if (firstOccurence) {
+			if (firstOccurence)
 				return entries.BinarySearchFirst (new Tuple<K, V>(key, default(V)), this.nodeManager.EntryComparer);
-			} else {
-				return entries.BinarySearchLast (new Tuple<K, V>(key, default(V)), this.nodeManager.EntryComparer);
-			}
+
+            return entries.BinarySearchLast (new Tuple<K, V>(key, default(V)), this.nodeManager.EntryComparer);
 		}
 
 		/// <summary>
@@ -380,13 +374,6 @@ namespace Netfluid.DB
 			return entries[atIndex];
 		}
 
-		/// <summary>
-		/// Check if there is an entry at given index
-		/// </summary>
-		public bool EntryExists (int atIndex)
-		{
-			return atIndex < entries.Count;
-		}
 
 		public override string ToString ()
 		{

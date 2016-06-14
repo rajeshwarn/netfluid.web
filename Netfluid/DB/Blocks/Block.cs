@@ -43,31 +43,26 @@ namespace Netfluid.DB
 
 		public long GetHeader (int field)
 		{
-			if (isDisposed) {
+			if (isDisposed)
 				throw new ObjectDisposedException ("Block");
-			}
 
 			// Validate field number
-			if (field < 0) {
+			if (field < 0)
 				throw new IndexOutOfRangeException ();
-			}
-			if (field >= (storage.BlockHeaderSize/8)) {
+
+			if (field >= (storage.BlockHeaderSize/8))
 				throw new ArgumentException ("Invalid field: " + field);
-			}
 
 			// Check from cache, if it is there then return it
 			if (field < cachedHeaderValue.Length)
 			{
-				if (cachedHeaderValue[field] == null) {
+				if (cachedHeaderValue[field] == null)
 					cachedHeaderValue[field] = BufferHelper.ReadBufferInt64 (firstSector, field * 8);
-				}
+
 				return (long)cachedHeaderValue[field];
 			}
-			// Otherwise return straight away
-			else {
-				return BufferHelper.ReadBufferInt64 (firstSector, field * 8);
-			}
-		}
+            return BufferHelper.ReadBufferInt64(firstSector, field * 8);
+        }
 
 		public void SetHeader (int field, long value)
 		{
@@ -215,10 +210,8 @@ namespace Netfluid.DB
 		protected virtual void OnDisposed (EventArgs e)
 		{
 			if (Disposed != null)
-			{
-				Disposed (this, e);
-			}
-		}
+                Disposed(this, e);
+        }
 
 		//
 		// Dispose

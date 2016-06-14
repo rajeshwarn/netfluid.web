@@ -5,7 +5,7 @@ namespace Netfluid.DB
 {
     internal class TreeDiskNodeManager<K, V> : ITreeNodeManager<K, V>
 	{
-		readonly IRecordStorage recordStorage;
+		readonly RecordStorage recordStorage;
 		readonly Dictionary<uint, TreeNode<K, V>> dirtyNodes = new Dictionary<uint, TreeNode<K, V>> ();
 		readonly Dictionary<uint, WeakReference<TreeNode<K, V>>> nodeWeakRefs = new Dictionary<uint, WeakReference<TreeNode<K, V>>>();
 		readonly Queue<TreeNode<K, V>> nodeStrongRefs = new Queue<TreeNode<K, V>> ();
@@ -47,7 +47,7 @@ namespace Netfluid.DB
 		/// </summary>
 		public TreeDiskNodeManager (ISerializer<K> keySerializer
 			, ISerializer<V> valueSerializer
-			, IRecordStorage nodeStorage)
+			, RecordStorage nodeStorage)
 			: this (keySerializer, valueSerializer, nodeStorage, Comparer<K>.Default)
 		{
 		}
@@ -61,7 +61,7 @@ namespace Netfluid.DB
 		/// <param name="keyComparer">Key comparer.</param>
 		public TreeDiskNodeManager (ISerializer<K> keySerializer
 			, ISerializer<V> valueSerializer
-			, IRecordStorage recordStorage
+			, RecordStorage recordStorage
 			, IComparer<K> keyComparer)
 		{
 			if (recordStorage == null)
