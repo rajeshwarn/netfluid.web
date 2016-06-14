@@ -32,15 +32,15 @@ namespace Netfluid.Smtp
 			}.Union(GetExtensions(context as SmtpSession)).ToArray<string>();
 			for (int i = 0; i < array.Length - 1; i++)
 			{
-				await context.Stream.WriteLineAsync(string.Format("250-{0}", array[i]), cancellationToken);
+				await context.NetworkTextStream.WriteLineAsync(string.Format("250-{0}", array[i]), cancellationToken);
 			}
-			await context.Stream.WriteLineAsync(string.Format("250 {0}", array[array.Length - 1]), cancellationToken);
-			await context.Stream.FlushAsync(cancellationToken);
+			await context.NetworkTextStream.WriteLineAsync(string.Format("250 {0}", array[array.Length - 1]), cancellationToken);
+			await context.NetworkTextStream.FlushAsync(cancellationToken);
 		}
 		private IEnumerable<string> GetExtensions(SmtpSession session)
 		{
 			yield return "PIPELINING";
-			if (!session.Stream.IsSecure && _server.ServerCertificate != null)
+			if (!session.NetworkTextStream.IsSecure && _server.ServerCertificate != null)
 			{
 				yield return "STARTTLS";
 			}
@@ -48,7 +48,7 @@ namespace Netfluid.Smtp
 			{
 				yield return string.Format("SIZE {0}", _server.MaxMessageSize);
 			}
-			if (session.Stream.IsSecure && _server.UserAuthenticator != null)
+			if (session.NetworkTextStream.IsSecure && _server.UserAuthenticator != null)
 			{
 				yield return "AUTH PLAIN LOGIN";
 			}

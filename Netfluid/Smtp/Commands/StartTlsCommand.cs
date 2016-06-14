@@ -15,10 +15,10 @@ namespace Netfluid.Smtp
 		}
 		public override async Task ExecuteAsync(SmtpSession context, CancellationToken cancellationToken)
 		{
-			await context.Stream.ReplyAsync(SmtpResponse.ServiceReady, cancellationToken);
-			SslStream sslStream = new SslStream(context.Stream.GetInnerStream(), true);
+			await context.NetworkTextStream.ReplyAsync(SmtpResponse.ServiceReady, cancellationToken);
+			SslStream sslStream = new SslStream(context.NetworkTextStream.GetInnerStream(), true);
 			await sslStream.AuthenticateAsServerAsync(_certificate, false, SslProtocols.Default, true);
-			context.Stream = new NetworkTextStream(sslStream);
+			context.NetworkTextStream = new NetworkTextStream(sslStream);
 		}
 	}
 }

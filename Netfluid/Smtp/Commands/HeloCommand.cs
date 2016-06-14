@@ -20,7 +20,7 @@ namespace Netfluid.Smtp
 		public override Task ExecuteAsync(SmtpSession context, CancellationToken cancellationToken)
 		{
 			SmtpResponse response = new SmtpResponse(SmtpReplyCode.Ok, string.Format("Hello {0}, haven't we met before?", Domain));
-			return context.Stream.ReplyAsync(response, cancellationToken);
+			return context.NetworkTextStream.ReplyAsync(response, cancellationToken);
 		}
 	}
 }

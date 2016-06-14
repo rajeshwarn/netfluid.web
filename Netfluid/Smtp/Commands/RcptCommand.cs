@@ -30,13 +30,13 @@ namespace Netfluid.Smtp
 			{
 			case ValidationResult.Yes:
 				context.To.Add(Address);
-				await context.Stream.ReplyAsync(SmtpResponse.Ok, cancellationToken);
+				await context.NetworkTextStream.ReplyAsync(SmtpResponse.Ok, cancellationToken);
 				break;
 			case ValidationResult.NoTemporarily:
-				await context.Stream.ReplyAsync(SmtpResponse.MailboxUnavailable, cancellationToken);
+				await context.NetworkTextStream.ReplyAsync(SmtpResponse.MailboxUnavailable, cancellationToken);
 				break;
 			case ValidationResult.NoPermanently:
-				await context.Stream.ReplyAsync(SmtpResponse.MailboxNameNotAllowed, cancellationToken);
+				await context.NetworkTextStream.ReplyAsync(SmtpResponse.MailboxNameNotAllowed, cancellationToken);
 				break;
 			default:
 				throw new NotSupportedException("The Acceptance state is not supported.");

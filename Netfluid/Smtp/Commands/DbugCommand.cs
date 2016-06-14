@@ -7,7 +7,7 @@ namespace Netfluid.Smtp
 	{
 		public override async Task ExecuteAsync(SmtpSession context, CancellationToken cancellationToken)
 		{
-			await context.Stream.ReplyAsync(SmtpResponse.Ok, cancellationToken).ConfigureAwait(false);
+			await context.NetworkTextStream.ReplyAsync(SmtpResponse.Ok, cancellationToken).ConfigureAwait(false);
 		}
 	}
 }

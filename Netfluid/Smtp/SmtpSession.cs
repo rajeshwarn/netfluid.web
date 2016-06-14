@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Net.Mail;
+using System.IO;
 
 namespace Netfluid.Smtp
 {
@@ -17,7 +18,7 @@ namespace Netfluid.Smtp
 		private bool closed;
         StringBuilder Mime;
 
-        internal NetworkTextStream Stream;
+        internal NetworkTextStream NetworkTextStream;
 
         public string Username { get; set; }
         public int RetryCount { get; private set; }
@@ -25,11 +26,20 @@ namespace Netfluid.Smtp
         public List<MailAddress> To { get; set; }
         public string Content { get { return Mime.ToString(); } }
 
+        public Stream Stream
+        {
+            get
+            {
+                return new MemoryStream(Encoding.UTF8.GetBytes(Content));
+            }
+        }
+
+
         internal SmtpSession(SmtpServer server, TcpClient tcpClient)
 		{
 			_server = server;
 			_stateMachine = new SmtpStateMachine(_server);
-			Stream = new NetworkTextStream(tcpClient);
+			NetworkTextStream = new NetworkTextStream(tcpClient);
             RetryCount = 5;
             Reset();
         }
@@ -51,8 +61,8 @@ namespace Netfluid.Smtp
 			cancellationToken.ThrowIfCancellationRequested();
 
             Version version = typeof(SmtpSession).Assembly.GetName().Version;
-            await Stream.WriteLineAsync(string.Format("220 {0} v{1} ESMTP ready", _server.ServerName, version), cancellationToken).ConfigureAwait(false);
-            await Stream.FlushAsync(cancellationToken).ConfigureAwait(false);
+            await NetworkTextStream.WriteLineAsync(string.Format("220 {0} v{1} ESMTP ready", _server.ServerName, version), cancellationToken).ConfigureAwait(false);
+            await NetworkTextStream.FlushAsync(cancellationToken).ConfigureAwait(false);
 
             while (true)
 			{
@@ -63,7 +73,7 @@ namespace Netfluid.Smtp
 					break;
 				}
 				cancellationToken.ThrowIfCancellationRequested();
-				string text = await Stream.ReadLineAsync(cancellationToken).ConfigureAwait(false);
+				string text = await NetworkTextStream.ReadLineAsync(cancellationToken).ConfigureAwait(false);
 				SmtpCommand smtpCommand;
 
 				if (_stateMachine.TryAccept(new TokenEnumerator(new StringTokenizer(text)), out smtpCommand))

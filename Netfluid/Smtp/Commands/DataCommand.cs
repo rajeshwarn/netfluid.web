@@ -16,13 +16,13 @@ namespace Netfluid.Smtp
 		{
 			if (context.To.Count == 0)
 			{
-				await context.Stream.ReplyAsync(SmtpResponse.NoValidRecipientsGiven, cancellationToken).ConfigureAwait(false);
+				await context.NetworkTextStream.ReplyAsync(SmtpResponse.NoValidRecipientsGiven, cancellationToken).ConfigureAwait(false);
 			}
 			else
 			{
-				await context.Stream.ReplyAsync(new SmtpResponse(SmtpReplyCode.StartMailInput, "end with <CRLF>.<CRLF>"), cancellationToken).ConfigureAwait(false);
+				await context.NetworkTextStream.ReplyAsync(new SmtpResponse(SmtpReplyCode.StartMailInput, "end with <CRLF>.<CRLF>"), cancellationToken).ConfigureAwait(false);
 				string text;
-				while ((text = await context.Stream.ReadLineAsync(cancellationToken).ConfigureAwait(false)) != ".")
+				while ((text = await context.NetworkTextStream.ReadLineAsync(cancellationToken).ConfigureAwait(false)) != ".")
 				{
 					context.AppendLine(text.TrimStart(new char[]
 					{
@@ -32,11 +32,11 @@ namespace Netfluid.Smtp
 				try
 				{
 					string arg = OnMessage(context);
-					await context.Stream.ReplyAsync(new SmtpResponse(SmtpReplyCode.Ok, string.Format("mail accepted ({0})", arg)), cancellationToken).ConfigureAwait(false);
+					await context.NetworkTextStream.ReplyAsync(new SmtpResponse(SmtpReplyCode.Ok, string.Format("mail accepted ({0})", arg)), cancellationToken).ConfigureAwait(false);
 				}
 				catch (Exception)
 				{
-					await context.Stream.ReplyAsync(new SmtpResponse(SmtpReplyCode.MailboxUnavailable, null), cancellationToken).ConfigureAwait(false);
+					await context.NetworkTextStream.ReplyAsync(new SmtpResponse(SmtpReplyCode.MailboxUnavailable, null), cancellationToken).ConfigureAwait(false);
 				}
 			}
 		}

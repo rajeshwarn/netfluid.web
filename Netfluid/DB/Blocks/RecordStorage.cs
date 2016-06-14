@@ -80,7 +80,7 @@ namespace Netfluid.DB
 				var bytesRead = 0;
 
 				// Now start filling data
-				IBlock currentBlock = block;
+				Block currentBlock = block;
 				while (true)
 				{
 					uint nextBlockId;
@@ -95,7 +95,7 @@ namespace Netfluid.DB
 						}
 
 						// Read all available content of current block
-						currentBlock.Read (dst:data, dstOffset:bytesRead, srcOffset:0, count:(int)thisBlockContentLength);
+						currentBlock.Read (dest:data, destOffset:bytesRead, srcOffset:0, count:(int)thisBlockContentLength);
 
 						// Update number of bytes read
 						bytesRead += (int)thisBlockContentLength;
@@ -145,10 +145,10 @@ namespace Netfluid.DB
 				}
 
 				// Otherwise continue to write data until completion
-				IBlock currentBlock = firstBlock;
+				Block currentBlock = firstBlock;
 				while (dataWritten < dataTobeWritten)
 				{
-					IBlock nextBlock = null;
+					Block nextBlock = null;
 
 					using (currentBlock)
 					{
@@ -213,10 +213,10 @@ namespace Netfluid.DB
             storeLocker.EnterWriteLock();
 			using (var block = storage.Find (recordId))
 			{
-				IBlock currentBlock = block;
+				Block currentBlock = block;
 				while (true)
 				{
-					IBlock nextBlock = null;
+					Block nextBlock = null;
 
 					using (currentBlock)
 					{
@@ -251,7 +251,7 @@ namespace Netfluid.DB
 			var total = data.Length;
 			var blocks = FindBlocks (recordId);
 			var blocksUsed = 0;
-			var previousBlock = (IBlock)null;
+			var previousBlock = (Block)null;
 
             storeLocker.EnterWriteLock();
             try {
@@ -267,7 +267,7 @@ namespace Netfluid.DB
 					// Find the block to write to:
 					// If `blockIndex` exists in `blocks`, then write into it,
 					// otherwise allocate a new one for writting
-					var target = (IBlock)null;
+					var target = (Block)null;
 					if (blockIndex < blocks.Count) {
 						target = blocks[blockIndex];
 					} else {
@@ -324,9 +324,9 @@ namespace Netfluid.DB
 		/// Find all blocks of given record, return these blocks in order.
 		/// </summary>
 		/// <param name="recordId">Record identifier.</param>
-		List<IBlock> FindBlocks (uint recordId)
+		List<Block> FindBlocks (uint recordId)
 		{
-			var blocks = new List<IBlock>();
+			var blocks = new List<Block>();
 			var success = false;
 
 			try
@@ -374,10 +374,10 @@ namespace Netfluid.DB
 		/// or creating a new one
 		/// </summary>
 		/// <returns>Newly allocated block ready to use.</returns>
-		IBlock AllocateBlock ()
+		Block AllocateBlock ()
 		{
 			uint resuableBlockId;
-			IBlock newBlock;
+			Block newBlock;
 
 			if (false == TryFindFreeBlock (out resuableBlockId))
             {
@@ -406,7 +406,7 @@ namespace Netfluid.DB
 		bool TryFindFreeBlock (out uint blockId)
 		{
 			blockId = 0;
-			IBlock lastBlock, secondLastBlock;
+			Block lastBlock, secondLastBlock;
 			GetSpaceTrackingBlock (out lastBlock, out secondLastBlock);
 
 			using (lastBlock)
@@ -447,7 +447,7 @@ namespace Netfluid.DB
 			}
 		}
 
-		void AppendUInt32ToContent (IBlock block, uint value)
+		void AppendUInt32ToContent (Block block, uint value)
 		{
 			var contentLength = block.GetHeader (kBlockContentLength);
 
@@ -458,7 +458,7 @@ namespace Netfluid.DB
 			block.Write (src: LittleEndianByteOrder.GetBytes(value), srcOffset: 0, dstOffset: (int)contentLength, count: 4);
 		}
 
-		uint ReadUInt32FromTrailingContent (IBlock block)
+		uint ReadUInt32FromTrailingContent (Block block)
 		{
 			var buffer = new byte[4];
 			var contentLength = block.GetHeader (kBlockContentLength);
@@ -471,13 +471,13 @@ namespace Netfluid.DB
 				throw new InvalidDataException ("Trying to dequeue UInt32 from an empty block");
 			}
 
-			block.Read (dst: buffer, dstOffset: 0, srcOffset: (int)contentLength -4, count: 4);
+			block.Read (dest: buffer, destOffset: 0, srcOffset: (int)contentLength -4, count: 4);
 			return LittleEndianByteOrder.GetUInt32 (buffer);
 		}
 
 		void MarkAsFree (uint blockId)
 		{
-			IBlock lastBlock, secondLastBlock, targetBlock = null;
+			Block lastBlock, secondLastBlock, targetBlock = null;
 			GetSpaceTrackingBlock (out lastBlock, out secondLastBlock);
 
 			using (lastBlock)
@@ -518,7 +518,7 @@ namespace Netfluid.DB
 		/// <summary>
 		/// Get the last 2 blocks from the free space tracking record, 
 		/// </summary>
-		void GetSpaceTrackingBlock (out IBlock lastBlock, out IBlock secondLastBlock)
+		void GetSpaceTrackingBlock (out Block lastBlock, out Block secondLastBlock)
 		{
 			lastBlock = null;
 			secondLastBlock = null;

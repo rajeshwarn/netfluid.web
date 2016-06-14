@@ -52,12 +52,10 @@
     <Compile Include="Context.cs" />
     <Compile Include="Country.cs" />
     <Compile Include="Date.cs" />
-    <Compile Include="DB\BinaryPersistentList.cs" />
     <Compile Include="DB\BinaryKeyValueStore.cs" />
     <Compile Include="DB\Blocks\Block.cs" />
     <Compile Include="DB\Blocks\BlockStorage.cs" />
     <Compile Include="DB\Blocks\BufferHelper.cs" />
-    <Compile Include="DB\Blocks\IBlock.cs" />
     <Compile Include="DB\Blocks\IBlockStorage.cs" />
     <Compile Include="DB\Blocks\IIndex.cs" />
     <Compile Include="DB\Blocks\IRecordStorage.cs" />
@@ -70,7 +68,6 @@
     <Compile Include="DB\IKeyValueStore.cs" />
     <Compile Include="DB\Index.cs" />
     <Compile Include="DB\KeyValueStore.cs" />
-    <Compile Include="DB\PersistentQueue.cs" />
     <Compile Include="DB\Serializer.cs" />
     <Compile Include="DB\Serializers\DateTimeSerializer.cs" />
     <Compile Include="DB\Serializers\DoubleSerializer.cs" />
@@ -314,7 +311,6 @@
     <Compile Include="Serialization\JsonInternals\Converters\DataSetConverter.cs" />
     <Compile Include="Serialization\JsonInternals\Converters\DataTableConverter.cs" />
     <Compile Include="Serialization\JsonInternals\Converters\DateTimeConverterBase.cs" />
-    <Compile Include="Serialization\JsonInternals\Converters\DiscriminatedUnionConverter.cs" />
     <Compile Include="Serialization\JsonInternals\Converters\EntityKeyMemberConverter.cs" />
     <Compile Include="Serialization\JsonInternals\Converters\ExpandoObjectConverter.cs" />
     <Compile Include="Serialization\JsonInternals\Converters\IPConverter.cs" />
@@ -454,7 +450,6 @@
     <Compile Include="Serialization\JsonInternals\Utilities\EnumUtils.cs" />
     <Compile Include="Serialization\JsonInternals\Utilities\EnumValue.cs" />
     <Compile Include="Serialization\JsonInternals\Utilities\ExpressionReflectionDelegateFactory.cs" />
-    <Compile Include="Serialization\JsonInternals\Utilities\FSharpUtils.cs" />
     <Compile Include="Serialization\JsonInternals\Utilities\ILGeneratorExtensions.cs" />
     <Compile Include="Serialization\JsonInternals\Utilities\ImmutableCollectionsUtils.cs" />
     <Compile Include="Serialization\JsonInternals\Utilities\JavaScriptUtils.cs" />

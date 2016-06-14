@@ -106,9 +106,6 @@ namespace Netfluid.Json.Serialization
             new DataSetConverter(),
             new DataTableConverter(),
 #endif
-#if !(NET35 || NET20)
-            new DiscriminatedUnionConverter(),
-#endif
             new KeyValuePairConverter(),
             new BsonObjectIdConverter(),
             new RegexConverter()
@@ -797,25 +794,11 @@ namespace Netfluid.Json.Serialization
             if (t.IsGenericType() && t.GetGenericTypeDefinition() == typeof(ConcurrentDictionary<,>))
                 return true;
 #endif
-#if !(NET35 || NET20)
-            if (t.Name == FSharpUtils.FSharpSetTypeName || t.Name == FSharpUtils.FSharpMapTypeName)
-                return true;
-#endif
-
             return false;
         }
 
         private static bool ShouldSkipSerializing(Type t)
         {
-#if !(NET35 || NET20)
-            if (t.Name == FSharpUtils.FSharpSetTypeName || t.Name == FSharpUtils.FSharpMapTypeName)
-                return true;
-#endif
-#if DOTNET
-            if (t.IsGenericType() && t.GetGenericTypeDefinition() == typeof(ConcurrentDictionary<,>))
-                return true;
-#endif
-
             return false;
         }
 

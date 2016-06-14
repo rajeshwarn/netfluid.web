@@ -8,3 +8,4 @@ D:\PROGETTI\NetFluid\Netfluid\bin\Release\Netfluid.dll
 D:\PROGETTI\NetFluid\Netfluid\bin\Release\Netfluid.pdb
 D:\PROGETTI\NetFluid\Netfluid\obj\Release\Netfluid.dll
 D:\PROGETTI\NetFluid\Netfluid\obj\Release\Netfluid.pdb
+D:\PROGETTI\NetFluid\Netfluid\obj\Release\Netfluid.csprojResolveAssemblyReference.cache

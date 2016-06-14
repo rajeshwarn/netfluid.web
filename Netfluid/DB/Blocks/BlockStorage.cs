@@ -7,59 +7,39 @@ namespace Netfluid.DB
 	internal class BlockStorage : IBlockStorage
 	{
 		readonly Stream stream;
-		readonly int blockSize;
-		readonly int blockHeaderSize;
-		readonly int blockContentSize;
-		readonly int unitOfWork;
 		readonly Dictionary<uint, Block> blocks = new Dictionary<uint, Block> ();
 
-		public int DiskSectorSize {
-			get {
-				return unitOfWork;
-			}
-		}
+		public int DiskSectorSize { get; private set; }
 
-		public int BlockSize {
-			get {
-				return blockSize;
-			}
-		}
+		public int BlockSize { get; private set; }
 
-		public int BlockHeaderSize {
-			get {
-				return blockHeaderSize;
-			}
-		}
+        public int BlockHeaderSize { get; private set; }
 
-		public int BlockContentSize {
-			get {
-				return blockContentSize;
-			}
-		}
+        public int BlockContentSize { get; private set; }
 
-		//
-		// Constructors
-		//
+        //
+        // Constructors
+        //
 
-		public BlockStorage (Stream storage, int blockSize = 40960, int blockHeaderSize = 48)
+        public BlockStorage (Stream storage, int BlockSize = 40960, int BlockHeaderSize = 48)
 		{
 			if (storage == null)
 				throw new ArgumentNullException ("storage");
 
-			if (blockHeaderSize >= blockSize) {
-				throw new ArgumentException ("blockHeaderSize cannot be " +
+			if (BlockHeaderSize >= BlockSize) {
+				throw new ArgumentException ("BlockHeaderSize cannot be " +
 					"larger than or equal " +
-					"to " + "blockSize");
+					"to " + "BlockSize");
 			}
 
-			if (blockSize < 128) {
-				throw new ArgumentException ("blockSize too small");
+			if (BlockSize < 128) {
+				throw new ArgumentException ("BlockSize too small");
 			}
 
-			this.unitOfWork = ((blockSize >= 4096) ? 4096 : 128);
-			this.blockSize = blockSize;
-			this.blockHeaderSize = blockHeaderSize;
-			this.blockContentSize = blockSize - blockHeaderSize;
+			this.DiskSectorSize = ((BlockSize >= 4096) ? 4096 : 128);
+			this.BlockSize = BlockSize;
+			this.BlockHeaderSize = BlockHeaderSize;
+			this.BlockContentSize = BlockSize - BlockHeaderSize;
 			this.stream = storage;
 		}
 
@@ -67,7 +47,7 @@ namespace Netfluid.DB
 		// Public Methods
 		//
 
-		public IBlock Find (uint blockId)
+		public Block Find (uint blockId)
 		{
 			// Check from initialized blocks
 			if (true == blocks.ContainsKey(blockId))
@@ -77,15 +57,15 @@ namespace Netfluid.DB
 
 			// First, move to that block.
 			// If there is no such block return NULL
-			var blockPosition = blockId * blockSize;
-			if ((blockPosition + blockSize) > this.stream.Length)
+			var blockPosition = blockId * BlockSize;
+			if ((blockPosition + BlockSize) > this.stream.Length)
 			{
 				return null;
 			}
 
 			// Read the first 4KB of the block to construct a block from it
 			var firstSector = new byte[DiskSectorSize];
-			stream.Position = blockId * blockSize;
+			stream.Position = blockId * BlockSize;
 			stream.Read (firstSector, 0, DiskSectorSize);
 
 			var block = new Block (this, blockId, firstSector, this.stream);
@@ -93,17 +73,17 @@ namespace Netfluid.DB
 			return block;
 		}
 
-		public IBlock CreateNew ()
+		public Block CreateNew ()
 		{
-			if ((this.stream.Length % blockSize) != 0) {
+			if ((this.stream.Length % BlockSize) != 0) {
 				throw new DataMisalignedException ("Unexpected length of the stream: " + this.stream.Length);
 			}
 
 			// Calculate new block id
-			var blockId = (uint)Math.Ceiling ((double)this.stream.Length / (double)blockSize);
+			var blockId = (uint)Math.Ceiling ((double)this.stream.Length / (double)BlockSize);
 
 			// Extend length of underlying stream
-			this.stream.SetLength ((long)((blockId * blockSize) + blockSize));
+			this.stream.SetLength ((long)((blockId * BlockSize) + BlockSize));
 			this.stream.Flush ();
 
 			// Return desired block

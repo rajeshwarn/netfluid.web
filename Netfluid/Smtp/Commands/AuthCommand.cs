@@ -27,36 +27,36 @@ namespace Netfluid.Smtp
 			case AuthenticationMethod.Login:
 				if (!(await TryLogin(context, cancellationToken)))
 				{
-					await context.Stream.ReplyAsync(SmtpResponse.AuthenticationFailed, cancellationToken).ConfigureAwait(false);
+					await context.NetworkTextStream.ReplyAsync(SmtpResponse.AuthenticationFailed, cancellationToken).ConfigureAwait(false);
 					return;
 				}
 				break;
 			case AuthenticationMethod.Plain:
 				if (!(await TryPlain(context, cancellationToken)))
 				{
-					await context.Stream.ReplyAsync(SmtpResponse.AuthenticationFailed, cancellationToken).ConfigureAwait(false);
+					await context.NetworkTextStream.ReplyAsync(SmtpResponse.AuthenticationFailed, cancellationToken).ConfigureAwait(false);
 					return;
 				}
 				break;
 			}
 			if (!_userAuthenticator(context, _user, _password))
 			{
-				await context.Stream.ReplyAsync(SmtpResponse.AuthenticationFailed, cancellationToken).ConfigureAwait(false);
+				await context.NetworkTextStream.ReplyAsync(SmtpResponse.AuthenticationFailed, cancellationToken).ConfigureAwait(false);
 			}
 			else
 			{
-				await context.Stream.ReplyAsync(SmtpResponse.AuthenticationSuccessful, cancellationToken).ConfigureAwait(false);
+				await context.NetworkTextStream.ReplyAsync(SmtpResponse.AuthenticationSuccessful, cancellationToken).ConfigureAwait(false);
 			}
 		}
 		private async Task<bool> TryPlain(SmtpSession context, CancellationToken cancellationToken)
 		{
-			await context.Stream.ReplyAsync(new SmtpResponse(SmtpReplyCode.ContinueWithAuth, " "), cancellationToken).ConfigureAwait(false);
-			string @string = Encoding.UTF8.GetString(Convert.FromBase64String(await context.Stream.ReadLineAsync(cancellationToken).ConfigureAwait(false)));
+			await context.NetworkTextStream.ReplyAsync(new SmtpResponse(SmtpReplyCode.ContinueWithAuth, " "), cancellationToken).ConfigureAwait(false);
+			string @string = Encoding.UTF8.GetString(Convert.FromBase64String(await context.NetworkTextStream.ReadLineAsync(cancellationToken).ConfigureAwait(false)));
 			Match match = Regex.Match(@string, "\0(?<user>.*)\0(?<password>.*)");
 			bool result;
 			if (!match.Success)
 			{
-				await context.Stream.ReplyAsync(SmtpResponse.AuthenticationFailed, cancellationToken).ConfigureAwait(false);
+				await context.NetworkTextStream.ReplyAsync(SmtpResponse.AuthenticationFailed, cancellationToken).ConfigureAwait(false);
 				result = false;
 			}
 			else
@@ -69,10 +69,10 @@ namespace Netfluid.Smtp
 		}
 		private async Task<bool> TryLogin(SmtpSession context, CancellationToken cancellationToken)
 		{
-			await context.Stream.ReplyAsync(new SmtpResponse(SmtpReplyCode.ContinueWithAuth, "VXNlcm5hbWU6"), cancellationToken);
-			_user = Encoding.UTF8.GetString(Convert.FromBase64String(await context.Stream.ReadLineAsync(cancellationToken).ConfigureAwait(false)));
-			await context.Stream.ReplyAsync(new SmtpResponse(SmtpReplyCode.ContinueWithAuth, "UGFzc3dvcmQ6"), cancellationToken);
-			_password = Encoding.UTF8.GetString(Convert.FromBase64String(await context.Stream.ReadLineAsync(cancellationToken).ConfigureAwait(false)));
+			await context.NetworkTextStream.ReplyAsync(new SmtpResponse(SmtpReplyCode.ContinueWithAuth, "VXNlcm5hbWU6"), cancellationToken);
+			_user = Encoding.UTF8.GetString(Convert.FromBase64String(await context.NetworkTextStream.ReadLineAsync(cancellationToken).ConfigureAwait(false)));
+			await context.NetworkTextStream.ReplyAsync(new SmtpResponse(SmtpReplyCode.ContinueWithAuth, "UGFzc3dvcmQ6"), cancellationToken);
+			_password = Encoding.UTF8.GetString(Convert.FromBase64String(await context.NetworkTextStream.ReadLineAsync(cancellationToken).ConfigureAwait(false)));
 			return true;
 		}
 	}

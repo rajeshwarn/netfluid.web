@@ -1,33 +1,26 @@
 ﻿using System;
-using System.Diagnostics;
 using System.IO;
 
 namespace Netfluid.DB
 {
-	internal class Block : IBlock
+    internal class Block : IDisposable
 	{
 		readonly byte[] firstSector;
 		readonly long?[] cachedHeaderValue = new long?[5];
 		readonly Stream stream;
 		readonly BlockStorage storage;
-		readonly uint id;
-
 		bool isFirstSectorDirty = false;
 		bool isDisposed = false;
 
 		public event EventHandler Disposed;
 
-		public uint Id {
-			get {
-				return id;
-			}
-		}
+		public uint Id { get; private set; }
 
 		//
 		// Constructors
 		//
 
-		public Block (BlockStorage storage, uint id, byte[] firstSector, Stream stream)
+		public Block (BlockStorage storage, uint Id, byte[] firstSector, Stream stream)
 		{
 			if (stream == null)
 				throw new ArgumentNullException ("stream");
@@ -39,7 +32,7 @@ namespace Netfluid.DB
 				throw new ArgumentException ("firstSector length must be " + storage.DiskSectorSize);
 
 			this.storage = storage;
-			this.id = id;
+			this.Id = Id;
 			this.stream = stream;
 			this.firstSector = firstSector;
 		}

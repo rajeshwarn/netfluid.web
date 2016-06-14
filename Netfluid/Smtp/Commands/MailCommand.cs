@@ -40,7 +40,7 @@ namespace Netfluid.Smtp
 			int messageSize = GetMessageSize();
 			if (_maxMessageSize > 0 && messageSize > _maxMessageSize)
 			{
-				await context.Stream.ReplyAsync(SmtpResponse.SizeLimitExceeded, cancellationToken);
+				await context.NetworkTextStream.ReplyAsync(SmtpResponse.SizeLimitExceeded, cancellationToken);
                 return;
 			}
 
@@ -48,13 +48,13 @@ namespace Netfluid.Smtp
             {
                 case ValidationResult.Yes:
                     context.From = Address;
-                    await context.Stream.ReplyAsync(SmtpResponse.Ok, cancellationToken);
+                    await context.NetworkTextStream.ReplyAsync(SmtpResponse.Ok, cancellationToken);
                     break;
                 case ValidationResult.NoTemporarily:
-                    await context.Stream.ReplyAsync(SmtpResponse.MailboxUnavailable, cancellationToken);
+                    await context.NetworkTextStream.ReplyAsync(SmtpResponse.MailboxUnavailable, cancellationToken);
                     break;
                 case ValidationResult.NoPermanently:
-                    await context.Stream.ReplyAsync(SmtpResponse.MailboxNameNotAllowed, cancellationToken);
+                    await context.NetworkTextStream.ReplyAsync(SmtpResponse.MailboxNameNotAllowed, cancellationToken);
                     break;
                 default:
                     throw new NotSupportedException("The Acceptance state is not supported.");

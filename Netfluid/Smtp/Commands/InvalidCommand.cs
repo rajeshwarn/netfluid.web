@@ -13,7 +13,7 @@ namespace Netfluid.Smtp
 		public override Task ExecuteAsync(SmtpSession context, CancellationToken cancellationToken)
 		{
 			SmtpResponse response = new SmtpResponse(_response.ReplyCode, string.Format("{0}, {1} retry(ies) remaining.", _response.Message, context.RetryCount));
-			return context.Stream.ReplyAsync(response, cancellationToken);
+			return context.NetworkTextStream.ReplyAsync(response, cancellationToken);
 		}
 	}
 }
