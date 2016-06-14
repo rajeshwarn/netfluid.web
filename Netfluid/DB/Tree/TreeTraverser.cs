@@ -9,7 +9,7 @@ namespace Netfluid.DB
 		readonly TreeNode<K, V> fromNode;
 		readonly int fromIndex;
 		readonly TreeTraverseDirection direction;
-		readonly ITreeNodeManager<K, V> nodeManager;
+		readonly TreeDiskNodeManager<K, V> nodeManager;
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="Sdb.BTree.TreeTraverser`2"/> class.
@@ -18,7 +18,7 @@ namespace Netfluid.DB
 		/// <param name="fromNode">From node.</param>
 		/// <param name="fromIndex">From index.</param>
 		/// <param name="direction">Direction.</param>
-		public TreeTraverser (ITreeNodeManager<K, V> nodeManager
+		public TreeTraverser (TreeDiskNodeManager<K, V> nodeManager
 			, TreeNode<K,V> fromNode
 			, int fromIndex
 			, TreeTraverseDirection direction)

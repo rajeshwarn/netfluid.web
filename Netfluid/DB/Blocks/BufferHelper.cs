@@ -33,7 +33,7 @@ namespace Netfluid.DB
 		{
 			var doubleBuffer = new byte[8];
 			Buffer.BlockCopy (buffer, bufferOffset, doubleBuffer, 0, 8);
-			return BitConverter.ToDouble (doubleBuffer,0);
+			return BitConverter.ToDouble(doubleBuffer,0);
 		}
 
 		public static void WriteBuffer (uint value, byte[] buffer, int bufferOffset)

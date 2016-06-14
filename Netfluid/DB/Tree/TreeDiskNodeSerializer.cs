@@ -8,12 +8,12 @@ namespace Netfluid.DB
 	{
 		ISerializer<K> keySerializer;
 		ISerializer<V> valueSerializer;
-		ITreeNodeManager<K, V> nodeManager;
+		TreeDiskNodeManager<K, V> nodeManager;
 
 		/// <summary>
 		/// Construct a tree serializer that uses given key/value serializers 
 		/// </summary>
-		public TreeDiskNodeSerializer (ITreeNodeManager<K, V> nodeManager
+		public TreeDiskNodeSerializer (TreeDiskNodeManager<K, V> nodeManager
 			, ISerializer<K> keySerializer
 			, ISerializer<V> valueSerializer)
 		{

@@ -6,7 +6,7 @@ namespace Netfluid.DB
 {
 	internal class Tree<K, V>
     {
-		readonly ITreeNodeManager<K, V> nodeManager;
+		readonly TreeDiskNodeManager<K, V> nodeManager;
 		readonly bool allowDuplicateKeys;
         ReaderWriterLockSlim locker;
 
@@ -15,7 +15,7 @@ namespace Netfluid.DB
         /// </summary>
         /// <param name="logger">Logger.</param>
         /// <param name="nodeManager">Node manager.</param>
-        public Tree (ITreeNodeManager<K, V> nodeManager, bool allowDuplicateKeys = false)
+        public Tree (TreeDiskNodeManager<K, V> nodeManager, bool allowDuplicateKeys = false)
 		{
 			if (nodeManager == null)
 				throw new ArgumentNullException ("nodeManager");

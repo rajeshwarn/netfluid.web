@@ -6,7 +6,7 @@ namespace Netfluid.DB
 {
 	internal class TreeEnumerator<K, V> : IEnumerator<Tuple<K, V>>
 	{
-		readonly ITreeNodeManager<K, V> nodeManager;
+		readonly TreeDiskNodeManager<K, V> nodeManager;
 		readonly TreeTraverseDirection direction;
 
 		bool doneIterating = false;
@@ -46,7 +46,7 @@ namespace Netfluid.DB
 		/// <param name="node">Node.</param>
 		/// <param name="fromIndex">From index.</param>
 		/// <param name="direction">Direction.</param>
-		public TreeEnumerator (ITreeNodeManager<K, V> nodeManager
+		public TreeEnumerator (TreeDiskNodeManager<K, V> nodeManager
 			, TreeNode<K, V> node
 			, int fromIndex
 			, TreeTraverseDirection direction)

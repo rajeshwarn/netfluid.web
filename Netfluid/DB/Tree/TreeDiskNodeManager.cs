@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace Netfluid.DB
 {
-    internal class TreeDiskNodeManager<K, V> : ITreeNodeManager<K, V>
+    internal class TreeDiskNodeManager<K, V>
 	{
 		readonly RecordStorage recordStorage;
 		readonly Dictionary<uint, TreeNode<K, V>> dirtyNodes = new Dictionary<uint, TreeNode<K, V>> ();
@@ -95,7 +95,8 @@ namespace Netfluid.DB
 			// Create new record
 			TreeNode<K, V> node = null;
 
-			recordStorage.Create (nodeId => {
+			recordStorage.Create (nodeId =>
+            {
 				// Instantiate a new node
 				node = new TreeNode<K, V> (this, nodeId, 0, entries, childrenIds);
 

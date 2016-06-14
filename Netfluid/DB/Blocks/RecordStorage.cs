@@ -119,11 +119,10 @@ namespace Netfluid.DB
 			}
         }
 
-		public virtual uint Create (Func<uint, byte[]> dataGenerator)
+		public uint Create (Func<uint, byte[]> dataGenerator)
 		{
-			if (dataGenerator == null) {
+			if (dataGenerator == null)
 				throw new ArgumentException ();
-			}
 
             storeLocker.EnterWriteLock();
             using (var firstBlock = AllocateBlock ())
@@ -208,7 +207,7 @@ namespace Netfluid.DB
 			}
 		}
 
-		public virtual void Delete (uint recordId)
+		public void Delete (uint recordId)
 		{
             storeLocker.EnterWriteLock();
 			using (var block = storage.Find (recordId))
@@ -224,9 +223,12 @@ namespace Netfluid.DB
 						currentBlock.SetHeader (kIsDeleted, 1L);
 
 						var nextBlockId = (uint)currentBlock.GetHeader (kNextBlockId);
-						if (nextBlockId == 0) {
+						if (nextBlockId == 0)
+                        {
 							break;
-						} else {
+						}
+                        else
+                        {
 							nextBlock = storage.Find (nextBlockId);
 							if (currentBlock == null)
                             {
@@ -437,7 +439,8 @@ namespace Netfluid.DB
 					return true;
 				}
 				// If this block is not empty then dequeue an UInt32 from it
-				else {
+				else
+                {
 					blockId = ReadUInt32FromTrailingContent (lastBlock);
 					lastBlock.SetHeader (kBlockContentLength, currentBlockContentLength -4);
 
@@ -472,7 +475,7 @@ namespace Netfluid.DB
 			}
 
 			block.Read (dest: buffer, destOffset: 0, srcOffset: (int)contentLength -4, count: 4);
-			return BitConverter.ToUInt32 (buffer);
+			return BitConverter.ToUInt32 (buffer,0);
 		}
 
 		void MarkAsFree (uint blockId)
@@ -483,15 +486,18 @@ namespace Netfluid.DB
 			using (lastBlock)
 			using (secondLastBlock)
 			{
-				try {
+				try
+                {
 					// Just append a number, if there is some space left
 					var contentLength = lastBlock.GetHeader (kBlockContentLength);
-					if ((contentLength + 4) <= storage.BlockContentSize) {
+					if ((contentLength + 4) <= storage.BlockContentSize)
+                    {
 						targetBlock = lastBlock;
 					}
-					// No more fucking space left, allocate new block for writing.
+                    // No more fucking space left, allocate new block for writing.
 					// Note that we allocate fresh new block, if we reuse it may fuck things up
-					else {
+					else
+                    {
 						targetBlock = storage.CreateNew ();
 						targetBlock.SetHeader (kPreviousBlockId, lastBlock.Id);
 
@@ -526,24 +532,24 @@ namespace Netfluid.DB
 			// Grab all record 0's blocks
 			var blocks = FindBlocks (0);
 
-			try {
-				if (blocks == null || (blocks.Count == 0)) {
+			try
+            {
+				if (blocks == null || (blocks.Count == 0))
 					throw new Exception ("Failed to find blocks of record 0");
-				}
 
 				// Assign
 				lastBlock = blocks[blocks.Count -1];
-				if (blocks.Count > 1) {
+				if (blocks.Count > 1)
 					secondLastBlock = blocks[blocks.Count -2];
-				}
-			} finally {
+			}
+            finally
+            {
 				// Awlays dispose unused blocks
 				if (blocks != null)
 				{
 					foreach (var block in blocks)
 					{
-						if ((lastBlock == null || block != lastBlock) 
-							&& (secondLastBlock == null || block != secondLastBlock))
+						if ((lastBlock == null || block != lastBlock) && (secondLastBlock == null || block != secondLastBlock))
 						{
 							block.Dispose ();
 						}

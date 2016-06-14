@@ -119,12 +119,9 @@ namespace Netfluid.DB
 
 			// Move the stream to correct position,
 			// if there is still some data tobe copied
-			if (dataCopied < count) {
-				if (copyFromFirstSector) {
-					stream.Position = (Id * storage.BlockSize) + storage.DiskSectorSize ;
-				} else {
-					stream.Position = (Id * storage.BlockSize) + storage.BlockHeaderSize + srcOffset;
-				}
+			if (dataCopied < count)
+            {
+                stream.Position = copyFromFirstSector ? (Id * storage.BlockSize) + storage.DiskSectorSize : (Id * storage.BlockSize) + storage.BlockHeaderSize + srcOffset;
 			}
 
 			// Start copying until all data required is copied
@@ -132,9 +129,9 @@ namespace Netfluid.DB
 			{
 				var bytesToRead = Math.Min (storage.DiskSectorSize, count -dataCopied);
 				var thisRead = stream.Read (dest, destOffset + dataCopied, bytesToRead);
-				if (thisRead == 0) {
+				if (thisRead == 0)
 					throw new EndOfStreamException ();
-				}
+
 				dataCopied += thisRead;
 			}
 		}
@@ -146,15 +143,11 @@ namespace Netfluid.DB
 			}
 
 			// Validate argument
-			if (false == ((dstOffset >= 0) && ((dstOffset + count) <= storage.BlockContentSize))) {
-				throw new ArgumentOutOfRangeException ("Count argument is outside of dest bounds: Count=" + count
-					, "count");
-			}
+			if (false == ((dstOffset >= 0) && ((dstOffset + count) <= storage.BlockContentSize)))
+				throw new ArgumentOutOfRangeException ("Count argument is outside of dest bounds: Count=" + count, "count");
 
-			if (false == ((srcOffset >= 0) && ((srcOffset + count) <= src.Length))) {
-				throw new ArgumentOutOfRangeException ("Count argument is outside of src bounds: Count=" + count
-					, "count");
-			}
+			if (false == ((srcOffset >= 0) && ((srcOffset + count) <= src.Length)))
+				throw new ArgumentOutOfRangeException ("Count argument is outside of src bounds: Count=" + count, "count");
 
 			// Write bytes that belong to the firstSector
 			if ((storage.BlockHeaderSize + dstOffset) < storage.DiskSectorSize) {

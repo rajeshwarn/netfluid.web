@@ -9,7 +9,7 @@ namespace Netfluid.DB
 	{
 		protected uint id = 0;
 		protected uint parentId;
-		protected readonly ITreeNodeManager<K, V> nodeManager;
+		protected readonly TreeDiskNodeManager<K, V> nodeManager;
 		protected readonly List<uint> childrenIds;
 		protected readonly List<Tuple<K, V>> entries;
 
@@ -99,7 +99,7 @@ namespace Netfluid.DB
 		/// </summary>
 		/// <param name="branchingFactor">Branching factor.</param>
 		/// <param name="nodeManager">Node manager.</param>
-		public TreeNode (ITreeNodeManager<K, V> nodeManager
+		public TreeNode (TreeDiskNodeManager<K, V> nodeManager
 			, uint id
 			, uint parentId
 			, IEnumerable<Tuple<K, V>> entries = null
@@ -287,17 +287,16 @@ namespace Netfluid.DB
 				}
 			}
 
-			// Remove all values that larger than the middle 
-			// one from current node
-			entries.RemoveRange (halfCount);
+            // Remove all values that larger than the middle 
+            // one from current node
+            entries.RemoveRange(halfCount, entries.Count - halfCount);
 
-			if (false == IsLeaf) {
-				childrenIds.RemoveRange (halfCount + 1);
-			}
+			if (false == IsLeaf)
+                childrenIds.RemoveRange(halfCount + 1, childrenIds.Count - halfCount + 1);
 
-			// alright now we have 2 nodes,
-			// insert the middle element to parent node.
-			var parent = parentId == 0 ? null : nodeManager.Find(parentId);
+            // alright now we have 2 nodes,
+            // insert the middle element to parent node.
+            var parent = parentId == 0 ? null : nodeManager.Find(parentId);
 
 			// If there is no parent,
 			// then the middle element becomes the new root node
