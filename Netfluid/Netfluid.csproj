@@ -70,7 +70,6 @@
     <Compile Include="DB\Tree\TreeDiskNodeManager.cs" />
     <Compile Include="DB\Tree\TreeDiskNodeSerializer.cs" />
     <Compile Include="DB\Tree\TreeEnumerator.cs" />
-    <Compile Include="DB\Tree\TreeHelper.cs" />
     <Compile Include="DB\Serializers\IntSerializer.cs" />
     <Compile Include="DB\Tree\TreeKeyExistsException.cs" />
     <Compile Include="DB\Serializers\LongSerializer.cs" />

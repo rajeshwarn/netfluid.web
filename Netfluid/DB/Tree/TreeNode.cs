@@ -351,10 +351,50 @@ namespace Netfluid.DB
 		/// <param name="firstOccurence">If set to <c>true</c> first occurence.</param>
 		public int BinarySearchEntriesForKey (K key, bool firstOccurence)
 		{
-			if (firstOccurence)
-				return entries.BinarySearchFirst (new Tuple<K, V>(key, default(V)), this.nodeManager.EntryComparer);
+            var value = new Tuple<K, V>(key, default(V));
+            int result = entries.BinarySearch(value, nodeManager.EntryComparer);
 
-            return entries.BinarySearchLast (new Tuple<K, V>(key, default(V)), this.nodeManager.EntryComparer);
+            if (firstOccurence)
+            {
+                if (result >= 1)
+                {
+                    // Found, move back to the first element
+                    var lastI = result;
+                    for (var i = (result - 1); i >= 0; i--)
+                    {
+                        if (nodeManager.EntryComparer.Compare(entries[i], value) != 0)
+                        {
+                            break;
+                        }
+                        else
+                        {
+                            lastI = i;
+                        }
+                    }
+                    result = lastI;
+                }
+                return result;
+            }
+
+            if ((result >= 0) && ((result + 1) < entries.Count))
+            {
+                // Found, move back to the first element
+                var lastI = result;
+                for (var i = result + 1; i < entries.Count; i++)
+                {
+                    if (nodeManager.EntryComparer.Compare(entries[i], value) != 0)
+                    {
+                        break;
+                    }
+                    else
+                    {
+                        lastI = i;
+                    }
+                }
+                result = lastI;
+            }
+            return result;
+
 		}
 
 		/// <summary>
