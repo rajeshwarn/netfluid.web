@@ -26,7 +26,7 @@ namespace Netfluid.DB.Serializers
 
         public byte[] Serialize(DateTime value)
         {
-            return LittleEndianByteOrder.GetBytes(value.Ticks);
+            return BitConverter.GetBytes(value.Ticks);
         }
     }
 }

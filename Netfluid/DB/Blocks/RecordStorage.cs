@@ -455,7 +455,7 @@ namespace Netfluid.DB
 				throw new DataMisalignedException ("Block content length not %4: " + contentLength);
 			}
 
-			block.Write (src: LittleEndianByteOrder.GetBytes(value), srcOffset: 0, dstOffset: (int)contentLength, count: 4);
+			block.Write (src: BitConverter.GetBytes(value), srcOffset: 0, dstOffset: (int)contentLength, count: 4);
 		}
 
 		uint ReadUInt32FromTrailingContent (Block block)
@@ -472,7 +472,7 @@ namespace Netfluid.DB
 			}
 
 			block.Read (dest: buffer, destOffset: 0, srcOffset: (int)contentLength -4, count: 4);
-			return LittleEndianByteOrder.GetUInt32 (buffer);
+			return BitConverter.ToUInt32 (buffer);
 		}
 
 		void MarkAsFree (uint blockId)

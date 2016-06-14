@@ -188,11 +188,11 @@ namespace Netfluid.DB
 			using (var m = new MemoryStream())
 			{
 				// 4 bytes uint parent id
-				m.Write (LittleEndianByteOrder.GetBytes((uint)node.ParentId), 0, 4);
+				m.Write (BitConverter.GetBytes((uint)node.ParentId), 0, 4);
 				// Followed by 4 bytes of how many entries
-				m.Write (LittleEndianByteOrder.GetBytes((uint)node.EntriesCount), 0, 4);
+				m.Write (BitConverter.GetBytes((uint)node.EntriesCount), 0, 4);
 				// Followed by 4 bytes of how manu child references
-				m.Write (LittleEndianByteOrder.GetBytes((uint)node.ChildrenNodeCount), 0, 4);
+				m.Write (BitConverter.GetBytes((uint)node.ChildrenNodeCount), 0, 4);
 
 				// Write entries..
 				for (var i = 0; i < node.EntriesCount; i++)
@@ -202,7 +202,7 @@ namespace Netfluid.DB
 					var key = this.keySerializer.Serialize(entry.Item1);
 					var value = this.valueSerializer.Serialize(entry.Item2);
 
-					m.Write (LittleEndianByteOrder.GetBytes((int)key.Length), 0, 4);
+					m.Write (BitConverter.GetBytes((int)key.Length), 0, 4);
 					m.Write (key, 0, key.Length);
 					m.Write (value, 0, value.Length);
 				}
@@ -211,7 +211,7 @@ namespace Netfluid.DB
 				var childrenIds = node.ChildrenIds;
 				for (var i = 0; i < node.ChildrenNodeCount; i++)
 				{
-					m.Write (LittleEndianByteOrder.GetBytes((uint)childrenIds[i]), 0, 4);
+					m.Write (BitConverter.GetBytes((uint)childrenIds[i]), 0, 4);
 				}
 
 				return m.ToArray();

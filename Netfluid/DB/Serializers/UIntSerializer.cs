@@ -6,7 +6,7 @@ namespace Netfluid.DB.Serializers
     {
         public byte[] Serialize(uint value)
         {
-            return LittleEndianByteOrder.GetBytes(value);
+            return BitConverter.GetBytes(value);
         }
 
         public uint Deserialize(byte[] buffer, int offset, int length)

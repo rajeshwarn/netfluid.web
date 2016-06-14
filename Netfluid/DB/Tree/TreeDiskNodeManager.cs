@@ -152,7 +152,7 @@ namespace Netfluid.DB
 
 			// Make it the root node
 			this.rootNode = node;
-			recordStorage.Update (1u, LittleEndianByteOrder.GetBytes(node.Id));
+			recordStorage.Update (1u, BitConverter.GetBytes(node.Id));
 
 			// Then return it
 			return this.rootNode;
@@ -161,7 +161,7 @@ namespace Netfluid.DB
 		public void MakeRoot (TreeNode<K, V> node)
 		{
 			this.rootNode = node;
-			recordStorage.Update (1u, LittleEndianByteOrder.GetBytes(node.Id));
+			recordStorage.Update (1u, BitConverter.GetBytes(node.Id));
 		}
 
 		public void Delete (TreeNode<K, V> node)
@@ -200,7 +200,7 @@ namespace Netfluid.DB
 		TreeNode<K, V> CreateFirstRoot ()
 		{
 			// Write down the id of first node into the first block
-			recordStorage.Create (LittleEndianByteOrder.GetBytes((uint)2));
+			recordStorage.Create (BitConverter.GetBytes((uint)2));
 
 			// Return a new node, this node should has id of 2
 			return Create (null, null);

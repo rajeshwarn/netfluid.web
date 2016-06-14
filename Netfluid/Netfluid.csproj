@@ -58,7 +58,6 @@
     <Compile Include="DB\Blocks\BufferHelper.cs" />
     <Compile Include="DB\Blocks\ISerializer.cs" />
     <Compile Include="DB\Blocks\ITreeNodeManager.cs" />
-    <Compile Include="DB\Blocks\LittleEndianByteOrder.cs" />
     <Compile Include="DB\Blocks\RecordStorage.cs" />
     <Compile Include="DB\Blocks\StreamExtension.cs" />
     <Compile Include="DB\IKeyValueStore.cs" />
