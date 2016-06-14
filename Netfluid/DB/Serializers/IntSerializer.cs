@@ -15,7 +15,7 @@ namespace Netfluid.DB.Serializers
 				throw new ArgumentException ("Invalid length: " + length);
 			}
 			
-			return BufferHelper.ReadBufferInt32 (buffer, offset);
+			return BitConverter.ToInt32 (buffer, offset);
 		}
 
 		public bool IsFixedSize {

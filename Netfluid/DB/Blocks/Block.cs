@@ -57,11 +57,11 @@ namespace Netfluid.DB
 			if (field < cachedHeaderValue.Length)
 			{
 				if (cachedHeaderValue[field] == null)
-					cachedHeaderValue[field] = BufferHelper.ReadBufferInt64 (firstSector, field * 8);
+					cachedHeaderValue[field] = BitConverter.ToInt64 (firstSector, field * 8);
 
 				return (long)cachedHeaderValue[field];
 			}
-            return BufferHelper.ReadBufferInt64(firstSector, field * 8);
+            return BitConverter.ToInt64(firstSector, field * 8);
         }
 
 		public void SetHeader (int field, long value)

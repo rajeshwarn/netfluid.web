@@ -540,22 +540,27 @@ namespace Netfluid.DB
 
 			// If the parent is the root and now has no elements, 
 			// then free it and make the merged node the new root (tree becomes shallower)
-			if (parent.parentId == 0 && parent.EntriesCount == 0) {
+			if (parent.parentId == 0 && parent.EntriesCount == 0)
+            {
 				leftChild.parentId = 0;
 				nodeManager.MarkAsChanged (leftChild); // Changed left one
 				nodeManager.MakeRoot (leftChild);      
 				nodeManager.Delete (parent);           // Deleted parent
+                return;
 			}
+
 			// Otherwise, if the parent has fewer than 
 			// the required number of elements, then rebalance the parent
-			else if ((parent.parentId != 0) && (parent.EntriesCount < nodeManager.MinEntriesPerNode)) {
+			if ((parent.parentId != 0) && (parent.EntriesCount < nodeManager.MinEntriesPerNode))
+            {
 				nodeManager.MarkAsChanged (leftChild);  // Changed left one
 				nodeManager.MarkAsChanged (parent);     // Changed parent
 				parent.Rebalance ();
-			} else {
-				nodeManager.MarkAsChanged (leftChild);  // Changed left one
-				nodeManager.MarkAsChanged (parent);     // Changed parent
+                return;
 			}
+            
+			nodeManager.MarkAsChanged (leftChild);  // Changed left one
+			nodeManager.MarkAsChanged (parent);     // Changed parent
 		}
 	}
 }

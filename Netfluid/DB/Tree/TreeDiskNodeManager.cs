@@ -80,7 +80,7 @@ namespace Netfluid.DB
 			var firstBlockData = recordStorage.Find (1u);
 			if (firstBlockData != null)
 			{
-				this.rootNode = Find (BufferHelper.ReadBufferUInt32(firstBlockData, 0));
+				this.rootNode = Find (BitConverter.ToUInt32(firstBlockData, 0));
 			} else {
 				this.rootNode = CreateFirstRoot ();
 			}

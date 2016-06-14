@@ -109,13 +109,13 @@ namespace Netfluid.DB
 			var entrySize = this.keySerializer.Length + this.valueSerializer.Length;
 
 			// First 4 bytes uint32 is parent id 
-			var parentId = BufferHelper.ReadBufferUInt32 (buffer, 0);
+			var parentId = BitConverter.ToUInt32 (buffer, 0);
 
 			// Followed by 4 bytes uint32 of by how many entries this node has
-			var entriesCount = BufferHelper.ReadBufferUInt32 (buffer, 4);
+			var entriesCount = BitConverter.ToUInt32 (buffer, 4);
 
 			// Followed by 4 bytes uint32 of how many child reference this node has
-			var childrenCount  = BufferHelper.ReadBufferUInt32 (buffer, 8);
+			var childrenCount  = BitConverter.ToUInt32 (buffer, 8);
 
 			// Deserialize entries
 			var entries = new Tuple<K, V>[entriesCount];
@@ -135,7 +135,7 @@ namespace Netfluid.DB
 			for (var i = 0; i < childrenCount; i++)
 			{
 				// Decode child refs..
-				children[i] = BufferHelper.ReadBufferUInt32 (buffer, (int)(12 + entrySize*entriesCount + (i*4)));
+				children[i] = BitConverter.ToUInt32 (buffer, (int)(12 + entrySize*entriesCount + (i*4)));
 			}
 
 			// Reconstuct the node
@@ -145,20 +145,20 @@ namespace Netfluid.DB
 		TreeNode<K, V> VariableKeyLengthDeserialize (uint assignId, byte[] buffer)
 		{
 			// First 4 bytes uint32 is parent id 
-			var parentId = BufferHelper.ReadBufferUInt32 (buffer, 0);
+			var parentId = BitConverter.ToUInt32 (buffer, 0);
 
 			// Followed by 4 bytes uint32 of by how many entries this node has
-			var entriesCount = BufferHelper.ReadBufferUInt32 (buffer, 4);
+			var entriesCount = BitConverter.ToUInt32 (buffer, 4);
 
 			// Followed by 4 bytes uint32 of how many child reference this node has
-			var childrenCount  = BufferHelper.ReadBufferUInt32 (buffer, 8);
+			var childrenCount  = BitConverter.ToUInt32 (buffer, 8);
 
 			// Deserialize entries
 			var entries = new Tuple<K, V>[entriesCount];
 			var p = 12;
 			for (var i = 0; i < entriesCount; i++)
 			{
-				var keyLength = BufferHelper.ReadBufferInt32 (buffer, p);
+				var keyLength = BitConverter.ToInt32 (buffer, p);
 				var key = this.keySerializer.Deserialize (buffer
 					, p + 4
 					, keyLength);
@@ -176,7 +176,7 @@ namespace Netfluid.DB
 			for (var i = 0; i < childrenCount; i++)
 			{
 				// Decode child refs..
-				children[i] = BufferHelper.ReadBufferUInt32 (buffer, (int)(p + (i*4)));
+				children[i] = BitConverter.ToUInt32 (buffer, (int)(p + (i*4)));
 			}
 
 			// Reconstuct the node

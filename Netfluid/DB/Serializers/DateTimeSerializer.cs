@@ -21,7 +21,7 @@ namespace Netfluid.DB.Serializers
 
         public DateTime Deserialize(byte[] buffer, int offset, int length)
         {
-            return new DateTime(BufferHelper.ReadBufferInt64(buffer, offset));
+            return new DateTime(BitConverter.ToInt64(buffer, offset));
         }
 
         public byte[] Serialize(DateTime value)
