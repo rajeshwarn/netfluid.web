@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Netfluid.DB.Serializers
 {
@@ -10,14 +6,7 @@ namespace Netfluid.DB.Serializers
     {
         public byte[] Serialize(double value)
         {
-            var bytes = BitConverter.GetBytes(value);
-
-            if (false == BitConverter.IsLittleEndian)
-            {
-                Array.Reverse(bytes);
-            }
-
-            return bytes;
+            return BitConverter.GetBytes(value);
         }
 
         public double Deserialize(byte[] buffer, int offset, int length)

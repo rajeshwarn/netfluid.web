@@ -34,34 +34,27 @@ namespace Netfluid.DB
 		/// </summary>
 		public byte[] Serialize (TreeNode<K, V> node)
 		{
-			if (keySerializer.IsFixedSize && valueSerializer.IsFixedSize) {
-				return FixedLengthSerialize (node);				
-			} else if (valueSerializer.IsFixedSize) {
-				return VariableKeyLengthSerialize (node);
-			} else {
-				// It's rare to have varaible-length serialization of value,
-				// as value always point to a record ID
-				// so I dont implement it for now.
-				throw new NotSupportedException ();
-			}
-		}
+			if (keySerializer.IsFixedSize && valueSerializer.IsFixedSize) return FixedLengthSerialize(node);
+
+            if (valueSerializer.IsFixedSize) return VariableKeyLengthSerialize(node);
+
+            // It's rare to have varaible-length serialization of value,
+            // as value always point to a record ID
+            // so I dont implement it for now.
+            throw new NotSupportedException();
+        }
 
 		/// <summary>
 		/// Deserialize given node from data which is read from RecordStorage
 		/// </summary>
 		public TreeNode<K, V> Deserialize (uint assignId, byte[] record)
 		{
-			if (keySerializer.IsFixedSize && valueSerializer.IsFixedSize) {
-				return FixedLengthDeserialize (assignId, record);
-			} else if (valueSerializer.IsFixedSize) {
-				return VariableKeyLengthDeserialize (assignId, record);
-			} else {
-				// It's rare to have varaible-length serialization of value,
-				// as value always point to a record ID
-				// so I dont implement it for now.
-				throw new NotSupportedException ();
-			}
-		}
+			if (keySerializer.IsFixedSize && valueSerializer.IsFixedSize) return FixedLengthDeserialize(assignId, record);
+
+            if (valueSerializer.IsFixedSize) return VariableKeyLengthDeserialize(assignId, record);
+
+            throw new NotSupportedException();
+        }
 
 		byte[] FixedLengthSerialize (TreeNode<K, V> node)
 		{
@@ -202,7 +195,7 @@ namespace Netfluid.DB
 					var key = this.keySerializer.Serialize(entry.Item1);
 					var value = this.valueSerializer.Serialize(entry.Item2);
 
-					m.Write (BitConverter.GetBytes((int)key.Length), 0, 4);
+					m.Write (BitConverter.GetBytes(key.Length), 0, 4);
 					m.Write (key, 0, key.Length);
 					m.Write (value, 0, value.Length);
 				}
@@ -211,7 +204,7 @@ namespace Netfluid.DB
 				var childrenIds = node.ChildrenIds;
 				for (var i = 0; i < node.ChildrenNodeCount; i++)
 				{
-					m.Write (BitConverter.GetBytes((uint)childrenIds[i]), 0, 4);
+					m.Write (BitConverter.GetBytes(childrenIds[i]), 0, 4);
 				}
 
 				return m.ToArray();
