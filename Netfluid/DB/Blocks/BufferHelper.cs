@@ -8,13 +8,6 @@ namespace Netfluid.DB
 	/// </summary>
 	static class BufferHelper
 	{
-		public static Guid ReadBufferGuid (byte[] buffer, int bufferOffset)
-		{
-			var guidBuffer = new byte[16];
-			Buffer.BlockCopy (buffer, bufferOffset, guidBuffer, 0, 16);
-			return new Guid (guidBuffer);
-		}
-
 		public static uint ReadBufferUInt32 (byte[] buffer, int bufferOffset)
 		{
 			var uintBuffer = new byte[4];
@@ -43,11 +36,6 @@ namespace Netfluid.DB
 			return LittleEndianByteOrder.GetDouble (doubleBuffer);
 		}
 
-		public static void WriteBuffer (double value, byte[] buffer, int bufferOffset)
-		{
-			Buffer.BlockCopy (LittleEndianByteOrder.GetBytes(value), 0, buffer, bufferOffset, 8);
-		}
-
 		public static void WriteBuffer (uint value, byte[] buffer, int bufferOffset)
 		{
 			Buffer.BlockCopy (LittleEndianByteOrder.GetBytes(value), 0, buffer, bufferOffset, 4);
@@ -56,16 +44,6 @@ namespace Netfluid.DB
 		public static void WriteBuffer (long value, byte[] buffer, int bufferOffset)
 		{
 			Buffer.BlockCopy (LittleEndianByteOrder.GetBytes(value), 0, buffer, bufferOffset, 8);
-		}
-
-		public static void WriteBuffer (int value, byte[] buffer, int bufferOffset)
-		{
-			Buffer.BlockCopy (LittleEndianByteOrder.GetBytes((int)value), 0, buffer, bufferOffset, 4);
-		}
-
-		public static void WriteBuffer (Guid value, byte[] buffer, int bufferOffset)
-		{
-			Buffer.BlockCopy (value.ToByteArray(), 0, buffer, bufferOffset, 16);
 		}
 	}
 }

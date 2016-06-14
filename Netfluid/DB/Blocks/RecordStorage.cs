@@ -11,7 +11,7 @@ namespace Netfluid.DB
 	/// </summary>
 	class RecordStorage
 	{
-		readonly IBlockStorage storage;
+		readonly BlockStorage storage;
         readonly ReaderWriterLockSlim storeLocker;
 
         const int MaxRecordSize = 4194304; // 4MB
@@ -25,7 +25,7 @@ namespace Netfluid.DB
 		// Constructors
 		//
 
-		public RecordStorage (IBlockStorage storage)
+		public RecordStorage (BlockStorage storage)
 		{
             storeLocker = new ReaderWriterLockSlim();
 

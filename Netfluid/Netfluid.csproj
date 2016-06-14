@@ -56,13 +56,11 @@
     <Compile Include="DB\Blocks\Block.cs" />
     <Compile Include="DB\Blocks\BlockStorage.cs" />
     <Compile Include="DB\Blocks\BufferHelper.cs" />
-    <Compile Include="DB\Blocks\IBlockStorage.cs" />
     <Compile Include="DB\Blocks\ISerializer.cs" />
     <Compile Include="DB\Blocks\ITreeNodeManager.cs" />
     <Compile Include="DB\Blocks\LittleEndianByteOrder.cs" />
     <Compile Include="DB\Blocks\RecordStorage.cs" />
     <Compile Include="DB\Blocks\StreamExtension.cs" />
-    <Compile Include="DB\Blocks\StreamReadWrapper.cs" />
     <Compile Include="DB\IKeyValueStore.cs" />
     <Compile Include="DB\Index.cs" />
     <Compile Include="DB\KeyValueStore.cs" />
@@ -78,7 +76,6 @@
     <Compile Include="DB\Serializers\IntSerializer.cs" />
     <Compile Include="DB\Tree\TreeKeyExistsException.cs" />
     <Compile Include="DB\Serializers\LongSerializer.cs" />
-    <Compile Include="DB\Tree\TreeMemoryNodeManager.cs" />
     <Compile Include="DB\Tree\TreeNode.cs" />
     <Compile Include="DB\Tree\TreeNodeSerializationException.cs" />
     <Compile Include="DB\Serializers\StringSerializer.cs" />

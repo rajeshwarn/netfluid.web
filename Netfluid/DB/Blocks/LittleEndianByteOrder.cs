@@ -44,30 +44,6 @@ namespace Netfluid.DB
 			return bytes;
 		}
 
-		public static byte[] GetBytes (float value)
-		{
-			var bytes = BitConverter.GetBytes (value);
-
-			if (false ==BitConverter.IsLittleEndian)
-			{
-				Array.Reverse (bytes);
-			}
-
-			return bytes;
-		}
-
-		public static byte[] GetBytes (double value)
-		{
-			var bytes = BitConverter.GetBytes (value);
-
-			if (false == BitConverter.IsLittleEndian)
-			{
-				Array.Reverse (bytes);
-			}
-
-			return bytes;
-		}
-
         public static float GetSingle (byte[] bytes)
 		{
 			// Given bytes are little endian

@@ -4,7 +4,7 @@ using System.IO;
 
 namespace Netfluid.DB
 {
-	internal class BlockStorage : IBlockStorage
+	internal class BlockStorage
 	{
 		readonly Stream stream;
 		readonly Dictionary<uint, Block> blocks = new Dictionary<uint, Block> ();
