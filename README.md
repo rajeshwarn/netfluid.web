@@ -50,12 +50,60 @@ class User
 }
 ```
 
+```
+class Exposer
+{
+    [Route("/user")]
+    public static dynamic ShowUser(User user)
+    {
+        return user;
+    }
+}
+```
+
 To set in-URL parameters, mark them with **:**
 ```
 [Route("/new/:date/:value")]
 public static dynamic MyMthod(DateTime date, MyEnum value)
 {
     /*....*/
+}
+```
+
+Accessing the context
+
+Netfluid.Web contains a wrapper to the **HttpListenerConxtext**, his name is **Context**.
+To access the current context just define a parameter in your method using the context type
+```
+[Route("/")]
+public static dynamic MyMthod(Context cnt)
+{
+    cnt.Request.Files.ForEach(x=>Console.WriteLine(x.FileName));
+}
+```
+
+To set and read session value, use the *Session* method of the context
+```
+[Route("/")]
+public static dynamic MyMthod(Context cnt)
+{
+    if(cnt.Session<User>("user")==null)
+        cnt.Session<User>("user", User.Anonymous);
+}
+```
+
+To grant or not access to part of your website, use the **Filter**.
+If a filter returns something different from **false** the execution of the current context is stopped and the value returned.
+If a filter defines a Route, the filter is invoked only on URLs matching that regex, otherwise is invoke on any URL.
+
+```
+[Filter]
+public static dynamic WalledGarden(Context cnt)
+{
+    if(cnt.Session<User>("user")==null)
+        return new MustacheTemplate("./login.html");
+    
+    return false;
 }
 ```
 
