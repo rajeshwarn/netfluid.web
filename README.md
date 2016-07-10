@@ -1,6 +1,15 @@
-# Netfluid http://netfluid.org/
-## Enterprise Software Development Kit
+# Netfluid.Web http://netfluid.org/
+## Easy embeddable application server to expose class an methods over the net
 
-Netfluid framework is more than an application server: is a toolbox to fast develop high complexity business apllication.
-In the last ten years i developed many enterprise software and i built this framework mainly for me, filling it with what i didn't found everywhere else, adapting other open source application or writing thousands and thousands of sloc.
-This software has undergone several changes, it was born as my own server side language six year ago, and seven realese after is became a complete framework to develop professional grade enterprise application even with a small team and short deadlines 
+###Getting started
+To expose a method all you need to do is to mark it with the Route attribute
+
+```
+[Route("/my/rest")]
+public static dynamic List()
+{
+    //When a method returns a class or an enumerable they are automatically JSON serialized
+    return Database.Elements.All;
+}
+```
+
