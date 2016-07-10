@@ -91,7 +91,7 @@ namespace Netfluid
         {
             get
             {
-                var code = CountryCode.World;
+                CountryCode code = CountryCode.World;
                 try
                 {
                     var wc = new WebClient();

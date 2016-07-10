@@ -28,7 +28,7 @@ using System.Text;
 namespace Netfluid.IO
 {
     [Serializable]
-    public class ChunkedStream : Stream
+    internal class ChunkedStream : Stream
     {
         private static readonly byte[] CRLF;
         private static readonly byte[] ENDTRAIL /*= new byte[] {48,13,10,13,10}*/;

@@ -165,6 +165,14 @@ namespace Netfluid.Json.Serialization
 
                 _parametrizedConstructor = CollectionUtils.ResolveEnumerableCollectionConstructor(underlyingType, CollectionItemType);
 
+#if !(NET35 || NET20)
+                if (!HasParametrizedCreator && underlyingType.Name == FSharpUtils.FSharpListTypeName)
+                {
+                    FSharpUtils.EnsureInitialized(underlyingType.Assembly());
+                    _parametrizedCreator = FSharpUtils.CreateSeq(CollectionItemType);
+                }
+#endif
+
                 if (underlyingType.IsGenericType() && underlyingType.GetGenericTypeDefinition() == typeof(IEnumerable<>))
                 {
                     _genericCollectionDefinitionType = tempCollectionType;

@@ -147,12 +147,34 @@ namespace Netfluid.Json.Serialization
             if (keyType != null && valueType != null)
             {
                 _parametrizedConstructor = CollectionUtils.ResolveEnumerableCollectionConstructor(CreatedType, typeof(KeyValuePair<,>).MakeGenericType(keyType, valueType));
+
+#if !(NET35 || NET20)
+                if (!HasParametrizedCreator && underlyingType.Name == FSharpUtils.FSharpMapTypeName)
+                {
+                    FSharpUtils.EnsureInitialized(underlyingType.Assembly());
+                    _parametrizedCreator = FSharpUtils.CreateMap(keyType, valueType);
+                }
+#endif
             }
 
             ShouldCreateWrapper = !typeof(IDictionary).IsAssignableFrom(CreatedType);
 
             DictionaryKeyType = keyType;
             DictionaryValueType = valueType;
+
+#if (NET20 || NET35)
+            if (DictionaryValueType != null && ReflectionUtils.IsNullableType(DictionaryValueType))
+            {
+                Type tempDictioanryType;
+
+                // bug in .NET 2.0 & 3.5 that Dictionary<TKey, Nullable<TValue>> throws an error when adding null via IDictionary[key] = object
+                // wrapper will handle calling Add(T) instead
+                if (ReflectionUtils.InheritsGenericDefinition(CreatedType, typeof(Dictionary<,>), out tempDictioanryType))
+                {
+                    ShouldCreateWrapper = true;
+                }
+            }
+#endif
 
 #if !(NET20 || NET35 || NET40 || PORTABLE40)
             Type immutableCreatedType;

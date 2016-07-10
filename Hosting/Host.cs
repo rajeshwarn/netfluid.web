@@ -62,7 +62,17 @@ namespace Netfluid
         [Json.JsonIgnore]
         public Logger Logger { get; set; }
 
-        Task listeningTask; 
+        Task listeningTask;
+
+        static List<NetfluidHost> instances;
+
+        public static IEnumerable<NetfluidHost> Instances
+        {
+            get
+            {
+                return instances;
+            }
+        }
 
         static NetfluidHost()
         {
@@ -72,11 +82,17 @@ namespace Netfluid
             ThreadPool.SetMaxThreads(max, max);
 
             ServicePointManager.DefaultConnectionLimit = 65000;
+            instances = new List<NetfluidHost>();
         }
 
         public NetfluidHost()
         {
             listener = new HttpListener();
+
+            lock (instances)
+            {
+                instances.Add(this);
+            }
 
             OnException = (c, e) => 
             {

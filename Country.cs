@@ -529,6 +529,11 @@ namespace Netfluid
         public bool Landlocked { get; private set; }
         public double Area { get; private set; }
 
+        public override string ToString()
+        {
+            return CommonName;
+        }
+
         public static Country Parse(string value)
         {
             CountryCode code;
